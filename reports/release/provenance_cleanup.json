@@ -1,0 +1,14 @@
+{
+  "changed_fields": [
+    "/decks/0/cards/55/notes/0/source_cohort",
+    "/decks/1/cards/49/notes/0/source_cohort",
+    "/decks/1/cards/78/notes/1/source_cohort",
+    "/decks/3/cards/3/notes/0/source_cohort"
+  ],
+  "change": "Historical source_cohort references made project-relative. All other strategy content and the saved game snapshots are unchanged.",
+  "strategy_revision": {
+    "revision": 44,
+    "fingerprint": "38c602b489ecaf06e782328fafdd22f882b745c2d16b1426b2adba157d419f8a",
+    "revision_id": "strategy-r44-38c602b489ecaf06"
+  }
+}

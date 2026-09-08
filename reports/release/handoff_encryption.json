@@ -1,0 +1,11 @@
+{
+  "format": "AES-256-GCM",
+  "archive": "paused-game-305.zip.aesgcm",
+  "bytes": 25699590,
+  "sha256": "d4ce84e74ced036cf6dbfb7c96632f9da491982eef157e60449da0fa1cd2985c",
+  "plain_archive_sha256": "9d4fa27497fa6ca87d36f1c41a47e65283b63fcc1e83d2d4088ab9668a6d1a96",
+  "key_uploaded": false,
+  "roundtrip_verified": true,
+  "tamper_rejected": true,
+  "existing_output_protected": true
+}

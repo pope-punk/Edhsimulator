@@ -1,0 +1,4412 @@
+{
+  "cards": {
+    "acidic-slime": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "keywords": [
+        "deathtouch"
+      ]
+    },
+    "adarkar-wastes": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "ajani-s-pridemate": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "alseid-of-life-s-bounty": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "lifelink"
+      ],
+      "registered_abilities": [
+        {
+          "ability_id": "alseid-of-life-s-bounty:registered:alseid_protection",
+          "cost_text": "{1}, sacrifice",
+          "event": null,
+          "face_id": "alseid-of-life-s-bounty",
+          "handler": "legacy:alseid_protection",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, sacrifice: grant protection from a chosen color",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "aminatou-the-fateshifter": {
+      "faces": {
+        "aminatou-the-fateshifter": {
+          "loyalty": 3,
+          "loyalty_variable": null
+        }
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "aminatou-the-fateshifter:registered:aminatou_plus",
+          "cost_text": "+1",
+          "event": null,
+          "face_id": "aminatou-the-fateshifter",
+          "handler": "legacy:aminatou_plus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "+1: draw, then put a card from hand on top",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "aminatou-the-fateshifter:registered:aminatou_minus",
+          "cost_text": "-1",
+          "event": null,
+          "face_id": "aminatou-the-fateshifter",
+          "handler": "legacy:aminatou_minus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-1: blink another permanent you own",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "aminatou-the-fateshifter:registered:aminatou_ultimate",
+          "cost_text": "-6",
+          "event": null,
+          "face_id": "aminatou-the-fateshifter",
+          "handler": "legacy:aminatou_ultimate",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-6: exchange nonland permanents left or right",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "aminatou-veil-piercer": {
+      "combat": {
+        "power": 2,
+        "toughness": 4
+      }
+    },
+    "angel-of-invention": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying",
+        "lifelink",
+        "vigilance"
+      ]
+    },
+    "angel-of-vitality": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "apex-devastator": {
+      "combat": {
+        "power": 10,
+        "toughness": 10
+      }
+    },
+    "arcane-signet": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": true
+      }
+    },
+    "arid-mesa": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Mountain",
+          "Plains"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "arvad-the-cursed": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      },
+      "keywords": [
+        "deathtouch",
+        "lifelink"
+      ]
+    },
+    "aven-courier": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "avenger-of-zendikar": {
+      "combat": {
+        "power": 5,
+        "toughness": 5
+      }
+    },
+    "azusa-lost-but-seeking": {
+      "combat": {
+        "power": 1,
+        "toughness": 2
+      }
+    },
+    "baldur-s-gate": {
+      "land": {
+        "classifications": [
+          "gate"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "baleful-strix": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "deathtouch",
+        "flying"
+      ]
+    },
+    "basilisk-gate": {
+      "land": {
+        "classifications": [
+          "gate"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "basilisk-gate:registered:basilisk_gate",
+          "cost_text": "{2}, tap",
+          "event": null,
+          "face_id": "basilisk-gate",
+          "handler": "legacy:basilisk_gate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}, tap: target creature gets +X/+X for Gates",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "birds-of-paradise": {
+      "combat": {
+        "power": 0,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying"
+      ],
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
+    "blast-zone": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "blast-zone:registered:blast_zone_counters",
+          "cost_text": "{X}{X}, tap",
+          "event": null,
+          "face_id": "blast-zone",
+          "handler": "legacy:blast_zone_counters",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{X}{X}, tap: put X charge counters on Blast Zone",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "blast-zone:registered:blast_zone_destroy",
+          "cost_text": "{3}, tap, sacrifice",
+          "event": null,
+          "face_id": "blast-zone",
+          "handler": "legacy:blast_zone_destroy",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}, tap, sacrifice: destroy matching nonland permanents",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "bloodstained-mire": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Mountain",
+          "Swamp"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "body-double": {
+      "combat": {
+        "power": 0,
+        "toughness": 0
+      }
+    },
+    "bristly-bill-spine-sower": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "caves-of-koilos": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "celestial-armor": {
+      "registered_abilities": [
+        {
+          "ability_id": "celestial-armor:registered:equip_armor",
+          "cost_text": null,
+          "event": null,
+          "face_id": "celestial-armor",
+          "handler": "legacy:equip_armor",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "equip {3}{W}",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "champion-of-lambholt": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "charcoal-diamond": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "chromatic-lantern": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": true
+      }
+    },
+    "cinder-glade": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "city-of-brass": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "cloudpost": {
+      "land": {
+        "classifications": [
+          "enters_tapped",
+          "locus"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "command-tower": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "dark-depths": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "dark-depths:registered:dark_depths",
+          "cost_text": "{3}",
+          "event": null,
+          "face_id": "dark-depths",
+          "handler": "legacy:dark_depths",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}: remove an ice counter",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "dawn-of-hope": {
+      "registered_abilities": [
+        {
+          "ability_id": "dawn-of-hope:registered:dawn_soldier",
+          "cost_text": "{3}{W}",
+          "event": null,
+          "face_id": "dawn-of-hope",
+          "handler": "legacy:dawn_soldier",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}{W}: create a lifelink Soldier",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "defiant-bloodlord": {
+      "combat": {
+        "power": 4,
+        "toughness": 5
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "defiler-of-vigor": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "delighted-halfling": {
+      "combat": {
+        "power": 1,
+        "toughness": 2
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
+    "deserted-beach": {
+      "land": {
+        "classifications": [
+          "slow"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "dimir-house-guard": {
+      "combat": {
+        "power": 2,
+        "toughness": 3
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "dimir-house-guard:registered:houseguard_sac",
+          "cost_text": "Sacrifice a creature",
+          "event": null,
+          "face_id": "dimir-house-guard",
+          "handler": "legacy:houseguard_sac",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Sacrifice a creature: regenerate Dimir House Guard",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "domri-anarch-of-bolas": {
+      "faces": {
+        "domri-anarch-of-bolas": {
+          "loyalty": 3,
+          "loyalty_variable": null
+        }
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [],
+        "variable_output": false
+      }
+    },
+    "doomwake-giant": {
+      "combat": {
+        "power": 4,
+        "toughness": 6
+      }
+    },
+    "dreamroot-cascade": {
+      "land": {
+        "classifications": [
+          "slow"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "dryad-of-the-ilysian-grove": {
+      "combat": {
+        "power": 2,
+        "toughness": 4
+      }
+    },
+    "eiganjo-seat-of-the-empire": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "eiganjo-seat-of-the-empire:registered:channel_eiganjo",
+          "cost_text": "Channel",
+          "event": null,
+          "face_id": "eiganjo-seat-of-the-empire",
+          "handler": "legacy:channel_eiganjo",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Channel: deal 4 to an attacking or blocking creature",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "hand"
+        }
+      ]
+    },
+    "elenda-s-hierophant": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "elenda-saint-of-dusk": {
+      "combat": {
+        "power": 4,
+        "toughness": 4
+      },
+      "keywords": [
+        "lifelink"
+      ]
+    },
+    "elvish-mystic": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": false
+      }
+    },
+    "elvish-rejuvenator": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "entity-tracker": {
+      "combat": {
+        "power": 2,
+        "toughness": 3
+      }
+    },
+    "essence-channeler": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "eternal-witness": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      }
+    },
+    "evolution-sage": {
+      "combat": {
+        "power": 3,
+        "toughness": 2
+      }
+    },
+    "exemplar-of-light": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "exotic-orchard": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "expedition-map": {
+      "registered_abilities": [
+        {
+          "ability_id": "expedition-map:registered:expedition_map",
+          "cost_text": "{2}, tap, sacrifice",
+          "event": null,
+          "face_id": "expedition-map",
+          "handler": "legacy:expedition_map",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}, tap, sacrifice: search for a land",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "fallen-ideal": {
+      "registered_abilities": [
+        {
+          "ability_id": "fallen-ideal:registered:fallen_sac",
+          "cost_text": "Sacrifice a creature",
+          "event": null,
+          "face_id": "fallen-ideal",
+          "handler": "legacy:fallen_sac",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Sacrifice a creature: enchanted creature gets +2/+1 until end of turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "fanatical-devotion": {
+      "registered_abilities": [
+        {
+          "ability_id": "fanatical-devotion:registered:devotion_activate",
+          "cost_text": "Sacrifice a creature",
+          "event": null,
+          "face_id": "fanatical-devotion",
+          "handler": "legacy:devotion_activate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Sacrifice a creature: regenerate target creature",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "fanatic-of-rhonas": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
+    "felidar-guardian": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      }
+    },
+    "fellwar-stone": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": true
+      }
+    },
+    "fiendish-panda": {
+      "combat": {
+        "power": 3,
+        "toughness": 2
+      }
+    },
+    "flooded-grove": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "flooded-strand": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Island",
+          "Plains"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "forest": {
+      "land": {
+        "classifications": [
+          "basic"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "forgotten-ancient": {
+      "combat": {
+        "power": 0,
+        "toughness": 3
+      }
+    },
+    "funeral-room-awakening-hall": {
+      "registered_abilities": [
+        {
+          "ability_id": "funeral-room-awakening-hall:registered:unlock_awakening_hall",
+          "cost_text": "{6}{B}{B}",
+          "event": null,
+          "face_id": "funeral-room",
+          "handler": "legacy:unlock_awakening_hall",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{6}{B}{B}: unlock Awakening Hall",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "fyndhorn-elves": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": false
+      }
+    },
+    "game-trail": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "ghalta-primal-hunger": {
+      "combat": {
+        "power": 12,
+        "toughness": 12
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "ghostly-dancers": {
+      "combat": {
+        "power": 3,
+        "toughness": 5
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "glasswing-grace-age-graced-chapel": {
+      "land": {
+        "classifications": [
+          "enters_tapped",
+          "modal_or_transform_face"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "gleaming-splendor": {
+      "registered_abilities": [
+        {
+          "ability_id": "gleaming-splendor:registered:splendor_draw",
+          "cost_text": "{2}{W}",
+          "event": null,
+          "face_id": "gleaming-splendor",
+          "handler": "legacy:splendor_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}{W}: two target players each draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "glen-elendra-archmage": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "keywords": [
+        "flying"
+      ],
+      "registered_abilities": [
+        {
+          "ability_id": "glen-elendra-archmage:registered:glen_counter",
+          "cost_text": "{U}, sacrifice",
+          "event": null,
+          "face_id": "glen-elendra-archmage",
+          "handler": "legacy:glen_counter",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{U}, sacrifice: counter target noncreature spell",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "glimmerpost": {
+      "land": {
+        "classifications": [
+          "locus"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "goblin-anarchomancer": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "godless-shrine": {
+      "land": {
+        "classifications": [
+          "shock"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "gravebreaker-lamia": {
+      "combat": {
+        "power": 4,
+        "toughness": 4
+      },
+      "keywords": [
+        "lifelink"
+      ]
+    },
+    "grim-guardian": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      }
+    },
+    "grumgully-the-generous": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      }
+    },
+    "gruul-signet": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "gruul-turf": {
+      "land": {
+        "classifications": [
+          "bounce",
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "hakbal-of-the-surging-soul": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      }
+    },
+    "halana-and-alena-partners": {
+      "combat": {
+        "power": 2,
+        "toughness": 3
+      },
+      "keywords": [
+        "first_strike",
+        "reach"
+      ]
+    },
+    "hall-of-heliod-s-generosity": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "hall-of-heliod-s-generosity:registered:hall_heliod",
+          "cost_text": "{1}{W}, tap",
+          "event": null,
+          "face_id": "hall-of-heliod-s-generosity",
+          "handler": "legacy:hall_heliod",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}{W}, tap: put an enchantment from graveyard on top",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "hallowed-fountain": {
+      "land": {
+        "classifications": [
+          "shock"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "hashep-oasis": {
+      "land": {
+        "classifications": [
+          "desert"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "hashep-oasis:registered:hashep_green",
+          "cost_text": "tap, pay 1 life",
+          "event": null,
+          "face_id": "hashep-oasis",
+          "handler": "legacy:hashep_green",
+          "kind": "activated",
+          "mana_ability": true,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap, pay 1 life: add {G}",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": false,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "hashep-oasis:registered:hashep_pump",
+          "cost_text": "{1}{G}{G}, tap, sacrifice a Desert",
+          "event": null,
+          "face_id": "hashep-oasis",
+          "handler": "legacy:hashep_pump",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}{G}{G}, tap, sacrifice a Desert: target creature gets +3/+3",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "healer-s-hawk": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying",
+        "lifelink"
+      ]
+    },
+    "helm-of-the-host": {
+      "registered_abilities": [
+        {
+          "ability_id": "helm-of-the-host:registered:equip_helm",
+          "cost_text": null,
+          "event": null,
+          "face_id": "helm-of-the-host",
+          "handler": "legacy:equip_helm",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "equip {5}",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "hidden-nursery": {
+      "land": {
+        "classifications": [
+          "cave",
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "high-priest-of-penance": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "horizon-of-progress": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "horizon-of-progress:registered:horizon_mana",
+          "cost_text": "tap, pay 1 life",
+          "event": null,
+          "face_id": "horizon-of-progress",
+          "handler": "legacy:horizon_mana",
+          "kind": "activated",
+          "mana_ability": true,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap, pay 1 life: add a mana type a land you control could produce",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": false,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "horizon-of-progress:registered:horizon_land",
+          "cost_text": "{3}, tap",
+          "event": null,
+          "face_id": "horizon-of-progress",
+          "handler": "legacy:horizon_land",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}, tap: put a land from hand onto battlefield tapped",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "horizon-of-progress:registered:horizon_draw",
+          "cost_text": "{1}, tap, sacrifice",
+          "event": null,
+          "face_id": "horizon-of-progress",
+          "handler": "legacy:horizon_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice: draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "hydra-broodmaster": {
+      "combat": {
+        "power": 7,
+        "toughness": 7
+      }
+    },
+    "hydroid-krasis": {
+      "combat": {
+        "power": 0,
+        "toughness": 0
+      },
+      "keywords": [
+        "flying",
+        "trample"
+      ]
+    },
+    "indulgent-tormentor": {
+      "combat": {
+        "power": 5,
+        "toughness": 3
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "innkeeper-s-talent": {
+      "registered_abilities": [
+        {
+          "ability_id": "innkeeper-s-talent:registered:innkeeper_level2",
+          "cost_text": "{G}",
+          "event": null,
+          "face_id": "innkeeper-s-talent",
+          "handler": "legacy:innkeeper_level2",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{G}: level 2",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "innkeeper-s-talent:registered:innkeeper_level3",
+          "cost_text": "{3}{G}",
+          "event": null,
+          "face_id": "innkeeper-s-talent",
+          "handler": "legacy:innkeeper_level3",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}{G}: level 3",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "inspiring-overseer": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "invasion-of-theros": {
+      "faces": {
+        "ephara-ever-sheltering": {
+          "power": 4,
+          "toughness": 4
+        }
+      }
+    },
+    "island": {
+      "land": {
+        "classifications": [
+          "basic"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "jyoti-moag-ancient": {
+      "combat": {
+        "power": 2,
+        "toughness": 4
+      }
+    },
+    "kalonian-hydra": {
+      "combat": {
+        "power": 0,
+        "toughness": 0
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "kami-of-whispered-hopes": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
+    "karmic-guide": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "keywords": [
+        "flying",
+        "protection_black"
+      ]
+    },
+    "karplusan-forest": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "kazuul-s-fury-kazuul-s-cliffs": {
+      "land": {
+        "classifications": [
+          "enters_tapped",
+          "modal_or_transform_face"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "kessig-wolf-run": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "kessig-wolf-run:registered:wolf_run",
+          "cost_text": "{X}{R}{G}, tap",
+          "event": null,
+          "face_id": "kessig-wolf-run",
+          "handler": "legacy:wolf_run",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{X}{R}{G}, tap: target creature gets +X/+0 and trample",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "kodama-of-the-west-tree": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      },
+      "keywords": [
+        "reach"
+      ]
+    },
+    "kunoros-hound-of-athreos": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      },
+      "keywords": [
+        "lifelink",
+        "menace",
+        "vigilance"
+      ]
+    },
+    "lair-of-the-hydra": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "lazotep-quarry": {
+      "land": {
+        "classifications": [
+          "desert"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "lazotep-quarry:registered:lazotep_copy",
+          "cost_text": "{X}{2}, tap, sacrifice a Desert",
+          "event": null,
+          "face_id": "lazotep-quarry",
+          "handler": "legacy:lazotep_copy",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{X}{2}, tap, sacrifice a Desert: make a 4/4 Zombie copy from graveyard",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "leonin-relic-warder": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "liliana-the-faultless": {
+      "combat": {
+        "power": 1,
+        "toughness": 2
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "liliana-the-faultless:registered:liliana_activate",
+          "cost_text": "{1}, tap, discard a card",
+          "event": null,
+          "face_id": "liliana-the-faultless",
+          "handler": "legacy:liliana_activate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, discard: another creature or planeswalker gains hexproof",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "llanowar-elves": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": false
+      }
+    },
+    "loran-of-the-third-path": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      },
+      "keywords": [
+        "vigilance"
+      ],
+      "registered_abilities": [
+        {
+          "ability_id": "loran-of-the-third-path:registered:loran_draw",
+          "cost_text": "tap",
+          "event": null,
+          "face_id": "loran-of-the-third-path",
+          "handler": "legacy:loran_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap: you and target opponent each draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "lord-of-the-unreal": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "lotus-blossom": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "lotus-blossom:registered:lotus_blossom_mana",
+          "cost_text": "tap, sacrifice",
+          "event": null,
+          "face_id": "lotus-blossom",
+          "handler": "legacy:lotus_blossom_mana",
+          "kind": "activated",
+          "mana_ability": true,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap, sacrifice: add mana equal to petal counters",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": false,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "lumbering-falls": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "lumbering-falls:registered:animate_lumbering",
+          "cost_text": "{2}{G}{U}",
+          "event": null,
+          "face_id": "lumbering-falls",
+          "handler": "legacy:animate_lumbering",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}{G}{U}: become a 3/3 hexproof creature until end of turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "lush-oasis": {
+      "land": {
+        "classifications": [
+          "desert",
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "lyra-dawnbringer": {
+      "combat": {
+        "power": 5,
+        "toughness": 5
+      },
+      "keywords": [
+        "first_strike",
+        "flying",
+        "lifelink"
+      ]
+    },
+    "magus-of-the-candelabra": {
+      "combat": {
+        "power": 1,
+        "toughness": 2
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "magus-of-the-candelabra:registered:magus_candelabra",
+          "cost_text": "{X}, tap",
+          "event": null,
+          "face_id": "magus-of-the-candelabra",
+          "handler": "legacy:magus_candelabra",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{X}, tap: untap X target lands",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "mana-confluence": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "managorger-hydra": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "marauding-blight-priest": {
+      "combat": {
+        "power": 3,
+        "toughness": 2
+      }
+    },
+    "marble-diamond": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "marsh-flats": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Plains",
+          "Swamp"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "maze-s-end": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "maze-s-end:registered:mazes_end",
+          "cost_text": "{3}, tap, return",
+          "event": null,
+          "face_id": "maze-s-end",
+          "handler": "legacy:mazes_end",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}, tap, return: search for a Gate; check the win condition",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "midnight-snack": {
+      "registered_abilities": [
+        {
+          "ability_id": "midnight-snack:registered:midnight_snack",
+          "cost_text": "{2}{B}, sacrifice",
+          "event": null,
+          "face_id": "midnight-snack",
+          "handler": "legacy:midnight_snack",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}{B}, sacrifice: target opponent loses life gained this turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "mikaeus-the-lunarch": {
+      "combat": {
+        "power": 0,
+        "toughness": 0
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "mikaeus-the-lunarch:registered:mikaeus_self",
+          "cost_text": "tap",
+          "event": null,
+          "face_id": "mikaeus-the-lunarch",
+          "handler": "legacy:mikaeus_self",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap: put a +1/+1 counter on Mikaeus",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "mikaeus-the-lunarch:registered:mikaeus_team",
+          "cost_text": "tap, remove a +1/+1 counter",
+          "event": null,
+          "face_id": "mikaeus-the-lunarch",
+          "handler": "legacy:mikaeus_team",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap, remove a +1/+1 counter: counter each other creature",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "mind-stone": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "mind-stone:registered:mind_stone_draw",
+          "cost_text": "{1}, tap, sacrifice",
+          "event": null,
+          "face_id": "mind-stone",
+          "handler": "legacy:mind_stone_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice: draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "minsc-boo-timeless-heroes": {
+      "faces": {
+        "minsc-boo-timeless-heroes": {
+          "loyalty": 3,
+          "loyalty_variable": null
+        }
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "minsc-boo-timeless-heroes:registered:minsc_plus",
+          "cost_text": "+1",
+          "event": null,
+          "face_id": "minsc-boo-timeless-heroes",
+          "handler": "legacy:minsc_plus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "+1: put three counters on up to one creature with trample or haste",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "minsc-boo-timeless-heroes:registered:minsc_minus",
+          "cost_text": "-2",
+          "event": null,
+          "face_id": "minsc-boo-timeless-heroes",
+          "handler": "legacy:minsc_minus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-2: sacrifice a creature; damage any target and draw if it was a Hamster",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "mirage-mirror": {
+      "registered_abilities": [
+        {
+          "ability_id": "mirage-mirror:registered:mirage_mirror",
+          "cost_text": "{2}",
+          "event": null,
+          "face_id": "mirage-mirror",
+          "handler": "legacy:mirage_mirror",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}: copy an artifact, creature, enchantment, or land until end of turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "misty-rainforest": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Forest",
+          "Island"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "morphic-pool": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "mossfire-valley": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "mountain": {
+      "land": {
+        "classifications": [
+          "basic"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "mulldrifter": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "nissa-steward-of-elements": {
+      "faces": {
+        "nissa-steward-of-elements": {
+          "loyalty": null,
+          "loyalty_variable": "X"
+        }
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "nissa-steward-of-elements:registered:nissa_plus",
+          "cost_text": "+2",
+          "event": null,
+          "face_id": "nissa-steward-of-elements",
+          "handler": "legacy:nissa_plus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "+2: scry 2",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "nissa-steward-of-elements:registered:nissa_zero",
+          "cost_text": "0",
+          "event": null,
+          "face_id": "nissa-steward-of-elements",
+          "handler": "legacy:nissa_zero",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "0: look at top; may put a qualifying land or creature onto battlefield",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "nissa-steward-of-elements:registered:nissa_ultimate",
+          "cost_text": "-6",
+          "event": null,
+          "face_id": "nissa-steward-of-elements",
+          "handler": "legacy:nissa_ultimate",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-6: animate up to two lands",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "noxious-gearhulk": {
+      "combat": {
+        "power": 5,
+        "toughness": 4
+      },
+      "keywords": [
+        "menace"
+      ]
+    },
+    "nullpriest-of-oblivion": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      },
+      "keywords": [
+        "lifelink",
+        "menace"
+      ]
+    },
+    "oasis-gardener": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": true
+      }
+    },
+    "omen-of-the-sea": {
+      "registered_abilities": [
+        {
+          "ability_id": "omen-of-the-sea:registered:omen_scry",
+          "cost_text": "{2}{U}, sacrifice",
+          "event": null,
+          "face_id": "omen-of-the-sea",
+          "handler": "legacy:omen_scry",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}{U}, sacrifice: scry 2",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "omo-queen-of-vesuva": {
+      "combat": {
+        "power": 1,
+        "toughness": 5
+      }
+    },
+    "oracle-of-mul-daya": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "orzhov-signet": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [],
+        "variable_output": false
+      }
+    },
+    "otawara-soaring-city": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "otawara-soaring-city:registered:channel_otawara",
+          "cost_text": "Channel",
+          "event": null,
+          "face_id": "otawara-soaring-city",
+          "handler": "legacy:channel_otawara",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Channel: return an artifact, creature, enchantment, or planeswalker",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "hand"
+        }
+      ]
+    },
+    "overflowing-basin": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "ozolith-the-shattered-spire": {
+      "registered_abilities": [
+        {
+          "ability_id": "ozolith-the-shattered-spire:registered:shattered_spire_counter",
+          "cost_text": "{1}{G}, tap",
+          "event": null,
+          "face_id": "ozolith-the-shattered-spire",
+          "handler": "legacy:shattered_spire_counter",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}{G}, tap: put a +1/+1 counter on an artifact or creature",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "parallax-wave": {
+      "registered_abilities": [
+        {
+          "ability_id": "parallax-wave:registered:wave_activate",
+          "cost_text": "Remove a fade counter",
+          "event": null,
+          "face_id": "parallax-wave",
+          "handler": "legacy:wave_activate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Remove a fade counter: exile target creature",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "plains": {
+      "land": {
+        "classifications": [
+          "basic"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "planar-nexus": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      }
+    },
+    "polluted-delta": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Island",
+          "Swamp"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "pontiff-of-blight": {
+      "combat": {
+        "power": 2,
+        "toughness": 7
+      }
+    },
+    "priest-of-titania": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
+    "pristine-talisman": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "pristine-talisman:registered:pristine_talisman_mana",
+          "cost_text": "tap",
+          "event": null,
+          "face_id": "pristine-talisman",
+          "handler": "legacy:pristine_talisman_mana",
+          "kind": "activated",
+          "mana_ability": true,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap: add {C} and gain 1 life",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": false,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "raffine-s-tower": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "rampaging-baloths": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "rampant-frogantua": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      },
+      "keywords": [
+        "trample"
+      ]
+    },
+    "ramunap-excavator": {
+      "combat": {
+        "power": 2,
+        "toughness": 3
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "ramunap-excavator:registered:ramunap_land",
+          "cost_text": null,
+          "event": null,
+          "face_id": "ramunap-excavator",
+          "handler": "legacy:ramunap_land",
+          "kind": "special_action",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "play a land from your graveyard",
+          "support_status": "registered",
+          "timing": "land_play",
+          "uses_stack": false,
+          "zone": "graveyard"
+        }
+      ]
+    },
+    "reliquary-tower": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "restless-fortress": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "restless-fortress:registered:animate_fortress",
+          "cost_text": "{2}{W}{B}",
+          "event": null,
+          "face_id": "restless-fortress",
+          "handler": "legacy:animate_fortress",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}{W}{B}: become a 1/4 creature until end of turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "reveillark": {
+      "combat": {
+        "power": 4,
+        "toughness": 3
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "rockfall-vale": {
+      "land": {
+        "classifications": [
+          "slow"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "rogue-s-passage": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "rogue-s-passage:registered:rogues_passage",
+          "cost_text": "{4}, tap",
+          "event": null,
+          "face_id": "rogue-s-passage",
+          "handler": "legacy:rogues_passage",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{4}, tap: target creature can't be blocked this turn",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "rootbound-crag": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "ruby-daring-tracker": {
+      "combat": {
+        "power": 1,
+        "toughness": 2
+      },
+      "keywords": [
+        "haste"
+      ],
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": false
+      }
+    },
+    "rune-scarred-demon": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "sage-of-the-maze": {
+      "combat": {
+        "power": 1,
+        "toughness": 3
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [],
+        "variable_output": false
+      }
+    },
+    "sakura-tribe-elder": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "sakura-tribe-elder:registered:sakura_tribe",
+          "cost_text": "sacrifice",
+          "event": null,
+          "face_id": "sakura-tribe-elder",
+          "handler": "legacy:sakura_tribe",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "sacrifice: search for a basic land tapped",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "satyr-wayfinder": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "scalding-tarn": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Island",
+          "Mountain"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "scoured-barrens": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "scute-swarm": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "sea-of-clouds": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "sensei-s-divining-top": {
+      "registered_abilities": [
+        {
+          "ability_id": "sensei-s-divining-top:registered:top_look",
+          "cost_text": "{1}",
+          "event": null,
+          "face_id": "sensei-s-divining-top",
+          "handler": "legacy:top_look",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}: look at and reorder the top three cards",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "sensei-s-divining-top:registered:top_draw",
+          "cost_text": "tap",
+          "event": null,
+          "face_id": "sensei-s-divining-top",
+          "handler": "legacy:top_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap: draw a card, then put Top on its owner's library",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "shattered-sanctum": {
+      "land": {
+        "classifications": [
+          "slow"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "shineshadow-snarl": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "shipwreck-marsh": {
+      "land": {
+        "classifications": [
+          "slow"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "silent-clearing": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "silent-clearing:registered:silent_clearing_draw",
+          "cost_text": "{1}, tap, sacrifice",
+          "event": null,
+          "face_id": "silent-clearing",
+          "handler": "legacy:silent_clearing_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice: draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "simic-growth-chamber": {
+      "land": {
+        "classifications": [
+          "bounce",
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 2,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "simic-guildgate": {
+      "land": {
+        "classifications": [
+          "enters_tapped",
+          "gate"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "sol-ring": {
+      "mana": {
+        "base_amount": 2,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "solemn-simulacrum": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "sorin-of-house-markov": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      },
+      "faces": {
+        "sorin-ravenous-neonate": {
+          "loyalty": 3,
+          "loyalty_variable": null
+        }
+      },
+      "keywords": [
+        "lifelink"
+      ],
+      "registered_abilities": [
+        {
+          "ability_id": "sorin-of-house-markov:registered:sorin_house_plus",
+          "cost_text": "+2",
+          "event": null,
+          "face_id": "sorin-ravenous-neonate",
+          "handler": "legacy:sorin_house_plus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "+2: create a Food",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "sorin-of-house-markov:registered:sorin_house_minus",
+          "cost_text": "-1",
+          "event": null,
+          "face_id": "sorin-ravenous-neonate",
+          "handler": "legacy:sorin_house_minus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-1: deal life-gained damage to any target",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "sorin-of-house-markov:registered:sorin_house_ultimate",
+          "cost_text": "-6",
+          "event": null,
+          "face_id": "sorin-ravenous-neonate",
+          "handler": "legacy:sorin_house_ultimate",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-6: gain control of a creature",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "sorin-vengeful-bloodlord": {
+      "faces": {
+        "sorin-vengeful-bloodlord": {
+          "loyalty": 4,
+          "loyalty_variable": null
+        }
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "sorin-vengeful-bloodlord:registered:sorin_vengeful_plus",
+          "cost_text": "+2",
+          "event": null,
+          "face_id": "sorin-vengeful-bloodlord",
+          "handler": "legacy:sorin_vengeful_plus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "+2: deal 1 damage to target player or planeswalker",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "sorin-vengeful-bloodlord:registered:sorin_vengeful_minus",
+          "cost_text": "-X",
+          "event": null,
+          "face_id": "sorin-vengeful-bloodlord",
+          "handler": "legacy:sorin_vengeful_minus",
+          "kind": "loyalty",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "-X: return a creature card with mana value X from your graveyard; it becomes a Vampire",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "spire-garden": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "spirited-companion": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      }
+    },
+    "stomping-ground": {
+      "land": {
+        "classifications": [
+          "shock"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "R",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "sun-titan": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      },
+      "keywords": [
+        "vigilance"
+      ]
+    },
+    "sunken-palace": {
+      "land": {
+        "classifications": [
+          "cave",
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "sunken-palace:registered:sunken_palace",
+          "cost_text": "{1}{U}, tap, exile seven cards",
+          "event": null,
+          "face_id": "sunken-palace",
+          "handler": "legacy:sunken_palace",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}{U}, tap, exile seven cards: add copy-linked {U}",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "swamp": {
+      "land": {
+        "classifications": [
+          "basic"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "swiftfoot-boots": {
+      "registered_abilities": [
+        {
+          "ability_id": "swiftfoot-boots:registered:equip_boots",
+          "cost_text": null,
+          "event": null,
+          "face_id": "swiftfoot-boots",
+          "handler": "legacy:equip_boots",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "equip {1}",
+          "support_status": "registered",
+          "timing": "sorcery",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "talisman-of-dominance": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "B",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "talisman-of-hierarchy": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "talisman-of-progress": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "talon-gates-of-madara": {
+      "land": {
+        "classifications": [
+          "gate"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "U",
+          "B",
+          "R",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "any_color",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "talon-gates-of-madara:registered:talon_from_hand",
+          "cost_text": "{4}",
+          "event": null,
+          "face_id": "talon-gates-of-madara",
+          "handler": "legacy:talon_from_hand",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{4}: put Talon Gates onto the battlefield",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "hand"
+        }
+      ]
+    },
+    "tatyova-benthic-druid": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      }
+    },
+    "taurean-mauler": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "temple-of-mystery": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "temple-of-silence": {
+      "land": {
+        "classifications": [
+          "enters_tapped"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "terastodon": {
+      "combat": {
+        "power": 9,
+        "toughness": 9
+      }
+    },
+    "the-earth-crystal": {
+      "registered_abilities": [
+        {
+          "ability_id": "the-earth-crystal:registered:earth_crystal_distribute",
+          "cost_text": "{4}{G}{G}, tap",
+          "event": null,
+          "face_id": "the-earth-crystal",
+          "handler": "legacy:earth_crystal_distribute",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{4}{G}{G}, tap: distribute two +1/+1 counters",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "the-restoration-of-eiganjo": {
+      "faces": {
+        "architect-of-restoration": {
+          "power": 3,
+          "toughness": 4
+        }
+      }
+    },
+    "thespian-s-stage": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "thespian-s-stage:registered:stage_copy",
+          "cost_text": "{2}, tap",
+          "event": null,
+          "face_id": "thespian-s-stage",
+          "handler": "legacy:stage_copy",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}, tap: become a copy of target land",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "thought-vessel": {
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "mana_rock"
+        ],
+        "variable_output": false
+      }
+    },
+    "touch-the-spirit-realm": {
+      "registered_abilities": [
+        {
+          "ability_id": "touch-the-spirit-realm:registered:channel_touch",
+          "cost_text": "Channel {1}{W}",
+          "event": null,
+          "face_id": "touch-the-spirit-realm",
+          "handler": "legacy:channel_touch",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Channel {1}{W}: exile an artifact or creature until the next end step",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "hand"
+        }
+      ]
+    },
+    "trading-post": {
+      "registered_abilities": [
+        {
+          "ability_id": "trading-post:registered:trading_post_life",
+          "cost_text": "{1}, tap, discard",
+          "event": null,
+          "face_id": "trading-post",
+          "handler": "legacy:trading_post_life",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, discard: gain 4 life",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "trading-post:registered:trading_post_goat",
+          "cost_text": "{1}, tap, pay 1 life",
+          "event": null,
+          "face_id": "trading-post",
+          "handler": "legacy:trading_post_goat",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, pay 1 life: create a Goat",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "trading-post:registered:trading_post_recur",
+          "cost_text": "{1}, tap, sacrifice a creature",
+          "event": null,
+          "face_id": "trading-post",
+          "handler": "legacy:trading_post_recur",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice a creature: return an artifact card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        },
+        {
+          "ability_id": "trading-post:registered:trading_post_draw",
+          "cost_text": "{1}, tap, sacrifice an artifact",
+          "event": null,
+          "face_id": "trading-post",
+          "handler": "legacy:trading_post_draw",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice an artifact: draw a card",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "trenchpost": {
+      "land": {
+        "classifications": [
+          "locus"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "trenchpost:registered:trenchpost",
+          "cost_text": "{3}, tap",
+          "event": null,
+          "face_id": "trenchpost",
+          "handler": "legacy:trenchpost",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}, tap: target player mills for each Locus",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "twinblade-paladin": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      }
+    },
+    "ulvenwald-hydra": {
+      "combat": {
+        "power": 0,
+        "toughness": 0
+      },
+      "keywords": [
+        "reach",
+        "trample"
+      ]
+    },
+    "underworld-coinsmith": {
+      "combat": {
+        "power": 2,
+        "toughness": 2
+      }
+    },
+    "uro-titan-of-nature-s-wrath": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      }
+    },
+    "urza-s-cave": {
+      "land": {
+        "classifications": [
+          "cave"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "urza-s-cave:registered:urzas_cave",
+          "cost_text": "{3}, tap, sacrifice",
+          "event": null,
+          "face_id": "urza-s-cave",
+          "handler": "legacy:urzas_cave",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{3}, tap, sacrifice: search for a land tapped",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "urza-s-mine": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "urza-s-power-plant": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "urza-s-saga": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": true
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "urza-s-saga:registered:urza_saga_construct",
+          "cost_text": "{2}, tap",
+          "event": null,
+          "face_id": "urza-s-saga",
+          "handler": "legacy:urza_saga_construct",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}, tap: create a Construct",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "urza-s-tower": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "vault-of-champions": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "W",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "verdant-catacombs": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Forest",
+          "Swamp"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "vesperlark": {
+      "combat": {
+        "power": 2,
+        "toughness": 1
+      },
+      "keywords": [
+        "flying"
+      ]
+    },
+    "vesuva": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "victor-valgavoth-s-seneschal": {
+      "combat": {
+        "power": 3,
+        "toughness": 3
+      }
+    },
+    "vineglimmer-snarl": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "viscera-seer": {
+      "combat": {
+        "power": 1,
+        "toughness": 1
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "viscera-seer:registered:seer_activate",
+          "cost_text": "Sacrifice a creature",
+          "event": null,
+          "face_id": "viscera-seer",
+          "handler": "legacy:seer_activate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "Sacrifice a creature: scry 1",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "volatile-fault": {
+      "land": {
+        "classifications": [
+          "cave"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      },
+      "registered_abilities": [
+        {
+          "ability_id": "volatile-fault:registered:volatile_fault",
+          "cost_text": "{1}, tap, sacrifice",
+          "event": null,
+          "face_id": "volatile-fault",
+          "handler": "legacy:volatile_fault",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{1}, tap, sacrifice: destroy an opponent's nonbasic land",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "vorinclex-monstrous-raider": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      },
+      "keywords": [
+        "haste",
+        "trample"
+      ]
+    },
+    "watery-grave": {
+      "land": {
+        "classifications": [
+          "shock"
+        ],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "B"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "wayfarer-s-bauble": {
+      "registered_abilities": [
+        {
+          "ability_id": "wayfarer-s-bauble:registered:bauble_activate",
+          "cost_text": "{2}, tap, sacrifice",
+          "event": null,
+          "face_id": "wayfarer-s-bauble",
+          "handler": "legacy:bauble_activate",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "{2}, tap, sacrifice: search for a basic land tapped",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "windswept-heath": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Forest",
+          "Plains"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "wonderscape-sage": {
+      "combat": {
+        "power": 1,
+        "toughness": 3
+      },
+      "keywords": [
+        "flying"
+      ],
+      "registered_abilities": [
+        {
+          "ability_id": "wonderscape-sage:registered:wonderscape_sage",
+          "cost_text": "tap, return a land",
+          "event": null,
+          "face_id": "wonderscape-sage",
+          "handler": "legacy:wonderscape_sage",
+          "kind": "activated",
+          "mana_ability": false,
+          "optional": false,
+          "origin": "registry",
+          "rules_text": "tap, return a land: draw then conditionally discard",
+          "support_status": "registered",
+          "timing": "priority",
+          "uses_stack": true,
+          "zone": "battlefield"
+        }
+      ]
+    },
+    "wooded-foothills": {
+      "land": {
+        "classifications": [
+          "fetch"
+        ],
+        "fetch_types": [
+          "Forest",
+          "Mountain"
+        ]
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "xenagos-god-of-revels": {
+      "combat": {
+        "power": 6,
+        "toughness": 5
+      },
+      "keywords": [
+        "indestructible"
+      ]
+    },
+    "xolatoyac-the-smiling-flood": {
+      "combat": {
+        "power": 6,
+        "toughness": 6
+      }
+    },
+    "yavimaya-coast": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "U",
+          "G",
+          "C"
+        ],
+        "is_mana_source": true,
+        "production_rule": "printed",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    },
+    "yavimaya-cradle-of-growth": {
+      "land": {
+        "classifications": [],
+        "fetch_types": []
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [],
+        "is_mana_source": true,
+        "production_rule": "none",
+        "source_kinds": [
+          "land"
+        ],
+        "variable_output": false
+      }
+    }
+  },
+  "schema_version": 1,
+  "source": "catalog migration annotations frozen from the 2026-08-31 four-deck harness"
+}

@@ -1,0 +1,81 @@
+{
+  "schema": 2,
+  "catalog_valid": true,
+  "four_100_card_decks": true,
+  "runtime_deck_order_matches_catalog": true,
+  "strategy_profiles_match_catalog": true,
+  "role_presence_matrix_generated": true,
+  "registered_actions_catalog_backed": true,
+  "printed_creature_stats_complete": true,
+  "printed_planeswalker_loyalty_complete": true,
+  "runtime_uses_catalog_deck_source": true,
+  "duplicated_runtime_classification_literals_retired": true,
+  "latest_reaminatour_baseline": true,
+  "official_layer_has_no_action_chooser": true,
+  "death_grasp_is_not_grouped_with_multiplayer_drains": true,
+  "event_visibility_policy_complete": true,
+  "catalog_counts": {
+    "Reaminatour": 100,
+    "Minsc & Boo": 100,
+    "Omo": 100,
+    "Elenda": 100
+  },
+  "runtime_counts": {
+    "Reaminatour": 100,
+    "Minsc & Boo": 100,
+    "Omo": 100,
+    "Elenda": 100
+  },
+  "strategy_counts": {
+    "Reaminatour": 100,
+    "Minsc & Boo": 100,
+    "Omo": 100,
+    "Elenda": 100
+  },
+  "catalog_audit": {
+    "abilities": 728,
+    "ability_kinds": {
+      "activated": 272,
+      "loyalty": 13,
+      "replacement": 60,
+      "special_action": 1,
+      "spell": 90,
+      "static": 139,
+      "triggered": 153
+    },
+    "ability_origins": {
+      "oracle": 649,
+      "registry": 79
+    },
+    "entry_replacements": 49,
+    "faces": 340,
+    "oracle_ability_clauses": 649,
+    "physical_deck_slots": 400,
+    "registered_actions": 79,
+    "support_statuses": {
+      "generic": 118,
+      "oracle_only": 531,
+      "registered": 79
+    },
+    "unique_cards": 334
+  },
+  "strategy_revision": {
+    "revision": 44,
+    "fingerprint": "38c602b489ecaf06e782328fafdd22f882b745c2d16b1426b2adba157d419f8a",
+    "revision_id": "strategy-r44-38c602b489ecaf06"
+  },
+  "strategy_errors": [],
+  "profile_parity": {
+    "Reaminatour": true,
+    "Minsc & Boo": true,
+    "Omo": true,
+    "Elenda": true
+  },
+  "missing_creature_stats": [],
+  "missing_planeswalker_loyalty": [],
+  "forbidden_hits": [],
+  "retired_literal_hits": [],
+  "missing_event_visibility": [],
+  "unused_event_visibility": [],
+  "ok": true
+}

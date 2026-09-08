@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "game": 1,
+  "review_id": "review-replace-with-generated-review-id",
+  "terminal_fingerprint": "terminal-replace-with-generated-terminal-fingerprint",
+  "base_revision": "strategy-r1-replace-with-current-revision-id",
+  "review": {
+    "summary": "Replace this example with the completed game's concise basic narrative and learning conclusion.",
+    "pilot_dispositions": {
+      "Reaminatour": {
+        "disposition": "changes",
+        "rationale": "The reviewed evidence supports the example Reaminatour operations below."
+      },
+      "Minsc & Boo": {
+        "disposition": "no_change",
+        "rationale": "The packet was reviewed and did not justify a reusable memory change."
+      },
+      "Omo": {
+        "disposition": "no_change",
+        "rationale": "The packet was reviewed and did not justify a reusable memory change."
+      },
+      "Elenda": {
+        "disposition": "no_change",
+        "rationale": "The packet was reviewed and did not justify a reusable memory change."
+      }
+    },
+    "no_change_reason": ""
+  },
+  "operations": [
+    {
+      "op": "add_note",
+      "deck": "reaminatour",
+      "card": "Vesperlark",
+      "note": {
+        "note_id": "g01_example_vesperlark_lesson",
+        "text": "Replace this example with self-contained, reusable guidance supported by the reviewed evidence. Keep game-specific provenance in source_game and the learning audit rather than referring to this game, its seed, decisions, or turns in the note text.",
+        "contexts": [
+          "decision",
+          "priority"
+        ],
+        "confidence": 0.8
+      }
+    },
+    {
+      "op": "create_role",
+      "label": "Example learned role",
+      "description": "Replace or remove this example operation during post-game review."
+    },
+    {
+      "op": "assign_role",
+      "deck": "reaminatour",
+      "card": "Vesperlark",
+      "role": "example_learned_role"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "tests": 1029,
+  "passed": false,
+  "seconds": 1001.275,
+  "failures": [],
+  "errors": [
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_failed_cold_delivery_retains_all_references_and_retry_is_baseline",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_failed_warm_send_keeps_request_and_previous_acknowledged_state",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_fresh_physical_thread_does_not_reuse_old_board_or_standing_reference",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_inspection_redelivery_preserves_normal_checkpoint_memory",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_same_thread_warm_delivery_reuses_only_successfully_delivered_information",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_same_thread_zero_tool_pilot_retry_reuses_existing_input",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_same_thread_zero_tool_planner_retry_reuses_existing_input",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_stopped_same_thread_pilot_resume_restores_full_plan_preview",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communication_delivery.CommunicationDeliveryTests.test_stopped_same_thread_planner_resume_restores_board_and_standing_baseline",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_communications_inspection.InspectionCommunicationTests.test_host_acknowledges_raw_inspection_knowledge_only_after_response_success",
+      "category": "incomplete test fixture"
+    },
+    {
+      "test": "test_host_routing.RuntimeRoutingTests.test_only_missing_unused_transports_are_restored_without_inference",
+      "category": "missing server binding in unused-transport recovery"
+    }
+  ],
+  "skipped": [],
+  "resolution": "Corrected; 94 targeted checks passed before the final full-suite rerun."
+}

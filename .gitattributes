@@ -1,0 +1,12 @@
+* text=auto eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.whl binary
+*.zip binary
+# Preserve the exact authored, hash-bound strategy reference text.
+data/strategy/**/*.md whitespace=-blank-at-eol,-blank-at-eof

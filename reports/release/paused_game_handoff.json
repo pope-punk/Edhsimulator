@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "game": 1,
+  "accepted": 305,
+  "seed": 2026090805,
+  "decision_sha256": "fc1ef225f239627b1c3dbe548d02f2bf73e002d2dac88b0bc70f75b329fa74f3",
+  "state": "paused_by_user",
+  "learning": "deferred by operator; original game binding unchanged",
+  "rules_hotfixes": "suspended",
+  "warning": "Preservation archive, not an automatic remote import. Physical App Server conversations and credentials are not included. Destination requires explicit path/identity reconciliation, isolated context reconstruction and prefix validation before any inference.",
+  "files": 7160,
+  "uncompressed_bytes": 103527446,
+  "archive_bytes": 25699541,
+  "archive_sha256": "9d4fa27497fa6ca87d36f1c41a47e65283b63fcc1e83d2d4088ab9668a6d1a96"
+}

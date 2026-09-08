@@ -1,0 +1,2851 @@
+MAGIC: THE GATHERING — FOUR-DECK FULL CARD REFERENCE
+Snapshot date: 2026-09-01
+Reference version: v3 — mana costs + full type lines + stored Oracle/rules text
+
+PURPOSE
+-------
+Validation reference for the four-player EDH simulation pod:
+  • Reaminatour — Aminatou, Veil Piercer
+  • Minsc & Boo, Timeless Heroes
+  • Omo, Queen of Vesuva
+  • Elenda, Saint of Dusk
+
+DECK SNAPSHOTS
+--------------
+• Reaminatour: current project 100-card snapshot based on Archidekt deck 16760747, with user-directed updates through 2026-09-01.
+• Minsc & Boo: frozen EDHREC-average snapshot used by the simulation pod.
+• Omo: frozen EDHREC Lands Matter average snapshot used by the simulation pod.
+• Elenda: exact user-supplied 100-card list used by the simulation pod.
+
+ENTRY FORMAT
+------------
+Each card entry explicitly stores:
+  Quantity
+  Mana cost
+  Full type line
+  Oracle/rules text
+
+For Rooms, transforming double-faced cards, modal double-faced cards, and Battles that transform,
+both faces/doors are kept in the same deck entry. Face metadata is separated by “//” where applicable.
+Lands use Mana cost: —.
+Flavor text and card-specific rulings are omitted.
+The Rules text field is the stored Oracle/rules-text basis used by the simulations; established-keyword
+reminder text may be absent where Oracle text normally omits it.
+
+INTEGRITY
+---------
+4 decks × 100 physical cards = 400 deck slots.
+334 unique card names across the four decks.
+Every distinct entry has explicit metadata and a nonempty rules-text body.
+
+====================================================================================================
+REAMINATOUR — AMINATOU, VEIL PIERCER
+====================================================================================================
+Total physical cards: 100
+Distinct entries: 98
+
+[001] 1x Aminatou, Veil Piercer
+-------------------------------
+Mana cost: {1}{W}{U}{B}
+Type line: Legendary Creature — Human Wizard
+Rules text:
+  At the beginning of your upkeep, surveil 2.
+  Each enchantment card in your hand has miracle. Its miracle cost is equal to its mana cost reduced by {4}.
+
+[002] 1x Aminatou, the Fateshifter
+----------------------------------
+Mana cost: {W}{U}{B}
+Type line: Legendary Planeswalker — Aminatou
+Rules text:
+  [+1]: Draw a card, then put a card from your hand on top of your library.
+  [−1]: Exile another target permanent you own, then return it to the battlefield under your control.
+  [−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.
+  Aminatou, the Fateshifter can be your commander.
+
+[003] 1x Felidar Guardian
+-------------------------
+Mana cost: {3}{W}
+Type line: Creature — Cat Beast
+Rules text:
+  When this creature enters, you may exile another target permanent you control, then return that card to the battlefield under its owner's control.
+
+[004] 1x Animate Dead
+---------------------
+Mana cost: {1}{B}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature card in a graveyard
+  When this Aura enters, if it's on the battlefield, it loses "enchant creature card in a graveyard" and gains "enchant creature put onto the battlefield with this Aura." Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.
+  Enchanted creature gets -1/-0.
+
+[005] 1x Body Double
+--------------------
+Mana cost: {4}{U}
+Type line: Creature — Shapeshifter
+Rules text:
+  You may have this creature enter as a copy of any creature card in a graveyard.
+
+[006] 1x Changing Loyalty
+-------------------------
+Mana cost: {1}{B}
+Type line: Enchantment — Aura
+Rules text:
+  Flash
+  Replicate {2}
+  Enchant creature
+  When enchanted creature dies, return it to the battlefield under your control.
+
+[007] 1x Dance of the Dead
+--------------------------
+Mana cost: {1}{B}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature card in a graveyard
+  When this Aura enters, if it's on the battlefield, it loses "enchant creature card in a graveyard" and gains "enchant creature put onto the battlefield with this Aura." Put enchanted creature card onto the battlefield tapped under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.
+  Enchanted creature gets +1/+1 and doesn't untap during its controller's untap step.
+  At the beginning of the upkeep of enchanted creature's controller, that player may pay {1}{B}. If the player does, untap that creature.
+
+[008] 1x Fallen Ideal
+---------------------
+Mana cost: {2}{B}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature
+  Enchanted creature has flying and "Sacrifice a creature: This creature gets +2/+1 until end of turn."
+  When this Aura is put into a graveyard from the battlefield, return it to its owner's hand.
+
+[009] 1x Fanatical Devotion
+---------------------------
+Mana cost: {2}{W}
+Type line: Enchantment
+Rules text:
+  Sacrifice a creature: Regenerate target creature.
+
+[010] 1x Funeral Room // Awakening Hall
+---------------------------------------
+Mana cost: {2}{B} // {6}{B}{B}
+Type line: Enchantment — Room // Enchantment — Room
+Rules text:
+  FUNERAL ROOM
+  Whenever a creature you control dies, each opponent loses 1 life and you gain 1 life.
+
+  AWAKENING HALL
+  When you unlock this door, return all creature cards from your graveyard to the battlefield.
+
+[011] 1x Karmic Guide
+---------------------
+Mana cost: {3}{W}{W}
+Type line: Creature — Angel Spirit
+Rules text:
+  Flying, protection from black
+  Echo {3}{W}{W}
+  When this creature enters, return target creature card from your graveyard to the battlefield.
+
+[012] 1x Necromancy
+--------------------
+Mana cost: {2}{B}
+Type line: Enchantment
+Rules text:
+  You may cast this spell as though it had flash. If you cast it any time a sorcery couldn't have been cast, the controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step.
+  When this enchantment enters, if it's on the battlefield, it becomes an Aura with "enchant creature put onto the battlefield with Necromancy." Put target creature card from a graveyard onto the battlefield under your control and attach this enchantment to it. When this enchantment leaves the battlefield, that creature's controller sacrifices it.
+
+[013] 1x Reveillark
+--------------------
+Mana cost: {4}{W}
+Type line: Creature — Elemental
+Rules text:
+  Flying
+  When this creature leaves the battlefield, return up to two target creature cards each with power 2 or less from your graveyard to the battlefield.
+  Evoke {5}{W}
+
+[014] 1x Sun Titan
+--------------------
+Mana cost: {4}{W}{W}
+Type line: Creature — Giant
+Rules text:
+  Vigilance
+  Whenever this creature enters or attacks, you may return target permanent card with mana value 3 or less from your graveyard to the battlefield.
+
+[015] 1x Viscera Seer
+---------------------
+Mana cost: {B}
+Type line: Creature — Vampire Wizard
+Rules text:
+  Sacrifice a creature: Scry 1.
+
+[016] 1x Liliana the Faultless
+------------------------------
+Mana cost: {W}
+Type line: Legendary Creature — Human Cleric
+Rules text:
+  Whenever another creature or planeswalker you control enters, you gain 1 life.
+  {1}, {T}, Discard a card: Another target creature or planeswalker you control gains hexproof until end of turn.
+
+[017] 1x The Meathook Massacre
+------------------------------
+Mana cost: {X}{B}{B}
+Type line: Legendary Enchantment
+Rules text:
+  When The Meathook Massacre enters, each creature gets -X/-X until end of turn.
+  Whenever a creature you control dies, each opponent loses 1 life.
+  Whenever a creature an opponent controls dies, you gain 1 life.
+
+[018] 1x Underworld Coinsmith
+-----------------------------
+Mana cost: {W}{B}
+Type line: Enchantment Creature — Human Cleric
+Rules text:
+  Constellation — Whenever this creature or another enchantment you control enters, you gain 1 life.
+  {1}{W}{B}, Pay 1 life: Each opponent loses 1 life.
+
+[019] 1x Starfield of Nyx
+-------------------------
+Mana cost: {4}{W}
+Type line: Enchantment
+Rules text:
+  At the beginning of your upkeep, you may return target enchantment card from your graveyard to the battlefield.
+  As long as you control five or more enchantments, each other non-Aura enchantment you control is a creature in addition to its other types and has base power and base toughness each equal to its mana value.
+
+[020] 1x Touch the Spirit Realm
+-------------------------------
+Mana cost: {2}{W}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.
+  Channel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.
+
+[021] 1x Fierce Guardianship
+----------------------------
+Mana cost: {2}{U}
+Type line: Instant
+Rules text:
+  If you control a commander, you may cast this spell without paying its mana cost.
+  Counter target noncreature spell.
+
+[022] 1x Glen Elendra Archmage
+------------------------------
+Mana cost: {3}{U}
+Type line: Creature — Faerie Wizard
+Rules text:
+  Flying
+  {U}, Sacrifice this creature: Counter target noncreature spell.
+  Persist
+
+[023] 1x Remand
+--------------------
+Mana cost: {1}{U}
+Type line: Instant
+Rules text:
+  Counter target spell. If that spell is countered this way, put it into its owner's hand instead of into that player's graveyard.
+  Draw a card.
+
+[024] 1x Swan Song
+--------------------
+Mana cost: {U}
+Type line: Instant
+Rules text:
+  Counter target enchantment, instant, or sorcery spell. Its controller creates a 2/2 blue Bird creature token with flying.
+
+[025] 1x Consider
+--------------------
+Mana cost: {U}
+Type line: Instant
+Rules text:
+  Surveil 1.
+  Draw a card.
+
+[026] 1x Mystic Remora
+----------------------
+Mana cost: {U}
+Type line: Enchantment
+Rules text:
+  Cumulative upkeep {1}
+  Whenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}.
+
+[027] 1x Omen of the Sea
+------------------------
+Mana cost: {1}{U}
+Type line: Enchantment
+Rules text:
+  Flash
+  When this enchantment enters, scry 2, then draw a card.
+  {2}{U}, Sacrifice this enchantment: Scry 2.
+
+[028] 1x Rhystic Study
+----------------------
+Mana cost: {2}{U}
+Type line: Enchantment
+Rules text:
+  Whenever an opponent casts a spell, you may draw a card unless that player pays {1}.
+
+[029] 1x Gleaming Splendor
+--------------------------
+Mana cost: {1}{W}
+Type line: Enchantment
+Rules text:
+  Whenever an opponent draws their second card each turn, you create a Treasure token.
+  {2}{W}: Two target players each draw a card.
+
+[030] 1x Doomwake Giant
+-----------------------
+Mana cost: {4}{B}
+Type line: Enchantment Creature — Giant
+Rules text:
+  Constellation — Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.
+
+[031] 1x Entity Tracker
+-----------------------
+Mana cost: {2}{U}
+Type line: Creature — Human Scout
+Rules text:
+  Flash
+  Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.
+
+[032] 1x Ghostly Dancers
+------------------------
+Mana cost: {3}{W}{W}
+Type line: Creature — Spirit
+Rules text:
+  Flying
+  When Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.
+  Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.
+
+[033] 1x Grim Guardian
+----------------------
+Mana cost: {2}{B}
+Type line: Enchantment Creature — Zombie
+Rules text:
+  Constellation — Whenever this creature or another enchantment you control enters, each opponent loses 1 life.
+
+[034] 1x Victor, Valgavoth's Seneschal
+--------------------------------------
+Mana cost: {1}{W}{B}
+Type line: Legendary Creature — Human Warlock
+Rules text:
+  Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.
+
+[035] 1x Mulldrifter
+--------------------
+Mana cost: {4}{U}
+Type line: Creature — Elemental
+Rules text:
+  Flying
+  When this creature enters, draw two cards.
+  Evoke {2}{U}
+
+[036] 1x Baleful Strix
+----------------------
+Mana cost: {U}{B}
+Type line: Artifact Creature — Bird
+Rules text:
+  Flying, deathtouch
+  When this creature enters, draw a card.
+
+[037] 1x Spirited Companion
+---------------------------
+Mana cost: {1}{W}
+Type line: Enchantment Creature — Dog
+Rules text:
+  When this creature enters, draw a card.
+
+[038] 1x The Restoration of Eiganjo
+-----------------------------------
+Mana cost: {2}{W}
+Type line: Enchantment — Saga // Enchantment Creature — Fox Monk
+Rules text:
+  FRONT — THE RESTORATION OF EIGANJO
+  I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.
+  II — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.
+  III — Exile this Saga, then return it to the battlefield transformed under your control.
+
+  BACK — ARCHITECT OF RESTORATION
+  Vigilance
+  Whenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token.
+
+[039] 1x Elspeth Conquers Death
+-------------------------------
+Mana cost: {3}{W}{W}
+Type line: Enchantment — Saga
+Rules text:
+  I — Exile target permanent an opponent controls with mana value 3 or greater.
+  II — Noncreature spells your opponents cast cost {2} more to cast until your next turn.
+  III — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.
+
+[040] 1x Smothering Tithe
+-------------------------
+Mana cost: {3}{W}
+Type line: Enchantment
+Rules text:
+  Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token.
+
+[041] 1x Alseid of Life's Bounty
+--------------------------------
+Mana cost: {W}
+Type line: Enchantment Creature — Nymph
+Rules text:
+  Lifelink
+  {1}, Sacrifice this creature: Target creature or enchantment you control gains protection from the color of your choice until end of turn.
+
+[042] 1x Replenish
+--------------------
+Mana cost: {3}{W}
+Type line: Sorcery
+Rules text:
+  Return all enchantment cards from your graveyard to the battlefield.
+
+[043] 1x Leonin Relic-Warder
+----------------------------
+Mana cost: {W}{W}
+Type line: Creature — Cat Cleric
+Rules text:
+  When this creature enters, you may exile target artifact or enchantment.
+  When this creature leaves the battlefield, return the exiled card to the battlefield under its owner's control.
+
+[044] 1x Loran of the Third Path
+--------------------------------
+Mana cost: {2}{W}
+Type line: Legendary Creature — Human Artificer
+Rules text:
+  Vigilance
+  When Loran enters, destroy up to one target artifact or enchantment.
+  {T}: You and target opponent each draw a card.
+
+[045] 1x Oblivion Ring
+----------------------
+Mana cost: {2}{W}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, exile another target nonland permanent.
+  When this enchantment leaves the battlefield, return the exiled card to the battlefield under its owner's control.
+
+[046] 1x Parallax Wave
+----------------------
+Mana cost: {2}{W}{W}
+Type line: Enchantment
+Rules text:
+  Fading 5
+  Remove a fade counter from this enchantment: Exile target creature.
+  When this enchantment leaves the battlefield, each player returns to the battlefield all cards they own exiled with this enchantment.
+
+[047] 1x Chthonian Nightmare
+----------------------------
+Mana cost: {1}{B}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, you get {E}{E}{E} (three energy counters).
+  Pay X {E}, Sacrifice a creature, Return this enchantment to its owner's hand: Return target creature card with mana value X from your graveyard to the battlefield. Activate only as a sorcery.
+
+[048] 1x Brainstorm
+--------------------
+Mana cost: {U}
+Type line: Instant
+Rules text:
+  Draw three cards, then put two cards from your hand on top of your library in any order.
+
+[049] 1x Opt
+--------------------
+Mana cost: {U}
+Type line: Instant
+Rules text:
+  Scry 1.
+  Draw a card.
+
+[050] 1x Dimir House Guard
+--------------------------
+Mana cost: {3}{B}
+Type line: Creature — Skeleton
+Rules text:
+  Fear
+  Sacrifice a creature: Regenerate this creature.
+  Transmute {1}{B}{B}
+
+[051] 1x Sensei's Divining Top
+------------------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {1}: Look at the top three cards of your library, then put them back in any order.
+  {T}: Draw a card, then put this artifact on top of its owner's library.
+
+[052] 1x Enlightened Tutor
+--------------------------
+Mana cost: {W}
+Type line: Instant
+Rules text:
+  Search your library for an artifact or enchantment card, reveal it, then shuffle and put that card on top.
+
+[053] 1x Gifts Ungiven
+----------------------
+Mana cost: {3}{U}
+Type line: Instant
+Rules text:
+  Search your library for up to four cards with different names and reveal them. Target opponent chooses two of those cards. Put the chosen cards into your graveyard and the rest into your hand. Then shuffle.
+
+[054] 1x Gravebreaker Lamia
+---------------------------
+Mana cost: {4}{B}
+Type line: Enchantment Creature — Snake Lamia
+Rules text:
+  Lifelink
+  When this creature enters, search your library for a card, put it into your graveyard, then shuffle.
+  Spells you cast from your graveyard cost {1} less to cast.
+
+[055] 1x Invasion of Theros
+---------------------------
+Mana cost: {2}{W}
+Type line: Battle — Siege // Legendary Enchantment Creature — God
+Rules text:
+  FRONT — INVASION OF THEROS
+  When this Siege enters, search your library for an Aura, God, or Demigod card, reveal it, put it into your hand, then shuffle.
+
+  BACK — EPHARA, EVER-SHELTERING
+  Ephara has lifelink and indestructible as long as you control at least three other enchantments.
+  Whenever another enchantment you control enters, draw a card.
+
+[056] 1x The Cruelty of Gix
+---------------------------
+Mana cost: {3}{B}{B}
+Type line: Enchantment — Saga
+Rules text:
+  Read ahead
+  I — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.
+  II — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.
+  III — Put target creature card from a graveyard onto the battlefield under your control.
+
+[057] 1x Vampiric Tutor
+-----------------------
+Mana cost: {B}
+Type line: Instant
+Rules text:
+  Search your library for a card, then shuffle and put that card on top. You lose 2 life.
+
+[058] 1x Arcane Signet
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[059] 1x Fellwar Stone
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add one mana of any color that a land an opponent controls could produce.
+
+[060] 1x Mind Stone
+--------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}.
+  {1}, {T}, Sacrifice this artifact: Draw a card.
+
+[061] 1x Sol Ring
+--------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}{C}.
+
+[062] 1x Talisman of Dominance
+------------------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {U} or {B}. This artifact deals 1 damage to you.
+
+[063] 1x Talisman of Hierarchy
+------------------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {W} or {B}. This artifact deals 1 damage to you.
+
+[064] 1x Talisman of Progress
+-----------------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {W} or {U}. This artifact deals 1 damage to you.
+
+[065] 1x Adarkar Wastes
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {W} or {U}. This land deals 1 damage to you.
+
+[066] 1x Arid Mesa
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Mountain or Plains card, put it onto the battlefield, then shuffle.
+
+[067] 1x Bloodstained Mire
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Swamp or Mountain card, put it onto the battlefield, then shuffle.
+
+[068] 1x Caves of Koilos
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {W} or {B}. This land deals 1 damage to you.
+
+[069] 1x City of Brass
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  Whenever this land becomes tapped, it deals 1 damage to you.
+  {T}: Add one mana of any color.
+
+[070] 1x Command Tower
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[071] 1x Deserted Beach
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control two or more other lands.
+  {T}: Add {W} or {U}.
+
+[072] 1x Eiganjo, Seat of the Empire
+------------------------------------
+Mana cost: —
+Type line: Legendary Land
+Rules text:
+  {T}: Add {W}.
+  Channel — {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.
+
+[073] 1x Exotic Orchard
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add one mana of any color that a land an opponent controls could produce.
+
+[074] 1x Flooded Strand
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Plains or Island card, put it onto the battlefield, then shuffle.
+
+[075] 1x Godless Shrine
+-----------------------
+Mana cost: —
+Type line: Land — Plains Swamp
+Rules text:
+  ({T}: Add {W} or {B}.)
+  As this land enters, you may pay 2 life. If you don't, it enters tapped.
+
+[076] 1x Hallowed Fountain
+--------------------------
+Mana cost: —
+Type line: Land — Plains Island
+Rules text:
+  ({T}: Add {W} or {U}.)
+  As this land enters, you may pay 2 life. If you don't, it enters tapped.
+
+[077] 1x Island
+--------------------
+Mana cost: —
+Type line: Basic Land — Island
+Rules text:
+  No printed Oracle text. The basic land type Island intrinsically grants "{T}: Add {U}."
+
+[078] 1x Mana Confluence
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life: Add one mana of any color.
+
+[079] 1x Marsh Flats
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Plains or Swamp card, put it onto the battlefield, then shuffle.
+
+[080] 1x Misty Rainforest
+-------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Forest or Island card, put it onto the battlefield, then shuffle.
+
+[081] 1x Morphic Pool
+---------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you have two or more opponents.
+  {T}: Add {U} or {B}.
+
+[082] 1x Otawara, Soaring City
+------------------------------
+Mana cost: —
+Type line: Legendary Land
+Rules text:
+  {T}: Add {U}.
+  Channel — {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.
+
+[083] 3x Plains
+--------------------
+Mana cost: —
+Type line: Basic Land — Plains
+Rules text:
+  No printed Oracle text. The basic land type Plains intrinsically grants "{T}: Add {W}."
+
+[084] 1x Polluted Delta
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for an Island or Swamp card, put it onto the battlefield, then shuffle.
+
+[085] 1x Hall of Heliod's Generosity
+------------------------------------
+Mana cost: —
+Type line: Legendary Land
+Rules text:
+  {T}: Add {C}.
+  {1}{W}, {T}: Put target enchantment card from your graveyard on top of your library.
+
+[086] 1x Raffine's Tower
+------------------------
+Mana cost: —
+Type line: Land — Plains Island Swamp
+Rules text:
+  This land enters tapped.
+  {T}: Add {W}, {U}, or {B}.
+  Cycling {3}
+
+[087] 1x Scalding Tarn
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for an Island or Mountain card, put it onto the battlefield, then shuffle.
+
+[088] 1x Sea of Clouds
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you have two or more opponents.
+  {T}: Add {W} or {U}.
+
+[089] 1x Shattered Sanctum
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control two or more other lands.
+  {T}: Add {W} or {B}.
+
+[090] 1x Shipwreck Marsh
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control two or more other lands.
+  {T}: Add {U} or {B}.
+
+[091] 1x Silent Clearing
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life: Add {W} or {B}.
+  {1}, {T}, Sacrifice this land: Draw a card.
+
+[092] 1x Swamp
+--------------------
+Mana cost: —
+Type line: Basic Land — Swamp
+Rules text:
+  No printed Oracle text. The basic land type Swamp intrinsically grants "{T}: Add {B}."
+
+[093] 1x Vesperlark
+--------------------
+Mana cost: {2}{W}
+Type line: Creature — Elemental
+Rules text:
+  Flying
+  When this creature leaves the battlefield, return target creature card with power 1 or less from your graveyard to the battlefield.
+  Evoke {1}{W}
+
+[094] 1x Urza's Saga
+--------------------
+Mana cost: —
+Type line: Enchantment Land — Urza's Saga
+Rules text:
+  I — This Saga gains "{T}: Add {C}."
+  II — This Saga gains "{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’"
+  III — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.
+
+[095] 1x Vault of Champions
+---------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you have two or more opponents.
+  {T}: Add {W} or {B}.
+
+[096] 1x Verdant Catacombs
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Swamp or Forest card, put it onto the battlefield, then shuffle.
+
+[097] 1x Watery Grave
+---------------------
+Mana cost: —
+Type line: Land — Island Swamp
+Rules text:
+  ({T}: Add {U} or {B}.)
+  As this land enters, you may pay 2 life. If you don't, it enters tapped.
+
+[098] 1x Windswept Heath
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Forest or Plains card, put it onto the battlefield, then shuffle.
+
+
+====================================================================================================
+MINSC & BOO, TIMELESS HEROES
+====================================================================================================
+Total physical cards: 100
+Distinct entries: 80
+
+[001] 1x Minsc & Boo, Timeless Heroes
+-------------------------------------
+Mana cost: {2}{R}{G}
+Type line: Legendary Planeswalker — Minsc
+Rules text:
+  When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.
+  [+1]: Put three +1/+1 counters on up to one target creature with trample or haste.
+  [−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.
+  Minsc & Boo, Timeless Heroes can be your commander.
+
+[002] 1x Birds of Paradise
+--------------------------
+Mana cost: {G}
+Type line: Creature — Bird
+Rules text:
+  Flying
+  {T}: Add one mana of any color.
+
+[003] 1x Bristly Bill, Spine Sower
+----------------------------------
+Mana cost: {1}{G}
+Type line: Legendary Creature — Plant Druid
+Rules text:
+  Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature.
+  {3}{G}{G}: Double the number of +1/+1 counters on each creature you control.
+
+[004] 1x Champion of Lambholt
+-----------------------------
+Mana cost: {1}{G}{G}
+Type line: Creature — Human Warrior
+Rules text:
+  Creatures with power less than this creature's power can't block creatures you control.
+  Whenever another creature you control enters, put a +1/+1 counter on this creature.
+
+[005] 1x Defiler of Vigor
+-------------------------
+Mana cost: {3}{G}{G}
+Type line: Creature — Phyrexian Wurm
+Rules text:
+  Trample
+  As an additional cost to cast green permanent spells, you may pay 2 life. Those spells cost {G} less to cast if you paid life this way. This effect reduces only the amount of green mana you pay.
+  Whenever you cast a green permanent spell, put a +1/+1 counter on each creature you control.
+
+[006] 1x Delighted Halfling
+---------------------------
+Mana cost: {G}
+Type line: Creature — Halfling Citizen
+Rules text:
+  {T}: Add {C}.
+  {T}: Add one mana of any color. Spend this mana only to cast a legendary spell, and that spell can't be countered.
+
+[007] 1x Elvish Mystic
+----------------------
+Mana cost: {G}
+Type line: Creature — Elf Druid
+Rules text:
+  {T}: Add {G}.
+
+[008] 1x Eternal Witness
+------------------------
+Mana cost: {1}{G}{G}
+Type line: Creature — Human Shaman
+Rules text:
+  When this creature enters, you may return target card from your graveyard to your hand.
+
+[009] 1x Evolution Sage
+-----------------------
+Mana cost: {2}{G}
+Type line: Creature — Elf Druid
+Rules text:
+  Landfall — Whenever a land you control enters, proliferate.
+
+[010] 1x Fanatic of Rhonas
+--------------------------
+Mana cost: {1}{G}
+Type line: Creature — Snake Druid
+Rules text:
+  {T}: Add {G}.
+  Ferocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.
+  Eternalize {2}{G}{G}
+
+[011] 1x Forgotten Ancient
+--------------------------
+Mana cost: {3}{G}
+Type line: Creature — Elemental
+Rules text:
+  Whenever a player casts a spell, you may put a +1/+1 counter on this creature.
+  At the beginning of your upkeep, you may move any number of +1/+1 counters from this creature onto other creatures.
+
+[012] 1x Fyndhorn Elves
+-----------------------
+Mana cost: {G}
+Type line: Creature — Elf Druid
+Rules text:
+  {T}: Add {G}.
+
+[013] 1x Ghalta, Primal Hunger
+------------------------------
+Mana cost: {10}{G}{G}
+Type line: Legendary Creature — Elder Dinosaur
+Rules text:
+  This spell costs {X} less to cast, where X is the total power of creatures you control.
+  Trample
+
+[014] 1x Goblin Anarchomancer
+-----------------------------
+Mana cost: {R}{G}
+Type line: Creature — Goblin Shaman
+Rules text:
+  Each spell you cast that's red or green costs {1} less to cast.
+
+[015] 1x Grumgully, the Generous
+--------------------------------
+Mana cost: {1}{R}{G}
+Type line: Legendary Creature — Goblin Shaman
+Rules text:
+  Each other non-Human creature you control enters with an additional +1/+1 counter on it.
+
+[016] 1x Halana and Alena, Partners
+-----------------------------------
+Mana cost: {2}{R}{G}
+Type line: Legendary Creature — Human Ranger
+Rules text:
+  First strike, reach
+  At the beginning of combat on your turn, put X +1/+1 counters on another target creature you control, where X is Halana and Alena's power. That creature gains haste until end of turn.
+
+[017] 1x Kalonian Hydra
+-----------------------
+Mana cost: {3}{G}{G}
+Type line: Creature — Hydra
+Rules text:
+  Trample
+  This creature enters with four +1/+1 counters on it.
+  Whenever this creature attacks, double the number of +1/+1 counters on each creature you control.
+
+[018] 1x Kami of Whispered Hopes
+--------------------------------
+Mana cost: {2}{G}
+Type line: Creature — Spirit
+Rules text:
+  If one or more +1/+1 counters would be put on a permanent you control, that many plus one +1/+1 counters are put on that permanent instead.
+  {T}: Add X mana of any one color, where X is this creature's power.
+
+[019] 1x Kodama of the West Tree
+--------------------------------
+Mana cost: {2}{G}
+Type line: Legendary Creature — Spirit
+Rules text:
+  Reach
+  Modified creatures you control have trample.
+  Whenever a modified creature you control deals combat damage to a player, search your library for a basic land card, put it onto the battlefield tapped, then shuffle.
+
+[020] 1x Llanowar Elves
+-----------------------
+Mana cost: {G}
+Type line: Creature — Elf Druid
+Rules text:
+  {T}: Add {G}.
+
+[021] 1x Managorger Hydra
+-------------------------
+Mana cost: {2}{G}
+Type line: Creature — Hydra
+Rules text:
+  Trample
+  Whenever a player casts a spell, put a +1/+1 counter on this creature.
+
+[022] 1x Ruby, Daring Tracker
+-----------------------------
+Mana cost: {R}{G}
+Type line: Legendary Creature — Human Scout
+Rules text:
+  Haste
+  Whenever Ruby attacks while you control a creature with power 4 or greater, Ruby gets +2/+2 until end of turn.
+  {T}: Add {R} or {G}.
+
+[023] 1x Sakura-Tribe Elder
+---------------------------
+Mana cost: {1}{G}
+Type line: Creature — Snake Shaman
+Rules text:
+  Sacrifice this creature: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+[024] 1x Taurean Mauler
+-----------------------
+Mana cost: {2}{R}
+Type line: Creature — Shapeshifter
+Rules text:
+  Changeling
+  Whenever an opponent casts a spell, you may put a +1/+1 counter on this creature.
+
+[025] 1x Vorinclex, Monstrous Raider
+------------------------------------
+Mana cost: {4}{G}{G}
+Type line: Legendary Creature — Phyrexian Praetor
+Rules text:
+  Trample, haste
+  If you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead.
+  If an opponent would put one or more counters on a permanent or player, they put half that many of each of those kinds of counters on that permanent or player instead, rounded down.
+
+[026] 1x Xenagos, God of Revels
+-------------------------------
+Mana cost: {3}{R}{G}
+Type line: Legendary Enchantment Creature — God
+Rules text:
+  Indestructible
+  As long as your devotion to red and green is less than seven, Xenagos isn't a creature.
+  At the beginning of combat on your turn, another target creature you control gains haste and gets +X/+X until end of turn, where X is that creature's power.
+
+[027] 1x Beast Within
+---------------------
+Mana cost: {2}{G}
+Type line: Instant
+Rules text:
+  Destroy target permanent. Its controller creates a 3/3 green Beast creature token.
+
+[028] 1x Bulk Up
+--------------------
+Mana cost: {1}{R}
+Type line: Instant
+Rules text:
+  Double target creature's power until end of turn.
+  Flashback {4}{R}{R}
+
+[029] 1x Chaos Warp
+--------------------
+Mana cost: {2}{R}
+Type line: Instant
+Rules text:
+  The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it's a permanent card, they put it onto the battlefield.
+
+[030] 1x Fling
+--------------------
+Mana cost: {1}{R}
+Type line: Instant
+Rules text:
+  As an additional cost to cast this spell, sacrifice a creature.
+  This spell deals damage equal to the sacrificed creature's power to any target.
+
+[031] 1x Heroic Intervention
+----------------------------
+Mana cost: {1}{G}
+Type line: Instant
+Rules text:
+  Permanents you control gain hexproof and indestructible until end of turn.
+
+[032] 1x Inspiring Call
+-----------------------
+Mana cost: {2}{G}
+Type line: Instant
+Rules text:
+  Draw a card for each creature you control with a +1/+1 counter on it. Those creatures gain indestructible until end of turn.
+
+[033] 1x Invigorating Surge
+---------------------------
+Mana cost: {2}{G}
+Type line: Instant
+Rules text:
+  Put a +1/+1 counter on target creature you control, then double the number of +1/+1 counters on that creature.
+
+[034] 1x Kazuul's Fury // Kazuul's Cliffs
+-----------------------------------------
+Mana cost: {2}{R} // —
+Type line: Instant // Land
+Rules text:
+  FRONT — KAZUUL'S FURY
+  As an additional cost to cast this spell, sacrifice a creature.
+  This spell deals damage equal to the sacrificed creature's power to any target.
+
+  BACK — KAZUUL'S CLIFFS
+  This land enters tapped.
+  {T}: Add {R}.
+
+[035] 1x Ram Through
+--------------------
+Mana cost: {1}{G}
+Type line: Instant
+Rules text:
+  Target creature you control deals damage equal to its power to target creature you don't control. If the creature you control has trample, excess damage is dealt to that creature's controller instead.
+
+[036] 1x Return of the Wildspeaker
+----------------------------------
+Mana cost: {4}{G}
+Type line: Instant
+Rules text:
+  Choose one —
+  • Draw cards equal to the greatest power among non-Human creatures you control.
+  • Non-Human creatures you control get +3/+3 until end of turn.
+
+[037] 1x Unleash Fury
+---------------------
+Mana cost: {1}{R}
+Type line: Instant
+Rules text:
+  Double the power of target creature until end of turn.
+
+[038] 1x Blasphemous Act
+------------------------
+Mana cost: {8}{R}
+Type line: Sorcery
+Rules text:
+  This spell costs {1} less to cast for each creature on the battlefield.
+  This spell deals 13 damage to each creature.
+
+[039] 1x Chandra's Ignition
+---------------------------
+Mana cost: {3}{R}{R}
+Type line: Sorcery
+Rules text:
+  Target creature you control deals damage equal to its power to each other creature and each opponent.
+
+[040] 1x Cultivate
+--------------------
+Mana cost: {2}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.
+
+[041] 1x Fangs of Kalonia
+-------------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Put a +1/+1 counter on target creature you control, then double the number of +1/+1 counters on each creature that had a +1/+1 counter put on it this way.
+  Overload {4}{G}{G}
+
+[042] 1x Farseek
+--------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for a Plains, Island, Swamp, or Mountain card, put it onto the battlefield tapped, then shuffle.
+
+[043] 1x Kodama's Reach
+-----------------------
+Mana cost: {2}{G}
+Type line: Sorcery — Arcane
+Rules text:
+  Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.
+
+[044] 1x Nature's Lore
+----------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for a Forest card, put that card onto the battlefield, then shuffle.
+
+[045] 1x Rampant Growth
+-----------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+[046] 1x Rishkar's Expertise
+----------------------------
+Mana cost: {4}{G}{G}
+Type line: Sorcery
+Rules text:
+  Draw cards equal to the greatest power among creatures you control.
+  You may cast a spell with mana value 5 or less from your hand without paying its mana cost.
+
+[047] 1x Three Visits
+---------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for a Forest card, put that card onto the battlefield, then shuffle.
+
+[048] 1x Arcane Signet
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[049] 1x Gruul Signet
+---------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {1}, {T}: Add {R}{G}.
+
+[050] 1x Ozolith, the Shattered Spire
+-------------------------------------
+Mana cost: {1}{G}
+Type line: Legendary Artifact
+Rules text:
+  If one or more +1/+1 counters would be put on an artifact or creature you control, that many plus one +1/+1 counters are put on it instead.
+  {1}{G}, {T}: Put a +1/+1 counter on target artifact or creature you control. Activate only as a sorcery.
+  Cycling {2}
+
+[051] 1x Sol Ring
+--------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}{C}.
+
+[052] 1x Swiftfoot Boots
+------------------------
+Mana cost: {2}
+Type line: Artifact — Equipment
+Rules text:
+  Equipped creature has hexproof and haste.
+  Equip {1}
+
+[053] 1x The Earth Crystal
+--------------------------
+Mana cost: {2}{G}{G}
+Type line: Legendary Artifact
+Rules text:
+  Green spells you cast cost {1} less to cast.
+  If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.
+  {4}{G}{G}, {T}: Distribute two +1/+1 counters among one or two target creatures you control.
+
+[054] 1x The Ozolith
+--------------------
+Mana cost: {1}
+Type line: Legendary Artifact
+Rules text:
+  Whenever a creature you control leaves the battlefield, if it had counters on it, put those counters on this artifact.
+  At the beginning of combat on your turn, if this artifact has counters on it, you may move all counters from it onto target creature.
+
+[055] 1x Thought Vessel
+-----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  You have no maximum hand size.
+  {T}: Add {C}.
+
+[056] 1x All Will Be One
+------------------------
+Mana cost: {3}{R}{R}
+Type line: Enchantment
+Rules text:
+  Whenever you put one or more counters on a permanent or player, this enchantment deals that much damage to target opponent, creature an opponent controls, or planeswalker an opponent controls.
+
+[057] 1x Branching Evolution
+----------------------------
+Mana cost: {2}{G}
+Type line: Enchantment
+Rules text:
+  If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.
+
+[058] 1x Garruk's Uprising
+--------------------------
+Mana cost: {2}{G}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, if you control a creature with power 4 or greater, draw a card.
+  Creatures you control have trample.
+  Whenever a creature you control with power 4 or greater enters, draw a card.
+
+[059] 1x Hardened Scales
+------------------------
+Mana cost: {G}
+Type line: Enchantment
+Rules text:
+  If one or more +1/+1 counters would be put on a creature you control, that many plus one +1/+1 counters are put on it instead.
+
+[060] 1x Innkeeper's Talent
+---------------------------
+Mana cost: {1}{G}
+Type line: Enchantment — Class
+Rules text:
+  At the beginning of combat on your turn, put a +1/+1 counter on target creature you control.
+  {G}: Level 2
+  Permanents you control with counters on them have ward {1}.
+  {3}{G}: Level 3
+  If you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead.
+
+[061] 1x Rhythm of the Wild
+---------------------------
+Mana cost: {1}{R}{G}
+Type line: Enchantment
+Rules text:
+  Creature spells you control can't be countered.
+  Nontoken creatures you control have riot.
+
+[062] 1x Terrasymbiosis
+-----------------------
+Mana cost: {2}{G}
+Type line: Enchantment
+Rules text:
+  Whenever you put one or more +1/+1 counters on a creature you control, you may draw that many cards. Do this only once each turn.
+
+[063] 1x Unnatural Growth
+-------------------------
+Mana cost: {1}{G}{G}{G}{G}
+Type line: Enchantment
+Rules text:
+  At the beginning of each combat, double the power and toughness of each creature you control until end of turn.
+
+[064] 1x Domri, Anarch of Bolas
+-------------------------------
+Mana cost: {1}{R}{G}
+Type line: Legendary Planeswalker — Domri
+Rules text:
+  Creatures you control get +1/+0.
+  [+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.
+  [−2]: Target creature you control fights target creature you don't control.
+
+[065] 1x Cinder Glade
+---------------------
+Mana cost: —
+Type line: Land — Mountain Forest
+Rules text:
+  ({T}: Add {R} or {G}.)
+  This land enters tapped unless you control two or more basic lands.
+
+[066] 1x Command Tower
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[067] 1x Game Trail
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  As this land enters, you may reveal a Mountain or Forest card from your hand. If you don't, this land enters tapped.
+  {T}: Add {R} or {G}.
+
+[068] 1x Gruul Turf
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  When this land enters, return a land you control to its owner's hand.
+  {T}: Add {R}{G}.
+
+[069] 1x Karplusan Forest
+-------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {R} or {G}. This land deals 1 damage to you.
+
+[070] 1x Kessig Wolf Run
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {X}{R}{G}, {T}: Target creature gets +X/+0 and gains trample until end of turn.
+
+[071] 1x Mossfire Valley
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {1}, {T}: Add {R}{G}.
+
+[072] 1x Reliquary Tower
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  You have no maximum hand size.
+  {T}: Add {C}.
+
+[073] 1x Rockfall Vale
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control two or more other lands.
+  {T}: Add {R} or {G}.
+
+[074] 1x Rogue's Passage
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {4}, {T}: Target creature can't be blocked this turn.
+
+[075] 1x Rootbound Crag
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control a Mountain or a Forest.
+  {T}: Add {R} or {G}.
+
+[076] 1x Spire Garden
+---------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you have two or more opponents.
+  {T}: Add {R} or {G}.
+
+[077] 1x Stomping Ground
+------------------------
+Mana cost: —
+Type line: Land — Mountain Forest
+Rules text:
+  ({T}: Add {R} or {G}.)
+  As this land enters, you may pay 2 life. If you don't, it enters tapped.
+
+[078] 1x Wooded Foothills
+-------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life, Sacrifice this land: Search your library for a Mountain or Forest card, put it onto the battlefield, then shuffle.
+
+[079] 13x Forest
+--------------------
+Mana cost: —
+Type line: Basic Land — Forest
+Rules text:
+  No printed Oracle text. The basic land type Forest intrinsically grants "{T}: Add {G}."
+
+[080] 9x Mountain
+--------------------
+Mana cost: —
+Type line: Basic Land — Mountain
+Rules text:
+  No printed Oracle text. The basic land type Mountain intrinsically grants "{T}: Add {R}."
+
+
+====================================================================================================
+OMO, QUEEN OF VESUVA
+====================================================================================================
+Total physical cards: 100
+Distinct entries: 97
+
+[001] 1x Omo, Queen of Vesuva
+-----------------------------
+Mana cost: {2}{G/U}
+Type line: Legendary Creature — Shapeshifter Noble
+Rules text:
+  Whenever Omo enters or attacks, put an everything counter on up to one target land and up to one target creature.
+  Each land with an everything counter on it is every land type in addition to its other types.
+  Each nonland creature with an everything counter on it is every creature type.
+
+[002] 1x Acidic Slime
+---------------------
+Mana cost: {3}{G}{G}
+Type line: Creature — Ooze
+Rules text:
+  Deathtouch
+  When this creature enters, destroy target artifact, enchantment, or land.
+
+[003] 1x Aggressive Biomancy
+----------------------------
+Mana cost: {X}{X}{G}{U}
+Type line: Sorcery
+Rules text:
+  Create X tokens that are copies of target creature you control, except they have "When this token enters, it fights up to one target creature you don't control."
+
+[004] 1x Apex Devastator
+------------------------
+Mana cost: {8}{G}{G}
+Type line: Creature — Chimera
+Rules text:
+  Cascade, cascade, cascade, cascade
+
+[005] 1x Arcane Denial
+----------------------
+Mana cost: {1}{U}
+Type line: Instant
+Rules text:
+  Counter target spell. Its controller may draw up to two cards at the beginning of the next turn's upkeep.
+  You draw a card at the beginning of the next turn's upkeep.
+
+[006] 1x Arcane Signet
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[007] 1x Aven Courier
+---------------------
+Mana cost: {1}{U}
+Type line: Creature — Bird Advisor
+Rules text:
+  Flying
+  Whenever Aven Courier attacks, choose a counter on a permanent you control. Put a counter of that kind on target permanent you control if it doesn't have a counter of that kind on it.
+
+[008] 1x Avenger of Zendikar
+----------------------------
+Mana cost: {5}{G}{G}
+Type line: Creature — Elemental
+Rules text:
+  When this creature enters, create a 0/1 green Plant creature token for each land you control.
+  Landfall — Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.
+
+[009] 1x Azusa, Lost but Seeking
+--------------------------------
+Mana cost: {2}{G}
+Type line: Legendary Creature — Human Monk
+Rules text:
+  You may play two additional lands on each of your turns.
+
+[010] 1x Baldur's Gate
+----------------------
+Mana cost: —
+Type line: Legendary Land — Gate
+Rules text:
+  This land enters tapped unless you control two or more other Gates.
+  {T}: Add {G}.
+  {2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.
+
+[011] 1x Basilisk Gate
+----------------------
+Mana cost: —
+Type line: Land — Gate
+Rules text:
+  {T}: Add {C}.
+  {2}, {T}: Target creature gets +X/+X until end of turn, where X is the number of Gates you control. Activate only as a sorcery.
+
+[012] 1x Beast Within
+---------------------
+Mana cost: {2}{G}
+Type line: Instant
+Rules text:
+  Destroy target permanent. Its controller creates a 3/3 green Beast creature token.
+
+[013] 1x Blast Zone
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters with a charge counter on it.
+  {T}: Add {C}.
+  {X}{X}, {T}: Put X charge counters on this land.
+  {3}, {T}, Sacrifice this land: Destroy each nonland permanent with mana value equal to the number of charge counters on this land.
+
+[014] 1x Chromatic Lantern
+--------------------------
+Mana cost: {3}
+Type line: Artifact
+Rules text:
+  Lands you control have "{T}: Add one mana of any color."
+  {T}: Add one mana of any color.
+
+[015] 1x Cloudpost
+--------------------
+Mana cost: —
+Type line: Land — Locus
+Rules text:
+  This land enters tapped.
+  {T}: Add {C} for each Locus on the battlefield.
+
+[016] 1x Command Tower
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[017] 1x Copy Land
+--------------------
+Mana cost: {2}{U}
+Type line: Enchantment
+Rules text:
+  You may have this enchantment enter as a copy of any land on the battlefield, except it's an enchantment in addition to its other types.
+
+[018] 1x Counterspell
+---------------------
+Mana cost: {U}{U}
+Type line: Instant
+Rules text:
+  Counter target spell.
+
+[019] 1x Crop Rotation
+----------------------
+Mana cost: {G}
+Type line: Instant
+Rules text:
+  As an additional cost to cast this spell, sacrifice a land.
+  Search your library for a land card, put that card onto the battlefield, then shuffle.
+
+[020] 1x Curse of the Swine
+---------------------------
+Mana cost: {X}{U}{U}
+Type line: Sorcery
+Rules text:
+  Exile X target creatures. For each creature exiled this way, its controller creates a 2/2 green Boar creature token.
+
+[021] 1x Dark Depths
+--------------------
+Mana cost: —
+Type line: Legendary Snow Land
+Rules text:
+  This land enters with ten ice counters on it.
+  {3}: Remove an ice counter from this land.
+  When this land has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible.
+
+[022] 1x Desert Warfare
+-----------------------
+Mana cost: {3}{G}
+Type line: Enchantment
+Rules text:
+  Whenever you sacrifice a Desert and whenever a Desert card is put into your graveyard from your hand or library, put that card onto the battlefield under your control at the beginning of your next end step.
+  At the beginning of combat on your turn, if you control five or more Deserts, create that many 1/1 red, green, and white Sand Warrior creature tokens. They gain haste.
+
+[023] 1x Dreamroot Cascade
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped unless you control two or more other lands.
+  {T}: Add {G} or {U}.
+
+[024] 1x Drown in Dreams
+------------------------
+Mana cost: {X}{2}{U}
+Type line: Instant
+Rules text:
+  Choose one. If you control a commander as you cast this spell, you may choose both.
+  • Target player draws X cards.
+  • Target player mills twice X cards.
+
+[025] 1x Dryad of the Ilysian Grove
+-----------------------------------
+Mana cost: {2}{G}
+Type line: Enchantment Creature — Nymph Dryad
+Rules text:
+  You may play an additional land on each of your turns.
+  Lands you control are every basic land type in addition to their other types.
+
+[026] 1x Elvish Rejuvenator
+---------------------------
+Mana cost: {2}{G}
+Type line: Creature — Elf Druid
+Rules text:
+  When this creature enters, look at the top five cards of your library. You may put a land card from among them onto the battlefield tapped. Put the rest on the bottom of your library in a random order.
+
+[027] 1x Eureka Moment
+----------------------
+Mana cost: {2}{G}{U}
+Type line: Instant
+Rules text:
+  Draw two cards. You may put a land card from your hand onto the battlefield.
+
+[028] 1x Evacuation
+--------------------
+Mana cost: {3}{U}{U}
+Type line: Instant
+Rules text:
+  Return all creatures to their owners' hands.
+
+[029] 1x Expedition Map
+-----------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {2}, {T}, Sacrifice this artifact: Search your library for a land card, reveal it, put it into your hand, then shuffle.
+
+[030] 1x Finale of Revelation
+-----------------------------
+Mana cost: {X}{U}{U}
+Type line: Sorcery
+Rules text:
+  Draw X cards. If X is 10 or more, instead shuffle your graveyard into your library, draw X cards, untap up to five lands, and you have no maximum hand size for the rest of the game.
+  Exile this spell.
+
+[031] 1x Flooded Grove
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {G/U}, {T}: Add {G}{G}, {G}{U}, or {U}{U}.
+
+[032] 1x Glimmerpost
+--------------------
+Mana cost: —
+Type line: Land — Locus
+Rules text:
+  When this land enters, you gain 1 life for each Locus on the battlefield.
+  {T}: Add {C}.
+
+[033] 1x Growth Spiral
+----------------------
+Mana cost: {G}{U}
+Type line: Instant
+Rules text:
+  Draw a card. You may put a land card from your hand onto the battlefield.
+
+[034] 1x Hakbal of the Surging Soul
+-----------------------------------
+Mana cost: {2}{G}{U}
+Type line: Legendary Creature — Merfolk Scout
+Rules text:
+  At the beginning of combat on your turn, each Merfolk creature you control explores.
+  Whenever Hakbal attacks, you may put a land card from your hand onto the battlefield. If you don't, draw a card.
+
+[035] 1x Harmonize
+--------------------
+Mana cost: {2}{G}{G}
+Type line: Sorcery
+Rules text:
+  Draw three cards.
+
+[036] 1x Hashep Oasis
+---------------------
+Mana cost: —
+Type line: Land — Desert
+Rules text:
+  {T}: Add {C}.
+  {T}, Pay 1 life: Add {G}.
+  {1}{G}{G}, {T}, Sacrifice a Desert: Target creature you control gets +3/+3 until end of turn. Activate only as a sorcery.
+
+[037] 1x Helm of the Host
+-------------------------
+Mana cost: {4}
+Type line: Legendary Artifact — Equipment
+Rules text:
+  At the beginning of combat on your turn, create a token that's a copy of equipped creature, except the token isn't legendary if equipped creature is legendary. That token gains haste.
+  Equip {5}
+
+[038] 1x Hidden Nursery
+-----------------------
+Mana cost: —
+Type line: Land — Cave
+Rules text:
+  This land enters tapped.
+  {T}: Add {G}.
+  {4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery.
+
+[039] 1x Horizon of Progress
+----------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}, Pay 1 life: Add one mana of any type that a land you control could produce.
+  {3}, {T}: You may put a land card from your hand onto the battlefield tapped.
+  {1}, {T}, Sacrifice this land: Draw a card.
+
+[040] 1x Hour of Promise
+------------------------
+Mana cost: {4}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for up to two land cards, put them onto the battlefield tapped, then shuffle. Then if you control three or more Deserts, create two 2/2 black Zombie creature tokens.
+
+[041] 1x Hydra Broodmaster
+--------------------------
+Mana cost: {3}{G}{G}{G}
+Type line: Creature — Hydra
+Rules text:
+  {X}{X}{G}: Monstrosity X.
+  When this creature becomes monstrous, create X X/X green Hydra creature tokens.
+
+[042] 1x Hydroid Krasis
+-----------------------
+Mana cost: {X}{G}{U}
+Type line: Creature — Jellyfish Hydra Beast
+Rules text:
+  When you cast this spell, you gain half X life and draw half X cards. Round down each time.
+  Flying, trample
+  This creature enters with X +1/+1 counters on it.
+
+[043] 1x Jyoti, Moag Ancient
+----------------------------
+Mana cost: {2}{G}{U}
+Type line: Legendary Creature — Elemental
+Rules text:
+  When Jyoti enters, create a 1/1 green Forest Dryad land creature token for each time you've cast your commander from the command zone this game.
+  At the beginning of each combat, land creatures you control get +X/+X until end of turn, where X is Jyoti's power.
+
+[044] 1x Lair of the Hydra
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  If you control two or more other lands, this land enters tapped.
+  {T}: Add {G}.
+  {X}{G}: Until end of turn, this land becomes an X/X green Hydra creature. It's still a land. X can't be 0.
+
+[045] 1x Lazotep Quarry
+-----------------------
+Mana cost: —
+Type line: Land — Desert
+Rules text:
+  {T}: Add {C}.
+  {T}, Sacrifice a creature: Add one mana of any color.
+  {X}{2}, {T}, Sacrifice a Desert: Exile target creature card with mana value X from your graveyard. Create a token that's a copy of it, except it's a 4/4 black Zombie. Activate only as a sorcery.
+
+[046] 1x Lord of the Unreal
+---------------------------
+Mana cost: {U}{U}
+Type line: Creature — Human Wizard
+Rules text:
+  Illusion creatures you control get +1/+1 and have hexproof.
+
+[047] 1x Lumbering Falls
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  {T}: Add {G} or {U}.
+  {2}{G}{U}: Until end of turn, this land becomes a 3/3 green and blue Elemental creature with hexproof. It's still a land.
+
+[048] 1x Lush Oasis
+--------------------
+Mana cost: —
+Type line: Land — Desert
+Rules text:
+  This land enters tapped.
+  When this land enters, it deals 1 damage to target opponent.
+  {T}: Add {G} or {U}.
+
+[049] 1x Magus of the Candelabra
+--------------------------------
+Mana cost: {G}
+Type line: Creature — Human Wizard
+Rules text:
+  {X}, {T}: Untap X target lands.
+
+[050] 1x Mana Reflection
+------------------------
+Mana cost: {4}{G}{G}
+Type line: Enchantment
+Rules text:
+  If you tap a permanent for mana, it produces twice as much of that mana instead.
+
+[051] 1x March from Velis Vel
+-----------------------------
+Mana cost: {2}{U}
+Type line: Sorcery
+Rules text:
+  Choose a nonbasic land type. Each land you control of that type becomes a copy of target creature you control until end of turn and gains haste until end of turn.
+  Flashback {4}{U}
+
+[052] 1x Maze's End
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  {T}: Add {C}.
+  {3}, {T}, Return this land to its owner's hand: Search your library for a Gate card, put it onto the battlefield, then shuffle. If you control ten or more Gates with different names, you win the game.
+
+[053] 1x Mirage Mirror
+----------------------
+Mana cost: {3}
+Type line: Artifact
+Rules text:
+  {2}: This artifact becomes a copy of target artifact, creature, enchantment, or land until end of turn.
+
+[054] 1x Nissa, Steward of Elements
+-----------------------------------
+Mana cost: {X}{G}{U}
+Type line: Legendary Planeswalker — Nissa
+Rules text:
+  [+2]: Scry 2.
+  [0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.
+  [−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.
+
+[055] 1x Oracle of Mul Daya
+---------------------------
+Mana cost: {3}{G}
+Type line: Creature — Elf Shaman
+Rules text:
+  You may play an additional land on each of your turns.
+  Play with the top card of your library revealed.
+  You may play lands from the top of your library.
+
+[056] 1x Overflowing Basin
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {1}, {T}: Add {G}{U}.
+
+[057] 1x Planar Nexus
+---------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land is every nonbasic land type.
+  {T}: Add {C}.
+  {1}, {T}: Add one mana of any color.
+
+[058] 1x Pongify
+--------------------
+Mana cost: {U}
+Type line: Instant
+Rules text:
+  Destroy target creature. It can't be regenerated. Its controller creates a 3/3 green Ape creature token.
+
+[059] 1x Priest of Titania
+--------------------------
+Mana cost: {1}{G}
+Type line: Creature — Elf Druid
+Rules text:
+  {T}: Add {G} for each Elf on the battlefield.
+
+[060] 1x Propaganda
+--------------------
+Mana cost: {2}{U}
+Type line: Enchantment
+Rules text:
+  Creatures can't attack you unless their controller pays {2} for each creature they control that's attacking you.
+
+[061] 1x Rampaging Baloths
+--------------------------
+Mana cost: {4}{G}{G}
+Type line: Creature — Beast
+Rules text:
+  Trample
+  Landfall — Whenever a land you control enters, you may create a 4/4 green Beast creature token.
+
+[062] 1x Rampant Frogantua
+--------------------------
+Mana cost: {2}{G}
+Type line: Creature — Frog
+Rules text:
+  Trample
+  Rampant Frogantua gets +10/+10 for each player who has lost the game.
+  Whenever Rampant Frogantua deals combat damage to a player, you may mill that many cards. Put any number of land cards from among them onto the battlefield tapped.
+
+[063] 1x Ramunap Excavator
+--------------------------
+Mana cost: {2}{G}
+Type line: Creature — Naga Cleric
+Rules text:
+  You may play lands from your graveyard.
+
+[064] 1x Replication Technique
+------------------------------
+Mana cost: {4}{U}
+Type line: Sorcery
+Rules text:
+  Demonstrate
+  Create a token that's a copy of target permanent you control.
+
+[065] 1x Sage of the Maze
+-------------------------
+Mana cost: {2}{G}
+Type line: Creature — Elf Wizard
+Rules text:
+  {T}: Add two mana in any combination of colors.
+  {T}: Until end of turn, target land you control becomes an X/X Citizen creature with haste in addition to its other types, where X is twice the number of Gates you control. Activate only as a sorcery.
+  Tap an untapped Gate you control: Untap this creature.
+
+[066] 1x Satyr Wayfinder
+------------------------
+Mana cost: {1}{G}
+Type line: Creature — Satyr
+Rules text:
+  When this creature enters, reveal the top four cards of your library. You may put a land card from among them into your hand. Put the rest into your graveyard.
+
+[067] 1x Scute Swarm
+--------------------
+Mana cost: {2}{G}
+Type line: Creature — Insect
+Rules text:
+  Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.
+
+[068] 1x Simic Growth Chamber
+-----------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  When this land enters, return a land you control to its owner's hand.
+  {T}: Add {G}{U}.
+
+[069] 1x Simic Guildgate
+------------------------
+Mana cost: —
+Type line: Land — Gate
+Rules text:
+  This land enters tapped.
+  {T}: Add {G} or {U}.
+
+[070] 1x Sol Ring
+--------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}{C}.
+
+[071] 1x Spelunking
+--------------------
+Mana cost: {2}{G}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, draw a card, then you may put a land card from your hand onto the battlefield. If you put a Cave onto the battlefield this way, you gain 4 life.
+  Lands you control enter untapped.
+
+[072] 1x Summary Dismissal
+--------------------------
+Mana cost: {2}{U}{U}
+Type line: Instant
+Rules text:
+  Exile all other spells and counter all abilities.
+
+[073] 1x Sunken Palace
+----------------------
+Mana cost: —
+Type line: Land — Cave
+Rules text:
+  This land enters tapped.
+  {T}: Add {U}.
+  {1}{U}, {T}, Exile seven cards from your graveyard: Add {U}. When you spend this mana to cast a spell or activate an ability, copy that spell or ability. You may choose new targets for the copy.
+
+[074] 1x Sylvan Scrying
+-----------------------
+Mana cost: {1}{G}
+Type line: Sorcery
+Rules text:
+  Search your library for a land card, reveal it, put it into your hand, then shuffle.
+
+[075] 1x Talon Gates of Madara
+------------------------------
+Mana cost: —
+Type line: Land — Gate
+Rules text:
+  When this land enters, up to one target creature phases out.
+  {T}: Add {C}.
+  {1}, {T}: Add one mana of any color.
+  {4}: Put this card from your hand onto the battlefield.
+
+[076] 1x Tatyova, Benthic Druid
+-------------------------------
+Mana cost: {3}{G}{U}
+Type line: Legendary Creature — Merfolk Druid
+Rules text:
+  Landfall — Whenever a land you control enters, you gain 1 life and draw a card.
+
+[077] 1x Temple of Mystery
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  When this land enters, scry 1.
+  {T}: Add {G} or {U}.
+
+[078] 1x Terastodon
+--------------------
+Mana cost: {6}{G}{G}
+Type line: Creature — Elephant
+Rules text:
+  When this creature enters, you may destroy up to three target noncreature permanents. For each permanent put into a graveyard this way, its controller creates a 3/3 green Elephant creature token.
+
+[079] 1x Thespian's Stage
+-------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {2}, {T}: This land becomes a copy of target land, except it has this ability.
+
+[080] 1x Trenchpost
+--------------------
+Mana cost: —
+Type line: Land — Locus
+Rules text:
+  {T}: Add {C}.
+  {3}, {T}: Target player mills a card for each Locus you control.
+
+[081] 1x Ulvenwald Hydra
+------------------------
+Mana cost: {4}{G}{G}
+Type line: Creature — Hydra
+Rules text:
+  Reach
+  Ulvenwald Hydra's power and toughness are each equal to the number of lands you control.
+  When this creature enters, you may search your library for a land card, put it onto the battlefield tapped, then shuffle.
+
+[082] 1x Urban Evolution
+------------------------
+Mana cost: {3}{G}{U}
+Type line: Sorcery
+Rules text:
+  Draw three cards. You may play an additional land this turn.
+
+[083] 1x Uro, Titan of Nature's Wrath
+-------------------------------------
+Mana cost: {1}{G}{U}
+Type line: Legendary Creature — Elder Giant
+Rules text:
+  When Uro enters, sacrifice it unless it escaped.
+  Whenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.
+  Escape—{G}{G}{U}{U}, Exile five other cards from your graveyard.
+
+[084] 1x Urza's Cave
+--------------------
+Mana cost: —
+Type line: Land — Cave
+Rules text:
+  {T}: Add {C}.
+  {3}, {T}, Sacrifice this land: Search your library for a land card, put it onto the battlefield tapped, then shuffle.
+
+[085] 1x Urza's Mine
+--------------------
+Mana cost: —
+Type line: Land — Urza's Mine
+Rules text:
+  {T}: Add {C}. If you control an Urza's Power-Plant and an Urza's Tower, add {C}{C} instead.
+
+[086] 1x Urza's Power Plant
+---------------------------
+Mana cost: —
+Type line: Land — Urza's Power-Plant
+Rules text:
+  {T}: Add {C}. If you control an Urza's Mine and an Urza's Tower, add {C}{C} instead.
+
+[087] 1x Urza's Tower
+---------------------
+Mana cost: —
+Type line: Land — Urza's Tower
+Rules text:
+  {T}: Add {C}. If you control an Urza's Mine and an Urza's Power-Plant, add {C}{C}{C} instead.
+
+[088] 1x Vesuva
+--------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  You may have this land enter tapped as a copy of any land on the battlefield.
+
+[089] 1x Vineglimmer Snarl
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  As this land enters, you may reveal a Forest or Island card from your hand. If you don't, this land enters tapped.
+  {T}: Add {G} or {U}.
+
+[090] 1x Volatile Fault
+-----------------------
+Mana cost: —
+Type line: Land — Cave
+Rules text:
+  {T}: Add {C}.
+  {1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls. That player may search their library for a basic land card, put it onto the battlefield, then shuffle. You create a Treasure token.
+
+[091] 1x Whelming Wave
+----------------------
+Mana cost: {2}{U}{U}
+Type line: Sorcery
+Rules text:
+  Return all creatures to their owners' hands except for Krakens, Leviathans, Octopuses, and Serpents.
+
+[092] 1x Wonderscape Sage
+-------------------------
+Mana cost: {1}{U}
+Type line: Creature — Moonfolk Wizard
+Rules text:
+  Flying
+  {T}, Return a land you control to its owner's hand: Draw a card. Then discard a card unless that land had a nonbasic land type.
+
+[093] 1x Xolatoyac, the Smiling Flood
+-------------------------------------
+Mana cost: {4}{G}{U}
+Type line: Legendary Creature — Salamander Serpent
+Rules text:
+  Whenever Xolatoyac enters or attacks, put a flood counter on target land. That land is an Island in addition to its other types for as long as it has a flood counter on it.
+  At the beginning of your end step, untap each permanent you control with a counter on it.
+
+[094] 1x Yavimaya Coast
+-----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {T}: Add {G} or {U}. This land deals 1 damage to you.
+
+[095] 1x Yavimaya, Cradle of Growth
+-----------------------------------
+Mana cost: —
+Type line: Legendary Land
+Rules text:
+  Each land is a Forest in addition to its other land types.
+
+[096] 3x Forest
+--------------------
+Mana cost: —
+Type line: Basic Land — Forest
+Rules text:
+  No printed Oracle text. The basic land type Forest intrinsically grants "{T}: Add {G}."
+
+[097] 2x Island
+--------------------
+Mana cost: —
+Type line: Basic Land — Island
+Rules text:
+  No printed Oracle text. The basic land type Island intrinsically grants "{T}: Add {U}."
+
+
+====================================================================================================
+ELENDA, SAINT OF DUSK
+====================================================================================================
+Total physical cards: 100
+Distinct entries: 75
+
+[001] 1x Elenda, Saint of Dusk
+------------------------------
+Mana cost: {2}{W}{B}
+Type line: Legendary Creature — Vampire Knight
+Rules text:
+  Lifelink, hexproof from instants
+  As long as your life total is greater than your starting life total, Elenda gets +1/+1 and has menace. Elenda gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total.
+
+[002] 1x Sorin, Vengeful Bloodlord
+----------------------------------
+Mana cost: {2}{W}{B}
+Type line: Legendary Planeswalker — Sorin
+Rules text:
+  During your turn, creatures and planeswalkers you control have lifelink.
+  [+2]: Sorin deals 1 damage to target player or planeswalker.
+  [−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.
+
+[003] 1x Ajani's Pridemate
+--------------------------
+Mana cost: {1}{W}
+Type line: Creature — Cat Soldier
+Rules text:
+  Whenever you gain life, put a +1/+1 counter on this creature.
+
+[004] 1x Angel of Invention
+---------------------------
+Mana cost: {3}{W}{W}
+Type line: Creature — Angel Artificer
+Rules text:
+  Flying, vigilance, lifelink
+  Fabricate 2
+  Other creatures you control get +1/+1.
+
+[005] 1x Angel of Vitality
+--------------------------
+Mana cost: {2}{W}
+Type line: Creature — Angel
+Rules text:
+  Flying
+  If you would gain life, you gain that much life plus 1 instead.
+  This creature gets +2/+2 as long as you have 25 or more life.
+
+[006] 1x Arvad the Cursed
+-------------------------
+Mana cost: {3}{W}{B}
+Type line: Legendary Creature — Vampire Knight
+Rules text:
+  Deathtouch, lifelink
+  Other legendary creatures you control get +2/+2.
+
+[007] 1x Defiant Bloodlord
+--------------------------
+Mana cost: {5}{B}{B}
+Type line: Creature — Vampire
+Rules text:
+  Flying
+  Whenever you gain life, target opponent loses that much life.
+
+[008] 1x Elenda's Hierophant
+----------------------------
+Mana cost: {2}{W}
+Type line: Creature — Vampire Cleric
+Rules text:
+  Flying
+  Whenever you gain life, put a +1/+1 counter on this creature.
+  When this creature dies, create X 1/1 white Vampire creature tokens with lifelink, where X is its power.
+
+[009] 1x Essence Channeler
+--------------------------
+Mana cost: {1}{W}
+Type line: Creature — Bat Cleric
+Rules text:
+  As long as you've lost life this turn, this creature has flying and vigilance.
+  Whenever you gain life, put a +1/+1 counter on this creature.
+  When this creature dies, put its counters on target creature you control.
+
+[010] 1x Exemplar of Light
+--------------------------
+Mana cost: {2}{W}{W}
+Type line: Creature — Angel
+Rules text:
+  Flying
+  Whenever you gain life, put a +1/+1 counter on this creature.
+  Whenever you put one or more +1/+1 counters on this creature, draw a card. This ability triggers only once each turn.
+
+[011] 1x Fiendish Panda
+-----------------------
+Mana cost: {2}{W}{B}
+Type line: Creature — Bear Demon
+Rules text:
+  Whenever you gain life, put a +1/+1 counter on this creature.
+  When this creature dies, return another target non-Bear creature card with mana value less than or equal to this creature's power from your graveyard to the battlefield.
+
+[012] 1x Healer's Hawk
+----------------------
+Mana cost: {W}
+Type line: Creature — Bird
+Rules text:
+  Flying, lifelink
+
+[013] 1x High Priest of Penance
+-------------------------------
+Mana cost: {W}{B}
+Type line: Creature — Human Cleric
+Rules text:
+  Whenever this creature is dealt damage, you may destroy target nonland permanent.
+
+[014] 1x Indulgent Tormentor
+----------------------------
+Mana cost: {3}{B}{B}
+Type line: Creature — Demon
+Rules text:
+  Flying
+  At the beginning of your upkeep, draw a card unless target opponent sacrifices a creature or pays 3 life.
+
+[015] 1x Inspiring Overseer
+---------------------------
+Mana cost: {2}{W}
+Type line: Creature — Angel Cleric
+Rules text:
+  Flying
+  When this creature enters, you gain 1 life and draw a card.
+
+[016] 1x Midnight Snack
+-----------------------
+Mana cost: {2}{B}
+Type line: Enchantment
+Rules text:
+  Raid — At the beginning of your end step, if you attacked this turn, create a Food token.
+  {2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.
+
+[017] 1x Kunoros, Hound of Athreos
+----------------------------------
+Mana cost: {1}{W}{B}
+Type line: Legendary Creature — Dog
+Rules text:
+  Vigilance, menace, lifelink
+  Creature cards in graveyards can't enter the battlefield.
+  Players can't cast spells from graveyards.
+
+[018] 1x Lyra Dawnbringer
+-------------------------
+Mana cost: {3}{W}{W}
+Type line: Legendary Creature — Angel
+Rules text:
+  Flying, first strike, lifelink
+  Other Angels you control get +1/+1 and have lifelink.
+
+[019] 1x Marauding Blight-Priest
+--------------------------------
+Mana cost: {2}{B}
+Type line: Creature — Vampire Cleric
+Rules text:
+  Whenever you gain life, each opponent loses 1 life.
+
+[020] 1x Mikaeus, the Lunarch
+-----------------------------
+Mana cost: {X}{W}
+Type line: Legendary Creature — Human Cleric
+Rules text:
+  Mikaeus enters with X +1/+1 counters on it.
+  {T}: Put a +1/+1 counter on Mikaeus.
+  {T}, Remove a +1/+1 counter from Mikaeus: Put a +1/+1 counter on each other creature you control.
+
+[021] 1x Noxious Gearhulk
+-------------------------
+Mana cost: {4}{B}{B}
+Type line: Artifact Creature — Construct
+Rules text:
+  Menace
+  When this creature enters, you may destroy another target creature. If a creature is destroyed this way, you gain life equal to its toughness.
+
+[022] 1x Nullpriest of Oblivion
+-------------------------------
+Mana cost: {1}{B}
+Type line: Creature — Vampire Cleric
+Rules text:
+  Kicker {3}{B}
+  Menace, lifelink
+  When this creature enters, if it was kicked, return target creature card from your graveyard to the battlefield.
+
+[023] 1x Oasis Gardener
+-----------------------
+Mana cost: {3}
+Type line: Artifact Creature — Scarecrow
+Rules text:
+  When this creature enters, you gain 2 life.
+  {T}: Add one mana of any color.
+
+[024] 1x Pontiff of Blight
+--------------------------
+Mana cost: {4}{B}{B}
+Type line: Creature — Zombie Cleric
+Rules text:
+  Extort
+  Other creatures you control have extort.
+
+[025] 1x Rune-Scarred Demon
+---------------------------
+Mana cost: {5}{B}{B}
+Type line: Creature — Demon
+Rules text:
+  Flying
+  When this creature enters, search your library for a card, put it into your hand, then shuffle.
+
+[026] 1x Solemn Simulacrum
+--------------------------
+Mana cost: {4}
+Type line: Artifact Creature — Golem
+Rules text:
+  When this creature enters, you may search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+  When this creature dies, you may draw a card.
+
+[027] 1x Sorin of House Markov
+------------------------------
+Mana cost: {1}{B} // —
+Type line: Legendary Creature — Human Noble // Legendary Planeswalker — Sorin
+Rules text:
+  FRONT — SORIN OF HOUSE MARKOV
+  Lifelink
+  Extort
+  At the beginning of each of your postcombat main phases, if you gained 3 or more life this turn, exile Sorin, then return him to the battlefield transformed under his owner's control.
+
+  BACK — SORIN, RAVENOUS NEONATE
+  Extort
+  [+2]: Create a Food token.
+  [−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.
+  [−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.
+
+[028] 1x Twinblade Paladin
+--------------------------
+Mana cost: {3}{W}
+Type line: Creature — Human Knight
+Rules text:
+  Whenever you gain life, put a +1/+1 counter on this creature.
+  As long as you have 25 or more life, this creature has double strike.
+
+[029] 1x Akroma's Vengeance
+---------------------------
+Mana cost: {4}{W}{W}
+Type line: Sorcery
+Rules text:
+  Destroy all artifacts, creatures, and enchantments.
+  Cycling {3}
+
+[030] 1x Death Grasp
+--------------------
+Mana cost: {X}{W}{B}
+Type line: Sorcery
+Rules text:
+  Death Grasp deals X damage to any target. You gain X life.
+
+[031] 1x Debt to the Deathless
+------------------------------
+Mana cost: {X}{W}{W}{B}{B}
+Type line: Sorcery
+Rules text:
+  Each opponent loses two times X life. You gain life equal to the life lost this way.
+
+[032] 1x Diabolic Tutor
+-----------------------
+Mana cost: {2}{B}{B}
+Type line: Sorcery
+Rules text:
+  Search your library for a card, put that card into your hand, then shuffle.
+
+[033] 1x Exsanguinate
+---------------------
+Mana cost: {X}{B}{B}
+Type line: Sorcery
+Rules text:
+  Each opponent loses X life. You gain life equal to the life lost this way.
+
+[034] 1x Restart Sequence
+-------------------------
+Mana cost: {3}{B}
+Type line: Sorcery
+Rules text:
+  Freerunning {1}{B}
+  Return target creature card from your graveyard to the battlefield.
+
+[035] 1x Zombify
+--------------------
+Mana cost: {3}{B}
+Type line: Sorcery
+Rules text:
+  Return target creature card from your graveyard to the battlefield.
+
+[036] 1x Give In to Violence
+----------------------------
+Mana cost: {1}{B}
+Type line: Instant
+Rules text:
+  Target creature gets +2/+2 and gains lifelink until end of turn.
+
+[037] 1x Breathe Your Last
+--------------------------
+Mana cost: {1}{B}{B}
+Type line: Instant
+Rules text:
+  Destroy target creature or planeswalker. You gain 1 life for each of its colors.
+
+[038] 1x Moment of Craving
+--------------------------
+Mana cost: {1}{B}
+Type line: Instant
+Rules text:
+  Target creature gets -2/-2 until end of turn. You gain 2 life.
+
+[039] 1x Utter End
+--------------------
+Mana cost: {2}{W}{B}
+Type line: Instant
+Rules text:
+  Exile target nonland permanent.
+
+[040] 1x Deadly Riposte
+-----------------------
+Mana cost: {1}{W}
+Type line: Instant
+Rules text:
+  This spell deals 3 damage to target tapped creature and you gain 2 life.
+
+[041] 1x Devouring Light
+------------------------
+Mana cost: {1}{W}{W}
+Type line: Instant
+Rules text:
+  Convoke
+  Exile target attacking or blocking creature.
+
+[042] 1x Hero's Downfall
+------------------------
+Mana cost: {1}{B}{B}
+Type line: Instant
+Rules text:
+  Destroy target creature or planeswalker.
+
+[043] 1x Murder
+--------------------
+Mana cost: {1}{B}{B}
+Type line: Instant
+Rules text:
+  Destroy target creature.
+
+[044] 1x Valorous Stance
+------------------------
+Mana cost: {1}{W}
+Type line: Instant
+Rules text:
+  Choose one —
+  • Target creature gains indestructible until end of turn.
+  • Destroy target creature with toughness 4 or greater.
+
+[045] 1x Celestial Armor
+------------------------
+Mana cost: {2}{W}
+Type line: Artifact — Equipment
+Rules text:
+  Flash
+  When this Equipment enters, attach it to target creature you control. That creature gains hexproof and indestructible until end of turn.
+  Equipped creature gets +2/+0 and has flying.
+  Equip {3}{W}
+
+[046] 1x Cosmos Elixir
+----------------------
+Mana cost: {4}
+Type line: Artifact
+Rules text:
+  At the beginning of your end step, draw a card if your life total is greater than your starting life total. Otherwise, you gain 2 life.
+
+[047] 1x Charcoal Diamond
+-------------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  This artifact enters tapped.
+  {T}: Add {B}.
+
+[048] 1x Fellwar Stone
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {T}: Add one mana of any color that a land an opponent controls could produce.
+
+[049] 1x Marble Diamond
+-----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  This artifact enters tapped.
+  {T}: Add {W}.
+
+[050] 1x Lotus Blossom
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  At the beginning of your upkeep, you may put a petal counter on this artifact.
+  {T}, Sacrifice this artifact: Add X mana of any one color, where X is the number of petal counters on this artifact.
+
+[051] 1x Orzhov Signet
+----------------------
+Mana cost: {2}
+Type line: Artifact
+Rules text:
+  {1}, {T}: Add {W}{B}.
+
+[052] 1x Pristine Talisman
+--------------------------
+Mana cost: {3}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}. You gain 1 life.
+
+[053] 1x Sol Ring
+--------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {T}: Add {C}{C}.
+
+[054] 1x Swiftfoot Boots
+------------------------
+Mana cost: {2}
+Type line: Artifact — Equipment
+Rules text:
+  Equipped creature has hexproof and haste.
+  Equip {1}
+
+[055] 1x Trading Post
+---------------------
+Mana cost: {4}
+Type line: Artifact
+Rules text:
+  {1}, {T}, Discard a card: You gain 4 life.
+  {1}, {T}, Pay 1 life: Create a 0/1 white Goat creature token.
+  {1}, {T}, Sacrifice a creature: Return target artifact card from your graveyard to your hand.
+  {1}, {T}, Sacrifice an artifact: Draw a card.
+
+[056] 1x Wayfarer's Bauble
+--------------------------
+Mana cost: {1}
+Type line: Artifact
+Rules text:
+  {2}, {T}, Sacrifice this artifact: Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle.
+
+[057] 1x Angelic Destiny
+------------------------
+Mana cost: {2}{W}{W}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature
+  Enchanted creature gets +4/+4, has flying and first strike, and is an Angel in addition to its other types.
+  When enchanted creature dies, return this Aura to its owner's hand.
+
+[058] 1x Darksteel Mutation
+---------------------------
+Mana cost: {1}{W}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature
+  Enchanted creature is an Insect artifact creature with base power and toughness 0/1 and has indestructible, and it loses all other abilities, card types, and creature types.
+
+[059] 1x Dawn of Hope
+---------------------
+Mana cost: {1}{W}
+Type line: Enchantment
+Rules text:
+  Whenever you gain life, you may pay {2}. If you do, draw a card.
+  {3}{W}: Create a 1/1 white Soldier creature token with lifelink.
+
+[060] 1x Glasswing Grace // Age-Graced Chapel
+---------------------------------------------
+Mana cost: {3}{W/B}{W/B} // —
+Type line: Enchantment — Aura // Land
+Rules text:
+  FRONT — GLASSWING GRACE
+  Enchant creature
+  Enchanted creature gets +2/+2 and has flying and lifelink.
+
+  BACK — AGE-GRACED CHAPEL
+  This land enters tapped.
+  {T}: Add {W} or {B}.
+
+[061] 1x Grasp of Fate
+----------------------
+Mana cost: {1}{W}{W}
+Type line: Enchantment
+Rules text:
+  When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield.
+
+[062] 1x Leyline of Hope
+------------------------
+Mana cost: {2}{W}{W}
+Type line: Enchantment
+Rules text:
+  If this card is in your opening hand, you may begin the game with it on the battlefield.
+  If you would gain life, you gain that much life plus 1 instead.
+  As long as you have at least 7 life more than your starting life total, creatures you control get +2/+2.
+
+[063] 1x Parasitic Impetus
+--------------------------
+Mana cost: {2}{B}
+Type line: Enchantment — Aura
+Rules text:
+  Enchant creature
+  Enchanted creature gets +2/+2 and is goaded.
+  Whenever enchanted creature attacks, its controller loses 2 life and you gain 2 life.
+
+[064] 1x Phyrexian Arena
+------------------------
+Mana cost: {1}{B}{B}
+Type line: Enchantment
+Rules text:
+  At the beginning of your upkeep, you draw a card and you lose 1 life.
+
+[065] 1x Polluted Bonds
+-----------------------
+Mana cost: {3}{B}{B}
+Type line: Enchantment
+Rules text:
+  Whenever a land an opponent controls enters, that player loses 2 life and you gain 2 life.
+
+[066] 1x Prayer of Binding
+--------------------------
+Mana cost: {3}{W}
+Type line: Enchantment
+Rules text:
+  Flash
+  When this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life.
+
+[067] 1x Sigarda's Splendor
+---------------------------
+Mana cost: {2}{W}{W}
+Type line: Enchantment
+Rules text:
+  As this enchantment enters, note your life total.
+  At the beginning of your upkeep, draw a card if your life total is greater than or equal to the last noted life total. Then note your life total.
+  Whenever you cast a white spell, you gain 1 life.
+
+[068] 1x Command Tower
+----------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add one mana of any color in your commander's color identity.
+
+[069] 1x Restless Fortress
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  {T}: Add {W} or {B}.
+  {2}{W}{B}: Until end of turn, this land becomes a 1/4 white and black Nightmare creature in addition to its other types.
+  Whenever this land attacks, defending player loses 2 life and you gain 2 life.
+
+[070] 1x Rogue's Passage
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  {T}: Add {C}.
+  {4}, {T}: Target creature can't be blocked this turn.
+
+[071] 1x Scoured Barrens
+------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  When this land enters, you gain 1 life.
+  {T}: Add {W} or {B}.
+
+[072] 1x Shineshadow Snarl
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  As this land enters, you may reveal a Plains or Swamp card from your hand. If you don't, this land enters tapped.
+  {T}: Add {W} or {B}.
+
+[073] 1x Temple of Silence
+--------------------------
+Mana cost: —
+Type line: Land
+Rules text:
+  This land enters tapped.
+  When this land enters, scry 1.
+  {T}: Add {W} or {B}.
+
+[074] 14x Plains
+--------------------
+Mana cost: —
+Type line: Basic Land — Plains
+Rules text:
+  No printed Oracle text. The basic land type Plains intrinsically grants "{T}: Add {W}."
+
+[075] 13x Swamp
+--------------------
+Mana cost: —
+Type line: Basic Land — Swamp
+Rules text:
+  No printed Oracle text. The basic land type Swamp intrinsically grants "{T}: Add {B}."
