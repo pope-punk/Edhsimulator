@@ -34,7 +34,7 @@ class Dashboard:
         if process and not alive:result['exit_code']=process.returncode
         return result
     def snapshot(self,run_id):
-        root=self.root(run_id);manifest=read_json(root/'manifest.json',{}) or {}
+        root=self.root(run_id);manifest=read_json(root/'cohort.json',{}) or {}
         next_doc=read_json(root/'NEXT_ACTION.json',{}) or {};action=next_doc.get('next_action') or {}
         game=int(action.get('game') or manifest.get('active_game') or 1);directory=root/f'game_{game:02d}'
         status=read_json(directory/'status.json',{}) or {};config=read_json(directory/'game_config.json',{}) or {}
@@ -46,7 +46,7 @@ class Dashboard:
             for line in event_file.read_text(encoding='utf8',errors='replace').splitlines()[-40:]:
                 try:events.append(json.loads(line))
                 except json.JSONDecodeError:pass
-        files=[p for p in (root/'NEXT_ACTION.json',root/'manifest.json',directory/'status.json',event_file) if p.exists()]
+        files=[p for p in (root/'NEXT_ACTION.json',root/'cohort.json',directory/'status.json',event_file) if p.exists()]
         source='|'.join(f'{p}:{p.stat().st_mtime_ns}:{p.stat().st_size}' for p in files)
         host=self.host(run_id,root);state='running' if host['alive'] else status.get('state') or ('configured' if manifest else 'missing')
         return {'id':run_id,'revision':hashlib.sha256(source.encode()).hexdigest()[:16],'state':state,'game':game,
@@ -75,7 +75,7 @@ class Dashboard:
         return self.snapshot(run_id)
     def start(self,run_id,body):
         root=self.root(run_id)
-        if not (root/'manifest.json').exists():raise FileNotFoundError('Unknown run')
+        if not (root/'cohort.json').exists():raise FileNotFoundError('Unknown run')
         with self.lock:
             current=self.processes.get(run_id)
             if current and current.poll() is None:return self.snapshot(run_id)
@@ -90,7 +90,9 @@ class Dashboard:
             write_json(root/'dashboard'/'launch.json',{'pid':process.pid,'started_at':datetime.now(timezone.utc).isoformat(),'max_decisions':maximum,'context_tokens':tokens,'timing_events':timing,'auth_mode':'chatgpt_session_only'})
         return self.snapshot(run_id)
     def pause(self,run_id):
-        root=self.root(run_id);accepted=int((self.snapshot(run_id).get('status') or {}).get('decision_count') or 0)
+        root=self.root(run_id);snapshot=self.snapshot(run_id)
+        if not snapshot['host']['alive']:raise RuntimeError('Host is not running')
+        accepted=int((snapshot.get('status') or {}).get('decision_count') or 0)
         write_json(root/'HOST_PAUSED.json',{'reason':'user_stop','accepted':accepted});return self.snapshot(run_id)
 
 class Handler(BaseHTTPRequestHandler):
