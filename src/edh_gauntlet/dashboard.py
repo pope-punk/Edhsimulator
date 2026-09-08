@@ -51,7 +51,8 @@ class Dashboard:
         host=self.host(run_id,root);state='running' if host['alive'] else status.get('state') or ('configured' if manifest else 'missing')
         return {'id':run_id,'revision':hashlib.sha256(source.encode()).hexdigest()[:16],'state':state,'game':game,
                 'manifest':manifest,'config':config,'next_action':action,'status':status,'operator':operator,
-                'events':events,'host':host,'auth_mode':'Codex ChatGPT session; API-key environment removed'}
+                'events':events,'messageboard':(directory/'MESSAGEBOARD.md').read_text(encoding='utf8',errors='replace') if (directory/'MESSAGEBOARD.md').exists() else '',
+                'host':host,'auth_mode':'Codex ChatGPT session; API-key environment removed'}
     def list_runs(self):
         return [{k:s.get(k) for k in ('id','revision','state','game','next_action','host')} for p in sorted(self.runs.iterdir(),reverse=True) if p.is_dir() and SAFE_ID.fullmatch(p.name) for s in [self.snapshot(p.name)]]
     def create(self,body):
@@ -71,6 +72,8 @@ class Dashboard:
         result=subprocess.run(command,capture_output=True,text=True,timeout=300)
         if result.returncode:raise RuntimeError((result.stderr or result.stdout)[-2000:])
         write_json(root/'OPERATOR_VIEW.json',{'enabled':True})
+        refresh=subprocess.run([self.python,'-m','edh_gauntlet','--cohort',str(root),'advance','--game','1'],capture_output=True,text=True,timeout=300)
+        if refresh.returncode:raise RuntimeError((refresh.stderr or refresh.stdout)[-2000:])
         write_json(root/'dashboard'/'configuration.json',{**values,'learning':learning,'planner_publication':publication,'async_diplomacy':bool(body.get('async_diplomacy',True))})
         return self.snapshot(run_id)
     def start(self,run_id,body):
