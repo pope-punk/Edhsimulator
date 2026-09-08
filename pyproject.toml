@@ -12,12 +12,16 @@ dependencies = []
 
 [project.scripts]
 edh-gauntlet = "edh_gauntlet.campaign:main"
+edh-dashboard = "edh_gauntlet.dashboard:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+edh_gauntlet = ["dashboard_static/*"]
 
 [tool.setuptools.data-files]
 "share/edh-gauntlet/data/catalog" = ["data/catalog/cards.json"]
