@@ -61,12 +61,12 @@ strategy parity, registered action backing, printed stats and event visibility.
 It does not replace behavioral testing or establish that every Magic interaction
 is supported. Future changes need new focused validation.
 
-The repository is prepared for GitHub; the no-login web dashboard is a design.
+The source and software release are published on GitHub; the no-login web dashboard is a design.
 Cross-machine import of the saved game and live remote hosting are not certified.
 See [GITHUB_HANDOFF.md](GITHUB_HANDOFF.md) for the required boundary checks.
 
 After cleanup, four historical strategy source paths were made project-relative;
 all other strategy fields and paused-game snapshots remain unchanged. The release
 gate was rerun. The optional archive decryption helper separately passed full-game
-roundtrip, tamper rejection and existing-output protection checks. Only encrypted
-game evidence is uploaded publicly; its private key stays local.
+roundtrip, tamper rejection and existing-output protection checks. No game evidence
+archive was uploaded; both encrypted backup and key remain local by operator choice.

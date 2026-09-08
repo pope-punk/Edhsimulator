@@ -32,11 +32,12 @@ destination is validated. Run archives are excluded from Git history. The archiv
 contains game evidence and observer information; it contains no Codex credentials
 or machine-wide model-session database.
 
-The public release distributes only `paused-game-305.zip.aesgcm`, authenticated
-AES-256-GCM ciphertext. Its separate random key stays in the local ignored
-`handoff/paused-game-305.key`; never upload it or paste it into GitHub/chat. Transfer
-that file privately to the destination when preparing the hosted continuation.
-To recover the ZIP after obtaining the key:
+The operator chose to keep all game archives and the key local. The published
+release contains only the software wheel and its checksum. An authenticated
+AES-256-GCM copy, `handoff/paused-game-305.zip.aesgcm`, is prepared locally for a
+later explicitly authorized transfer. Its separate random key stays in the local
+ignored `handoff/paused-game-305.key`; never upload it or paste it into GitHub/chat.
+For a future authorized transfer, recover the ZIP after obtaining the key:
 
 ```sh
 python -m pip install cryptography
@@ -44,8 +45,8 @@ python tools/open_handoff.py paused-game-305.zip.aesgcm --key-file paused-game-3
 ```
 
 The helper authenticates before writing, refuses to overwrite a file, and neither
-extracts nor resumes the game. The release checksum describes ciphertext; the
-embedded manifest verifies original plaintext files after decryption.
+extracts nor resumes the game. Local handoff metadata records the ciphertext
+checksum; the embedded manifest verifies original plaintext files after decryption.
 
 This is a preservation archive, **not an automatic remote import**. It contains
 Windows absolute artifact paths and machine-local App Server conversation IDs.
