@@ -1,7 +1,7 @@
 """Seat-private background continuity, frozen inspection and metadata scheduling.
 
-No operation chooses a move or starts an agent. The host coordinator admits one
-planner at a time; publication never takes the campaign lock or wakes a decider.
+No operation chooses a move or starts an agent. The host admits work through the
+bound inference lanes; publication never takes the campaign lock or wakes a decider.
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def directory_for(root, game):
     return Path(root) / f'game_{game:02d}' / 'continuity'
 
 
-from .background_slots import reservations,reservation,available,assign,release,concurrent
+from .background_slots import reservations,reservation,available,assign,release,concurrent,seat_roles,lane_key
 
 
 def _state(directory):
@@ -323,7 +323,7 @@ def _job_metadata(job):
                                         'status', 'queued_at', 'snapshot', 'plan_id')}
 
 
-def workboard(root, game,*,action=None,role=None):
+def workboard(root, game,*,action=None,role=None,actor=None):
     """No private payloads, card names, history, requirements or plan text."""
     state = _state(directory_for(root, game))
     action = action or read(Path(root) / 'NEXT_ACTION.json', {}).get('next_action', {})
@@ -331,6 +331,7 @@ def workboard(root, game,*,action=None,role=None):
     pending = [job for job in state['jobs'].values() if job['status'] == 'pending']
     from .split_planning import eligible
     pending=available(state,eligible(root,game,state,pending))
+    if actor is not None:pending=[j for j in pending if j['actor']==actor]
     if role is not None:pending=[j for j in pending if j.get('role','planner')==role]
     from .split_planning import sort_pending
     sort_pending(root,game,pending)
@@ -338,18 +339,18 @@ def workboard(root, game,*,action=None,role=None):
     counts=dict(Counter(job['status'] for job in state['jobs'].values()))
     return {'schema': 1, 'game': game, 'lifecycle': action.get('kind'),
             'stop_required': not live, 'active': next(iter(reservations(state)),None),
-            'active_by_role':{j.get('role','planner'):j for j in reservations(state)},'role_slots':state.get('role_slots',0),
+            'active_by_role':{lane_key(state,j):j for j in reservations(state)},'role_slots':state.get('role_slots',0),
             'next_actor': pending[0]['actor'] if pending and live else None,
             'next_role':pending[0].get('role','planner') if pending and live else None,
             'jobs': [_job_metadata(job) for job in visible[:32]],'counts':counts,
             'omitted_job_count':max(0,len(visible)-32),'mandatory_boundaries':sum(job['mandatory'] for job in state['jobs'].values()),
             'wake_counts':dict(Counter(job.get('requirements',{}).get('reason','legacy_boundary') for job in state['jobs'].values() if job['status']!='superseded')),
             'pending_seat_count':len({job['actor'] for job in pending}),
-            'planners': state['planners'], 'planner_concurrency':3 if concurrent(state) else 1,
-            'reserved_decision_slots':1 if concurrent(state) else 3}
+            'planners': state['planners'], 'planner_concurrency':12 if seat_roles(state) else 3 if concurrent(state) else 1,
+            'reserved_decision_slots':4 if seat_roles(state) else 1 if concurrent(state) else 3}
 
 
-def _refresh_reservation(root, game, state, actor, rows):
+def _refresh_reservation(root, game, state, actor, rows, replay_cache=None):
     """Refresh a queued seat once, at admission; never rewrite active input.
 
     Call under campaign then planning locks. Replay only the accepted tape and
@@ -370,17 +371,25 @@ def _refresh_reservation(root, game, state, actor, rows):
         return ({'accepted': len(rows), 'seconds': 0, 'replayed': False,
                  'coalesced_jobs': len(stale)} if stale else None)
     started = time.monotonic()
+    # The software host supplies a cache scoped to one locked scheduling pass.
+    # Include the entire accepted prefix and bound config, never only its length.
     manifest = campaign.load_manifest(root)
     config = campaign._game_config_with_bound_surface(root, manifest, game)
-    scratch = directory / '.reservation_request.json'
-    try:
-        outcome = campaign._run(root, config, directory.parent / 'decisions.jsonl',
-                                scratch, retain_suspended_game=True)
-    finally:
-        scratch.unlink(missing_ok=True)
-    runtime = outcome.get('game')
-    if outcome['state'] != 'need_decision' or runtime is None:
-        raise SystemExit('Planner reservation requires a reproducible live frontier.')
+    key=(str(Path(root).resolve()),game,identity(rows),identity(config))
+    runtime=replay_cache.get(key) if replay_cache is not None else None
+    reused=runtime is not None
+    if runtime is None:
+        scratch = directory / '.reservation_request.json'
+        try:
+            outcome = campaign._run(root, config, directory.parent / 'decisions.jsonl',
+                                    scratch, retain_suspended_game=True)
+        finally:
+            scratch.unlink(missing_ok=True)
+        runtime = outcome.get('game')
+        if outcome['state'] != 'need_decision' or runtime is None:
+            raise SystemExit('Planner reservation requires a reproducible live frontier.')
+        if replay_cache is not None:
+            replay_cache.clear();replay_cache[key]=runtime
     if previous and not _compatible(old['source_session'], root, game, actor, rows):
         previous = None
     snapshot = _snapshot(root, game, actor, runtime, rows, previous)
@@ -389,11 +398,12 @@ def _refresh_reservation(root, game, state, actor, rows):
         if job['actor'] == actor and job['status'] == 'pending':
             job.update(snapshot=snapshot, source_session=source)
     return {'previous_accepted': old.get('source_session', {}).get('accepted_prefix_count'),
-            'accepted': len(rows), 'seconds': round(time.monotonic() - started, 6), 'replayed': True}
+            'accepted': len(rows), 'seconds': round(time.monotonic() - started, 6), 'replayed': not reused,
+            'shared_replay': reused}
 
 
 @serialized
-def reserve(root, game, *, admission_id, host_capacity, host_active, expected_identity=None):
+def reserve(root, game, *, admission_id, host_capacity, host_active, expected_identity=None, replay_cache=None):
     """Admission is metadata only; host tools must still create/wake the agent."""
     if not isinstance(admission_id, str) or not admission_id.strip():
         raise SystemExit('Supply a stable admission ID for retries.')
@@ -419,7 +429,8 @@ def reserve(root, game, *, admission_id, host_capacity, host_active, expected_id
         from .agent_architecture import registration_key
         pending=available(state,eligible(root,game,state,pending))
         if expected_identity is not None and concurrent(state):
-            pending=[j for j in pending if j.get('role','planner')==expected_identity[1]]
+            pending=[j for j in pending if j.get('role','planner')==expected_identity[1]
+                     and (not seat_roles(state) or j['actor']==expected_identity[0])]
         if not pending:
             return {'state': 'idle'}
         from .split_planning import sort_pending
@@ -429,7 +440,7 @@ def reserve(root, game, *, admission_id, host_capacity, host_active, expected_id
         if expected_identity is not None and tuple(expected_identity)!=selected:
             return {'state':'reschedule','reason':'next_background_identity_changed'}
         from .agent_architecture import enabled as architecture_enabled
-        refresh = _refresh_reservation(root, game, state, actor, rows) if architecture_enabled(root, game) else None
+        refresh = _refresh_reservation(root, game, state, actor, rows, replay_cache) if architecture_enabled(root, game) else None
         role=pending[0].get('role','planner');registry_key=registration_key(actor,role)
         if role=='diplomacy':
             from .diplomacy import preflight_required

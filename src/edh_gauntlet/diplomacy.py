@@ -196,7 +196,7 @@ def publish(root,game,actor,batch_id,generation,response):
         public=any(response.get(k) for k in ('disclosure_ids','offer_ids','accept_offer_ids','withdraw_offer_ids'))
         authorized=bool(brief and current and identity(current)==source_ref and applicable(brief,current,latest,d))
         required=batch.get('requires_public_post',False)
-        if required and not authorized and state.get('role_slots')==1:
+        if required and not authorized and state.get('role_slots') in {1,2}:
             # A concurrent strategic publication may supersede this frozen
             # authorization. Resolve its debt in Python without a correction
             # inference or posting any of the obsolete selected atoms.
@@ -301,6 +301,15 @@ def replay(runtime):
             'async|'+key,key,reply_to=entry.get('reply_to'))
 
 
+def duplicate_post(posts,row,address):
+    """Suppress repeated speech, never silently discard a new typed commitment."""
+    if any(row.get(k) for k in ('offers','accept_offer_ids','withdraw_offer_ids')):return None
+    normalized=' '.join(row['text'].split()).casefold()
+    return next((p['message_id'] for p in posts if p['author']==row['actor'] and
+        ' '.join(p['text'].split()).casefold()==normalized and p['address']==address and
+        p.get('reply_to')==row.get('reply_to')),None)
+
+
 def flush(root,game):
     """Called under the campaign lock BEFORE claim/batch execution; no inference."""
     if not diplomacy_enabled(root,game):return False
@@ -322,7 +331,8 @@ def flush(root,game):
         route=read(root/f'game_{game:02d}'/'handoffs'/'routes'/(action['dispatch']['route_id']+'.json'),{})
         if route.get('claim_id'):return False
         state=runtime._state(d);posts=read(d/'diplomacy_posts.json',[]);ledger=read(d/'diplomatic_offers.json',{})
-        decisions=runtime._rows(root,game);changed=set();valid=[]
+        decisions=runtime._rows(root,game);changed=set();valid=[];suppressed={};suppression_writes=[]
+        comparable=[p for p in posts if runtime._compatible(p['source_session'],root,game,p['author'])]
         for key,row in outbox.items():
             actor=row['actor'];current=components.current(root,game,actor).get('diplomacy_brief')
             snapshot=get(d/'snapshots',state['snapshots'][actor])
@@ -336,6 +346,13 @@ def flush(root,game):
                 continue
             source=pilot_handoff.session_descriptor(root,game,actor,decisions)
             address={'kind':'generic','pilots':[]} if row.get('reply_to') or not row.get('to') else {'kind':'pilot','pilots':[row['to']]}
+            duplicate=duplicate_post(comparable,row,address)
+            if duplicate:
+                suppressed[key]=duplicate
+                publication=read(d/'publications'/(key+'.json'),{})
+                suppression_writes.append((d/'publications'/(key+'.json'),{**publication,
+                    'public_post':'duplicate_suppressed','duplicate_of':duplicate}))
+                continue
             entry={'message_id':'diplomacy-'+key,'author':actor,'text':row['text'],'address':address,'reply_to':row.get('reply_to'),
                 'after_decision':len(decisions),'source_session':source,'authorization':row['brief_id'],
                 'claims':[atom['text'] for atom in row['brief']['disclosures'] if atom['id'] in row['disclosure_ids']],
@@ -343,7 +360,7 @@ def flush(root,game):
             if row.get('opening_salutation') and not any(p.get('opening_salutation') and p['author']==actor for p in posts):
                 posts.append({**entry,'message_id':'diplomacy-opener-'+key,'text':row['opening_salutation'],
                     'address':{'kind':'generic','pilots':[]},'reply_to':None,'claims':[],'opening_salutation':True})
-            posts.append(entry);valid.append(key);changed.add(actor)
+            posts.append(entry);comparable.append(entry);valid.append(key);changed.add(actor)
             if entry['claims']:changed.update(snapshot['board']['players'])
             for offer in row['offers']:
                 offer_id=identity([row['brief_id'],offer['id']])
@@ -354,6 +371,7 @@ def flush(root,game):
                 ledger[offer_id]['state']='agreement' if offer_id in row['accept_offer_ids'] else 'withdrawal'
                 changed.update([ledger[offer_id]['author'],ledger[offer_id]['to']])
         writes=[(d/'diplomacy_posts.json',posts),(d/'diplomatic_offers.json',ledger),(d/'diplomacy_outbox.json',{}),(d/'workboard.json',state)]
+        writes.extend(suppression_writes)
         if valid:writes.append((d/'diplomacy_refresh.json',{'after_decision':len(decisions),'posted':valid}))
         for actor in changed:
             snapshot_id=state['snapshots'][actor];snapshot=get(d/'snapshots',snapshot_id)
@@ -374,7 +392,7 @@ def flush(root,game):
                 writes.append((d/'mailboxes'/(pilot_handoff.seat_slug(actor)+'.json'),{'plan_id':plan_id,'published_at':time.time()}))
             writes.append((components.index_path(d,actor),pointers))
         actor=next(iter(outbox.values()))['actor'];source=pilot_handoff.session_descriptor(root,game,actor,decisions)
-        components.commit(root,game,actor,'flush:'+identity(sorted(outbox)),identity(outbox),source,writes,{'posted':valid,'discarded':len(outbox)-len(valid)})
+        components.commit(root,game,actor,'flush:'+identity(sorted(outbox)),identity(outbox),source,writes,{'posted':valid,'suppressed_duplicates':suppressed,'discarded':len(outbox)-len(valid)-len(suppressed)})
         if valid:
             campaign.advance(root,game)
             (d/'diplomacy_refresh.json').unlink()

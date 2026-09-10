@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+from .continuous import read_only_views
 import re, json, random, hashlib, math, shutil
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
@@ -64,7 +65,7 @@ class CardObj:
     uid: str
     d: CardDef
 
-@dataclass
+@dataclass(eq=False)
 class Perm:
     uid: str
     name: str
@@ -602,7 +603,7 @@ class Game:
     def card_in_hand(self,p,name):
         return next((c for c in p.hand if c.d.name==name),None)
     def perm(self,p,name):
-        return next((q for q in p.battlefield if q.name==name and not q.metadata.get('mutated')),None)
+        return next((q for q in p.battlefield if (q.copy_of or q.name)==name and not q.metadata.get('mutated')),None)
     def controls_commander(self,p):
         """Return whether *p* controls any object designated as a commander.
 
@@ -889,6 +890,16 @@ class Game:
         return max(0,t)
 
     def available_sources(self,p):
+        # Menu enumeration is read-only: mana sources do not change between
+        # affordability checks for different cards or X values. Copy containers
+        # on return so a payment solver cannot mutate the cached source options.
+        cache=getattr(self,'_query_source_cache',None)
+        # Convoke previews temporarily tap creatures even inside a read-only
+        # menu query. Distinguish those previews and restored source availability.
+        key=('available_sources',id(p),tuple((id(q),q.tapped,q.summoning_sick) for q in p.battlefield),
+             p.treasures,tuple(p.dungeon.get('domri_floating',())),tuple(p.dungeon.get('floating_mana',())))
+        if cache is not None and key in cache:
+            return [(source,set(colors),amount) for source,colors,amount in cache[key]]
         src=[]
         yavimaya_active=any(
             z.name=='Yavimaya, Cradle of Growth' and not permanent_mana_inactive(z)
@@ -908,6 +919,8 @@ class Game:
         for token in p.dungeon.get('floating_mana',[]):
             color=token.split('-')[-1]
             src.append((f'FLOAT:{token}',set(color),1))
+        if cache is not None:
+            cache[key]=tuple((source,frozenset(colors),amount) for source,colors,amount in src)
         return src
 
     def mana_filters(self,p):
@@ -1006,6 +1019,7 @@ class Game:
     def noncreature_spell_tax(self,p):
         return 2*sum(op.dungeon.get('ecd_tax_effects',0) for op in self.opponents(p))
 
+    @read_only_views
     def _payment_plan(self,p,card:CardDef,commander=False,miracle=False,x_value=0,avoid_source=None):
         from . import mana_safety
         def solve(sources=None):
@@ -1451,8 +1465,8 @@ class Game:
             self.gain_life(p,1,'Liliana planeswalker ETB trigger')
 
     def on_etb(self,p,q,x_value=0):
-        n=q.name
-        d=CARDDEF.get(q.name)
+        n=q.copy_of or q.name
+        d=CARDDEF.get(n)
         starting_loyalty=catalog_starting_loyalty(n,x_value=x_value)
         if starting_loyalty is not None:q.counters.setdefault('loyalty',starting_loyalty)
         # Entry replacement effects exist when other permanents observe the entry.
@@ -1996,12 +2010,9 @@ class Game:
         p.battlefield.append(q);self.mark_appearance(c.d.name,realized=True)
         p.land_play_limit=self.max_land_plays(p)
         self.log('etb',p.name,c.d.name,f'{c.d.name} entered battlefield: {reason}'+(f' copying {copy_of}' if copy_of else ''),uid=c.uid,copy_of=copy_of)
-        # use copy's ETB behavior where relevant
-        if copy_of:
-            pseudo=Perm(q.uid,copy_of,q.owner,p.name,q.tapped,q.summoning_sick,q.counters,q.attached_to,q.copy_of,q.token,q.base_power,q.base_toughness,q.keywords,q.entered_turn,q.metadata)
-            self.on_etb(p,pseudo,x_value=x_value)
-            q.metadata.update(pseudo.metadata)
-        else:self.on_etb(p,q,x_value=x_value)
+        # Dispatch copied characteristics on the real battlefield object.
+        # A synthetic Perm breaks delayed callbacks and zone-change identity.
+        self.on_etb(p,q,x_value=x_value)
         return q
 
     def put_grave_creature_bf(self,p,c,reason):

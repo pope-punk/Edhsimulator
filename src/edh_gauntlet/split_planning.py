@@ -30,8 +30,8 @@ def eligible(root,game,state,pending):
     long_pending={j['actor'] for j in pending if j.get('role')==LONG}
     return [j for j in pending if j.get('role')==LONG and
             (j['scope']=='standing' or 'standing' in values[j['actor']]) or
-            j.get('role')==SHORT and {'standing','long_term'}<=set(values[j['actor']]) and (state.get('role_slots')==1 or j['actor'] not in long_pending) or
-            j.get('role')==DIPLOMACY and (state.get('role_slots')==1 or j['mandatory'] or j['actor'] not in long_pending)]
+            j.get('role')==SHORT and {'standing','long_term'}<=set(values[j['actor']]) and (state.get('role_slots') in {1,2} or j['actor'] not in long_pending) or
+            j.get('role')==DIPLOMACY and (state.get('role_slots') in {1,2} or j['mandatory'] or j['actor'] not in long_pending)]
 
 
 def cursor(root,game,actor,role):
@@ -43,6 +43,7 @@ def cursor(root,game,actor,role):
 
 
 def sort_pending(root,game,pending):
+    if not pending:return
     urgent=None
     if enabled(root,game):
         action=read(components.directory(root,game).parent.parent/'NEXT_ACTION.json',{}).get('next_action',{})
@@ -51,7 +52,7 @@ def sort_pending(root,game,pending):
             current=components.current(root,game,actor)
             if not {'standing','long_term'}<=set(current):urgent=actor
     from .planner_runtime import _state
-    state_concurrent=_state(components.directory(root,game)).get('role_slots')==1
+    state_concurrent=_state(components.directory(root,game)).get('role_slots') in {1,2}
     def priority(job):
         if state_concurrent and job.get('role')==SHORT and 'short_term' not in components.current(root,game,job['actor']):return -1
         if state_concurrent and time.time()-job['queued_at']>=120:return 0

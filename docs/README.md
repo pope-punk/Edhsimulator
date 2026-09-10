@@ -5,6 +5,7 @@
 - Agents: [role architecture](AGENT_ARCHITECTURE_V1.md), [resident policy](HOST_AGENT_POLICY.md), [planner policy](PLANNER_RUNTIME_POLICY.md).
 - Decisions: [referee protocol](MANUAL_REFEREE_PROTOCOL.md), [approved sequences](APPROVED_SEQUENCES.md), [rules coverage](RULES_SUPPORT.md).
 - Data: [catalog](CARD_CATALOG_ARCHITECTURE.md), [standing plans](STATIC_STANDING_PLANS.md).
+- Rules architecture: [primitives migration plan](RULES_PRIMITIVES_MIGRATION.md).
 - Efficiency: [communications](COMMUNICATIONS.md), [resources](RESOURCE_USAGE.md).
 - GitHub and paused game: [handoff requirements](GITHUB_HANDOFF.md).
 - Next interface: [remote dashboard design](REMOTE_DASHBOARD.md).

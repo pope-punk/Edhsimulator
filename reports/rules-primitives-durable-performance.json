@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "scope": "Synthetic SQLite FULL/WAL on local temporary storage; includes engine execution and actor packet creation, excludes inference, network, production disks and campaign integration",
+  "cases": [
+    {
+      "checkpoint_interval": 1,
+      "commands_per_run": 65,
+      "repeats": 3,
+      "median_commit_ms": 3.0013689975021407,
+      "median_regular_commit_ms": null,
+      "median_checkpoint_commit_ms": 3.0013689975021407,
+      "median_reopen_ms": 9.629064003092935,
+      "replayed_commands_on_open": 0
+    },
+    {
+      "checkpoint_interval": 32,
+      "commands_per_run": 65,
+      "repeats": 3,
+      "median_commit_ms": 0.8103820000542328,
+      "median_regular_commit_ms": 0.8091290001175366,
+      "median_checkpoint_commit_ms": 3.3641115005593747,
+      "median_reopen_ms": 9.141972001089016,
+      "replayed_commands_on_open": 1
+    }
+  ]
+}

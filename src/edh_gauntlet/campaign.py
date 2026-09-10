@@ -1969,13 +1969,15 @@ def game_config(manifest: Dict[str, Any], game_number: int) -> Dict[str, Any]:
     config['planner_stages']=bool(planning.get('stages',False) and config['planning_contract']==4)
     config['plan_tiers']=bool(planning.get('tiers',False) and config['planner_stages'])
     config['context_handling']=planning.get('context_handling',0) if config['planning_contract']==4 else 0
+    if 'selection_batch_after' in manifest:config['selection_batch_after']=manifest['selection_batch_after']
+    if 'proliferate_batch_after' in manifest:config['proliferate_batch_after']=manifest['proliferate_batch_after']
     if 'combat_blocker_batch' in manifest:
         from .block_declaration import version
         config['combat_blocker_batch']=version(manifest['combat_blocker_batch'])
     if 'combat_damage_batch' in manifest:
         from .combat_damage import version as damage_version
         config['combat_damage_batch']=damage_version(manifest['combat_damage_batch'])
-    for field in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches'):
+    for field in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast'):
         if planning.get(field) and game_number>=planning.get('effective_from_game',1):config[field]=planning[field]
     from .agent_architecture import validate_binding
     validate_binding(config)
@@ -2043,6 +2045,10 @@ def _game_config_with_bound_surface(
     config['planner_stages']=persisted.get('planner_stages',False)
     config['plan_tiers']=persisted.get('plan_tiers',False)
     config['context_handling']=persisted.get('context_handling',0)
+    config.pop('selection_batch_after',None)
+    if 'selection_batch_after' in persisted:config['selection_batch_after']=persisted['selection_batch_after']
+    config.pop('proliferate_batch_after',None)
+    if 'proliferate_batch_after' in persisted:config['proliferate_batch_after']=persisted['proliferate_batch_after']
     config.pop('combat_blocker_batch',None)
     if 'combat_blocker_batch' in persisted:
         from .block_declaration import version
@@ -2051,7 +2057,7 @@ def _game_config_with_bound_surface(
     if 'combat_damage_batch' in persisted:
         from .combat_damage import version as damage_version
         config['combat_damage_batch']=damage_version(persisted['combat_damage_batch'])
-    for field in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches'):
+    for field in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast'):
         config.pop(field,None)
         if field in persisted:config[field]=persisted[field]
     from .agent_architecture import validate_binding
@@ -2637,7 +2643,7 @@ def bind_game_seed_gameplan_snapshot(
         **({'planner_stages':True} if config.get('planner_stages',False) else {}),
         **({'plan_tiers':True} if config.get('plan_tiers',False) else {}),
         **({'context_handling':1} if config.get('context_handling')==1 else {}),
-        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','combat_blocker_batch','combat_damage_batch','learning_enabled') if key in config},
+        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast','combat_blocker_batch','combat_damage_batch','proliferate_batch_after','selection_batch_after','learning_enabled') if key in config},
         "decision_surface_revision": _validate_decision_surface_revision(
             config.get("decision_surface_revision", LEGACY_DECISION_SURFACE_REVISION)
         ),
@@ -2694,7 +2700,7 @@ def bind_game_messaging_personality_snapshot(
         **({'planner_stages':True} if config.get('planner_stages',False) else {}),
         **({'plan_tiers':True} if config.get('plan_tiers',False) else {}),
         **({'context_handling':1} if config.get('context_handling')==1 else {}),
-        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','combat_blocker_batch','combat_damage_batch','learning_enabled') if key in config},
+        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast','combat_blocker_batch','combat_damage_batch','proliferate_batch_after','selection_batch_after','learning_enabled') if key in config},
         "decision_surface_revision":_validate_decision_surface_revision(
             config.get("decision_surface_revision",LEGACY_DECISION_SURFACE_REVISION)),
         "messaging_personality_snapshot":dict(expected),
@@ -2761,7 +2767,7 @@ def bind_game_strategy_snapshot(root: Path, config: Dict[str, Any]) -> StrategyS
         **({'planner_stages':True} if config.get('planner_stages',False) else {}),
         **({'plan_tiers':True} if config.get('plan_tiers',False) else {}),
         **({'context_handling':1} if config.get('context_handling')==1 else {}),
-        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','combat_blocker_batch','combat_damage_batch','learning_enabled') if key in config},
+        **{key:config[key] for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast','combat_blocker_batch','combat_damage_batch','proliferate_batch_after','selection_batch_after','learning_enabled') if key in config},
         "strategy_revision": frozen,
     }
     if desired != persisted:
@@ -2808,6 +2814,8 @@ def _run(root: Path, config: Dict[str, Any], tape_path: Path, request_path: Path
             combo_deliveries=deliveries(root,config['game']) if config.get('decision_roles')==1 else [],
             combat_blocker_batch=config.get('combat_blocker_batch',0),
             combat_damage_batch=config.get('combat_damage_batch',0),
+            proliferate_batch_after=config.get('proliferate_batch_after'),
+            selection_batch_after=config.get('selection_batch_after'),
             turn_batches=config.get('turn_batches',0),
             diplomacy_posts=committed_posts(root,config['game']) if config.get('async_diplomacy')==1 else None,
             decision_surface_revision=_validate_decision_surface_revision(
@@ -3165,7 +3173,8 @@ def _status_markdown(status: Dict[str, Any]) -> str:
             if request["allow_pass"]:
                 lines.append("0. PASS")
             if request.get('multi_select'):
-                lines.append("Choose all applicable option numbers in one comma-separated answer.")
+                lines.append("Choose option numbers in one comma-separated answer."+
+                             (" Order matters: follow the direction in the prompt." if request.get("ordered_selection") else ""))
         rationale_policy=request.get("rationale_policy") or {}
         if rationale_policy:
             lines += [
@@ -4961,6 +4970,29 @@ def _invalidate_unresolved_terminal_review(
     manifest["updated_at"]=now();write_json(root/"cohort.json",manifest)
 
 
+def _retained_public_history(root, game, rows):
+    """Keep committed public inputs, independently of discarded model contexts."""
+    directory=game_dir(root,game)/'continuity';retained={}
+    for name,actor_key in [('diplomacy_posts.json','author'),('combo_deliveries.json','actor')]:
+        values=read_json(directory/name) if (directory/name).exists() else []
+        retained[name]=[row for row in values if pilot_handoff.can_resume_session(
+            row['source_session'],root,game,row[actor_key],rows)]
+    return retained
+
+
+def _rebind_public_history(root, game, rows, retained):
+    """Called only after epoch invalidation, with history validated before it."""
+    directory=game_dir(root,game)/'continuity'
+    for name,actor_key in [('diplomacy_posts.json','author'),('combo_deliveries.json','actor')]:
+        values=[]
+        for row in retained[name]:
+            count=row['source_session']['accepted_prefix_count']
+            if count>len(rows) or row['source_session']['accepted_prefix_sha256']!=pilot_handoff.fingerprint(rows[:count]):
+                raise SystemExit('Public rewind history no longer matches the retained tape.')
+            values.append({**row,'source_session':pilot_handoff.session_descriptor(root,game,row[actor_key],rows[:count])})
+        write_json(directory/name,values)
+
+
 @serialized
 def rewind(root: Path, decision_id: str, reason: str, game_number: Optional[int] = None) -> Dict[str, Any]:
     _require_no_prepared_learning_transaction(root, "rewind gameplay")
@@ -4996,8 +5028,10 @@ def rewind(root: Path, decision_id: str, reason: str, game_number: Optional[int]
         _invalidate_unresolved_terminal_review(root,manifest,directory,number)
     discarded = rows[cut:]
     digest = hashlib.sha256(json.dumps(discarded, sort_keys=True).encode("utf-8")).hexdigest()
+    retained_public=_retained_public_history(root,number,rows[:cut])
     write_jsonl(tape_path, rows[:cut])
     pilot_handoff.invalidate_sessions(root,number,'rewind')
+    _rebind_public_history(root,number,rows[:cut],retained_public)
     # Epoch fencing makes all prior contexts incompatible.  Remove their
     # routing identities as well so a new software host can safely create
     # isolated contexts on the retained accepted prefix.
@@ -6174,7 +6208,7 @@ def init(root: Path, games: int, seed_start: int, max_rounds: int, *, decision_s
     if games<1:raise SystemExit("games must be at least 1")
     if type(learning_enabled) is not bool:raise SystemExit('learning_enabled must be boolean.')
     from .agent_architecture import validate_binding
-    architecture_flags={k:1 for k,v in [('agent_architecture',agent_architecture),('async_diplomacy',async_diplomacy),('decision_roles',async_diplomacy),('static_standing',agent_architecture),('combat_proposals',agent_architecture),('turn_batches',agent_architecture)] if v}
+    architecture_flags={k:1 for k,v in [('agent_architecture',agent_architecture),('async_diplomacy',async_diplomacy),('decision_roles',async_diplomacy),('static_standing',agent_architecture),('combat_proposals',agent_architecture),('turn_batches',agent_architecture),('short_term_sol_fast',agent_architecture)] if v}
     validate_binding({**architecture_flags,'planning_contract':planning_contract,'planner_stages':planner_stages,'plan_tiers':plan_tiers,'context_handling':1})
     if max_rounds<1:raise SystemExit("max-rounds must be at least 1")
     if not isinstance(plan_tiers,bool):raise SystemExit('plan_tiers must be boolean.')
@@ -6195,7 +6229,7 @@ def init(root: Path, games: int, seed_start: int, max_rounds: int, *, decision_s
         "target_games": games, "seed_start": seed_start, "max_rounds": max_rounds,
         "learning_enabled":learning_enabled,
         "active_game": 1, "baseline": "data/decks/reaminatour.txt",
-        **({'combat_blocker_batch':2,'combat_damage_batch':1} if decision_surface_revision>=6 else {}),
+        **({'combat_blocker_batch':2,'combat_damage_batch':1,'proliferate_batch_after':0,'selection_batch_after':0} if decision_surface_revision>=6 else {}),
         "decision_surface_revision": _validate_decision_surface_revision(decision_surface_revision),
         "cohort_state": "active",
         "planning_runtime":{"contract":planning_contract,"effective_from_game":1,"stages":planner_stages,"tiers":bool(planner_stages and plan_tiers),"context_handling":1 if planning_contract==4 else 0,**architecture_flags},
@@ -6291,7 +6325,7 @@ def print_status(status: Dict[str, Any]) -> None:
             if request["allow_pass"]:
                 print("  0. PASS")
         if request.get('multi_select'):
-            print("  Select all attackers in one comma-separated answer (for example: 1,3,4).")
+            print("  Select option numbers in one comma-separated answer (for example: 1,3,4); preserve the requested order.")
         batch=request.get('pass_on_batch') or {}
         if batch.get('schema')==1:
             print('  PASS ON BATCH. Choose its option and repeat --pass-on "UID=SCHEDULE".')

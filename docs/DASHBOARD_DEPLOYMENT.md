@@ -42,3 +42,27 @@ closed rather than falling back to API billing.
   recovery workflow.
 - GitHub Pages can host the static files, but private Pages availability depends on
   the repository organization and plan. The private Codespace URL is the default.
+
+## Operator reports
+
+The Cardwise Rating tab lists Aminatou’s full frozen 100-card deck, including the
+commander. Repeated basics share one row with their quantity. “Seen” means that an
+original deck card entered hand, battlefield or graveyard from any source. The
+ETB/cast column is the union of battlefield entry and casting. Each name counts
+at most once per game in each column; both win percentages use their corresponding
+column as the denominator. Draws are non-wins; zero-denominator percentages are blank.
+
+Only sealed completed games with a bound learning skip or completed review count.
+A cached, isolated Python replay observes physical card identities in those zones;
+it never dispatches models or changes the live game. Token copies do not count as
+original cards, and merely looking at a library card does not count as seeing it.
+A replay that cannot reproduce the sealed result is excluded with an explanation.
+
+The dashboard messageboard presents only sender, turn/phase and message in compact
+chat rows. This is a display projection of MESSAGEBOARD.md; agent inputs and original
+messages are unchanged.
+
+On Linux, saved process identity includes the boot ID and process start ticks.
+The dashboard recognizes a recovered host across its own restarts, and Start
+returns that same live host instead of attempting a second worker. Refreshing the
+browser does not reload a running host or change its bound lane policy.

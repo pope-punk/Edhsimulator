@@ -170,6 +170,7 @@ def main():
     parser.add_argument('--bounded-memory-recovery',action='store_true',help='With baseline telemetry, checkpoint retained oversized planner contexts using the bounded rules cache before inference; never waive the budget.')
     parser.add_argument('--combo-telemetry',type=Path,help='Explicit continuation after a committed combo adjudication at the same prefix.')
     parser.add_argument('--capacity-telemetry',type=Path,help='Explicit continuation after a completed act and terminal overload at the next unanswered input.')
+    parser.add_argument('--seat-role-lanes',action='store_true',help='Enable 16 independent seat/role lanes at a verified diagnostic stop.')
     parser.add_argument('--concurrent-background',action='store_true',help='Explicitly enable independent role lanes at this verified diagnostic stop.')
     parser.add_argument('--reservation-telemetry',type=Path,help='Fence a diagnosed misrouted background input with no accepted output and discard its context.')
     parser.add_argument('--diagnostic-pause-telemetry',type=Path,help='Explicit continuation after a cooperative investigation pause, verified against complete local telemetry.')
@@ -181,7 +182,8 @@ def main():
     parser.add_argument('--planner-validation-recovery',action='store_true',help='Resume after a diagnosed planner contract error, retaining published plans and restarting its cancelled pending work.')
     args=parser.parse_args();root=args.cohort.resolve();directory=root/'host_runtime'
     if args.bounded_memory_recovery and not args.baseline_telemetry:parser.error('Bounded-memory recovery requires baseline telemetry.')
-    if args.concurrent_background and not args.diagnostic_pause_telemetry:parser.error('Role-slot upgrade requires a verified diagnostic pause.')
+    if args.concurrent_background and args.seat_role_lanes:parser.error('Choose one lane upgrade version.')
+    if (args.concurrent_background or args.seat_role_lanes) and not args.diagnostic_pause_telemetry:parser.error('Role-slot upgrade requires a verified diagnostic pause.')
     if args.max_decisions<=args.accepted:parser.error('Decision cap must exceed the stopped accepted count.')
     with locked(root,'host-driver',timeout=0):
         action=read(root/'NEXT_ACTION.json')['next_action']
@@ -273,6 +275,7 @@ def main():
             audit={'game':args.game,'accepted':args.accepted,'prefix_sha256':digest,
                    'diagnostic_pause_continuation':diagnostic,'reservation_recovery':reservation,
                    'concurrent_background_upgrade':args.concurrent_background,
+                   'seat_role_lanes_upgrade':args.seat_role_lanes,
                    'previous_pause':pause,'user_authorized_resume':args.user_resume,
                    'combo_continuation':bool(args.combo_telemetry),
                    'decision_limit_resume':args.decision_limit_resume,
@@ -287,9 +290,9 @@ def main():
                    'bounded_memory_recovery':args.bounded_memory_recovery,
                    'previous_launch':read(directory/f'stopped_{args.game}_{args.accepted}.json',{}).get('previous_launch')}
             write(directory/f'recovery_{args.game}_{args.accepted}.json',audit)
-            if args.concurrent_background:
+            if args.concurrent_background or args.seat_role_lanes:
                 from edh_gauntlet.background_slots import enable
-                enable(root,args.game)
+                enable(root,args.game,role_slots=2 if args.seat_role_lanes else 1)
             if reservation:
                 from reservation_recovery import discard
                 sessions=discard(root,args.game,sessions,reservation,server)

@@ -20,3 +20,5 @@ jobs:
       - name: Verify installed catalog and runtime assets
         working-directory: ${{ runner.temp }}
         run: python -m edh_gauntlet verify
+      - name: Run rules primitive conformance checks
+        run: python -m unittest discover -s tests -p "test_rules_primitives*.py" -v

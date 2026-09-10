@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Cohort,[Parameter(Mandatory=$true)][int]$Game,[Parameter(Mandatory=$true)][int]$Accepted,[switch]$UserResume,[switch]$DecisionLimitResume,[switch]$ClaimCompletionRecovery,[switch]$RestoreUnusedTransports,[switch]$PlannerValidationRecovery,[switch]$UnansweredDecisionRecovery,[string]$BaselineTelemetry,[switch]$BoundedMemoryRecovery,[string]$ComboTelemetry,[string]$CapacityTelemetry,[string]$DiagnosticPauseTelemetry,[string]$ReservationTelemetry,[switch]$ConcurrentBackground,[int]$MaxDecisions=10000,[ValidateRange(64,4096)][int]$TimingEvents=512)
+param([Parameter(Mandatory=$true)][string]$Cohort,[Parameter(Mandatory=$true)][int]$Game,[Parameter(Mandatory=$true)][int]$Accepted,[switch]$UserResume,[switch]$DecisionLimitResume,[switch]$ClaimCompletionRecovery,[switch]$RestoreUnusedTransports,[switch]$PlannerValidationRecovery,[switch]$UnansweredDecisionRecovery,[string]$BaselineTelemetry,[switch]$BoundedMemoryRecovery,[string]$ComboTelemetry,[string]$CapacityTelemetry,[string]$DiagnosticPauseTelemetry,[string]$ReservationTelemetry,[switch]$ConcurrentBackground,[switch]$SeatRoleLanes,[int]$MaxDecisions=10000,[ValidateRange(64,4096)][int]$TimingEvents=512)
 $ErrorActionPreference='Stop'
 $taskRepoRoot=Split-Path -Parent $PSScriptRoot
 $taskRoot=(Resolve-Path -LiteralPath $Cohort).Path
@@ -33,6 +33,7 @@ if ($ReservationTelemetry) { $taskArgs+=@('--reservation-telemetry',('"'+(Resolv
 if ($DiagnosticPauseTelemetry) { $taskArgs+=@('--diagnostic-pause-telemetry',('"'+(Resolve-Path -LiteralPath $DiagnosticPauseTelemetry).Path+'"')) }
 if ($ComboTelemetry) { $taskArgs+=@('--combo-telemetry',('"'+(Resolve-Path -LiteralPath $ComboTelemetry).Path+'"')) }
 if ($ConcurrentBackground) { $taskArgs+='--concurrent-background' }
+if ($SeatRoleLanes) { $taskArgs+='--seat-role-lanes' }
 if ($UserResume) { $taskArgs+='--user-resume' }
 if ($DecisionLimitResume) { $taskArgs+='--decision-limit-resume' }
 if ($ClaimCompletionRecovery) { $taskArgs+='--claim-completion-recovery' }

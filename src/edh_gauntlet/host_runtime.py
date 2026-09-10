@@ -50,7 +50,8 @@ class AppServer:
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf8',bufsize=1,
             creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         self.events=queue.Queue();self.replies={};self.serial=0;self.usage={}
-        threading.Thread(target=self._read,daemon=True).start()
+        self.reader=threading.Thread(target=self._read,daemon=True)
+        self.reader.start()
         try:
             self.call('initialize',{'clientInfo':{'name':'edh_gauntlet','version':'1'},
                                    'capabilities':{'experimentalApi':True}})
@@ -63,6 +64,7 @@ class AppServer:
         try:
             for line in self.process.stdout:
                 message=json.loads(line)
+                message['_host_received_monotonic']=time.monotonic()
                 if getattr(self,'timing',None):self.timing.observe(message)
                 if self.observer:self.observer(message)
                 if message.get('method')=='thread/tokenUsage/updated':
@@ -119,6 +121,7 @@ class AppServer:
             self.process.terminate()
             try:self.process.wait(timeout=5)
             except subprocess.TimeoutExpired:self.process.kill();self.process.wait(timeout=5)
+        self.reader.join(timeout=5)
 
 
 def tool(name,description,properties,required):
@@ -173,14 +176,15 @@ class Runner:
         self.timing=Timing(self.directory/'timing.json',limit=timing_events);self.server.timing=self.timing
         action=self.action();self.game=action.get('game')
         from . import agent_architecture
-        if agent_architecture.enabled(self.root,self.game):self.routing.primary.update(agent_architecture.MODELS)
+        if agent_architecture.enabled(self.root,self.game):self.routing.primary.update(agent_architecture.models(self.root,self.game))
         if (action.get('kind')!='dispatch_pilot' or not self.game or
                 read(campaign.game_dir(self.root,self.game)/'game_config.json').get('planning_contract')!=4):
             raise SystemExit('Host runner requires a playing contract-4 game.')
         self.require_fresh()
         from .background_slots import enable
         if not self.resume_fenced and not self.rows() and agent_architecture.enabled(self.root,self.game):enable(self.root,self.game)
-        self.concurrent_roles=planner_runtime.workboard(self.root,self.game).get('role_slots')==1
+        self.role_slots=planner_runtime.workboard(self.root,self.game).get('role_slots',0)
+        self.concurrent_roles=self.role_slots in {1,2}
         from .host_context import Contexts
         self.contexts=Contexts(self,context_tokens)
         if self.resume_fenced:self.resume_contexts()
@@ -305,7 +309,8 @@ class Runner:
         params=self.context_parameters(actor,role)
         if value.get('model'):params['model']=value['model']
         if value.get('model_provider'):params['modelProvider']=value['model_provider']
-        if value.get('reasoning_effort'):params['config']={'model_reasoning_effort':value['reasoning_effort']}
+        if value.get('reasoning_effort'):params.setdefault('config',{})['model_reasoning_effort']=value['reasoning_effort']
+        if value.get('service_tier'):params['serviceTier']=value['service_tier']
         result=self.server.call('thread/start',params)
         fresh=result['thread']['id']
         if fresh==thread or fresh in self.threads:raise RuntimeError('Context replacement reused an existing transport.')
@@ -368,7 +373,7 @@ class Runner:
         self.contexts.bind(thread,actor,role)
         self.contexts.values[thread].update(model=result.get('model',params.get('model')),
             model_provider=result.get('modelProvider',result['thread'].get('modelProvider')),
-            reasoning_effort=result.get('reasoningEffort'))
+            reasoning_effort=result.get('reasoningEffort'),service_tier=params.get('serviceTier'))
         self.contexts.save(thread)
         self.save_sessions()
         return thread
@@ -452,6 +457,8 @@ class Runner:
                 for entry in params['dynamicTools']:
                     if entry['name']=='edh_act':
                         entry['inputSchema']['properties']['response']['oneOf'][1]['properties']['batch']['properties'].pop('pass_priority',None)
+        tier=agent_architecture.service_tier(self.root,self.game,role)
+        if tier:params['serviceTier']=tier
         params['model']=self.routing.primary[role]
         return params
 
@@ -464,8 +471,9 @@ class Runner:
         value=self.contexts.values[thread]
         params={'threadId':thread,'model':model,'input':[{'type':'text','text':text}]}
         if value.get('reasoning_effort'):params['effort']=value['reasoning_effort']
+        if value.get('service_tier'):params['serviceTier']=value['service_tier']
         self.timing.record('turn_request',thread,input_chars=len(text),model=model,
-            previous_model=value.get('model'),effort=value.get('reasoning_effort'))
+            previous_model=value.get('model'),effort=value.get('reasoning_effort'),service_tier=value.get('service_tier'))
         result=self.server.call('turn/start',params)
         value['model']=model;self.contexts.save(thread)
         counts=self.metrics.setdefault('model_turns',{}).setdefault(role,{})
@@ -591,6 +599,8 @@ class Runner:
         if self.concurrent_roles:
             actor,role=self.threads[thread]
             occupied=self.active-self.pending.keys()-self.parking
+            if self.role_slots==2:
+                return thread in occupied or (len(occupied)<16 and not any(self.threads[t]==(actor,role) for t in occupied))
             return thread in occupied or (len(occupied)<4 and not any(self.threads[t][1]==role for t in occupied))
         if thread in self.active or len(self.active)<4:return True
         # Waiting turns count against capacity until host completion is observed.
@@ -605,8 +615,9 @@ class Runner:
 
     def pump(self):
         # Keep retained goal selection and the claim's plan version atomic.
-        with locked(self.root),locked(planner_runtime.directory_for(self.root,self.game),'planning'):
-            return self._pump()
+        with self.timing.measure('pump'):
+            with locked(self.root),locked(planner_runtime.directory_for(self.root,self.game),'planning'):
+                return self._pump()
 
     def _pump(self):
         self.check_pause();action=self.action()
@@ -616,10 +627,13 @@ class Runner:
             write(self.root/'HOST_PAUSED.json',{'reason':'decision_limit','accepted':len(self.rows())})
             self.done=True;return
         from .diplomacy import flush
-        if flush(self.root,self.game):action=self.action()
+        with self.timing.measure('diplomacy_flush'):
+            if flush(self.root,self.game):action=self.action()
         from .decision_roles import flush as flush_combos
-        if flush_combos(self.root,self.game):action=self.action()
-        continued=sequence_runtime.continue_pending(self.root)
+        with self.timing.measure('combo_flush'):
+            if flush_combos(self.root,self.game):action=self.action()
+        with self.timing.measure('sequence_continuation'):
+            continued=sequence_runtime.continue_pending(self.root)
         if continued['state']=='continued':
             self.metrics['auto_choices']+=continued['accepted'];return self.pump()
         if continued['state']=='stop':self.done=True;return
@@ -639,18 +653,28 @@ class Runner:
         # Independent role lanes share no active-job pointer. Waiting pilot
         # tools retain their contexts without occupying an inference lane.
         from .agent_architecture import SHORT,LONG,DIPLOMACY
-        lanes=(SHORT,LONG,DIPLOMACY) if self.concurrent_roles else (None,)
-        for lane in lanes:
-            board=planner_runtime.workboard(self.root,self.game,role=lane)
+        lanes=[(None,role) for role in (SHORT,LONG,DIPLOMACY)] if self.concurrent_roles else [(None,None)]
+        if self.role_slots==2:
+            lanes=[(seat,role) for seat in campaign.PILOT_GAMEPLAN_FILES for role in (SHORT,LONG,DIPLOMACY)]
+        replay_cache={}
+        for seat,lane in lanes:
+            # Handle already-arrived events before another expensive admission.
+            # This preserves FIFO tool order and all planner eligibility rules.
+            if not self.server.events.empty():return
+            if seat is not None and any(job.get('role','planner')==lane and job['actor']==seat
+                                        for job in self.backgrounds.values()):continue
+            board=planner_runtime.workboard(self.root,self.game,role=lane,actor=seat)
             if not board['next_actor']:continue
             role=board.get('next_role') or 'planner'
-            if any(job.get('role','planner')==role for job in self.backgrounds.values()):continue
+            if any(job.get('role','planner')==role and (self.role_slots!=2 or job['actor']==board['next_actor'])
+                   for job in self.backgrounds.values()):continue
             if self.routing.delay(self.routing.select(role))>0:continue
             thread=self.context(board['next_actor'],role)
             if thread is None or not self.slot_available(thread):continue
             expected=(board['next_actor'],role)
-            job=planner_runtime.reserve(self.root,self.game,admission_id=str(uuid.uuid4()),
-                host_capacity=4,host_active=self.inference_count(),expected_identity=expected)
+            with self.timing.measure('planner_reservation',thread):
+                job=planner_runtime.reserve(self.root,self.game,admission_id=str(uuid.uuid4()),
+                    host_capacity=16 if self.role_slots==2 else 4,host_active=self.inference_count(),expected_identity=expected,replay_cache=replay_cache)
             if job.get('state') in {'idle','reschedule'}:
                 self.timing.record('background_rescheduled',thread,reason=job.get('reason',job['state']))
                 if job.get('state')=='reschedule':
@@ -777,6 +801,9 @@ class Runner:
         if call in self.seen_calls:raise RuntimeError('Repeated host tool call; reconcile rather than rebinding it to a newer decision.')
         self.seen_calls.add(call)
         name=params['tool'];args=params['arguments'];request=message['id']
+        received=message.get('_host_received_monotonic')
+        self.timing.record('host_tool_started',thread,request=request,tool=name,
+                           queue_seconds=time.monotonic()-received if received is not None else None)
         delivery=self.contexts.values[thread].get('component_delivery')
         if delivery and delivery['thread']==thread:
             delivery['acknowledged']=dict(delivery['offered']);self.contexts.save(thread)
@@ -843,7 +870,8 @@ class Runner:
                 host_contract.validate_response(body)
                 claim=self.claims[thread]
                 envelope={k:claim[k] for k in ('game','actor','decision_id','pilot_context_id','claim_id')}|body
-                submitted=pilot_session.submit_payload(self.root,actor,envelope)
+                with self.timing.measure('pilot_submission',thread):
+                    submitted=pilot_session.submit_payload(self.root,actor,envelope)
                 # Capture this submission's scheduler before pump can continue
                 # another seat's approved program and change the last tape row.
                 table=body.get('answer',{}).get('snooze_table')
@@ -901,7 +929,10 @@ class Runner:
             self.pump()
             while not self.done:
                 try:
-                    self.handle(self.server.events.get(timeout=.2))
+                    message=self.server.events.get(timeout=.2)
+                    with self.timing.measure('handle:'+message.get('method','unknown'),
+                                             message.get('params',{}).get('threadId')):
+                        self.handle(message)
                     if not self.done:self.pump()
                 except queue.Empty:self.check_pause()
                 self.expire_waiters()
@@ -913,22 +944,24 @@ class Runner:
                     'message_sha256':hashlib.sha256(str(error).encode()).hexdigest()})
             raise
         finally:
-            # Closing the owned server terminates waiting calls and inference.
-            self.server.close()
-            for thread in self.contexts.values:self.contexts.save(thread)
-            for job in list(self.backgrounds.values()):
-                planner_runtime.stopped(self.root,self.game,job['batch_id'],host_status='cancelled')
-            write(self.directory/'metrics.json',self.metrics)
-            if self.action().get('kind')=='dispatch_pilot':
-                if not (self.root/'HOST_PAUSED.json').exists():
-                    write(self.root/'HOST_PAUSED.json',{'reason':'host_stopped','accepted':len(self.rows())})
-            elif self.action().get('kind') not in {'adjudicate_combo','resolve_horizon_stop'}:
-                # App-server thread IDs are useful only while this exact game can
-                # still accept pilot decisions.  Keeping them after a lifecycle
-                # boundary makes the next fresh game look like an unsafe resume
-                # and retains references to contexts that must never be reused.
-                sessions=self.directory/'sessions.json'
-                if sessions.exists():sessions.unlink()
+            try:
+                # Closing the owned server terminates waiting calls and inference.
+                self.server.close()
+                for thread in self.contexts.values:self.contexts.save(thread)
+                for job in list(self.backgrounds.values()):
+                    planner_runtime.stopped(self.root,self.game,job['batch_id'],host_status='cancelled')
+                write(self.directory/'metrics.json',self.metrics)
+                if self.action().get('kind')=='dispatch_pilot':
+                    if not (self.root/'HOST_PAUSED.json').exists():
+                        write(self.root/'HOST_PAUSED.json',{'reason':'host_stopped','accepted':len(self.rows())})
+                elif self.action().get('kind') not in {'adjudicate_combo','resolve_horizon_stop'}:
+                    # App-server thread IDs are useful only while this exact game can
+                    # still accept pilot decisions.  Keeping them after a lifecycle
+                    # boundary makes the next fresh game look like an unsafe resume
+                    # and retains references to contexts that must never be reused.
+                    sessions=self.directory/'sessions.json'
+                    if sessions.exists():sessions.unlink()
+            finally:self.timing.close()
 
 
 def main(argv=None):

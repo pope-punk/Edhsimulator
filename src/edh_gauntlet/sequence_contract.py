@@ -219,8 +219,8 @@ def match(step,request):
     if request.get('multi_select'):
         if not isinstance(choice,list):raise ValueError('multi_select_requires_list')
         from .decision_selection import validate_count
-        validate_count(request,choice)
         indexes=[one(item) for item in choice]
+        validate_count(request,indexes)
         if len(set(indexes))!=len(indexes) or not set(request.get('required_indexes',[])).issubset(indexes):
             raise ValueError('required_or_duplicate_choice')
         if not indexes and not request['allow_pass']:raise ValueError('required_choice')

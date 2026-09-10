@@ -1,0 +1,900 @@
+{
+  "schema": 1,
+  "purpose": "Prioritization hints from overlapping text signals, not semantic coverage, support certification, or an exhaustive implementation inventory",
+  "unmapped_unique_cards": 135,
+  "families": [
+    {
+      "family": "counters_or_variable_values",
+      "text_signal_count": 47,
+      "cards": [
+        {
+          "card_id": "aggressive-biomancy",
+          "name": "Aggressive Biomancy",
+          "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8"
+        },
+        {
+          "card_id": "aminatou-veil-piercer",
+          "name": "Aminatou, Veil Piercer",
+          "source_facts_sha256": "96afc686cad3279a1bc689000f1dc9279537235c756800a0b2fa7e3514980f1c"
+        },
+        {
+          "card_id": "arcane-denial",
+          "name": "Arcane Denial",
+          "source_facts_sha256": "50edb16e0afcd12531f002d411cddb9f8dbfb9d2ffacb33a16d5f4422b2838c3"
+        },
+        {
+          "card_id": "aven-courier",
+          "name": "Aven Courier",
+          "source_facts_sha256": "8b3b0586224fa7b9478aa813bac65808142d8b026cadade3ad18a4326de0992b"
+        },
+        {
+          "card_id": "bulk-up",
+          "name": "Bulk Up",
+          "source_facts_sha256": "1422387ff17f6aa9b02f558f7298a1295385866a23ed7c8c9dcd983b26f9ea54"
+        },
+        {
+          "card_id": "champion-of-lambholt",
+          "name": "Champion of Lambholt",
+          "source_facts_sha256": "ee6cba2ea82f25d952f12b9510f8bbce21f26bb4d981cb5909ec39ee1a056d48"
+        },
+        {
+          "card_id": "chandra-s-ignition",
+          "name": "Chandra's Ignition",
+          "source_facts_sha256": "d7ea0fb76ee2117d85224b09db3cc3d68e00f1da5a2c180d47c55dbdf44f8723"
+        },
+        {
+          "card_id": "chthonian-nightmare",
+          "name": "Chthonian Nightmare",
+          "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473"
+        },
+        {
+          "card_id": "dark-depths",
+          "name": "Dark Depths",
+          "source_facts_sha256": "f21ac0e6360b17a10ecf19314864436a4b2b4776a69e0111728cef923a8c9c5d"
+        },
+        {
+          "card_id": "defiler-of-vigor",
+          "name": "Defiler of Vigor",
+          "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd"
+        },
+        {
+          "card_id": "delighted-halfling",
+          "name": "Delighted Halfling",
+          "source_facts_sha256": "2d0e6ba4c2924cca986b52bba1b261dd6f82cede41d4dffcd448cf5bad95e9b1"
+        },
+        {
+          "card_id": "desert-warfare",
+          "name": "Desert Warfare",
+          "source_facts_sha256": "5379fe3951854242e50fb24fb03bb900f339d646a91dccefa7d5e497a5cb74f5"
+        },
+        {
+          "card_id": "domri-anarch-of-bolas",
+          "name": "Domri, Anarch of Bolas",
+          "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5"
+        },
+        {
+          "card_id": "elspeth-conquers-death",
+          "name": "Elspeth Conquers Death",
+          "source_facts_sha256": "dbd945febb95618afa07581bdccdaab7c2cb2c943586fbd73d16d40168d96845"
+        },
+        {
+          "card_id": "essence-channeler",
+          "name": "Essence Channeler",
+          "source_facts_sha256": "753488e8d98d990b810eed5dd5c0d591748ebad58444f00318f54d4a96d11e34"
+        },
+        {
+          "card_id": "fangs-of-kalonia",
+          "name": "Fangs of Kalonia",
+          "source_facts_sha256": "0435b0fba9ece9ca7d19c741f24c08d8fd1b1a305b0ed39e302a3408dadafeae"
+        },
+        {
+          "card_id": "fierce-guardianship",
+          "name": "Fierce Guardianship",
+          "source_facts_sha256": "2c756bcd5ee8d4c0a99e3ab059c78807c948f9784e7eff25ef2d6460d18d47f2"
+        },
+        {
+          "card_id": "finale-of-revelation",
+          "name": "Finale of Revelation",
+          "source_facts_sha256": "c2f04ec9ecdcba06db5bdf4248f6ef95c3e61c024340fa9ce477e07f58fa1d72"
+        },
+        {
+          "card_id": "fling",
+          "name": "Fling",
+          "source_facts_sha256": "d2890717c3fd8d584466565cb5dd58b45f218fde0672a069545ad3545768c0a7"
+        },
+        {
+          "card_id": "forgotten-ancient",
+          "name": "Forgotten Ancient",
+          "source_facts_sha256": "e3c90e3543c9d71797ec0c67d4bc4ee7f6de9b91b6fa31856a35102c65a1f07a"
+        },
+        {
+          "card_id": "glen-elendra-archmage",
+          "name": "Glen Elendra Archmage",
+          "source_facts_sha256": "43fbe62e2a20dbd9cc521b43e754a85ee5332ce9a4e5c16497da1a777afcecd4"
+        },
+        {
+          "card_id": "hydra-broodmaster",
+          "name": "Hydra Broodmaster",
+          "source_facts_sha256": "5b85358607525226ae85a16fe228f38da9d79f67b8298b13b261f14de7292b72"
+        },
+        {
+          "card_id": "innkeeper-s-talent",
+          "name": "Innkeeper's Talent",
+          "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4"
+        },
+        {
+          "card_id": "jyoti-moag-ancient",
+          "name": "Jyoti, Moag Ancient",
+          "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9"
+        },
+        {
+          "card_id": "kazuul-s-fury-kazuul-s-cliffs",
+          "name": "Kazuul's Fury // Kazuul's Cliffs",
+          "source_facts_sha256": "b55987ca1d3a41315df7b448d891b7afe2d08552b4f1a926b5338a88c8fc22e9"
+        },
+        {
+          "card_id": "lazotep-quarry",
+          "name": "Lazotep Quarry",
+          "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d"
+        },
+        {
+          "card_id": "leyline-of-hope",
+          "name": "Leyline of Hope",
+          "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760"
+        },
+        {
+          "card_id": "midnight-snack",
+          "name": "Midnight Snack",
+          "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d"
+        },
+        {
+          "card_id": "minsc-boo-timeless-heroes",
+          "name": "Minsc & Boo, Timeless Heroes",
+          "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3"
+        },
+        {
+          "card_id": "nissa-steward-of-elements",
+          "name": "Nissa, Steward of Elements",
+          "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7"
+        },
+        {
+          "card_id": "omo-queen-of-vesuva",
+          "name": "Omo, Queen of Vesuva",
+          "source_facts_sha256": "746f7195ebadd7788596cf7880798b27b72fe39d16bbc83881280a123d99fb88"
+        },
+        {
+          "card_id": "parallax-wave",
+          "name": "Parallax Wave",
+          "source_facts_sha256": "fa1e1c46b9e526bfbdc1eb978118fb9ac8ef435c93c72388b8b1c18a3bf2a398"
+        },
+        {
+          "card_id": "ram-through",
+          "name": "Ram Through",
+          "source_facts_sha256": "f52260881b1ade69624f7f166b643eb2a7091cc410886a0448ad784e23fc2dfd"
+        },
+        {
+          "card_id": "rampant-frogantua",
+          "name": "Rampant Frogantua",
+          "source_facts_sha256": "a0317571b9a621c9278439fc329ccabb1b68eb490c9411d1ee4b8e99597ce0dc"
+        },
+        {
+          "card_id": "rhythm-of-the-wild",
+          "name": "Rhythm of the Wild",
+          "source_facts_sha256": "126a6d8e385f9efaa54dc8229f42b33651b2d2829e07ad40b2cbd80c1f6ccd6d"
+        },
+        {
+          "card_id": "rishkar-s-expertise",
+          "name": "Rishkar's Expertise",
+          "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7"
+        },
+        {
+          "card_id": "sigarda-s-splendor",
+          "name": "Sigarda's Splendor",
+          "source_facts_sha256": "361531c0139fbe7ab320f3725346f3c87a59c04635651f7e93d88f27bbe72008"
+        },
+        {
+          "card_id": "sorin-of-house-markov",
+          "name": "Sorin of House Markov",
+          "source_facts_sha256": "cfe50ea469f9605069927cda31a5694b474e59aa41f1e6086141cc6591c16b24"
+        },
+        {
+          "card_id": "sorin-vengeful-bloodlord",
+          "name": "Sorin, Vengeful Bloodlord",
+          "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8"
+        },
+        {
+          "card_id": "starfield-of-nyx",
+          "name": "Starfield of Nyx",
+          "source_facts_sha256": "c9d7fc59fc584c35a2d5e5c345b6f78ba59b229678a561d5f7e1434ca211f6f2"
+        },
+        {
+          "card_id": "summary-dismissal",
+          "name": "Summary Dismissal",
+          "source_facts_sha256": "b0a091754b47e85e9317d2cbce59addc8812477c1cc62dfcc97ef54ec94818d0"
+        },
+        {
+          "card_id": "taurean-mauler",
+          "name": "Taurean Mauler",
+          "source_facts_sha256": "0e993f94365d8e12d7aa155d8256f44b0c85fc82791772c0d9d20a48af5207f8"
+        },
+        {
+          "card_id": "terrasymbiosis",
+          "name": "Terrasymbiosis",
+          "source_facts_sha256": "38d61b29eff4f7d90188e6bc3dfc220319d502228861001b525d093e4ddfb3cb"
+        },
+        {
+          "card_id": "the-earth-crystal",
+          "name": "The Earth Crystal",
+          "source_facts_sha256": "0cabcb8c3fc889dfaedf0d74e1fef0e44797fddbafac8f398d34be5ac513faaa"
+        },
+        {
+          "card_id": "the-ozolith",
+          "name": "The Ozolith",
+          "source_facts_sha256": "38d3ab4a07bf008fbe1252996c25ac9dff5ae755497ee1b7b4e0738fadf032ab"
+        },
+        {
+          "card_id": "xenagos-god-of-revels",
+          "name": "Xenagos, God of Revels",
+          "source_facts_sha256": "82de69098ec26d1d1efc7edf7fd5523fa91b1753e6fd08b5ed32cf63cf30ba61"
+        },
+        {
+          "card_id": "xolatoyac-the-smiling-flood",
+          "name": "Xolatoyac, the Smiling Flood",
+          "source_facts_sha256": "dec7453e5735bac0ef01878b37a2ce0fae130d6081c9f8e1edffb15eba183b45"
+        }
+      ]
+    },
+    {
+      "family": "mana_choices_or_restrictions",
+      "text_signal_count": 20,
+      "cards": [
+        {
+          "card_id": "chromatic-lantern",
+          "name": "Chromatic Lantern",
+          "source_facts_sha256": "480119e99cf00b4d083cdf22f348fdf7570f9627e11ac95368a7d624c29989cd"
+        },
+        {
+          "card_id": "city-of-brass",
+          "name": "City of Brass",
+          "source_facts_sha256": "966fe4ea45cb111dc6c48163f72836a8984f3cda7c3dd7f71141e3a1c49ee5ff"
+        },
+        {
+          "card_id": "delighted-halfling",
+          "name": "Delighted Halfling",
+          "source_facts_sha256": "2d0e6ba4c2924cca986b52bba1b261dd6f82cede41d4dffcd448cf5bad95e9b1"
+        },
+        {
+          "card_id": "domri-anarch-of-bolas",
+          "name": "Domri, Anarch of Bolas",
+          "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5"
+        },
+        {
+          "card_id": "exotic-orchard",
+          "name": "Exotic Orchard",
+          "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c"
+        },
+        {
+          "card_id": "fanatic-of-rhonas",
+          "name": "Fanatic of Rhonas",
+          "source_facts_sha256": "f9972af4f92c8e113d0c7d190f99b01bc2f4524242b715c74914b6e8e6867aa0"
+        },
+        {
+          "card_id": "fellwar-stone",
+          "name": "Fellwar Stone",
+          "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a"
+        },
+        {
+          "card_id": "game-trail",
+          "name": "Game Trail",
+          "source_facts_sha256": "ea8842c50a10fb77c94c4d7e27053b5a049b3e488d1609f4051f0093a619d52c"
+        },
+        {
+          "card_id": "glasswing-grace-age-graced-chapel",
+          "name": "Glasswing Grace // Age-Graced Chapel",
+          "source_facts_sha256": "bc6f9bd70c8929089ec484c8b22392e37f6fb8ad0050c215a5748641a9016dde"
+        },
+        {
+          "card_id": "godless-shrine",
+          "name": "Godless Shrine",
+          "source_facts_sha256": "07e67437462208d7d3174296e2879fadc4984d766ff93bf92cc727468e785756"
+        },
+        {
+          "card_id": "hallowed-fountain",
+          "name": "Hallowed Fountain",
+          "source_facts_sha256": "a16da312f8c5610f7b38a6c420d87d8d5be2d7d453b502700324c1e74a5cff10"
+        },
+        {
+          "card_id": "horizon-of-progress",
+          "name": "Horizon of Progress",
+          "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16"
+        },
+        {
+          "card_id": "lazotep-quarry",
+          "name": "Lazotep Quarry",
+          "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d"
+        },
+        {
+          "card_id": "planar-nexus",
+          "name": "Planar Nexus",
+          "source_facts_sha256": "e388566ba593ce30299075b10fbc2d63ab020d0604850e0b95c0cb37745d1611"
+        },
+        {
+          "card_id": "shineshadow-snarl",
+          "name": "Shineshadow Snarl",
+          "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86"
+        },
+        {
+          "card_id": "stomping-ground",
+          "name": "Stomping Ground",
+          "source_facts_sha256": "de8d9dfb402c68722e07317b981869aed31465e768ea0519915bcc2941bdfe0c"
+        },
+        {
+          "card_id": "sunken-palace",
+          "name": "Sunken Palace",
+          "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca"
+        },
+        {
+          "card_id": "talon-gates-of-madara",
+          "name": "Talon Gates of Madara",
+          "source_facts_sha256": "c1fd0a20ba37f7cdb5d77ea536e9d71c5e89dfaf903605e8ea9d074988148ffc"
+        },
+        {
+          "card_id": "vineglimmer-snarl",
+          "name": "Vineglimmer Snarl",
+          "source_facts_sha256": "e4e2b42bb524a496d251cff25e5f9dabada82d6f13fe59cebb2a920956e945d4"
+        },
+        {
+          "card_id": "watery-grave",
+          "name": "Watery Grave",
+          "source_facts_sha256": "34b28a99693c24bdec7e7076b2d60fd0613d72789f05151b59c1c9c99466585f"
+        }
+      ]
+    },
+    {
+      "family": "search_or_top_library_manipulation",
+      "text_signal_count": 20,
+      "cards": [
+        {
+          "card_id": "aminatou-the-fateshifter",
+          "name": "Aminatou, the Fateshifter",
+          "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a"
+        },
+        {
+          "card_id": "aminatou-veil-piercer",
+          "name": "Aminatou, Veil Piercer",
+          "source_facts_sha256": "96afc686cad3279a1bc689000f1dc9279537235c756800a0b2fa7e3514980f1c"
+        },
+        {
+          "card_id": "chaos-warp",
+          "name": "Chaos Warp",
+          "source_facts_sha256": "d71a7cccea38a8d4f21318069f24870713f24c88af9191882cd996da055d7ffd"
+        },
+        {
+          "card_id": "crop-rotation",
+          "name": "Crop Rotation",
+          "source_facts_sha256": "48e88506dacc5edf0aa3177a3bed00a159af1bdf9e62156555ab6ceb41b61fe7"
+        },
+        {
+          "card_id": "cultivate",
+          "name": "Cultivate",
+          "source_facts_sha256": "5bd35d19d13cda10e0627ba658679174693a0dddcef51353d43eeb1b0ef38725"
+        },
+        {
+          "card_id": "elvish-rejuvenator",
+          "name": "Elvish Rejuvenator",
+          "source_facts_sha256": "f2083f08719973b50958adc76bab1a34fce48fda58a007d3bdcfa6e81990164c"
+        },
+        {
+          "card_id": "gifts-ungiven",
+          "name": "Gifts Ungiven",
+          "source_facts_sha256": "1fefe1813077b143c824ddc8d883c4d8ddcc74b410d2ab22fcaf1df9765fc902"
+        },
+        {
+          "card_id": "gravebreaker-lamia",
+          "name": "Gravebreaker Lamia",
+          "source_facts_sha256": "867c403a923605d231400df1a9df8efd663c054c025b195ed849262cf50a2ae2"
+        },
+        {
+          "card_id": "invasion-of-theros",
+          "name": "Invasion of Theros",
+          "source_facts_sha256": "a5a277b6a7bd8ea67d75945f959b21bb649f1ce197e30224c1e5eac60ef5af6c"
+        },
+        {
+          "card_id": "kodama-of-the-west-tree",
+          "name": "Kodama of the West Tree",
+          "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566"
+        },
+        {
+          "card_id": "kodama-s-reach",
+          "name": "Kodama's Reach",
+          "source_facts_sha256": "c85bb43096036710dbe142f7a132886b5c04084e7fd04d8d8cd384d684e34f62"
+        },
+        {
+          "card_id": "maze-s-end",
+          "name": "Maze's End",
+          "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2"
+        },
+        {
+          "card_id": "nissa-steward-of-elements",
+          "name": "Nissa, Steward of Elements",
+          "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7"
+        },
+        {
+          "card_id": "oracle-of-mul-daya",
+          "name": "Oracle of Mul Daya",
+          "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549"
+        },
+        {
+          "card_id": "satyr-wayfinder",
+          "name": "Satyr Wayfinder",
+          "source_facts_sha256": "b64b05513e960cfd26979ad4b082199e3003eff456b0ffaa27bc162e56ed780d"
+        },
+        {
+          "card_id": "the-cruelty-of-gix",
+          "name": "The Cruelty of Gix",
+          "source_facts_sha256": "028214612d839be03d088a105ee9afa261d5eecf60274c84d2fbff7a603fa538"
+        },
+        {
+          "card_id": "the-restoration-of-eiganjo",
+          "name": "The Restoration of Eiganjo",
+          "source_facts_sha256": "3ef1396c7f17c07818b5423a4aa0951e20b120ee4309b3123040de287f83971f"
+        },
+        {
+          "card_id": "urza-s-saga",
+          "name": "Urza's Saga",
+          "source_facts_sha256": "4a3aee2d51b070586feba7dc432f7b5a842f7825e59bcb342441a11c3246bd7f"
+        },
+        {
+          "card_id": "victor-valgavoth-s-seneschal",
+          "name": "Victor, Valgavoth's Seneschal",
+          "source_facts_sha256": "83d149a031b3cc1e63b9a115eb57d624ee04f4215ecbc887d6bc0b7f4dc0b093"
+        },
+        {
+          "card_id": "volatile-fault",
+          "name": "Volatile Fault",
+          "source_facts_sha256": "7be3aaf3d64e39686c3af45c0985e6ce23011c5d3a6122875f892d502939d5fa"
+        }
+      ]
+    },
+    {
+      "family": "sacrifice_discard_exile_or_return_costs",
+      "text_signal_count": 25,
+      "cards": [
+        {
+          "card_id": "alseid-of-life-s-bounty",
+          "name": "Alseid of Life's Bounty",
+          "source_facts_sha256": "72aafe6173c47fe7afdb2abee41877c7e4efa16850be102e2ad0c4cf797eceea"
+        },
+        {
+          "card_id": "bulk-up",
+          "name": "Bulk Up",
+          "source_facts_sha256": "1422387ff17f6aa9b02f558f7298a1295385866a23ed7c8c9dcd983b26f9ea54"
+        },
+        {
+          "card_id": "chthonian-nightmare",
+          "name": "Chthonian Nightmare",
+          "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473"
+        },
+        {
+          "card_id": "crop-rotation",
+          "name": "Crop Rotation",
+          "source_facts_sha256": "48e88506dacc5edf0aa3177a3bed00a159af1bdf9e62156555ab6ceb41b61fe7"
+        },
+        {
+          "card_id": "defiler-of-vigor",
+          "name": "Defiler of Vigor",
+          "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd"
+        },
+        {
+          "card_id": "devouring-light",
+          "name": "Devouring Light",
+          "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e"
+        },
+        {
+          "card_id": "dimir-house-guard",
+          "name": "Dimir House Guard",
+          "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45"
+        },
+        {
+          "card_id": "eiganjo-seat-of-the-empire",
+          "name": "Eiganjo, Seat of the Empire",
+          "source_facts_sha256": "2bf4435c5d4528720cbc94b3e148cc91d86bb52e78bb6d2a60c1dbf7a1842485"
+        },
+        {
+          "card_id": "fallen-ideal",
+          "name": "Fallen Ideal",
+          "source_facts_sha256": "25bfbb8bb0f8452dcf1a3ecd40d6c3973b6e7c98dad70a0e6aaf7f5635243680"
+        },
+        {
+          "card_id": "fanatical-devotion",
+          "name": "Fanatical Devotion",
+          "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2"
+        },
+        {
+          "card_id": "fling",
+          "name": "Fling",
+          "source_facts_sha256": "d2890717c3fd8d584466565cb5dd58b45f218fde0672a069545ad3545768c0a7"
+        },
+        {
+          "card_id": "glen-elendra-archmage",
+          "name": "Glen Elendra Archmage",
+          "source_facts_sha256": "43fbe62e2a20dbd9cc521b43e754a85ee5332ce9a4e5c16497da1a777afcecd4"
+        },
+        {
+          "card_id": "hidden-nursery",
+          "name": "Hidden Nursery",
+          "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a"
+        },
+        {
+          "card_id": "horizon-of-progress",
+          "name": "Horizon of Progress",
+          "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16"
+        },
+        {
+          "card_id": "kazuul-s-fury-kazuul-s-cliffs",
+          "name": "Kazuul's Fury // Kazuul's Cliffs",
+          "source_facts_sha256": "b55987ca1d3a41315df7b448d891b7afe2d08552b4f1a926b5338a88c8fc22e9"
+        },
+        {
+          "card_id": "lazotep-quarry",
+          "name": "Lazotep Quarry",
+          "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d"
+        },
+        {
+          "card_id": "march-from-velis-vel",
+          "name": "March from Velis Vel",
+          "source_facts_sha256": "8a0f2cde30721197f82d9b517ba6b67986316db74583f4daf031dcaec667dbaa"
+        },
+        {
+          "card_id": "maze-s-end",
+          "name": "Maze's End",
+          "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2"
+        },
+        {
+          "card_id": "midnight-snack",
+          "name": "Midnight Snack",
+          "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d"
+        },
+        {
+          "card_id": "otawara-soaring-city",
+          "name": "Otawara, Soaring City",
+          "source_facts_sha256": "570e97d4fbcc7180bb562ac8efce92f1fac9747a24997ae756874262a7d0169d"
+        },
+        {
+          "card_id": "sunken-palace",
+          "name": "Sunken Palace",
+          "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca"
+        },
+        {
+          "card_id": "touch-the-spirit-realm",
+          "name": "Touch the Spirit Realm",
+          "source_facts_sha256": "83aaac5ab0b65890aad8edb37ef6d71b9d246c222daf64c17c8cd03a3b39c168"
+        },
+        {
+          "card_id": "uro-titan-of-nature-s-wrath",
+          "name": "Uro, Titan of Nature's Wrath",
+          "source_facts_sha256": "16596c98bb602560722dd3f2023d9f602e0f74863f7fe0e44c1264708ff9431c"
+        },
+        {
+          "card_id": "volatile-fault",
+          "name": "Volatile Fault",
+          "source_facts_sha256": "7be3aaf3d64e39686c3af45c0985e6ce23011c5d3a6122875f892d502939d5fa"
+        },
+        {
+          "card_id": "wonderscape-sage",
+          "name": "Wonderscape Sage",
+          "source_facts_sha256": "bbc98a6da6e605773cc013aef7c4f39e0bff8f0cb593c619cf5f8f67233e0438"
+        }
+      ]
+    },
+    {
+      "family": "conditional_or_tapped_entry",
+      "text_signal_count": 13,
+      "cards": [
+        {
+          "card_id": "game-trail",
+          "name": "Game Trail",
+          "source_facts_sha256": "ea8842c50a10fb77c94c4d7e27053b5a049b3e488d1609f4051f0093a619d52c"
+        },
+        {
+          "card_id": "glasswing-grace-age-graced-chapel",
+          "name": "Glasswing Grace // Age-Graced Chapel",
+          "source_facts_sha256": "bc6f9bd70c8929089ec484c8b22392e37f6fb8ad0050c215a5748641a9016dde"
+        },
+        {
+          "card_id": "godless-shrine",
+          "name": "Godless Shrine",
+          "source_facts_sha256": "07e67437462208d7d3174296e2879fadc4984d766ff93bf92cc727468e785756"
+        },
+        {
+          "card_id": "hallowed-fountain",
+          "name": "Hallowed Fountain",
+          "source_facts_sha256": "a16da312f8c5610f7b38a6c420d87d8d5be2d7d453b502700324c1e74a5cff10"
+        },
+        {
+          "card_id": "hidden-nursery",
+          "name": "Hidden Nursery",
+          "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a"
+        },
+        {
+          "card_id": "kazuul-s-fury-kazuul-s-cliffs",
+          "name": "Kazuul's Fury // Kazuul's Cliffs",
+          "source_facts_sha256": "b55987ca1d3a41315df7b448d891b7afe2d08552b4f1a926b5338a88c8fc22e9"
+        },
+        {
+          "card_id": "maze-s-end",
+          "name": "Maze's End",
+          "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2"
+        },
+        {
+          "card_id": "shineshadow-snarl",
+          "name": "Shineshadow Snarl",
+          "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86"
+        },
+        {
+          "card_id": "sigarda-s-splendor",
+          "name": "Sigarda's Splendor",
+          "source_facts_sha256": "361531c0139fbe7ab320f3725346f3c87a59c04635651f7e93d88f27bbe72008"
+        },
+        {
+          "card_id": "stomping-ground",
+          "name": "Stomping Ground",
+          "source_facts_sha256": "de8d9dfb402c68722e07317b981869aed31465e768ea0519915bcc2941bdfe0c"
+        },
+        {
+          "card_id": "sunken-palace",
+          "name": "Sunken Palace",
+          "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca"
+        },
+        {
+          "card_id": "vineglimmer-snarl",
+          "name": "Vineglimmer Snarl",
+          "source_facts_sha256": "e4e2b42bb524a496d251cff25e5f9dabada82d6f13fe59cebb2a920956e945d4"
+        },
+        {
+          "card_id": "watery-grave",
+          "name": "Watery Grave",
+          "source_facts_sha256": "34b28a99693c24bdec7e7076b2d60fd0613d72789f05151b59c1c9c99466585f"
+        }
+      ]
+    },
+    {
+      "family": "token_creation_or_copying",
+      "text_signal_count": 20,
+      "cards": [
+        {
+          "card_id": "aggressive-biomancy",
+          "name": "Aggressive Biomancy",
+          "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8"
+        },
+        {
+          "card_id": "dark-depths",
+          "name": "Dark Depths",
+          "source_facts_sha256": "f21ac0e6360b17a10ecf19314864436a4b2b4776a69e0111728cef923a8c9c5d"
+        },
+        {
+          "card_id": "dawn-of-hope",
+          "name": "Dawn of Hope",
+          "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4"
+        },
+        {
+          "card_id": "desert-warfare",
+          "name": "Desert Warfare",
+          "source_facts_sha256": "5379fe3951854242e50fb24fb03bb900f339d646a91dccefa7d5e497a5cb74f5"
+        },
+        {
+          "card_id": "ghostly-dancers",
+          "name": "Ghostly Dancers",
+          "source_facts_sha256": "6af0e90a8304198ec6180c4ae6e85cc10fd65f6e61bc9f7ea536abc4e3956c48"
+        },
+        {
+          "card_id": "gleaming-splendor",
+          "name": "Gleaming Splendor",
+          "source_facts_sha256": "0121e4f4d098b2d9842e721673e61a8e452807c07e25fb449550a84d7c5453c4"
+        },
+        {
+          "card_id": "helm-of-the-host",
+          "name": "Helm of the Host",
+          "source_facts_sha256": "9d52634afc7db9e90e7e9ed64e565c83c6e06701bcabcad2f094979f43b009e4"
+        },
+        {
+          "card_id": "hydra-broodmaster",
+          "name": "Hydra Broodmaster",
+          "source_facts_sha256": "5b85358607525226ae85a16fe228f38da9d79f67b8298b13b261f14de7292b72"
+        },
+        {
+          "card_id": "jyoti-moag-ancient",
+          "name": "Jyoti, Moag Ancient",
+          "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9"
+        },
+        {
+          "card_id": "lazotep-quarry",
+          "name": "Lazotep Quarry",
+          "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d"
+        },
+        {
+          "card_id": "midnight-snack",
+          "name": "Midnight Snack",
+          "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d"
+        },
+        {
+          "card_id": "minsc-boo-timeless-heroes",
+          "name": "Minsc & Boo, Timeless Heroes",
+          "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3"
+        },
+        {
+          "card_id": "pongify",
+          "name": "Pongify",
+          "source_facts_sha256": "59a5d0c1e859a1c3ed9aa299e6fe9786660dddd0e679631871283f73f923c979"
+        },
+        {
+          "card_id": "replication-technique",
+          "name": "Replication Technique",
+          "source_facts_sha256": "567938c6529bfc7261d06df950f64fcff12a29047eaa9ad68b9150d9b9e3bedc"
+        },
+        {
+          "card_id": "scute-swarm",
+          "name": "Scute Swarm",
+          "source_facts_sha256": "89ae041eccf2ba6740a6f1fddfd306b9bd1d2e4c4dcba92b0501265a7708d28b"
+        },
+        {
+          "card_id": "smothering-tithe",
+          "name": "Smothering Tithe",
+          "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e"
+        },
+        {
+          "card_id": "sorin-of-house-markov",
+          "name": "Sorin of House Markov",
+          "source_facts_sha256": "cfe50ea469f9605069927cda31a5694b474e59aa41f1e6086141cc6591c16b24"
+        },
+        {
+          "card_id": "the-restoration-of-eiganjo",
+          "name": "The Restoration of Eiganjo",
+          "source_facts_sha256": "3ef1396c7f17c07818b5423a4aa0951e20b120ee4309b3123040de287f83971f"
+        },
+        {
+          "card_id": "urza-s-saga",
+          "name": "Urza's Saga",
+          "source_facts_sha256": "4a3aee2d51b070586feba7dc432f7b5a842f7825e59bcb342441a11c3246bd7f"
+        },
+        {
+          "card_id": "volatile-fault",
+          "name": "Volatile Fault",
+          "source_facts_sha256": "7be3aaf3d64e39686c3af45c0985e6ce23011c5d3a6122875f892d502939d5fa"
+        }
+      ]
+    },
+    {
+      "family": "granted_or_removed_abilities",
+      "text_signal_count": 13,
+      "cards": [
+        {
+          "card_id": "aggressive-biomancy",
+          "name": "Aggressive Biomancy",
+          "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8"
+        },
+        {
+          "card_id": "angelic-destiny",
+          "name": "Angelic Destiny",
+          "source_facts_sha256": "40432f9ced75c677c5c51da5974d47eb9f1e57c6a38dabc79fc5225da651e543"
+        },
+        {
+          "card_id": "chromatic-lantern",
+          "name": "Chromatic Lantern",
+          "source_facts_sha256": "480119e99cf00b4d083cdf22f348fdf7570f9627e11ac95368a7d624c29989cd"
+        },
+        {
+          "card_id": "darksteel-mutation",
+          "name": "Darksteel Mutation",
+          "source_facts_sha256": "33a082ee71ee29e786c8036d3f99483be786d4de38eb317b306a5ad5928bf824"
+        },
+        {
+          "card_id": "desert-warfare",
+          "name": "Desert Warfare",
+          "source_facts_sha256": "5379fe3951854242e50fb24fb03bb900f339d646a91dccefa7d5e497a5cb74f5"
+        },
+        {
+          "card_id": "essence-channeler",
+          "name": "Essence Channeler",
+          "source_facts_sha256": "753488e8d98d990b810eed5dd5c0d591748ebad58444f00318f54d4a96d11e34"
+        },
+        {
+          "card_id": "fallen-ideal",
+          "name": "Fallen Ideal",
+          "source_facts_sha256": "25bfbb8bb0f8452dcf1a3ecd40d6c3973b6e7c98dad70a0e6aaf7f5635243680"
+        },
+        {
+          "card_id": "glasswing-grace-age-graced-chapel",
+          "name": "Glasswing Grace // Age-Graced Chapel",
+          "source_facts_sha256": "bc6f9bd70c8929089ec484c8b22392e37f6fb8ad0050c215a5748641a9016dde"
+        },
+        {
+          "card_id": "helm-of-the-host",
+          "name": "Helm of the Host",
+          "source_facts_sha256": "9d52634afc7db9e90e7e9ed64e565c83c6e06701bcabcad2f094979f43b009e4"
+        },
+        {
+          "card_id": "invasion-of-theros",
+          "name": "Invasion of Theros",
+          "source_facts_sha256": "a5a277b6a7bd8ea67d75945f959b21bb649f1ce197e30224c1e5eac60ef5af6c"
+        },
+        {
+          "card_id": "march-from-velis-vel",
+          "name": "March from Velis Vel",
+          "source_facts_sha256": "8a0f2cde30721197f82d9b517ba6b67986316db74583f4daf031dcaec667dbaa"
+        },
+        {
+          "card_id": "sorin-vengeful-bloodlord",
+          "name": "Sorin, Vengeful Bloodlord",
+          "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8"
+        },
+        {
+          "card_id": "xenagos-god-of-revels",
+          "name": "Xenagos, God of Revels",
+          "source_facts_sha256": "82de69098ec26d1d1efc7edf7fd5523fa91b1753e6fd08b5ed32cf63cf30ba61"
+        }
+      ]
+    },
+    {
+      "family": "life_or_draw_event_dependencies",
+      "text_signal_count": 11,
+      "cards": [
+        {
+          "card_id": "dawn-of-hope",
+          "name": "Dawn of Hope",
+          "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4"
+        },
+        {
+          "card_id": "entity-tracker",
+          "name": "Entity Tracker",
+          "source_facts_sha256": "e9593d5e13e3c7e4aa7aaf71953f3a9eecdeeed05687e582d559c08326e9b221"
+        },
+        {
+          "card_id": "essence-channeler",
+          "name": "Essence Channeler",
+          "source_facts_sha256": "753488e8d98d990b810eed5dd5c0d591748ebad58444f00318f54d4a96d11e34"
+        },
+        {
+          "card_id": "gleaming-splendor",
+          "name": "Gleaming Splendor",
+          "source_facts_sha256": "0121e4f4d098b2d9842e721673e61a8e452807c07e25fb449550a84d7c5453c4"
+        },
+        {
+          "card_id": "invasion-of-theros",
+          "name": "Invasion of Theros",
+          "source_facts_sha256": "a5a277b6a7bd8ea67d75945f959b21bb649f1ce197e30224c1e5eac60ef5af6c"
+        },
+        {
+          "card_id": "leyline-of-hope",
+          "name": "Leyline of Hope",
+          "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760"
+        },
+        {
+          "card_id": "mystic-remora",
+          "name": "Mystic Remora",
+          "source_facts_sha256": "049fc0391f3d8fd57dffc68e9db1153e5677bb547d2cb01e1e892273f4545c23"
+        },
+        {
+          "card_id": "rhystic-study",
+          "name": "Rhystic Study",
+          "source_facts_sha256": "b47109d0106da31fe7a0b27088ab8df5e916ef260a8f522ffdccec95888543e9"
+        },
+        {
+          "card_id": "smothering-tithe",
+          "name": "Smothering Tithe",
+          "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e"
+        },
+        {
+          "card_id": "terrasymbiosis",
+          "name": "Terrasymbiosis",
+          "source_facts_sha256": "38d61b29eff4f7d90188e6bc3dfc220319d502228861001b525d093e4ddfb3cb"
+        },
+        {
+          "card_id": "uro-titan-of-nature-s-wrath",
+          "name": "Uro, Titan of Nature's Wrath",
+          "source_facts_sha256": "16596c98bb602560722dd3f2023d9f602e0f74863f7fe0e44c1264708ff9431c"
+        }
+      ]
+    }
+  ]
+}

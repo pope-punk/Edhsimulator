@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "repeats": 7,
+  "scope": "Synthetic fixed-token creation and current public packet; no triggers, modifiers, inference, transport, live queues or production throughput claims",
+  "cases": [
+    {
+      "tokens": 1,
+      "creation_median_ms": 0.600511,
+      "creation_samples_ms": [
+        0.841637,
+        0.626419,
+        0.575974,
+        0.648491,
+        0.600511,
+        0.567181,
+        0.563215
+      ],
+      "packet_median_ms": 0.056754,
+      "packet_samples_ms": [
+        0.076714,
+        0.062673,
+        0.072637,
+        0.056033,
+        0.056534,
+        0.056754,
+        0.055232
+      ],
+      "one_atomic_batch": true,
+      "checkpoint_parity": true
+    },
+    {
+      "tokens": 10,
+      "creation_median_ms": 1.837023,
+      "creation_samples_ms": [
+        1.837023,
+        1.97657,
+        2.627174,
+        1.696745,
+        1.682835,
+        1.756364,
+        2.130498
+      ],
+      "packet_median_ms": 0.111355,
+      "packet_samples_ms": [
+        0.110093,
+        0.113859,
+        0.124365,
+        0.113108,
+        0.110173,
+        0.108841,
+        0.111355
+      ],
+      "one_atomic_batch": true,
+      "checkpoint_parity": true
+    },
+    {
+      "tokens": 100,
+      "creation_median_ms": 15.359829,
+      "creation_samples_ms": [
+        16.186004,
+        15.174213,
+        15.359829,
+        15.227533,
+        14.668184,
+        24.842856,
+        23.869613
+      ],
+      "packet_median_ms": 0.69488,
+      "packet_samples_ms": [
+        0.724974,
+        0.683233,
+        0.686688,
+        0.69488,
+        0.689892,
+        1.267549,
+        0.732396
+      ],
+      "one_atomic_batch": true,
+      "checkpoint_parity": true
+    }
+  ]
+}

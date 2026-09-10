@@ -6,7 +6,8 @@ review/
 archive/
 unused/
 test-tmp*/
-tests/
+tests/*
+!tests/test_*.py
 build/
 dist/
 *.egg-info/

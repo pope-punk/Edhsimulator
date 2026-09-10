@@ -7,6 +7,10 @@ END='<!-- OPERATOR PLANS END -->'
 
 
 def enabled(root):return read(Path(root)/'OPERATOR_VIEW.json',{}).get('enabled') is True
+def is_current(root,game):
+    return read(Path(root)/'cohort.json',{}).get('active_game',game)==game
+
+
 def path(root,actor):
     from .pilot_handoff import seat_slug
     return Path(root)/'operator'/f'{seat_slug(actor)}.md'
@@ -52,7 +56,7 @@ def plans(root,game,actor=None):
 
 
 def checkpoint(root,config,game,request,decision_count,state):
-    if not enabled(root) or game is None:return
+    if not enabled(root) or game is None or not is_current(root,config['game']):return
     from .campaign import atomic_text,_messageboard_markdown
     # Lock order matches publication: planning, then operator. No private state
     # is copied to any tool response, brief, status.md or seat context.
@@ -87,7 +91,7 @@ def checkpoint(root,config,game,request,decision_count,state):
 
 
 def refresh_plans(root,game):
-    if not enabled(root):return
+    if not enabled(root) or not is_current(root,game):return
     from .campaign import atomic_text
     with locked(root,'operator-view'):
         from .engine import DECK_HEADINGS

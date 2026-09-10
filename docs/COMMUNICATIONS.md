@@ -117,3 +117,13 @@ Idle host checkpoints bound the re-delivered card-definition cache; this is an
 explicit memory-selection policy, separate from the lossless communication codec.
 Archived definitions remain inspectable and are not eligible as already-delivered
 references. Full strategic prose and source evidence are not truncated.
+
+### Duplicate public speech
+
+Python's asynchronous outbox commit suppresses a post whose author, audience,
+reply target and whitespace-normalized, case-insensitive text match an existing
+post on the accepted branch (including another post in the same flush). Typed
+new offers, acceptances and withdrawals are preserved. Suppression is recorded
+in the publication/commit receipt with the original message ID; it drains the
+outbox without a new public event, reply wake, retry prompt or authorization
+refresh debt. Already accepted public history is never filtered during replay.

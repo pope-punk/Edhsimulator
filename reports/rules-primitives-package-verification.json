@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "scope": "Source and isolated wheel verification of Sage of the Maze mana, Gate-count animation and tap-cost composition; no production admission or gameplay",
+  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "source_baseline": "archive/rules-baselines/43037fd91b9d03b2d97baf28ed54bbb9fdafbb4c0237833f6406c8c7bc39428c.tar.gz",
+  "authored_unique_cards": 199,
+  "authored_copies": 264,
+  "repository_tests": 1035,
+  "installed_primitive_tests": 914,
+  "source_assets_verified": true,
+  "installed_assets_verified": true,
+  "durable_portability_verified": true,
+  "production_ready": false,
+  "artifacts_sha256": {
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-full.log": "3d0cfb03cdae9bd15b9396578152b371d3209022092538845b0f5c5bc4418c97",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-verify.log": "4cd8410cce766da03442cf2994e3092640ed712ba5c5b6bc5a98bb9bb143ba0e",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-installed-tests.log": "d1fba8845d5063b07f73acebe2f414ae5bd3e28fea667820c8e524857944ef76",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-installed-verify.log": "4cd8410cce766da03442cf2994e3092640ed712ba5c5b6bc5a98bb9bb143ba0e",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-installed-proof.log": "606ca0dfcb6dc80a05cab75beeb55fc4f607e485e42e339c87479494717b7bc9",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-wheel.log": "ab961918ed71a1cd6463bc6536e05f337a3d5160eb71eb555dbecd305ee77293",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-install.log": "900e9020147e36a7e3a82a7716dd17b422d61c5a9424d8ff940de1eda681ca68",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-core-benchmark.log": "e9f83633eda3d8639c1109266d4e53bcdc2963271829df8a0f7a3e72eeca3deb",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-adapter-benchmark.log": "7685b5c6bcae8d96ed6831c199be10e16ce519c7f16083c3487d68b07a3ecdbf",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-token-benchmark.log": "3a37ca6853f67adfbe156c31ba30c83e87e72e0bfce40b78b2eec0f04fcda890",
+    "archive/rules-verification/sage-composition-lbh1fvll/primitives-sage-composition-durable-benchmark.log": "f3ca17a62a29a9747b67353fb1de1533c22787efc3f6872dfe2b00451fd9cba6",
+    "archive/rules-verification/sage-composition-lbh1fvll/durable_portability.py": "382592d194ab2585b6ea2034352d599940e8fba8108c8244beb4edb2965139dc",
+    "archive/rules-verification/sage-composition-lbh1fvll/edh_manual_gauntlet-1.1.0-py3-none-any.whl": "54556d616600a005d51261ce194c52dfde7395ac21b006b36b44f195274275bd",
+    "archive/rules-verification/sage-composition-lbh1fvll/rules-primitives-performance.json": "6f04697863c359ff62dcd5a74b8c448ad862665f8f7d24ee5e1a6aa01e1e44bd",
+    "archive/rules-verification/sage-composition-lbh1fvll/rules-primitives-adapter-performance.json": "7685b5c6bcae8d96ed6831c199be10e16ce519c7f16083c3487d68b07a3ecdbf",
+    "archive/rules-verification/sage-composition-lbh1fvll/rules-primitives-token-performance.json": "5ba956ddea0a284fe540c987c2351118fec1e53a791db193f3f9de44c5a27a2d",
+    "archive/rules-verification/sage-composition-lbh1fvll/rules-primitives-durable-performance.json": "f3ca17a62a29a9747b67353fb1de1533c22787efc3f6872dfe2b00451fd9cba6"
+  }
+}

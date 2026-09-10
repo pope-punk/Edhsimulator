@@ -52,7 +52,7 @@ ACTOR_WITH_PUBLIC_STUB_EVENT_TYPES = frozenset({
 PUBLIC_EVENT_TYPES = frozenset({
     'planner_phase_boundary', 'planner_turn_boundary', 'planner_life_change',
     "ability_countered", "ability_fizzle", "ability_resolve", "activated_ability",
-    "attach", "aura_disable", "aura_illegal_attach", "aura_restore",
+    "attach", "aura_disable", "aura_illegal_attach", "aura_restore", "aura_return_failed",
     "bounce", "cascade_bottom", "cascade_decline", "cascade_hit", "cast", "cleanup",
     "battle_protector", "cast_transformed", "combat_buff", "combat_damage",
     "combat_damage_battle", "combat_damage_creature",
@@ -69,7 +69,7 @@ PUBLIC_EVENT_TYPES = frozenset({
     "explore_grave", "explore_keep", "explore_land", "explore_reveal", "extra_land",
     "fading", "fight_damage", "food", "game_start", "gifts_split", "global_bounce",
     "global_effect", "goad_attack_requirement", "graveyard_land_play", "helm_copy",
-    "horizon_adjudication", "horizon_stop", "infinite_setup", "land_animation",
+    "horizon_adjudication", "horizon_stop", "land_animation",
     "land_copy", "land_copy_effect", "land_play", "leaves_game", "life_gain",
     "life_loss", "loyalty_damage", "ltb", "mana_ability", "mana_payment", "mass_damage",
     "maze_end_activate", "messageboard_message", "mill", "miracle_reveal", "monstrous", "ozolith_decline",

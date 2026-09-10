@@ -3,9 +3,11 @@
 For fresh games explicitly binding `agent_architecture:1`, the role, component,
 escalation and scheduling rules in [AGENT_ARCHITECTURE_V1.md](docs/AGENT_ARCHITECTURE_V1.md)
 supersede the single-planner instructions below. Sol owns strategic goals; static standing files serve fresh split games;
-Terra-high owns continuity and tactical prose/actions; Terra-low owns decisions.
-Fresh split software hosts use independent short-term, long-term and diplomacy
-inference lanes alongside one decision lane. Each lane admits one seat at a time;
+Sol-high with Fast service owns continuity and tactical prose/actions for fresh
+cohorts bound to `short_term_sol_fast:1`; older games retain Terra-high. Terra-low owns decisions.
+Fresh split software hosts use 16 independent seat/role inference lanes: each
+seat has its own decider, short-term planner, long-term planner and diplomat lane.
+Each lane admits one inference at a time;
 waiting pilot tools retain context without occupying an inference lane. Older
 hosts retain serialized admission until explicitly upgraded at a verified stop. Optional
 `async_diplomacy:1` routes authorized public conversation to Luna-low and removes
@@ -19,7 +21,8 @@ evidence and complete pilot plan prose; new conversations and standalone CLI
 deliveries receive self-contained baselines. Presentation does not alter scheduling
 or a started game's contract.
 
-Software-host routing uses Terra-low deciders, Terra-high short-term planners,
+Software-host routing uses Terra-low deciders, Sol-high Fast short-term planners
+for fresh `short_term_sol_fast:1` cohorts (Terra-high for older bindings),
 Sol long-term planners and Luna-low diplomats in fresh split games. Legacy
 single-planner contracts use Sol planners. See docs/HOST_RUNTIME.md for bounded capacity fallback between those
 role models. Only zero-tool terminal capacity failures are retried; never replay

@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from . import engine as sim
 from .scheduler import PilotScheduler, resolution_sequence, SURFACE_REVISION as SCHEDULER_SURFACE_REVISION
 from .ability_registry import CARD_ABILITIES, registrations_for
-from .continuous import ContinuousEffect, ContinuousView, Layer, evaluate as evaluate_continuous
+from .continuous import read_only_views, ContinuousEffect, ContinuousView, Layer, evaluate as evaluate_continuous
 from .combo_adjudication import (
     ComboAdjudicationValidationError,
     INFINITE as COMBO_INFINITE,
@@ -530,13 +530,19 @@ class ManualGame(sim.Game):
     """
     def __init__(self,*args,decision_tape=None,inspection_service=None,
                  combo_adjudications=None,decision_surface_revision=1,planning_contract=1,
-                 capture_event_state=True,capture_decision_state=True,async_diplomacy=False,diplomacy_posts=None,combat_blocker_batch=False,combat_damage_batch=False,turn_batches=False,decision_roles=False,combo_deliveries=None,**kwargs):
+                 capture_event_state=True,capture_decision_state=True,async_diplomacy=False,diplomacy_posts=None,combat_blocker_batch=False,combat_damage_batch=False,proliferate_batch_after=None,selection_batch_after=None,turn_batches=False,decision_roles=False,combo_deliveries=None,**kwargs):
         self.decision_surface_revision=int(decision_surface_revision)
         self.planning_contract=planning_contract
         self.async_diplomacy=async_diplomacy
         self.decision_roles=decision_roles
         self.combo_deliveries=combo_deliveries or [];self.used_combo_proposals=set()
         self.combat_blocker_batch=combat_blocker_batch
+        self.selection_batch_after=selection_batch_after
+        if selection_batch_after is not None and (type(selection_batch_after) is not int or selection_batch_after<0):
+            raise ValueError("selection_batch_after must be a nonnegative accepted decision count")
+        self.proliferate_batch_after=proliferate_batch_after
+        if proliferate_batch_after is not None and (type(proliferate_batch_after) is not int or proliferate_batch_after<0):
+            raise ValueError("proliferate_batch_after must be a nonnegative accepted decision count")
         self.combat_damage_batch=combat_damage_batch
         self.turn_batches=turn_batches
         self.diplomacy_posts=diplomacy_posts or [];self.diplomacy_applied=set()
@@ -1187,7 +1193,7 @@ class ManualGame(sim.Game):
         if kind=='combat_damage_batch':
             return {'schema':1,'mode':'required','reason':'combat_damage',
                 'help':'Explain the overall damage distribution once, including trample and deliberate nonlethal allocations.'}
-        if kind=='trigger_order':
+        if kind in {'trigger_order','trigger_order_selection'}:
             return {
                 'schema':1,'mode':'required','reason':'trigger_ordering',
                 'help':'Explain why this trigger order best serves the current line.',
@@ -1472,6 +1478,27 @@ class ManualGame(sim.Game):
             [row['note_id'] for row in memory],request.get('pass_on_controls',[]),
             request.get('rationale_policy'))
         return value
+
+    def selection_batch_enabled(self):
+        return self.selection_batch_after is not None and self.decision_counter>=self.selection_batch_after
+
+    def _request_selection(self,kind,p,prompt,objects,label_fn,*,minimum=0,maximum=None,
+                           ordered=False,groups=None):
+        """One pilot-authored set or ordering, validated at every submission path.
+
+        Callers must collect all choices before applying effects. No priority,
+        revelation, actor handoff, or dependent choice may be crossed here.
+        """
+        objects=list(objects)
+        maximum=len(objects) if maximum is None else min(maximum,len(objects))
+        if minimum<0 or maximum<minimum:raise ValueError('Impossible selection bounds')
+        metadata={'min_selected':minimum,'max_selected':maximum,'ordered_selection':ordered}
+        if groups is not None:
+            if len(groups)!=len(objects):raise ValueError('Each selection option needs a group')
+            metadata['selection_groups']=groups
+            metadata['max_per_group']=1
+        return self._request_multi_decision(kind,p,prompt,objects,label_fn,
+            allow_pass=minimum==0,request_metadata=metadata,scheduler_passable=False)
 
     def _request_multi_decision(self,kind,p,prompt,objects,label_fn,allow_pass=False,required=None,
                                 request_metadata=None,scheduler_passable=None):
@@ -1876,11 +1903,35 @@ class ManualGame(sim.Game):
         if sage:
             def resolve_proliferate():
                 eligible=[(owner,permanent) for owner,permanent in self.all_permanents() if any(count>0 for count in permanent.counters.values())]
-                chosen=[]
-                for owner,permanent in eligible:
-                    include=self._request_decision('proliferate_choice',p,f'Evolution Sage: proliferate {owner.name} — {permanent.name}?',[True,False],lambda value:'proliferate' if value else 'do not proliferate')
-                    if include:chosen.append((owner,permanent))
+                # The cutoff is bound explicitly to the game. Finish any old
+                # resolution in its original shape, even across the cutoff.
+                batched=(self.proliferate_batch_after is not None and
+                         self.decision_counter>=self.proliferate_batch_after)
+                if batched:
+                    eligible=[(owner,permanent) for owner,permanent in eligible
+                              if not owner.eliminated and not permanent.metadata.get("phased_out")]
+                    eligible.extend((owner,None) for owner in self.players.values()
+                                    if not owner.eliminated and owner.energy>0)
+                    def label(row):
+                        owner,permanent=row
+                        if permanent is None:return f'{owner.name} — player (energy: {owner.energy})'
+                        counters=', '.join(f'{kind}: {count}' for kind,count in permanent.counters.items() if count>0)
+                        return f'{owner.name} — {permanent.name} [{permanent.uid}] ({counters})'
+                    chosen=self._request_multi_decision(
+                        'proliferate_selection',p,
+                        'Evolution Sage: choose any number of permanents and/or players to proliferate. '
+                        'Each chosen recipient gets one more of every counter kind it already has; an empty selection is legal.',
+                        eligible,label,allow_pass=True,scheduler_passable=False)
+                else:
+                    chosen=[]
+                    for owner,permanent in eligible:
+                        include=self._request_decision('proliferate_choice',p,f'Evolution Sage: proliferate {owner.name} — {permanent.name}?',[True,False],lambda value:'proliferate' if value else 'do not proliferate')
+                        if include:chosen.append((owner,permanent))
                 for owner,permanent in chosen:
+                    if permanent is None:
+                        owner.energy+=1
+                        self.log("energy",owner.name,"Evolution Sage","Proliferated energy",energy=owner.energy)
+                        continue
                     for kind,count in list(permanent.counters.items()):
                         if count>0:self.add_counters(p,permanent,kind,1,'Evolution Sage proliferate')
             add(p,sage.name,'proliferate',resolve_proliferate)
@@ -1890,6 +1941,7 @@ class ManualGame(sim.Game):
         p.dungeon.setdefault('pending_landfall_triggers',{})[land.uid]=triggers
 
     def on_etb(self,p,q,x_value=0):
+        effective_name=q.copy_of or q.name
         deferred=self.__dict__.get('_deferred_etb_observation',[])
         if deferred:
             deferred[-1].append((p,q,x_value));return
@@ -1899,51 +1951,51 @@ class ManualGame(sim.Game):
         self.__dict__.setdefault('_etb_trigger_frames',[]).append(frame)
         # "Enters with" counters are replacement effects and must exist before
         # the base ETB routine performs its first state-based-action check.
-        if q.name=='Nissa, Steward of Elements':q.counters['loyalty']=x_value
-        elif q.name=='Mikaeus, the Lunarch':self.add_counters(p,q,'+1/+1',x_value,'Mikaeus enters')
-        elif q.name=='Invasion of Theros' and not q.metadata.get('transformed_invasion'):
+        if effective_name=='Nissa, Steward of Elements':q.counters['loyalty']=x_value
+        elif effective_name=='Mikaeus, the Lunarch':self.add_counters(p,q,'+1/+1',x_value,'Mikaeus enters')
+        elif effective_name=='Invasion of Theros' and not q.metadata.get('transformed_invasion'):
             q.counters['defense']=4
             protector=self._request_decision(
                 'battle_protector',p,
                 'Invasion of Theros enters: choose an opponent to protect this Siege.',
                 self.opponents(p),lambda opponent:f'{opponent.name} protects Invasion of Theros')
             q.metadata['battle_protector']=protector.name
-            self.log('battle_protector',p.name,q.name,
+            self.log('battle_protector',p.name,effective_name,
                      f'{protector.name} protects Invasion of Theros',target=protector.name,uid=q.uid)
         super().on_etb(p,q,x_value=x_value)
         modes=p.dungeon.get('resolving_cast_modes',{}).get(q.uid,{})
-        if q.name=="Innkeeper's Talent":q.metadata.setdefault('level',1)
-        elif q.name=='Lotus Blossom':q.counters.setdefault('petal',0)
-        elif q.name=='Sorin of House Markov':q.metadata.setdefault('transformed_sorin',False)
-        elif q.name in {'Glasswing Grace // Age-Graced Chapel','Parasitic Impetus'}:
+        if effective_name=="Innkeeper's Talent":q.metadata.setdefault('level',1)
+        elif effective_name=='Lotus Blossom':q.counters.setdefault('petal',0)
+        elif effective_name=='Sorin of House Markov':q.metadata.setdefault('transformed_sorin',False)
+        elif effective_name in {'Glasswing Grace // Age-Graced Chapel','Parasitic Impetus'}:
             chosen=self._announced_aura_target(p,q)
             if chosen:
                 owner,target=chosen
                 if self._aura_target_legal(p,q,owner,target):
                     q.attached_to=target.uid
-                    if q.name=='Parasitic Impetus':target.metadata['goaded_by']=p.name
-                    self.log('attach',p.name,q.name,f'{q.name} enchants {target.name}',target_uid=target.uid)
-        if q.name=='Nullpriest of Oblivion' and modes.get('kicked'):
+                    if effective_name=='Parasitic Impetus':target.metadata['goaded_by']=p.name
+                    self.log('attach',p.name,effective_name,f'{effective_name} enchants {target.name}',target_uid=target.uid)
+        if effective_name=='Nullpriest of Oblivion' and modes.get('kicked'):
             choices=[card for card in p.graveyard if card.d.is_creature]
             if choices:
                 target=self._request_decision('nullpriest_target',p,'Nullpriest kicked ETB: choose target creature card in your graveyard.',choices,lambda card:f'{card.d.name} {card.d.mana_cost}')
                 def resolve_nullpriest():
                     if target in p.graveyard:p.graveyard.remove(target);self._put_card_bf(p,target,'Nullpriest kicked ETB')
-                self._dispatch_etb_triggers(p,q,[{'controller':p,'source':q.name,'label':f'return target {target.d.name}','resolve':resolve_nullpriest}])
-        if modes.get('evoke') and q.name in {'Reveillark','Vesperlark'}:
-            self._dispatch_etb_triggers(p,q,[{'controller':p,'source':q.name,'label':'sacrifice it for evoke','resolve':lambda:self.leave_battlefield(p,q,'graveyard','evoke sacrifice') if q in p.battlefield else None}])
+                self._dispatch_etb_triggers(p,q,[{'controller':p,'source':effective_name,'label':f'return target {target.d.name}','resolve':resolve_nullpriest}])
+        if modes.get('evoke') and effective_name in {'Reveillark','Vesperlark'}:
+            self._dispatch_etb_triggers(p,q,[{'controller':p,'source':effective_name,'label':'sacrifice it for evoke','resolve':lambda:self.leave_battlefield(p,q,'graveyard','evoke sacrifice') if q in p.battlefield else None}])
         self._etb_trigger_frames.pop()
         def final_check():
             if q.metadata.pop('saga_enter_final_check',False) and q in p.battlefield and q.counters.get('lore',0)>=3:
-                if q.name in {'The Cruelty of Gix','Elspeth Conquers Death',"Urza's Saga"}:
+                if effective_name in {'The Cruelty of Gix','Elspeth Conquers Death',"Urza's Saga"}:
                     self.leave_battlefield(p,q,'graveyard','Saga final chapter left the stack')
-                elif q.name=='The Restoration of Eiganjo' and not q.metadata.get('transformed_restoration'):
+                elif effective_name=='The Restoration of Eiganjo' and not q.metadata.get('transformed_restoration'):
                     self.leave_battlefield(p,q,'graveyard','Restoration final chapter left the stack without transforming')
         batches=self.__dict__.get('_simultaneous_etb_frames',[])
         if batches:
             batches[-1]['triggers'].extend(frame['triggers']);batches[-1]['finalizers'].append(final_check)
         else:
-            self.resolve_simultaneous_triggers(f'{q.name} enters the battlefield',frame['triggers'],starter=self.players[self.turn_order[self.active_idx]])
+            self.resolve_simultaneous_triggers(f'{effective_name} enters the battlefield',frame['triggers'],starter=self.players[self.turn_order[self.active_idx]])
             final_check()
 
     def _dispatch_etb_triggers(self,p,q,triggers):
@@ -1962,9 +2014,9 @@ class ManualGame(sim.Game):
         triggers=[]
         def add(source,label,resolver):triggers.append({'controller':p,'source':source,'label':label,'resolve':resolver})
         liliana=self.perm(p,'Liliana the Faultless')
-        if liliana and q.name!='Liliana the Faultless':add(liliana.name,'gain 1 life',lambda:self.gain_life(p,1,'Liliana creature ETB'))
-        if q.name=='Inspiring Overseer':add(q.name,'gain 1 life and draw a card',lambda:(self.gain_life(p,1,q.name),self.draw(p,1,q.name)))
-        if q.name=='Oasis Gardener':add(q.name,'gain 2 life',lambda:self.gain_life(p,2,q.name))
+        if liliana and (q.copy_of or q.name)!='Liliana the Faultless':add(liliana.name,'gain 1 life',lambda:self.gain_life(p,1,'Liliana creature ETB'))
+        if (q.copy_of or q.name)=='Inspiring Overseer':add(q.name,'gain 1 life and draw a card',lambda:(self.gain_life(p,1,q.name),self.draw(p,1,q.name)))
+        if (q.copy_of or q.name)=='Oasis Gardener':add(q.name,'gain 2 life',lambda:self.gain_life(p,2,q.name))
         champion=self.perm(p,'Champion of Lambholt')
         if champion and q.uid!=champion.uid:add(champion.name,'put a +1/+1 counter on it',lambda:self.add_counters(p,champion,'+1/+1',1,champion.name))
         uprising=self.perm(p,"Garruk's Uprising")
@@ -2065,12 +2117,16 @@ class ManualGame(sim.Game):
     def terastodon_etb(self,p,q):
         remaining=[(owner,target) for owner,target in self.all_permanents() if target.uid!=q.uid and
                    not self.is_creature_perm(target) and (owner is p or not self.has_hexproof(target))]
-        announced=[]
-        for slot in range(3):
-            if not remaining:break
-            chosen=self._request_decision('terastodon_target',p,f'Terastodon: choose target noncreature permanent {slot+1}, or stop.',remaining,lambda row:f'{row[0].name}: {row[1].name}',allow_pass=True)
-            if not chosen:break
-            announced.append(chosen);remaining.remove(chosen)
+        if self.selection_batch_enabled():
+            announced=self._request_selection('terastodon_targets',p,'Terastodon: choose up to three target noncreature permanents.',remaining,
+                lambda row:f'{row[0].name}: {row[1].name} [{row[1].uid}]',maximum=3)
+        else:
+            announced=[]
+            for slot in range(3):
+                if not remaining:break
+                chosen=self._request_decision('terastodon_target',p,f'Terastodon: choose target noncreature permanent {slot+1}, or stop.',remaining,lambda row:f'{row[0].name}: {row[1].name}',allow_pass=True)
+                if not chosen:break
+                announced.append(chosen);remaining.remove(chosen)
         def resolve_terastodon():
             for owner,target in announced:
                 if self.target_still_legal(p,owner,target) and self.destroy(owner,target,'Terastodon ETB'):self.token(owner,'Elephant',3,3)
@@ -2102,7 +2158,8 @@ class ManualGame(sim.Game):
         escaped=(p.dungeon.pop('escaping_uro_uid',None)==q.uid) or q.metadata.get('escaped')
         if escaped:q.metadata['escaped']=True
         triggers=[]
-        if not escaped:triggers.append({'controller':p,'source':q.name,'label':'sacrifice Uro unless it escaped','resolve':lambda:self.leave_battlefield(p,q,'graveyard','Uro sacrifice trigger') if q in p.battlefield else None})
+        triggers.append({'controller':p,'source':q.copy_of or q.name,'label':'sacrifice Uro unless it escaped',
+                         'resolve':lambda:self.leave_battlefield(p,q,'graveyard','Uro sacrifice trigger') if not escaped and q in p.battlefield else None})
         def resolve_uro_value():self.gain_life(p,3,'Uro');self.draw(p,1,'Uro');self.extra_land_from_hand(p,'Uro')
         triggers.append({'controller':p,'source':q.name,'label':'gain 3 life, draw, then you may put a land from hand onto the battlefield','resolve':resolve_uro_value})
         self._dispatch_etb_triggers(p,q,triggers)
@@ -2199,13 +2256,19 @@ class ManualGame(sim.Game):
         }])
 
     def grasp_of_fate_etb(self,p,q):
-        announced=[]
-        for opponent in self.opponents(p):
-            legal=[target for target in opponent.battlefield if not sim.is_land_permanent(target) and not self.has_hexproof(target)]
-            chosen=self._request_decision('grasp_of_fate_target',p,
-                f'Grasp of Fate: choose up to one target nonland permanent controlled by {opponent.name}.',legal,
-                lambda target:target.name,allow_pass=True) if legal else None
-            if chosen:announced.append((opponent,chosen))
+        if self.selection_batch_enabled():
+            legal=[(opponent,target) for opponent in self.opponents(p) for target in opponent.battlefield
+                   if not sim.is_land_permanent(target) and not self.has_hexproof(target)]
+            announced=self._request_selection('grasp_of_fate_targets',p,'Grasp of Fate: choose up to one target nonland permanent per opponent.',legal,
+                lambda row:f'{row[0].name}: {row[1].name} [{row[1].uid}]',groups=[owner.name for owner,_ in legal])
+        else:
+            announced=[]
+            for opponent in self.opponents(p):
+                legal=[target for target in opponent.battlefield if not sim.is_land_permanent(target) and not self.has_hexproof(target)]
+                chosen=self._request_decision('grasp_of_fate_target',p,
+                    f'Grasp of Fate: choose up to one target nonland permanent controlled by {opponent.name}.',legal,
+                    lambda target:target.name,allow_pass=True) if legal else None
+                if chosen:announced.append((opponent,chosen))
         def resolve_grasp():
             if q not in p.battlefield:return
             for owner,target in announced:
@@ -2222,6 +2285,25 @@ class ManualGame(sim.Game):
         cards=[c for c in p.graveyard if c.d.is_creature]
         return self._request_decision('reanimation_target',p,f'{aura.name}: choose creature card to return.',cards,
                          lambda c:f'{c.d.name} [{c.d.mana_cost}]')
+
+    def blink_own_permanent(self,p,target,reason):
+        if target.name not in {'Animate Dead','Dance of the Dead'}:
+            return super().blink_own_permanent(p,target,reason)
+        if target not in p.battlefield:return None
+        self.leave_battlefield(p,target,'exile',reason+' exile')
+        if target.token:return None
+        owner=self.players[target.owner]
+        card=next((c for c in owner.exile if c.uid==target.uid),None)
+        if card is None:return None
+        # CR 303.4f-g: these Auras must enchant a creature card as they
+        # return. Their old creature's sacrifice trigger cannot resolve in
+        # the middle of Felidar's blink to supply a graveyard card in time.
+        if not any(c.d.is_creature for player in self.players.values() for c in player.graveyard):
+            self.log('aura_return_failed',owner.name,card.d.name,
+                     'Remains in exile: no creature card in a graveyard to enchant',uid=card.uid)
+            return None
+        owner.exile.remove(card)
+        return self._put_card_bf(owner,card,reason+' return')
 
     def reanimate_aura_etb(self,p,aura):
         state=p.dungeon.get('announced_spells',{}).get(aura.uid,{})
@@ -2242,6 +2324,7 @@ class ManualGame(sim.Game):
         }])
 
     def resolve_reanimation_aura_trigger(self,p,aura,owner,card):
+        if aura not in p.battlefield:return
         if not card or card not in owner.graveyard:return
         owner.graveyard.remove(card)
         copy=self.request_body_double_copy(p) if card.d.name=='Body Double' else None
@@ -3001,8 +3084,16 @@ class ManualGame(sim.Game):
         sf=self.perm(p,'Starfield of Nyx')
         if sf:
             ens=[c for c in p.graveyard if c.d.is_enchantment]
-            target=self._request_decision('starfield_upkeep',p,'Starfield of Nyx: choose target enchantment card, or decline.',ens,lambda c:f'{c.d.name} [{c.d.mana_cost}]',allow_pass=True) if ens else None
-            if target:add(sf.name,f'return target {target.d.name}',lambda target=target:self._put_card_bf(p,p.graveyard.pop(p.graveyard.index(target)),'Starfield of Nyx upkeep') if target in p.graveyard else None)
+            # The trigger's target is mandatory even though returning it is optional.
+            # A snooze cannot remove this trigger before it reaches the stack.
+            target=self._request_decision('starfield_upkeep',p,'Starfield of Nyx: choose target enchantment card.',ens,lambda c:f'{c.d.name} [{c.d.mana_cost}]') if ens else None
+            if target:
+                def resolve_starfield(target=target):
+                    if not any(card is target for card in p.graveyard):return
+                    if self._request_decision('starfield_return',p,f'Starfield of Nyx: return {target.d.name} to the battlefield?',
+                            [True,False],lambda yes:'return enchantment' if yes else 'leave it in the graveyard'):
+                        self._put_card_bf(p,p.graveyard.pop(p.graveyard.index(target)),'Starfield of Nyx upkeep')
+                add(sf.name,f'you may return target {target.d.name}',resolve_starfield)
         amin=self.active_ability_perm(p,'Aminatou, Veil Piercer')
         if amin:add(amin.name,'surveil 2',lambda:self.aminatou_surveil(p))
         arena=self.perm(p,'Phyrexian Arena')
@@ -3419,11 +3510,12 @@ class ManualGame(sim.Game):
         # exists on the stack.
         if spell_marker not in self.stack:
             if commander:
-                if not p.commander or p.commander.uid!=c.uid:
-                    p.commander=c;p.command_tax+=2
+                p.command_tax+=2
+                if not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile) and (not p.commander or p.commander.uid!=c.uid):
+                    p.commander=c
                     self.log('commander_zone',p.name,c.d.name,
                              'Countered commander returned to command zone')
-            elif not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile):
+            elif not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile) and (not p.commander or p.commander.uid!=c.uid):
                 p.graveyard.append(c)
                 self.log('countered',p.name,c.d.name,
                          f'{c.d.name} countered → graveyard')
@@ -3443,11 +3535,14 @@ class ManualGame(sim.Game):
             return True
         if self.react_to_spell(p,c):
             if spell_marker in self.stack:self.stack.remove(spell_marker)
-            if commander:p.commander=c;p.command_tax+=2;self.log('commander_zone',p.name,c.d.name,'Countered commander returned to command zone')
+            if commander:
+                p.command_tax+=2
+                if not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile) and (not p.commander or p.commander.uid!=c.uid):
+                    p.commander=c;self.log('commander_zone',p.name,c.d.name,'Countered commander returned to command zone')
             else:
                 # Remand already placed the exact physical spell card back in hand. Do not
                 # also append it to graveyard after the response window closes.
-                if not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile):
+                if not any(x.uid==c.uid for x in p.hand+p.graveyard+p.exile) and (not p.commander or p.commander.uid!=c.uid):
                     p.graveyard.append(c);self.log('countered',p.name,c.d.name,f'{c.d.name} countered → graveyard')
                 else:
                     self.log('countered_destination',p.name,c.d.name,f'{c.d.name} countered; destination already established by counter effect')
@@ -3720,12 +3815,17 @@ class ManualGame(sim.Game):
                 p.dungeon['no_max_hand']=True
             self.draw(p,min(max(0,x_value),40),c.d.name)
             if x_value>=10:
-                for slot in range(5):
+                if self.selection_batch_enabled():
                     tapped=[q for q in p.battlefield if sim.CARDDEF.get(q.name) and sim.CARDDEF[q.name].is_land and q.tapped]
-                    if not tapped:break
-                    land=self._request_decision('finale_untap',p,f'Finale of Revelation: choose land {slot+1} of up to five to untap, or stop.',tapped,lambda q:q.name,allow_pass=True)
-                    if not land:break
-                    land.tapped=False
+                    for land in self._request_selection('finale_untap_selection',p,'Finale of Revelation: choose up to five lands to untap.',tapped,
+                            lambda q:f'{q.name} [{q.uid}]',maximum=5):land.tapped=False
+                else:
+                    for slot in range(5):
+                        tapped=[q for q in p.battlefield if sim.CARDDEF.get(q.name) and sim.CARDDEF[q.name].is_land and q.tapped]
+                        if not tapped:break
+                        land=self._request_decision('finale_untap',p,f'Finale of Revelation: choose land {slot+1} of up to five to untap, or stop.',tapped,lambda q:q.name,allow_pass=True)
+                        if not land:break
+                        land.tapped=False
             p.exile.append(c);self.log('exile',p.name,c.d.name,'Finale of Revelation exiles itself after resolving')
             return
         if c.d.name=='Curse of the Swine':
@@ -3745,12 +3845,18 @@ class ManualGame(sim.Game):
             return
         if c.d.name=='Brainstorm':
             self.draw(p,3,'Brainstorm')
-            selected=[]
-            for slot in range(min(2,len(p.hand))):
-                choice=self._request_decision('brainstorm_putback',p,
-                    f'Brainstorm: choose putback {slot+1} of 2'+(' (this card will be the top card).' if slot==1 else ' (the next putback will be above it).'),
-                    [card for card in p.hand if card not in selected],lambda card:f'{card.d.name} {card.d.mana_cost}')
-                selected.append(choice)
+            if self.selection_batch_enabled():
+                count=min(2,len(p.hand))
+                selected=self._request_selection('brainstorm_putback_order',p,
+                    f'Brainstorm: select {count} cards in bottom-to-top order; the last selected card will be drawn first.',p.hand,
+                    lambda card:f'{card.d.name} [{card.uid}]',minimum=count,maximum=count,ordered=True)
+            else:
+                selected=[]
+                for slot in range(min(2,len(p.hand))):
+                    choice=self._request_decision('brainstorm_putback',p,
+                        f'Brainstorm: choose putback {slot+1} of 2'+(' (this card will be the top card).' if slot==1 else ' (the next putback will be above it).'),
+                        [card for card in p.hand if card not in selected],lambda card:f'{card.d.name} {card.d.mana_cost}')
+                    selected.append(choice)
             for card in selected:
                 p.hand.remove(card);p.library.append(card);self.log('put_on_top',p.name,card.d.name,'Brainstorm ordered putback')
             return
@@ -4493,12 +4599,16 @@ class ManualGame(sim.Game):
                 payload['target']=chosen
                 if chosen:targets=[chosen]
             elif kind=='nissa_ultimate':
-                remaining=[q for q in p.battlefield if sim.is_land_permanent(q)];chosen=[]
-                for slot in range(2):
-                    if not remaining:break
-                    land=self._request_decision('nissa_land_target',p,f'Nissa -6: choose target land {slot+1}, or stop.',remaining,lambda q:q.name,allow_pass=True)
-                    if not land:break
-                    chosen.append(land);remaining.remove(land)
+                if self.selection_batch_enabled():
+                    chosen=self._request_selection('nissa_land_targets',p,'Nissa -6: choose up to two target lands.',
+                        [q for q in p.battlefield if sim.is_land_permanent(q)],lambda q:f'{q.name} [{q.uid}]',maximum=2)
+                else:
+                    remaining=[q for q in p.battlefield if sim.is_land_permanent(q)];chosen=[]
+                    for slot in range(2):
+                        if not remaining:break
+                        land=self._request_decision('nissa_land_target',p,f'Nissa -6: choose target land {slot+1}, or stop.',remaining,lambda q:q.name,allow_pass=True)
+                        if not land:break
+                        chosen.append(land);remaining.remove(land)
                 payload['lands']=chosen;targets=chosen
             elif kind=='sorin_house_minus':
                 chosen=self._request_decision('sorin_damage_target',p,'Sorin -1: choose any target.',self.death_grasp_targets(p),
@@ -4636,10 +4746,14 @@ class ManualGame(sim.Game):
             lands=[q for q in p.battlefield if sim.is_land_permanent(q) and q.tapped]
             x=self.choose_x_for_cost(p,source,lambda value:f'{{{value}}}',min(20,len(lands)),True,'Magus of the Candelabra: choose X lands to untap.')
             if not x:return False
-            chosen=[]
-            for slot in range(x):
-                land=self._request_decision('magus_land_target',p,f'Magus: choose target land {slot+1} of {x}.',[q for q in lands if q not in chosen],lambda q:q.name)
-                chosen.append(land)
+            if self.selection_batch_enabled():
+                chosen=self._request_selection('magus_land_targets',p,f'Magus: choose exactly {x} target lands.',lands,
+                    lambda q:f'{q.name} [{q.uid}]',minimum=x,maximum=x)
+            else:
+                chosen=[]
+                for slot in range(x):
+                    land=self._request_decision('magus_land_target',p,f'Magus: choose target land {slot+1} of {x}.',[q for q in lands if q not in chosen],lambda q:q.name)
+                    chosen.append(land)
             payload['lands']=chosen;targets=chosen;cost=f'{{{x}}}'
         elif kind=='urzas_cave':cost='{3}';sacrifice_source=True
         elif kind=='trenchpost':
@@ -4904,10 +5018,14 @@ class ManualGame(sim.Game):
             self.gain_life(p,1,'Pristine Talisman mana ability')
         else:
             if len(p.graveyard)<7 or not self.pay_registered_cost(p,source,'{1}{U}',tap=True):return False
-            chosen=[]
-            for slot in range(7):
-                card=self._request_decision('sunken_exile_cost',p,f'Sunken Palace: choose graveyard card {slot+1} of 7 to exile.',[c for c in p.graveyard if c not in chosen],lambda c:c.d.name)
-                chosen.append(card)
+            if self.selection_batch_enabled():
+                chosen=self._request_selection('sunken_exile_selection',p,'Sunken Palace: choose exactly seven graveyard cards to exile.',p.graveyard,
+                    lambda card:f'{card.d.name} [{card.uid}]',minimum=7,maximum=7)
+            else:
+                chosen=[]
+                for slot in range(7):
+                    card=self._request_decision('sunken_exile_cost',p,f'Sunken Palace: choose graveyard card {slot+1} of 7 to exile.',[c for c in p.graveyard if c not in chosen],lambda c:c.d.name)
+                    chosen.append(card)
             for card in chosen:p.graveyard.remove(card);p.exile.append(card)
             p.dungeon.setdefault('floating_mana',[]).append('SUNKEN-U')
         self.log('mana_ability',p.name,source.name,f'Resolved {kind}',floating=list(p.dungeon.get('floating_mana',[])))
@@ -5068,6 +5186,7 @@ class ManualGame(sim.Game):
         return token
 
     # ---------- spell sequencing ----------
+    @read_only_views
     def legal_main_actions(self,p,context=None):
         actions=self.registered_actions(p,'sorcery')
         # Mana abilities are legal while the active player has priority even
@@ -5259,6 +5378,7 @@ class ManualGame(sim.Game):
             return False
         return True
 
+    @read_only_views
     def legal_priority_actions(self,p,timing,context=None,include_held=False):
         """Project supported actions using the actual phase, player and stack."""
         # CR 117.1a: returning priority after a main-phase trigger resolves can
@@ -6474,17 +6594,23 @@ class ManualGame(sim.Game):
         active=starter or self.players[self.turn_order[self.active_idx]]
         apnap=self.turn_order[self.turn_order.index(active.name):]+self.turn_order[:self.turn_order.index(active.name)]
         ordered=[]
+        batch_order=self.selection_batch_enabled()
         for name in apnap:
             controller=self.players[name]
             remaining=[t for t in triggers if t['controller'].name==name]
-            while remaining:
-                if len(remaining)==1:chosen=remaining[0]
-                else:
-                    chosen=self._request_decision(
-                        'trigger_order',controller,
-                        f'{event}: choose the next trigger you control to put on the stack (bottom to top; this choice resolves after triggers you place later).',
-                        remaining,lambda t:f'{t["source"]}: {t["label"]}')
-                ordered.append(chosen);remaining.remove(chosen)
+            if batch_order and len(remaining)>1:
+                ordered.extend(self._request_selection('trigger_order_selection',controller,
+                    f'{event}: order all your triggers bottom-to-top; the last selected resolves first.',remaining,
+                    lambda t:f'{t["source"]}: {t["label"]}',minimum=len(remaining),maximum=len(remaining),ordered=True))
+            else:
+                while remaining:
+                    if len(remaining)==1:chosen=remaining[0]
+                    else:
+                        chosen=self._request_decision(
+                            'trigger_order',controller,
+                            f'{event}: choose the next trigger you control to put on the stack (bottom to top; this choice resolves after triggers you place later).',
+                            remaining,lambda t:f'{t["source"]}: {t["label"]}')
+                    ordered.append(chosen);remaining.remove(chosen)
         for index,t in enumerate(ordered):
             marker={'actor':t['controller'].name,'card':t['source'],'trigger_event':event,
                     'trigger_index':index,'trigger_label':t['label']}
@@ -6874,12 +7000,18 @@ class ManualGame(sim.Game):
         if self.can_pay(p,cost) is None:return False
         if not self.pay(p,cost):return False
         def resolve_look():
-            seen=list(p.library[-min(3,len(p.library)):]);ordered=[]
-            for slot in range(len(seen)):
-                card=self._request_decision('top_order',p,
-                    f"Sensei's Divining Top: choose card {slot+1} from bottom to top of the inspected group"+(' (this will be drawn first).' if slot==len(seen)-1 else '.'),
-                    [card for card in seen if card not in ordered],lambda card:f'{card.d.name} {card.d.mana_cost}')
-                ordered.append(card)
+            if self.selection_batch_enabled():
+                seen=list(p.library[-min(3,len(p.library)):])
+                ordered=self._request_selection('top_order_selection',p,
+                    "Sensei's Divining Top: select all inspected cards in bottom-to-top order; the last selected card will be drawn first.",seen,
+                    lambda card:f'{card.d.name} [{card.uid}]',minimum=len(seen),maximum=len(seen),ordered=True)
+            else:
+                seen=list(p.library[-min(3,len(p.library)):]);ordered=[]
+                for slot in range(len(seen)):
+                    card=self._request_decision('top_order',p,
+                        f"Sensei's Divining Top: choose card {slot+1} from bottom to top of the inspected group"+(' (this will be drawn first).' if slot==len(seen)-1 else '.'),
+                        [card for card in seen if card not in ordered],lambda card:f'{card.d.name} {card.d.mana_cost}')
+                    ordered.append(card)
             for card in seen:p.library.remove(card)
             p.library.extend(ordered);self.log('top_reorder',p.name,top.name,'Reordered top three cards')
         return self.put_registered_stack_item(p,top,'look at and reorder the top three cards',resolve_look)
@@ -6995,11 +7127,15 @@ class ManualGame(sim.Game):
         others=[candidate for candidate in p.graveyard if candidate.uid!=card.uid]
         cost=sim.CardDef('Uro escape','{G}{G}{U}{U}','Ability','',1,p.name,4)
         if len(others)<5 or self.can_pay(p,cost) is None:return False
-        remaining=list(others);chosen=[]
-        for slot in range(5):
-            exile=self._request_decision('escape_exile',p,f'Uro escape: choose graveyard card {slot+1} of 5 to exile as an additional cost.',remaining,
-                lambda candidate:f'{candidate.d.name} {candidate.d.mana_cost}')
-            chosen.append(exile);remaining.remove(exile)
+        if self.selection_batch_enabled():
+            chosen=self._request_selection('escape_exile_selection',p,'Uro escape: choose exactly five other graveyard cards to exile.',others,
+                lambda card:f'{card.d.name} [{card.uid}]',minimum=5,maximum=5)
+        else:
+            remaining=list(others);chosen=[]
+            for slot in range(5):
+                exile=self._request_decision('escape_exile',p,f'Uro escape: choose graveyard card {slot+1} of 5 to exile as an additional cost.',remaining,
+                    lambda candidate:f'{candidate.d.name} {candidate.d.mana_cost}')
+                chosen.append(exile);remaining.remove(exile)
         if not self.pay(p,cost):return False
         for exile in chosen:
             p.graveyard.remove(exile);p.exile.append(exile);self.log('exile',p.name,exile.d.name,'Uro escape additional cost')
@@ -7259,7 +7395,15 @@ class ManualGame(sim.Game):
         self.log('counterspell',p.name,c.d.name,
                  f'{c.d.name} counters {target_card.d.name}',target=target_card.d.name)
         if c.d.name=='Remand':
-            target_caster.hand.append(target_card);self.draw(p,1,'Remand')
+            commander=target_card.uid==target_caster.dungeon.get('commander_uid')
+            to_command=self._request_decision('remand_commander_destination',target_caster,
+                f'Remand: put {target_card.d.name} in the command zone instead of returning it to hand?',
+                [True,False],lambda value:'command zone' if value else 'hand') if commander else False
+            if to_command:
+                target_caster.commander=target_card
+                self.log('commander_zone',target_caster.name,target_card.d.name,'Remand: command zone instead of hand',uid=target_card.uid)
+            else:target_caster.hand.append(target_card)
+            self.draw(p,1,'Remand')
         elif c.d.name=='Summary Dismissal':
             target_caster.exile.append(target_card)
             self.log('exile',target_caster.name,target_card.d.name,
@@ -7438,13 +7582,9 @@ class ManualGame(sim.Game):
                 trigger['label']='blink no target';return
             def resolve_felidar():
                 if target not in p.battlefield:return
-                if target.name in {'Animate Dead','Dance of the Dead','Necromancy'} and target.attached_to==q.uid and self.perm(p,'Ghostly Dancers'):
-                    establish=self._request_decision('infinite_spirit_loop',p,'Felidar can blink its linked reanimation Aura repeatedly; each cycle triggers Ghostly Dancers. Establish an arbitrarily large non-hasty Spirit army?',
-                        [True,False],lambda value:'establish the Spirit loop' if value else 'do not loop')
-                    if establish:
-                        p.dungeon['infinite_spirits_turn']=self.turn_number
-                        self.log('infinite_setup',p.name,'Ghostly Dancers','Felidar/reanimation-Aura loop establishes an arbitrarily large army of 3/1 flying Spirit tokens')
-                        return
+                # A linked reanimation Aura alone does not establish a loop:
+                # its sacrifice trigger resolves after this entire blink.
+                # Resolve the actual objects; broader shortcuts require proof.
                 self.blink_own_permanent(p,target,'Felidar Guardian ETB');self.check_ream_combo()
             trigger['label']=f'exile and return target {target.name}'
             trigger['targets']=[target]
@@ -7456,12 +7596,17 @@ class ManualGame(sim.Game):
     def resolve_gifts(self,p):
         # Choose 1-4 distinct cards manually. Then the opponent who is strategically best placed
         # to make the choice selects the two cards going to graveyard (or all if <=2).
-        available=list(p.library);pile=[]
-        for slot in range(4):
-            c=self._request_decision('gifts_select',p,f'Gifts Ungiven: choose search card {slot+1} (or stop).',
-                        [x for x in available if x not in pile],lambda c:f'{c.d.name} [{c.d.mana_cost}]',allow_pass=(slot>0))
-            if c is None:break
-            pile.append(c)
+        if self.selection_batch_enabled():
+            available=list(p.library)
+            pile=self._request_selection('gifts_selection',p,'Gifts Ungiven: choose up to four cards with different names (choosing none is legal).',available,
+                lambda card:f'{card.d.name} [{card.uid}]',maximum=4,groups=[card.d.name for card in available])
+        else:
+            available=list(p.library);pile=[]
+            for slot in range(4):
+                c=self._request_decision('gifts_select',p,f'Gifts Ungiven: choose search card {slot+1} (or stop).',
+                            [x for x in available if x not in pile],lambda c:f'{c.d.name} [{c.d.mana_cost}]',allow_pass=(slot>0))
+                if c is None:break
+                pile.append(c)
         if len(pile)<=2:
             grave=list(pile);hand=[]
         else:
@@ -7818,6 +7963,11 @@ class ManualGame(sim.Game):
         atk=[a for a in atk if a in attacker.battlefield and self.is_creature_perm(a)
              and a.metadata.get('removed_from_combat_turn')!=self.turn_number]
         if not atk:return
+        # CR 506.4: the blocker packet describes creatures still in combat,
+        # not the declaration before responses removed attackers.
+        combat_context={**combat_context,'attackers':[a.uid for a in atk],
+                        'attacker_destinations':{a.uid:combat_context['attacker_destinations'][a.uid]
+                                                 for a in atk}}
         blockers=[q for q in target.battlefield if self.is_creature_perm(q) and not q.tapped and self.effective_toughness(q)>0]
         assignments={a.uid:[] for a in atk}
         unused=list(blockers)
@@ -8419,10 +8569,18 @@ class ManualGame(sim.Game):
         self.empty_mana_pools('beginning of cleanup')
         self.phase='cleanup';self.reset_eot_modifiers()
         if not self.has_no_maximum_hand_size(p):
-            while len(p.hand)>7:
-                card=self._request_decision('cleanup_discard',p,f'Cleanup: choose a card to discard ({len(p.hand)} cards; maximum 7).',list(p.hand),
-                           lambda card:f'{card.d.name} {card.d.mana_cost}')
-                p.hand.remove(card);p.graveyard.append(card);self.log('discard',p.name,card.d.name,'Cleanup maximum hand size')
+            if self.selection_batch_enabled():
+                count=max(0,len(p.hand)-7)
+                if count:
+                    selected=self._request_selection('cleanup_discard_selection',p,f'Cleanup: choose exactly {count} cards to discard to seven.',p.hand,
+                        lambda card:f'{card.d.name} [{card.uid}]',minimum=count,maximum=count)
+                    for card in selected:
+                        p.hand.remove(card);p.graveyard.append(card);self.log('discard',p.name,card.d.name,'Cleanup maximum hand size')
+            else:
+                while len(p.hand)>7:
+                    card=self._request_decision('cleanup_discard',p,f'Cleanup: choose a card to discard ({len(p.hand)} cards; maximum 7).',list(p.hand),
+                               lambda card:f'{card.d.name} {card.d.mana_cost}')
+                    p.hand.remove(card);p.graveyard.append(card);self.log('discard',p.name,card.d.name,'Cleanup maximum hand size')
         for owner in self.players.values():
             for necromancy in list(owner.battlefield):
                 if necromancy.name=='Necromancy' and necromancy.metadata.get('flash_cleanup_due',10**9)<=self.turn_number:
@@ -8506,6 +8664,7 @@ class ManualGame(sim.Game):
         an ``until source leaves`` duration remain immediate; actual triggered
         abilities are announced here and resolved through the common trigger stack.
         """
+        source_name=q.copy_of or q.name
         triggers=[]
         active=self.players[self.turn_order[self.active_idx]]
         lki_power=self.power(q)
@@ -8528,21 +8687,21 @@ class ManualGame(sim.Game):
 
         # Effects worded "until this leaves" end immediately, without using the
         # stack.  Oblivion Ring/LRW/Wave use separate leaves triggers below.
-        if q.name in {'Touch the Spirit Realm','Prayer of Binding','Grasp of Fate'}:
+        if source_name in {'Touch the Spirit Realm','Prayer of Binding','Grasp of Fate'}:
             for uid in list(q.metadata.get('linked_exiled_uids',[])):
                 return_exiled(uid,f'{q.name} leaves linked return')
 
         # Removing an Aura/equipment-derived continuous effect is immediate.
-        if q.name=='Parasitic Impetus' and q.attached_to:
+        if source_name=='Parasitic Impetus' and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found:found[1].metadata.pop('goaded_by',None)
-        if q.name=='Angelic Destiny' and q.attached_to:
+        if source_name=='Angelic Destiny' and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found:found[1].metadata.pop('angelic_destiny_uid',None)
-        if q.name=='Celestial Armor' and q.attached_to:
+        if source_name=='Celestial Armor' and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found:found[1].metadata.pop('celestial_armor_uid',None)
-        if q.name=='Darksteel Mutation' and q.attached_to:
+        if source_name=='Darksteel Mutation' and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found:
                 controller,target=found;original=target.metadata.pop('darksteel_original',None)
@@ -8556,7 +8715,7 @@ class ManualGame(sim.Game):
                 target.metadata.pop('mutated',None)
                 self.log('aura_restore',controller.name,q.name,
                          f'{target.name} regains its printed characteristics',target_uid=target.uid)
-        if q.name=='Fallen Ideal' and q.attached_to:
+        if source_name=='Fallen Ideal' and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found and found[1].metadata.pop('fallen_granted_flying',False):found[1].keywords.discard('flying')
 
@@ -8573,7 +8732,7 @@ class ManualGame(sim.Game):
             add(p,'The Ozolith',f'put {lki_counters} on The Ozolith',resolve_ozolith)
 
         if died:
-            if q.name=='Essence Channeler' and lki_counters:
+            if source_name=='Essence Channeler' and lki_counters:
                 choices=[creature for creature in p.battlefield if self.is_creature_perm(creature)]
                 target=self._request_decision('essence_channeler_target',p,
                     'Essence Channeler died: choose target creature you control.',choices,
@@ -8594,11 +8753,11 @@ class ManualGame(sim.Game):
             for opponent in self.opponents(p):
                 hook=self.perm(opponent,'The Meathook Massacre')
                 if hook:add(opponent,hook.name,'gain 1 life',lambda opponent=opponent:self.gain_life(opponent,1,'Meathook opponent creature death'))
-            if q.name=='Solemn Simulacrum':add(p,q.name,'draw a card',lambda:self.draw(p,1,'Solemn death'))
-            if q.name=="Elenda's Hierophant":
+            if source_name=='Solemn Simulacrum':add(p,q.name,'draw a card',lambda:self.draw(p,1,'Solemn death'))
+            if source_name=="Elenda's Hierophant":
                 add(p,q.name,f'create {lki_power} Vampire tokens',
                     lambda amount=min(lki_power,40):[self.token(p,'Vampire',1,1,{'lifelink'}) for _ in range(amount)])
-            if q.name=='Fiendish Panda':
+            if source_name=='Fiendish Panda':
                 legal=[card for card in p.graveyard if card.d.is_creature and 'Bear' not in card.d.type_line
                        and card.d.mv<=lki_power and card.uid!=q.uid]
                 target=self._request_decision('fiendish_panda_target',p,
@@ -8632,7 +8791,7 @@ class ManualGame(sim.Game):
         if (q.copy_of or q.name) in {'Vesperlark','Reveillark'}:
             trigger=self.build_lark_ltb_trigger(p,q)
             if trigger:triggers.append(trigger)
-        if died and q.name=='Glen Elendra Archmage' and lki_counters.get('-1/-1',0)==0:
+        if died and source_name=='Glen Elendra Archmage' and lki_counters.get('-1/-1',0)==0:
             owner=self.players[q.owner]
             def resolve_persist(owner=owner):
                 card=next((card for card in owner.graveyard if card.uid==q.uid),None)
@@ -8640,24 +8799,24 @@ class ManualGame(sim.Game):
                 owner.graveyard.remove(card);returned=self._put_card_bf(owner,card,'Glen Elendra Archmage persist')
                 returned.counters['-1/-1']=1;self.log('persist',owner.name,q.name,'Returned with a -1/-1 counter',uid=q.uid)
             add(p,q.name,'persist: return it with a -1/-1 counter',resolve_persist)
-        if q.name=='Fallen Ideal' and died:
+        if source_name=='Fallen Ideal' and died:
             owner=self.players[q.owner]
             def resolve_fallen(owner=owner):
                 card=next((card for card in owner.graveyard if card.uid==q.uid),None)
                 if card:owner.graveyard.remove(card);owner.hand.append(card);self.log('return_to_hand',owner.name,q.name,'Fallen Ideal graveyard trigger')
             add(p,q.name,'return it to its owner\'s hand',resolve_fallen)
-        if q.name in {'Animate Dead','Dance of the Dead','Necromancy'} and q.attached_to:
+        if source_name in {'Animate Dead','Dance of the Dead','Necromancy'} and q.attached_to:
             found=battlefield_object(q.attached_to)
             if found:
                 enchanted_controller,enchanted=found
                 add(p,q.name,f'{enchanted_controller.name} sacrifices {enchanted.name}',
                     lambda enchanted_controller=enchanted_controller,enchanted=enchanted:self.leave_battlefield(enchanted_controller,enchanted,'graveyard',f'{q.name} left battlefield') if enchanted in enchanted_controller.battlefield else None)
-        if q.name=='Leonin Relic-Warder' and q.metadata.get('exiled_uid'):
+        if source_name=='Leonin Relic-Warder' and q.metadata.get('exiled_uid'):
             add(p,q.name,'return the exiled card',lambda uid=q.metadata['exiled_uid']:return_exiled(uid,'Leonin Relic-Warder leaves'))
-        if q.name=='Oblivion Ring':
+        if source_name=='Oblivion Ring':
             for uid in list(q.metadata.get('linked_exiled_uids',[])):
                 add(p,q.name,'return the exiled card',lambda uid=uid:return_exiled(uid,'Oblivion Ring leaves'))
-        if q.name=='Parallax Wave':
+        if source_name=='Parallax Wave':
             uids=list(q.metadata.get('wave_exiled_uids',[]))
             if uids:add(p,q.name,'each player returns all cards exiled with Parallax Wave',
                         lambda uids=uids:[return_exiled(uid,'Parallax Wave leaves linked return') for uid in uids])
@@ -8673,15 +8832,19 @@ class ManualGame(sim.Game):
         power_limit=1 if source_name=='Vesperlark' else 2
         maximum=1 if source_name=='Vesperlark' else 2
         legal=[card for card in p.graveyard if card.d.is_creature and self.card_base_power(card.d.name)<=power_limit]
-        selected=[]
-        for slot in range(maximum):
-            remaining=[card for card in legal if card not in selected]
-            if not remaining:break
-            card=self._request_decision('lark_target',p,
-                f'{source_name} left the battlefield: choose target creature card {slot+1} of up to {maximum}.',
-                remaining,lambda card:f'{card.d.name} power={self.card_base_power(card.d.name)}',allow_pass=True)
-            if not card:break
-            selected.append(card)
+        if self.selection_batch_enabled():
+            selected=self._request_selection('lark_targets',p,f'{source_name} left the battlefield: choose up to {maximum} target creature cards.',legal,
+                lambda card:f'{card.d.name} [{card.uid}] power={self.card_base_power(card.d.name)}',maximum=maximum)
+        else:
+            selected=[]
+            for slot in range(maximum):
+                remaining=[card for card in legal if card not in selected]
+                if not remaining:break
+                card=self._request_decision('lark_target',p,
+                    f'{source_name} left the battlefield: choose target creature card {slot+1} of up to {maximum}.',
+                    remaining,lambda card:f'{card.d.name} power={self.card_base_power(card.d.name)}',allow_pass=True)
+                if not card:break
+                selected.append(card)
         if not selected:return None
         def resolve_lark():
             for card in selected:

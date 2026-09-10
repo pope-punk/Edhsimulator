@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scope": "Synthetic characteristic evaluation only; excludes inference, transport and live gameplay",
+  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "python": "3.12.11",
+  "platform": "Linux-6.8.0-1064-azure-x86_64-with-glibc2.36",
+  "repeats": 7,
+  "reference": "Same evaluator with dependency pruning disabled; not a legacy-host latency baseline",
+  "cases": [
+    {
+      "case": "independent_modifiers",
+      "objects": 120,
+      "continuous_effects": 24,
+      "semantic_parity": true,
+      "result_sha256": "26a8289d295f9ccd2dd3fea0512c79891928bda0d185498345753c33d5535578",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            27.61781,
+            28.813042,
+            27.63134,
+            27.526004,
+            27.883925,
+            27.543279,
+            34.852254
+          ],
+          "median_ms": 27.63134,
+          "p95_ms": 34.852254
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            1488.862388,
+            1608.816355,
+            1595.657208,
+            1563.754306,
+            1614.320404,
+            1541.366609,
+            1523.168022
+          ],
+          "median_ms": 1563.754306,
+          "p95_ms": 1614.320404
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000184143,
+            0.000180608,
+            0.00017224500000000002,
+            0.000170743,
+            0.000180808,
+            0.00016894000000000002,
+            0.000173327
+          ],
+          "median_ms": 0.000173327,
+          "p95_ms": 0.000184143
+        }
+      },
+      "median_speedup_vs_exhaustive": 56.59350237809675
+    },
+    {
+      "case": "mixed_layers",
+      "objects": 58,
+      "continuous_effects": 10,
+      "semantic_parity": true,
+      "result_sha256": "fdc8482dc43d9f66c9ff00dc97ec7a008f7400547b3dff8888eae45a0a5e4bc6",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            6.461699,
+            6.374019,
+            6.394559,
+            6.275843,
+            6.236325,
+            6.264166,
+            6.283004
+          ],
+          "median_ms": 6.283004,
+          "p95_ms": 6.461699
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            52.054695,
+            50.991588,
+            51.043236,
+            51.952724,
+            51.179728,
+            51.172076,
+            51.461105
+          ],
+          "median_ms": 51.179728,
+          "p95_ms": 52.054695
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000169972,
+            0.00016857,
+            0.000169491,
+            0.000183883,
+            0.000169982,
+            0.000169161,
+            0.000169451
+          ],
+          "median_ms": 0.000169491,
+          "p95_ms": 0.000183883
+        }
+      },
+      "median_speedup_vs_exhaustive": 8.145741750283781
+    },
+    {
+      "case": "no_continuous_effects",
+      "objects": 120,
+      "continuous_effects": 0,
+      "semantic_parity": true,
+      "result_sha256": "5b948241112396cd59815ec98a63a7a74927cd5f63d435341e444db0cb9c7939",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            0.687168,
+            0.748119,
+            0.561993,
+            0.554011,
+            0.552669,
+            0.551748,
+            0.563295
+          ],
+          "median_ms": 0.561993,
+          "p95_ms": 0.748119
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            0.610795,
+            0.583114,
+            0.568062,
+            0.565959,
+            0.561953,
+            0.564927,
+            0.564888
+          ],
+          "median_ms": 0.565959,
+          "p95_ms": 0.610795
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000167989,
+            0.00016669700000000002,
+            0.000169321,
+            0.000177754,
+            0.00016802900000000001,
+            0.000167258,
+            0.00016869999999999998
+          ],
+          "median_ms": 0.00016802900000000001,
+          "p95_ms": 0.000177754
+        }
+      },
+      "median_speedup_vs_exhaustive": 1.0070570274006971
+    }
+  ]
+}
