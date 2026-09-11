@@ -9,7 +9,7 @@ class AdmissionTests(unittest.TestCase):
         report = readiness()
         self.assertFalse(report['production_ready'])
         self.assertEqual(RulesKernel(RulesState(('A','B')),()).snapshot()['schema'],report['kernel_checkpoint_schema'])
-        self.assertEqual(3, report['fixture_card_count'])
+        self.assertEqual(2, report['fixture_card_count'])
         self.assertEqual(7, sum(card['fixture_program'] is not None for card in report['cards']))
         body = next(card for card in report['cards'] if card['card_id'] == 'body-double')
         self.assertEqual('program_authored', body['status'])
@@ -18,7 +18,7 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(report['card_count'], len(report['cards']))
         self.assertTrue(all(not card['production_certified'] for card in report['cards']))
         starfield = next(card for card in report['cards'] if card['card_id'] == 'starfield-of-nyx')
-        self.assertEqual('fixture_only', starfield['status'])
+        self.assertEqual('program_authored', starfield['status'])
         self.assertEqual(64, len(starfield['fixture_sha256']))
         self.assertGreater(len(report['blockers']), 0)
 

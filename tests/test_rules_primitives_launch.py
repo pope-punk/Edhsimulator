@@ -13,7 +13,7 @@ class LaunchTests(unittest.TestCase):
             self.assertFalse(target.exists());self.assertFalse(report['initialized'])
             self.assertIsNone(report['launch_command'])
             self.assertEqual('blocked_rules_migration',report['status'])
-            self.assertEqual(135,report['unreviewed_program_count'])
+            self.assertEqual(108,report['unreviewed_program_count'])
             self.assertEqual(1,report['requested']['short_term_sol_fast'])
             self.assertFalse(report['requested']['learning_enabled'])
             self.assertEqual(report,preflight(target,learning='disabled'))

@@ -105,7 +105,7 @@ class CounterRules:
         types=frozenset() if obj is None else self.effective(recipient).types
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
-            for ability in self.definition(source).abilities:
+            for ability in self._trigger_abilities(source,'counters_added'):
                 event=ability.event
                 if event.kind!='counters_added':continue
                 if event.subject=='self' and (obj is None or source.ref!=recipient):continue

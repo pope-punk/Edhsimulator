@@ -6,9 +6,11 @@ Dependencies are re-evaluated within a layer; multi-layer effects retain their
 recipient set. This is not an implementation of arbitrary continuous effects.
 """
 from dataclasses import dataclass, replace
+import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
-from .rules_program import SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
+from .rules_program import DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -23,17 +25,21 @@ class Characteristics:
     keywords: frozenset[str] = frozenset()
     supertypes: frozenset[str] = frozenset()
     colors: frozenset[str] = frozenset()
+    granted_abilities: tuple = ()
+    mana_symbols: tuple[str,...] = ()
 
 
 def base(obj, definitions):
     definition = definitions[obj.effective_definition]
     subtypes = frozenset(definition.subtypes) | ({'Aura'} if definition.enchant else set())
-    return Characteristics(frozenset(definition.types), frozenset(subtypes),
+    subtypes=expanded_subtypes(tuple(sorted(subtypes)),definition.all_subtype_sets) if definition.all_subtype_sets else subtypes
+    return Characteristics(frozenset(definition.types) | frozenset(obj.copied_add_types), frozenset(subtypes),
                            definition.mana_value + (definition.cast.cost.mana.x_symbols * obj.cast_x
                                if obj.zone == Zone.STACK and definition.cast else 0), definition.power, definition.toughness,
                            target_restrictions=definition.target_restrictions if obj.zone == Zone.BATTLEFIELD else (),
                            keywords=frozenset(definition.keywords),
-                           supertypes=frozenset(definition.supertypes),colors=frozenset(definition.colors))
+                           supertypes=frozenset(definition.supertypes),colors=frozenset(definition.colors),
+                           mana_symbols=definition.cast.cost.mana.symbols if definition.cast else ())
 
 
 def characteristics_match(ranges, view):
@@ -44,12 +50,17 @@ def characteristics_match(ranges, view):
     return True
 
 
+def counters_match(ranges, obj):
+    if not ranges:return True
+    counters=dict(obj.counters)
+    return all((r.minimum is None or counters.get(r.kind,0)>=r.minimum)
+        and (r.maximum is None or counters.get(r.kind,0)<=r.maximum) for r in ranges)
+
+
 def matches(selector, obj, view, source):
     if selector.characteristics and obj.zone==Zone.BATTLEFIELD and 'Creature' not in view.types and any(bound.statistic in {'power','toughness'} for bound in selector.characteristics):return False
-    counters=dict(obj.counters) if selector.counters else None
     return (not obj.phased and obj.zone == selector.zone
-        and (not selector.counters or all((r.minimum is None or counters.get(r.kind,0)>=r.minimum)
-            and (r.maximum is None or counters.get(r.kind,0)<=r.maximum) for r in selector.counters))
+        and counters_match(selector.counters,obj)
         and (selector.commander is None or obj.commander==selector.commander)
         and (selector.tapped is None or obj.tapped==selector.tapped)
         and (not selector.exclude_source or obj.ref != source.ref)
@@ -69,7 +80,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
+    return {ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None):
@@ -86,6 +97,14 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
             or condition.players=='opponents' and player!=source.controller
             or condition.players=='controller' and player==source.controller)
         return count>=condition.minimum
+    if isinstance(condition,DevotionCondition):
+        remaining=condition.minimum;colors=set(condition.colors)
+        for obj in objects:
+            if remaining<=0:return True
+            if obj.ref!=excluding_ref and obj.zone==Zone.BATTLEFIELD and not obj.phased and obj.controller==source.controller:
+                # Each hybrid symbol contributes once to combined devotion.
+                remaining-=sum(bool(colors.intersection(symbol.split('/'))) for symbol in views[obj.ref].mana_symbols)
+        return remaining<=0
     if isinstance(condition,LifeCondition):
         if life_totals is None or source.controller not in life_totals:
             raise RulesViolation('Life conditions require explicit player state')
@@ -115,16 +134,24 @@ def _recipients(source, effect, objects, views, entering_ref=None, life_totals=N
         and (effect.subject != 'attached' or obj.ref == source.attached_to))
 
 
-def _apply(views, refs, changes, key):
+def _apply(views, refs, changes, key, grant_key=None):
     for ref in refs:
         view = views[ref]
-        for change in changes:
+        for change_index,change in enumerate(changes):
             if isinstance(change, ChangeTypes):
-                view = replace(view, types=(view.types - set(change.remove)) | set(change.add))
+                types=(view.types-set(change.remove))|set(change.add)
+                subtypes=view.subtypes
+                if {'Creature','Kindred'}&view.types and not {'Creature','Kindred'}&types:subtypes=subtypes-CREATURE_TYPES
+                if 'Land' in view.types and 'Land' not in types:subtypes=subtypes-LAND_TYPES
+                view=replace(view,types=types,subtypes=subtypes)
             elif isinstance(change,AddSubtypes):
-                if change.card_type in view.types:view=replace(view,subtypes=view.subtypes|set(change.subtypes))
+                if change.card_type in view.types:view=replace(view,subtypes=view.subtypes|expanded_subtypes(change.subtypes,change.sets))
             elif isinstance(change,SetColors):
                 view=replace(view,colors=frozenset(change.colors))
+            elif isinstance(change,AddActivated):
+                identity=[grant_key[0].to_json() if grant_key else None,key,change_index,change.ability.ability_id]
+                ability=replace(change.ability,ability_id='granted:'+json.dumps(identity,sort_keys=True,separators=(',',':')))
+                view=replace(view,granted_abilities=view.granted_abilities+(ability,))
             elif isinstance(change,AddKeywords):
                 view=replace(view,keywords=view.keywords|set(change.keywords))
             elif 'Creature' in view.types:
@@ -161,7 +188,7 @@ def condition_selectors(condition):
         for child in condition.conditions:yield from condition_selectors(child)
     elif isinstance(condition,NotCondition):
         yield from condition_selectors(condition.condition)
-    elif condition is not None and not isinstance(condition,(LifeCondition,PlayerCountCondition)):
+    elif condition is not None and not isinstance(condition,(LifeCondition,PlayerCountCondition,DevotionCondition)):
         yield condition.selector
 
 
@@ -177,15 +204,17 @@ def _may_change_recipients(changes, effect):
     subtype_reads={subtype for selector in selectors for subtype in selector.subtypes+selector.any_subtypes+selector.excluded_subtypes}
     for change in changes:
         if isinstance(change, ChangeTypes):
-            if reads.intersection(change.add + change.remove) or 'Creature' in change.add+change.remove and statistics & {'power','toughness'}:
+            if (reads.intersection(change.add + change.remove) or 'Creature' in change.add+change.remove and statistics & {'power','toughness'}
+                    or {'Creature','Kindred'}&set(change.remove) and subtype_reads & CREATURE_TYPES
+                    or 'Land' in change.remove and subtype_reads & LAND_TYPES):
                 return True
         elif isinstance(change,SetColors):
             if any(s.colors or s.any_colors or s.excluded_colors for s in selectors):return True
         elif isinstance(change,AddSubtypes):
-            if subtype_reads.intersection(change.subtypes):return True
+            if subtype_reads.intersection(expanded_subtypes(change.subtypes,change.sets)):return True
         elif isinstance(change,(SetPT,ModifyPT,SwitchPT)):
             if statistics & {'power','toughness'}:return True
-        elif not isinstance(change,AddKeywords):
+        elif not isinstance(change,(AddKeywords,AddActivated)):
             return True
     return False
 
@@ -236,7 +265,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             for key, source, effect in pending:
                 refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players)
                 locked.setdefault(key, refs)
-                _apply(views, refs, changes[key], effect.effect_id)
+                _apply(views, refs, changes[key], effect.effect_id, key)
             pending = []
         while pending:
             def recipients(row, state):
@@ -252,7 +281,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
                 if not affected:
                     continue
                 hypothetical = dict(views)
-                _apply(hypothetical, current[other[0]], changes[other[0]], other[2].effect_id)
+                _apply(hypothetical, current[other[0]], changes[other[0]], other[2].effect_id, other[0])
                 for row in affected:
                     if current[row[0]] != recipients(row, hypothetical):
                         dependencies[row[0]].add(other[0])
@@ -261,7 +290,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             row = ready[0]
             refs = current[row[0]]
             locked.setdefault(row[0], refs)
-            _apply(views, refs, changes[row[0]], row[2].effect_id)
+            _apply(views, refs, changes[row[0]], row[2].effect_id, row[0])
             pending.remove(row)
         if layer == 73:
             for obj in objects:

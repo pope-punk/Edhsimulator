@@ -2,14 +2,14 @@
 
 This experimental slice uses already-produced, unrestricted mana and one atomic
 activation zone-cost group or fixed source-counter costs. Casting zone costs, separately ordered activation
-cost groups, alternative costs, restricted mana and mana during announcement
+cost groups, keyword-specific alternative-cost consequences, restricted mana and mana during announcement
 remain unsupported. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
 """
 from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
-from .rules_program import ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -66,13 +66,14 @@ class PreparedAction:
     implementation: str
     cost: object
     mode_choices: tuple = ()
+    alternative_id: str | None = None
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
             'source': self.source.to_json(), 'targets': [ref.to_json() for ref in self.targets],
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
-            'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
+            'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
     def from_json(cls, value):
@@ -103,6 +104,7 @@ class CastingRules:
         """Basic land types confer mana abilities independently of printed text."""
         abilities = self.definition(source).activated
         view = self.effective(source.ref)
+        if source.zone == Zone.BATTLEFIELD:abilities+=view.granted_abilities
         if source.zone == Zone.BATTLEFIELD and 'Land' in view.types:
             intrinsic = tuple(ActivatedProgram('intrinsic-land:' + subtype, CostSpec(tap_source=True),
                 (AddMana((symbol,)),), mana_ability=True)
@@ -144,7 +146,7 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=()):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None):
         self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
             raise RulesViolation('Action requires a bounded nonempty identity')
@@ -155,7 +157,7 @@ class CastingRules:
         source = self.state.get(ref)
         program = self.definition(source)
         if kind == 'cast':
-            if source.zone not in {Zone.HAND, Zone.COMMAND} or source.owner != actor:
+            if program.cast is None or source.zone not in program.cast.origin_zones or source.owner != actor:
                 raise RulesViolation('Unsupported spell origin or permission')
             if source.zone == Zone.COMMAND and not source.commander:
                 raise RulesViolation('Only a commander has this command-zone permission')
@@ -178,6 +180,12 @@ class CastingRules:
         if specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in self.effective(ref).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
             raise RulesViolation('Action requires sorcery timing')
         cost = specification.cost
+        if alternative_id is not None:
+            if kind!='cast' or type(alternative_id) is not str:raise RulesViolation('Invalid alternative casting declaration')
+            alternative=next((a for a in specification.alternatives if a.alternative_id==alternative_id),None)
+            if alternative is None or not self._condition_holds(alternative.condition,replace(source,controller=actor)):
+                raise RulesViolation('Alternative casting cost is unavailable')
+            cost=alternative.cost
         if type(x_value) is not int or x_value < 0 or x_value and not cost.mana.x_symbols:
             raise RulesViolation('Invalid announced X')
         if kind=='activate' and x_value<specification.minimum_x:raise RulesViolation('Announced X is below the activation minimum')
@@ -200,25 +208,27 @@ class CastingRules:
             if 'Creature' in view.types and 'haste' not in view.keywords and not self.state.ready_since_turn_start(ref):
                 raise RulesViolation('Creature has not been controlled since its controller’s turn began')
         generic = cost.mana.generic + cost.mana.x_symbols * x_value
+        generic-=self._quantity(specification.generic_reduction,{'source':source.to_json(),'controller':actor})
         if kind == 'cast':
             if source.commander and source.zone == Zone.COMMAND:
                 generic += 2 * self.state.commander_casts(ref.card_id)
             proposed = replace(source, zone=Zone.STACK, controller=actor, cast_x=x_value)
             proposed_view=base(proposed,self.definitions)
-            generic-=self._quantity(self.definition(source).cast.generic_reduction,
-                {'source':source.to_json(),'controller':actor})
             for permanent in self.state.objects(Zone.BATTLEFIELD):
                 if permanent.phased:
                     continue
+                for restriction in self.definition(permanent).casting_restrictions:
+                    if source.zone in restriction.origin_zones and matches(restriction.selector,proposed,proposed_view,permanent):
+                        raise RulesViolation('A battlefield effect prohibits this spell from its origin zone')
                 for modifier in self.definition(permanent).cost_modifiers:
-                    if matches(modifier.selector, proposed, proposed_view, permanent):
+                    if (not modifier.origin_zones or source.zone in modifier.origin_zones) and matches(modifier.selector, proposed, proposed_view, permanent):
                         generic += modifier.generic_delta
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=()):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id)
 
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value)
@@ -255,7 +265,7 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         resources = self._resource_payment(quote, payment)
@@ -280,10 +290,25 @@ class CastingRules:
         if boundary is None and mana_ability and quote.actor in self.state.live_players:self.priority=quote.actor
         return boundary
 
+    def _produce_mana(self,player,symbols,*,tapped_for_mana=False):
+        # Supported multipliers commute. Each active replacement modifies the
+        # production event once; it does not create another mana ability/event.
+        factor=1
+        if symbols and tapped_for_mana:
+            for obj in self.state.objects(Zone.BATTLEFIELD):
+                if obj.phased:continue
+                for rule in self.definition(obj).tapped_mana_replacements:
+                    if (rule.players=='all' or rule.players=='controller' and obj.controller==player
+                            or rule.players=='opponents' and obj.controller!=player):factor*=rule.multiplier
+        symbols=tuple(symbols)*factor
+        self.state.add_mana(player,symbols)
+        self._event('mana_added',player=player,symbols=list(symbols))
+
     def _commit_prepared(self,quote,resources,*,paid=False,source=None,ability=None,zone_payment=None,previous_types=None,prepared_frame=None):
         source = source or self.state.get(quote.source)
         program = self.definition(source)
-        immediate_mana=()
+        immediate_mana=();tapped_for_mana=False
+        tap_observers=self._tap_observers(resources.taps) if not paid else ()
         if quote.kind == 'cast':
             events = self.state.move((ZoneMove(source.ref, Zone.STACK, quote.actor, cast_x=quote.x_value),),
                                      'cast', payment=resources)
@@ -295,6 +320,7 @@ class CastingRules:
                 effects = (Move('source', Zone.BATTLEFIELD),)
             frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                                 target_spec=program.spell_targets,chosen_x=quote.x_value)
+            if quote.alternative_id is not None:frame['alternative_id']=quote.alternative_id
             if program.modal is not None:
                 selected=dict(quote.mode_choices)
                 frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]
@@ -313,9 +339,10 @@ class CastingRules:
                 self.state.move((), 'activation_payment', payment=resources)
                 source=self.state.get(quote.source)
             mana_ability = ability.mana_ability
+            tapped_for_mana=mana_ability and quote.cost.tap_source and source.zone==Zone.BATTLEFIELD
             if mana_ability and not all(isinstance(effect,AddMana) for effect in ability.effects):
                 frame=self._frame(source,quote.actor,ability.effects,chosen_x=quote.x_value)
-                frame.update(ability_id=ability.ability_id,mana_ability=True,return_priority=quote.actor)
+                frame.update(ability_id=ability.ability_id,mana_ability=True,return_priority=quote.actor,tapped_for_mana=tapped_for_mana)
                 self.resolving=frame
             elif mana_ability:
                 immediate_mana=ability.effects
@@ -337,9 +364,9 @@ class CastingRules:
         self.priority = quote.actor
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
+        self._collect_tapped(resources.taps,tap_observers)
         for effect in immediate_mana:
-            self.state.add_mana(quote.actor,effect.symbols)
-            self._event('mana_added',player=quote.actor,symbols=list(effect.symbols))
+            self._produce_mana(quote.actor,effect.symbols,tapped_for_mana=tapped_for_mana)
         return mana_ability
 
     def _zone_cost_refs(self,quote,payment):
@@ -382,17 +409,19 @@ class CastingRules:
         for source in observers:
             if source.phased:
                 continue
-            for ability in self.definition(source).abilities:
+            for ability in self._trigger_abilities(source,kind):
                 pattern = ability.event
                 if source.zone == Zone.STACK and pattern.subject != 'self':
                     continue
                 if pattern.kind != kind or pattern.subject == 'self' and source.ref != announced.ref:
                     continue
-                if pattern.controller_only and source.controller != actor:
+                if not event_player_matches(pattern,source.controller,actor):
                     continue
                 if pattern.types:
                     if types is None:
                         try:types=self.effective(announced.ref).types
                         except RulesViolation:types=set(previous_types) if previous_types is not None else self._damage_source(announced)[1].types
                     if not set(pattern.types) <= types:continue
-                self._trigger(source, ability, values={"event_x":announced.cast_x} if kind=="spell_cast" else values)
+                captured={"event_x":announced.cast_x} if kind=="spell_cast" else dict(values or {})
+                if kind in ACTOR_EVENTS:captured["event_controllers"]=[actor]
+                self._trigger(source, ability, values=captured)

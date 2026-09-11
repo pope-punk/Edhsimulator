@@ -5,6 +5,8 @@ kernel has no face-down/reveal-permission vocabulary; production admission stays
 closed until those semantics and the complete transport/replay contract exist.
 """
 from copy import deepcopy
+from .rules_program import encode
+from .rules_creature_types import CREATURE_TYPES
 from .rules_state import Zone,RulesViolation,RulesObject,ObjectRef
 
 
@@ -13,17 +15,20 @@ PUBLIC_ZONES=(Zone.BATTLEFIELD,Zone.GRAVEYARD,Zone.EXILE,Zone.COMMAND)
 
 def _card(kernel,obj,views):
     view=views[obj.ref]
+    all_creature_types=CREATURE_TYPES<=view.subtypes
     limits=[{'ability_id':ability.ability_id,'remaining':kernel.remaining_trigger_uses(obj,ability)}
             for ability in kernel.definition(obj).abilities if ability.trigger_limit is not None] if obj.zone==Zone.BATTLEFIELD else []
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
         'definition_id':obj.effective_definition,'owner':obj.owner,'controller':obj.controller,
-        'zone':obj.zone.value,'types':sorted(view.types),'subtypes':sorted(view.subtypes),
+        'zone':obj.zone.value,'types':sorted(view.types),'subtypes':sorted(view.subtypes-CREATURE_TYPES if all_creature_types else view.subtypes),
+        **({'all_creature_types':True} if all_creature_types else {}),
         'supertypes':sorted(view.supertypes),'keywords':sorted(view.keywords),'colors':sorted(view.colors),
         'mana_value':view.mana_value,'power':view.power,'toughness':view.toughness,
         'tapped':obj.tapped,'phased':obj.phased,'counters':dict(obj.counters),
         'damage':obj.damage_marked,'commander':obj.commander,'token':obj.token,
         'attached_to':obj.attached_to.to_json() if obj.attached_to else None,
-        **({'limited_triggers':limits} if limits else {})}
+        **({'limited_triggers':limits} if limits else {}),
+        **({'granted_abilities':encode(view.granted_abilities)} if view.granted_abilities else {})}
 
 
 def decision_for_actor(kernel,actor):
@@ -84,6 +89,7 @@ def project_actor(kernel,actor):
         return {'id':frame['id'],'kind':'spell' if frame['spell'] else 'ability',
             'name':kernel.definition(source).name,'source':source.ref.to_json(),
             'controller':frame['controller'],'ability_id':frame.get('ability_id'),'chosen_x':frame['chosen_x'],
+            **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
             **({'event_x':frame['values']['event_x']} if 'event_x' in frame.get('values',{}) else {}),
             **({'event_amount':frame['values']['event_amount']} if 'event_amount' in frame.get('values',{}) else {}),
             **({'defending_player':frame['values']['defending_player']} if 'defending_player' in frame.get('values',{}) else {}),

@@ -76,18 +76,20 @@ class RulesObject:
     damage_marked:int=0
     deathtouch_hit:bool=False
     combat_departure:int=0
+    copied_add_types:tuple[str,...]=()
 
     @property
     def effective_definition(self):return self.copied_definition or self.definition
 
     def to_json(self):
-        return {**asdict(self),'ref':self.ref.to_json(),'zone':self.zone.value,'entry_flags':sorted(self.entry_flags)}
+        return {**asdict(self),'ref':self.ref.to_json(),'zone':self.zone.value,'entry_flags':sorted(self.entry_flags),'copied_add_types':list(self.copied_add_types)}
 
     @classmethod
     def from_json(cls,value):
         value=dict(value);value['ref']=ObjectRef.from_json(value['ref']);value['zone']=Zone(value['zone'])
         value['attached_to']=ObjectRef.from_json(value['attached_to']) if value['attached_to'] else None
         value['entry_flags']=frozenset(value['entry_flags']);value['counters']=tuple(tuple(row) for row in value['counters'])
+        value['copied_add_types']=tuple(value['copied_add_types'])
         return cls(**value)
 
 
@@ -113,6 +115,7 @@ class ZoneMove:
     cast_x:int=0
     tapped:bool=False
     counters:tuple[tuple[str,int],...]=()
+    copied_add_types:tuple[str,...]=()
 
 
 @dataclass(frozen=True)
@@ -128,7 +131,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=11
+    CHECKPOINT_SCHEMA=12
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -289,11 +292,13 @@ class RulesState:
             if move.position is not None and (type(move.position) is not int or move.position<0):raise RulesViolation('Invalid destination position')
             if (not isinstance(move.counters,tuple) or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0] or type(row[1]) is not int or row[1]<=0 for row in move.counters)
                     or len({row[0] for row in move.counters})!=len(move.counters)):raise RulesViolation('Invalid entry counters')
+            if (not isinstance(move.copied_add_types,tuple) or any(type(t) is not str or t not in {'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'} for t in move.copied_add_types)
+                    or len(set(move.copied_add_types))!=len(move.copied_add_types) or move.copied_add_types and not move.copied_definition):raise RulesViolation('Invalid copiable type exception')
             if type(move.tapped) is not bool:raise RulesViolation('Invalid entry tapped status')
-            if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters):raise RulesViolation('Entry attributes require battlefield entry')
+            if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters or move.copied_add_types):raise RulesViolation('Entry attributes require battlefield entry')
             after=RulesObject(ObjectRef(before.ref.card_id,before.ref.incarnation+1),before.definition,before.owner,
                 controller,destination,before.token,before.commander,move.copied_definition,
-                counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
+                copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
         if not pending and not detaches and not counter_pairs and payment is None:return ()
         self._batch+=1;events=[]
@@ -352,15 +357,34 @@ class RulesState:
         if len(refs)!=len(existing) or set(refs)!={obj.ref for obj in existing}:raise RulesViolation('Reorder must be a complete exact permutation')
         self._order[(owner,zone)]=[ref.card_id for ref in refs];self._sequence+=1
 
-    def shuffle_library(self,owner):
-        if owner not in self.live_players:raise RulesViolation('Unavailable library owner')
-        ids=list(self._order[(owner,Zone.LIBRARY)]);draw=0
+    def _random_order(self,values):
+        ids=list(values);draw=0
         for index in range(len(ids)-1,0,-1):
             bound=index+1;limit=(2**256//bound)*bound
             while True:
                 value=int.from_bytes(hashlib.sha256(f'{self._shuffle_seed}:{self._shuffle_nonce}:{draw}'.encode()).digest(),'big');draw+=1
                 if value<limit:break
             other=value%bound;ids[index],ids[other]=ids[other],ids[index]
+        return ids
+
+    def random_bottom(self,owner,refs):
+        """Randomize only the selected library subset and put it on the bottom."""
+        if owner not in self.live_players:raise RulesViolation('Unavailable library owner')
+        refs=tuple(refs)
+        if len(set(refs))!=len(refs):raise RulesViolation('Duplicate random-bottom reference')
+        objects=tuple(self.get(ref) for ref in refs)
+        if any(obj.zone!=Zone.LIBRARY or obj.owner!=owner for obj in objects):raise RulesViolation('Invalid random-bottom subset')
+        if not refs:return
+        ids=self._random_order(obj.ref.card_id for obj in objects);chosen=set(ids)
+        middle=[card for card in self._order[(owner,Zone.LIBRARY)] if card not in chosen]
+        self._shuffle_nonce+=1;self._sequence+=1
+        for card in ids:
+            obj=self._objects[card];self._objects[card]=replace(obj,ref=ObjectRef(card,obj.ref.incarnation+1))
+        self._order[(owner,Zone.LIBRARY)]=ids+middle;self.assert_invariants()
+
+    def shuffle_library(self,owner):
+        if owner not in self.live_players:raise RulesViolation('Unavailable library owner')
+        ids=self._random_order(self._order[(owner,Zone.LIBRARY)])
         # Reordering hidden objects retires earlier inspection references. This
         # is not a zone change and must not produce leaves/entry events.
         self._shuffle_nonce+=1;self._sequence+=1

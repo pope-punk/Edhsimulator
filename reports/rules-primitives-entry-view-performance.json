@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "scope": "Synthetic prospective-entry evaluation; excludes construction, inference, transport and live gameplay",
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
+  "python": "3.12.11",
+  "platform": "Linux-6.8.0-1064-azure-x86_64-with-glibc2.36",
+  "repeats": 7,
+  "cache_limit": 64,
+  "cases": [
+    {
+      "case": "bookkeeping_only",
+      "incoming": 24,
+      "passes": 6,
+      "semantic_parity": true,
+      "result_sha256": "682094e3d95f5f71651ada7ceb04ee42156734cb4955e0ebcbecca18a71d599c",
+      "timings": {
+        "cached": {
+          "samples_ms": [
+            104.195557,
+            66.924908,
+            66.762107,
+            100.711703,
+            67.153547,
+            66.288735,
+            83.360462
+          ],
+          "median_ms": 67.153547,
+          "p95_ms": 104.195557
+        },
+        "uncached": {
+          "samples_ms": [
+            405.515625,
+            491.741183,
+            453.786671,
+            398.072271,
+            431.506253,
+            394.404705,
+            490.375669
+          ],
+          "median_ms": 431.506253,
+          "p95_ms": 491.741183
+        }
+      },
+      "median_speedup_vs_uncached": 6.425665840108192
+    },
+    {
+      "case": "material_changes",
+      "incoming": 24,
+      "passes": 6,
+      "semantic_parity": true,
+      "result_sha256": "f29282069041335c6e89ab018f8f9909ae99640d6945378588b53a286ca7fc50",
+      "timings": {
+        "cached": {
+          "samples_ms": [
+            499.676066,
+            396.35739,
+            441.503733,
+            394.54973,
+            387.105104,
+            479.600106,
+            422.673069
+          ],
+          "median_ms": 422.673069,
+          "p95_ms": 499.676066
+        },
+        "uncached": {
+          "samples_ms": [
+            409.878252,
+            469.566452,
+            480.774226,
+            396.57432,
+            399.050281,
+            435.822962,
+            496.317497
+          ],
+          "median_ms": 435.822962,
+          "p95_ms": 496.317497
+        }
+      },
+      "median_speedup_vs_uncached": 1.0311112629700097
+    }
+  ]
+}

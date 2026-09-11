@@ -7,10 +7,11 @@ replacement for ManualGame's four-deck implementation.
 """
 from __future__ import annotations
 import hashlib,json
+from collections import Counter as Counts, OrderedDict
 from dataclasses import replace
 from types import MappingProxyType
 from .rules_state import RulesState,RulesObject,ObjectRef,Zone,ZoneMove,RulesViolation
-from .rules_characteristics import Characteristics, evaluate as evaluate_characteristics, base as base_characteristics, matches as matches_selector, condition_holds, characteristics_match
+from .rules_characteristics import Characteristics, evaluate as evaluate_characteristics, base as base_characteristics, matches as matches_selector, condition_holds, characteristics_match, counters_match
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_choices import Option, ChoiceRequest, PriorityBoundary, choice_capacity
 from .rules_attachments import AttachmentRules
@@ -21,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (SourceCounter,TargetStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,Damage,GainControl,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (event_player_matches,SourceCounter,TargetStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -37,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=76
+    CHECKPOINT_SCHEMA=108
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -58,6 +59,14 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     if previous!=token:raise RulesViolation('Conflicting embedded token definition')
                 else:self.definitions[token.definition_id]=token;pending.append(token)
         programs=tuple(self.definitions.values())
+        index={}
+        for program in programs:
+            grouped={}
+            for ability in program.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
+            index[program.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
+        self._trigger_index=MappingProxyType(index)
+        self._has_attachment_observers=any(a.event.subject=='attached' for p in programs for a in p.abilities)
+        self._has_tap_triggers=any(a.event.kind=='becomes_tapped' for p in programs for a in p.abilities)
         self.definitions=MappingProxyType(self.definitions)
         self.bundle=fingerprint([encode(p) for p in sorted(programs,key=lambda p:p.definition_id)])
         self.active=active_player or state.players[0]
@@ -75,6 +84,9 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
     def definition(self,obj):
         try:return self.definitions[obj.effective_definition]
         except KeyError as exc:raise UnsupportedRule('No supported program for '+obj.effective_definition) from exc
+
+    def _trigger_abilities(self,source,kind):
+        return self._trigger_index[self.definition(source).definition_id].get(kind,())
 
     def _id(self,prefix):self._serial+=1;return f'{prefix}-{self._serial}'
 
@@ -100,10 +112,12 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         self._event(kind,player=player,**data)
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
-            for ability in self.definition(source).abilities:
+            for ability in self._trigger_abilities(source,kind):
                 pattern=ability.event
-                if pattern.kind==kind and (not pattern.controller_only or source.controller==player):
-                    self._trigger(source,ability,values={'event_amount':data['amount']} if kind=='life_gained' else {})
+                if pattern.kind==kind and event_player_matches(pattern,source.controller,player):
+                    captured={'event_controllers':[player]}
+                    if kind=='life_gained':captured['event_amount']=data['amount']
+                    self._trigger(source,ability,values=captured)
 
     def _frame(self,source,controller,effects,*,spell=False,targets=(),target_spec=None,entry_flags=(),chosen_x=0):
         return {'id':self._id('frame'),'source':source.to_json(),'controller':controller,'spell':spell,
@@ -177,30 +191,46 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         return tuple(p for p in order if p in selected and p in self.state.live_players)
 
     def _target_options(self,spec,frame):
-        objects=self._options(self._target_query(spec.selector,frame)) if spec.selector is not None else ()
+        if spec.groups:
+            return tuple(replace(option,key=json.dumps([group.group_id,option.key],separators=(',',':')),
+                label=group.group_id+': '+option.label,group=group.group_id)
+                for group in spec.groups for option in self._target_options(group.targets,frame))
+        candidates=self._target_query(spec.selector,frame) if spec.selector is not None else ()
+        if spec.combat is not None:
+            combat_refs=self._combat_target_refs(spec.combat)
+            candidates=tuple(obj for obj in candidates if obj.ref in combat_refs)
+        objects=self._options(candidates)
         players=tuple(Option('player:'+p,p+' (player)',player=p,group=p) for p in self._players(frame,spec.players)) if spec.players else ()
         return objects+players
 
     def _target_query(self,selector,frame):
         # These permissions constrain targeting, not nontargeted selection.
-        permitted=[]
+        permitted=[];source_types=None
         for obj in self._query(selector,frame):
             view=self.effective(obj.ref)
             if 'shroud' in view.keywords or 'hexproof' in view.keywords and obj.controller!=frame['controller']:continue
-            if any(not rule.opponents_only or obj.controller!=frame['controller'] for rule in view.target_restrictions):continue
+            restricted=False
+            for rule in view.target_restrictions:
+                if rule.opponents_only and obj.controller==frame['controller']:continue
+                if rule.source_types:
+                    if source_types is None:source_types=self._object_information(self._source(frame))[1].types
+                    if not source_types.intersection(rule.source_types):continue
+                restricted=True;break
+            if restricted:continue
             permitted.append(obj)
         return tuple(permitted)
 
     def _options(self,objects):
         return tuple(Option(f'{obj.ref.card_id}@{obj.ref.incarnation}',f'{obj.controller}: {self.definition(obj).name} [{obj.ref.card_id}@{obj.ref.incarnation}]',ref=obj.ref,group=obj.controller) for obj in objects)
 
-    def _choose(self,key,actor,kind,prompt,options,minimum=0,maximum=None,ordered=False,groups=False):
-        options=tuple(options);capacity=choice_capacity(options,groups)
+    def _choose(self,key,actor,kind,prompt,options,minimum=0,maximum=None,ordered=False,groups=False,group_bounds=()):
+        options=tuple(options);capacity=choice_capacity(options,groups,group_bounds)
         maximum=capacity if maximum is None else min(maximum,capacity)
         if minimum>maximum:raise RulesViolation('Required choice has insufficient legal options')
-        if not options:return ()
+        if not options and not group_bounds:return ()
         if actor not in self.state.live_players:actor=self.next_live_player(actor)
-        request=ChoiceRequest(key,actor,kind,prompt,options,minimum,maximum,ordered,groups,self.revision)
+        request=ChoiceRequest(key,actor,kind,prompt,options,minimum,maximum,ordered,groups,self.revision,group_bounds)
+        if not options:return ()
         accepted=self.answers.get(key)
         if accepted is not None:
             # Each execution frame retains exactly the request which was answered.
@@ -266,7 +296,9 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         if pattern.to_zone is not None and pattern.to_zone!=event.after.zone:return False
         subject=event.before if pattern.from_zone==Zone.BATTLEFIELD else event.after
         if pattern.subject=='self' and source.ref!=subject.ref:return False
+        if pattern.subject=='attached' and source.attached_to!=subject.ref:return False
         if pattern.exclude_source and source.ref==subject.ref:return False
+        if not counters_match(pattern.counters,subject):return False
         if (pattern.controller_only or pattern.recipient_relation!='any') and subject.zone not in {Zone.BATTLEFIELD,Zone.STACK}:return False
         if pattern.controller_only and source.controller!=subject.controller:return False
         if pattern.recipient_relation=='controlled' and source.controller!=subject.controller:return False
@@ -275,6 +307,34 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         if view is None:view=base_characteristics(subject,self.definitions)
         return (set(pattern.types)<=view.types and (not pattern.any_types or bool(set(pattern.any_types)&view.types))
                 and characteristics_match(pattern.characteristics,view))
+
+    def _tap_observers(self,refs):
+        # Avoid a battlefield snapshot for bundles without orientation triggers.
+        return self.state.objects(Zone.BATTLEFIELD) if refs and self._has_tap_triggers else ()
+
+    def _collect_tapped(self,refs,before):
+        if not refs or not before or not self._has_tap_triggers:return
+        refs=set(refs)
+        # Resource payments may tap and then sacrifice the same permanent.
+        # Observe the tap before its departure, including copied abilities.
+        objects=tuple(replace(obj,tapped=True) if obj.ref in refs else obj for obj in before)
+        subjects=tuple(obj for obj in objects if obj.ref in refs and not obj.phased)
+        views=None
+        for source in objects:
+            if source.phased:continue
+            for ability in self._trigger_abilities(source,'becomes_tapped'):
+                pattern=ability.event
+                if pattern.kind!='becomes_tapped':continue
+                for subject in subjects:
+                    if pattern.subject=='self' and source.ref!=subject.ref:continue
+                    if pattern.controller_only and source.controller!=subject.controller:continue
+                    if views is None and (pattern.types or ability.occurrence_condition or ability.intervening_if):
+                        views=evaluate_characteristics(objects,self.definitions,temporary=self._temporary_rows(),
+                            life_totals={p:self.state.life(p) for p in self.state.players},
+                            starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players)
+                    if pattern.types and not set(pattern.types)<=views[subject.ref].types:continue
+                    self._trigger(source,ability,bindings={'event_subject':[subject.ref.to_json()]},
+                        condition_objects=objects,condition_views=views)
 
     def _collect(self,events,before,after,before_views=None,before_life_totals=None,before_live_players=None):
         before_views=before_views if before_views is not None else evaluate_characteristics(before,self.definitions,temporary=self._temporary_rows(),life_totals=before_life_totals if before_life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=before_live_players if before_live_players is not None else self.state.live_players)
@@ -287,13 +347,29 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 view=before_views.get(event.before.ref)
                 if view is None:view=base_characteristics(event.before,self.definitions)
                 self.last_known[event.before.ref]=(event.before,view)
+        grave_successors={e.before.ref:e.after.ref for e in events
+            if e.before.zone==Zone.BATTLEFIELD and e.after.zone==Zone.GRAVEYARD} if self._has_attachment_observers else {}
+        # CR 400.7f: only the same batch or the unattached-Aura SBA may
+        # bridge this identity boundary. Later destruction cannot qualify.
+        aura_sbas={e.before.ref:e for e in events if e.cause=='permanent_sba'
+            and e.before.ref in grave_successors} if grave_successors and self.pending_triggers else {}
+        if aura_sbas:
+            for trigger in self.pending_triggers:
+                tracked=trigger.get('values',{}).get('aura_tracking')
+                if not tracked:continue
+                event=aura_sbas.get(ObjectRef.from_json(tracked['source']))
+                if event is not None and event.before.attached_to==ObjectRef.from_json(tracked['attached']):
+                    try:self.state.get(event.before.attached_to)
+                    except RulesViolation:
+                        trigger['bindings']['aura_successor']=[event.after.ref.to_json()]
+                        trigger['values'].pop('aura_tracking',None)
         for event in events:
             # Leaves/dies observations use the whole pre-event battlefield;
             # entrants and ordinary ETB observers use the whole post-event view.
             for sources,lookback in ((before,True),(after,False)):
                 for source in sources:
                     if source.phased:continue
-                    for ability in self.definition(source).abilities:
+                    for ability in self._trigger_abilities(source,'zone_changed'):
                         if (ability.event.from_zone==Zone.BATTLEFIELD)!=lookback:continue
                         if self._matches(ability.event,source,event=event,views=before_views if lookback else after_views):
                             subject=event.before if lookback else event.after
@@ -301,7 +377,14 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                             if event.after.zone==Zone.BATTLEFIELD:values['event_x']=event.before.cast_x if event.before.zone==Zone.STACK else 0
                             if source.ref==event.before.ref and event.after.zone in {Zone.BATTLEFIELD,Zone.STACK,Zone.GRAVEYARD,Zone.EXILE,Zone.COMMAND}:
                                 values['source_successor']=event.after.ref.to_json()
-                            self._trigger(source,ability,bindings={'event_subject':[subject.ref.to_json()]},
+                            bindings={'event_subject':[subject.ref.to_json()]}
+                            if 'source_successor' in values:bindings['source_successor']=[values['source_successor']]
+                            if ability.event.subject=='attached' and self.definition(source).enchant is not None:
+                                successor=grave_successors.get(source.ref)
+                                bindings['aura_successor']=[successor.to_json()] if successor else []
+                                if successor is None:
+                                    values['aura_tracking']={'source':source.ref.to_json(),'attached':subject.ref.to_json()}
+                            self._trigger(source,ability,bindings=bindings,
                                 values=values,
                                 condition_objects=sources,condition_views=before_views if lookback else after_views,condition_life_totals=before_life_totals if lookback else None,condition_live_players=before_live_players if lookback else None)
 
@@ -323,10 +406,14 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
     def _trigger_limit_key(self,source,ability):
         return json.dumps([source.ref.to_json(),source.effective_definition,ability.ability_id],sort_keys=True)
 
+    def _optional_limit_key(self,source,ability):
+        return json.dumps(['optional',self._trigger_limit_key(source,ability),source.controller])
+
     def remaining_trigger_uses(self,source,ability):
-        if ability.trigger_limit is None:return None
-        used=self.trigger_limits.get(self._trigger_limit_key(source,ability),0) if self.trigger_limit_turn==self.state.turn_number else 0
-        return max(0,ability.trigger_limit-used)
+        if ability.trigger_limit is None and not ability.optional_once_per_turn:return None
+        key=self._optional_limit_key(source,ability) if ability.optional_once_per_turn else self._trigger_limit_key(source,ability)
+        used=self.trigger_limits.get(key,0) if self.trigger_limit_turn==self.state.turn_number else 0
+        return max(0,(1 if ability.optional_once_per_turn else ability.trigger_limit)-used)
 
     def _trigger(self,source,ability,bindings=None,*,condition_objects=None,condition_views=None,condition_life_totals=None,condition_live_players=None,values=None):
         if source.controller not in self.state.live_players:return
@@ -339,6 +426,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             return
         if self.trigger_limit_turn!=self.state.turn_number:
             self.trigger_limit_turn=self.state.turn_number;self.trigger_limits={}
+        if ability.optional_once_per_turn and self.trigger_limits.get(self._optional_limit_key(source,ability),0):return
         if ability.trigger_limit is not None:
             limit_key=self._trigger_limit_key(source,ability)
             if self.trigger_limits.get(limit_key,0)>=ability.trigger_limit:return
@@ -360,12 +448,30 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
     def _collect_step(self,step):
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
-            for ability in self.definition(source).abilities:
+            for ability in self._trigger_abilities(source,'step_began'):
                 if self._matches(ability.event,source,step=step):self._trigger(source,ability)
 
+    ENTRY_VIEW_CACHE_LIMIT=64
+
     def _proposal_view(self, proposal):
+        # Replacement ordering/trace bookkeeping cannot change characteristics.
+        # Retain only this state epoch and a bounded number of material proposals.
+        epoch=(self.state,self.state.sequence)
+        if getattr(self,'_entry_view_epoch',None)!=epoch:
+            self._entry_view_epoch=epoch;self._entry_view_cache=OrderedDict()
+        key=(proposal.before,proposal.controller,proposal.copied_definition,proposal.counters,proposal.tapped,proposal.copied_add_types)
+        cache=self._entry_view_cache
+        if key in cache:
+            cache.move_to_end(key)
+            return cache[key]
+        result=self._compute_proposal_view(proposal)
+        cache[key]=result
+        if len(cache)>self.ENTRY_VIEW_CACHE_LIMIT:cache.popitem(last=False)
+        return result
+
+    def _compute_proposal_view(self, proposal):
         entering=replace(proposal.before,ref=ObjectRef(proposal.before.ref.card_id,proposal.before.ref.incarnation+1),
-            zone=Zone.BATTLEFIELD,controller=proposal.controller,copied_definition=proposal.copied_definition,
+            zone=Zone.BATTLEFIELD,controller=proposal.controller,copied_definition=proposal.copied_definition,copied_add_types=proposal.copied_add_types,
             counters=proposal.counters,tapped=proposal.tapped,attached_to=None,phased=False,timestamp=self.state.sequence+1)
         objects=tuple(obj for obj in self.state.objects() if obj.ref.card_id!=entering.ref.card_id)+(entering,)
         return entering,evaluate_characteristics(objects,self.definitions,entering_ref=entering.ref,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players)[entering.ref]
@@ -429,6 +535,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 candidate = available[0]
             accepted = True
             copied_definition = None
+            copied_add_types = ()
             counters = None
             if candidate.kind == 'commander':
                 chosen = self._choose(step_key + ':commander', candidate.controller,
@@ -442,7 +549,9 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     self._options(self._query(candidate.program, context)), 0, 1)
                 accepted = bool(chosen)
                 if chosen:
-                    copied_definition = self.state.get(chosen[0].ref).effective_definition
+                    copied = self.state.get(chosen[0].ref)
+                    copied_definition = copied.effective_definition
+                    copied_add_types = copied.copied_add_types
             elif candidate.kind=='entry_counters':
                 context={**frame,'source':candidate.source.to_json(),'controller':candidate.controller,
                     'chosen_x':proposal.before.cast_x if proposal.before.zone==Zone.STACK else 0}
@@ -458,18 +567,27 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     (Option('yes', 'Apply replacement'), Option('no', 'Decline replacement')), 1, 1)
                 accepted = chosen[0].key == 'yes'
             proposal = apply_replacement(proposal, candidate, accepted=accepted,
-                                         copied_definition=copied_definition,counters=counters)
+                                         copied_definition=copied_definition,counters=counters,copied_add_types=copied_add_types)
 
-    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=()):
+    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=()):
         before = self.state.objects(Zone.BATTLEFIELD)
         before_views = self.characteristics()
         before_life_totals = {p:self.state.life(p) for p in self.state.players}
         before_live_players = self.state.live_players
-        proposals = []
+        proposals = [];blocked=[]
+        entry_restrictions=tuple((source,restriction) for source in before if not source.phased
+            for restriction in self.definition(source).entry_restrictions)
+        default_destination=destination;default_tapped=entry_tapped
+        if placements is not None:
+            if (not isinstance(placements,dict) or set(placements)!=set(refs)
+                    or any(not isinstance(row,tuple) or len(row)!=2 or not isinstance(row[0],Zone)
+                        or type(row[1]) is not bool or row[1] and row[0]!=Zone.BATTLEFIELD for row in placements.values())):
+                raise RulesViolation('Invalid simultaneous placement groups')
         created={obj.ref:obj for obj in creates}
         def get_source(ref):return created.get(ref) or self.state.get(ref)
         seen = set()
         for index, ref in enumerate(refs):
+            destination,entry_tapped=placements[ref] if placements is not None else (default_destination,default_tapped)
             if ref in seen:
                 raise RulesViolation('Duplicate source in a simultaneous move')
             seen.add(ref)
@@ -480,8 +598,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             if (obj.phased and cause!='departed_controller_exile') or obj.zone==destination or ref not in created and (obj.zone==Zone.OUTSIDE or obj.token and obj.zone not in {Zone.BATTLEFIELD, Zone.STACK}):
                 continue
             if destination==Zone.BATTLEFIELD and controller_mode=='effect' and frame['controller'] not in self.state.live_players:continue
+            if destination==Zone.BATTLEFIELD:
+                blocker=next((source for source,restriction in entry_restrictions
+                    if obj.zone==restriction.zone and matches_selector(restriction,obj,before_views[obj.ref],source)),None)
+                if blocker is not None:
+                    blocked.append((obj.ref,blocker.ref));continue
             proposals.append((index, ZoneProposal(obj, destination,
-                frame['controller'] if destination == Zone.BATTLEFIELD and controller_mode == 'effect' else obj.owner,tapped=entry_tapped)))
+                frame['controller'] if destination == Zone.BATTLEFIELD and controller_mode == 'effect' else obj.owner,tapped=entry_tapped,counters=entry_counters)))
         # Choices for different affected players follow APNAP. Commit order
         # stays bound to the input batch, independently of choice scheduling.
         start = self.state.players.index(self.active)
@@ -513,7 +636,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 proposal.controller if entering else proposal.before.owner,
                 proposal.copied_definition if entering else None,
                 frozenset(entry_flags) if entering else frozenset(), attached_to=attachments.get(index),
-                tapped=proposal.tapped if entering else False,counters=proposal.counters if entering else ()))
+                tapped=proposal.tapped if entering else False,counters=proposal.counters if entering else (),
+                copied_add_types=proposal.copied_add_types if entering else ()))
         # Timestamp choices matter when simultaneous entrants carry competing
         # continuous effects. Other entrants have no timestamp-sensitive static
         # behavior in this vocabulary and retain stable relative order.
@@ -536,6 +660,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 own = [next(replacement) if move in relevant else move for move in own]
             ordered_moves.extend(own)
         events = self.state.move(ordered_moves, cause, detaches=detaches, counter_pairs=counter_pairs,payment=payment,creates=tuple(created[m.source] for m in ordered_moves if m.source in created))
+        for ref,blocker in blocked:self._event('entry_prohibited',ref=ref.to_json(),source=blocker.to_json())
+        departed_spells={event.before.ref for event in events if event.before.zone==Zone.STACK}
+        if departed_spells:
+            self.stack=[waiting for waiting in self.stack if not (waiting['spell'] and self._source(waiting).ref in departed_spells)]
         for index, _ in proposals:
             proposal = resolved[index]
             for replacement in proposal.trace if proposal is not None else ():
@@ -546,12 +674,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         for event in events:
             if event.after.zone==Zone.BATTLEFIELD and event.after.counters:
                 self._emit_counters(event.after.ref,dict(event.after.counters),event.after.controller,event.after.ref)
+        if payment is not None:self._collect_tapped(payment.taps,before)
         self._prune_attachment_rules()
         return events
 
     def _refs(self,frame,subject):
         if subject=='source':return (self._source(frame).ref,)
-        if subject=='target':return tuple(target_from_json(v) for v in frame['targets'] if 'player' not in v)
+        if subject=='target':return tuple(dict.fromkeys(target_from_json(v) for v in frame['targets'] if 'player' not in v))
         return tuple(ObjectRef.from_json(v) for v in frame['bindings'].get(subject,[]))
 
     def _insert(self,frame,effects):
@@ -609,7 +738,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     try:obj=self.state.get(ref)
                     except RulesViolation:continue
                     if obj.zone==Zone.LIBRARY and not obj.phased:retained[ref]=obj
-            events=self._move(refs,effect.destination,frame,key,entry_flags=frame['entry_flags'] if effect.subject=='source' else (),controller_mode=effect.controller,entry_tapped=effect.tapped)
+            events=self._move(refs,effect.destination,frame,key,entry_flags=frame['entry_flags'] if effect.subject=='source' else (),controller_mode=effect.controller,entry_tapped=effect.tapped,entry_counters=effect.counters)
             if effect.library_position is not None:
                 arrivals={e.before.ref:e.after for e in events if e.after.zone==Zone.LIBRARY}
                 groups={}
@@ -683,6 +812,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         if 'mode_id' in task:
             frame['active_mode']=task['mode_id']
             frame['targets']=next(group['targets'] for group in frame['mode_groups'] if group['mode_id']==task['mode_id'])
+        for group in frame.get('target_groups',()):
+            frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
         if self._execute_attachment(effect,frame,key):return
         if isinstance(effect,UntilEndOfTurn):
@@ -744,8 +875,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 try:obj=self.state.get(ref)
                 except RulesViolation:continue
                 if obj.zone==Zone.BATTLEFIELD and not obj.phased:refs.append(ref)
+            before=self._tap_observers(refs) if effect.tapped else ()
             changed=self.state.set_tapped_batch(refs,effect.tapped)
             if changed:self._event('objects_tapped' if effect.tapped else 'objects_untapped',controller=controller,refs=[r.to_json() for r in changed])
+            self._collect_tapped(changed,before)
         elif isinstance(effect,GainControl):
             refs=[]
             for ref in self._refs(frame,effect.subject):
@@ -755,10 +888,27 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             keys=self.state.change_control_batch(refs,controller,duration=effect.duration)
             self._event('control_effects_created',controller=controller,effects=list(keys),refs=[ref.to_json() for ref in refs])
             self._combat_prune()
+        elif isinstance(effect,CounterAbilities):
+            players=set(self._players(frame,effect.players))
+            removed=[waiting['id'] for waiting in self.stack if not waiting['spell']
+                and not waiting.get('turn_based') and waiting['controller'] in players]
+            if removed:
+                ids=set(removed);self.stack=[waiting for waiting in self.stack if waiting['id'] not in ids]
+                self._event('abilities_countered',frames=removed)
         elif isinstance(effect,Damage):
             recipients=(controller,) if effect.subject=='controller' else tuple(target_from_json(v).player if 'player' in v else target_from_json(v) for v in frame['targets']) if effect.subject=='target' else self._refs(frame,effect.subject)
             amount=self._quantity(effect.amount,frame)
-            self._deal_damage([(source,recipient,amount) for recipient in recipients])
+            if effect.players is not None:recipients+=self._players(frame,effect.players)
+            recipients=tuple(dict.fromkeys(recipients));sources=[]
+            if effect.source_subject=='source':sources=[source]
+            else:
+                for ref in self._refs(frame,effect.source_subject):
+                    try:obj=self.state.get(ref)
+                    except RulesViolation:
+                        obj=self.last_known[ref][0] if ref in self.last_known else next((event.before for event in reversed(self.state.events) if event.before.ref==ref),None)
+                    if obj is not None:sources.append(obj)
+            self._deal_damage([(dealer,recipient,amount) for dealer in sources for recipient in recipients
+                if not effect.exclude_damage_source or recipient!=dealer.ref])
         elif isinstance(effect,ProduceMana):
             amount=self._quantity(effect.amount,frame)
             if not amount:return
@@ -767,7 +917,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 options=tuple(Option(c,str(amount)+' {'+c+'}') for c in effect.options)
                 symbol=self._choose(key,controller,'mana_choice','Choose the mana to produce.',options,1,1)[0].key
             symbols=(symbol,)*amount
-            self.state.add_mana(controller,symbols);self._event('mana_added',player=controller,symbols=list(symbols))
+            self._produce_mana(controller,symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
         elif isinstance(effect,(ChooseMana,ChooseCommanderMana)):
             alternatives=effect.options if isinstance(effect,ChooseMana) else tuple((c,) for c in self.state.commander_identity(controller))
             if not alternatives:return
@@ -776,9 +926,9 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 options=tuple(Option(str(i),''.join('{'+symbol+'}' for symbol in symbols)) for i,symbols in enumerate(alternatives))
                 chosen=self._choose(key,controller,'mana_choice','Choose the mana to produce.',options,1,1)
                 symbols=alternatives[int(chosen[0].key)]
-            self.state.add_mana(controller,symbols);self._event('mana_added',player=controller,symbols=list(symbols))
+            self._produce_mana(controller,symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
         elif isinstance(effect,AddMana):
-            self.state.add_mana(controller,effect.symbols);self._event('mana_added',player=controller,symbols=list(effect.symbols))
+            self._produce_mana(controller,effect.symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
         elif isinstance(effect,GainLife):
             amount=self._quantity(effect.amount,frame)
             amount=self._life_gain_amount(controller,amount)
@@ -787,6 +937,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         elif isinstance(effect,(Scry,Surveil,LookTop)):
             kind='scry' if isinstance(effect,Scry) else 'surveil' if isinstance(effect,Surveil) else 'look_top'
             self._arrange_top(effect,frame,task,kind)
+        elif isinstance(effect,ChooseFromTop):
+            self._choose_from_top(effect,frame,task)
         elif isinstance(effect,SearchLibrary):
             self._search_library(effect,frame,task)
         elif isinstance(effect,(LoseLife,WithLifeLost)):
@@ -830,8 +982,23 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             branch=effect.effects if self._condition_holds(effect.condition,replace(source,controller=controller)) else effect.otherwise
             self._insert(frame,branch)
         elif isinstance(effect,May):
-            selected=self._choose(key,controller,'may','Perform the optional effect?',(Option('yes','Yes'),Option('no','No')),1,1)
-            if selected[0].key=='yes':self._insert(frame,effect.effects)
+            limit_key=frame.get('optional_limit_key') if frame.get('optional_limit_task')==key else None
+            if limit_key is not None:
+                if self.trigger_limit_turn!=self.state.turn_number:
+                    self.trigger_limit_turn=self.state.turn_number;self.trigger_limits={}
+                if self.trigger_limits.get(limit_key,0):return
+            available=True
+            if effect.available is not None:
+                subjects=set(self._refs(frame,effect.subject))
+                available=any(obj.ref in subjects for obj in self._query(effect.available,frame))
+            if available:
+                selected=self._choose(key,controller,'may','Perform the optional effect?',(Option('yes','Yes'),Option('no','No')),1,1)
+                accepted=selected[0].key=='yes'
+            else:accepted=False
+            if accepted and limit_key is not None:
+                self.trigger_limits[limit_key]=1
+                self._event('optional_turn_use_consumed',source=source.ref.to_json(),ability=frame['ability_id'],controller=controller)
+            self._insert(frame,effect.effects if accepted else effect.otherwise)
         elif isinstance(effect,UnlessEntered):
             if effect.flag not in source.entry_flags:self._insert(frame,effect.effects)
         elif isinstance(effect,SelectAll):
@@ -891,12 +1058,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         else:raise UnsupportedRule('No interpreter for effect node')
 
     def _legal_targets(self,frame):
-        if 'mode_groups' in frame:
+        if 'target_groups' in frame or 'mode_groups' in frame:
+            group_key='target_groups' if 'target_groups' in frame else 'mode_groups'
             had_targets=False;remaining=[]
-            for group in frame['mode_groups']:
+            for group in frame[group_key]:
                 had_targets=had_targets or bool(group['targets'])
                 local={**frame,'targets':group['targets'],'target_spec':group['target_spec']}
-                del local['mode_groups']
+                del local[group_key]
                 self._legal_targets(local)
                 group['targets']=local['targets'];remaining.extend(local['targets'])
             frame['targets']=remaining
@@ -990,17 +1158,29 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             order=placement['orders'][actor]
             while order:
                 trigger=next(t for t in self.pending_triggers if t['id']==order[0]);ability=decode(trigger['ability'])
-                context={'source':trigger['source'],'controller':actor,'values':trigger.get('values',{})};targets=()
+                context={'source':trigger['source'],'controller':actor,'values':trigger.get('values',{})};targets=();target_groups=[]
                 if ability.targets:
                     options=self._target_options(ability.targets,context);spec=ability.targets
-                    if choice_capacity(options,spec.group_by_controller)<spec.minimum:
+                    group_bounds=tuple((g.group_id,g.targets.minimum,g.targets.maximum) for g in spec.groups)
+                    available=Counts(o.group for o in options) if spec.groups else {}
+                    if (choice_capacity(options,spec.group_by_controller,group_bounds)<spec.minimum
+                            or any(available[name]<minimum for name,minimum,_ in group_bounds)):
                         self._event('trigger_unplaceable',trigger=trigger['id'],reason='No legal required targets')
                         self.pending_triggers.remove(trigger);order.pop(0);continue
                     amount=trigger.get('values',{}).get('event_amount')
                     prompt='Choose targets for '+ability.ability_id+(' (amount '+str(amount)+')' if amount is not None else '')+'.'
-                    selected=self._choose(trigger['id']+':targets',actor,'trigger_targets',prompt,options,spec.minimum,spec.maximum,groups=spec.group_by_controller)
+                    selected=self._choose(trigger['id']+':targets',actor,'trigger_targets',prompt,options,spec.minimum,spec.maximum,groups=spec.group_by_controller,group_bounds=group_bounds)
+                    grouped={g.group_id:[] for g in spec.groups}
+                    if grouped:
+                        for option in selected:grouped[option.group].append(option.ref.to_json())
+                    target_groups=[{'group_id':g.group_id,'target_spec':encode(g.targets),
+                        'targets':grouped[g.group_id]} for g in spec.groups]
                     targets=tuple(o.ref if o.ref is not None else PlayerRef(o.player) for o in selected)
                 frame=self._frame(RulesObject.from_json(trigger['source']),actor,ability.effects,targets=targets,target_spec=ability.targets)
+                if ability.optional_once_per_turn:
+                    frame['optional_limit_key']=self._optional_limit_key(RulesObject.from_json(trigger['source']),ability)
+                    frame['optional_limit_task']=frame['tasks'][0]['id']
+                if target_groups:frame['target_groups']=target_groups
                 frame['ability_id']=ability.ability_id;frame['source_must_remain']=ability.source_must_remain.value if ability.source_must_remain else None
                 frame['intervening_if']=encode(ability.intervening_if)
                 frame['bindings']=json.loads(json.dumps(trigger.get('bindings',{})));frame['values']=dict(trigger.get('values',{}));self.stack.append(frame)
@@ -1074,7 +1254,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
     def snapshot(self):
         # Round-trip through JSON also detaches caller-visible dictionaries.
         value={'schema':self.CHECKPOINT_SCHEMA,'implementation':IMPLEMENTATION_ID,'bundle':self.bundle,'state':self.state.snapshot(),'active':self.active,
-            'last_known':[{'object':obj.to_json(),'view':{**view.__dict__,**{name:sorted(getattr(view,name)) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':list(view.applied),'target_restrictions':encode(view.target_restrictions)}} for ref,(obj,view) in sorted(self.last_known.items(),key=lambda row:(row[0].card_id,row[0].incarnation))],
+            'last_known':[{'object':obj.to_json(),'view':{**view.__dict__,**{name:sorted(getattr(view,name)) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':list(view.applied),'target_restrictions':encode(view.target_restrictions),'granted_abilities':encode(view.granted_abilities)}} for ref,(obj,view) in sorted(self.last_known.items(),key=lambda row:(row[0].card_id,row[0].incarnation))],
             'temporary_effects':self.temporary_effects,'library_observations':self.library_observations,'stack':self.stack,'resolving':self.resolving,'pending_triggers':self.pending_triggers,'placement':self.placement,
             'pending_choice':self.pending_choice.to_json() if self.pending_choice else None,'answers':self.answers,
             'accepted':self.accepted,'semantic_events':self.semantic_events,'priority':self.priority,'passes':self.passes,
@@ -1094,7 +1274,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             setattr(kernel,name,value[name])
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
-            kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'target_restrictions':decode(view['target_restrictions'])}))
+            kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))
         kernel.pending_choice=ChoiceRequest.from_json(value['pending_choice']) if value['pending_choice'] else None
         kernel._serial=value['serial'];kernel._revision=value['revision']
         kernel._commander_sba_handled={ObjectRef.from_json(r) for r in value['commander_sba_handled']}
