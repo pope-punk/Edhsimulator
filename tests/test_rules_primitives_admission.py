@@ -9,7 +9,7 @@ class AdmissionTests(unittest.TestCase):
         report = readiness()
         self.assertFalse(report['production_ready'])
         self.assertEqual(RulesKernel(RulesState(('A','B')),()).snapshot()['schema'],report['kernel_checkpoint_schema'])
-        self.assertEqual(2, report['fixture_card_count'])
+        self.assertEqual(1, report['fixture_card_count'])
         self.assertEqual(7, sum(card['fixture_program'] is not None for card in report['cards']))
         body = next(card for card in report['cards'] if card['card_id'] == 'body-double')
         self.assertEqual('program_authored', body['status'])
@@ -20,6 +20,10 @@ class AdmissionTests(unittest.TestCase):
         starfield = next(card for card in report['cards'] if card['card_id'] == 'starfield-of-nyx')
         self.assertEqual('program_authored', starfield['status'])
         self.assertEqual(64, len(starfield['fixture_sha256']))
+        animate = next(card for card in report['cards'] if card['card_id'] == 'animate-dead')
+        self.assertEqual('program_authored', animate['status'])
+        self.assertEqual('catalog:animate-dead', animate['authored_program'])
+        self.assertEqual(64, len(animate['fixture_sha256']))
         self.assertGreater(len(report['blockers']), 0)
 
     def test_production_entrypoint_rejects_before_any_state_is_constructed(self):
