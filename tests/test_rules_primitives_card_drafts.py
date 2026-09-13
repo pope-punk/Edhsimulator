@@ -16,6 +16,7 @@ PROMOTED_CARDS = frozenset((
     'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
     'mulldrifter', 'reveillark', 'vesperlark',
     'oblivion-ring', 'leonin-relic-warder', 'animate-dead',
+    'crop-rotation', 'fling',
 ))
 
 
@@ -54,7 +55,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(13, len(self.cards))
+        self.assertEqual(15, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):
@@ -75,7 +76,7 @@ class CardProgramReviewTests(unittest.TestCase):
                     self.assertIsNone(program.cast)
                 else:
                     self.assertIsNotNone(program.cast)
-                    self.assertEqual('sorcery', program.cast.timing)
+                    self.assertEqual('instant' if 'Instant' in face.types else 'sorcery', program.cast.timing)
 
     def test_shock_lands_keep_both_intrinsic_mana_abilities(self):
         symbols = {'Plains': 'W', 'Island': 'U', 'Swamp': 'B', 'Mountain': 'R', 'Forest': 'G'}

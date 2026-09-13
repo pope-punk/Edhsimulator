@@ -1,8 +1,9 @@
-# Crop Rotation and Fling — casting sacrifice costs
+# Crop Rotation and Fling — casting sacrifice review
 
 This cycle begins at `374d00fc3b76d1820cb4cbafa1e24335f5a29d4c` on
-`codex/remaining-card-programs`. Both complete printed programs are initially
-isolated drafts. They are not imported by the normal reviewed loader.
+`codex/remaining-card-programs`. Both complete printed programs began as
+isolated drafts. After printed-face review, they now have exact source-fact
+bindings and catalog identities in the reviewed library.
 
 ## Shared transaction
 
@@ -59,8 +60,25 @@ controller versus owner, payment replacement and actor privacy, replay and
 checkpoint restoration, countered spells, cost reducers, trigger ordering,
 nonactive casting, command-zone tax, modal/X declarations and compiler boundaries.
 
-GitHub-hosted validation is pending. Review/source binding and promotion remain
-separate from the draft's initial conformance result.
+[Draft validation run 34770970728](https://github.com/pope-punk/Edhsimulator/actions/runs/34770970728) passed **1,293 tests on each of Ubuntu and Windows**,
+plus syntax, installation and packaged-asset checks, at
+`679a0e5971fdb21deb36d39a484a2b3c2fffdafa`. This validated all 24 new methods and the existing conformance suite.
+
+The first draft run caught two fixture mistakes: a vanished token has no current
+object, and the commander fixture must answer the command-zone state-based
+choice after resolution. Both expectations were corrected without changing the
+runtime or card programs.
+
+Printed-face review checked casting costs, color/type characteristics, every
+retained clause, replacement timing, source identity, target legality and actor
+privacy against the references below and the authored conformance cases. Both
+programs now have catalog identities, source-fact SHA-256 bindings and explicit
+review-basis records. The same 24 methods now exercise the reviewed loader.
+Validation of that promotion is pending.
+
+The inventory contains **242 reviewed programs / 307 deck copies**, no drafts
+and **92 unstarted cards**. Next: Uro's complete escape permission/payment and
+missing attack trigger, reusing the existing entry effects and escaped fact.
 
 ## Compatibility and boundaries
 

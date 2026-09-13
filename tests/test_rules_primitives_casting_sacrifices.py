@@ -1,4 +1,4 @@
-"""Complete Crop Rotation/Fling drafts and accepted sacrifice-cost transactions."""
+"""Source-bound Crop Rotation/Fling and accepted sacrifice-cost transactions."""
 import json
 import unittest
 from dataclasses import replace
@@ -17,11 +17,10 @@ class CastingSacrificeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={r['card_id']:r for r in draft['drafts'] if r['card_id'] in {'crop-rotation','fling'}}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
         cls.reviewed=load_reviewed(cls.root)
-        cls.base=tuple(r['program'] for r in cls.reviewed.values())+tuple(cls.cards.values())
+        cls.cards={key:cls.reviewed[key]['program'] for key in ('crop-rotation','fling')}
+        cls.rows={key:cls.reviewed[key]['review'] for key in cls.cards}
+        cls.base=tuple(r['program'] for r in cls.reviewed.values())
 
     def game(self,key='fling',*,body=None,extra=(),owner='A',token=False,spell=None):
         self.card=spell or self.cards[key];self.key=key
@@ -62,14 +61,15 @@ class CastingSacrificeTests(unittest.TestCase):
         self.kernel.commit_action(self.kernel.quote_cast('counter','B',counter,(self.state.current('spell'),)),Payment((('U',2),)))
         self.drain()
 
-    def test_drafts_are_complete_source_bound_programs_and_not_reviewed(self):
+    def test_reviewed_programs_match_complete_printed_faces_and_source_bindings(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         self.assertEqual({'crop-rotation','fling'},set(self.cards))
         for key,p in self.cards.items():
             with self.subTest(card=key):
-                self.assertNotIn(key,self.reviewed);self.assertEqual('draft:'+key,p.definition_id)
+                self.assertEqual('catalog:'+key,p.definition_id)
+                self.assertEqual('all_printed_faces',self.rows[key]['scope']);self.assertTrue(self.rows[key]['review_basis'])
                 self.assertEqual(self.rows[key]['program'],encode(p))
-                self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+                self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
                 f=catalog[key].faces[0]
                 for field in ('types','subtypes','supertypes','colors'):
                     self.assertEqual(set(getattr(f,field)),set(getattr(p,field)))

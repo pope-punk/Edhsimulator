@@ -5,26 +5,31 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**240 reviewed programs / 305 deck copies**. There are **94 cards outside the
-reviewed bundle**: **two complete drafts awaiting validation/review** and **92
-unstarted cards**. Reviewed coverage is not production certification.
+**242 reviewed programs / 307 deck copies**. There are **92 cards outside the
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Current cycle: casting sacrifices for Crop Rotation and Fling
 
-Both complete drafts reuse selected ZoneCost sacrifices. The shared casting
+Both reviewed programs reuse selected ZoneCost sacrifices. The shared casting
 transaction keeps the announced spell public on the stack during payment choices,
 commits payment once, and then collects cast triggers. PaidCostStat captures the
 sacrificed creature's derived power for Fling. Crop Rotation reuses SearchLibrary.
 
 Twenty-four new conformance methods cover the printed cards, atomic rejection,
 replacement/priority boundaries, exact source information, hidden zones, actor
-replay, checkpoints, cost reductions and modal/X casting. Hosted validation and
-printed-face/source-binding review are pending. See
-[the cycle record](CASTING_SACRIFICE_CARD_DRAFTS.md).
+replay, checkpoints, cost reductions and modal/X casting. Both cards have complete
+printed-face review and exact source bindings; the same methods now use the
+reviewed loader. See [the cycle record](CASTING_SACRIFICE_CARD_DRAFTS.md).
+
+[Draft validation run 34770970728](https://github.com/pope-punk/Edhsimulator/actions/runs/34770970728) passed **1,293 tests on each of Ubuntu and Windows**,
+plus syntax, installation and packaged-asset checks, at
+`679a0e5971fdb21deb36d39a484a2b3c2fffdafa`. This validated all 24 new methods and the existing conformance suite.
+
+Reviewed-loader validation is pending.
 
 Checkpoint schema is now **113**. Previous games and checkpoints are not migrated.
-Next: finish hosted validation, review and promotion for these two drafts, then
-refresh the next unstarted card family. All project execution remains hosted.
+Next: validate the promotion, then Uro's escape payment/permission and attack
+trigger. All project execution remains hosted.
 
 ## Prior cycle: Animate Dead and linked-exile review
 
@@ -178,13 +183,13 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the thirteen now promoted. It records
+originally outstanding card IDs, including the fifteen now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
-card-level review. Crop Rotation and Fling are now complete drafts using the
-new shared casting-sacrifice transaction. Finish their hosted conformance and
-source-bound review before promotion.
+card-level review. Crop Rotation and Fling also completed printed-face review;
+their same conformance methods now load the source-bound reviewed programs.
+Finish the promotion's hosted check before moving to the next family.
 
 For the next unstarted family, assess Uro's escape cost against the existing
 announcement transaction. Exiling several other graveyard cards and composing

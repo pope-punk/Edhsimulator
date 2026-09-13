@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 240,
-    "remaining_outside_reviewed_bundle": 94,
-    "drafts_written": 2,
+    "reviewed_bundle_unique": 242,
+    "remaining_outside_reviewed_bundle": 92,
+    "drafts_written": 0,
     "not_started_on_this_branch": 92,
-    "reviewed_bundle_copies": 305,
-    "draft_copies": 2,
+    "reviewed_bundle_copies": 307,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 13
+    "promoted_on_this_branch": 15
   },
   "cards": [
     {
@@ -262,7 +262,7 @@
     {
       "card_id": "crop-rotation",
       "name": "Crop Rotation",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -277,16 +277,22 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_ci",
       "batch": "casting-sacrifices-2026-09-13",
-      "draft_definition": "draft:crop-rotation",
       "shared_mechanics": [
         "ZoneCost",
         "spell announcement transaction",
         "SearchLibrary"
       ],
-      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md"
+      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md",
+      "reviewed_definition": "catalog:crop-rotation",
+      "previous_draft_definition": "draft:crop-rotation",
+      "source_facts_sha256": "48e88506dacc5edf0aa3177a3bed00a159af1bdf9e62156555ab6ceb41b61fe7",
+      "draft_hosted_validation": {
+        "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
+        "run_id": 34770970728
+      }
     },
     {
       "card_id": "dance-of-the-dead",
@@ -638,7 +644,7 @@
     {
       "card_id": "fling",
       "name": "Fling",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -653,17 +659,23 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_ci",
       "batch": "casting-sacrifices-2026-09-13",
-      "draft_definition": "draft:fling",
       "shared_mechanics": [
         "ZoneCost",
         "spell announcement transaction",
         "PaidCostStat",
         "Damage"
       ],
-      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md"
+      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md",
+      "reviewed_definition": "catalog:fling",
+      "previous_draft_definition": "draft:fling",
+      "source_facts_sha256": "d2890717c3fd8d584466565cb5dd58b45f218fde0672a069545ad3545768c0a7",
+      "draft_hosted_validation": {
+        "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
+        "run_id": 34770970728
+      }
     },
     {
       "card_id": "forgotten-ancient",
@@ -2237,7 +2249,7 @@
   ],
   "hosted_validation": {
     "conclusion": "pending",
-    "scope": "Shared spell sacrifice-cost transactions, both opted-in card drafts, all 240 reviewed programs and hosted conformance"
+    "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2246,7 +2258,10 @@
       "crop-rotation",
       "fling"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "crop-rotation",
+      "fling"
+    ],
     "shared_mechanics": [
       "Selected sacrifice costs during spell announcement",
       "PaidCostStat",
@@ -2255,13 +2270,64 @@
     "shared_corrections": [],
     "runtime_checkpoint_schema": 113,
     "new_test_methods": 24,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "pending_reviewed_loader_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "crop-rotation",
-      "fling"
+      "uro-titan-of-nature-s-wrath"
     ],
-    "review_work_remaining": "Validate the two complete drafts remotely, then finish printed-face/source-binding review and promotion. 92 catalog cards remain unstarted; production admission remains closed."
+    "review_work_remaining": "Both cards have complete printed-face review and source bindings. Validate their reviewed-loader promotion. 92 catalog cards remain unstarted; Uro escape is next. Production admission remains closed.",
+    "next_batch_implementation_notes": {
+      "shared_sources": [
+        "src/edh_gauntlet/rules_casting.py",
+        "src/edh_gauntlet/rules_program.py",
+        "src/edh_gauntlet/rules_scenarios.py"
+      ],
+      "reuse_candidates": [
+        "accepted spell announcement transaction",
+        "EntryAlternativeCost entry flags",
+        "ZoneCost graveyard exile selection",
+        "UnlessEntered escaped marker",
+        "GainLife, Draw, Select and Move"
+      ],
+      "required_work": [
+        "Add a source-zone-bound alternative casting permission: escape is available only from the graveyard, while the ordinary casting cost stays bound to ordinary origins.",
+        "Support the escape alternative's five other owned graveyard cards as one exile-cost group, including exact self-exclusion, accepted replacement choices and replay.",
+        "Carry the escaped entry fact through the resulting permanent; reuse the existing conditional sacrifice and gain/draw/optional-land effects.",
+        "Add Uro's missing attack trigger and complete printed Giant/Elder, legendary, color and mana source facts."
+      ],
+      "guard": "Do not enable graveyard normal-cost casting or relax unsupported cost gates without their complete payment transaction. Keep Uro isolated until all printed clauses and relevant hosted validation are complete."
+    },
+    "draft_validation": {
+      "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
+      "run_id": 34770970728,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34770970728",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1293,
+      "new_test_methods": 24,
+      "conclusion": "success",
+      "scope": "Shared spell sacrifice-cost transaction, Crop Rotation and Fling as opted-in drafts, all reviewed programs, replay, syntax, installation and packaged assets"
+    },
+    "resolved_validation_issues": [
+      {
+        "commit": "6a98454a40ed860a3744ad5b924f8f67924d31ef",
+        "run_id": 34770721889,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34770721889",
+        "conclusion": "failure",
+        "ubuntu_tests": 1293,
+        "failures": 1,
+        "errors": 1,
+        "windows": "cancelled_after_matrix_failure",
+        "issues": [
+          "Token disappearance fixture attempted to inspect a token that had correctly ceased to exist.",
+          "Commander fixture omitted the required command-zone state-based choice after spell resolution."
+        ],
+        "resolution": "Correct the fixture expectations and explicitly answer the commander return choice; no runtime change.",
+        "resolution_commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa"
+      }
+    ]
   },
   "hosted_validation_history": [
     {
@@ -2361,6 +2427,35 @@
       "new_test_methods": 19,
       "conclusion": "success",
       "scope": "All 240 source-bound reviewed programs including Animate Dead, the shared keyword targeting correction, replay, source syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "6a98454a40ed860a3744ad5b924f8f67924d31ef",
+      "run_id": 34770721889,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34770721889",
+      "conclusion": "failure",
+      "ubuntu_tests": 1293,
+      "failures": 1,
+      "errors": 1,
+      "windows": "cancelled_after_matrix_failure",
+      "issues": [
+        "Token disappearance fixture attempted to inspect a token that had correctly ceased to exist.",
+        "Commander fixture omitted the required command-zone state-based choice after spell resolution."
+      ],
+      "resolution": "Correct the fixture expectations and explicitly answer the commander return choice; no runtime change.",
+      "resolution_commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa"
+    },
+    {
+      "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
+      "run_id": 34770970728,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34770970728",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1293,
+      "new_test_methods": 24,
+      "conclusion": "success",
+      "scope": "Shared spell sacrifice-cost transaction, Crop Rotation and Fling as opted-in drafts, all reviewed programs, replay, syntax, installation and packaged assets"
     }
   ],
   "cycle_history": [
