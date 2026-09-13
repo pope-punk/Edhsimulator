@@ -5,8 +5,9 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**246 reviewed programs / 311 deck copies**. There are **88 cards outside the
-reviewed bundle**: **4 isolated drafts** and **84 unstarted**. Reviewed coverage is not production certification.
+**250 source-bound reviewed programs / 315 deck copies**. There are **84 cards outside the
+reviewed bundle**, all unstarted. The four new reviewed entries await final hosted
+reviewed-loader validation. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,22 +23,26 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-The next candidate queue is **Dawn of Hope, Rhystic Study and Smothering Tithe**.
-They need a shared optional payment boundary during resolution, with the paying
-player permitted to activate mana abilities. The inventory records concrete
-implementation notes and the existing primitives to reuse. Assess **Gleaming
-Splendor** as a fourth card using second-draw event tracking. Continue into another
-coherent family when useful context remains.
+The next candidate queue is **Forgotten Ancient, The Ozolith, Aven Courier and
+Essence Channeler**. They share counter-kind snapshots, placement and transfers.
+Implement replacement-aware transfers and authored allocation; Essence Channeler
+also needs life-lost-this-turn history. The inventory records the required work.
+Prioritize unfinished validation before beginning that family.
 
 ## Current cycle: resolution payments and draw ordinals
 
-Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor now have isolated
-complete printed programs. PayMana offers the captured payer an authenticated
-resolution window for mana abilities and exact optional payment. Parent resolution
-survives immediate mana choices, source-sacrifice costs, checkpoints and replay.
-DrawEventPattern counts each actual draw across the turn, including draws before
-the enchantment enters. Checkpoint schema is 115. The 46 new conformance methods
-await GitHub-hosted validation; no draft is admitted to the reviewed loader yet.
+Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor have complete
+printed-face review and exact source bindings. PayMana offers the captured payer
+an authenticated resolution window for mana abilities and exact optional payment.
+Parent resolution survives immediate mana choices, source-sacrifice costs,
+checkpoints and replay. DrawEventPattern counts each actual draw across the turn,
+including draws before the enchantment enters. Checkpoint schema is **115**.
+
+The **46 new conformance methods** now use the reviewed loader. [Draft validation 34776935566](https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566)
+passed **1,384 tests on each of Ubuntu and Windows** at `1d434de1fcabaf4d82d06baf17608df2fa76614f`,
+plus syntax, installation and packaged assets. The reviewed-loader run is pending.
+[The cycle review](RESOLUTION_PAYMENT_CARD_REVIEW.md) records the rules mapping,
+source bindings, scope and the two corrected fixture setup errors.
 
 ## Previous cycle: four-card graveyard casting and exile durations
 
@@ -59,9 +64,8 @@ The following result-recording commit changes only documentation and inventory
 metadata; runtime, programs and tests are unchanged after this validation. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
 records the complete mappings, public projection and historical fixture fixes.
 
-Checkpoint schema is **114**. Existing games and checkpoints are not migrated.
-Production admission remains closed. The next family is the three payment
-triggers above; all project execution remains hosted.
+That earlier cycle used checkpoint schema **114**. Existing games and checkpoints are not migrated.
+Production admission remains closed. That payment family is completed by the current cycle above; all project execution remains hosted.
 
 ## Prior cycle: casting sacrifices for Crop Rotation and Fling
 

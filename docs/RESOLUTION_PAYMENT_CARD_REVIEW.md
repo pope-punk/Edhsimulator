@@ -64,7 +64,17 @@ resolution payments. Unsupported node shapes fail compilation.
 
 ## Validation
 
-Pending GitHub-hosted results. The 46 new methods cover all printed clauses,
+[Draft run 34776935566](https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566) passed **1,384 tests on both
+Ubuntu and Windows** at `1d434de1fcabaf4d82d06baf17608df2fa76614f`, together with source syntax,
+installation and packaged-asset checks. The same 46 new methods now load the four
+source-bound reviewed programs; reviewed-loader validation is pending.
+
+The first draft run `f94894b36674f0be871abb333c2385baf84b210b` / 34776728530 exposed two
+fixture setup mistakes: a stale moved source reference and a prompt assertion for
+an automatically selected sole option. The corrected fixtures preserve the intended
+checks and exercise both payment branches. No runtime fix was needed.
+
+The 46 new methods cover all printed clauses,
 normal casting, paid/unpaid outcomes, correct actor capture, repeated events,
 payer departure, source control changes, mana-source readiness, mana choices and
 sacrifice, rejection atomicity, lexical bindings, suspended parent restore,

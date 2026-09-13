@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 246,
-    "remaining_outside_reviewed_bundle": 88,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 250,
+    "remaining_outside_reviewed_bundle": 84,
+    "drafts_written": 0,
     "not_started_on_this_branch": 84,
-    "reviewed_bundle_copies": 311,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 315,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 19
+    "promoted_on_this_branch": 23
   },
   "cards": [
     {
@@ -371,7 +371,7 @@
     {
       "card_id": "dawn-of-hope",
       "name": "Dawn of Hope",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -386,10 +386,17 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader",
       "batch": "resolution-payment-2026-09-13",
-      "draft_definition": "draft:dawn-of-hope"
+      "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:dawn-of-hope",
+      "previous_draft_definition": "draft:dawn-of-hope",
+      "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4",
+      "draft_hosted_validation": {
+        "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+        "run_id": 34776935566
+      }
     },
     {
       "card_id": "defiler-of-vigor",
@@ -822,7 +829,7 @@
     {
       "card_id": "gleaming-splendor",
       "name": "Gleaming Splendor",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -837,10 +844,17 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader",
       "batch": "resolution-payment-2026-09-13",
-      "draft_definition": "draft:gleaming-splendor"
+      "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:gleaming-splendor",
+      "previous_draft_definition": "draft:gleaming-splendor",
+      "source_facts_sha256": "0121e4f4d098b2d9842e721673e61a8e452807c07e25fb449550a84d7c5453c4",
+      "draft_hosted_validation": {
+        "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+        "run_id": 34776935566
+      }
     },
     {
       "card_id": "godless-shrine",
@@ -1738,7 +1752,7 @@
     {
       "card_id": "rhystic-study",
       "name": "Rhystic Study",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1753,10 +1767,17 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader",
       "batch": "resolution-payment-2026-09-13",
-      "draft_definition": "draft:rhystic-study"
+      "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:rhystic-study",
+      "previous_draft_definition": "draft:rhystic-study",
+      "source_facts_sha256": "b47109d0106da31fe7a0b27088ab8df5e916ef260a8f522ffdccec95888543e9",
+      "draft_hosted_validation": {
+        "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+        "run_id": 34776935566
+      }
     },
     {
       "card_id": "rhythm-of-the-wild",
@@ -1866,7 +1887,7 @@
     {
       "card_id": "smothering-tithe",
       "name": "Smothering Tithe",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1881,10 +1902,17 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader",
       "batch": "resolution-payment-2026-09-13",
-      "draft_definition": "draft:smothering-tithe"
+      "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:smothering-tithe",
+      "previous_draft_definition": "draft:smothering-tithe",
+      "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e",
+      "draft_hosted_validation": {
+        "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+        "run_id": 34776935566
+      }
     },
     {
       "card_id": "sorin-of-house-markov",
@@ -2361,7 +2389,12 @@
       "smothering-tithe",
       "gleaming-splendor"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "dawn-of-hope",
+      "rhystic-study",
+      "smothering-tithe",
+      "gleaming-splendor"
+    ],
     "shared_mechanics": [
       "PayMana",
       "Authenticated resolution mana window",
@@ -2370,9 +2403,9 @@
     ],
     "runtime_checkpoint_schema": 115,
     "new_test_methods": 46,
-    "validation_status": "awaiting_github_hosted_ci",
+    "validation_status": "awaiting_reviewed_loader_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "Validate the four isolated drafts on hosted runners, complete printed-face review and source binding, then promote and validate through the reviewed loader. No local execution.",
+    "review_work_remaining": "Complete reviewed-loader validation for the four source-bound payment/draw enchantments, then use the recorded counter-transfer family as the next multi-card work order.",
     "resolved_validation_issues": [
       {
         "commit": "f94894b36674f0be871abb333c2385baf84b210b",
@@ -2385,9 +2418,50 @@
           "A direct hand-addition fixture moved its scenario source and then reused the stale object reference.",
           "The lexical-binding fixture expected a selection prompt when its sole legal selection was automatically chosen."
         ],
-        "resolution": "Move a separate library card for the non-draw hand addition; provide two legal selection options and verify both paid and unpaid lexical branches. No runtime change."
+        "resolution": "Move a separate library card for the non-draw hand addition; provide two legal selection options and verify both paid and unpaid lexical branches. No runtime change.",
+        "resolution_commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f"
       }
-    ]
+    ],
+    "next_batch": [
+      "forgotten-ancient",
+      "the-ozolith",
+      "aven-courier",
+      "essence-channeler"
+    ],
+    "next_batch_implementation_notes": {
+      "cards": [
+        "forgotten-ancient",
+        "the-ozolith",
+        "aven-courier",
+        "essence-channeler"
+      ],
+      "reuse": [
+        "CounterRange, SourceCounter, AddCounters, MultiplyCounters and shared counter replacement events",
+        "Captured source/zone-event last-known characteristics",
+        "Select and grouped actor-bound choices",
+        "Turn-identity reset and checkpoint/actor replay patterns"
+      ],
+      "requirements": [
+        "Add atomic counter transfers with the original counter kinds/amounts preserved, replacement-aware removal and placement, and authored allocation for any number among other creatures.",
+        "The Ozolith copies departing creatures' last counters without removing counters from the new graveyard incarnation; its optional combat transfer moves all currently present counters to one target.",
+        "Aven Courier chooses the counter kind on resolution; target announcement happens first, and no counter is placed if the target already has that kind.",
+        "Essence Channeler needs life-lost-this-turn history for its continuous keywords plus exact last-known death counters; do not approximate with current life total.",
+        "Review every printed clause, draft together where useful, and run the new methods only on GitHub-hosted runners."
+      ]
+    },
+    "draft_validation": {
+      "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+      "run_id": 34776935566,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1384,
+      "new_test_methods": 46,
+      "conclusion": "success",
+      "scope": "All four isolated payment/draw enchantments, authenticated resolution mana windows, draw ordinals, checkpoint/replay, source syntax, installation and packaged assets"
+    }
   },
   "hosted_validation_history": [
     {

@@ -18,6 +18,7 @@ PROMOTED_CARDS = frozenset((
     'oblivion-ring', 'leonin-relic-warder', 'animate-dead',
     'crop-rotation', 'fling',
     'uro-titan-of-nature-s-wrath', 'bulk-up', 'grasp-of-fate', 'prayer-of-binding',
+    'dawn-of-hope', 'rhystic-study', 'smothering-tithe', 'gleaming-splendor',
 ))
 
 
@@ -56,7 +57,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(19, len(self.cards))
+        self.assertEqual(23, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):

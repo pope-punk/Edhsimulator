@@ -23,10 +23,9 @@ class ResolutionPaymentTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={r['card_id']:r for r in drafts if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,key='dawn-of-hope',*,extra=(),source_zone=Zone.BATTLEFIELD):
         self.key=key
@@ -103,7 +102,7 @@ class ResolutionPaymentTests(unittest.TestCase):
         self.assertEqual(set(CARDS),set(self.cards))
         for key,program in self.cards.items():
             with self.subTest(card=key):
-                self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+                self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
                 self.assertEqual(self.rows[key]['program'],encode(program))
                 face=catalog[key].faces[0]
                 self.assertEqual(1,len(catalog[key].faces))

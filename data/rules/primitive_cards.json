@@ -7048,6 +7048,224 @@
       }
     },
     {
+      "card_id": "dawn-of-hope",
+      "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping and fixed casting costs reviewed in docs/RESOLUTION_PAYMENT_CARD_REVIEW.md. Shared PayMana preserves payer capture, resolution-time mana abilities, paid/unpaid continuations and actor replay; DrawEventPattern binds actual per-turn draw history. Token creation, life gain, draws and two-player targets reuse shared primitives. Production admission remains separately gated.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:dawn-of-hope",
+        "name": "Dawn of Hope",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "life-payment",
+            "event": {
+              "node": "EventPattern",
+              "kind": "life_gained",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "PayMana",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 2,
+                  "symbols": [],
+                  "x_symbols": 0
+                },
+                "effects": [
+                  {
+                    "node": "Draw",
+                    "amount": 1,
+                    "players": "controller"
+                  }
+                ],
+                "otherwise": [],
+                "players": "controller"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "soldier",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 3,
+                "symbols": [
+                  "W"
+                ],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "CreateTokens",
+                "token": {
+                  "node": "CardProgram",
+                  "definition_id": "token:soldier-1-1-white-lifelink",
+                  "name": "Soldier Token",
+                  "types": [
+                    "Creature"
+                  ],
+                  "abilities": [],
+                  "spell_effects": [],
+                  "spell_targets": null,
+                  "entry_copy": null,
+                  "replacements": [],
+                  "enchant": null,
+                  "subtypes": [
+                    "Soldier"
+                  ],
+                  "mana_value": 0,
+                  "power": 1,
+                  "toughness": 1,
+                  "continuous": [],
+                  "cast": null,
+                  "activated": [],
+                  "cost_modifiers": [],
+                  "target_restrictions": [],
+                  "keywords": [
+                    "lifelink"
+                  ],
+                  "supertypes": [],
+                  "entry_modifiers": [],
+                  "player_permissions": {
+                    "node": "PlayerPermissions",
+                    "additional_land_plays": 0,
+                    "no_maximum_hand_size": false,
+                    "land_zones": []
+                  },
+                  "counter_replacements": [],
+                  "entry_counters": [],
+                  "colors": [
+                    "W"
+                  ],
+                  "modal": null,
+                  "entry_copy_tapped": false,
+                  "characteristic_pt": null,
+                  "life_gain_replacements": [],
+                  "block_restrictions": [],
+                  "tapped_mana_replacements": [],
+                  "all_subtype_sets": [],
+                  "entry_restrictions": [],
+                  "casting_restrictions": [],
+                  "entry_copy_add_types": []
+                },
+                "amount": 1,
+                "players": "controller"
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "deadly-riposte",
       "source_facts_sha256": "dcb5ec912485044452c9b7ff967cc7b3490f30e1736a92513175104556278cbb",
       "scope": "all_printed_faces",
@@ -12725,6 +12943,275 @@
         "entry_counters": [],
         "colors": [
           "B"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "gleaming-splendor",
+      "source_facts_sha256": "0121e4f4d098b2d9842e721673e61a8e452807c07e25fb449550a84d7c5453c4",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping and fixed casting costs reviewed in docs/RESOLUTION_PAYMENT_CARD_REVIEW.md. Shared PayMana preserves payer capture, resolution-time mana abilities, paid/unpaid continuations and actor replay; DrawEventPattern binds actual per-turn draw history. Token creation, life gain, draws and two-player targets reuse shared primitives. Production admission remains separately gated.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:gleaming-splendor",
+        "name": "Gleaming Splendor",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "second-draw",
+            "event": {
+              "node": "DrawEventPattern",
+              "kind": "card_drawn",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "opponent_controlled",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": [],
+              "occurrence": 2
+            },
+            "effects": [
+              {
+                "node": "CreateTokens",
+                "token": {
+                  "node": "CardProgram",
+                  "definition_id": "token:treasure",
+                  "name": "Treasure Token",
+                  "types": [
+                    "Artifact"
+                  ],
+                  "abilities": [],
+                  "spell_effects": [],
+                  "spell_targets": null,
+                  "entry_copy": null,
+                  "replacements": [],
+                  "enchant": null,
+                  "subtypes": [
+                    "Treasure"
+                  ],
+                  "mana_value": 0,
+                  "power": null,
+                  "toughness": null,
+                  "continuous": [],
+                  "cast": null,
+                  "activated": [
+                    {
+                      "node": "ActivatedProgram",
+                      "ability_id": "mana",
+                      "cost": {
+                        "node": "CostSpec",
+                        "mana": {
+                          "node": "ManaCost",
+                          "generic": 0,
+                          "symbols": [],
+                          "x_symbols": 0
+                        },
+                        "life": 0,
+                        "tap_source": true,
+                        "tap_selector": null,
+                        "tap_count": 0,
+                        "zone_costs": [
+                          {
+                            "node": "ZoneCost",
+                            "cost_id": "treasure",
+                            "kind": "sacrifice",
+                            "selector": null,
+                            "count": 1
+                          }
+                        ],
+                        "counter_costs": []
+                      },
+                      "effects": [
+                        {
+                          "node": "ChooseMana",
+                          "options": [
+                            [
+                              "W"
+                            ],
+                            [
+                              "U"
+                            ],
+                            [
+                              "B"
+                            ],
+                            [
+                              "R"
+                            ],
+                            [
+                              "G"
+                            ]
+                          ]
+                        }
+                      ],
+                      "targets": null,
+                      "timing": "instant",
+                      "mana_ability": true,
+                      "zone": {
+                        "zone": "battlefield"
+                      },
+                      "minimum_x": 0,
+                      "generic_reduction": 0
+                    }
+                  ],
+                  "cost_modifiers": [],
+                  "target_restrictions": [],
+                  "keywords": [],
+                  "supertypes": [],
+                  "entry_modifiers": [],
+                  "player_permissions": {
+                    "node": "PlayerPermissions",
+                    "additional_land_plays": 0,
+                    "no_maximum_hand_size": false,
+                    "land_zones": []
+                  },
+                  "counter_replacements": [],
+                  "entry_counters": [],
+                  "colors": [],
+                  "modal": null,
+                  "entry_copy_tapped": false,
+                  "characteristic_pt": null,
+                  "life_gain_replacements": [],
+                  "block_restrictions": [],
+                  "tapped_mana_replacements": [],
+                  "all_subtype_sets": [],
+                  "entry_restrictions": [],
+                  "casting_restrictions": [],
+                  "entry_copy_add_types": []
+                },
+                "amount": 1,
+                "players": "controller"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "two-players-draw",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 2,
+                "symbols": [
+                  "W"
+                ],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Draw",
+                "amount": 1,
+                "players": "target"
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": null,
+              "minimum": 2,
+              "maximum": 2,
+              "group_by_controller": false,
+              "players": "all",
+              "combat": null,
+              "groups": []
+            },
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
         ],
         "modal": null,
         "entry_copy_tapped": false,
@@ -25559,6 +26046,144 @@
       }
     },
     {
+      "card_id": "rhystic-study",
+      "source_facts_sha256": "b47109d0106da31fe7a0b27088ab8df5e916ef260a8f522ffdccec95888543e9",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping and fixed casting costs reviewed in docs/RESOLUTION_PAYMENT_CARD_REVIEW.md. Shared PayMana preserves payer capture, resolution-time mana abilities, paid/unpaid continuations and actor replay; DrawEventPattern binds actual per-turn draw history. Token creation, life gain, draws and two-player targets reuse shared primitives. Production admission remains separately gated.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:rhystic-study",
+        "name": "Rhystic Study",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "spell-payment",
+            "event": {
+              "node": "EventPattern",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "opponent_controlled",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "PayMana",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 1,
+                  "symbols": [],
+                  "x_symbols": 0
+                },
+                "effects": [],
+                "otherwise": [
+                  {
+                    "node": "May",
+                    "effects": [
+                      {
+                        "node": "Draw",
+                        "amount": 1,
+                        "players": "controller"
+                      }
+                    ],
+                    "otherwise": [],
+                    "available": null,
+                    "subject": "source"
+                  }
+                ],
+                "players": "event_controllers"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "U"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "rockfall-vale",
       "source_facts_sha256": "4622d64972100f81121ff8f2f26212f76cc2e2334d05d31f0d76cee1b49ea4bf",
       "scope": "all_printed_faces",
@@ -28327,6 +28952,241 @@
         "counter_replacements": [],
         "entry_counters": [],
         "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "smothering-tithe",
+      "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping and fixed casting costs reviewed in docs/RESOLUTION_PAYMENT_CARD_REVIEW.md. Shared PayMana preserves payer capture, resolution-time mana abilities, paid/unpaid continuations and actor replay; DrawEventPattern binds actual per-turn draw history. Token creation, life gain, draws and two-player targets reuse shared primitives. Production admission remains separately gated.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:smothering-tithe",
+        "name": "Smothering Tithe",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "draw-payment",
+            "event": {
+              "node": "EventPattern",
+              "kind": "card_drawn",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "opponent_controlled",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "PayMana",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 2,
+                  "symbols": [],
+                  "x_symbols": 0
+                },
+                "effects": [],
+                "otherwise": [
+                  {
+                    "node": "CreateTokens",
+                    "token": {
+                      "node": "CardProgram",
+                      "definition_id": "token:treasure",
+                      "name": "Treasure Token",
+                      "types": [
+                        "Artifact"
+                      ],
+                      "abilities": [],
+                      "spell_effects": [],
+                      "spell_targets": null,
+                      "entry_copy": null,
+                      "replacements": [],
+                      "enchant": null,
+                      "subtypes": [
+                        "Treasure"
+                      ],
+                      "mana_value": 0,
+                      "power": null,
+                      "toughness": null,
+                      "continuous": [],
+                      "cast": null,
+                      "activated": [
+                        {
+                          "node": "ActivatedProgram",
+                          "ability_id": "mana",
+                          "cost": {
+                            "node": "CostSpec",
+                            "mana": {
+                              "node": "ManaCost",
+                              "generic": 0,
+                              "symbols": [],
+                              "x_symbols": 0
+                            },
+                            "life": 0,
+                            "tap_source": true,
+                            "tap_selector": null,
+                            "tap_count": 0,
+                            "zone_costs": [
+                              {
+                                "node": "ZoneCost",
+                                "cost_id": "treasure",
+                                "kind": "sacrifice",
+                                "selector": null,
+                                "count": 1
+                              }
+                            ],
+                            "counter_costs": []
+                          },
+                          "effects": [
+                            {
+                              "node": "ChooseMana",
+                              "options": [
+                                [
+                                  "W"
+                                ],
+                                [
+                                  "U"
+                                ],
+                                [
+                                  "B"
+                                ],
+                                [
+                                  "R"
+                                ],
+                                [
+                                  "G"
+                                ]
+                              ]
+                            }
+                          ],
+                          "targets": null,
+                          "timing": "instant",
+                          "mana_ability": true,
+                          "zone": {
+                            "zone": "battlefield"
+                          },
+                          "minimum_x": 0,
+                          "generic_reduction": 0
+                        }
+                      ],
+                      "cost_modifiers": [],
+                      "target_restrictions": [],
+                      "keywords": [],
+                      "supertypes": [],
+                      "entry_modifiers": [],
+                      "player_permissions": {
+                        "node": "PlayerPermissions",
+                        "additional_land_plays": 0,
+                        "no_maximum_hand_size": false,
+                        "land_zones": []
+                      },
+                      "counter_replacements": [],
+                      "entry_counters": [],
+                      "colors": [],
+                      "modal": null,
+                      "entry_copy_tapped": false,
+                      "characteristic_pt": null,
+                      "life_gain_replacements": [],
+                      "block_restrictions": [],
+                      "tapped_mana_replacements": [],
+                      "all_subtype_sets": [],
+                      "entry_restrictions": [],
+                      "casting_restrictions": [],
+                      "entry_copy_add_types": []
+                    },
+                    "amount": 1,
+                    "players": "controller"
+                  }
+                ],
+                "players": "event_controllers"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 4,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 3,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
