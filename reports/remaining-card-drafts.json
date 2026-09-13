@@ -2484,7 +2484,25 @@
       }
     ],
     "unresolved_defects": [],
-    "review_work_remaining": "Complete isolated draft hosted validation; promote all four exact source bindings; validate the same methods through the reviewed loader."
+    "review_work_remaining": "Complete isolated draft hosted validation; promote all four exact source bindings; validate the same methods through the reviewed loader.",
+    "resolved_validation_issues": [
+      {
+        "commit": "a95e7d4c88aa6e5a0adda0d9b76fdbe98da47c5e",
+        "run_id": 34778960568,
+        "conclusion": "failure",
+        "tests_run": 1437,
+        "errors": 1,
+        "failures": 0,
+        "platforms": {
+          "ubuntu": "1437 tests; one fixture setup error",
+          "windows": "cancelled by matrix fail-fast"
+        },
+        "issues": [
+          "The all-player Forgotten Ancient spell fixture tried to pass priority after the isolated stack had emptied. A fresh scenario window is required when no turn schedule is active."
+        ],
+        "resolution": "Open a scenario priority window for each caster when the stack is empty; retain actual priority passes for responses. No runtime or card program change."
+      }
+    ]
   },
   "hosted_validation_history": [
     {

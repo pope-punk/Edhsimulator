@@ -79,6 +79,8 @@ class CounterTransferTests(unittest.TestCase):
         return self.kernel.execute_for_scenario(self.bodies[player],player,effects)
 
     def cast(self,player='B',definition='transfer-spell',targets=()):
+        if not self.kernel.stack and self.kernel.turn_schedule is None:
+            self.kernel.open_window_for_scenario('A',priority_actor=player)
         while self.kernel.priority!=player:self.kernel.pass_priority(self.kernel.priority)
         ref=self.state.add_card(self.ident(),definition,player,Zone.HAND)
         self.kernel.commit_action(self.kernel.quote_cast(self.ident(),player,ref,targets),Payment())

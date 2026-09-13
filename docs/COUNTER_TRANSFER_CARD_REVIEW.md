@@ -88,3 +88,9 @@ it is not a production admission certificate.
 The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt)
 remain the runtime rules baseline. No Python, imports, compilation, installation,
 tests, simulations or games were run on the user's computer.
+
+The first [draft run](https://github.com/pope-punk/Edhsimulator/actions/runs/34778960568)
+ran 1,437 tests on Ubuntu with one scenario-window fixture error; Windows was
+cancelled by matrix fail-fast. The fixture now opens each empty-stack caster's
+scenario window explicitly. Runtime and card programs were unchanged. The corrected
+run is pending.
