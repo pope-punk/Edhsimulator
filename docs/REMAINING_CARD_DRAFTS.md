@@ -95,8 +95,11 @@ readiness. The seven programs therefore remain separate drafts.
 The [2026-09-13 library audit](CARD_LIBRARY_AUDIT.md) records six corrected
 reviewed cards and consistent single-color mana composition for 26 reviewed
 cards and three drafts. It changes authored programs, not runtime modules or
-reviewed coverage. Its GitHub-hosted validation is pending; resolve any failures
-before adding the next card family.
+reviewed coverage. [GitHub-hosted validation 34761841466](https://github.com/pope-punk/Edhsimulator/actions/runs/34761841466)
+passed 1,213 tests on each of Ubuntu and Windows at code/test commit
+`5ca100ea394a34c6a09b652b5a0a52dd9bbdd457`. Continue with the next card family,
+using the audit's selector and mana conventions. Draft promotion and production
+admission remain separate review steps.
 
 ## Continuing the remaining cards
 

@@ -15,6 +15,9 @@ rules proof or a production certificate.
 | Angel of Invention | Fabricate named its tokens Servo. The default token name is Servo Token under CR 111.4. |
 | Doomwake Giant, Grim Guardian, Underworld Coinsmith | A blanket Enchantment filter could suppress the source's own entry after a continuous type change. Compose disjoint self-entry and other-controlled-enchantment patterns, preserving exactly one ordinary self-entry trigger. |
 
+The existing Lyra regression now uses a valid Kindred artifact Angel and checks
+that lifelink applies while power and toughness remain absent.
+
 All six corrected cards use existing primitives. The constellation composition
 follows the existing approach for multiple event clauses, with source exclusion
 making its event branches mutually exclusive.
@@ -58,8 +61,13 @@ cards, the two mixed-mana cards, damage versus life costs, Mana Reflection, and
 pending-choice restoration. The existing draft fixtures cover the three normalized
 reveal lands.
 
-GitHub-hosted validation is pending. No local Python, package installation, tests,
-or gameplay was executed. Runtime modules and checkpoint schema 109 are unchanged.
+GitHub-hosted [validation run 34761841466](https://github.com/pope-punk/Edhsimulator/actions/runs/34761841466)
+passed syntax, distribution installation, packaged-asset verification, and
+**1,213 conformance tests on each of Ubuntu and Windows**, including the eight
+new methods. The validated code/test commit is
+`5ca100ea394a34c6a09b652b5a0a52dd9bbdd457`. This result update changes only
+review documentation and audit metadata. No local Python, package installation,
+tests, or gameplay was executed. Runtime modules and checkpoint schema 109 are unchanged.
 Program fingerprints change, so this is not a conversion or authorization to
 resume an existing game under different definitions.
 

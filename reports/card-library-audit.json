@@ -130,11 +130,43 @@
     "Swan Song and Beast Within retain controller capture independent of success; Terastodon and Curse of the Swine retain actual zone-result checks."
   ],
   "validation": {
-    "status": "pending_github_hosted_ci",
+    "status": "passed_github_hosted_ci",
     "new_test_methods": 8,
     "local_python_executed": false,
     "local_tests_executed": false,
-    "production_certificate": false
+    "production_certificate": false,
+    "initial_run": {
+      "id": 34761651628,
+      "conclusion": "failure",
+      "ubuntu_tests": 1213,
+      "failures": 1,
+      "errors": 3,
+      "windows_conclusion": "cancelled_by_matrix_fail_fast",
+      "resolution": "Corrected an older Lyra expectation and a new filter-land fixture that seeded mana before open_window_for_scenario cleared it. No runtime changes."
+    },
+    "run_id": 34761841466,
+    "run_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34761841466",
+    "validated_code_commit": "5ca100ea394a34c6a09b652b5a0a52dd9bbdd457",
+    "checks": [
+      "source syntax",
+      "distribution installation",
+      "installed catalog and runtime assets",
+      "rules primitive conformance"
+    ],
+    "jobs": [
+      {
+        "id": 103735942720,
+        "name": "verify (windows-latest)",
+        "conclusion": "success",
+        "tests": 1213
+      },
+      {
+        "id": 103735942818,
+        "name": "verify (ubuntu-latest)",
+        "conclusion": "success",
+        "tests": 1213
+      }
+    ]
   },
   "compatibility": {
     "runtime_modules_changed": false,
