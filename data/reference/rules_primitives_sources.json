@@ -224,7 +224,10 @@
       "608.2g",
       "800.4g",
       "111.10a",
-      "800.4f"
+      "800.4f",
+      "122.5",
+      "122.8",
+      "119.4"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -330,6 +333,18 @@
     {
       "url": "https://media.wizards.com/2024/downloads/FDN_Release_Notes_dPeeQG7XyE/EN_FDN%20Release%20Notes%2008282024.pdf",
       "scope": "Bulk Up's power snapshot and Prayer of Binding's optional targeting, early source departure and Aura return."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/ikoria-lair-behemoths-and-commander-2020-edition-release-notes-2020-04-10",
+      "scope": "The Ozolith departure copies, optional all-counter transfer, exact source and target availability."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/streets-new-capenna-release-notes-2022-04-20",
+      "scope": "Aven Courier chooses targets at trigger placement and counter kinds during resolution."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
+      "scope": "Essence Channeler's printed 2/1 body, gross turn life loss, one trigger per life-gain event, all-kind death snapshot and independent departure copies."
     }
   ]
 }

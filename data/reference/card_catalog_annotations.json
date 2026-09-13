@@ -841,7 +841,7 @@
     "essence-channeler": {
       "combat": {
         "power": 2,
-        "toughness": 2
+        "toughness": 1
       }
     },
     "eternal-witness": {

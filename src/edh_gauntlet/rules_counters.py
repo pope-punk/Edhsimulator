@@ -5,6 +5,7 @@ Replacement side effects and general counter-removal effects remain separate gat
 """
 from .rules_state import ObjectRef,PlayerRef,Zone,RulesViolation,target_from_json
 from .rules_choices import Option
+from .rules_program import CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind
 from .rules_characteristics import matches
 
 
@@ -40,13 +41,13 @@ class CounterRules:
         except RulesViolation:return None
         return dict(obj.counters) if obj.zone==Zone.BATTLEFIELD and not obj.phased else None
 
-    def _put_counters(self,placements,frame,key):
+    def _plan_counter_placements(self,placements,frame,key):
         merged={}
         for recipient,kind,amount in placements:
             if amount<=0 or self._counter_counts(recipient) is None:continue
             counts=merged.setdefault(recipient,{})
             counts[kind]=counts.get(kind,0)+amount
-        if not merged:return
+        if not merged:return (),()
         sources=tuple((source,rule) for source in self.state.objects(Zone.BATTLEFIELD) if not source.phased
                       for rule in self.definition(source).counter_replacements)
         views=self.characteristics()
@@ -86,10 +87,63 @@ class CounterRules:
             if counts:final.append((recipient,tuple(sorted(counts.items()))))
         # Choices above mutate no resources, counters or event stream. A resumed
         # instruction recomputes the same proposals and reuses its bound answers.
-        self.state.put_counters_batch(final)
+        return tuple(final),tuple(trace)
+
+    def _put_counters(self,placements,frame,key):
+        final,trace=self._plan_counter_placements(placements,frame,key)
+        self._commit_counters(final,trace,frame)
+
+    def _commit_counters(self,final,trace,frame,removals=()):
+        self.state.put_counters_batch(final,removals=removals)
+        for ref,counts in removals:
+            self._event('counters_removed',ref=ref.to_json(),counters=dict(counts),player=frame['controller'])
         for row in trace:self._event('counter_replacement_applied',**row)
         for recipient,counts in final:
             self._emit_counters(recipient,dict(counts),frame['controller'],self._source(frame).ref)
+
+    def _execute_counter_instruction(self,effect,frame,key):
+        if isinstance(effect,CopyEventCounters):
+            counts=frame['values']['event_counters']
+            self._put_counters(((ref,kind,n) for ref in self._refs(frame,effect.subject)
+                for kind,n in counts.items()),frame,key)
+        elif isinstance(effect,MoveCounters):
+            sources=self._refs(frame,effect.subject);targets=self._refs(frame,effect.to)
+            if not sources or not targets:return True
+            if len(sources)!=1 or len(targets)!=1:raise RulesViolation('Counter moves require one source and destination')
+            source,target=sources[0],targets[0]
+            counts=self._counter_counts(source)
+            if source==target or not counts or self._counter_counts(target) is None:return True
+            counts={kind:n for kind,n in counts.items() if effect.kind is None or kind==effect.kind}
+            if not counts:return True
+            final,trace=self._plan_counter_placements(((target,kind,n) for kind,n in counts.items()),frame,key)
+            self._commit_counters(final,trace,frame,((source,tuple(sorted(counts.items()))),))
+        elif isinstance(effect,DistributeCounters):
+            sources=self._refs(frame,effect.subject)
+            if not sources:return True
+            if len(sources)!=1:raise RulesViolation('Counter distribution requires one source')
+            source=sources[0];counts=self._counter_counts(source)
+            amount=counts.get(effect.kind,0) if counts is not None else 0
+            if not amount:return True
+            options=tuple(Option(str(i),self.definition(obj).name,ref=obj.ref)
+                for i,obj in enumerate(self._query(effect.selector,frame)) if obj.ref!=source)
+            allocations=self._counter_allocation(key,frame['controller'],source,effect.kind,amount,options)
+            total=sum(n for ref,n in allocations)
+            if not total:return True
+            final,trace=self._plan_counter_placements(((ref,effect.kind,n) for ref,n in allocations),frame,key)
+            self._commit_counters(final,trace,frame,((source,((effect.kind,total),)),))
+        elif isinstance(effect,CopyCounterKind):
+            options=[];kinds=[]
+            for obj in self._query(effect.selector,frame):
+                for kind,n in obj.counters:
+                    kinds.append(kind);options.append(Option(str(len(options)),self.definition(obj).name+': '+kind,ref=obj.ref))
+            if not options:return True
+            chosen=self._choose(key+':kind',frame['controller'],'counter_kind','Choose a counter on a permanent.',options,1,1)
+            kind=kinds[int(chosen[0].key)]
+            recipients=tuple(ref for ref in self._refs(frame,effect.subject)
+                if (counts:=self._counter_counts(ref)) is not None and (not effect.only_if_absent or not counts.get(kind,0)))
+            self._put_counters(((ref,kind,1) for ref in recipients),frame,key)
+        else:return False
+        return True
 
     def _emit_counters(self,recipient,counts,actor,source):
         controller=recipient.player if isinstance(recipient,PlayerRef) else self.state.get(recipient).controller

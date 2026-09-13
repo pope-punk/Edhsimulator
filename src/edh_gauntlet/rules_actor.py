@@ -156,6 +156,7 @@ def project_actor(kernel,actor):
         window=kernel.mana_payment
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],
             'mana':deepcopy(window['mana']),'parent_frame':window['parent']['id']}
+    packet['life_lost_this_turn']={p:state.life_lost_this_turn(p) for p in state.live_players}
     packet['draw_counts']={player:kernel.draw_counts.get(player,0) if kernel.draw_count_turn==state.turn_number else 0
         for player in state.live_players}
     if actor in kernel.library_observations:

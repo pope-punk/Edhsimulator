@@ -13,7 +13,7 @@ from types import MappingProxyType
 from .rules_state import RulesState,RulesObject,ObjectRef,Zone,ZoneMove,RulesViolation
 from .rules_characteristics import Characteristics, evaluate as evaluate_characteristics, base as base_characteristics, matches as matches_selector, condition_holds, characteristics_match, counters_match
 from .rules_identity import IMPLEMENTATION_ID
-from .rules_choices import Option, ChoiceRequest, PriorityBoundary, choice_capacity
+from .rules_choices import Option, ChoiceRequest, CounterAllocationRequest, PriorityBoundary, choice_capacity
 from .rules_attachments import AttachmentRules
 from .rules_casting import CastingRules
 from .rules_turns import TurnRules, TurnActionBoundary
@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=115
+    CHECKPOINT_SCHEMA=116
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -161,7 +161,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         # views are passed explicitly and never retrieved through this cache.
         cached = getattr(self, '_characteristics_cache', None)
         if cached is None or cached[0] != self.state.sequence:
-            cached = (self.state.sequence, evaluate_characteristics(self.state.objects(), self.definitions,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players))
+            cached = (self.state.sequence, evaluate_characteristics(self.state.objects(), self.definitions,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players}))
             self._characteristics_cache = cached
         return cached[1]
 
@@ -251,6 +251,30 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             if accepted['request']!=request.to_json():raise RulesViolation('Accepted choice no longer matches its bound request')
             return tuple(options[i] for i in accepted['indexes'])
         self.pending_choice=request;raise _NeedsChoice()
+
+    def _counter_allocation(self,key,actor,source,kind,maximum,options):
+        if not options or not maximum:return ()
+        request=CounterAllocationRequest(key,actor,source,kind,maximum,tuple(options),self.revision)
+        accepted=self.answers.get(key)
+        if accepted is not None:
+            if accepted['request']!=request.to_json():raise RulesViolation('Accepted allocation no longer matches its bound request')
+            return request.validate_allocations(actor,accepted['allocations'])
+        self.pending_choice=request;raise _NeedsChoice()
+
+    def allocate_counters(self,request_id,actor,allocations):
+        request=self.pending_choice
+        if not isinstance(request,CounterAllocationRequest) or request.request_id!=request_id:
+            raise RulesViolation('No matching counter allocation request')
+        if request.revision!=self.revision:raise RulesViolation('State changed after allocation was requested')
+        rows=request.validate_allocations(actor,allocations)
+        canonical=[{'ref':ref.to_json(),'amount':n} for ref,n in rows]
+        self.answers[request_id]={'request':request.to_json(),'allocations':canonical}
+        self.accepted.append({'request_id':request_id,'actor':actor,'allocations':canonical})
+        self.pending_choice=None
+        mana_actor=self.resolving.get('return_priority') if self.resolving and self.resolving.get('mana_ability') else None
+        boundary=self.advance()
+        if boundary is None and mana_actor in self.state.live_players:self.priority=mana_actor
+        return boundary
 
     def answer(self,request_id,actor,indexes):
         request=self.pending_choice
@@ -346,13 +370,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     if views is None and (pattern.types or ability.occurrence_condition or ability.intervening_if):
                         views=evaluate_characteristics(objects,self.definitions,temporary=self._temporary_rows(),
                             life_totals={p:self.state.life(p) for p in self.state.players},
-                            starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players)
+                            starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})
                     if pattern.types and not set(pattern.types)<=views[subject.ref].types:continue
                     self._trigger(source,ability,bindings={'event_subject':[subject.ref.to_json()]},
                         condition_objects=objects,condition_views=views)
 
-    def _collect(self,events,before,after,before_views=None,before_life_totals=None,before_live_players=None):
-        before_views=before_views if before_views is not None else evaluate_characteristics(before,self.definitions,temporary=self._temporary_rows(),life_totals=before_life_totals if before_life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=before_live_players if before_live_players is not None else self.state.live_players)
+    def _collect(self,events,before,after,before_views=None,before_life_totals=None,before_live_players=None,before_life_lost=None):
+        before_views=before_views if before_views is not None else evaluate_characteristics(before,self.definitions,temporary=self._temporary_rows(),life_totals=before_life_totals if before_life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=before_live_players if before_live_players is not None else self.state.live_players,life_lost_totals=before_life_lost if before_life_lost is not None else {p:self.state.life_lost_this_turn(p) for p in self.state.players})
         after_views=self.characteristics()
         # Retain public-zone information before collecting any triggers.
         # Battlefield views include simultaneous departing effects; stack views
@@ -389,6 +413,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                         if self._matches(ability.event,source,event=event,views=before_views if lookback else after_views):
                             subject=event.before if lookback else event.after
                             values={'event_controllers':[subject.controller] if subject.zone in {Zone.BATTLEFIELD,Zone.STACK} else []}
+                            if lookback:values['event_counters']=dict(event.before.counters)
                             if event.after.zone==Zone.BATTLEFIELD:values['event_x']=event.before.cast_x if event.before.zone==Zone.STACK else 0
                             if source.ref==event.before.ref and event.after.zone in {Zone.BATTLEFIELD,Zone.STACK,Zone.GRAVEYARD,Zone.EXILE,Zone.COMMAND}:
                                 values['source_successor']=event.after.ref.to_json()
@@ -401,7 +426,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                                     values['aura_tracking']={'source':source.ref.to_json(),'attached':subject.ref.to_json()}
                             self._trigger(source,ability,bindings=bindings,
                                 values=values,
-                                condition_objects=sources,condition_views=before_views if lookback else after_views,condition_life_totals=before_life_totals if lookback else None,condition_live_players=before_live_players if lookback else None)
+                                condition_objects=sources,condition_views=before_views if lookback else after_views,condition_life_totals=before_life_totals if lookback else None,condition_live_players=before_live_players if lookback else None,condition_life_lost=before_life_lost if lookback else None)
 
         self._collect_delayed(events)
 
@@ -412,11 +437,11 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             return current.zone==zone and not current.phased
         except RulesViolation:return False
 
-    def _condition_holds(self,condition,source,objects=None,views=None,life_totals=None,live_players=None):
+    def _condition_holds(self,condition,source,objects=None,views=None,life_totals=None,live_players=None,life_lost_totals=None):
         if condition is None:return True
         return condition_holds(condition,source,
             self.state.objects(Zone.BATTLEFIELD) if objects is None else objects,
-            self.characteristics() if views is None else views,life_totals=life_totals if life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=live_players if live_players is not None else self.state.live_players)
+            self.characteristics() if views is None else views,life_totals=life_totals if life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=live_players if live_players is not None else self.state.live_players,life_lost_totals=life_lost_totals if life_lost_totals is not None else {p:self.state.life_lost_this_turn(p) for p in self.state.players})
 
     def _trigger_limit_key(self,source,ability):
         return json.dumps([source.ref.to_json(),source.effective_definition,ability.ability_id],sort_keys=True)
@@ -430,13 +455,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         used=self.trigger_limits.get(key,0) if self.trigger_limit_turn==self.state.turn_number else 0
         return max(0,(1 if ability.optional_once_per_turn else ability.trigger_limit)-used)
 
-    def _trigger(self,source,ability,bindings=None,*,condition_objects=None,condition_views=None,condition_life_totals=None,condition_live_players=None,values=None):
+    def _trigger(self,source,ability,bindings=None,*,condition_objects=None,condition_views=None,condition_life_totals=None,condition_live_players=None,condition_life_lost=None,values=None):
         if source.controller not in self.state.live_players:return
         if not self._source_condition(source,ability.source_must_remain):return
-        if not self._condition_holds(ability.occurrence_condition,source,condition_objects,condition_views,condition_life_totals,condition_live_players):
+        if not self._condition_holds(ability.occurrence_condition,source,condition_objects,condition_views,condition_life_totals,condition_live_players,condition_life_lost):
             self._event('trigger_occurrence_condition_failed',ability=ability.ability_id,source=source.ref.to_json())
             return
-        if not self._condition_holds(ability.intervening_if,source,condition_objects,condition_views,condition_life_totals,condition_live_players):
+        if not self._condition_holds(ability.intervening_if,source,condition_objects,condition_views,condition_life_totals,condition_live_players,condition_life_lost):
             self._event('trigger_condition_failed',ability=ability.ability_id,source=source.ref.to_json())
             return
         if self.trigger_limit_turn!=self.state.turn_number:
@@ -489,7 +514,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             zone=Zone.BATTLEFIELD,controller=proposal.controller,copied_definition=proposal.copied_definition,copied_add_types=proposal.copied_add_types,
             counters=proposal.counters,tapped=proposal.tapped,attached_to=None,phased=False,timestamp=self.state.sequence+1)
         objects=tuple(obj for obj in self.state.objects() if obj.ref.card_id!=entering.ref.card_id)+(entering,)
-        return entering,evaluate_characteristics(objects,self.definitions,entering_ref=entering.ref,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players)[entering.ref]
+        return entering,evaluate_characteristics(objects,self.definitions,entering_ref=entering.ref,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})[entering.ref]
 
     def _proposal_types(self, proposal):
         if proposal.destination == Zone.BATTLEFIELD:return self._proposal_view(proposal)[1].types
@@ -632,6 +657,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         before_views = self.characteristics()
         before_life_totals = {p:self.state.life(p) for p in self.state.players}
         before_live_players = self.state.live_players
+        before_life_lost = {p:self.state.life_lost_this_turn(p) for p in self.state.players}
         proposals = [];blocked=[]
         entry_restrictions=tuple((source,restriction) for source in before if not source.phased
             for restriction in self.definition(source).entry_restrictions)
@@ -745,7 +771,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 self._event('replacement_considered', source=proposal.before.ref.to_json(), **replacement)
         for event in events:
             self._event('zone_changed', event=event.to_json())
-        self._collect(events, before, self.state.objects(Zone.BATTLEFIELD), before_views,before_life_totals,before_live_players)
+        self._collect(events, before, self.state.objects(Zone.BATTLEFIELD), before_views,before_life_totals,before_live_players,before_life_lost)
         for event in events:
             if event.after.zone==Zone.BATTLEFIELD and event.after.counters:
                 self._emit_counters(event.after.ref,dict(event.after.counters),event.after.controller,event.after.ref)
@@ -911,6 +937,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
         if self._execute_attachment(effect,frame,key):return
+        if self._execute_counter_instruction(effect,frame,key):return
         if isinstance(effect,PayMana):
             window=self.mana_payment
             if window is None:
@@ -1447,7 +1474,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
             kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))
-        kernel.pending_choice=ChoiceRequest.from_json(value['pending_choice']) if value['pending_choice'] else None
+        request=value['pending_choice']
+        kernel.pending_choice=(CounterAllocationRequest if request['kind']=='counter_allocation' else ChoiceRequest).from_json(request) if request else None
         kernel._serial=value['serial'];kernel._revision=value['revision']
         kernel._commander_sba_handled={ObjectRef.from_json(r) for r in value['commander_sba_handled']}
         return kernel

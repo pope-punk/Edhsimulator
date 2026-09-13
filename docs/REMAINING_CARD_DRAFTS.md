@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **250 source-bound reviewed programs / 315 deck copies**. There are **84 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**, 80 unstarted and four isolated drafts awaiting hosted validation. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,13 +22,21 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-The next candidate queue is **Forgotten Ancient, The Ozolith, Aven Courier and
-Essence Channeler**. They share counter-kind snapshots, placement and transfers.
-Implement replacement-aware transfers and authored allocation; Essence Channeler
-also needs life-lost-this-turn history. The inventory records the required work.
-Begin that family from the current remote head and preserve the execution policy.
+## Current cycle: counter transfers and turn life-loss history
 
-## Current cycle: resolution payments and draw ordinals
+Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler have complete
+draft programs and printed-face mappings. The shared code adds atomic
+replacement-aware transfers, authored allocation, departure snapshots and gross
+life-lost-this-turn history. Essence Channeler's source toughness is corrected
+from 2 to 1 using Wizards' release notes. Kernel checkpoint schema is **116**;
+state schema is **13**.
+
+The **53 new conformance methods** await GitHub-hosted validation. Keep these
+programs isolated until the draft run passes, then promote exact source bindings
+and validate the same methods through the reviewed loader.
+See [the cycle review](COUNTER_TRANSFER_CARD_REVIEW.md).
+
+## Previous cycle: resolution payments and draw ordinals
 
 Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor have complete
 printed-face review and exact source bindings. PayMana offers the captured payer

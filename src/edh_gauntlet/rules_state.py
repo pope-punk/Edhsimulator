@@ -131,7 +131,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=12
+    CHECKPOINT_SCHEMA=13
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -154,6 +154,7 @@ class RulesState:
                 or any(type(n) is not int or n<=0 for n in totals.values())):
             raise RulesViolation('Invalid starting life totals')
         self._starting_life=dict(totals)
+        self._life_lost={p:0 for p in self.players}
         self._life=dict(totals);self._player_counters={p:{} for p in self.players}
         self._command_casts={p:0 for p in self.players}
         self._commander_casts={};self._mana={p:{} for p in self.players}
@@ -213,6 +214,7 @@ class RulesState:
     def sequence(self):return self._sequence
 
     def life(self,player):return self._life[player]
+    def life_lost_this_turn(self,player):return self._life_lost[player]
     def starting_life(self,player):return self._starting_life[player]
 
     def player_counters(self,player):return tuple(sorted(self._player_counters[player].items()))
@@ -338,6 +340,7 @@ class RulesState:
                 pool[symbol]-=amount
                 if not pool[symbol]:del pool[symbol]
             self._life[payment.actor]-=payment.life
+            self._life_lost[payment.actor]+=payment.life
             moved_refs={before.ref for _,before,_ in pending}
             for ref in payment.taps:
                 if ref not in moved_refs:self._objects[ref.card_id]=replace(self.get(ref),tapped=True)
@@ -346,7 +349,8 @@ class RulesState:
                 self._objects[ref.card_id]=replace(obj,counters=tuple(sorted((k,n) for k,n in counts.items() if n)))
             self._sequence+=1
         if entry_life:
-            for actor,amount in entry_life:self._life[actor]-=amount
+            for actor,amount in entry_life:
+                self._life[actor]-=amount;self._life_lost[actor]+=amount
             self._sequence+=1
         self._events.extend(events);self.assert_invariants();return tuple(events)
 
@@ -468,6 +472,7 @@ class RulesState:
         if active not in self.players:raise RulesViolation('Unknown active player')
         self._sequence+=1;self._turn_starts[active]=self._sequence
         self._turn_number+=1;self._turn_active=active
+        self._life_lost={p:0 for p in self.players}
         for key,obj in self._objects.items():
             if obj.zone==Zone.BATTLEFIELD and obj.controller==active and not obj.phased and obj.tapped:
                 self._objects[key]=replace(obj,tapped=False)
@@ -489,7 +494,7 @@ class RulesState:
 
     def damage_batch(self, assignments):
         """Atomic nonprevented damage; keyword semantics are supplied by the kernel."""
-        assignments=tuple(assignments);life=dict(self._life);marked={};touch=set();gains={};counter_updates={};changed=False
+        assignments=tuple(assignments);life=dict(self._life);losses={};marked={};touch=set();gains={};counter_updates={};changed=False
         commander_damage=dict(self._commander_damage)
         for row in assignments:
             amount=row['amount'];target=row['target'];source=row['source']
@@ -500,7 +505,7 @@ class RulesState:
             if isinstance(target,str):
                 if target not in self.players:raise RulesViolation('Unknown damage recipient')
                 if target not in self.live_players or not amount:continue
-                life[target]-=amount
+                life[target]-=amount;losses[target]=losses.get(target,0)+amount
                 if row.get('combat') and source.commander:
                     key=(target,source.ref.card_id);commander_damage[key]=commander_damage.get(key,0)+amount
             else:
@@ -526,6 +531,7 @@ class RulesState:
                 life[source.controller]+=gain;gains[source.controller]=gains.get(source.controller,0)+gain
         if not changed:return {}
         self._life=life;self._commander_damage=commander_damage
+        for player,amount in losses.items():self._life_lost[player]+=amount
         for ref,amount in marked.items():
             obj=self.get(ref);self._objects[ref.card_id]=replace(obj,damage_marked=amount,deathtouch_hit=obj.deathtouch_hit or ref in touch)
         for ref,counts in counter_updates.items():
@@ -550,9 +556,20 @@ class RulesState:
                 self._objects[key]=replace(obj,damage_marked=0,deathtouch_hit=False);changed=True
         if changed:self._sequence+=1
 
-    def put_counters_batch(self,placements):
-        """Commit validated permanent/player counter additions in one mutation."""
-        placements=tuple(placements);seen=set();objects={};players={}
+    def put_counters_batch(self,placements,*,removals=()):
+        """Commit counter removals and replacement-adjusted placements atomically."""
+        placements=tuple(placements);removals=tuple(removals);seen=set();objects={};players={}
+        for ref,counts in removals:
+            if not isinstance(ref,ObjectRef) or ref in objects:raise RulesViolation('Invalid or duplicate counter source')
+            obj=self.get(ref)
+            if obj.zone!=Zone.BATTLEFIELD or obj.phased:raise RulesViolation('Unavailable counter source')
+            if not isinstance(counts,tuple) or not counts:raise RulesViolation('Counter removals must be a nonempty tuple')
+            remaining=dict(obj.counters);kinds=set()
+            for kind,amount in counts:
+                if (type(kind) is not str or not kind or kind in kinds or type(amount) is not int
+                        or amount<=0 or amount>remaining.get(kind,0)):raise RulesViolation('Invalid counter removal')
+                kinds.add(kind);remaining[kind]-=amount
+            objects[ref]=replace(obj,counters=tuple(sorted((k,n) for k,n in remaining.items() if n)))
         for recipient,additions in placements:
             if not isinstance(recipient,(ObjectRef,PlayerRef)) or recipient in seen:raise RulesViolation('Invalid or duplicate counter recipient')
             seen.add(recipient)
@@ -568,11 +585,11 @@ class RulesState:
             else:
                 obj=self.get(recipient)
                 if obj.zone!=Zone.BATTLEFIELD or obj.phased:raise RulesViolation('Unavailable counter recipient')
-                counts=dict(obj.counters)
+                counts=dict(objects.get(recipient,obj).counters)
             for kind,amount in additions:counts[kind]=counts.get(kind,0)+amount
             if isinstance(recipient,PlayerRef):players[recipient.player]=counts
             else:objects[recipient]=replace(obj,counters=tuple(sorted(counts.items())))
-        if not placements:return
+        if not placements and not removals:return
         for ref,obj in objects.items():self._objects[ref.card_id]=obj
         self._player_counters.update(players);self._sequence+=1
 
@@ -606,6 +623,7 @@ class RulesState:
             raise RulesViolation('Invalid life-loss batch')
         if not amount or not players:return {}
         self._life={p:life-amount if p in players else life for p,life in self._life.items()}
+        for player in players:self._life_lost[player]+=amount
         self._sequence+=1
         return {player:amount for player in players}
 
@@ -678,6 +696,7 @@ class RulesState:
             latest=max((row for row in self._control_effects.values() if row['ref'].card_id==card),key=lambda row:row['timestamp'])
             if self._objects[card].controller!=latest['controller']:raise RulesViolation('Control ledger disagrees with object')
         if set(self._mana)!=set(self.players) or set(self._life)!=set(self.players):raise RulesViolation('Invalid player resource ledger')
+        if set(self._life_lost)!=set(self.players) or any(type(n) is not int or n<0 for n in self._life_lost.values()):raise RulesViolation('Invalid turn life-loss ledger')
         if any(type(n) is not int for n in self._life.values()):raise RulesViolation('Invalid life ledger')
         if set(self._player_counters)!=set(self.players):raise RulesViolation('Invalid player counter ledger')
         for counts in self._player_counters.values():
@@ -711,7 +730,7 @@ class RulesState:
         return {'schema':self.CHECKPOINT_SCHEMA,'starting_life':dict(self._starting_life),'commander_identities':None if self._commander_identities is None else {p:list(c) for p,c in self._commander_identities.items()},'players':list(self.players),'objects':[o.to_json() for o in self._objects.values()],
             'order':[{'owner':p,'zone':z.value,'ids':list(ids)} for (p,z),ids in self._order.items()],
             'physical':sorted(self._physical),'issued':sorted(self._issued),'sequence':self._sequence,'batch':self._batch,
-            'events':[e.to_json() for e in self._events],'life':dict(self._life),
+            'events':[e.to_json() for e in self._events],'life':dict(self._life),'life_lost_this_turn':dict(self._life_lost),
             'player_counters':{p:dict(c) for p,c in self._player_counters.items()},'command_casts':dict(self._command_casts),'commander_casts':dict(self._commander_casts),
             'mana':{player:dict(pool) for player,pool in self._mana.items()},
             'turn_starts':dict(self._turn_starts),'turn_number':self._turn_number,'turn_active':self._turn_active,
@@ -731,6 +750,7 @@ class RulesState:
         if len(state._order)!=len(value['order']) or set(state._order)!={(p,z) for p in state.players for z in Zone}:raise RulesViolation('Invalid restored zone index')
         state._issued=set(value['issued'])
         state._physical=set(value['physical']);state._sequence=value['sequence'];state._batch=value['batch']
+        state._life_lost=dict(value['life_lost_this_turn'])
         state._life=dict(value['life']);state._player_counters={p:dict(c) for p,c in value['player_counters'].items()};state._command_casts=dict(value['command_casts'])
         state._commander_casts=dict(value['commander_casts']);state._mana={player:dict(pool) for player,pool in value['mana'].items()}
         state._turn_starts=dict(value['turn_starts']);state._turn_number=value['turn_number'];state._turn_active=value['turn_active']

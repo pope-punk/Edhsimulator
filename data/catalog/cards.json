@@ -7446,7 +7446,7 @@
             "Cleric"
           ],
           "supertypes": [],
-          "toughness": 2,
+          "toughness": 1,
           "type_line": "Creature — Bat Cleric",
           "types": [
             "Creature"

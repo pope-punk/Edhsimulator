@@ -71,6 +71,44 @@ class ChoiceRequest:
 
 
 @dataclass(frozen=True)
+class CounterAllocationRequest:
+    request_id: str
+    actor: str
+    source: ObjectRef
+    counter_kind: str
+    maximum: int
+    options: tuple[Option,...]
+    revision: str
+    kind: str = 'counter_allocation'
+    prompt: str = 'Choose how many counters to move to each recipient, or move none.'
+
+    def to_json(self):
+        return {**asdict(self),'source':self.source.to_json(),'options':[o.to_json() for o in self.options]}
+
+    @classmethod
+    def from_json(cls,value):
+        value=dict(value);value['source']=ObjectRef.from_json(value['source'])
+        value['options']=tuple(Option(**{**o,'ref':ObjectRef.from_json(o['ref'])}) for o in value['options'])
+        return cls(**value)
+
+    def validate(self,actor,indexes):
+        raise RulesViolation('Counter allocation requires an authored allocation command')
+
+    def validate_allocations(self,actor,allocations):
+        if actor!=self.actor:raise RulesViolation('Counter allocation belongs to another actor')
+        if type(allocations) is not list:raise RulesViolation('Counter allocations must be a list')
+        legal={o.ref for o in self.options};seen=set();total=0;result=[]
+        for row in allocations:
+            if type(row) is not dict or set(row)!={'ref','amount'} or type(row['amount']) is not int or row['amount']<=0:
+                raise RulesViolation('Invalid counter allocation row')
+            ref=ObjectRef.from_json(row['ref'])
+            if ref not in legal or ref in seen:raise RulesViolation('Unavailable or duplicate counter recipient')
+            seen.add(ref);total+=row['amount'];result.append((ref,row['amount']))
+        if total>self.maximum:raise RulesViolation('Allocation exceeds available counters')
+        return tuple(sorted(result,key=lambda row:(row[0].card_id,row[0].incarnation)))
+
+
+@dataclass(frozen=True)
 class ManaPaymentBoundary:
     actor: str
     request_id: str

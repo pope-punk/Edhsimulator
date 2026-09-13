@@ -10,7 +10,7 @@ import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -53,8 +53,9 @@ def characteristics_match(ranges, view):
 def counters_match(ranges, obj):
     if not ranges:return True
     counters=dict(obj.counters)
-    return all((r.minimum is None or counters.get(r.kind,0)>=r.minimum)
-        and (r.maximum is None or counters.get(r.kind,0)<=r.maximum) for r in ranges)
+    def amount(kind):return sum(counters.values()) if kind is None else counters.get(kind,0)
+    return all((r.minimum is None or amount(r.kind)>=r.minimum)
+        and (r.maximum is None or amount(r.kind)<=r.maximum) for r in ranges)
 
 
 def matches(selector, obj, view, source):
@@ -83,14 +84,23 @@ def _layer(change):
     return {ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
 
 
-def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None):
+def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
     if condition is None:
         return True
     if isinstance(condition,(AllConditions,AnyConditions)):
-        answers=(condition_holds(child,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players) for child in condition.conditions)
+        answers=(condition_holds(child,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals) for child in condition.conditions)
         return all(answers) if isinstance(condition,AllConditions) else any(answers)
     if isinstance(condition,NotCondition):
-        return not condition_holds(condition.condition,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players)
+        return not condition_holds(condition.condition,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
+    if isinstance(condition,LifeLostCondition):
+        if life_lost_totals is None or source.controller not in life_lost_totals:
+            raise RulesViolation('Life-loss conditions require explicit turn history')
+        return life_lost_totals[source.controller]>=condition.minimum
+    if isinstance(condition,SourceCountersCondition):
+        current=next((obj for obj in objects if obj.ref==source.ref and obj.zone==Zone.BATTLEFIELD and not obj.phased),None)
+        if current is None:return False
+        counts=dict(current.counters)
+        return (sum(counts.values()) if condition.kind is None else counts.get(condition.kind,0))>=condition.minimum
     if isinstance(condition,EntryFlagCondition):
         return condition.flag in source.entry_flags
     if isinstance(condition,PlayerCountCondition):
@@ -127,8 +137,8 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
     return remaining <= 0
 
 
-def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None):
-    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players):
+def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals):
         return ()
     return tuple(obj.ref for obj in objects if matches(effect.selector, obj, views[obj.ref], source)
         and (source.ref != entering_ref or obj.ref == entering_ref)
@@ -190,7 +200,7 @@ def condition_selectors(condition):
         for child in condition.conditions:yield from condition_selectors(child)
     elif isinstance(condition,NotCondition):
         yield from condition_selectors(condition.condition)
-    elif condition is not None and not isinstance(condition,(EntryFlagCondition,LifeCondition,PlayerCountCondition,DevotionCondition)):
+    elif condition is not None and not isinstance(condition,(SourceCountersCondition,LifeLostCondition,EntryFlagCondition,LifeCondition,PlayerCountCondition,DevotionCondition)):
         yield condition.selector
 
 
@@ -221,16 +231,16 @@ def _may_change_recipients(changes, effect):
     return False
 
 
-def evaluate(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None):
-    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=True,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players)
+def evaluate(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=True,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
 
 
-def evaluate_exhaustive(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None):
+def evaluate_exhaustive(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
     """Slow comparison oracle for tests/benchmarks, never selected by the kernel."""
-    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=False,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players)
+    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=False,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
 
 
-def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruning, life_totals, starting_life_totals, live_players):
+def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruning, life_totals, starting_life_totals, live_players, life_lost_totals):
     objects = tuple(objects)
     views = {obj.ref: base(obj, definitions) for obj in objects}
     effects = []
@@ -265,13 +275,13 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             # Proven independent: timestamp order is sufficient, with one
             # recipient calculation per effect instead of repeated graph passes.
             for key, source, effect in pending:
-                refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players)
+                refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals)
                 locked.setdefault(key, refs)
                 _apply(views, refs, changes[key], effect.effect_id, key)
             pending = []
         while pending:
             def recipients(row, state):
-                return locked[row[0]] if row[0] in locked else _recipients(row[1], row[2], objects, state, entering_ref, life_totals, starting_life_totals, live_players)
+                return locked[row[0]] if row[0] in locked else _recipients(row[1], row[2], objects, state, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals)
             # A cache lives only within this dependency pass. Applying an effect
             # invalidates it; cross-layer recipient locking remains separate.
             current = {row[0]: recipients(row, views) for row in pending}

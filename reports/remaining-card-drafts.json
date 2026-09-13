@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 250,
     "remaining_outside_reviewed_bundle": 84,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 84,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 80,
     "reviewed_bundle_copies": 315,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 23
   },
@@ -67,7 +67,7 @@
       "oracle_text": [
         {
           "face_id": "aminatou-the-fateshifter",
-          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[−1]: Exile another target permanent you own, then return it to the battlefield under your control.\n[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
+          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
         }
       ]
     },
@@ -172,7 +172,7 @@
     {
       "card_id": "aven-courier",
       "name": "Aven Courier",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -185,7 +185,21 @@
           "face_id": "aven-courier",
           "text": "Flying\nWhenever Aven Courier attacks, choose a counter on a permanent you control. Put a counter of that kind on target permanent you control if it doesn't have a counter of that kind on it."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_mapping_complete_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transfers-2026-09-13",
+      "draft_definition": "draft:aven-courier",
+      "shared_mechanics": [
+        "CopyEventCounters",
+        "MoveCounters",
+        "DistributeCounters",
+        "CopyCounterKind",
+        "LifeLostCondition",
+        "SourceCountersCondition"
+      ],
+      "review_record": "docs/COUNTER_TRANSFER_CARD_REVIEW.md"
     },
     {
       "card_id": "bulk-up",
@@ -506,7 +520,7 @@
       "oracle_text": [
         {
           "face_id": "domri-anarch-of-bolas",
-          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[−2]: Target creature you control fights target creature you don't control."
+          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control."
         }
       ]
     },
@@ -524,7 +538,7 @@
       "oracle_text": [
         {
           "face_id": "elspeth-conquers-death",
-          "text": "I — Exile target permanent an opponent controls with mana value 3 or greater.\nII — Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
+          "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
         }
       ]
     },
@@ -542,14 +556,14 @@
       "oracle_text": [
         {
           "face_id": "entity-tracker",
-          "text": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
+          "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
         }
       ]
     },
     {
       "card_id": "essence-channeler",
       "name": "Essence Channeler",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -562,7 +576,21 @@
           "face_id": "essence-channeler",
           "text": "As long as you've lost life this turn, this creature has flying and vigilance.\nWhenever you gain life, put a +1/+1 counter on this creature.\nWhen this creature dies, put its counters on target creature you control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_mapping_complete_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transfers-2026-09-13",
+      "draft_definition": "draft:essence-channeler",
+      "shared_mechanics": [
+        "CopyEventCounters",
+        "MoveCounters",
+        "DistributeCounters",
+        "CopyCounterKind",
+        "LifeLostCondition",
+        "SourceCountersCondition"
+      ],
+      "review_record": "docs/COUNTER_TRANSFER_CARD_REVIEW.md"
     },
     {
       "card_id": "exotic-orchard",
@@ -596,7 +624,7 @@
       "oracle_text": [
         {
           "face_id": "fanatic-of-rhonas",
-          "text": "{T}: Add {G}.\nFerocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
+          "text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
         }
       ]
     },
@@ -720,7 +748,7 @@
     {
       "card_id": "forgotten-ancient",
       "name": "Forgotten Ancient",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -733,7 +761,21 @@
           "face_id": "forgotten-ancient",
           "text": "Whenever a player casts a spell, you may put a +1/+1 counter on this creature.\nAt the beginning of your upkeep, you may move any number of +1/+1 counters from this creature onto other creatures."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_mapping_complete_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transfers-2026-09-13",
+      "draft_definition": "draft:forgotten-ancient",
+      "shared_mechanics": [
+        "CopyEventCounters",
+        "MoveCounters",
+        "DistributeCounters",
+        "CopyCounterKind",
+        "LifeLostCondition",
+        "SourceCountersCondition"
+      ],
+      "review_record": "docs/COUNTER_TRANSFER_CARD_REVIEW.md"
     },
     {
       "card_id": "funeral-room-awakening-hall",
@@ -804,7 +846,7 @@
       "oracle_text": [
         {
           "face_id": "ghostly-dancers",
-          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
+          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
         }
       ]
     },
@@ -1312,7 +1354,7 @@
       "oracle_text": [
         {
           "face_id": "midnight-snack",
-          "text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
+          "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
         }
       ]
     },
@@ -1330,7 +1372,7 @@
       "oracle_text": [
         {
           "face_id": "minsc-boo-timeless-heroes",
-          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
+          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
         }
       ]
     },
@@ -1442,7 +1484,7 @@
       "oracle_text": [
         {
           "face_id": "nissa-steward-of-elements",
-          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
+          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
         }
       ]
     },
@@ -1841,7 +1883,7 @@
       "oracle_text": [
         {
           "face_id": "scute-swarm",
-          "text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+          "text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
         }
       ]
     },
@@ -1948,7 +1990,7 @@
         },
         {
           "face_id": "sorin-ravenous-neonate",
-          "text": "Extort\n[+2]: Create a Food token.\n[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
+          "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
         }
       ]
     },
@@ -1966,7 +2008,7 @@
       "oracle_text": [
         {
           "face_id": "sorin-vengeful-bloodlord",
-          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
+          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
         }
       ]
     },
@@ -2053,7 +2095,7 @@
       "oracle_text": [
         {
           "face_id": "the-cruelty-of-gix",
-          "text": "Read ahead\nI — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII — Put target creature card from a graveyard onto the battlefield under your control."
+          "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2078,7 +2120,7 @@
     {
       "card_id": "the-ozolith",
       "name": "The Ozolith",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2091,7 +2133,21 @@
           "face_id": "the-ozolith",
           "text": "Whenever a creature you control leaves the battlefield, if it had counters on it, put those counters on this artifact.\nAt the beginning of combat on your turn, if this artifact has counters on it, you may move all counters from it onto target creature."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_mapping_complete_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transfers-2026-09-13",
+      "draft_definition": "draft:the-ozolith",
+      "shared_mechanics": [
+        "CopyEventCounters",
+        "MoveCounters",
+        "DistributeCounters",
+        "CopyCounterKind",
+        "LifeLostCondition",
+        "SourceCountersCondition"
+      ],
+      "review_record": "docs/COUNTER_TRANSFER_CARD_REVIEW.md"
     },
     {
       "card_id": "the-restoration-of-eiganjo",
@@ -2107,7 +2163,7 @@
       "oracle_text": [
         {
           "face_id": "the-restoration-of-eiganjo",
-          "text": "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control."
+          "text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control."
         },
         {
           "face_id": "architect-of-restoration",
@@ -2147,7 +2203,7 @@
       "oracle_text": [
         {
           "face_id": "touch-the-spirit-realm",
-          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
+          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
         }
       ]
     },
@@ -2165,7 +2221,7 @@
       "oracle_text": [
         {
           "face_id": "uro-titan-of-nature-s-wrath",
-          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard."
+          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard."
         }
       ],
       "authoring_status": "complete_printed_program",
@@ -2199,7 +2255,7 @@
       "oracle_text": [
         {
           "face_id": "urza-s-saga",
-          "text": "I — This Saga gains \"{T}: Add {C}.\"\nII — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"\nIII — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
+          "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
         }
       ]
     },
@@ -2258,7 +2314,7 @@
       "oracle_text": [
         {
           "face_id": "victor-valgavoth-s-seneschal",
-          "text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
+          "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2398,106 +2454,37 @@
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "1d25cf3ff93762b3326190ae7c55486bb1509259",
+    "base_commit": "5285058b45badafddf7fa740ef6ef377deb5e75a",
     "cards_written": [
-      "dawn-of-hope",
-      "rhystic-study",
-      "smothering-tithe",
-      "gleaming-splendor"
-    ],
-    "cards_promoted": [
-      "dawn-of-hope",
-      "rhystic-study",
-      "smothering-tithe",
-      "gleaming-splendor"
-    ],
-    "shared_mechanics": [
-      "PayMana",
-      "Authenticated resolution mana window",
-      "Suspended parent and immediate mana ability frames",
-      "DrawEventPattern and actual draw ordinals"
-    ],
-    "runtime_checkpoint_schema": 115,
-    "new_test_methods": 46,
-    "validation_status": "passed_github_hosted_ci",
-    "unresolved_defects": [],
-    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler using the retained counter-transfer work order.",
-    "resolved_validation_issues": [
-      {
-        "commit": "f94894b36674f0be871abb333c2385baf84b210b",
-        "run_id": 34776728530,
-        "conclusion": "failure",
-        "tests_run": 1384,
-        "failures": 0,
-        "errors": 2,
-        "issues": [
-          "A direct hand-addition fixture moved its scenario source and then reused the stale object reference.",
-          "The lexical-binding fixture expected a selection prompt when its sole legal selection was automatically chosen."
-        ],
-        "resolution": "Move a separate library card for the non-draw hand addition; provide two legal selection options and verify both paid and unpaid lexical branches. No runtime change.",
-        "resolution_commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f"
-      }
-    ],
-    "next_batch": [
       "forgotten-ancient",
       "the-ozolith",
       "aven-courier",
       "essence-channeler"
     ],
-    "next_batch_implementation_notes": {
-      "cards": [
-        "forgotten-ancient",
-        "the-ozolith",
-        "aven-courier",
-        "essence-channeler"
-      ],
-      "reuse": [
-        "CounterRange, SourceCounter, AddCounters, MultiplyCounters and shared counter replacement events",
-        "Captured source/zone-event last-known characteristics",
-        "Select and grouped actor-bound choices",
-        "Turn-identity reset and checkpoint/actor replay patterns"
-      ],
-      "requirements": [
-        "Add atomic counter transfers with the original counter kinds/amounts preserved, replacement-aware removal and placement, and authored allocation for any number among other creatures.",
-        "The Ozolith copies departing creatures' last counters without removing counters from the new graveyard incarnation; its optional combat transfer moves all currently present counters to one target.",
-        "Aven Courier chooses the counter kind on resolution; target announcement happens first, and no counter is placed if the target already has that kind.",
-        "Essence Channeler needs life-lost-this-turn history for its continuous keywords plus exact last-known death counters; do not approximate with current life total.",
-        "Review every printed clause, draft together where useful, and run the new methods only on GitHub-hosted runners."
-      ],
-      "source_paths": [
-        "src/edh_gauntlet/rules_counters.py",
-        "src/edh_gauntlet/rules_state.py",
-        "src/edh_gauntlet/rules_kernel.py",
-        "src/edh_gauntlet/rules_program.py",
-        "src/edh_gauntlet/rules_actor.py",
-        "src/edh_gauntlet/rules_adapter.py"
-      ],
-      "implementation_findings": [
-        "CounterRules._put_counters currently combines replacement planning and the final put_counters_batch commit. Split out a reusable pure placement plan before introducing a transfer transaction; do not remove counters before a replacement choice can suspend.",
-        "RulesState has atomic placements and fixed activation counter costs, but no general removal/transfer transaction. Validate every source, recipient, kind and amount before applying source removals and destination placements once.",
-        "CounterRange.kind is currently a fixed string. Aven Courier needs an explicit serialized chosen-counter-kind binding, with legal options derived at resolution and its target's existing kind checked then.",
-        "Retain separate semantics for copying a departing object's last-known counters (The Ozolith and Essence Channeler death trigger) and actually moving current counters (The Ozolith combat trigger and Forgotten Ancient). Do not follow a stale reference into the new graveyard incarnation.",
-        "Extend current per-turn history carefully for life lost, including damage and life payments, and preserve it through checkpoints. Current life total alone cannot establish that life was lost this turn.",
-        "Current checkpoint schema is 115. If retained state changes, increment it and preserve historical fixtures as lower-bound assertions while rejecting their previous layouts."
-      ]
-    },
-    "draft_validation": {
-      "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
-      "run_id": 34776935566,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1384,
-      "new_test_methods": 46,
-      "conclusion": "success",
-      "scope": "All four isolated payment/draw enchantments, authenticated resolution mana windows, draw ordinals, checkpoint/replay, source syntax, installation and packaged assets"
-    },
-    "validated_commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
-    "ci_run_id": 34777218224,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
-    "tests_per_platform": 1384
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Departure counter snapshots",
+      "Atomic replacement-aware counter moves",
+      "Authored counter allocation",
+      "Resolution-time counter-kind choice",
+      "Gross life-lost-this-turn history"
+    ],
+    "runtime_checkpoint_schema": 116,
+    "state_checkpoint_schema": 13,
+    "new_test_methods": 53,
+    "validation_status": "pending_github_hosted_ci",
+    "catalog_corrections": [
+      {
+        "card_id": "essence-channeler",
+        "field": "toughness",
+        "before": 2,
+        "after": 1,
+        "source": "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
+        "source_facts_sha256": "a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862"
+      }
+    ],
+    "unresolved_defects": [],
+    "review_work_remaining": "Complete isolated draft hosted validation; promote all four exact source bindings; validate the same methods through the reviewed loader."
   },
   "hosted_validation_history": [
     {
@@ -2934,6 +2921,109 @@
       "ci_run_id": 34774679040,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
       "tests_per_platform": 1338
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "1d25cf3ff93762b3326190ae7c55486bb1509259",
+      "cards_written": [
+        "dawn-of-hope",
+        "rhystic-study",
+        "smothering-tithe",
+        "gleaming-splendor"
+      ],
+      "cards_promoted": [
+        "dawn-of-hope",
+        "rhystic-study",
+        "smothering-tithe",
+        "gleaming-splendor"
+      ],
+      "shared_mechanics": [
+        "PayMana",
+        "Authenticated resolution mana window",
+        "Suspended parent and immediate mana ability frames",
+        "DrawEventPattern and actual draw ordinals"
+      ],
+      "runtime_checkpoint_schema": 115,
+      "new_test_methods": 46,
+      "validation_status": "passed_github_hosted_ci",
+      "unresolved_defects": [],
+      "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler using the retained counter-transfer work order.",
+      "resolved_validation_issues": [
+        {
+          "commit": "f94894b36674f0be871abb333c2385baf84b210b",
+          "run_id": 34776728530,
+          "conclusion": "failure",
+          "tests_run": 1384,
+          "failures": 0,
+          "errors": 2,
+          "issues": [
+            "A direct hand-addition fixture moved its scenario source and then reused the stale object reference.",
+            "The lexical-binding fixture expected a selection prompt when its sole legal selection was automatically chosen."
+          ],
+          "resolution": "Move a separate library card for the non-draw hand addition; provide two legal selection options and verify both paid and unpaid lexical branches. No runtime change.",
+          "resolution_commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f"
+        }
+      ],
+      "next_batch": [
+        "forgotten-ancient",
+        "the-ozolith",
+        "aven-courier",
+        "essence-channeler"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "forgotten-ancient",
+          "the-ozolith",
+          "aven-courier",
+          "essence-channeler"
+        ],
+        "reuse": [
+          "CounterRange, SourceCounter, AddCounters, MultiplyCounters and shared counter replacement events",
+          "Captured source/zone-event last-known characteristics",
+          "Select and grouped actor-bound choices",
+          "Turn-identity reset and checkpoint/actor replay patterns"
+        ],
+        "requirements": [
+          "Add atomic counter transfers with the original counter kinds/amounts preserved, replacement-aware removal and placement, and authored allocation for any number among other creatures.",
+          "The Ozolith copies departing creatures' last counters without removing counters from the new graveyard incarnation; its optional combat transfer moves all currently present counters to one target.",
+          "Aven Courier chooses the counter kind on resolution; target announcement happens first, and no counter is placed if the target already has that kind.",
+          "Essence Channeler needs life-lost-this-turn history for its continuous keywords plus exact last-known death counters; do not approximate with current life total.",
+          "Review every printed clause, draft together where useful, and run the new methods only on GitHub-hosted runners."
+        ],
+        "source_paths": [
+          "src/edh_gauntlet/rules_counters.py",
+          "src/edh_gauntlet/rules_state.py",
+          "src/edh_gauntlet/rules_kernel.py",
+          "src/edh_gauntlet/rules_program.py",
+          "src/edh_gauntlet/rules_actor.py",
+          "src/edh_gauntlet/rules_adapter.py"
+        ],
+        "implementation_findings": [
+          "CounterRules._put_counters currently combines replacement planning and the final put_counters_batch commit. Split out a reusable pure placement plan before introducing a transfer transaction; do not remove counters before a replacement choice can suspend.",
+          "RulesState has atomic placements and fixed activation counter costs, but no general removal/transfer transaction. Validate every source, recipient, kind and amount before applying source removals and destination placements once.",
+          "CounterRange.kind is currently a fixed string. Aven Courier needs an explicit serialized chosen-counter-kind binding, with legal options derived at resolution and its target's existing kind checked then.",
+          "Retain separate semantics for copying a departing object's last-known counters (The Ozolith and Essence Channeler death trigger) and actually moving current counters (The Ozolith combat trigger and Forgotten Ancient). Do not follow a stale reference into the new graveyard incarnation.",
+          "Extend current per-turn history carefully for life lost, including damage and life payments, and preserve it through checkpoints. Current life total alone cannot establish that life was lost this turn.",
+          "Current checkpoint schema is 115. If retained state changes, increment it and preserve historical fixtures as lower-bound assertions while rejecting their previous layouts."
+        ]
+      },
+      "draft_validation": {
+        "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
+        "run_id": 34776935566,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1384,
+        "new_test_methods": 46,
+        "conclusion": "success",
+        "scope": "All four isolated payment/draw enchantments, authenticated resolution mana windows, draw ordinals, checkpoint/replay, source syntax, installation and packaged assets"
+      },
+      "validated_commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+      "ci_run_id": 34777218224,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
+      "tests_per_platform": 1384
     }
   ],
   "execution_policy": {

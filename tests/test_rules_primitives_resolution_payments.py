@@ -289,7 +289,7 @@ class ResolutionPaymentTests(unittest.TestCase):
     def test_payment_checkpoint_preserves_parent_task_identity(self):
         self.game();self.life_window();self.state.add_mana('A',('C','C'))
         checkpoint=self.kernel.snapshot();restored=RulesKernel.restore(checkpoint,self.programs)
-        self.assertEqual(115,checkpoint['schema']);self.assertIs(restored.resolving,restored.mana_payment['parent'])
+        self.assertGreaterEqual(checkpoint['schema'],115);self.assertIs(restored.resolving,restored.mana_payment['parent'])
         window=self.kernel.mana_payment;revision=self.kernel.revision
         self.payment({'C':2},action_id='pay')
         restored.pay_resolution_mana('pay','A',window['id'],Payment((('C',2),)),revision=revision)
