@@ -93,3 +93,10 @@ and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`. All 47 new m
 The four programs now use catalog identities and exact source-facts hashes;
 all 258 previously reviewed rows are unchanged. The suite now exercises these
 four through the reviewed loader, whose required hosted run is pending.
+
+The first reviewed-loader run [34787419424](https://github.com/pope-punk/Edhsimulator/actions/runs/34787419424)
+executed 1,546 Ubuntu tests and found four errors in one source-metadata test;
+Windows was cancelled by matrix fail-fast. The fixture used the wrong loader
+record level for the source hash. It now reads the nested review metadata while
+retaining the exact hash and encoded-program assertions. Card behavior and
+runtime are unchanged; the corrected reviewed-loader run is required.

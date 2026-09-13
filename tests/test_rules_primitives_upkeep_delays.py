@@ -20,8 +20,8 @@ class UpkeepDelayTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        cls.rows={key:reviewed[key] for key in CARDS}
-        cls.cards={key:row['program'] for key,row in cls.rows.items()}
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
         cls.base=tuple(row['program'] for row in reviewed.values())
 
     def game(self,key='mystic-remora',*,zone=Zone.BATTLEFIELD,extra=()):
@@ -134,7 +134,7 @@ class UpkeepDelayTests(unittest.TestCase):
         for key,program in self.cards.items():
             with self.subTest(card=key):
                 self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
-                self.assertEqual(program,decode(encode(program)))
+                self.assertEqual(self.rows[key]['program'],encode(program))
                 face=catalog[key].faces[0]
                 for field in ('types','subtypes','supertypes','colors'):
                     self.assertEqual(set(getattr(face,field)),set(getattr(program,field)))

@@ -2710,7 +2710,14 @@
         "Necromancy needs normal sorcery-versus-flash timing captured at cast announcement, optional instant permission, the complete permanent-to-Aura attachment change, and sacrifice at the next cleanup only for non-sorcery casting. Reuse the new delay lifecycle after supporting that exact step.",
         "Indulgent Tormentor requires a target opponent's choice between sacrificing a creature, paying 3 life or allowing a draw. Add a complete resolution payment-choice transaction with correct paying actor and unavailable options; current PayMana only handles mana."
       ],
-      "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion."
+      "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion.",
+      "implementation_findings": [
+        "DelayedNextStep currently accepts only unqualified upkeep/end_step patterns and an optional next-turn gate. Its retained controller and exact bindings are available; controller-only end steps and cleanup must be explicitly validated and tested before use.",
+        "TurnRules._begin_cleanup already begins the cleanup phase before discard/expiration and has cleanup-priority/repeated-cleanup handling. Necromancy must use those boundaries and preserve actual cast-time sorcery eligibility; a flash keyword alone does not record the required condition.",
+        "EventPattern lacks cause and subtype predicates. Desert Warfare must distinguish actual sacrifice from arbitrary battlefield departures and observe Desert cards arriving from hand/library using event-time characteristics and exact destination references.",
+        "PayMana has one authenticated payer and frozen mana payment. Indulgent Tormentor needs a distinct complete choice among life payment, creature sacrifice and allowing a draw, with selections/payments performed by the targeted opponent.",
+        "The hand-origin announcement reveal is now available. Talon Gates still cannot use RulesState.phase as a complete implementation: direct/indirect phase links, original untap scheduling and CR 702.26n remain absent."
+      ]
     },
     "draft_validation": {
       "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
@@ -2724,7 +2731,26 @@
       "new_test_methods": 47,
       "conclusion": "success",
       "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
-    }
+    },
+    "resolved_validation_issues": [
+      {
+        "commit": "3ed90e487e98ed0239006217815b0d4f543df133",
+        "run_id": 34787419424,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787419424",
+        "conclusion": "failure",
+        "tests_run": 1546,
+        "failures": 0,
+        "errors": 4,
+        "platforms": {
+          "ubuntu": "1546 tests; four metadata assertion errors in one parametrized test",
+          "windows": "cancelled by matrix fail-fast"
+        },
+        "issues": [
+          "The promoted fixture looked for source_facts_sha256 directly on a loader result instead of its nested review metadata."
+        ],
+        "resolution": "Use the loader's review record for source-hash and encoded-program assertions and its program field for execution. Runtime, card programs and all assertions are retained; rerun the reviewed-loader suite."
+      }
+    ]
   },
   "hosted_validation_history": [
     {
