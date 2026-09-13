@@ -200,7 +200,10 @@
       "700.5a",
       "603.2h",
       "400.7f",
-      "603.6e"
+      "603.6e",
+      "702.74a",
+      "400.7d",
+      "603.3b"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -264,6 +267,22 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-01-22",
       "scope": "Xenagos combined red/green devotion counts a hybrid symbol once; battlefield-only creature-status effect and combat power capture."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/edge-of-eternities-release-notes",
+      "scope": "Shock-land life payment preserves other tapped-entry instructions; entry-land printed-face review."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+      "scope": "Reveal-land subtypes, simultaneous hand entry and other tapped-entry instructions; entry-land printed-face review."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/commander-masters-release-notes",
+      "scope": "Evoke alternative costs, reductions and controller changes; Mulldrifter and lark printed-face review."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/modern-horizons-release-notes-2019-05-31",
+      "scope": "Vesperlark printed behavior and the priority window before evoke sacrifice."
     }
   ]
 }

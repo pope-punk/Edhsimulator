@@ -1,4 +1,4 @@
-"""Evoke drafts: real casting, entry facts, ordinary triggers and LTB targets.
+"""Reviewed evoke programs: real casting, entry facts, ordinary triggers and LTB targets.
 
 Rules basis: CR 702.74a, 400.7/400.7d, 601.2b/f-h, 603.3b/603.4 and 608.2b.
 Wizards' Commander Masters and Modern Horizons release notes clarify controller
@@ -24,13 +24,13 @@ from edh_gauntlet.rules_program import (
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone, ZoneMove
 
 
-class EvokeDraftTests(unittest.TestCase):
+class EvokeCardTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root = Path(__file__).resolve().parents[1]
-        bundle = json.loads((root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.drafts = {row['card_id']: validate(decode(row['program'])) for row in bundle['drafts']}
-        cls.reviewed = tuple(row['program'] for row in load_reviewed(root).values())
+        rows = load_reviewed(root)
+        cls.cards = {key: rows[key]['program'] for key in ('mulldrifter', 'reveillark', 'vesperlark')}
+        cls.reviewed = tuple(row['program'] for row in rows.values())
         cls.fixtures = (
             CardProgram('fixture:one', 'One power', ('Creature',), power=1, toughness=3),
             CardProgram('fixture:two', 'Two power', ('Creature',), power=2, toughness=3),
@@ -49,13 +49,13 @@ class EvokeDraftTests(unittest.TestCase):
         )
 
     def game(self, *extra):
-        self.programs = self.reviewed + tuple(self.drafts.values()) + self.fixtures + extra
+        self.programs = self.reviewed + self.fixtures + extra
         self.state = RulesState(('A', 'B'))
         self.kernel = RulesKernel(self.state, self.programs)
         self.kernel.open_window_for_scenario('A')
 
     def add(self, key, name=None, owner='A', zone=Zone.HAND):
-        definition = self.drafts[key].definition_id if key in self.drafts else key if key.startswith('fixture:') else 'catalog:' + key
+        definition = self.cards[key].definition_id if key in self.cards else key if key.startswith('fixture:') else 'catalog:' + key
         return self.state.add_card(name or key, definition, owner, zone)
 
     def current(self, ref):
@@ -239,7 +239,7 @@ class EvokeDraftTests(unittest.TestCase):
         self.kernel.answer(request.request_id, 'A', [chosen])
         self.drain()
         obj = self.current(copy)
-        self.assertEqual('draft:vesperlark', obj.effective_definition)
+        self.assertEqual('catalog:vesperlark', obj.effective_definition)
         self.assertEqual(frozenset(), obj.entry_flags)
         self.assertFalse(any(event['kind'] == 'trigger_created' and event['ability'] == 'evoke-sacrifice'
                              for event in self.kernel.semantic_events))
@@ -308,7 +308,7 @@ class EvokeDraftTests(unittest.TestCase):
         self.cast(ref, 0, 'W')
         self.resolve_one()
         self.assertEqual(frozenset({'evoked'}), self.current(ref).entry_flags)
-        commander = replace(self.drafts['vesperlark'], definition_id='fixture:commander',
+        commander = replace(self.cards['vesperlark'], definition_id='fixture:commander',
                             name='Commander fixture', supertypes=('Legendary',))
         self.game(commander)
         ref = self.state.add_card('commander', 'fixture:commander', 'A', Zone.COMMAND, commander=True)
@@ -413,7 +413,7 @@ class EvokeDraftTests(unittest.TestCase):
         self.assertEqual(condition, decode(encode(condition)))
 
     def test_new_nodes_reject_malformed_facts_nonpermanents_and_unsupported_costs(self):
-        program = self.drafts['vesperlark']
+        program = self.cards['vesperlark']
         alternative = program.cast.alternatives[0]
         for flags in ((), [], ('',), ('evoked', 'evoked'), (True,)):
             with self.subTest(flags=flags), self.assertRaises(RulesViolation):

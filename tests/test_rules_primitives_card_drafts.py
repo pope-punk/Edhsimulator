@@ -1,4 +1,4 @@
-"""Explicit opt-in fixtures: drafts never enter the reviewed coverage bundle."""
+"""Source-bound promotion and entry-land conformance; drafts stay isolated."""
 import json
 import unittest
 from pathlib import Path
@@ -11,39 +11,58 @@ from edh_gauntlet.rules_program import EntryPayment, decode, encode, validate
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
-class DraftCardTests(unittest.TestCase):
+PROMOTED_CARDS = frozenset((
+    'game-trail', 'shineshadow-snarl', 'vineglimmer-snarl',
+    'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
+    'mulldrifter', 'reveillark', 'vesperlark',
+))
+
+
+class CardProgramReviewTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.root = Path(__file__).resolve().parents[1]
         cls.bundle = json.loads((cls.root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows = cls.bundle['drafts']
-        cls.drafts = {row['card_id']: validate(decode(row['program'])) for row in cls.rows}
-        cls.land_drafts = {key: program for key, program in cls.drafts.items() if 'Land' in program.types}
         cls.reviewed = load_reviewed(cls.root)
-        cls.programs = tuple(row['program'] for row in cls.reviewed.values()) + tuple(cls.drafts.values())
+        cls.cards = {key: cls.reviewed[key]['program'] for key in PROMOTED_CARDS}
+        cls.lands = {key: program for key, program in cls.cards.items() if 'Land' in program.types}
+        cls.programs = tuple(row['program'] for row in cls.reviewed.values())
 
-    def test_exact_draft_inventory_is_source_bound_and_excluded_from_reviewed_coverage(self):
+    def test_draft_bundle_stays_separate_and_source_bound(self):
         self.assertEqual('edh-card-drafts:1', self.bundle['schema'])
         self.assertEqual('unvalidated_draft', self.bundle['status'])
         self.assertFalse(self.bundle['production_ready'])
         self.assertNotIn('cards', self.bundle)
-        self.assertEqual({
-            'game-trail', 'shineshadow-snarl', 'vineglimmer-snarl',
-            'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
-            'mulldrifter', 'reveillark', 'vesperlark',
-        }, set(self.drafts))
-        self.assertEqual(10, len(self.rows))
+        rows = self.bundle['drafts']
+        self.assertEqual(len(rows), len({row['card_id'] for row in rows}))
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        for row in self.rows:
+        inventory = json.loads((self.root / 'reports/remaining-card-drafts.json').read_text(encoding='utf-8'))
+        expected = {row['card_id'] for row in inventory['cards']
+                    if row['status'] == 'draft_written_review_pending'}
+        self.assertEqual(expected, {row['card_id'] for row in rows})
+        for row in rows:
             key = row['card_id']
             with self.subTest(card=key):
                 self.assertNotIn(key, self.reviewed)
                 self.assertEqual('unvalidated_draft', row['status'])
                 self.assertEqual('all_printed_faces', row['scope'])
                 self.assertEqual(digest(source_facts(catalog[key])), digest(row['source_facts']))
-                program = self.drafts[key]
+                program = validate(decode(row['program']))
                 self.assertEqual('draft:' + key, program.definition_id)
                 self.assertEqual(row['program'], encode(program))
+
+    def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
+        catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
+        self.assertEqual(10, len(self.cards))
+        self.assertEqual(7, len(self.lands))
+        for key, program in self.cards.items():
+            with self.subTest(card=key):
+                review = self.reviewed[key]['review']
+                self.assertEqual('catalog:' + key, program.definition_id)
+                self.assertEqual('all_printed_faces', review['scope'])
+                self.assertTrue(review['review_basis'])
+                self.assertEqual(digest(source_facts(catalog[key])), review['source_facts_sha256'])
+                self.assertEqual(review['program'], encode(program))
                 self.assertEqual(catalog[key].name, program.name)
                 self.assertEqual(1, len(catalog[key].faces))
                 face = catalog[key].faces[0]
@@ -60,7 +79,7 @@ class DraftCardTests(unittest.TestCase):
     def test_shock_lands_keep_both_intrinsic_mana_abilities(self):
         symbols = {'Plains': 'W', 'Island': 'U', 'Swamp': 'B', 'Mountain': 'R', 'Forest': 'G'}
         for key in ('godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave'):
-            program = self.drafts[key]
+            program = self.cards[key]
             self.assertEqual((), program.activated)
             for subtype in program.subtypes:
                 with self.subTest(card=key, subtype=subtype):
@@ -87,7 +106,7 @@ class DraftCardTests(unittest.TestCase):
             for symbol in symbols:
                 with self.subTest(card=key, symbol=symbol):
                     state = RulesState(('A', 'B'))
-                    program = self.drafts[key]
+                    program = self.cards[key]
                     ref = state.add_card('entry', program.definition_id, 'A', Zone.HAND)
                     reveal = state.add_card('reveal', 'catalog:' + matching, 'A', Zone.HAND)
                     kernel = RulesKernel(state, self.programs)
@@ -107,7 +126,7 @@ class DraftCardTests(unittest.TestCase):
 
     def test_play_land_choice_resumes_without_spending_a_second_land_play(self):
         matching = {'game-trail': 'mountain', 'shineshadow-snarl': 'plains', 'vineglimmer-snarl': 'island'}
-        for key, program in self.land_drafts.items():
+        for key, program in self.lands.items():
             with self.subTest(card=key):
                 state = RulesState(('A', 'B'))
                 ref = state.add_card('entry', program.definition_id, 'A', Zone.HAND)
@@ -132,8 +151,8 @@ class DraftCardTests(unittest.TestCase):
                     kernel.play_land('play', 'A', state.current('entry'), revision=kernel.revision)
                 self.assertEqual(1, kernel.turn_schedule['land_plays'])
 
-    def test_land_drafts_use_shared_entry_payment_nodes(self):
-        for program in self.land_drafts.values():
+    def test_reviewed_lands_use_shared_entry_payment_nodes(self):
+        for program in self.lands.values():
             self.assertEqual(1, len(program.entry_modifiers))
             self.assertIsInstance(program.entry_modifiers[0], EntryPayment)
             self.assertEqual((), program.abilities)

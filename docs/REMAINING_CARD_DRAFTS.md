@@ -3,33 +3,35 @@
 Branch: `codex/remaining-card-programs`, based on studious trout commit
 `e9c94a41b722a15621a1ab6352e96e97ccc5f8a7`.
 
-This is a writing head start, with no local Python execution, test run, package
-installation, game launch, or paused-game migration. The ten new card programs
-remain separate drafts awaiting card-level review. The reviewed bundle contains 227 programs;
-107 catalog cards remain outside that bundle, comprising these ten drafts and
-97 cards not yet started on this branch. Reviewed-program coverage is not a
-production certificate.
+This is a writing head start. Project execution and validation are restricted to
+GitHub-hosted runners; no local Python, installation, tests or games are authorized.
+The reviewed bundle now contains **237 unique programs / 302 deck copies**.
+There are **97 catalog cards outside that bundle**, all unstarted; the draft
+bundle is currently empty. Reviewed coverage is not production certification.
 
-## Current cycle: evoke
+## Current cycle: promotion of ten reviewed drafts
 
-Mulldrifter, Reveillark and Vesperlark now have complete printed programs in the
-draft bundle, using shared `EntryAlternativeCost` and `EntryFlagCondition`
-nodes with ordinary entry, sacrifice and return triggers. Eighteen new conformance
-methods cover casting costs, trigger order, blink, control changes, LTB targeting,
-replay and checkpoints. See [the evoke batch record](EVOKE_CARD_DRAFTS.md).
+The seven entry lands plus Mulldrifter, Reveillark and Vesperlark now have
+card-level printed-face review and exact source-fact bindings. Their programs
+load through `load_reviewed()`; land and evoke conformance fixtures now exercise
+that path. See [the promotion review](DRAFT_PROMOTION_REVIEW.md).
 
-The source base for this cycle is `dbf4fd69fb345f86d2ec701e845eb323bb2dcbac`.
-GitHub-hosted [validation run 34764423605](https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605)
-passed source syntax, installation, packaged assets, and **1,231 conformance tests
-on each of Ubuntu and Windows** at code/test commit
-`c54c116f7c087290f4c4568f0f841dd6502c37e1`. All ten drafts now have passing hosted
-conformance evidence. The inventory keeps their pending card-level rules review
-separate. No unresolved failure was found in this batch.
+The source base is `7a9a593b998f5b8301c84fe3964b8d09cc77b227`.
+Previous draft validation passed 1,231 tests per Ubuntu/Windows platform at
+`c54c116f7c087290f4c4568f0f841dd6502c37e1`
+([run 34764423605](https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605)).
+Validation of this promotion is pending on GitHub-hosted runners.
 
-Checkpoint schema is now 110. No local execution or live-game migration is
-authorized. The next cycle should finish the rules review and source bindings
-for the ten drafts, then implement linked exile/return for Oblivion Ring and
-Leonin Relic-Warder.
+Checkpoint schema remains 110; changed bundle identities still invalidate old
+bundle fingerprints. No checkpoint or game migration is supplied. Next: linked
+exile/return for Oblivion Ring and Leonin Relic-Warder, then casting zone costs
+for Crop Rotation and Fling.
+
+## Earlier batch evidence
+
+The sections below preserve entry-land and library-audit implementation history.
+Counts and draft-review status in those earlier records describe their original
+commits; the current inventory and promotion review above supersede them.
 
 ## Entry-land batch
 
@@ -109,8 +111,8 @@ complete the existing rules review, examine replay and actor projections, and
 review interactions with replacement ordering, departures, entry copying, and
 any future life-payment prohibitions. Card programs must follow the reviewed-bundle
 process; passing these conformance scenarios does not certify whole-pod production
-readiness. These seven entry-land programs remain separate drafts; the three evoke programs
-also require the reviewed-bundle process before promotion.
+readiness. The seven entry-land programs and three evoke programs have since completed
+card-level review; see the current promotion record above.
 
 ## Library review follow-up
 
@@ -126,10 +128,10 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-outstanding card IDs, their deck membership, printed text, and this branch's
-authoring status. It is an authoring report, not an executable-coverage report.
+originally outstanding card IDs, including the ten now promoted. It records
+deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
-After the ten-draft review, the next concrete implementation family is linked
+After the completed ten-draft review, the next implementation family is linked
 exile and return (Oblivion Ring, Leonin Relic-Warder), followed by casting costs
 with zone-changing payments (Crop Rotation, Fling). These require shared mechanics
 and complete card behavior; the existing gate against casting zone costs should

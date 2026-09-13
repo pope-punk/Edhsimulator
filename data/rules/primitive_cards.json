@@ -11206,6 +11206,132 @@
       }
     },
     {
+      "card_id": "game-trail",
+      "source_facts_sha256": "ea8842c50a10fb77c94c4d7e27053b5a049b3e488d1609f4051f0093a619d52c",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: EntryPayment optionally reveals one own-hand land with Mountain or Forest subtype, including a qualifying nonbasic or simultaneously entering hand card; decline enters tapped and reveal does not undo other tapped-entry instructions (CR 614.1c, 614.12, 616.1). Activated tap cost produces exactly one R or G through ProduceMana (CR 605); no intrinsic mana subtype or casting cost. Source-bound loader plus entry-payment and promoted-card fixtures cover reveal privacy, atomic batches, choices, checkpoints and each printed color. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:game-trail",
+        "name": "Game Trail",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "ProduceMana",
+                "options": [
+                  "R",
+                  "G"
+                ],
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "reveal-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 0,
+            "reveal": {
+              "node": "Selector",
+              "zone": {
+                "zone": "hand"
+              },
+              "types": [
+                "Land"
+              ],
+              "relation": "owned",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [
+                "Mountain",
+                "Forest"
+              ],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            }
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "garruk-s-uprising",
       "source_facts_sha256": "8143cdebbd28168850f5bddd00a0b733fd8494bab1826a6d3e5e84920b6f9585",
       "scope": "all_printed_faces",
@@ -12306,6 +12432,71 @@
           "R",
           "G"
         ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "godless-shrine",
+      "source_facts_sha256": "07e67437462208d7d3174296e2879fadc4984d766ff93bf92cc727468e785756",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: Plains/Swamp land types confer intrinsic mana (CR 305.6); optional payment of exactly two life is an EntryPayment replacement, with tapped entry on decline. Payment preserves other tapped-entry instructions and shared simultaneous budgets (CR 118.3, 614.1c, 614.12, 616.1). No cast, duplicate printed mana activation, or entry trigger. Source-bound loader plus entry-payment and promoted-card fixtures cover payment, controller, copying, replacement order, checkpoints and both mana colors. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:godless-shrine",
+        "name": "Godless Shrine",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Plains",
+          "Swamp"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "life-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 2,
+            "reveal": null
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
@@ -13530,6 +13721,71 @@
         "keywords": [],
         "supertypes": [
           "Legendary"
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "hallowed-fountain",
+      "source_facts_sha256": "a16da312f8c5610f7b38a6c420d87d8d5be2d7d453b502700324c1e74a5cff10",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: Plains/Island land types confer intrinsic mana (CR 305.6); optional payment of exactly two life is an EntryPayment replacement, with tapped entry on decline. Payment preserves other tapped-entry instructions and shared simultaneous budgets (CR 118.3, 614.1c, 614.12, 616.1). No cast, duplicate printed mana activation, or entry trigger. Source-bound loader plus entry-payment and promoted-card fixtures cover payment, controller, copying, replacement order, checkpoints and both mana colors. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:hallowed-fountain",
+        "name": "Hallowed Fountain",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Plains",
+          "Island"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "life-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 2,
+            "reveal": null
+          }
         ],
         "player_permissions": {
           "node": "PlayerPermissions",
@@ -19415,6 +19671,193 @@
       }
     },
     {
+      "card_id": "mulldrifter",
+      "source_facts_sha256": "b24844dffa6709cea9d9b32743042e47f2bfb194896816d99f6410354bd5e49e",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: normal {4}{U}, evoke {2}{U}, flying 2/2; separate self-entry Draw(2). EntryAlternativeCost records an accepted evoke choice on the spell; EntryFlagCondition gates the ordinary self-entry trigger and Sacrifice uses the permanent's current controller (CR 702.74a, 400.7d). Blink resets incarnation facts; ordering, target legality and actual zone results reuse the shared interpreter (CR 603.3b, 603.4, 608.2b). Source-bound loader and all 18 evoke fixtures cover normal/alternative costs, countering, control changes, copies, LTB boundaries, replay and checkpoints. See docs/DRAFT_PROMOTION_REVIEW.md for scope and hosted evidence; no production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:mulldrifter",
+        "name": "Mulldrifter",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "draw",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Draw",
+                "amount": 2,
+                "players": "controller"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "evoke-sacrifice",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Sacrifice",
+                "subject": "source",
+                "by_subject_controller": true
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": {
+              "node": "EntryFlagCondition",
+              "flag": "evoked"
+            },
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Elemental"
+        ],
+        "mana_value": 5,
+        "power": 2,
+        "toughness": 2,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 4,
+              "symbols": [
+                "U"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": [
+            {
+              "node": "EntryAlternativeCost",
+              "alternative_id": "evoke",
+              "cost": {
+                "node": "CostSpec",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 2,
+                  "symbols": [
+                    "U"
+                  ],
+                  "x_symbols": 0
+                },
+                "life": 0,
+                "tap_source": false,
+                "tap_selector": null,
+                "tap_count": 0,
+                "zone_costs": [],
+                "counter_costs": []
+              },
+              "condition": null,
+              "entry_flags": [
+                "evoked"
+              ]
+            }
+          ]
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [
+          "flying"
+        ],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "murder",
       "source_facts_sha256": "9cb7191d56b5e16b1bbe31000e54a3501aaab8112d4c03748eb34420481613ff",
       "scope": "all_printed_faces",
@@ -23381,6 +23824,238 @@
       }
     },
     {
+      "card_id": "reveillark",
+      "source_facts_sha256": "765929e275286e9bfc25c6634940cf6fa3485ca6da191a44afae4d1ec1b9bcae",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: normal {4}{W}, evoke {5}{W}, flying 4/3; leaves-battlefield trigger in any destination returns zero to two targeted own-graveyard creatures with power at most two. EntryAlternativeCost records an accepted evoke choice on the spell; EntryFlagCondition gates the ordinary self-entry trigger and Sacrifice uses the permanent's current controller (CR 702.74a, 400.7d). Blink resets incarnation facts; ordering, target legality and actual zone results reuse the shared interpreter (CR 603.3b, 603.4, 608.2b). Source-bound loader and all 18 evoke fixtures cover normal/alternative costs, countering, control changes, copies, LTB boundaries, replay and checkpoints. See docs/DRAFT_PROMOTION_REVIEW.md for scope and hosted evidence; no production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:reveillark",
+        "name": "Reveillark",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "return-creatures",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": {
+                "zone": "battlefield"
+              },
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Move",
+                "subject": "target",
+                "destination": {
+                  "zone": "battlefield"
+                },
+                "controller": "effect",
+                "tapped": false,
+                "library_position": null,
+                "counters": []
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "graveyard"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "owned",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [
+                  {
+                    "node": "CharacteristicRange",
+                    "statistic": "power",
+                    "minimum": null,
+                    "maximum": 2
+                  }
+                ],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 0,
+              "maximum": 2,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "evoke-sacrifice",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Sacrifice",
+                "subject": "source",
+                "by_subject_controller": true
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": {
+              "node": "EntryFlagCondition",
+              "flag": "evoked"
+            },
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Elemental"
+        ],
+        "mana_value": 5,
+        "power": 4,
+        "toughness": 3,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 4,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": [
+            {
+              "node": "EntryAlternativeCost",
+              "alternative_id": "evoke",
+              "cost": {
+                "node": "CostSpec",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 5,
+                  "symbols": [
+                    "W"
+                  ],
+                  "x_symbols": 0
+                },
+                "life": 0,
+                "tap_source": false,
+                "tap_selector": null,
+                "tap_count": 0,
+                "zone_costs": [],
+                "counter_costs": []
+              },
+              "condition": null,
+              "entry_flags": [
+                "evoked"
+              ]
+            }
+          ]
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [
+          "flying"
+        ],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "rockfall-vale",
       "source_facts_sha256": "4622d64972100f81121ff8f2f26212f76cc2e2334d05d31f0d76cee1b49ea4bf",
       "scope": "all_printed_faces",
@@ -25508,6 +26183,132 @@
       }
     },
     {
+      "card_id": "shineshadow-snarl",
+      "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: EntryPayment optionally reveals one own-hand land with Plains or Swamp subtype, including a qualifying nonbasic or simultaneously entering hand card; decline enters tapped and reveal does not undo other tapped-entry instructions (CR 614.1c, 614.12, 616.1). Activated tap cost produces exactly one W or B through ProduceMana (CR 605); no intrinsic mana subtype or casting cost. Source-bound loader plus entry-payment and promoted-card fixtures cover reveal privacy, atomic batches, choices, checkpoints and each printed color. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:shineshadow-snarl",
+        "name": "Shineshadow Snarl",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "ProduceMana",
+                "options": [
+                  "W",
+                  "B"
+                ],
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "reveal-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 0,
+            "reveal": {
+              "node": "Selector",
+              "zone": {
+                "zone": "hand"
+              },
+              "types": [
+                "Land"
+              ],
+              "relation": "owned",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [
+                "Plains",
+                "Swamp"
+              ],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            }
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "shipwreck-marsh",
       "source_facts_sha256": "8b96ea970be3aa2f04c4d4c799d9117c3effb334d91fb7f3c44511f63dc43199",
       "scope": "all_printed_faces",
@@ -27038,6 +27839,71 @@
         "colors": [
           "W"
         ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "stomping-ground",
+      "source_facts_sha256": "de8d9dfb402c68722e07317b981869aed31465e768ea0519915bcc2941bdfe0c",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: Mountain/Forest land types confer intrinsic mana (CR 305.6); optional payment of exactly two life is an EntryPayment replacement, with tapped entry on decline. Payment preserves other tapped-entry instructions and shared simultaneous budgets (CR 118.3, 614.1c, 614.12, 616.1). No cast, duplicate printed mana activation, or entry trigger. Source-bound loader plus entry-payment and promoted-card fixtures cover payment, controller, copying, replacement order, checkpoints and both mana colors. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:stomping-ground",
+        "name": "Stomping Ground",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Mountain",
+          "Forest"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "life-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 2,
+            "reveal": null
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
@@ -32709,6 +33575,238 @@
       }
     },
     {
+      "card_id": "vesperlark",
+      "source_facts_sha256": "1adf2ec959d168a00bb210ba9691af598300ea1e9fa6a9c27f419ef30334995f",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: normal {2}{W}, evoke {1}{W}, flying 2/1; leaves-battlefield trigger in any destination returns one required targeted own-graveyard creature with power at most one. EntryAlternativeCost records an accepted evoke choice on the spell; EntryFlagCondition gates the ordinary self-entry trigger and Sacrifice uses the permanent's current controller (CR 702.74a, 400.7d). Blink resets incarnation facts; ordering, target legality and actual zone results reuse the shared interpreter (CR 603.3b, 603.4, 608.2b). Source-bound loader and all 18 evoke fixtures cover normal/alternative costs, countering, control changes, copies, LTB boundaries, replay and checkpoints. See docs/DRAFT_PROMOTION_REVIEW.md for scope and hosted evidence; no production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:vesperlark",
+        "name": "Vesperlark",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "return-creatures",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": {
+                "zone": "battlefield"
+              },
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Move",
+                "subject": "target",
+                "destination": {
+                  "zone": "battlefield"
+                },
+                "controller": "effect",
+                "tapped": false,
+                "library_position": null,
+                "counters": []
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "graveyard"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "owned",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [
+                  {
+                    "node": "CharacteristicRange",
+                    "statistic": "power",
+                    "minimum": null,
+                    "maximum": 1
+                  }
+                ],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "evoke-sacrifice",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Sacrifice",
+                "subject": "source",
+                "by_subject_controller": true
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": {
+              "node": "EntryFlagCondition",
+              "flag": "evoked"
+            },
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Elemental"
+        ],
+        "mana_value": 3,
+        "power": 2,
+        "toughness": 1,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": [
+            {
+              "node": "EntryAlternativeCost",
+              "alternative_id": "evoke",
+              "cost": {
+                "node": "CostSpec",
+                "mana": {
+                  "node": "ManaCost",
+                  "generic": 1,
+                  "symbols": [
+                    "W"
+                  ],
+                  "x_symbols": 0
+                },
+                "life": 0,
+                "tap_source": false,
+                "tap_selector": null,
+                "tap_count": 0,
+                "zone_costs": [],
+                "counter_costs": []
+              },
+              "condition": null,
+              "entry_flags": [
+                "evoked"
+              ]
+            }
+          ]
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [
+          "flying"
+        ],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "vesuva",
       "source_facts_sha256": "78df9142bc646739e211b47af13075b6a9b2309a105e4a24ba8795ea668f645d",
       "scope": "all_printed_faces",
@@ -32772,6 +33870,132 @@
         "colors": [],
         "modal": null,
         "entry_copy_tapped": true,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "vineglimmer-snarl",
+      "source_facts_sha256": "e4e2b42bb524a496d251cff25e5f9dabada82d6f13fe59cebb2a920956e945d4",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: EntryPayment optionally reveals one own-hand land with Forest or Island subtype, including a qualifying nonbasic or simultaneously entering hand card; decline enters tapped and reveal does not undo other tapped-entry instructions (CR 614.1c, 614.12, 616.1). Activated tap cost produces exactly one G or U through ProduceMana (CR 605); no intrinsic mana subtype or casting cost. Source-bound loader plus entry-payment and promoted-card fixtures cover reveal privacy, atomic batches, choices, checkpoints and each printed color. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:vineglimmer-snarl",
+        "name": "Vineglimmer Snarl",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "ProduceMana",
+                "options": [
+                  "G",
+                  "U"
+                ],
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "reveal-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 0,
+            "reveal": {
+              "node": "Selector",
+              "zone": {
+                "zone": "hand"
+              },
+              "types": [
+                "Land"
+              ],
+              "relation": "owned",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [
+                "Forest",
+                "Island"
+              ],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            }
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
         "characteristic_pt": null,
         "life_gain_replacements": [],
         "block_restrictions": [],
@@ -33080,6 +34304,71 @@
         "colors": [
           "G"
         ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "watery-grave",
+      "source_facts_sha256": "34b28a99693c24bdec7e7076b2d60fd0613d72789f05151b59c1c9c99466585f",
+      "scope": "all_printed_faces",
+      "review_basis": "2026-09-13 full printed-face review against the retained catalog: Island/Swamp land types confer intrinsic mana (CR 305.6); optional payment of exactly two life is an EntryPayment replacement, with tapped entry on decline. Payment preserves other tapped-entry instructions and shared simultaneous budgets (CR 118.3, 614.1c, 614.12, 616.1). No cast, duplicate printed mana activation, or entry trigger. Source-bound loader plus entry-payment and promoted-card fixtures cover payment, controller, copying, replacement order, checkpoints and both mana colors. See docs/DRAFT_PROMOTION_REVIEW.md; experimental authored coverage, not production certification.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:watery-grave",
+        "name": "Watery Grave",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Island",
+          "Swamp"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryPayment",
+            "modifier_id": "life-or-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null,
+            "life": 2,
+            "reveal": null
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,

@@ -1,5 +1,9 @@
 # Evoke card authoring — 2026-09-13
 
+Historical batch record. These three programs were subsequently promoted with
+the seven entry lands; see [the promotion review](DRAFT_PROMOTION_REVIEW.md).
+The counts and pending-review statements below describe the original evoke commit.
+
 This batch adds complete printed programs for Mulldrifter, Reveillark and
 Vesperlark to the isolated draft bundle on `codex/remaining-card-programs`.
 They passed hosted conformance and remain authored drafts awaiting card-level review.
