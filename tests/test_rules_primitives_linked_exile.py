@@ -1,4 +1,4 @@
-"""Linked exile drafts: distinct entry/departure abilities and exact exile objects."""
+"""Reviewed linked exile: distinct entry/departure abilities and exact exile objects."""
 from collections import Counter as Counts
 from dataclasses import replace
 import json
@@ -23,9 +23,9 @@ class LinkedExileTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root = Path(__file__).resolve().parents[1]
-        bundle = json.loads((root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.drafts = {row['card_id']: validate(decode(row['program'])) for row in bundle['drafts']}
-        cls.reviewed = tuple(row['program'] for row in load_reviewed(root).values())
+        rows = load_reviewed(root)
+        cls.cards = {key: rows[key]['program'] for key in ('oblivion-ring', 'leonin-relic-warder')}
+        cls.reviewed = tuple(row['program'] for row in rows.values())
         cls.fixtures = (
             CardProgram('fixture:body', 'Body', ('Creature',), power=3, toughness=3),
             CardProgram('fixture:artifact', 'Artifact', ('Artifact',)),
@@ -48,13 +48,13 @@ class LinkedExileTests(unittest.TestCase):
         )
 
     def game(self, *extra):
-        self.programs = self.reviewed + tuple(self.drafts.values()) + self.fixtures + extra
+        self.programs = self.reviewed + self.fixtures + extra
         self.state = RulesState(('A', 'B'))
         self.kernel = RulesKernel(self.state, self.programs)
         self.kernel.open_window_for_scenario('A')
 
     def add(self, key, name=None, owner='A', zone=Zone.BATTLEFIELD, **kwargs):
-        definition = self.drafts[key].definition_id if key in self.drafts else key if key.startswith('fixture:') else 'catalog:' + key
+        definition = self.cards[key].definition_id if key in self.cards else key if key.startswith('fixture:') else 'catalog:' + key
         return self.state.add_card(name or key, definition, owner, zone, **kwargs)
 
     def current(self, ref):
@@ -121,7 +121,7 @@ class LinkedExileTests(unittest.TestCase):
                 ref = self.add(key, zone=Zone.HAND)
                 self.state.add_mana('A', symbols)
                 quote = self.kernel.quote_cast('cast', 'A', ref)
-                self.assertEqual(self.drafts[key].cast.cost, quote.cost)
+                self.assertEqual(self.cards[key].cast.cost, quote.cost)
                 self.kernel.commit_action(quote, Payment(tuple(Counts(symbols).items())))
                 self.drain()
                 self.choose_refs((target,))
@@ -173,7 +173,7 @@ class LinkedExileTests(unittest.TestCase):
         self.assertEqual(Zone.BATTLEFIELD, self.current(target).zone)
 
     def test_warder_can_exile_itself_when_it_is_an_artifact(self):
-        program = replace(self.drafts['leonin-relic-warder'],
+        program = replace(self.cards['leonin-relic-warder'],
                           definition_id='fixture:artifact-warder', types=('Artifact', 'Creature'))
         self.game(program)
         ref = self.add('fixture:artifact-warder', zone=Zone.HAND)
@@ -432,7 +432,7 @@ class LinkedExileTests(unittest.TestCase):
         self.drain()
         self.choose('yes')
         self.drain()
-        self.assertEqual('draft:leonin-relic-warder', self.current(copy).effective_definition)
+        self.assertEqual('catalog:leonin-relic-warder', self.current(copy).effective_definition)
         self.depart(self.current(copy).ref)
         self.assertEqual(Zone.BATTLEFIELD, self.current(second).zone)
         self.assertEqual(Zone.EXILE, self.current(first).zone)

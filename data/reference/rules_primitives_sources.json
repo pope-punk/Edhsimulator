@@ -206,7 +206,8 @@
       "603.3b",
       "607.1",
       "607.2a",
-      "607.3"
+      "607.3",
+      "113.6"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -290,6 +291,12 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-masters-2015-edition-release-notes-2015-05-12",
       "scope": "Oblivion Ring's separate exile/return triggers, early departure, and Aura entry on return; linked-exile draft conformance."
+    },
+    {
+      "url": "https://apps.magicjudges.org/forum/topic/13859/",
+      "author": "Nathan Long, Wizards.Com Boards NetRep",
+      "date": "2014-11-05",
+      "scope": "Animate Dead cannot attach to a returned noncreature God; the Aura falls off and its delayed ability sacrifices that permanent. Protection remains outside this implementation's supported scope."
     }
   ]
 }

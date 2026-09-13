@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=111
+    CHECKPOINT_SCHEMA=112
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -209,7 +209,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         permitted=[];source_types=None
         for obj in self._query(selector,frame):
             view=self.effective(obj.ref)
-            if 'shroud' in view.keywords or 'hexproof' in view.keywords and obj.controller!=frame['controller']:continue
+            # Printed keywords remain inspectable in every zone, but these
+            # static targeting restrictions protect battlefield permanents only.
+            if obj.zone==Zone.BATTLEFIELD and (
+                    'shroud' in view.keywords or 'hexproof' in view.keywords and obj.controller!=frame['controller']):continue
             restricted=False
             for rule in view.target_restrictions:
                 if rule.opponents_only and obj.controller==frame['controller']:continue

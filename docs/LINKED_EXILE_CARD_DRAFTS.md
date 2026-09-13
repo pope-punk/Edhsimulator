@@ -1,5 +1,9 @@
 # Linked exile and return drafts — 2026-09-13
 
+Historical authoring record. Both programs subsequently completed source-bound
+promotion; see [the follow-up review](ANIMATE_DEAD_CARD_REVIEW.md).
+The counts and pending-review statements below describe the original batch.
+
 Oblivion Ring and Leonin Relic-Warder now have complete printed programs in
 the separate draft bundle on `codex/remaining-card-programs`. Both use the
 same new linked-ability primitives with ordinary target, optional-effect,

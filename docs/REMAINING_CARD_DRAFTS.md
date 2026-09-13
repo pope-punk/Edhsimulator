@@ -3,45 +3,41 @@
 Branch: `codex/remaining-card-programs`, based on studious trout commit
 `e9c94a41b722a15621a1ab6352e96e97ccc5f8a7`.
 
-This is a writing head start. Project execution and validation are restricted to
-GitHub-hosted runners; no local Python, installation, tests or games are authorized.
-The reviewed bundle contains **237 unique programs / 302 deck copies**.
-There are **97 catalog cards outside that bundle**: two authored drafts and
-95 unstarted cards. Reviewed coverage is not production certification.
+Project execution and validation are restricted to GitHub-hosted runners; no
+local Python, installation, tests or games are authorized. The library contains
+**239 reviewed programs / 304 deck copies**. The **95 cards outside the reviewed
+bundle** comprise one Animate Dead draft and 94 unstarted cards. Reviewed
+coverage is not production certification.
 
-## Current cycle: linked exile and return
+## Current cycle: Animate Dead and linked-exile review
 
-Oblivion Ring and Leonin Relic-Warder have complete printed draft programs using
-shared `ExileLinked` and `WithLinkedExile` nodes, plus ordinary targeting,
-optional effects, departure triggers and owner-controlled movement. Eighteen
-new conformance methods cover incarnation isolation, early departure, ownership,
-replacement choices, Aura return, replay and public projections. See
-[the linked-exile batch record](LINKED_EXILE_CARD_DRAFTS.md).
+Oblivion Ring and Leonin Relic-Warder completed printed-face review and now
+have source-bound `catalog:` definitions. Their existing 18 conformance
+methods use the reviewed loader. Animate Dead is authored using the existing
+attachment, exact-reference movement, delayed sacrifice and attached P/T
+primitives. A shared correction restricts shroud/hexproof targeting protection
+to battlefield permanents while preserving printed keywords in other zones.
 
-The source base is `0788981d6851606eced204e7fe39b805a0a053e7`.
-[GitHub-hosted validation run 34767597799](https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799)
-passed source syntax, installation, packaged-asset checks and **1,250 tests on
-each of Ubuntu and Windows**, including all 18 new methods, at
-`2617d40e0a55f40892cd1a3f43d37558c12b5a4e`. Both drafts have passing hosted evidence and remain
-outside the reviewed bundle pending card-level review. No unresolved failure
-was found in this implementation batch.
+Nineteen new methods cover casting, targeting, attachment failures, controller
+changes, blink, Starfield/Oblivion Ring return, finite optional Relic-Warder
+cycles, replay and checkpoints. See [the cycle review](ANIMATE_DEAD_CARD_REVIEW.md).
+The cycle source base is `c1f5e17d0fbfee7a5dfe147e086243025797e319`.
+Hosted validation is pending. Next: finish Animate Dead's validation/review,
+then implement casting zone costs for Crop Rotation and Fling.
 
-Checkpoint schema advances to 111 for the retained link registry. Old checkpoints
-and started games are not migrated. Next: review the two linked-exile drafts,
-then check the existing Animate Dead fixture for full-card reuse before casting
-zone costs for Crop Rotation and Fling.
+Checkpoint schema is 112. Existing checkpoints and started games are not
+migrated. Authoring, card review, hosted conformance and production admission
+remain distinct.
 
-## Existing primitive reuse queued next
+## Earlier linked-exile evidence
 
-The remaining inventory still lists Animate Dead as unstarted, while
-`rules_scenarios.fixture_programs()` already has an attachment fixture using
-`WithAttached`, `SetAttachmentRule`, `WithMoved`, `Attach`, `DelayedTrigger`,
-`Sacrifice` and attached `ModifyPT`. Its fixture coverage is not a reviewed card
-program. The next pass should check all printed clauses, source characteristics,
-casting and cross-card interactions, then reuse this composition if complete.
-The new exile drafts' own card-level review remains first in the queue.
+[Run 34767597799](https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799)
+passed 1,250 tests on each Ubuntu/Windows runner at
+`2617d40e0a55f40892cd1a3f43d37558c12b5a4e`. The two linked-exile drafts
+subsequently completed review in the current cycle; see
+[their historical batch record](LINKED_EXILE_CARD_DRAFTS.md).
 
-## Completed promotion in this cycle
+## Earlier ten-card promotion
 
 The seven entry lands plus Mulldrifter, Reveillark and Vesperlark completed
 card-level printed-face review and exact source-fact bindings. They now load
@@ -153,12 +149,12 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the ten now promoted. It records
+originally outstanding card IDs, including the twelve now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 After the completed ten-draft review, the linked
-exile and return family (Oblivion Ring, Leonin Relic-Warder) is now authored and
-awaiting review. The next implementation family is casting costs
+exile and return family (Oblivion Ring, Leonin Relic-Warder) has completed
+card-level review. The next implementation family is casting costs
 with zone-changing payments (Crop Rotation, Fling). These require shared mechanics
 and complete card behavior; the existing gate against casting zone costs should
 remain until the full announcement transaction is implemented. Saga, Room,

@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 237,
-    "remaining_outside_reviewed_bundle": 97,
-    "drafts_written": 2,
-    "not_started_on_this_branch": 95,
-    "reviewed_bundle_copies": 302,
-    "draft_copies": 2,
-    "drafts_remotely_validated": 2,
-    "promoted_on_this_branch": 10
+    "reviewed_bundle_unique": 239,
+    "remaining_outside_reviewed_bundle": 95,
+    "drafts_written": 1,
+    "not_started_on_this_branch": 94,
+    "reviewed_bundle_copies": 304,
+    "draft_copies": 1,
+    "drafts_remotely_validated": 0,
+    "promoted_on_this_branch": 12
   },
   "cards": [
     {
@@ -92,7 +92,7 @@
     {
       "card_id": "animate-dead",
       "name": "Animate Dead",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -105,6 +105,21 @@
           "face_id": "animate-dead",
           "text": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets -1/-0."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:animate-dead",
+      "batch": "animate-dead-2026-09-13",
+      "shared_mechanics": [
+        "WithAttached",
+        "SetAttachmentRule",
+        "WithMoved",
+        "Attach",
+        "DelayedTrigger",
+        "Sacrifice",
+        "ContinuousProgram",
+        "ModifyPT"
       ]
     },
     {
@@ -1076,7 +1091,7 @@
     {
       "card_id": "leonin-relic-warder",
       "name": "Leonin Relic-Warder",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1091,15 +1106,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "passed",
-      "draft_definition": "draft:leonin-relic-warder",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_ci",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "hosted_validation": {
+      "reviewed_definition": "catalog:leonin-relic-warder",
+      "previous_draft_definition": "draft:leonin-relic-warder",
+      "source_facts_sha256": "cb04e79165008ce953bc0ff9ddde620330010808f6f003ad776f8f12ac914823",
+      "review_record": "docs/ANIMATE_DEAD_CARD_REVIEW.md",
+      "draft_hosted_validation": {
         "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
         "run_id": 34767597799
       }
@@ -1327,7 +1345,7 @@
     {
       "card_id": "oblivion-ring",
       "name": "Oblivion Ring",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1342,15 +1360,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "passed",
-      "draft_definition": "draft:oblivion-ring",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_ci",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "hosted_validation": {
+      "reviewed_definition": "catalog:oblivion-ring",
+      "previous_draft_definition": "draft:oblivion-ring",
+      "source_facts_sha256": "1579dfe03c1c2101fa254aded702a830b8b2dcc29837f4bfcbcba1c88984b1e3",
+      "review_record": "docs/ANIMATE_DEAD_CARD_REVIEW.md",
+      "draft_hosted_validation": {
         "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
         "run_id": 34767597799
       }
@@ -2173,86 +2194,33 @@
     }
   ],
   "hosted_validation": {
-    "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
-    "run_id": 34767597799,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799",
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "tests_per_platform": 1250,
-    "new_test_methods": 18,
-    "conclusion": "success",
-    "scope": "Shared linked exile/return, both opted-in drafts, all reviewed programs, source syntax, installation and packaged-asset checks; no production certification"
+    "conclusion": "pending",
+    "scope": "Animate Dead draft, permanent-only shroud/hexproof targeting, and promoted linked-exile definitions through reviewed loader"
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+    "base_commit": "c1f5e17d0fbfee7a5dfe147e086243025797e319",
     "cards_written": [
+      "animate-dead"
+    ],
+    "cards_promoted": [
       "oblivion-ring",
       "leonin-relic-warder"
     ],
-    "cards_promoted": [
-      "game-trail",
-      "godless-shrine",
-      "hallowed-fountain",
-      "mulldrifter",
-      "reveillark",
-      "shineshadow-snarl",
-      "stomping-ground",
-      "vesperlark",
-      "vineglimmer-snarl",
-      "watery-grave"
+    "shared_mechanics": [],
+    "shared_corrections": [
+      "Apply shroud and hexproof target restrictions only to battlefield permanents; retain printed keywords in other zones"
     ],
-    "promotion_validation": {
-      "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
-      "run_id": 34767022703,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1232,
-      "new_test_methods": 1,
-      "conclusion": "success",
-      "scope": "All ten promoted programs loaded through source-bound reviewed loader; hosted conformance and packaged assets; no production certification"
-    },
-    "shared_mechanics": [
-      "ExileLinked",
-      "WithLinkedExile"
-    ],
-    "runtime_checkpoint_schema": 111,
-    "new_test_methods": 18,
-    "validation_status": "passed_github_hosted_ci",
+    "runtime_checkpoint_schema": 112,
+    "new_test_methods": 19,
+    "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "review-linked-exile-drafts",
-      "animate-dead",
+      "review-animate-dead",
       "crop-rotation",
       "fling"
     ],
-    "review_work_remaining": "Review the two validated linked-exile drafts for source-bound promotion. Check the existing Animate Dead attachment fixture against its full printed card before adding new mechanics, then implement casting zone costs for Crop Rotation and Fling. 95 catalog cards remain unstarted; production admission remains closed.",
-    "validated_commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
-    "ci_run_id": 34767597799,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799",
-    "tests_per_platform": 1250,
-    "existing_primitive_reuse_candidate": {
-      "card_id": "animate-dead",
-      "source_file": "src/edh_gauntlet/rules_scenarios.py",
-      "source_function": "fixture_programs",
-      "existing_nodes": [
-        "WithAttached",
-        "SetAttachmentRule",
-        "WithMoved",
-        "Attach",
-        "DelayedTrigger",
-        "Sacrifice",
-        "ContinuousProgram",
-        "ModifyPT"
-      ],
-      "status": "fixture_identified_full_card_review_pending",
-      "existing_tests": "tests/test_rules_primitives_attachments.py"
-    }
+    "review_work_remaining": "Validate the full Animate Dead draft and shared target correction on hosted runners, then complete its source-bound promotion. 94 catalog cards remain unstarted; production admission remains closed."
   },
   "hosted_validation_history": [
     {
@@ -2293,6 +2261,19 @@
       "new_test_methods": 1,
       "conclusion": "success",
       "scope": "All ten promoted programs loaded through source-bound reviewed loader; hosted conformance and packaged assets; no production certification"
+    },
+    {
+      "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
+      "run_id": 34767597799,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1250,
+      "new_test_methods": 18,
+      "conclusion": "success",
+      "scope": "Shared linked exile/return, both opted-in drafts, all reviewed programs, source syntax, installation and packaged-asset checks; no production certification"
     }
   ]
 }
