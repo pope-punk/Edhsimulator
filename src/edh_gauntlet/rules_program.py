@@ -471,6 +471,17 @@ class EntryModifier:
 
 
 @dataclass(frozen=True)
+class EntryPayment(EntryModifier):
+    """Optional fixed life payment or one own-hand reveal; otherwise enter tapped.
+
+    Paying suppresses only this modifier. It never untaps an entry proposal
+    already made tapped by another instruction or replacement.
+    """
+    life: int = 0
+    reveal: Selector | None = None
+
+
+@dataclass(frozen=True)
 class IfCondition:
     condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition
     effects: tuple
@@ -754,7 +765,7 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+TYPES={cls.__name__:cls for cls in (EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
 EFFECTS=(UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
@@ -1422,6 +1433,15 @@ def validate(program,_depth=0):
         if modifier.selector is not None:
             selector(modifier.selector)
             if modifier.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Entry orientation selector requires battlefield')
+        if isinstance(modifier,EntryPayment):
+            if (modifier.tapped is not True or modifier.condition is not None or modifier.unless
+                    or modifier.selector is not None or type(modifier.life) is not int or modifier.life<0
+                    or (modifier.life>0)==(modifier.reveal is not None)):
+                raise RulesViolation('Entry payment requires exactly one fixed life or hand-reveal option')
+            if modifier.reveal is not None:
+                selector(modifier.reveal)
+                if modifier.reveal.zone!=Zone.HAND or modifier.reveal.relation!='owned':
+                    raise RulesViolation('Entry reveal requires the entering controller\'s hand')
         entry_ids.append(modifier.modifier_id)
     if len(entry_ids)!=len(set(entry_ids)):raise RulesViolation('Duplicate entry modifier ID')
     if not isinstance(program.replacements, tuple):

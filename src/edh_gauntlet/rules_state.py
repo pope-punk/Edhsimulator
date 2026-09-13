@@ -251,7 +251,7 @@ class RulesState:
     def zone(self,owner,zone):
         return tuple(self._objects[card_id] for card_id in self._order[(owner,Zone(zone))])
 
-    def move(self,moves:Iterable[ZoneMove],cause:str,*,detaches=(),counter_pairs=(),payment=None,creates=()):
+    def move(self,moves:Iterable[ZoneMove],cause:str,*,detaches=(),counter_pairs=(),payment=None,creates=(),entry_life=()):
         """Commit a validated simultaneous move, or leave all state unchanged.
 
         Replacement choices must already be resolved by the rules interpreter.
@@ -269,6 +269,17 @@ class RulesState:
         if set(new)!={m.source.card_id for m in moves if m.source.card_id in new}:raise RulesViolation('Every fresh token must have an entry proposal')
         if payment is not None:
             self.validate_payment(payment)
+        # Entry choices reserve life against the original state. Validate all
+        # players and the ordinary action payment before any object is changed.
+        if (not isinstance(entry_life,tuple) or any(not isinstance(row,tuple) or len(row)!=2
+                or type(row[0]) is not str or row[0] not in self.live_players
+                or type(row[1]) is not int or row[1]<=0 for row in entry_life)
+                or len({row[0] for row in entry_life})!=len(entry_life)):
+            raise RulesViolation('Invalid entry life payments')
+        for actor,amount in entry_life:
+            ordinary=payment.life if payment is not None and payment.actor==actor else 0
+            if amount+ordinary>self._life[actor]:
+                raise RulesViolation('Insufficient life for simultaneous entry payments')
         if payment is not None and payment.counters and (moves or detaches or counter_pairs):raise RulesViolation('Counter payment cannot be combined with zone or state-action groups')
         for refs in (detaches,counter_pairs):
             if len(set(refs))!=len(refs):raise RulesViolation('Duplicate non-zone state action')
@@ -300,7 +311,7 @@ class RulesState:
                 controller,destination,before.token,before.commander,move.copied_definition,
                 copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
-        if not pending and not detaches and not counter_pairs and payment is None:return ()
+        if not pending and not detaches and not counter_pairs and payment is None and not entry_life:return ()
         self._batch+=1;events=[]
         for move,before,after in pending:
             self._control_bases.pop(before.ref.card_id,None)
@@ -333,6 +344,9 @@ class RulesState:
             for ref,kind,amount in payment.counters:
                 obj=self.get(ref);counts=dict(obj.counters);counts[kind]-=amount
                 self._objects[ref.card_id]=replace(obj,counters=tuple(sorted((k,n) for k,n in counts.items() if n)))
+            self._sequence+=1
+        if entry_life:
+            for actor,amount in entry_life:self._life[actor]-=amount
             self._sequence+=1
         self._events.extend(events);self.assert_invariants();return tuple(events)
 

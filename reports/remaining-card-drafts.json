@@ -1,0 +1,1981 @@
+{
+  "schema": 1,
+  "kind": "static_authoring_inventory",
+  "base_commit": "e9c94a41b722a15621a1ab6352e96e97ccc5f8a7",
+  "branch": "codex/remaining-card-programs",
+  "production_ready": false,
+  "local_python_executed": false,
+  "counts": {
+    "catalog_unique": 334,
+    "reviewed_bundle_unique": 227,
+    "remaining_outside_reviewed_bundle": 107,
+    "drafts_written": 7,
+    "not_started_on_this_branch": 100,
+    "reviewed_bundle_copies": 292,
+    "draft_copies": 7
+  },
+  "cards": [
+    {
+      "card_id": "aggressive-biomancy",
+      "name": "Aggressive Biomancy",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 3,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "aggressive-biomancy",
+          "text": "Create X tokens that are copies of target creature you control, except they have \"When this token enters, it fights up to one target creature you don't control.\""
+        }
+      ]
+    },
+    {
+      "card_id": "alseid-of-life-s-bounty",
+      "name": "Alseid of Life's Bounty",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 41,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "alseid-of-life-s-bounty",
+          "text": "Lifelink\n{1}, Sacrifice this creature: Target creature or enchantment you control gains protection from the color of your choice until end of turn."
+        }
+      ]
+    },
+    {
+      "card_id": "aminatou-the-fateshifter",
+      "name": "Aminatou, the Fateshifter",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 2,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "aminatou-the-fateshifter",
+          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
+        }
+      ]
+    },
+    {
+      "card_id": "aminatou-veil-piercer",
+      "name": "Aminatou, Veil Piercer",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 1,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "aminatou-veil-piercer",
+          "text": "At the beginning of your upkeep, surveil 2.\nEach enchantment card in your hand has miracle. Its miracle cost is equal to its mana cost reduced by {4}."
+        }
+      ]
+    },
+    {
+      "card_id": "animate-dead",
+      "name": "Animate Dead",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 4,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "animate-dead",
+          "text": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Return enchanted creature card to the battlefield under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets -1/-0."
+        }
+      ]
+    },
+    {
+      "card_id": "apex-devastator",
+      "name": "Apex Devastator",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 4,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "apex-devastator",
+          "text": "Cascade, cascade, cascade, cascade"
+        }
+      ]
+    },
+    {
+      "card_id": "arcane-denial",
+      "name": "Arcane Denial",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 5,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "arcane-denial",
+          "text": "Counter target spell. Its controller may draw up to two cards at the beginning of the next turn's upkeep.\nYou draw a card at the beginning of the next turn's upkeep."
+        }
+      ]
+    },
+    {
+      "card_id": "aven-courier",
+      "name": "Aven Courier",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 7,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "aven-courier",
+          "text": "Flying\nWhenever Aven Courier attacks, choose a counter on a permanent you control. Put a counter of that kind on target permanent you control if it doesn't have a counter of that kind on it."
+        }
+      ]
+    },
+    {
+      "card_id": "bulk-up",
+      "name": "Bulk Up",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 28,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "bulk-up",
+          "text": "Double target creature's power until end of turn.\nFlashback {4}{R}{R}"
+        }
+      ]
+    },
+    {
+      "card_id": "changing-loyalty",
+      "name": "Changing Loyalty",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 6,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "changing-loyalty",
+          "text": "Flash\nReplicate {2}\nEnchant creature\nWhen enchanted creature dies, return it to the battlefield under your control."
+        }
+      ]
+    },
+    {
+      "card_id": "chaos-warp",
+      "name": "Chaos Warp",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 29,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "chaos-warp",
+          "text": "The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it's a permanent card, they put it onto the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "chthonian-nightmare",
+      "name": "Chthonian Nightmare",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 47,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "chthonian-nightmare",
+          "text": "When this enchantment enters, you get {E}{E}{E} (three energy counters).\nPay X {E}, Sacrifice a creature, Return this enchantment to its owner's hand: Return target creature card with mana value X from your graveyard to the battlefield. Activate only as a sorcery."
+        }
+      ]
+    },
+    {
+      "card_id": "crop-rotation",
+      "name": "Crop Rotation",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 19,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "crop-rotation",
+          "text": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put that card onto the battlefield, then shuffle."
+        }
+      ]
+    },
+    {
+      "card_id": "dance-of-the-dead",
+      "name": "Dance of the Dead",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 7,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "dance-of-the-dead",
+          "text": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Put enchanted creature card onto the battlefield tapped under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets +1/+1 and doesn't untap during its controller's untap step.\nAt the beginning of the upkeep of enchanted creature's controller, that player may pay {1}{B}. If the player does, untap that creature."
+        }
+      ]
+    },
+    {
+      "card_id": "dark-depths",
+      "name": "Dark Depths",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 21,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "dark-depths",
+          "text": "This land enters with ten ice counters on it.\n{3}: Remove an ice counter from this land.\nWhen this land has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible."
+        }
+      ]
+    },
+    {
+      "card_id": "darksteel-mutation",
+      "name": "Darksteel Mutation",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 58,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "darksteel-mutation",
+          "text": "Enchant creature\nEnchanted creature is an Insect artifact creature with base power and toughness 0/1 and has indestructible, and it loses all other abilities, card types, and creature types."
+        }
+      ]
+    },
+    {
+      "card_id": "dawn-of-hope",
+      "name": "Dawn of Hope",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 59,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "dawn-of-hope",
+          "text": "Whenever you gain life, you may pay {2}. If you do, draw a card.\n{3}{W}: Create a 1/1 white Soldier creature token with lifelink."
+        }
+      ]
+    },
+    {
+      "card_id": "defiler-of-vigor",
+      "name": "Defiler of Vigor",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 5,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "defiler-of-vigor",
+          "text": "Trample\nAs an additional cost to cast green permanent spells, you may pay 2 life. Those spells cost {G} less to cast if you paid life this way. This effect reduces only the amount of green mana you pay.\nWhenever you cast a green permanent spell, put a +1/+1 counter on each creature you control."
+        }
+      ]
+    },
+    {
+      "card_id": "delighted-halfling",
+      "name": "Delighted Halfling",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 6,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "delighted-halfling",
+          "text": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a legendary spell, and that spell can't be countered."
+        }
+      ]
+    },
+    {
+      "card_id": "desert-warfare",
+      "name": "Desert Warfare",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 22,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "desert-warfare",
+          "text": "Whenever you sacrifice a Desert and whenever a Desert card is put into your graveyard from your hand or library, put that card onto the battlefield under your control at the beginning of your next end step.\nAt the beginning of combat on your turn, if you control five or more Deserts, create that many 1/1 red, green, and white Sand Warrior creature tokens. They gain haste."
+        }
+      ]
+    },
+    {
+      "card_id": "devouring-light",
+      "name": "Devouring Light",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 41,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "devouring-light",
+          "text": "Convoke\nExile target attacking or blocking creature."
+        }
+      ]
+    },
+    {
+      "card_id": "dimir-house-guard",
+      "name": "Dimir House Guard",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 50,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "dimir-house-guard",
+          "text": "Fear\nSacrifice a creature: Regenerate this creature.\nTransmute {1}{B}{B}"
+        }
+      ]
+    },
+    {
+      "card_id": "domri-anarch-of-bolas",
+      "name": "Domri, Anarch of Bolas",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 64,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "domri-anarch-of-bolas",
+          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control."
+        }
+      ]
+    },
+    {
+      "card_id": "elspeth-conquers-death",
+      "name": "Elspeth Conquers Death",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 39,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "elspeth-conquers-death",
+          "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
+        }
+      ]
+    },
+    {
+      "card_id": "entity-tracker",
+      "name": "Entity Tracker",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 31,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "entity-tracker",
+          "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
+        }
+      ]
+    },
+    {
+      "card_id": "essence-channeler",
+      "name": "Essence Channeler",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 9,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "essence-channeler",
+          "text": "As long as you've lost life this turn, this creature has flying and vigilance.\nWhenever you gain life, put a +1/+1 counter on this creature.\nWhen this creature dies, put its counters on target creature you control."
+        }
+      ]
+    },
+    {
+      "card_id": "exotic-orchard",
+      "name": "Exotic Orchard",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 73,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "exotic-orchard",
+          "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
+        }
+      ]
+    },
+    {
+      "card_id": "fanatic-of-rhonas",
+      "name": "Fanatic of Rhonas",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 10,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "fanatic-of-rhonas",
+          "text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
+        }
+      ]
+    },
+    {
+      "card_id": "fanatical-devotion",
+      "name": "Fanatical Devotion",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 9,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "fanatical-devotion",
+          "text": "Sacrifice a creature: Regenerate target creature."
+        }
+      ]
+    },
+    {
+      "card_id": "fangs-of-kalonia",
+      "name": "Fangs of Kalonia",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 41,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "fangs-of-kalonia",
+          "text": "Put a +1/+1 counter on target creature you control, then double the number of +1/+1 counters on each creature that had a +1/+1 counter put on it this way.\nOverload {4}{G}{G}"
+        }
+      ]
+    },
+    {
+      "card_id": "fellwar-stone",
+      "name": "Fellwar Stone",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 59,
+          "quantity": 1
+        },
+        {
+          "deck": "Elenda",
+          "ordinal": 48,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "fellwar-stone",
+          "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
+        }
+      ]
+    },
+    {
+      "card_id": "finale-of-revelation",
+      "name": "Finale of Revelation",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 30,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "finale-of-revelation",
+          "text": "Draw X cards. If X is 10 or more, instead shuffle your graveyard into your library, draw X cards, untap up to five lands, and you have no maximum hand size for the rest of the game.\nExile this spell."
+        }
+      ]
+    },
+    {
+      "card_id": "fling",
+      "name": "Fling",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 30,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "fling",
+          "text": "As an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target."
+        }
+      ]
+    },
+    {
+      "card_id": "forgotten-ancient",
+      "name": "Forgotten Ancient",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 11,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "forgotten-ancient",
+          "text": "Whenever a player casts a spell, you may put a +1/+1 counter on this creature.\nAt the beginning of your upkeep, you may move any number of +1/+1 counters from this creature onto other creatures."
+        }
+      ]
+    },
+    {
+      "card_id": "funeral-room-awakening-hall",
+      "name": "Funeral Room // Awakening Hall",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 10,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "funeral-room",
+          "text": "Whenever a creature you control dies, each opponent loses 1 life and you gain 1 life."
+        },
+        {
+          "face_id": "awakening-hall",
+          "text": "When you unlock this door, return all creature cards from your graveyard to the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "game-trail",
+      "name": "Game Trail",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 67,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:game-trail",
+      "oracle_text": [
+        {
+          "face_id": "game-trail",
+          "text": "As this land enters, you may reveal a Mountain or Forest card from your hand. If you don't, this land enters tapped.\n{T}: Add {R} or {G}."
+        }
+      ]
+    },
+    {
+      "card_id": "ghostly-dancers",
+      "name": "Ghostly Dancers",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 32,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "ghostly-dancers",
+          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
+        }
+      ]
+    },
+    {
+      "card_id": "glasswing-grace-age-graced-chapel",
+      "name": "Glasswing Grace // Age-Graced Chapel",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 60,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "glasswing-grace",
+          "text": "Enchant creature\nEnchanted creature gets +2/+2 and has flying and lifelink."
+        },
+        {
+          "face_id": "age-graced-chapel",
+          "text": "This land enters tapped.\n{T}: Add {W} or {B}."
+        }
+      ]
+    },
+    {
+      "card_id": "gleaming-splendor",
+      "name": "Gleaming Splendor",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 29,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "gleaming-splendor",
+          "text": "Whenever an opponent draws their second card each turn, you create a Treasure token.\n{2}{W}: Two target players each draw a card."
+        }
+      ]
+    },
+    {
+      "card_id": "godless-shrine",
+      "name": "Godless Shrine",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 75,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:godless-shrine",
+      "oracle_text": [
+        {
+          "face_id": "godless-shrine",
+          "text": "({T}: Add {W} or {B}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped."
+        }
+      ]
+    },
+    {
+      "card_id": "grasp-of-fate",
+      "name": "Grasp of Fate",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 61,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "grasp-of-fate",
+          "text": "When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "hakbal-of-the-surging-soul",
+      "name": "Hakbal of the Surging Soul",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 34,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "hakbal-of-the-surging-soul",
+          "text": "At the beginning of combat on your turn, each Merfolk creature you control explores.\nWhenever Hakbal attacks, you may put a land card from your hand onto the battlefield. If you don't, draw a card."
+        }
+      ]
+    },
+    {
+      "card_id": "hallowed-fountain",
+      "name": "Hallowed Fountain",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 76,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:hallowed-fountain",
+      "oracle_text": [
+        {
+          "face_id": "hallowed-fountain",
+          "text": "({T}: Add {W} or {U}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped."
+        }
+      ]
+    },
+    {
+      "card_id": "helm-of-the-host",
+      "name": "Helm of the Host",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 37,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "helm-of-the-host",
+          "text": "At the beginning of combat on your turn, create a token that's a copy of equipped creature, except the token isn't legendary if equipped creature is legendary. That token gains haste.\nEquip {5}"
+        }
+      ]
+    },
+    {
+      "card_id": "hidden-nursery",
+      "name": "Hidden Nursery",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 38,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "hidden-nursery",
+          "text": "This land enters tapped.\n{T}: Add {G}.\n{4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery."
+        }
+      ]
+    },
+    {
+      "card_id": "horizon-of-progress",
+      "name": "Horizon of Progress",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 39,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "horizon-of-progress",
+          "text": "{T}, Pay 1 life: Add one mana of any type that a land you control could produce.\n{3}, {T}: You may put a land card from your hand onto the battlefield tapped.\n{1}, {T}, Sacrifice this land: Draw a card."
+        }
+      ]
+    },
+    {
+      "card_id": "hydra-broodmaster",
+      "name": "Hydra Broodmaster",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 41,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "hydra-broodmaster",
+          "text": "{X}{X}{G}: Monstrosity X.\nWhen this creature becomes monstrous, create X X/X green Hydra creature tokens."
+        }
+      ]
+    },
+    {
+      "card_id": "indulgent-tormentor",
+      "name": "Indulgent Tormentor",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 14,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "indulgent-tormentor",
+          "text": "Flying\nAt the beginning of your upkeep, draw a card unless target opponent sacrifices a creature or pays 3 life."
+        }
+      ]
+    },
+    {
+      "card_id": "innkeeper-s-talent",
+      "name": "Innkeeper's Talent",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 60,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "innkeeper-s-talent",
+          "text": "At the beginning of combat on your turn, put a +1/+1 counter on target creature you control.\n{G}: Level 2\nPermanents you control with counters on them have ward {1}.\n{3}{G}: Level 3\nIf you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead."
+        }
+      ]
+    },
+    {
+      "card_id": "invasion-of-theros",
+      "name": "Invasion of Theros",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 55,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "invasion-of-theros",
+          "text": "When this Siege enters, search your library for an Aura, God, or Demigod card, reveal it, put it into your hand, then shuffle."
+        },
+        {
+          "face_id": "ephara-ever-sheltering",
+          "text": "Ephara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card."
+        }
+      ]
+    },
+    {
+      "card_id": "jyoti-moag-ancient",
+      "name": "Jyoti, Moag Ancient",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 43,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "jyoti-moag-ancient",
+          "text": "When Jyoti enters, create a 1/1 green Forest Dryad land creature token for each time you've cast your commander from the command zone this game.\nAt the beginning of each combat, land creatures you control get +X/+X until end of turn, where X is Jyoti's power."
+        }
+      ]
+    },
+    {
+      "card_id": "karmic-guide",
+      "name": "Karmic Guide",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 11,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "karmic-guide",
+          "text": "Flying, protection from black\nEcho {3}{W}{W}\nWhen this creature enters, return target creature card from your graveyard to the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "kazuul-s-fury-kazuul-s-cliffs",
+      "name": "Kazuul's Fury // Kazuul's Cliffs",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 34,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "kazuul-s-fury",
+          "text": "As an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target."
+        },
+        {
+          "face_id": "kazuul-s-cliffs",
+          "text": "This land enters tapped.\n{T}: Add {R}."
+        }
+      ]
+    },
+    {
+      "card_id": "kodama-of-the-west-tree",
+      "name": "Kodama of the West Tree",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 19,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "kodama-of-the-west-tree",
+          "text": "Reach\nModified creatures you control have trample.\nWhenever a modified creature you control deals combat damage to a player, search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
+        }
+      ]
+    },
+    {
+      "card_id": "lazotep-quarry",
+      "name": "Lazotep Quarry",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 45,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "lazotep-quarry",
+          "text": "{T}: Add {C}.\n{T}, Sacrifice a creature: Add one mana of any color.\n{X}{2}, {T}, Sacrifice a Desert: Exile target creature card with mana value X from your graveyard. Create a token that's a copy of it, except it's a 4/4 black Zombie. Activate only as a sorcery."
+        }
+      ]
+    },
+    {
+      "card_id": "leonin-relic-warder",
+      "name": "Leonin Relic-Warder",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 43,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "leonin-relic-warder",
+          "text": "When this creature enters, you may exile target artifact or enchantment.\nWhen this creature leaves the battlefield, return the exiled card to the battlefield under its owner's control."
+        }
+      ]
+    },
+    {
+      "card_id": "leyline-of-hope",
+      "name": "Leyline of Hope",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 62,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "leyline-of-hope",
+          "text": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nIf you would gain life, you gain that much life plus 1 instead.\nAs long as you have at least 7 life more than your starting life total, creatures you control get +2/+2."
+        }
+      ]
+    },
+    {
+      "card_id": "march-from-velis-vel",
+      "name": "March from Velis Vel",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 51,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "march-from-velis-vel",
+          "text": "Choose a nonbasic land type. Each land you control of that type becomes a copy of target creature you control until end of turn and gains haste until end of turn.\nFlashback {4}{U}"
+        }
+      ]
+    },
+    {
+      "card_id": "maze-s-end",
+      "name": "Maze's End",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 52,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "maze-s-end",
+          "text": "This land enters tapped.\n{T}: Add {C}.\n{3}, {T}, Return this land to its owner's hand: Search your library for a Gate card, put it onto the battlefield, then shuffle. If you control ten or more Gates with different names, you win the game."
+        }
+      ]
+    },
+    {
+      "card_id": "midnight-snack",
+      "name": "Midnight Snack",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 16,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "midnight-snack",
+          "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
+        }
+      ]
+    },
+    {
+      "card_id": "minsc-boo-timeless-heroes",
+      "name": "Minsc & Boo, Timeless Heroes",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 1,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "minsc-boo-timeless-heroes",
+          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
+        }
+      ]
+    },
+    {
+      "card_id": "mirage-mirror",
+      "name": "Mirage Mirror",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 53,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "mirage-mirror",
+          "text": "{2}: This artifact becomes a copy of target artifact, creature, enchantment, or land until end of turn."
+        }
+      ]
+    },
+    {
+      "card_id": "mulldrifter",
+      "name": "Mulldrifter",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 35,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "mulldrifter",
+          "text": "Flying\nWhen this creature enters, draw two cards.\nEvoke {2}{U}"
+        }
+      ]
+    },
+    {
+      "card_id": "mystic-remora",
+      "name": "Mystic Remora",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 26,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "mystic-remora",
+          "text": "Cumulative upkeep {1}\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}."
+        }
+      ]
+    },
+    {
+      "card_id": "necromancy",
+      "name": "Necromancy",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 12,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "necromancy",
+          "text": "You may cast this spell as though it had flash. If you cast it any time a sorcery couldn't have been cast, the controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step.\nWhen this enchantment enters, if it's on the battlefield, it becomes an Aura with \"enchant creature put onto the battlefield with Necromancy.\" Put target creature card from a graveyard onto the battlefield under your control and attach this enchantment to it. When this enchantment leaves the battlefield, that creature's controller sacrifices it."
+        }
+      ]
+    },
+    {
+      "card_id": "nissa-steward-of-elements",
+      "name": "Nissa, Steward of Elements",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 54,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "nissa-steward-of-elements",
+          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
+        }
+      ]
+    },
+    {
+      "card_id": "nullpriest-of-oblivion",
+      "name": "Nullpriest of Oblivion",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 22,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "nullpriest-of-oblivion",
+          "text": "Kicker {3}{B}\nMenace, lifelink\nWhen this creature enters, if it was kicked, return target creature card from your graveyard to the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "oblivion-ring",
+      "name": "Oblivion Ring",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 45,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "oblivion-ring",
+          "text": "When this enchantment enters, exile another target nonland permanent.\nWhen this enchantment leaves the battlefield, return the exiled card to the battlefield under its owner's control."
+        }
+      ]
+    },
+    {
+      "card_id": "oracle-of-mul-daya",
+      "name": "Oracle of Mul Daya",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 55,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "oracle-of-mul-daya",
+          "text": "You may play an additional land on each of your turns.\nPlay with the top card of your library revealed.\nYou may play lands from the top of your library."
+        }
+      ]
+    },
+    {
+      "card_id": "parallax-wave",
+      "name": "Parallax Wave",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 46,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "parallax-wave",
+          "text": "Fading 5\nRemove a fade counter from this enchantment: Exile target creature.\nWhen this enchantment leaves the battlefield, each player returns to the battlefield all cards they own exiled with this enchantment."
+        }
+      ]
+    },
+    {
+      "card_id": "parasitic-impetus",
+      "name": "Parasitic Impetus",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 63,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "parasitic-impetus",
+          "text": "Enchant creature\nEnchanted creature gets +2/+2 and is goaded.\nWhenever enchanted creature attacks, its controller loses 2 life and you gain 2 life."
+        }
+      ]
+    },
+    {
+      "card_id": "pongify",
+      "name": "Pongify",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 58,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "pongify",
+          "text": "Destroy target creature. It can't be regenerated. Its controller creates a 3/3 green Ape creature token."
+        }
+      ]
+    },
+    {
+      "card_id": "pontiff-of-blight",
+      "name": "Pontiff of Blight",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 24,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "pontiff-of-blight",
+          "text": "Extort\nOther creatures you control have extort."
+        }
+      ]
+    },
+    {
+      "card_id": "prayer-of-binding",
+      "name": "Prayer of Binding",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 66,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "prayer-of-binding",
+          "text": "Flash\nWhen this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life."
+        }
+      ]
+    },
+    {
+      "card_id": "propaganda",
+      "name": "Propaganda",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 60,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "propaganda",
+          "text": "Creatures can't attack you unless their controller pays {2} for each creature they control that's attacking you."
+        }
+      ]
+    },
+    {
+      "card_id": "ram-through",
+      "name": "Ram Through",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 35,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "ram-through",
+          "text": "Target creature you control deals damage equal to its power to target creature you don't control. If the creature you control has trample, excess damage is dealt to that creature's controller instead."
+        }
+      ]
+    },
+    {
+      "card_id": "rampant-frogantua",
+      "name": "Rampant Frogantua",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 62,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "rampant-frogantua",
+          "text": "Trample\nRampant Frogantua gets +10/+10 for each player who has lost the game.\nWhenever Rampant Frogantua deals combat damage to a player, you may mill that many cards. Put any number of land cards from among them onto the battlefield tapped."
+        }
+      ]
+    },
+    {
+      "card_id": "replication-technique",
+      "name": "Replication Technique",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 64,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "replication-technique",
+          "text": "Demonstrate\nCreate a token that's a copy of target permanent you control."
+        }
+      ]
+    },
+    {
+      "card_id": "restart-sequence",
+      "name": "Restart Sequence",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 34,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "restart-sequence",
+          "text": "Freerunning {1}{B}\nReturn target creature card from your graveyard to the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "reveillark",
+      "name": "Reveillark",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 13,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "reveillark",
+          "text": "Flying\nWhen this creature leaves the battlefield, return up to two target creature cards each with power 2 or less from your graveyard to the battlefield.\nEvoke {5}{W}"
+        }
+      ]
+    },
+    {
+      "card_id": "rhystic-study",
+      "name": "Rhystic Study",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 28,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "rhystic-study",
+          "text": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}."
+        }
+      ]
+    },
+    {
+      "card_id": "rhythm-of-the-wild",
+      "name": "Rhythm of the Wild",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 61,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "rhythm-of-the-wild",
+          "text": "Creature spells you control can't be countered.\nNontoken creatures you control have riot."
+        }
+      ]
+    },
+    {
+      "card_id": "rishkar-s-expertise",
+      "name": "Rishkar's Expertise",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 46,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "rishkar-s-expertise",
+          "text": "Draw cards equal to the greatest power among creatures you control.\nYou may cast a spell with mana value 5 or less from your hand without paying its mana cost."
+        }
+      ]
+    },
+    {
+      "card_id": "scute-swarm",
+      "name": "Scute Swarm",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 67,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "scute-swarm",
+          "text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+        }
+      ]
+    },
+    {
+      "card_id": "shineshadow-snarl",
+      "name": "Shineshadow Snarl",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 72,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:shineshadow-snarl",
+      "oracle_text": [
+        {
+          "face_id": "shineshadow-snarl",
+          "text": "As this land enters, you may reveal a Plains or Swamp card from your hand. If you don't, this land enters tapped.\n{T}: Add {W} or {B}."
+        }
+      ]
+    },
+    {
+      "card_id": "sigarda-s-splendor",
+      "name": "Sigarda's Splendor",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 67,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "sigarda-s-splendor",
+          "text": "As this enchantment enters, note your life total.\nAt the beginning of your upkeep, draw a card if your life total is greater than or equal to the last noted life total. Then note your life total.\nWhenever you cast a white spell, you gain 1 life."
+        }
+      ]
+    },
+    {
+      "card_id": "smothering-tithe",
+      "name": "Smothering Tithe",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 40,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "smothering-tithe",
+          "text": "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token."
+        }
+      ]
+    },
+    {
+      "card_id": "sorin-of-house-markov",
+      "name": "Sorin of House Markov",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 27,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "sorin-of-house-markov",
+          "text": "Lifelink\nExtort\nAt the beginning of each of your postcombat main phases, if you gained 3 or more life this turn, exile Sorin, then return him to the battlefield transformed under his owner's control."
+        },
+        {
+          "face_id": "sorin-ravenous-neonate",
+          "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
+        }
+      ]
+    },
+    {
+      "card_id": "sorin-vengeful-bloodlord",
+      "name": "Sorin, Vengeful Bloodlord",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Elenda",
+          "ordinal": 2,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "sorin-vengeful-bloodlord",
+          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
+        }
+      ]
+    },
+    {
+      "card_id": "stomping-ground",
+      "name": "Stomping Ground",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 77,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:stomping-ground",
+      "oracle_text": [
+        {
+          "face_id": "stomping-ground",
+          "text": "({T}: Add {R} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped."
+        }
+      ]
+    },
+    {
+      "card_id": "sunken-palace",
+      "name": "Sunken Palace",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 73,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "sunken-palace",
+          "text": "This land enters tapped.\n{T}: Add {U}.\n{1}{U}, {T}, Exile seven cards from your graveyard: Add {U}. When you spend this mana to cast a spell or activate an ability, copy that spell or ability. You may choose new targets for the copy."
+        }
+      ]
+    },
+    {
+      "card_id": "talon-gates-of-madara",
+      "name": "Talon Gates of Madara",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 75,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "talon-gates-of-madara",
+          "text": "When this land enters, up to one target creature phases out.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.\n{4}: Put this card from your hand onto the battlefield."
+        }
+      ]
+    },
+    {
+      "card_id": "the-cruelty-of-gix",
+      "name": "The Cruelty of Gix",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 56,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "the-cruelty-of-gix",
+          "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
+        }
+      ]
+    },
+    {
+      "card_id": "the-earth-crystal",
+      "name": "The Earth Crystal",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 53,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "the-earth-crystal",
+          "text": "Green spells you cast cost {1} less to cast.\nIf one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.\n{4}{G}{G}, {T}: Distribute two +1/+1 counters among one or two target creatures you control."
+        }
+      ]
+    },
+    {
+      "card_id": "the-ozolith",
+      "name": "The Ozolith",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Minsc & Boo",
+          "ordinal": 54,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "the-ozolith",
+          "text": "Whenever a creature you control leaves the battlefield, if it had counters on it, put those counters on this artifact.\nAt the beginning of combat on your turn, if this artifact has counters on it, you may move all counters from it onto target creature."
+        }
+      ]
+    },
+    {
+      "card_id": "the-restoration-of-eiganjo",
+      "name": "The Restoration of Eiganjo",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 38,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "the-restoration-of-eiganjo",
+          "text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control."
+        },
+        {
+          "face_id": "architect-of-restoration",
+          "text": "Vigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token."
+        }
+      ]
+    },
+    {
+      "card_id": "thespian-s-stage",
+      "name": "Thespian's Stage",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 79,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "thespian-s-stage",
+          "text": "{T}: Add {C}.\n{2}, {T}: This land becomes a copy of target land, except it has this ability."
+        }
+      ]
+    },
+    {
+      "card_id": "touch-the-spirit-realm",
+      "name": "Touch the Spirit Realm",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 20,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "touch-the-spirit-realm",
+          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
+        }
+      ]
+    },
+    {
+      "card_id": "uro-titan-of-nature-s-wrath",
+      "name": "Uro, Titan of Nature's Wrath",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 83,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "uro-titan-of-nature-s-wrath",
+          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard."
+        }
+      ]
+    },
+    {
+      "card_id": "urza-s-saga",
+      "name": "Urza's Saga",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 94,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "urza-s-saga",
+          "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
+        }
+      ]
+    },
+    {
+      "card_id": "vesperlark",
+      "name": "Vesperlark",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 93,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "vesperlark",
+          "text": "Flying\nWhen this creature leaves the battlefield, return target creature card with power 1 or less from your graveyard to the battlefield.\nEvoke {1}{W}"
+        }
+      ]
+    },
+    {
+      "card_id": "victor-valgavoth-s-seneschal",
+      "name": "Victor, Valgavoth's Seneschal",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 34,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "victor-valgavoth-s-seneschal",
+          "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
+        }
+      ]
+    },
+    {
+      "card_id": "vineglimmer-snarl",
+      "name": "Vineglimmer Snarl",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 89,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:vineglimmer-snarl",
+      "oracle_text": [
+        {
+          "face_id": "vineglimmer-snarl",
+          "text": "As this land enters, you may reveal a Forest or Island card from your hand. If you don't, this land enters tapped.\n{T}: Add {G} or {U}."
+        }
+      ]
+    },
+    {
+      "card_id": "volatile-fault",
+      "name": "Volatile Fault",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 90,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "volatile-fault",
+          "text": "{T}: Add {C}.\n{1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls. That player may search their library for a basic land card, put it onto the battlefield, then shuffle. You create a Treasure token."
+        }
+      ]
+    },
+    {
+      "card_id": "watery-grave",
+      "name": "Watery Grave",
+      "status": "draft_written_validation_pending",
+      "source_decks": [
+        {
+          "deck": "Reaminatour",
+          "ordinal": 97,
+          "quantity": 1
+        }
+      ],
+      "draft_definition": "draft:watery-grave",
+      "oracle_text": [
+        {
+          "face_id": "watery-grave",
+          "text": "({T}: Add {U} or {B}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped."
+        }
+      ]
+    },
+    {
+      "card_id": "wonderscape-sage",
+      "name": "Wonderscape Sage",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 92,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "wonderscape-sage",
+          "text": "Flying\n{T}, Return a land you control to its owner's hand: Draw a card. Then discard a card unless that land had a nonbasic land type."
+        }
+      ]
+    },
+    {
+      "card_id": "xolatoyac-the-smiling-flood",
+      "name": "Xolatoyac, the Smiling Flood",
+      "status": "not_started_on_this_branch",
+      "source_decks": [
+        {
+          "deck": "Omo",
+          "ordinal": 93,
+          "quantity": 1
+        }
+      ],
+      "oracle_text": [
+        {
+          "face_id": "xolatoyac-the-smiling-flood",
+          "text": "Whenever Xolatoyac enters or attacks, put a flood counter on target land. That land is an Island in addition to its other types for as long as it has a flood counter on it.\nAt the beginning of your end step, untap each permanent you control with a counter on it."
+        }
+      ]
+    }
+  ]
+}

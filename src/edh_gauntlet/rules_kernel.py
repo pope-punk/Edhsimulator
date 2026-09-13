@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=108
+    CHECKPOINT_SCHEMA=109
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -512,7 +512,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     result.append(ReplacementCandidate(key,definition.name+': '+rule.replacement_id,'counter',3,source.controller,rule,source))
         return tuple(result)
 
-    def _resolve_zone_proposal(self, proposal, frame, key):
+    def _resolve_zone_proposal(self, proposal, frame, key, *, reserved_life=None):
+        reserved_life = reserved_life or {}
         while True:
             definition=self.definitions[proposal.copied_definition or proposal.before.effective_definition]
             source=replace(proposal.before,controller=proposal.controller)
@@ -537,6 +538,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             copied_definition = None
             copied_add_types = ()
             counters = None
+            life_payment = None
+            reveal = None
             if candidate.kind == 'commander':
                 chosen = self._choose(step_key + ':commander', candidate.controller,
                     'commander_destination', 'Choose the commander destination.',
@@ -552,6 +555,35 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     copied = self.state.get(chosen[0].ref)
                     copied_definition = copied.effective_definition
                     copied_add_types = copied.copied_add_types
+            elif candidate.kind == 'entry_payment':
+                actor = proposal.controller
+                rule = candidate.program
+                if rule.life:
+                    reserved = reserved_life.get(actor, 0) + sum(
+                        amount for player, amount in proposal.life_payments if player == actor)
+                    options = ((Option('pay', f'Pay {rule.life} life'),)
+                               if self.state.life(actor) - reserved >= rule.life else ())
+                    options += (Option('decline', 'Do not pay life'),)
+                    chosen = self._choose(step_key + ':life', actor, 'entry_life_payment',
+                        'You may pay life to ignore this land\'s own tapped-entry effect. '
+                        'Other entry effects still apply.', options, 1, 1)
+                    accepted = chosen[0].key == 'pay'
+                    if accepted:life_payment = (actor, rule.life)
+                else:
+                    # The batch has not moved yet. Another land entering from
+                    # this hand simultaneously can still be revealed (CR 614.12).
+                    views = self.characteristics()
+                    eligible = [obj for obj in self.state.zone(actor, Zone.HAND)
+                        if matches_selector(rule.reveal, obj, views[obj.ref], source)]
+                    eligible.sort(key=lambda obj: (self.definition(obj).name, obj.ref))
+                    chosen = self._choose(step_key + ':reveal', actor, 'entry_hand_reveal',
+                        'Reveal one matching card from your hand, or choose none. '
+                        'Revealing ignores only this land\'s own tapped-entry effect.',
+                        self._options(eligible), 0, 1)
+                    accepted = bool(chosen)
+                    if accepted:
+                        obj = self.state.get(chosen[0].ref)
+                        reveal = (actor, obj.ref, self.definition(obj).name)
             elif candidate.kind=='entry_counters':
                 context={**frame,'source':candidate.source.to_json(),'controller':candidate.controller,
                     'chosen_x':proposal.before.cast_x if proposal.before.zone==Zone.STACK else 0}
@@ -567,7 +599,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     (Option('yes', 'Apply replacement'), Option('no', 'Decline replacement')), 1, 1)
                 accepted = chosen[0].key == 'yes'
             proposal = apply_replacement(proposal, candidate, accepted=accepted,
-                                         copied_definition=copied_definition,counters=counters,copied_add_types=copied_add_types)
+                                         copied_definition=copied_definition,counters=counters,copied_add_types=copied_add_types,
+                                         life_payment=life_payment,reveal=reveal)
 
     def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=()):
         before = self.state.objects(Zone.BATTLEFIELD)
@@ -610,8 +643,17 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         start = self.state.players.index(self.active)
         players = self.state.players[start:] + self.state.players[:start]
         resolved = {}
+        reserved_life = {payment.actor: payment.life} if payment is not None else {}
+        entry_life = {}
+        entry_reveals = []
         for index, proposal in sorted(proposals, key=lambda row: players.index(affected_player(row[1]))):
-            resolved[index] = self._resolve_zone_proposal(proposal, frame, key + ':' + str(index))
+            result = self._resolve_zone_proposal(proposal, frame, key + ':' + str(index),
+                                                 reserved_life=reserved_life)
+            resolved[index] = result
+            for actor, amount in result.life_payments:
+                reserved_life[actor] = reserved_life.get(actor, 0) + amount
+                entry_life[actor] = entry_life.get(actor, 0) + amount
+            entry_reveals.extend(result.reveals)
         attachments = {}
         for index, proposal in sorted(resolved.items(), key=lambda row: players.index(row[1].controller)):
             if proposal.destination != Zone.BATTLEFIELD:
@@ -659,7 +701,15 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 replacement = iter(relevant[int(option.key)] for option in chosen)
                 own = [next(replacement) if move in relevant else move for move in own]
             ordered_moves.extend(own)
-        events = self.state.move(ordered_moves, cause, detaches=detaches, counter_pairs=counter_pairs,payment=payment,creates=tuple(created[m.source] for m in ordered_moves if m.source in created))
+        events = self.state.move(ordered_moves, cause, detaches=detaches, counter_pairs=counter_pairs,payment=payment,creates=tuple(created[m.source] for m in ordered_moves if m.source in created),
+                                 entry_life=tuple((actor,entry_life[actor]) for actor in players if entry_life.get(actor)))
+        # Publish only accepted disclosures, using their pre-move identities.
+        # Rebuilding a suspended proposal has no state or event side effects.
+        for actor, ref, name in entry_reveals:
+            self._event('cards_revealed', player=actor, refs=[ref.to_json()], names=[name], cause='entry_payment')
+        for actor in players:
+            if entry_life.get(actor):
+                self._event('life_lost', player=actor, amount=entry_life[actor], cause='entry_payment')
         for ref,blocker in blocked:self._event('entry_prohibited',ref=ref.to_json(),source=blocker.to_json())
         departed_spells={event.before.ref for event in events if event.before.zone==Zone.STACK}
         if departed_spells:

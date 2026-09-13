@@ -60,7 +60,7 @@ def decision_for_actor(kernel,actor):
 
 
 def project_actor(kernel,actor):
-    """Read current settled state without advancing, answering or exposing history."""
+    """Project current state plus explicitly public entry-reveal receipts."""
     if actor not in kernel.state.players:raise RulesViolation('Unknown actor')
     state=kernel.state;views=kernel.characteristics()
     players=[];permissions=kernel.player_permissions()
@@ -117,6 +117,14 @@ def project_actor(kernel,actor):
         'players':players,'zones':zones,'stack':stack,'resolving':resolving,'announcement':announcement,'combat':combat,
         'hand':[_card(kernel,obj,views) for obj in hand],
         'decision':decision_for_actor(kernel,actor),'outcome':deepcopy(kernel.outcome)}
+    # These are historical disclosures, not permission to inspect a hand or to
+    # follow a hidden card after a move/shuffle. Never forward choice options or
+    # raw event dictionaries; only the identities actually revealed are public.
+    entry_reveals=[{'event_index':event['index'],'player':event['player'],
+                   'refs':deepcopy(event['refs']),'names':list(event['names'])}
+                  for event in kernel.semantic_events
+                  if event['kind']=='cards_revealed' and event.get('cause')=='entry_payment']
+    if entry_reveals:packet['public_entry_reveals']=entry_reveals
     if actor in kernel.library_observations:
         packet['library_observation']=deepcopy(kernel.library_observations[actor])
     if actor in state.live_players:
