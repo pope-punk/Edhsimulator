@@ -3,8 +3,7 @@
 Oblivion Ring and Leonin Relic-Warder now have complete printed programs in
 the separate draft bundle on `codex/remaining-card-programs`. Both use the
 same new linked-ability primitives with ordinary target, optional-effect,
-departure-trigger and battlefield-entry behavior. They await hosted validation
-and subsequent card-level review.
+departure-trigger and battlefield-entry behavior. They passed hosted conformance and await card-level review.
 
 The reviewed library remains at 237 unique cards / 302 deck copies following
 [the completed ten-card promotion](DRAFT_PROMOTION_REVIEW.md). The outstanding
@@ -59,8 +58,13 @@ replacement-choice atomicity, multiple exiles and simultaneous returns, nested
 bindings, ceased tokens, Aura entry and attachment failure, entry payment
 checkpoints, actor replay and privacy, entry copying, and compiler rejection.
 
-Validation is pending on GitHub-hosted Ubuntu and Windows runners. No project
-execution, imports, installation, compilation, tests, or games run locally.
+[GitHub-hosted validation run 34767597799](https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799)
+passed source syntax, installation, packaged-asset checks and **1,250 tests on
+each of Ubuntu and Windows**, including all 18 new methods. The validated
+code/test commit is `2617d40e0a55f40892cd1a3f43d37558c12b5a4e`. No unresolved failure was found.
+This result update changes only documentation and inventory metadata.
+No project execution, imports, installation, compilation, tests or games ran
+on the user's computer.
 
 ## Compatibility and limits
 
@@ -89,5 +93,7 @@ confirm Oblivion Ring's early-departure interaction and Aura return handling.
 Leonin Relic-Warder's optionality and target types are taken from the retained
 catalog; it uses the same separately linked trigger structure.
 
-Next: review these two drafts after hosted conformance, then implement casting
-zone-cost transactions for Crop Rotation and Fling.
+Next: review these two validated drafts for promotion. Then check the existing
+Animate Dead attachment fixture against the complete printed card, reusing its
+shared primitives where complete, before implementing casting zone-cost
+transactions for Crop Rotation and Fling.

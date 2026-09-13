@@ -13,7 +13,7 @@
     "not_started_on_this_branch": 95,
     "reviewed_bundle_copies": 302,
     "draft_copies": 2,
-    "drafts_remotely_validated": 0,
+    "drafts_remotely_validated": 2,
     "promoted_on_this_branch": 10
   },
   "cards": [
@@ -1092,13 +1092,17 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "hosted_validation_status": "passed",
       "draft_definition": "draft:leonin-relic-warder",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
         "WithLinkedExile"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
+        "run_id": 34767597799
+      }
     },
     {
       "card_id": "leyline-of-hope",
@@ -1339,13 +1343,17 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "hosted_validation_status": "passed",
       "draft_definition": "draft:oblivion-ring",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
         "WithLinkedExile"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
+        "run_id": 34767597799
+      }
     },
     {
       "card_id": "oracle-of-mul-daya",
@@ -2165,8 +2173,17 @@
     }
   ],
   "hosted_validation": {
-    "conclusion": "pending",
-    "scope": "Linked exile/return interpreter, both draft programs, source bindings, replay and hosted distribution checks"
+    "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
+    "run_id": 34767597799,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799",
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "tests_per_platform": 1250,
+    "new_test_methods": 18,
+    "conclusion": "success",
+    "scope": "Shared linked exile/return, both opted-in drafts, all reviewed programs, source syntax, installation and packaged-asset checks; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2206,14 +2223,36 @@
     ],
     "runtime_checkpoint_schema": 111,
     "new_test_methods": 18,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
       "review-linked-exile-drafts",
+      "animate-dead",
       "crop-rotation",
       "fling"
     ],
-    "review_work_remaining": "Linked exile/return drafts require card-level review after hosted validation; 95 catalog cards remain unstarted. Production admission remains closed."
+    "review_work_remaining": "Review the two validated linked-exile drafts for source-bound promotion. Check the existing Animate Dead attachment fixture against its full printed card before adding new mechanics, then implement casting zone costs for Crop Rotation and Fling. 95 catalog cards remain unstarted; production admission remains closed.",
+    "validated_commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
+    "ci_run_id": 34767597799,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799",
+    "tests_per_platform": 1250,
+    "existing_primitive_reuse_candidate": {
+      "card_id": "animate-dead",
+      "source_file": "src/edh_gauntlet/rules_scenarios.py",
+      "source_function": "fixture_programs",
+      "existing_nodes": [
+        "WithAttached",
+        "SetAttachmentRule",
+        "WithMoved",
+        "Attach",
+        "DelayedTrigger",
+        "Sacrifice",
+        "ContinuousProgram",
+        "ModifyPT"
+      ],
+      "status": "fixture_identified_full_card_review_pending",
+      "existing_tests": "tests/test_rules_primitives_attachments.py"
+    }
   },
   "hosted_validation_history": [
     {

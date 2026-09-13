@@ -19,11 +19,27 @@ replacement choices, Aura return, replay and public projections. See
 [the linked-exile batch record](LINKED_EXILE_CARD_DRAFTS.md).
 
 The source base is `0788981d6851606eced204e7fe39b805a0a053e7`.
-Validation of this implementation is pending on GitHub-hosted runners.
+[GitHub-hosted validation run 34767597799](https://github.com/pope-punk/Edhsimulator/actions/runs/34767597799)
+passed source syntax, installation, packaged-asset checks and **1,250 tests on
+each of Ubuntu and Windows**, including all 18 new methods, at
+`2617d40e0a55f40892cd1a3f43d37558c12b5a4e`. Both drafts have passing hosted evidence and remain
+outside the reviewed bundle pending card-level review. No unresolved failure
+was found in this implementation batch.
 
 Checkpoint schema advances to 111 for the retained link registry. Old checkpoints
 and started games are not migrated. Next: review the two linked-exile drafts,
-then casting zone costs for Crop Rotation and Fling.
+then check the existing Animate Dead fixture for full-card reuse before casting
+zone costs for Crop Rotation and Fling.
+
+## Existing primitive reuse queued next
+
+The remaining inventory still lists Animate Dead as unstarted, while
+`rules_scenarios.fixture_programs()` already has an attachment fixture using
+`WithAttached`, `SetAttachmentRule`, `WithMoved`, `Attach`, `DelayedTrigger`,
+`Sacrifice` and attached `ModifyPT`. Its fixture coverage is not a reviewed card
+program. The next pass should check all printed clauses, source characteristics,
+casting and cross-card interactions, then reuse this composition if complete.
+The new exile drafts' own card-level review remains first in the queue.
 
 ## Completed promotion in this cycle
 
