@@ -208,7 +208,15 @@
       "607.2a",
       "607.3",
       "113.6",
-      "601.2a"
+      "601.2a",
+      "702.34a",
+      "702.138a",
+      "702.138b",
+      "610.3",
+      "610.3a",
+      "610.3b",
+      "610.3c",
+      "610.3d"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -306,6 +314,14 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
       "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
+      "scope": "Escape permission, alternative payment, repeated escape and Uro's independent entry benefit and optional land placement."
+    },
+    {
+      "url": "https://media.wizards.com/2024/downloads/FDN_Release_Notes_dPeeQG7XyE/EN_FDN%20Release%20Notes%2008282024.pdf",
+      "scope": "Bulk Up's power snapshot and Prayer of Binding's optional targeting, early source departure and Aura return."
     }
   ]
 }

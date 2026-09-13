@@ -9,7 +9,7 @@ from edh_gauntlet.rules_state import RulesState, Zone, ZoneMove, RulesViolation,
 from edh_gauntlet.rules_kernel import RulesKernel
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_adapter import RulesActorAdapter
-from edh_gauntlet.rules_bundle import load_reviewed, source_facts
+from edh_gauntlet.rules_bundle import load_reviewed, source_facts, digest
 from edh_gauntlet.catalog import load_catalog
 
 
@@ -60,7 +60,7 @@ class ExileDurationTests(unittest.TestCase):
     def test_source_facts_and_card_metadata(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         for key,p in self.cards.items():
-            self.assertEqual(source_facts(catalog[key]),self.rows[key]['source_facts'])
+            self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
             self.assertEqual(p,validate(decode(encode(p))))
             self.assertEqual(1,len(p.abilities));self.assertIsInstance(p.abilities[0].effects[0],ExileUntilSourceLeaves)
             self.assertIsNone(p.abilities[0].source_must_remain)
@@ -80,7 +80,7 @@ class ExileDurationTests(unittest.TestCase):
         self.state.add_mana('A',('C','W','W'))
         self.kernel.commit_action(self.kernel.quote_cast('grasp','A',self.source),Payment((('C',1),('W',2))))
         self.resolve_top();q=self.kernel.pending_choice
-        self.assertEqual(5,q.maximum);self.assertEqual(0,q.minimum);self.assertTrue(q.groups)
+        self.assertEqual(5,q.maximum);self.assertEqual(0,q.minimum);self.assertTrue(q.one_per_group)
         self.assertNotIn('land',{o.ref.card_id for o in q.options});self.assertNotIn('body-A',{o.ref.card_id for o in q.options})
         bad=[next(i for i,o in enumerate(q.options) if o.ref==r) for r in (other,self.bodies['B'])]
         before=self.kernel.snapshot()
@@ -121,7 +121,7 @@ class ExileDurationTests(unittest.TestCase):
         self.assertEqual((),returned.counters);self.assertNotEqual(exiled,returned.ref)
 
     def test_return_is_immediate_before_next_instruction_and_has_no_stack_trigger(self):
-        follow=replace(self.answer if hasattr(self,'answer') else CardProgram('temp','Temp',('Instant',)),
+        follow=replace(CardProgram('temp','Temp',('Instant',)),
             definition_id='follow',name='Return then destroy',cast=CastSpec(CostSpec(),timing='instant'),
             spell_targets=TargetSpec(Selector(Zone.BATTLEFIELD)),
             spell_effects=(Move('target',Zone.HAND),
@@ -227,3 +227,36 @@ class ExileDurationTests(unittest.TestCase):
                 (ExileUntilSourceLeaves('source'),),zone=Zone.HAND),)))
         with self.assertRaises(RulesViolation):
             validate(CardProgram('bad','Bad',('Instant',),spell_targets=TargetSpec(Selector(Zone.STACK),maximum=None)))
+
+    def test_public_duration_projection_does_not_follow_hidden_or_reexiled_cards(self):
+        self.game();self.enter(self.bodies['B'])
+        packet=RulesActorAdapter(self.kernel).packet('C')
+        self.assertEqual([self.current('body-B').ref.to_json()],packet['exile_until_source_leaves'][0]['exiled'])
+        self.assertEqual(self.current().ref.to_json(),packet['exile_until_source_leaves'][0]['source'])
+        self.state.move((ZoneMove(self.current('body-B').ref,Zone.HAND,'B'),),'fixture-hidden')
+        self.assertNotIn('exile_until_source_leaves',RulesActorAdapter(self.kernel).packet('C'))
+        self.state.move((ZoneMove(self.current('body-B').ref,Zone.EXILE,'B'),),'fixture-new-exile')
+        self.assertNotIn('exile_until_source_leaves',RulesActorAdapter(self.kernel).packet('C'))
+
+    def test_replaced_return_is_attempted_once_and_clears_the_obligation(self):
+        redirect=CardProgram('return-redirect','Return redirect',('Enchantment',),
+            replacements=(ZoneReplacement('redirect',Zone.BATTLEFIELD,Zone.GRAVEYARD,from_zone=Zone.EXILE),))
+        self.game(extra=(redirect,));self.enter(self.bodies['B'])
+        self.state.add_card('redirect','return-redirect','C',Zone.BATTLEFIELD)
+        self.remove()
+        self.assertEqual(Zone.GRAVEYARD,self.current('body-B').zone)
+        self.assertEqual({},self.kernel.exile_durations)
+
+    def test_returned_aura_with_no_legal_attachment_stays_exiled(self):
+        aura=CardProgram('rare-aura','Rare Aura',('Enchantment',),subtypes=('Aura',),
+            enchant=Selector(Zone.BATTLEFIELD,('Creature',),subtypes=('Unicorn',)))
+        unicorn=CardProgram('unicorn','Unicorn',('Creature',),subtypes=('Unicorn',),power=2,toughness=2)
+        self.game(extra=(aura,unicorn))
+        creature=self.state.add_card('unicorn','unicorn','B',Zone.BATTLEFIELD)
+        ref=self.state.add_card('rare-aura','rare-aura','B',Zone.HAND)
+        self.kernel.enter(ref);q=self.kernel.pending_choice
+        self.kernel.answer(q.request_id,q.actor,[0])
+        self.enter(self.current('rare-aura').ref)
+        self.state.move((ZoneMove(creature,Zone.GRAVEYARD,'B'),),'fixture')
+        self.remove()
+        self.assertEqual(Zone.EXILE,self.current('rare-aura').zone);self.assertEqual({},self.kernel.exile_durations)

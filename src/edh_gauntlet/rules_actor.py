@@ -91,6 +91,9 @@ def project_actor(kernel,actor):
             'name':kernel.definition(source).name,'source':source.ref.to_json(),
             'controller':frame['controller'],'ability_id':frame.get('ability_id'),'chosen_x':frame['chosen_x'],
             **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
+            **({'exile_on_stack_exit':True} if frame.get('exile_on_stack_exit') else {}),
+            **({'target_controller_groups':[{'target':target_summary(row['ref']),'controller':row['controller']}
+                for row in frame['target_controller_groups']]} if 'target_controller_groups' in frame else {}),
             **({'event_x':frame['values']['event_x']} if 'event_x' in frame.get('values',{}) else {}),
             **({'event_amount':frame['values']['event_amount']} if 'event_amount' in frame.get('values',{}) else {}),
             **({'defending_player':frame['values']['defending_player']} if 'defending_player' in frame.get('values',{}) else {}),
@@ -137,6 +140,14 @@ def project_actor(kernel,actor):
         links.append({'source':deepcopy(source),'source_name':kernel.definitions[definition_id].name,
                       'link_id':link_id,'exiled':[ref.to_json() for ref in refs]})
     if links:packet['linked_exile']=links
+    durations=[]
+    for key,row in kernel.exile_durations.items():
+        refs=kernel._current_exiled_refs(row['refs'])
+        if not refs:continue
+        source=RulesObject.from_json(row['source'])
+        durations.append({'source':source.ref.to_json(),'source_name':kernel.definition(source).name,
+            'exiled':[ref.to_json() for ref in refs]})
+    if durations:packet['exile_until_source_leaves']=durations
     if actor in kernel.library_observations:
         packet['library_observation']=deepcopy(kernel.library_observations[actor])
     if actor in state.live_players:

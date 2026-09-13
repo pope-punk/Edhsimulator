@@ -2287,10 +2287,11 @@
       "Exact spell stack-exit replacement",
       "ExileUntilSourceLeaves",
       "Simultaneous replacement-aware immediate returns",
-      "Frozen per-controller target clauses"
+      "Frozen per-controller target clauses",
+      "Public exact-incarnation duration and Flashback projection"
     ],
     "runtime_checkpoint_schema": 114,
-    "new_test_methods": 39,
+    "new_test_methods": 45,
     "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
@@ -2312,6 +2313,19 @@
           "An earlier schema assertion required exactly 113; the new layout intentionally uses 114."
         ],
         "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout."
+      },
+      {
+        "commit": "ddaefed0a115737dc907bc4f6365ab383f039143",
+        "run_id": 34774176554,
+        "conclusion": "failure",
+        "tests_run": 1332,
+        "failures": 2,
+        "errors": 1,
+        "issues": [
+          "Two new fixtures compared catalog tuples directly with their JSON list representation rather than comparing canonical source-fact digests.",
+          "The Grasp grouping assertion used a nonexistent ChoiceRequest.groups attribute."
+        ],
+        "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed."
       }
     ]
   },

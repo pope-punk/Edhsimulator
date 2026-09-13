@@ -35,7 +35,7 @@ cost retains its original casting permissions; the alternative binds graveyard
 permission to its specific payment. Uro composes the existing entry facts,
 sacrifice, gain/draw/land and attack trigger primitives. Bulk Up composes a signed
 recipient-power modifier with an exact stack-incarnation Flashback replacement.
-The graveyard-casting pair has 20 authored conformance methods; successful
+The graveyard-casting pair has 23 authored conformance methods; successful
 hosted validation remains pending.
 Checkpoint schema is 114. No local Python or game execution is permitted.
 
@@ -44,12 +44,15 @@ ExileUntilSourceLeaves primitive returns surviving exact exile incarnations
 before the next instruction, state-based actions or priority. Simultaneous
 source departures share one return batch. Source phasing/control/copy changes
 preserve the obligation. Per-opponent targeting freezes each selected player's
-clause at announcement. Nineteen further conformance methods cover this pair.
-The combined 39-method batch awaits successful hosted validation.
+clause at announcement. Twenty-two further conformance methods cover this pair.
+The combined 45-method batch awaits successful hosted validation.
 
 The initial hosted run rejected an extra GainLife JSON field and a historical
 test pinned to schema 113. The draft JSON and historical compatibility assertion
-are corrected; the failure remains recorded in the inventory.
+are corrected. The next run caught two tuple-versus-JSON fixture comparisons
+and a grouping-attribute typo; those are corrected too. Both failed runs remain
+recorded in the inventory. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
+records printed-clause mapping and the current validation scope.
 
 ## Prior cycle: casting sacrifices for Crop Rotation and Fling
 

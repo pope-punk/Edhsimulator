@@ -9,7 +9,7 @@ from edh_gauntlet.rules_state import RulesState, Zone, ZoneMove, RulesViolation
 from edh_gauntlet.rules_kernel import RulesKernel
 from edh_gauntlet.rules_casting import Payment, PreparedAction
 from edh_gauntlet.rules_adapter import RulesActorAdapter
-from edh_gauntlet.rules_bundle import load_reviewed, source_facts
+from edh_gauntlet.rules_bundle import load_reviewed, source_facts, digest
 from edh_gauntlet.catalog import load_catalog
 
 
@@ -63,7 +63,7 @@ class GraveyardCastingTests(unittest.TestCase):
     def test_complete_source_facts_and_codec(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         for key,p in self.cards.items():
-            self.assertEqual(source_facts(catalog[key]),self.rows[key]['source_facts'])
+            self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
             self.assertEqual(p,validate(decode(encode(p))))
             self.assertEqual((Zone.HAND,Zone.COMMAND),p.cast.origin_zones)
             self.assertIsInstance(p.cast.alternatives[0],GraveyardAlternativeCost)
@@ -140,6 +140,9 @@ class GraveyardCastingTests(unittest.TestCase):
         adapter.submit('A',{'kind':'cast','revision':self.kernel.revision,'action_id':'escape','source':self.source.to_json(),
             'targets':[],'x_value':0,'alternative_id':'escape','payment':{'mana':{'G':2,'U':2},'taps':[],'zone_costs':{'escape':[r.to_json() for r in self.fuel]}}})
         self.assertIsNotNone(self.kernel.announcement);self.assertEqual(Zone.STACK,self.current().zone)
+        public=adapter.packet('B')
+        self.assertNotIn('private',json.dumps(public))
+        self.assertNotIn('payment',public['announcement'])
         self.assertEqual((('G',2),('U',2)),self.state.mana_pool('A'))
         restored=RulesKernel.restore(self.kernel.snapshot(),self.programs)
         while self.kernel.pending_choice:
@@ -249,3 +252,24 @@ class GraveyardCastingTests(unittest.TestCase):
         bulk=self.cards['bulk-up']
         with self.assertRaises(RulesViolation):
             validate(replace(bulk,cast=replace(bulk.cast,alternatives=(replace(bulk.cast.alternatives[0],entry_flags=('escaped',)),))))
+
+    def test_actor_projection_marks_flashback_only_on_the_paid_stack_incarnation(self):
+        self.game();self.cast();packet=RulesActorAdapter(self.kernel).packet('B')
+        self.assertTrue(packet['stack'][0]['exile_on_stack_exit'])
+        self.game(zone=Zone.HAND);self.cast(False);packet=RulesActorAdapter(self.kernel).packet('B')
+        self.assertNotIn('exile_on_stack_exit',packet['stack'][0])
+
+    def test_uro_trigger_controller_cannot_sacrifice_uro_after_an_opponent_gains_it(self):
+        self.game('uro-titan-of-nature-s-wrath',Zone.HAND);self.cast(False)
+        self.kernel.pass_priority(self.kernel.priority);self.kernel.pass_priority(self.kernel.priority)
+        q=self.kernel.pending_choice;self.assertEqual('trigger_order',q.kind)
+        self.kernel.answer(q.request_id,q.actor,list(range(len(q.options))))
+        self.state.change_control(self.current().ref,'B');self.settle()
+        self.assertEqual(Zone.BATTLEFIELD,self.current().zone);self.assertEqual('B',self.current().controller)
+        self.assertEqual(43,self.state.life('A'));self.assertEqual(40,self.state.life('B'))
+
+    def test_flashback_fact_does_not_follow_the_card_into_a_later_normal_cast(self):
+        self.game();self.cast();self.settle()
+        self.state.move((ZoneMove(self.current().ref,Zone.HAND,'A'),),'fixture-return')
+        self.kernel.open_window_for_scenario('A');self.cast(False,action_id='normal');self.settle()
+        self.assertEqual(Zone.GRAVEYARD,self.current().zone);self.assertEqual(12,self.kernel.effective(self.body).power)
