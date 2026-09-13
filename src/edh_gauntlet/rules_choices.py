@@ -71,6 +71,14 @@ class ChoiceRequest:
 
 
 @dataclass(frozen=True)
+class ManaPaymentBoundary:
+    actor: str
+    request_id: str
+    mana: dict
+    revision: str
+
+
+@dataclass(frozen=True)
 class PriorityBoundary:
     actor:str
     stack:tuple[str,...]  # top first

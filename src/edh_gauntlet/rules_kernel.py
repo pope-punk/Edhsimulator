@@ -22,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=114
+    CHECKPOINT_SCHEMA=115
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -76,6 +76,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         self.pending_choice=None;self.answers={};self.accepted=[];self.semantic_events=[]
         self.priority=None;self.passes=[];self._serial=0;self._revision=0
         self.linked_exile={};self.exile_durations={}
+        self.mana_payment=None;self.draw_counts={};self.draw_count_turn=state.turn_number
         self.temporary_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
         self.phase=None;self.action_receipts={};self.turn_schedule=None;self.combat=None;self.departure=None;self.outcome=None;self.announcement=None
 
@@ -110,11 +111,17 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         return amount+cached[1][player]
 
     def _player_event(self,kind,player,**data):
+        if kind=='card_drawn':
+            if self.draw_count_turn!=self.state.turn_number:
+                self.draw_counts={};self.draw_count_turn=self.state.turn_number
+            self.draw_counts[player]=self.draw_counts.get(player,0)+1
+            data={**data,'draw_ordinal':self.draw_counts[player]}
         self._event(kind,player=player,**data)
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
             for ability in self._trigger_abilities(source,kind):
                 pattern=ability.event
+                if isinstance(pattern,DrawEventPattern) and pattern.occurrence!=self.draw_counts.get(player,0):continue
                 if pattern.kind==kind and event_player_matches(pattern,source.controller,player):
                     captured={'event_controllers':[player]}
                     if kind=='life_gained':captured['event_amount']=data['amount']
@@ -534,6 +541,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             # departure, including counters, illegal targets and returns to hand.
             flashback_key=f'flashback:{proposal.before.ref.card_id}@{proposal.before.ref.incarnation}'
             frames=tuple(self.stack)+((self.resolving,) if self.resolving is not None else ())
+            if self.mana_payment:frames+=(self.mana_payment['parent'],)
             if (proposal.before.zone==Zone.STACK and proposal.destination!=Zone.EXILE
                     and flashback_key not in proposal.used
                     and any(f['spell'] and f.get('exile_on_stack_exit') and self._source(f).ref==proposal.before.ref for f in frames)
@@ -903,7 +911,23 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
         if self._execute_attachment(effect,frame,key):return
-        if isinstance(effect,UntilEndOfTurn):
+        if isinstance(effect,PayMana):
+            window=self.mana_payment
+            if window is None:
+                players=self._players(frame,effect.players)
+                if not players:
+                    self._insert(frame,effect.otherwise);return
+                if len(players)!=1:raise UnsupportedRule('Resolution payment requires exactly one payer')
+                self.mana_payment={'id':key,'actor':players[0],'mana':encode(effect.mana),
+                    'parent':self.resolving,'completed':False,'paid':None}
+                self.priority=None;self.passes=[]
+                self._event('resolution_payment_opened',request_id=key,actor=players[0],mana=encode(effect.mana))
+                return
+            if window['id']!=key or not window['completed']:
+                raise RulesViolation('Resolution payment continuation does not match its suspended instruction')
+            self._insert(frame,effect.effects if window['paid'] else effect.otherwise)
+            self.mana_payment=None
+        elif isinstance(effect,UntilEndOfTurn):
             refs=[]
             for ref in self._refs(frame,effect.subject):
                 try:obj=self.state.get(ref)
@@ -1336,6 +1360,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 if self.outcome:return GameResult(self.outcome['kind'],tuple(self.outcome['winners']),tuple(self.outcome['departed']))
                 if self._return_expired_exiles():continue
                 if self.announcement:self._continue_announcement();continue
+                if self._payment_waiting():return self._payment_boundary()
                 if self.departure:self._continue_departure();continue
                 if self._exile_abandoned_control():continue
                 frame=self.resolving
@@ -1351,6 +1376,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     if frame['tasks']:
                         task=frame['tasks'][0];sequence=self.state.sequence
                         self._execute(frame,task)
+                        if self._payment_waiting():return self._payment_boundary()
                         # Combat removal is immediate, even between instructions
                         # of one resolution; it is not a state-based action.
                         if self.combat is not None and self.state.sequence!=sequence:self._combat_prune()
@@ -1363,6 +1389,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                             self._move((current.ref,),Zone.GRAVEYARD,frame,frame['id']+':finish',cause='spell_finished')
                     if frame.get('cleanup_after'):self._finish_cleanup_actions()
                     self._event('resolution_finished',frame=frame['id']);self.resolving=None;self.priority=frame.get('return_priority',self.priority_player());self.passes=[]
+                    if self.mana_payment:
+                        self.resolving=self.mana_payment['parent'];self.priority=None
                     continue
                 if self.turn_schedule is not None and self.priority is None:
                     if self.phase=='declare_attackers' and self.active not in self.state.live_players:
@@ -1401,6 +1429,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             'accepted':self.accepted,'semantic_events':self.semantic_events,'priority':self.priority,'passes':self.passes,
             'serial':self._serial,'revision':self._revision,'phase':self.phase,'action_receipts':self.action_receipts,'turn_schedule':self.turn_schedule,'combat':self.combat,'departure':self.departure,'outcome':self.outcome,'announcement':self.announcement,
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
+            'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1411,8 +1440,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn'):
+        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
+        if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
+            kernel.resolving=kernel.mana_payment['parent']
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
             kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))

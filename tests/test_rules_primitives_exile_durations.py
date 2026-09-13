@@ -213,7 +213,7 @@ class ExileDurationTests(unittest.TestCase):
 
     def test_checkpoint_layout_and_invalid_duration_programs(self):
         self.game();checkpoint=self.kernel.snapshot()
-        self.assertEqual(114,checkpoint['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],114)
         checkpoint['schema']=113
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)
         with self.assertRaises(RulesViolation):

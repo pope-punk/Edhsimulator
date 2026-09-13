@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 246,
     "remaining_outside_reviewed_bundle": 88,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 88,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 84,
     "reviewed_bundle_copies": 311,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 19
   },
@@ -67,7 +67,7 @@
       "oracle_text": [
         {
           "face_id": "aminatou-the-fateshifter",
-          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[−1]: Exile another target permanent you own, then return it to the battlefield under your control.\n[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
+          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
         }
       ]
     },
@@ -371,7 +371,7 @@
     {
       "card_id": "dawn-of-hope",
       "name": "Dawn of Hope",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -384,7 +384,12 @@
           "face_id": "dawn-of-hope",
           "text": "Whenever you gain life, you may pay {2}. If you do, draw a card.\n{3}{W}: Create a 1/1 white Soldier creature token with lifelink."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "resolution-payment-2026-09-13",
+      "draft_definition": "draft:dawn-of-hope"
     },
     {
       "card_id": "defiler-of-vigor",
@@ -490,7 +495,7 @@
       "oracle_text": [
         {
           "face_id": "domri-anarch-of-bolas",
-          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[−2]: Target creature you control fights target creature you don't control."
+          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control."
         }
       ]
     },
@@ -508,7 +513,7 @@
       "oracle_text": [
         {
           "face_id": "elspeth-conquers-death",
-          "text": "I — Exile target permanent an opponent controls with mana value 3 or greater.\nII — Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
+          "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
         }
       ]
     },
@@ -526,7 +531,7 @@
       "oracle_text": [
         {
           "face_id": "entity-tracker",
-          "text": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
+          "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
         }
       ]
     },
@@ -580,7 +585,7 @@
       "oracle_text": [
         {
           "face_id": "fanatic-of-rhonas",
-          "text": "{T}: Add {G}.\nFerocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
+          "text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
         }
       ]
     },
@@ -788,7 +793,7 @@
       "oracle_text": [
         {
           "face_id": "ghostly-dancers",
-          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
+          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
         }
       ]
     },
@@ -817,7 +822,7 @@
     {
       "card_id": "gleaming-splendor",
       "name": "Gleaming Splendor",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -830,7 +835,12 @@
           "face_id": "gleaming-splendor",
           "text": "Whenever an opponent draws their second card each turn, you create a Treasure token.\n{2}{W}: Two target players each draw a card."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "resolution-payment-2026-09-13",
+      "draft_definition": "draft:gleaming-splendor"
     },
     {
       "card_id": "godless-shrine",
@@ -1280,7 +1290,7 @@
       "oracle_text": [
         {
           "face_id": "midnight-snack",
-          "text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
+          "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
         }
       ]
     },
@@ -1298,7 +1308,7 @@
       "oracle_text": [
         {
           "face_id": "minsc-boo-timeless-heroes",
-          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
+          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
         }
       ]
     },
@@ -1410,7 +1420,7 @@
       "oracle_text": [
         {
           "face_id": "nissa-steward-of-elements",
-          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
+          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
         }
       ]
     },
@@ -1728,7 +1738,7 @@
     {
       "card_id": "rhystic-study",
       "name": "Rhystic Study",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1741,7 +1751,12 @@
           "face_id": "rhystic-study",
           "text": "Whenever an opponent casts a spell, you may draw a card unless that player pays {1}."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "resolution-payment-2026-09-13",
+      "draft_definition": "draft:rhystic-study"
     },
     {
       "card_id": "rhythm-of-the-wild",
@@ -1793,7 +1808,7 @@
       "oracle_text": [
         {
           "face_id": "scute-swarm",
-          "text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+          "text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
         }
       ]
     },
@@ -1851,7 +1866,7 @@
     {
       "card_id": "smothering-tithe",
       "name": "Smothering Tithe",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1864,7 +1879,12 @@
           "face_id": "smothering-tithe",
           "text": "Whenever an opponent draws a card, that player may pay {2}. If the player doesn't, you create a Treasure token."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "resolution-payment-2026-09-13",
+      "draft_definition": "draft:smothering-tithe"
     },
     {
       "card_id": "sorin-of-house-markov",
@@ -1884,7 +1904,7 @@
         },
         {
           "face_id": "sorin-ravenous-neonate",
-          "text": "Extort\n[+2]: Create a Food token.\n[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
+          "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
         }
       ]
     },
@@ -1902,7 +1922,7 @@
       "oracle_text": [
         {
           "face_id": "sorin-vengeful-bloodlord",
-          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
+          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
         }
       ]
     },
@@ -1989,7 +2009,7 @@
       "oracle_text": [
         {
           "face_id": "the-cruelty-of-gix",
-          "text": "Read ahead\nI — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII — Put target creature card from a graveyard onto the battlefield under your control."
+          "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2043,7 +2063,7 @@
       "oracle_text": [
         {
           "face_id": "the-restoration-of-eiganjo",
-          "text": "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control."
+          "text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control."
         },
         {
           "face_id": "architect-of-restoration",
@@ -2083,7 +2103,7 @@
       "oracle_text": [
         {
           "face_id": "touch-the-spirit-realm",
-          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
+          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
         }
       ]
     },
@@ -2101,7 +2121,7 @@
       "oracle_text": [
         {
           "face_id": "uro-titan-of-nature-s-wrath",
-          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard."
+          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard."
         }
       ],
       "authoring_status": "complete_printed_program",
@@ -2135,7 +2155,7 @@
       "oracle_text": [
         {
           "face_id": "urza-s-saga",
-          "text": "I — This Saga gains \"{T}: Add {C}.\"\nII — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"\nIII — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
+          "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
         }
       ]
     },
@@ -2194,7 +2214,7 @@
       "oracle_text": [
         {
           "face_id": "victor-valgavoth-s-seneschal",
-          "text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
+          "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2334,111 +2354,25 @@
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "9d918d1db85ef64337615c98b52d0ff546b02ddd",
+    "base_commit": "1d25cf3ff93762b3326190ae7c55486bb1509259",
     "cards_written": [
-      "uro-titan-of-nature-s-wrath",
-      "bulk-up",
-      "grasp-of-fate",
-      "prayer-of-binding"
-    ],
-    "cards_promoted": [
-      "uro-titan-of-nature-s-wrath",
-      "bulk-up",
-      "grasp-of-fate",
-      "prayer-of-binding"
-    ],
-    "shared_mechanics": [
-      "GraveyardAlternativeCost",
-      "Exact spell stack-exit replacement",
-      "ExileUntilSourceLeaves",
-      "Simultaneous replacement-aware immediate returns",
-      "Frozen per-controller target clauses",
-      "Public exact-incarnation duration and Flashback projection"
-    ],
-    "runtime_checkpoint_schema": 114,
-    "new_test_methods": 45,
-    "validation_status": "passed_github_hosted_ci",
-    "unresolved_defects": [],
-    "next_batch": [
       "dawn-of-hope",
       "rhystic-study",
-      "smothering-tithe"
+      "smothering-tithe",
+      "gleaming-splendor"
     ],
-    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation all passed. Continue the optional resolution-payment family; assess Gleaming Splendor's second-draw trigger as a fourth card when practical.",
-    "resolved_validation_issues": [
-      {
-        "commit": "d0bc4fb57b2b7c8c98cb25d5fcf60ecdf602c559",
-        "run_id": 34773794049,
-        "conclusion": "failure",
-        "tests_run": 1293,
-        "failures": 1,
-        "errors": 2,
-        "issues": [
-          "Uro's draft GainLife JSON incorrectly included a players field, rejected by the strict codec before the new fixture class ran.",
-          "An earlier schema assertion required exactly 113; the new layout intentionally uses 114."
-        ],
-        "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout.",
-        "resolution_commit": "ddaefed0a115737dc907bc4f6365ab383f039143"
-      },
-      {
-        "commit": "ddaefed0a115737dc907bc4f6365ab383f039143",
-        "run_id": 34774176554,
-        "conclusion": "failure",
-        "tests_run": 1332,
-        "failures": 2,
-        "errors": 1,
-        "issues": [
-          "Two new fixtures compared catalog tuples directly with their JSON list representation rather than comparing canonical source-fact digests.",
-          "The Grasp grouping assertion used a nonexistent ChoiceRequest.groups attribute."
-        ],
-        "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed.",
-        "resolution_commit": "a806a1822952084aa4fddf1510af6db899036914"
-      }
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "PayMana",
+      "Authenticated resolution mana window",
+      "Suspended parent and immediate mana ability frames",
+      "DrawEventPattern and actual draw ordinals"
     ],
-    "draft_validation": {
-      "commit": "a806a1822952084aa4fddf1510af6db899036914",
-      "run_id": 34774446530,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1338,
-      "new_test_methods": 45,
-      "conclusion": "success",
-      "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
-    },
-    "next_batch_implementation_notes": {
-      "cards": [
-        "dawn-of-hope",
-        "rhystic-study",
-        "smothering-tithe"
-      ],
-      "reuse": [
-        "ACTOR_EVENTS event_controllers capture",
-        "GainLife/life_gained and Draw/card_drawn events",
-        "Token creation with embedded Soldier or Treasure definitions",
-        "Mana satisfaction and atomic ResourcePayment validation",
-        "Authenticated actor adapter, checkpoints and accepted replay journal"
-      ],
-      "requirements": [
-        "Add an optional mana-payment instruction with paid/unpaid branches and a captured paying actor; do not re-use the trigger controller when the opponent owes the payment.",
-        "Provide a resolution-time mana-ability window. Current quote_activation requires idle priority and cannot be called while a spell or trigger is resolving. Merely checking already-banked mana would omit a printed option.",
-        "Permit only valid mana abilities in the payment window, preserving suspension, mana choices, zone costs, once-only payment, generated triggers and absence of ordinary priority.",
-        "Bind each resolution-stage request and accepted mana action to the paused effect so checkpoint restore and actor replay cannot pay, draw or create tokens twice.",
-        "Dawn pays optionally then draws, Rhystic lets the opponent pay before the controller's optional draw, and Tithe creates one Treasure after an opponent declines or cannot pay. Each draw and life-gain event retains its own trigger.",
-        "Keep private hand and mana-choice data actor-scoped; add rejection, insufficient resources, repeated events, opponent departure and checkpoint tests on hosted runners.",
-        "Assess Gleaming Splendor as a fourth card: track each player's second actual draw of the turn, including draws before it entered; hand additions are not draws. Its two-player draw activation can reuse existing player targets."
-      ],
-      "guard": "No local execution. Unsupported payment shapes stay rejected; keep new cards isolated until every printed clause and hosted validation are complete.",
-      "secondary_candidates": [
-        "gleaming-splendor"
-      ]
-    },
-    "validated_commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
-    "ci_run_id": 34774679040,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
-    "tests_per_platform": 1338
+    "runtime_checkpoint_schema": 115,
+    "new_test_methods": 46,
+    "validation_status": "awaiting_github_hosted_ci",
+    "unresolved_defects": [],
+    "review_work_remaining": "Validate the four isolated drafts on hosted runners, complete printed-face review and source binding, then promote and validate through the reviewed loader. No local execution."
   },
   "hosted_validation_history": [
     {
@@ -2754,6 +2688,114 @@
       "ci_run_id": 34771234815,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815",
       "tests_per_platform": 1293
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "9d918d1db85ef64337615c98b52d0ff546b02ddd",
+      "cards_written": [
+        "uro-titan-of-nature-s-wrath",
+        "bulk-up",
+        "grasp-of-fate",
+        "prayer-of-binding"
+      ],
+      "cards_promoted": [
+        "uro-titan-of-nature-s-wrath",
+        "bulk-up",
+        "grasp-of-fate",
+        "prayer-of-binding"
+      ],
+      "shared_mechanics": [
+        "GraveyardAlternativeCost",
+        "Exact spell stack-exit replacement",
+        "ExileUntilSourceLeaves",
+        "Simultaneous replacement-aware immediate returns",
+        "Frozen per-controller target clauses",
+        "Public exact-incarnation duration and Flashback projection"
+      ],
+      "runtime_checkpoint_schema": 114,
+      "new_test_methods": 45,
+      "validation_status": "passed_github_hosted_ci",
+      "unresolved_defects": [],
+      "next_batch": [
+        "dawn-of-hope",
+        "rhystic-study",
+        "smothering-tithe"
+      ],
+      "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation all passed. Continue the optional resolution-payment family; assess Gleaming Splendor's second-draw trigger as a fourth card when practical.",
+      "resolved_validation_issues": [
+        {
+          "commit": "d0bc4fb57b2b7c8c98cb25d5fcf60ecdf602c559",
+          "run_id": 34773794049,
+          "conclusion": "failure",
+          "tests_run": 1293,
+          "failures": 1,
+          "errors": 2,
+          "issues": [
+            "Uro's draft GainLife JSON incorrectly included a players field, rejected by the strict codec before the new fixture class ran.",
+            "An earlier schema assertion required exactly 113; the new layout intentionally uses 114."
+          ],
+          "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout.",
+          "resolution_commit": "ddaefed0a115737dc907bc4f6365ab383f039143"
+        },
+        {
+          "commit": "ddaefed0a115737dc907bc4f6365ab383f039143",
+          "run_id": 34774176554,
+          "conclusion": "failure",
+          "tests_run": 1332,
+          "failures": 2,
+          "errors": 1,
+          "issues": [
+            "Two new fixtures compared catalog tuples directly with their JSON list representation rather than comparing canonical source-fact digests.",
+            "The Grasp grouping assertion used a nonexistent ChoiceRequest.groups attribute."
+          ],
+          "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed.",
+          "resolution_commit": "a806a1822952084aa4fddf1510af6db899036914"
+        }
+      ],
+      "draft_validation": {
+        "commit": "a806a1822952084aa4fddf1510af6db899036914",
+        "run_id": 34774446530,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1338,
+        "new_test_methods": 45,
+        "conclusion": "success",
+        "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
+      },
+      "next_batch_implementation_notes": {
+        "cards": [
+          "dawn-of-hope",
+          "rhystic-study",
+          "smothering-tithe"
+        ],
+        "reuse": [
+          "ACTOR_EVENTS event_controllers capture",
+          "GainLife/life_gained and Draw/card_drawn events",
+          "Token creation with embedded Soldier or Treasure definitions",
+          "Mana satisfaction and atomic ResourcePayment validation",
+          "Authenticated actor adapter, checkpoints and accepted replay journal"
+        ],
+        "requirements": [
+          "Add an optional mana-payment instruction with paid/unpaid branches and a captured paying actor; do not re-use the trigger controller when the opponent owes the payment.",
+          "Provide a resolution-time mana-ability window. Current quote_activation requires idle priority and cannot be called while a spell or trigger is resolving. Merely checking already-banked mana would omit a printed option.",
+          "Permit only valid mana abilities in the payment window, preserving suspension, mana choices, zone costs, once-only payment, generated triggers and absence of ordinary priority.",
+          "Bind each resolution-stage request and accepted mana action to the paused effect so checkpoint restore and actor replay cannot pay, draw or create tokens twice.",
+          "Dawn pays optionally then draws, Rhystic lets the opponent pay before the controller's optional draw, and Tithe creates one Treasure after an opponent declines or cannot pay. Each draw and life-gain event retains its own trigger.",
+          "Keep private hand and mana-choice data actor-scoped; add rejection, insufficient resources, repeated events, opponent departure and checkpoint tests on hosted runners.",
+          "Assess Gleaming Splendor as a fourth card: track each player's second actual draw of the turn, including draws before it entered; hand additions are not draws. Its two-player draw activation can reuse existing player targets."
+        ],
+        "guard": "No local execution. Unsupported payment shapes stay rejected; keep new cards isolated until every printed clause and hosted validation are complete.",
+        "secondary_candidates": [
+          "gleaming-splendor"
+        ]
+      },
+      "validated_commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+      "ci_run_id": 34774679040,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
+      "tests_per_platform": 1338
     }
   ],
   "execution_policy": {

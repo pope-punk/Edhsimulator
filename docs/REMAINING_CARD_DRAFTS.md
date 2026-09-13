@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **246 reviewed programs / 311 deck copies**. There are **88 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**: **4 isolated drafts** and **84 unstarted**. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -29,7 +29,17 @@ implementation notes and the existing primitives to reuse. Assess **Gleaming
 Splendor** as a fourth card using second-draw event tracking. Continue into another
 coherent family when useful context remains.
 
-## Current cycle: four-card graveyard casting and exile durations
+## Current cycle: resolution payments and draw ordinals
+
+Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor now have isolated
+complete printed programs. PayMana offers the captured payer an authenticated
+resolution window for mana abilities and exact optional payment. Parent resolution
+survives immediate mana choices, source-sacrifice costs, checkpoints and replay.
+DrawEventPattern counts each actual draw across the turn, including draws before
+the enchantment enters. Checkpoint schema is 115. The 46 new conformance methods
+await GitHub-hosted validation; no draft is admitted to the reviewed loader yet.
+
+## Previous cycle: four-card graveyard casting and exile durations
 
 Uro, Bulk Up, Grasp of Fate and Prayer of Binding have complete printed-face
 review and exact source bindings. GraveyardAlternativeCost adds origin-bound

@@ -11,6 +11,7 @@ mana use shared turn-history and characteristic rules.
 from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
+from .rules_choices import ManaPaymentBoundary
 from .rules_program import GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
@@ -102,6 +103,42 @@ class Payment:
 
 
 class CastingRules:
+    def _payment_waiting(self):
+        window=self.mana_payment
+        return bool(window and not window['completed'] and not self.pending_choice and not self.announcement
+            and self.resolving is not None and self.resolving['id']==window['parent']['id'])
+
+    def _payment_boundary(self):
+        window=self.mana_payment
+        return ManaPaymentBoundary(window['actor'],window['id'],encode(decode(window['mana'])),self.revision)
+
+    def pay_resolution_mana(self,action_id,actor,request_id,payment,*,revision):
+        """Commit exactly one authored pay/decline after any immediate mana abilities."""
+        if not self._payment_waiting():raise RulesViolation('No resolution payment is awaiting an answer')
+        window=self.mana_payment
+        if (revision!=self.revision or request_id!=window['id'] or actor!=window['actor']
+                or actor not in self.state.live_players):raise RulesViolation('Stale or unauthorized resolution payment')
+        if type(action_id) is not str or not action_id or len(action_id)>128 or action_id in self.action_receipts:
+            raise RulesViolation('Resolution payment requires a fresh bounded action identity')
+        resources=None
+        if payment is not None:
+            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=():
+                raise RulesViolation('Resolution payment accepts mana only')
+            resources=ResourcePayment(actor,payment.mana)
+            self.state.validate_payment(resources)
+            cost=decode(window['mana']);paid=dict(payment.mana)
+            if (not _mana_symbols_satisfied(cost.symbols,paid)
+                    or sum(paid.values())!=cost.generic+len(cost.symbols)):
+                raise RulesViolation('Resolution payment must match the fixed mana cost exactly')
+        # All preconditions precede the sole resource mutation.
+        if resources is not None:self.state.move((),'resolution_payment',payment=resources)
+        window['completed']=True;window['paid']=resources is not None
+        receipt={'request_id':request_id,'actor':actor,'paid':window['paid'],
+                 'mana':dict(resources.mana) if resources is not None else {}}
+        self.action_receipts[action_id]=receipt
+        self._event('resolution_payment_completed',action_id=action_id,**receipt)
+        return self.advance()
+
     def activated_abilities(self, source):
         """Basic land types confer mana abilities independently of printed text."""
         abilities = self.definition(source).activated
@@ -149,13 +186,15 @@ class CastingRules:
             raise RulesViolation('More than one target in a controller group')
 
     def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None):
-        self._idle()
+        resolution_mana=kind=='activate' and self._payment_waiting()
+        if not resolution_mana:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
             raise RulesViolation('Action requires a bounded nonempty identity')
         if action_id in self.action_receipts:
             raise RulesViolation('Action was already accepted')
-        if actor not in self.state.live_players or self.priority != actor:
-            raise RulesViolation('Actor does not hold priority')
+        owner=self.mana_payment['actor'] if resolution_mana else self.priority
+        if actor not in self.state.live_players or owner != actor:
+            raise RulesViolation('Actor does not own the action window')
         source = self.state.get(ref)
         program = self.definition(source)
         if kind == 'cast':
@@ -173,6 +212,8 @@ class CastingRules:
             specification = next((ability for ability in self.activated_abilities(source) if ability.ability_id == ability_id), None)
             if specification is None:
                 raise RulesViolation('Unknown activated ability')
+            if resolution_mana and (not specification.mana_ability or specification.timing!='instant'):
+                raise RulesViolation('Only mana abilities are available during a resolution payment')
             permitted_actor=source.controller if source.zone==Zone.BATTLEFIELD else source.owner
             if source.zone!=specification.zone or source.phased or permitted_actor!=actor:
                 raise RulesViolation('Unavailable activated ability source')
@@ -387,7 +428,7 @@ class CastingRules:
         self.action_receipts[quote.action_id] = receipt
         self._event('costs_paid', action_id=quote.action_id, **receipt['payment'])
         self._event(event_kind, action_id=quote.action_id, source=source.ref.to_json(), controller=quote.actor)
-        self.priority = quote.actor
+        self.priority = None if self.mana_payment else quote.actor
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
         self._collect_tapped(resources.taps,tap_observers)

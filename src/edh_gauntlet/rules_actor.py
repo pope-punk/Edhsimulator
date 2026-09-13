@@ -39,6 +39,10 @@ def decision_for_actor(kernel,actor):
         if request.revision!=kernel.revision:raise RulesViolation('Choice no longer matches current state')
         if request.actor==actor:return {'kind':'choice','choice':request.to_json()}
         return {'kind':'waiting','actor':request.actor}
+    if kernel._payment_waiting():
+        window=kernel.mana_payment
+        if actor!=window['actor']:return {'kind':'waiting','actor':window['actor']}
+        return {'kind':'mana_payment','request_id':window['id'],'mana':deepcopy(window['mana']),'revision':kernel.revision}
     if kernel.resolving or kernel.pending_triggers or kernel.placement or kernel.departure or kernel.announcement:
         return {'kind':'engine_pending'}
     if kernel.priority is not None:
@@ -148,6 +152,12 @@ def project_actor(kernel,actor):
         durations.append({'source':source.ref.to_json(),'source_name':kernel.definition(source).name,
             'exiled':[ref.to_json() for ref in refs]})
     if durations:packet['exile_until_source_leaves']=durations
+    if kernel.mana_payment:
+        window=kernel.mana_payment
+        packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],
+            'mana':deepcopy(window['mana']),'parent_frame':window['parent']['id']}
+    packet['draw_counts']={player:kernel.draw_counts.get(player,0) if kernel.draw_count_turn==state.turn_number else 0
+        for player in state.live_players}
     if actor in kernel.library_observations:
         packet['library_observation']=deepcopy(kernel.library_observations[actor])
     if actor in state.live_players:

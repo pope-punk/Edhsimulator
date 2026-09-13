@@ -177,6 +177,12 @@ class EventPattern:
 
 
 @dataclass(frozen=True)
+class DrawEventPattern(EventPattern):
+    """The player's ordinal actual draw in the current turn."""
+    occurrence: int = 2
+
+
+@dataclass(frozen=True)
 class Move:
     subject:str
     destination:Zone
@@ -309,6 +315,15 @@ class May:
     otherwise:tuple=()
     available:Selector|None=None
     subject:str='source'
+
+
+@dataclass(frozen=True)
+class PayMana:
+    """Offer one player a fixed mana payment while suspending resolution."""
+    mana: ManaCost
+    effects: tuple
+    otherwise: tuple = ()
+    players: str = 'controller'
 
 
 @dataclass(frozen=True)
@@ -809,8 +824,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -840,9 +855,9 @@ def immediate_effect_nodes(nodes):
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+        if isinstance(node,(PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(IfCondition,May)):
+        if isinstance(node,(PayMana,IfCondition,May)):
             yield from immediate_effect_nodes(node.otherwise)
 
 
@@ -1117,6 +1132,14 @@ def validate(program,_depth=0):
         for node in nodes:
             if type(node) not in EFFECTS:
                 raise RulesViolation('Unregistered effect node')
+            if isinstance(node,PayMana):
+                mana(node.mana)
+                if node.mana.x_symbols or type(node.players) is not str or node.players not in {'controller','event_controllers'}:
+                    raise RulesViolation('Resolution payments require fixed mana and one supported payer')
+                if node.players=='event_controllers' and 'event_controllers' not in available_values:
+                    raise RulesViolation('Resolution payer requires a captured event player')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
             if isinstance(node,UntilEndOfTurn):
                 if not isinstance(node.changes,tuple) or not node.changes:raise RulesViolation('Empty or mutable temporary changes')
                 for change in node.changes:
@@ -1434,6 +1457,8 @@ def validate(program,_depth=0):
             raise RulesViolation('Exile-until-leaves requires a battlefield activation source')
         effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols))
         target_effects(ability.effects,ability.targets)
+        if ability.mana_ability and any(isinstance(node,PayMana) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Nested resolution payments inside mana abilities are unsupported')
         if ability.mana_ability != activation_is_mana(ability):
             raise RulesViolation('Activation mana-ability classification does not match its targets and immediate effects')
         activation_ids.append(ability.ability_id)
@@ -1568,6 +1593,8 @@ def validate(program,_depth=0):
                 or (event.any_types or event.exclude_source) and event.kind!='zone_changed'
                 or event.exclude_source and event.subject=='self'):
             raise RulesViolation('Invalid zone-event type union or source exclusion')
+        if isinstance(event,DrawEventPattern) and (event.kind!='card_drawn' or type(event.occurrence) is not int or event.occurrence<1):
+            raise RulesViolation('Draw ordinals require a positive card-drawn occurrence')
         if event.characteristics and event.kind!='zone_changed':
             raise RulesViolation('Characteristic event filters require zone events')
         if (event.kind not in {'zone_changed', 'step_began', 'spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} or event.subject not in {'any', 'self', 'attached'}

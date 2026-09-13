@@ -63,6 +63,7 @@ class RulesActorAdapter:
             raise RulesViolation('Invalid actor command')
         kind=command['kind']
         required={'answer':{'request_id','indexes'},'pass':set(),
+            'pay_mana':{'action_id','request_id','payment'},
             'cast':{'action_id','source','targets','x_value','payment'},
             'activate':{'action_id','source','targets','x_value','payment','ability_id'},
             'play_land':{'action_id','source'},'attack':{'attackers'},
@@ -72,12 +73,17 @@ class RulesActorAdapter:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
         decision=decision_for_actor(self.kernel,actor)['kind']
-        expected={'answer':'choice','pass':'priority','cast':'priority','activate':'priority',
+        expected={'answer':'choice','pass':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment',
                   'play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
-        if decision!=expected[kind]:raise RulesViolation('Actor does not own this decision stage')
+        if decision!=expected[kind] and not (kind=='activate' and decision=='mana_payment'):
+            raise RulesViolation('Actor does not own this decision stage')
         k=self.kernel
         if kind=='answer':return k.answer(command['request_id'],actor,command['indexes'])
         if kind=='pass':return k.pass_priority(actor)
+        if kind=='pay_mana':
+            try:payment=None if command['payment'] is None else Payment.from_json(command['payment'])
+            except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid resolution payment') from exc
+            return k.pay_resolution_mana(command['action_id'],actor,command['request_id'],payment,revision=command['revision'])
         if kind in {'cast','activate'}:
             source=self._visible_ref(command['source'],actor)
             if type(command['targets']) is not list:raise RulesViolation('Invalid targets')
