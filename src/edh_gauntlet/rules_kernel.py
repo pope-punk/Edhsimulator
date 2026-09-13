@@ -514,6 +514,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         if not self._has_state_triggers:return
         waiting=list(self.pending_triggers)+list(self.stack)
         if self.resolving is not None:waiting.append(self.resolving)
+        if self.mana_payment is not None:waiting.append(self.mana_payment['parent'])
         occupied={row.get('values',{}).get('state_trigger_key') for row in waiting}
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue

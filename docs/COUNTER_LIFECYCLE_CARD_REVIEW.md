@@ -92,7 +92,7 @@ those exact facts using the normal reviewed loader:
 
 ## Conformance and compatibility
 
-The 61 new methods in
+The 62 new methods in
 `tests/test_rules_primitives_counter_lifecycles.py` cover normal casts and land
 play, target legality, announcement and paid resources, replacement order,
 brief state conditions, countered triggers, control/departure/blink, phasing,
@@ -108,3 +108,14 @@ remain distinct; production admission stays closed. General unsupported rules,
 including counter-removal prohibitions, are not silently admitted.
 
 Validation is pending. Do not treat the authored scenarios as execution evidence.
+
+## Initial hosted findings
+
+[Run 34782111960](https://github.com/pope-punk/Edhsimulator/actions/runs/34782111960)
+ran 1,498 tests on Ubuntu at `f20404e234e443c6951141d429f015f6c4ef7307`;
+one new fixture failed because it reused a stale exile reference after returning
+a land. Windows was cancelled by matrix fail-fast. The fixture now captures the
+returned incarnation explicitly. Independent static review also retained the
+suspended resolution-payment parent in state-trigger occupancy, with a new
+regression while a mana ability runs. The corrected suite has 62 new methods;
+its execution is pending.

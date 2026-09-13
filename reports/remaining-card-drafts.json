@@ -2566,10 +2566,29 @@
     ],
     "runtime_checkpoint_schema": 117,
     "state_checkpoint_schema": 13,
-    "new_test_methods": 61,
+    "new_test_methods": 62,
     "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "All four printed programs and 61 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind exact source facts and promote, then validate the reviewed loader. No project execution is authorized locally."
+    "review_work_remaining": "All four printed programs and 62 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind exact source facts and promote, then validate the reviewed loader. No project execution is authorized locally.",
+    "resolved_validation_issues": [
+      {
+        "commit": "f20404e234e443c6951141d429f015f6c4ef7307",
+        "run_id": 34782111960,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782111960",
+        "conclusion": "failure",
+        "tests_run": 1498,
+        "failures": 1,
+        "errors": 0,
+        "platforms": {
+          "ubuntu": "1498 tests; one fixture expectation failure",
+          "windows": "cancelled by matrix fail-fast"
+        },
+        "issues": [
+          "The new-land-incarnation fixture returned a land from exile and then attempted to add a counter through its stale exile reference."
+        ],
+        "resolution": "Nest the second WithMoved binding so the flood counter is added to the actual returned incarnation. Separately retain a state trigger's suspended resolution-payment parent in the occupied set and add a regression for mana abilities during that payment."
+      }
+    ]
   },
   "hosted_validation_history": [
     {

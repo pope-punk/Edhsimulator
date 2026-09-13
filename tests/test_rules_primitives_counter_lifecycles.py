@@ -249,6 +249,23 @@ class CounterLifecycleTests(unittest.TestCase):
         self.assertEqual(self.kernel.snapshot(),restored.snapshot());self.assertEqual(1,len(self.tokens()))
         self.assertEqual(1,sum(e['kind']=='trigger_created' and e['ability']=='no-ice' for e in self.kernel.semantic_events))
 
+    def test_state_trigger_stays_occupied_while_resolution_mana_ability_runs(self):
+        program=CardProgram('paid-state','Paid state',('Artifact',),abilities=(AbilityProgram(
+            'state-payment',EventPattern('counter_state',subject='self',counters=(CounterRange('charge',0,0),)),
+            (PayMana(ManaCost(1),(Sacrifice('source'),)),)),))
+        self.game(extra=(program,))
+        source=self.state.add_card('paid-state','paid-state','A',Zone.BATTLEFIELD)
+        self.kernel.advance();self.top()
+        quote=self.kernel.quote_activation(self.ident(),'A',self.lands['A'],'intrinsic-land:Forest')
+        self.kernel.commit_action(quote,Payment())
+        self.assertEqual([],self.kernel.pending_triggers);self.assertEqual([],self.kernel.stack)
+        self.assertEqual(1,sum(e['kind']=='trigger_created' and e['ability']=='state-payment'
+                               for e in self.kernel.semantic_events))
+        window=self.kernel.mana_payment
+        self.kernel.pay_resolution_mana(self.ident(),'A',window['id'],Payment((('G',1),)),revision=self.kernel.revision)
+        self.assertEqual(Zone.GRAVEYARD,self.state.get(self.state.current('paid-state')).zone)
+        self.assertFalse(self.kernel.stack);self.assertIsNone(self.kernel.mana_payment)
+
     def test_depths_state_trigger_checkpoint_and_actor_replay(self):
         self.game();self.depth_trigger();adapter=RulesActorAdapter(self.kernel)
         restored=RulesKernel.restore(self.kernel.snapshot(),self.programs)
@@ -404,7 +421,7 @@ class CounterLifecycleTests(unittest.TestCase):
 
     def test_xolatoyac_new_land_incarnation_does_not_retain_old_duration(self):
         self.game('xolatoyac-the-smiling-flood',source_zone=Zone.HAND);self.flood()
-        self.effect(self.lands['A'],WithMoved('source',Zone.EXILE,(Move('moved',Zone.BATTLEFIELD),AddCounters('moved','flood',1))))
+        self.effect(self.lands['A'],WithMoved('source',Zone.EXILE,(WithMoved('moved',Zone.BATTLEFIELD,(AddCounters('moved','flood',1),)),)))
         ref=self.state.current('land-A')
         self.assertNotEqual(ref,self.lands['A']);self.assertEqual({'flood':1},self.counts(ref))
         self.assertNotIn('Island',self.kernel.effective(ref).subtypes)

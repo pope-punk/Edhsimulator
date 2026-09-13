@@ -31,7 +31,7 @@ announcement and best-effort removal. Existing continuous layers, replacement
 planning, counter costs and linked exile provide the remaining behavior.
 
 Kernel checkpoint schema is **117**; state schema remains **13**.
-The **61 new conformance methods** are written for GitHub-hosted validation.
+The **62 new conformance methods** are written for GitHub-hosted validation.
 No local execution is authorized. Draft CI and source-bound promotion are pending;
 the reviewed library remains at 254 cards until these steps complete.
 See [the cycle review](COUNTER_LIFECYCLE_CARD_REVIEW.md).
