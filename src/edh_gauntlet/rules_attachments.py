@@ -8,7 +8,7 @@ import json
 from .rules_state import Zone, ObjectRef, RulesObject, RulesViolation
 from .rules_characteristics import matches
 from .rules_program import (AbilityProgram, WithAttached, SetAttachmentRule,
-                            Attach, DelayedTrigger, Selector, encode, decode)
+                            Attach, DelayedTrigger, DelayedNextStep, Selector, encode, decode)
 
 
 class AttachmentRules:
@@ -96,21 +96,29 @@ class AttachmentRules:
             self.delayed_triggers.append({'id': delayed_id, 'source': source.to_json(),
                 'ability': encode(AbilityProgram(delayed_id, effect.event, effect.effects)),
                 'controller': frame['controller'],
-                'bindings': json.loads(json.dumps(frame['bindings']))})
+                'bindings': json.loads(json.dumps(frame['bindings'])),
+                'values': json.loads(json.dumps(frame.get('values',{}))),
+                'step':effect.event.step if isinstance(effect,DelayedNextStep) else None,
+                'not_before_turn':self.state.turn_number+(1 if isinstance(effect,DelayedNextStep) and effect.next_turn else 0),
+                'public_source':bool(frame.get('announced_source') or frame.get('values',{}).get('public_source'))})
             self._event('delayed_trigger_registered', delayed=delayed_id, source=source.ref.to_json())
         else:
             return False
         return True
 
-    def _collect_delayed(self, events):
+    def _collect_delayed(self, events, *, step=None):
         for delayed in tuple(self.delayed_triggers):
             source = RulesObject.from_json({**delayed['source'],'controller':delayed['controller']})
             ability = decode(delayed['ability'])
             if delayed['controller'] not in self.state.live_players:
                 self.delayed_triggers.remove(delayed);continue
-            if any(self._matches(ability.event, source, event=event) for event in events):
+            if delayed.get('not_before_turn',0)>self.state.turn_number:continue
+            if (self._matches(ability.event,source,step=step) if step is not None
+                    else any(self._matches(ability.event, source, event=event) for event in events)):
                 # Controller is bound at creation, independent of later control changes.
-                self._trigger(source, ability, delayed['bindings'])
+                values=dict(delayed.get('values',{}))
+                if delayed.get('public_source'):values['public_source']=True
+                self._trigger(source, ability, delayed['bindings'],values=values)
                 self.pending_triggers[-1]['controller'] = delayed['controller']
                 self.delayed_triggers.remove(delayed)
                 self._event('delayed_trigger_fired', delayed=delayed['id'])

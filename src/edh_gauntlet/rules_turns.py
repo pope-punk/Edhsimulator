@@ -47,7 +47,8 @@ class TurnRules:
 
     def _start_turn(self, active):
         self._validate_untap(active)
-        self.state.empty_mana_pools(); self.state.start_turn(active)
+        blocked=tuple(ref for ref,view in self.characteristics().items() if view.untap_blocked)
+        self.state.empty_mana_pools(); self.state.start_turn(active,skip_untap=blocked)
         self.active = active; self.priority = active; self.passes = []
         self.turn_schedule.update(land_plays=0, advance=False, cleanup_priority=False)
         self.combat=None

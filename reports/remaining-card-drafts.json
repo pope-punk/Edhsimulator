@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 258,
     "remaining_outside_reviewed_bundle": 76,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 76,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 72,
     "reviewed_bundle_copies": 323,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 31
   },
@@ -154,7 +154,7 @@
     {
       "card_id": "arcane-denial",
       "name": "Arcane Denial",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -167,6 +167,20 @@
           "face_id": "arcane-denial",
           "text": "Counter target spell. Its controller may draw up to two cards at the beginning of the next turn's upkeep.\nYou draw a card at the beginning of the next turn's upkeep."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "upkeep-delays-2026-09-13",
+      "draft_definition": "draft:arcane-denial",
+      "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
+      "shared_mechanics": [
+        "PayRepeatedMana",
+        "SkipUntap",
+        "DelayedNextStep",
+        "DrawUpTo",
+        "SpellEventPattern",
+        "announcement-bound reveals"
       ]
     },
     {
@@ -341,7 +355,7 @@
     {
       "card_id": "dance-of-the-dead",
       "name": "Dance of the Dead",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -354,6 +368,20 @@
           "face_id": "dance-of-the-dead",
           "text": "Enchant creature card in a graveyard\nWhen this Aura enters, if it's on the battlefield, it loses \"enchant creature card in a graveyard\" and gains \"enchant creature put onto the battlefield with this Aura.\" Put enchanted creature card onto the battlefield tapped under your control and attach this Aura to it. When this Aura leaves the battlefield, that creature's controller sacrifices it.\nEnchanted creature gets +1/+1 and doesn't untap during its controller's untap step.\nAt the beginning of the upkeep of enchanted creature's controller, that player may pay {1}{B}. If the player does, untap that creature."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "upkeep-delays-2026-09-13",
+      "draft_definition": "draft:dance-of-the-dead",
+      "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
+      "shared_mechanics": [
+        "PayRepeatedMana",
+        "SkipUntap",
+        "DelayedNextStep",
+        "DrawUpTo",
+        "SpellEventPattern",
+        "announcement-bound reveals"
       ]
     },
     {
@@ -1491,7 +1519,7 @@
     {
       "card_id": "mystic-remora",
       "name": "Mystic Remora",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1504,6 +1532,20 @@
           "face_id": "mystic-remora",
           "text": "Cumulative upkeep {1}\nWhenever an opponent casts a noncreature spell, you may draw a card unless that player pays {4}."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "upkeep-delays-2026-09-13",
+      "draft_definition": "draft:mystic-remora",
+      "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
+      "shared_mechanics": [
+        "PayRepeatedMana",
+        "SkipUntap",
+        "DelayedNextStep",
+        "DrawUpTo",
+        "SpellEventPattern",
+        "announcement-bound reveals"
       ]
     },
     {
@@ -2304,7 +2346,7 @@
     {
       "card_id": "touch-the-spirit-realm",
       "name": "Touch the Spirit Realm",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -2317,6 +2359,20 @@
           "face_id": "touch-the-spirit-realm",
           "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "upkeep-delays-2026-09-13",
+      "draft_definition": "draft:touch-the-spirit-realm",
+      "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
+      "shared_mechanics": [
+        "PayRepeatedMana",
+        "SkipUntap",
+        "DelayedNextStep",
+        "DrawUpTo",
+        "SpellEventPattern",
+        "announcement-bound reveals"
       ]
     },
     {
@@ -2590,119 +2646,56 @@
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "2cbc5f63a54aa67ae71cddbce5219da350aeec5a",
+    "base_commit": "e4aee73dd1af7739487ff3ac4919bcc5af394a75",
     "cards_written": [
-      "xolatoyac-the-smiling-flood",
-      "the-earth-crystal",
-      "dark-depths",
-      "parallax-wave"
-    ],
-    "cards_promoted": [
-      "xolatoyac-the-smiling-flood",
-      "the-earth-crystal",
-      "dark-depths",
-      "parallax-wave"
-    ],
-    "shared_mechanics": [
-      "Exact-recipient counter-conditioned continuous durations",
-      "Nonduplicating counter state triggers",
-      "Fixed target counter division during announcement",
-      "Best-effort counter removal"
-    ],
-    "runtime_checkpoint_schema": 117,
-    "state_checkpoint_schema": 13,
-    "new_test_methods": 62,
-    "validation_status": "passed_github_hosted_ci",
-    "unresolved_defects": [],
-    "review_work_remaining": "All four printed programs completed exact source binding and reviewed-loader hosted validation. Continue Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Talon Gates of Madara using the retained implementation findings.",
-    "resolved_validation_issues": [
-      {
-        "commit": "f20404e234e443c6951141d429f015f6c4ef7307",
-        "run_id": 34782111960,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782111960",
-        "conclusion": "failure",
-        "tests_run": 1498,
-        "failures": 1,
-        "errors": 0,
-        "platforms": {
-          "ubuntu": "1498 tests; one fixture expectation failure",
-          "windows": "cancelled by matrix fail-fast"
-        },
-        "issues": [
-          "The new-land-incarnation fixture returned a land from exile and then attempted to add a counter through its stale exile reference."
-        ],
-        "resolution": "Nest the second WithMoved binding so the flood counter is added to the actual returned incarnation. Separately retain a state trigger's suspended resolution-payment parent in the occupied set and add a regression for mana abilities during that payment.",
-        "resolution_commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145"
-      }
-    ],
-    "next_batch": [
       "dance-of-the-dead",
       "mystic-remora",
       "touch-the-spirit-realm",
-      "talon-gates-of-madara"
+      "arcane-denial"
+    ],
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Captured cumulative mana costs",
+      "Attached-controller upkeep and untap suppression",
+      "One-shot delayed steps with original lexical captures",
+      "Optional draw count chosen before draws",
+      "Spell type exclusions",
+      "Exact hand-origin announcement reveal"
+    ],
+    "runtime_checkpoint_schema": 118,
+    "state_checkpoint_schema": 13,
+    "new_test_methods": 47,
+    "validation_status": "pending_github_hosted_ci",
+    "unresolved_defects": [],
+    "review_work_remaining": "Four complete printed programs and 47 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind source facts and promote, then validate the reviewed loader.",
+    "selection_note": "Arcane Denial replaces Talon Gates in this cycle because it shares the new delayed-step primitive. Talon Gates requires full direct/indirect phasing, untap restoration and multiplayer departure handling under CR 702.26n; a single state toggle is insufficient. Those requirements remain queued.",
+    "next_batch": [
+      "talon-gates-of-madara",
+      "desert-warfare",
+      "necromancy",
+      "indulgent-tormentor"
     ],
     "next_batch_implementation_notes": {
       "cards": [
-        "dance-of-the-dead",
-        "mystic-remora",
-        "touch-the-spirit-realm",
-        "talon-gates-of-madara"
+        "talon-gates-of-madara",
+        "desert-warfare",
+        "necromancy",
+        "indulgent-tormentor"
       ],
       "reuse": [
-        "Animate Dead's exact attachment replacement and delayed sacrifice",
-        "PayMana's authenticated resolution window and frozen payment request",
-        "Origin-bound hand activation and source discard costs",
-        "ExileUntilSourceLeaves and WithMoved exact references",
-        "Counter lifecycle expiration and existing combat pruning"
+        "New DelayedNextStep captures and next-turn gate",
+        "PayMana/PayRepeatedMana and exact-source attachment primitives",
+        "Announcement-bound hand reveal",
+        "Captured controller values and exact zone-result bindings"
       ],
       "requirements": [
-        "Dance of the Dead needs the complete Animate Dead-style return/attachment lifecycle with tapped return, +1/+1, attached creature untap suppression, and upkeep discovery bound to that creature's controller. PayMana must charge that captured controller, who can differ from the Aura's controller, before optionally untapping the exact creature.",
-        "Mystic Remora requires the own-upkeep battlefield condition, replacement-aware age addition, and one optional all-or-nothing payment equal to the resulting age count. Extend the fixed PayMana shape with a validated computed generic amount captured when the request opens; do not repeatedly recalculate during mana abilities. Its noncreature opponent spell trigger reuses the captured payer and optional draw.",
-        "Touch the Spirit Realm reuses immediate source-duration exile for its entry ability. Its channel ability pays discard from hand and needs a one-shot next-end-step delayed return bound to the actual exiled reference and owner. A delay created after an end step begins waits for a subsequent end step. Tokens or changed exile incarnations do not return.",
-        "Talon Gates needs full direct and indirect phasing, attachment propagation, automatic phase-in under the appropriate untap controller, retained counters/identity and immediate combat removal. Its hand activation must reveal the exact card during the public ability's lifetime without revealing the rest of the hand; a stale source cannot put a different incarnation onto the battlefield.",
-        "Use the current source and pinned rules, implement the practical complete subset together, and validate only on GitHub-hosted runners. Do not weaken existing gates before supplying the missing semantics."
+        "Talon Gates still needs full phasing with attachment propagation, retained identities and counters, controller-at-phase-out scheduling, combat removal and CR 702.26n for a departed controller. Do not enable automatic phasing via the existing single-object toggle alone.",
+        "Desert Warfare needs a sacrifice-specific battlefield Desert event plus Desert discards/mills, exact graveyard references, a next-own-end-step delay and combat creation of haste Sand Warriors. Extend the delayed-step shape explicitly for controller-only timing before authoring it.",
+        "Necromancy needs normal sorcery-versus-flash timing captured at cast announcement, optional instant permission, the complete permanent-to-Aura attachment change, and sacrifice at the next cleanup only for non-sorcery casting. Reuse the new delay lifecycle after supporting that exact step.",
+        "Indulgent Tormentor requires a target opponent's choice between sacrificing a creature, paying 3 life or allowing a draw. Add a complete resolution payment-choice transaction with correct paying actor and unavailable options; current PayMana only handles mana."
       ],
-      "source_paths": [
-        "src/edh_gauntlet/rules_attachments.py",
-        "src/edh_gauntlet/rules_turns.py",
-        "src/edh_gauntlet/rules_casting.py",
-        "src/edh_gauntlet/rules_actor.py",
-        "src/edh_gauntlet/rules_program.py",
-        "src/edh_gauntlet/rules_state.py",
-        "src/edh_gauntlet/rules_kernel.py"
-      ],
-      "implementation_findings": [
-        "PayMana currently validates a fixed ManaCost; a computed cumulative-upkeep amount needs explicit quantity validation plus capture in the existing serialized payment window.",
-        "DelayedTrigger currently rejects every event except exact-source battlefield departure. Extend delayed step discovery and its one-shot identity, rather than pretending the existing node already supports next end step.",
-        "Attached EventPattern currently permits only battlefield departure. Dance of the Dead needs a separate attached-controller upkeep predicate and exact payer capture.",
-        "TurnRules._validate_untap explicitly rejects automatic phasing and attachment propagation. RulesState.phase alone only toggles one object; it is insufficient for Talon Gates.",
-        "Hand-origin activation permission already uses the card owner and specified zone. Public frame_summary currently hides foreign-hand sources, so announcement-bound reveal lifetime must accompany new hand abilities."
-      ],
-      "primary_references": [
-        "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
-        "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
-        "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-        "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
-      ],
-      "guard": "No local execution, no card-name shortcuts, no existing game/checkpoint migration and no production admission. Review each full printed face before promotion."
-    },
-    "draft_validation": {
-      "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
-      "run_id": 34782390422,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1499,
-      "new_test_methods": 62,
-      "conclusion": "success",
-      "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
-    },
-    "validated_commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
-    "ci_run_id": 34782734602,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
-    "tests_per_platform": 1499
+      "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion."
+    }
   },
   "hosted_validation_history": [
     {
@@ -3389,6 +3382,122 @@
       "ci_run_id": 34779503219,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
       "tests_per_platform": 1437
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "2cbc5f63a54aa67ae71cddbce5219da350aeec5a",
+      "cards_written": [
+        "xolatoyac-the-smiling-flood",
+        "the-earth-crystal",
+        "dark-depths",
+        "parallax-wave"
+      ],
+      "cards_promoted": [
+        "xolatoyac-the-smiling-flood",
+        "the-earth-crystal",
+        "dark-depths",
+        "parallax-wave"
+      ],
+      "shared_mechanics": [
+        "Exact-recipient counter-conditioned continuous durations",
+        "Nonduplicating counter state triggers",
+        "Fixed target counter division during announcement",
+        "Best-effort counter removal"
+      ],
+      "runtime_checkpoint_schema": 117,
+      "state_checkpoint_schema": 13,
+      "new_test_methods": 62,
+      "validation_status": "passed_github_hosted_ci",
+      "unresolved_defects": [],
+      "review_work_remaining": "All four printed programs completed exact source binding and reviewed-loader hosted validation. Continue Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Talon Gates of Madara using the retained implementation findings.",
+      "resolved_validation_issues": [
+        {
+          "commit": "f20404e234e443c6951141d429f015f6c4ef7307",
+          "run_id": 34782111960,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782111960",
+          "conclusion": "failure",
+          "tests_run": 1498,
+          "failures": 1,
+          "errors": 0,
+          "platforms": {
+            "ubuntu": "1498 tests; one fixture expectation failure",
+            "windows": "cancelled by matrix fail-fast"
+          },
+          "issues": [
+            "The new-land-incarnation fixture returned a land from exile and then attempted to add a counter through its stale exile reference."
+          ],
+          "resolution": "Nest the second WithMoved binding so the flood counter is added to the actual returned incarnation. Separately retain a state trigger's suspended resolution-payment parent in the occupied set and add a regression for mana abilities during that payment.",
+          "resolution_commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145"
+        }
+      ],
+      "next_batch": [
+        "dance-of-the-dead",
+        "mystic-remora",
+        "touch-the-spirit-realm",
+        "talon-gates-of-madara"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "dance-of-the-dead",
+          "mystic-remora",
+          "touch-the-spirit-realm",
+          "talon-gates-of-madara"
+        ],
+        "reuse": [
+          "Animate Dead's exact attachment replacement and delayed sacrifice",
+          "PayMana's authenticated resolution window and frozen payment request",
+          "Origin-bound hand activation and source discard costs",
+          "ExileUntilSourceLeaves and WithMoved exact references",
+          "Counter lifecycle expiration and existing combat pruning"
+        ],
+        "requirements": [
+          "Dance of the Dead needs the complete Animate Dead-style return/attachment lifecycle with tapped return, +1/+1, attached creature untap suppression, and upkeep discovery bound to that creature's controller. PayMana must charge that captured controller, who can differ from the Aura's controller, before optionally untapping the exact creature.",
+          "Mystic Remora requires the own-upkeep battlefield condition, replacement-aware age addition, and one optional all-or-nothing payment equal to the resulting age count. Extend the fixed PayMana shape with a validated computed generic amount captured when the request opens; do not repeatedly recalculate during mana abilities. Its noncreature opponent spell trigger reuses the captured payer and optional draw.",
+          "Touch the Spirit Realm reuses immediate source-duration exile for its entry ability. Its channel ability pays discard from hand and needs a one-shot next-end-step delayed return bound to the actual exiled reference and owner. A delay created after an end step begins waits for a subsequent end step. Tokens or changed exile incarnations do not return.",
+          "Talon Gates needs full direct and indirect phasing, attachment propagation, automatic phase-in under the appropriate untap controller, retained counters/identity and immediate combat removal. Its hand activation must reveal the exact card during the public ability's lifetime without revealing the rest of the hand; a stale source cannot put a different incarnation onto the battlefield.",
+          "Use the current source and pinned rules, implement the practical complete subset together, and validate only on GitHub-hosted runners. Do not weaken existing gates before supplying the missing semantics."
+        ],
+        "source_paths": [
+          "src/edh_gauntlet/rules_attachments.py",
+          "src/edh_gauntlet/rules_turns.py",
+          "src/edh_gauntlet/rules_casting.py",
+          "src/edh_gauntlet/rules_actor.py",
+          "src/edh_gauntlet/rules_program.py",
+          "src/edh_gauntlet/rules_state.py",
+          "src/edh_gauntlet/rules_kernel.py"
+        ],
+        "implementation_findings": [
+          "PayMana currently validates a fixed ManaCost; a computed cumulative-upkeep amount needs explicit quantity validation plus capture in the existing serialized payment window.",
+          "DelayedTrigger currently rejects every event except exact-source battlefield departure. Extend delayed step discovery and its one-shot identity, rather than pretending the existing node already supports next end step.",
+          "Attached EventPattern currently permits only battlefield departure. Dance of the Dead needs a separate attached-controller upkeep predicate and exact payer capture.",
+          "TurnRules._validate_untap explicitly rejects automatic phasing and attachment propagation. RulesState.phase alone only toggles one object; it is insufficient for Talon Gates.",
+          "Hand-origin activation permission already uses the card owner and specified zone. Public frame_summary currently hides foreign-hand sources, so announcement-bound reveal lifetime must accompany new hand abilities."
+        ],
+        "primary_references": [
+          "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
+          "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+          "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
+        ],
+        "guard": "No local execution, no card-name shortcuts, no existing game/checkpoint migration and no production admission. Review each full printed face before promotion."
+      },
+      "draft_validation": {
+        "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+        "run_id": 34782390422,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1499,
+        "new_test_methods": 62,
+        "conclusion": "success",
+        "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
+      },
+      "validated_commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+      "ci_run_id": 34782734602,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
+      "tests_per_platform": 1499
     }
   ],
   "execution_policy": {

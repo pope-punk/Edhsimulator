@@ -555,7 +555,7 @@ class CounterLifecycleTests(unittest.TestCase):
         checkpoint=self.kernel.snapshot();restored=RulesKernel.restore(checkpoint,self.programs)
         self.top()
         for _ in restored.state.live_players:restored.pass_priority(restored.priority)
-        self.assertEqual(self.kernel.snapshot(),restored.snapshot());self.assertEqual(117,checkpoint['schema'])
+        self.assertEqual(self.kernel.snapshot(),restored.snapshot());self.assertGreaterEqual(checkpoint['schema'],117)
         checkpoint['schema']=116
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)
 

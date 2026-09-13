@@ -177,6 +177,12 @@ class EventPattern:
 
 
 @dataclass(frozen=True)
+class SpellEventPattern(EventPattern):
+    """Spell-type exclusions are tested at the actual cast event."""
+    excluded_types: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
 class DrawEventPattern(EventPattern):
     """The player's ordinal actual draw in the current turn."""
     occurrence: int = 2
@@ -285,6 +291,11 @@ class Draw:
 
 
 @dataclass(frozen=True)
+class DrawUpTo(Draw):
+    """Choose one count before any cards are drawn."""
+
+
+@dataclass(frozen=True)
 class Mill:
     """Move up to the requested number of top library cards simultaneously."""
     amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat = 1
@@ -324,6 +335,12 @@ class PayMana:
     effects: tuple
     otherwise: tuple = ()
     players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class PayRepeatedMana(PayMana):
+    """Capture a repeated fixed mana cost when the resolution window opens."""
+    repetitions: int | SourceCounter = 1
 
 
 @dataclass(frozen=True)
@@ -473,6 +490,12 @@ class Attach:
 class DelayedTrigger:
     event: EventPattern
     effects: tuple
+
+
+@dataclass(frozen=True)
+class DelayedNextStep(DelayedTrigger):
+    """One future step occurrence, optionally excluding the current turn."""
+    next_turn: bool = False
 
 
 @dataclass(frozen=True)
@@ -640,6 +663,11 @@ class UntilEndOfTurn:
 class WhileCounter(UntilEndOfTurn):
     """Resolved continuous changes lasting while each recipient retains a kind."""
     counter_kind: str
+
+
+@dataclass(frozen=True)
+class SkipUntap:
+    """The affected permanent does not untap in its controller's untap step."""
 
 
 @dataclass(frozen=True)
@@ -881,8 +909,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -1233,6 +1261,13 @@ def validate(program,_depth=0):
                     if node.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Counter choices require battlefield objects')
                 if isinstance(node,DistributeCounters) and (type(node.kind) is not str or not node.kind):raise RulesViolation('Invalid distributed counter kind')
                 if isinstance(node,CopyCounterKind) and type(node.only_if_absent) is not bool:raise RulesViolation('Invalid missing-counter predicate')
+            if isinstance(node,DrawUpTo):
+                if type(node.amount) is not int or not 0<=node.amount<=100 or node.players not in {'controller','captured_controllers','event_controllers'}:
+                    raise RulesViolation('Optional draw needs one supported recipient and a fixed bounded amount')
+            if isinstance(node,PayRepeatedMana):
+                if type(node.repetitions) is not int and not isinstance(node.repetitions,SourceCounter):
+                    raise RulesViolation('Repeated payment needs a fixed or source-counter count')
+                quantity(node.repetitions,allow_x,available_values=available_values)
             if isinstance(node,PayMana):
                 mana(node.mana)
                 if node.mana.x_symbols or type(node.players) is not str or node.players not in {'controller','event_controllers'}:
@@ -1331,8 +1366,8 @@ def validate(program,_depth=0):
                 raise RulesViolation('Invalid destination')
             if isinstance(node,(Draw,Mill,LoseLife,WithLifeLost,GainLife,AddCounters,Damage)):quantity(node.amount,allow_x,available_values=available_values)
             if isinstance(node,(Draw,Mill,LoseLife,WithLifeLost)):
-                if node.players not in {'controller','opponents','all','target','controller_and_target','event_controllers','defending_player'}:raise RulesViolation('Invalid player recipients')
-                if node.players in {'event_controllers','defending_player'} and node.players not in available_values:raise RulesViolation('Unbound event player recipients')
+                if node.players not in {'controller','opponents','all','target','controller_and_target','captured_controllers','event_controllers','defending_player'}:raise RulesViolation('Invalid player recipients')
+                if node.players in {'captured_controllers','event_controllers','defending_player'} and node.players not in available_values:raise RulesViolation('Unbound event player recipients')
             if isinstance(node,(Scry,Surveil,LookTop)) and (type(node.amount) is not int or node.amount<0):raise RulesViolation('Invalid quantity')
             if isinstance(node,MultiplyCounters) and (type(node.factor) is not int or node.factor<1):raise RulesViolation('Invalid counter multiplier')
             if isinstance(node, (AddCounters,MultiplyCounters)) and (type(node.kind) is not str or not node.kind):
@@ -1352,10 +1387,16 @@ def validate(program,_depth=0):
                 if node.exact_subject is not None and node.exact_subject not in bindings:
                     raise RulesViolation('Unbound attachment restriction')
             if isinstance(node, DelayedTrigger):
-                # Explicitly bounded to a one-shot, exact-source leaves trigger.
-                if node.event != EventPattern('zone_changed', from_zone=Zone.BATTLEFIELD, subject='self'):
-                    raise RulesViolation('Unsupported delayed event pattern')
-                effects(node.effects, bindings)
+                if isinstance(node,DelayedNextStep):
+                    if (type(node.next_turn) is not bool or node.event not in (
+                            EventPattern('step_began',step='end_step'),EventPattern('step_began',step='upkeep'))):
+                        raise RulesViolation('Unsupported delayed step')
+                    retained=bindings-{'target'}-{name for name in bindings if name.startswith('target:')}
+                    effects(node.effects,retained,available_values=available_values-{'counter_division','target_statistics'})
+                else:
+                    if node.event != EventPattern('zone_changed', from_zone=Zone.BATTLEFIELD, subject='self'):
+                        raise RulesViolation('Unsupported delayed event pattern')
+                    effects(node.effects, bindings)
             if isinstance(node, IfCondition):
                 condition(node.condition)
                 effects(node.effects, bindings,allow_x,available_values)
@@ -1399,7 +1440,7 @@ def validate(program,_depth=0):
 
     def target_effects(nodes,spec):
         for node in immediate_effect_nodes(nodes):
-            if isinstance(node,DelayedTrigger):target_effects(node.effects,spec)
+            if isinstance(node,DelayedTrigger):target_effects(node.effects,None if isinstance(node,DelayedNextStep) else spec)
             if isinstance(node,SearchLibrary) and node.partition_player=='target':
                 if spec is None or spec.players is None or spec.selector is not None or spec.minimum!=1 or spec.maximum!=1:
                     raise RulesViolation('Search partition requires exactly one player target')
@@ -1632,7 +1673,7 @@ def validate(program,_depth=0):
             elif isinstance(change, ModifyPT):
                 if type(change.power) is not int or type(change.toughness) is not int:
                     raise RulesViolation('Invalid power/toughness modifier')
-            elif not isinstance(change, SwitchPT):
+            elif not isinstance(change, (SwitchPT,SkipUntap)):
                 raise RulesViolation('Unsupported continuous operation')
         continuous_ids.append(effect.effect_id)
     if len(continuous_ids) != len(set(continuous_ids)):
@@ -1690,6 +1731,8 @@ def validate(program,_depth=0):
                 or len(ability.effects)!=1 or not isinstance(ability.effects[0],May) or ability.effects[0].otherwise):
             raise RulesViolation('Optional turn limit requires one root May without a fallback or trigger limit')
         event = ability.event
+        if isinstance(event,SpellEventPattern) and (event.kind!='spell_cast' or not strings(event.excluded_types)):
+            raise RulesViolation('Spell exclusions require a spell-cast event')
         characteristic_ranges(event.characteristics)
         selector(Selector(Zone.BATTLEFIELD,counters=event.counters))
         if event.counters and event.kind not in {'zone_changed','counter_state'}:raise RulesViolation('Counter predicates require zone or counter-state events')
@@ -1711,8 +1754,10 @@ def validate(program,_depth=0):
                     or event.counter_kind is not None or event.controller_only or event.recipient_relation!='any'
                     or event.exclude_source or ability.intervening_if is not None or ability.occurrence_condition is not None):
                 raise RulesViolation('Counter-state triggers require an unqualified source counter predicate')
-        if event.subject=='attached' and (event.kind!='zone_changed' or event.from_zone!=Zone.BATTLEFIELD):
-            raise RulesViolation('Attached-object events require battlefield departure')
+        if event.subject=='attached' and not (
+                event.kind=='zone_changed' and event.from_zone==Zone.BATTLEFIELD
+                or event==EventPattern('step_began',step='upkeep',subject='attached')):
+            raise RulesViolation('Attached-object events require battlefield departure or unqualified upkeep')
         if (ability.trigger_limit is not None and (type(ability.trigger_limit) is not int or ability.trigger_limit!=1 or event.kind!='counters_added' or event.subject!='self')):
             raise RulesViolation('Only self counter-event once-per-turn limits are currently supported')
         if (event.counter_kind is not None and (event.kind!='counters_added' or type(event.counter_kind) is not str or not event.counter_kind)
@@ -1723,7 +1768,7 @@ def validate(program,_depth=0):
         if event.kind in {'life_gained','card_drawn','library_searched','library_shuffled', 'scried','surveilled'} and (event.subject!='any' or event.types or event.from_zone is not None or event.to_zone is not None or event.step is not None):
             raise RulesViolation('Player events cannot use object or step filters')
         if event.kind == 'step_began':
-            if event.step not in {'upkeep','draw','precombat_main','begin_combat','declare_attackers','declare_blockers','first_strike_damage','combat_damage','end_combat','postcombat_main','end_step','cleanup'} or event.from_zone is not None or event.to_zone is not None or event.subject != 'any' or event.types:
+            if event.step not in {'upkeep','draw','precombat_main','begin_combat','declare_attackers','declare_blockers','first_strike_damage','combat_damage','end_combat','postcombat_main','end_step','cleanup'} or event.from_zone is not None or event.to_zone is not None or event.subject not in {'any','attached'} or event.types:
                 raise RulesViolation('Unsupported step pattern')
         elif event.kind in {'spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} and (event.step is not None or event.from_zone is not None or event.to_zone is not None):
             raise RulesViolation('Announcement event cannot specify zones or step')
@@ -1738,6 +1783,8 @@ def validate(program,_depth=0):
         if event.subject=='attached' and program.enchant is not None:bindings.add('aura_successor')
         values={'event_amount'} if event.kind in {'life_gained','counters_added','damage_received'} else {'event_x'} if event.kind=='spell_cast' else {'event_controllers'} if event.kind=='zone_changed' else {'defending_player'} if event.kind=='creature_attacks' else frozenset()
         if event.kind in ACTOR_EVENTS:values=values|{'event_controllers'}
+        if event.kind=='step_began' and event.subject=='attached':
+            bindings.add('attached');values=values|{'event_controllers'}
         if event.kind=='zone_changed' and event.from_zone==Zone.BATTLEFIELD:values=values|{'event_counters'}
         if event.kind=='zone_changed' and event.to_zone==Zone.BATTLEFIELD:values=values|{'event_x'}
         effects(ability.effects,bindings,available_values=values)

@@ -232,7 +232,12 @@
       "611.2b",
       "702.26f",
       "702.32a",
-      "601.2d"
+      "601.2d",
+      "603.7d",
+      "611.3",
+      "613.11",
+      "702.24a",
+      "702.24b"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -329,7 +334,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
-      "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost. Dark Depths has no mana ability; its no-ice state trigger cannot duplicate while waiting, can retrigger after being countered, and requires a successful sacrifice to create Marit Lage."
+      "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost. Dark Depths has no mana ability; its no-ice state trigger cannot duplicate while waiting, can retrigger after being countered, and requires a successful sacrifice to create Marit Lage. Mystic Remora's cumulative upkeep increases with actual age counters and requires an optional complete payment."
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
@@ -362,6 +367,10 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/final-fantasy-release-notes",
       "scope": "The Earth Crystal's green generic reduction, replacement-aware +1/+1 doubling including entry, positive target division during announcement, and lost illegal-target shares."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+      "scope": "Touch the Spirit Realm's optional entry exile, Channel discard cost, exact delayed owner return, token disappearance and early source departure."
     }
   ]
 }

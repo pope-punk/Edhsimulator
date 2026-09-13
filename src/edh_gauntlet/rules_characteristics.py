@@ -10,7 +10,7 @@ import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -27,6 +27,7 @@ class Characteristics:
     colors: frozenset[str] = frozenset()
     granted_abilities: tuple = ()
     mana_symbols: tuple[str,...] = ()
+    untap_blocked: bool = False
 
 
 def base(obj, definitions):
@@ -81,7 +82,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
+    return {SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
@@ -166,6 +167,8 @@ def _apply(views, refs, changes, key, grant_key=None):
                 view=replace(view,granted_abilities=view.granted_abilities+(ability,))
             elif isinstance(change,AddKeywords):
                 view=replace(view,keywords=view.keywords|set(change.keywords))
+            elif isinstance(change,SkipUntap):
+                view=replace(view,untap_blocked=True)
             elif 'Creature' in view.types:
                 power = view.power if view.power is not None else 0
                 toughness = view.toughness if view.toughness is not None else 0
@@ -226,7 +229,7 @@ def _may_change_recipients(changes, effect):
             if subtype_reads.intersection(expanded_subtypes(change.subtypes,change.sets)):return True
         elif isinstance(change,(SetPT,ModifyPT,SwitchPT)):
             if statistics & {'power','toughness'}:return True
-        elif not isinstance(change,(AddKeywords,AddActivated)):
+        elif not isinstance(change,(AddKeywords,AddActivated,SkipUntap)):
             return True
     return False
 
@@ -259,7 +262,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
         key=(source.ref,effect.effect_id)
         effects.append((key,source,effect))
         locked[key]=tuple(ref for ref in refs if ref in current and current[ref].zone==Zone.BATTLEFIELD and not current[ref].phased)
-    for layer in (4, 5, 6, 71, 72, 73, 74):
+    for layer in (4, 5, 6, 71, 72, 73, 74, 8):
         if layer==71:
             for source,selector in characteristic_setters:
                 amount=sum(1 for obj in objects if matches(selector,obj,views[obj.ref],source))

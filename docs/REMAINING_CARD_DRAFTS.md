@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **258 source-bound reviewed programs / 323 deck copies**. There are **76 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**: four authored drafts and 72 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,25 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: counter durations, division, state triggers and Fading
+## Current cycle: upkeep payments and delayed steps
+
+Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Arcane Denial are
+authored as four isolated drafts. Shared additions provide repeated mana payment
+capture, attached-controller upkeep, ordinary untap suppression, one-shot
+delayed upkeep/end-step events, optional draw counts and hand-activation reveals.
+Arcane Denial shares the delay work; Talon Gates remains queued because full
+phasing requires additional attachment and multiplayer departure support.
+
+Kernel schema is **118**, state schema **13**. The **47 new conformance methods**
+are ready for GitHub-hosted validation. Draft CI and reviewed promotion are
+pending; coverage remains at 258 reviewed cards until they complete.
+See [the review](UPKEEP_DELAY_CARD_REVIEW.md).
+
+Finish hosted draft validation, source-bind the complete programs, then run the
+reviewed-loader checks. No local project execution, existing-game migration or
+production admission is authorized.
+
+## Previous cycle: counter durations, division, state triggers and Fading
 
 Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave have complete
 printed-face review and exact source bindings. The shared runtime provides

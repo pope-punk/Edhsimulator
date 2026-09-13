@@ -22,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=117
+    CHECKPOINT_SCHEMA=118
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -219,7 +219,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         elif which=='all':selected=set(self.state.live_players)
         elif which=='target':selected=targets
         elif which=='controller_and_target':selected=targets|{controller}
-        elif which=='event_controllers':selected=set(frame['values']['event_controllers'])
+        elif which in {'event_controllers','captured_controllers'}:selected=set(frame['values'][which])
         elif which=='defending_player':selected={frame['values']['defending_player']}
         else:raise UnsupportedRule('Unsupported player recipients')
         order=self.state.players;start=order.index(self.active);order=order[start:]+order[:start]
@@ -352,6 +352,11 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
 
     def _matches(self,pattern,source,*,event=None,step=None,views=None):
         if step is not None:
+            if pattern.subject=='attached':
+                try:attached=self.state.get(source.attached_to)
+                except (RulesViolation,AttributeError):return False
+                if (attached.zone!=Zone.BATTLEFIELD or attached.phased or attached.controller!=self.active
+                        or 'Creature' not in self.effective(attached.ref).types):return False
             return pattern.kind=='step_began' and pattern.step==step and (not pattern.controller_only or source.controller==self.active)
         if pattern.kind!='zone_changed':return False
         if event.cause=='owner_left_game' and (pattern.from_zone!=Zone.BATTLEFIELD or pattern.to_zone is not None):return False
@@ -528,7 +533,12 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
             for ability in self._trigger_abilities(source,'step_began'):
-                if self._matches(ability.event,source,step=step):self._trigger(source,ability)
+                if self._matches(ability.event,source,step=step):
+                    if ability.event.subject=='attached':
+                        self._trigger(source,ability,{'attached':[source.attached_to.to_json()]},
+                            values={'event_controllers':[self.active]})
+                    else:self._trigger(source,ability)
+        self._collect_delayed((),step=step)
 
     ENTRY_VIEW_CACHE_LIMIT=64
 
@@ -984,10 +994,14 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 if not players:
                     self._insert(frame,effect.otherwise);return
                 if len(players)!=1:raise UnsupportedRule('Resolution payment requires exactly one payer')
-                self.mana_payment={'id':key,'actor':players[0],'mana':encode(effect.mana),
+                mana=effect.mana
+                if isinstance(effect,PayRepeatedMana):
+                    count=self._quantity(effect.repetitions,frame)
+                    mana=replace(mana,generic=mana.generic*count,symbols=mana.symbols*count)
+                self.mana_payment={'id':key,'actor':players[0],'mana':encode(mana),
                     'parent':self.resolving,'completed':False,'paid':None}
                 self.priority=None;self.passes=[]
-                self._event('resolution_payment_opened',request_id=key,actor=players[0],mana=encode(effect.mana))
+                self._event('resolution_payment_opened',request_id=key,actor=players[0],mana=encode(mana))
                 return
             if window['id']!=key or not window['completed']:
                 raise RulesViolation('Resolution payment continuation does not match its suspended instruction')
@@ -1171,6 +1185,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     for obj in (self.state.zone(player,Zone.LIBRARY)[-amount:] if amount else ())]
             self._move(tuple(ObjectRef.from_json(ref) for ref in task['mill_refs']),
                 Zone.GRAVEYARD,frame,key+':mill',cause='mill',controller_mode='owner')
+        elif isinstance(effect,DrawUpTo):
+            players=self._players(frame,effect.players)
+            if not players:return
+            if len(players)!=1:raise UnsupportedRule('Optional draw requires one captured recipient')
+            options=tuple(Option(str(n),'Draw '+str(n)+' cards') for n in range(effect.amount+1))
+            chosen=self._choose(key+':count',players[0],'draw_count','Choose how many cards to draw.',options,1,1)
+            self._insert(frame,(Draw(int(chosen[0].key),effect.players),))
         elif isinstance(effect,Draw):
             # Fix the recipient set and amount once, then perform each player's
             # individual draws in APNAP order (121.2c). A choice resumes this cursor.

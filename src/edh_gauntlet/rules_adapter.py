@@ -47,7 +47,7 @@ class RulesActorAdapter:
         # external rejection. Never return details from the failed lookup.
         try:obj=self.kernel.state.get(ref)
         except RulesViolation:raise RulesViolation('Object reference is not visible to this actor') from None
-        if obj.zone not in (*PUBLIC_ZONES,Zone.STACK) and not (obj.zone==Zone.HAND and obj.owner==actor):
+        if obj.zone not in (*PUBLIC_ZONES,Zone.STACK) and not (obj.zone==Zone.HAND and (obj.owner==actor or ref in {o.ref for o in self.kernel.revealed_ability_sources()})):
             raise RulesViolation('Object reference is not visible to this actor')
         return ref
 

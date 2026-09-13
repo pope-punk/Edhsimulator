@@ -467,14 +467,18 @@ class RulesState:
         if changed:self._sequence+=1
         return tuple(obj.ref for obj in changed)
 
-    def start_turn(self, active):
+    def start_turn(self, active, *, skip_untap=()):
         """Atomic ordinary untap; the interpreter owns phasing/untap restrictions."""
         if active not in self.players:raise RulesViolation('Unknown active player')
+        skip_untap=tuple(skip_untap)
+        if len(set(skip_untap))!=len(skip_untap) or any(
+                self.get(ref).zone!=Zone.BATTLEFIELD for ref in skip_untap):
+            raise RulesViolation('Invalid untap exception')
         self._sequence+=1;self._turn_starts[active]=self._sequence
         self._turn_number+=1;self._turn_active=active
         self._life_lost={p:0 for p in self.players}
         for key,obj in self._objects.items():
-            if obj.zone==Zone.BATTLEFIELD and obj.controller==active and not obj.phased and obj.tapped:
+            if obj.zone==Zone.BATTLEFIELD and obj.controller==active and not obj.phased and obj.tapped and obj.ref not in skip_untap:
                 self._objects[key]=replace(obj,tapped=False)
 
     def ready_since_turn_start(self, ref):

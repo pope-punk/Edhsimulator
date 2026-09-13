@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -347,7 +347,7 @@ class CastingRules:
                     announced_frame=self._frame(source,quote.actor,ability.effects,targets=quote.targets,target_spec=ability.targets,chosen_x=quote.x_value)
                     announced_frame['ability_id']=ability.ability_id
             if announced_frame is not None:
-                self._bind_counter_division(announced_frame,quote)
+                self._bind_announced_values(announced_frame,quote)
                 self.stack.append(announced_frame)
             self.announcement={'frame_id':announced_frame['id'] if announced_frame else None,'quote':quote.to_json(),'payment':{'mana':dict(payment.mana),'taps':[r.to_json() for r in payment.taps],
                 'zone_costs':{key:[r.to_json() for r in refs] for key,refs in payment.zone_costs}},
@@ -377,7 +377,23 @@ class CastingRules:
         self.state.add_mana(player,symbols)
         self._event('mana_added',player=player,symbols=list(symbols))
 
-    def _bind_counter_division(self,frame,quote):
+    def revealed_ability_sources(self):
+        """Only current hand incarnations revealed by live announced abilities."""
+        frames=list(self.stack)
+        if self.resolving:frames.append(self.resolving)
+        if self.mana_payment:frames.append(self.mana_payment['parent'])
+        result={}
+        for frame in frames:
+            value=frame.get('announced_source')
+            if value is None:continue
+            try:source=self.state.get(ObjectRef.from_json(value['ref']))
+            except RulesViolation:continue
+            if source.zone==Zone.HAND:result[source.ref]=source
+        return tuple(result.values())
+
+    def _bind_announced_values(self,frame,quote):
+        if quote.kind=='activate' and frame['source']['zone']==Zone.HAND.value:
+            frame['announced_source']=dict(frame['source'])
         if quote.counter_division:
             frame['values']['counter_division']=[{'ref':ref.to_json(),'amount':amount} for ref,amount in quote.counter_division]
 
@@ -388,7 +404,7 @@ class CastingRules:
             effects = (Move('source', Zone.BATTLEFIELD),)
         frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                             target_spec=program.spell_targets,chosen_x=quote.x_value)
-        self._bind_counter_division(frame,quote)
+        self._bind_announced_values(frame,quote)
         if quote.alternative_id is not None:
             frame['alternative_id']=quote.alternative_id
             alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
@@ -444,7 +460,7 @@ class CastingRules:
                 frame['source']=source.to_json();frame['ability_id'] = ability.ability_id
                 if prepared_frame is None:self.stack.append(frame)
             event_kind = 'ability_activated'
-        if frame is not None:self._bind_counter_division(frame,quote)
+        if frame is not None:self._bind_announced_values(frame,quote)
         receipt = {'action': quote.to_json(), 'payment': {'mana': dict(resources.mana), 'life': resources.life,
             'taps': [ref.to_json() for ref in resources.taps]}, 'frame': frame['id'] if frame else None,
             'mana_ability': mana_ability}
@@ -524,11 +540,12 @@ class CastingRules:
                     continue
                 if not event_player_matches(pattern,source.controller,actor):
                     continue
-                if pattern.types:
+                excluded=pattern.excluded_types if isinstance(pattern,SpellEventPattern) else ()
+                if pattern.types or excluded:
                     if types is None:
                         try:types=self.effective(announced.ref).types
                         except RulesViolation:types=set(previous_types) if previous_types is not None else self._damage_source(announced)[1].types
-                    if not set(pattern.types) <= types:continue
+                    if not set(pattern.types) <= types or set(excluded)&types:continue
                 captured={"event_x":announced.cast_x} if kind=="spell_cast" else dict(values or {})
                 if kind in ACTOR_EVENTS:captured["event_controllers"]=[actor]
                 self._trigger(source, ability, values=captured)

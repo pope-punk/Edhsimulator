@@ -1,8 +1,8 @@
 """Pure actor projections for the primitive host adapter.
 
 This is an explicit allowlist, never a filtered kernel checkpoint. The current
-kernel has no face-down/reveal-permission vocabulary; production admission stays
-closed until those semantics and the complete transport/replay contract exist.
+kernel exposes only explicitly bound reveals; arbitrary reveal permissions and
+face-down objects remain unsupported. Production admission stays closed.
 """
 import json
 from copy import deepcopy
@@ -26,6 +26,7 @@ def _card(kernel,obj,views):
         'supertypes':sorted(view.supertypes),'keywords':sorted(view.keywords),'colors':sorted(view.colors),
         'mana_value':view.mana_value,'power':view.power,'toughness':view.toughness,
         'tapped':obj.tapped,'phased':obj.phased,'counters':dict(obj.counters),
+        **({'untap_blocked':True} if view.untap_blocked else {}),
         'damage':obj.damage_marked,'commander':obj.commander,'token':obj.token,
         'attached_to':obj.attached_to.to_json() if obj.attached_to else None,
         **({'limited_triggers':limits} if limits else {}),
@@ -68,6 +69,7 @@ def project_actor(kernel,actor):
     """Project current state plus explicitly public entry-reveal receipts."""
     if actor not in kernel.state.players:raise RulesViolation('Unknown actor')
     state=kernel.state;views=kernel.characteristics()
+    revealed={obj.ref:obj for obj in kernel.revealed_ability_sources()}
     players=[];permissions=kernel.player_permissions()
     for seat in state.players:
         row={'seat':seat,'life':state.life(seat),'starting_life':state.starting_life(seat),'mana':dict(state.mana_pool(seat)),
@@ -82,14 +84,14 @@ def project_actor(kernel,actor):
         if 'player' in value:return deepcopy(value)
         try:obj=state.get(ObjectRef.from_json(value))
         except RulesViolation:return {'unavailable':True}
-        if obj.zone in (*PUBLIC_ZONES,Zone.STACK) or obj.zone==Zone.HAND and obj.owner==actor:
+        if obj.zone in (*PUBLIC_ZONES,Zone.STACK) or obj.zone==Zone.HAND and (obj.owner==actor or obj.ref in revealed):
             return obj.ref.to_json()
         return {'hidden':True,'zone':obj.zone.value,'owner':obj.owner}
     def frame_summary(frame):
         source=RulesObject.from_json(frame['source'])
         if frame.get('turn_based'):
             return {'kind':'turn_action','controller':frame['controller'],'phase':kernel.phase}
-        if source.zone not in (*PUBLIC_ZONES,Zone.STACK) and not (source.zone==Zone.HAND and source.owner==actor):
+        if source.zone not in (*PUBLIC_ZONES,Zone.STACK) and not (source.zone==Zone.HAND and source.owner==actor) and not (frame.get('announced_source') or frame.get('values',{}).get('public_source')):
             return {'kind':'effect','controller':frame['controller']}
         return {'id':frame['id'],'kind':'spell' if frame['spell'] else 'ability',
             'name':kernel.definition(source).name,'source':source.ref.to_json(),
@@ -129,6 +131,7 @@ def project_actor(kernel,actor):
             'recipients':[ref.to_json() for ref in refs],'changes':deepcopy(row['effect']['changes'])}
             for row in kernel.counter_effects if (refs:=kernel._counter_duration_refs(row))],
         'hand':[_card(kernel,obj,views) for obj in hand],
+        'revealed_hand':[_card(kernel,obj,views) for obj in revealed.values()],
         'decision':decision_for_actor(kernel,actor),'outcome':deepcopy(kernel.outcome)}
     # These are historical disclosures, not permission to inspect a hand or to
     # follow a hidden card after a move/shuffle. Never forward choice options or
