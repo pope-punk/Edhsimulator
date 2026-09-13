@@ -25,11 +25,14 @@ reviewed loader. See [the cycle record](CASTING_SACRIFICE_CARD_DRAFTS.md).
 plus syntax, installation and packaged-asset checks, at
 `679a0e5971fdb21deb36d39a484a2b3c2fffdafa`. This validated all 24 new methods and the existing conformance suite.
 
-Reviewed-loader validation is pending.
+[Reviewed-loader validation run 34771234815](https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815) passed **1,293 tests on each of Ubuntu and Windows**,
+plus source syntax, installation and packaged-asset checks, at
+`06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0`. Both cards now run through the reviewed loader.
+The following result-recording commit changes only documentation and inventory
+validation metadata; no runtime, card-program or test changes follow this result.
 
 Checkpoint schema is now **113**. Previous games and checkpoints are not migrated.
-Next: validate the promotion, then Uro's escape payment/permission and attack
-trigger. All project execution remains hosted.
+Next: Uro's escape payment/permission and attack trigger. All project execution remains hosted.
 
 ## Prior cycle: Animate Dead and linked-exile review
 
@@ -189,7 +192,7 @@ deck membership, printed text and each card's current authoring/review status. I
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
 card-level review. Crop Rotation and Fling also completed printed-face review;
 their same conformance methods now load the source-bound reviewed programs.
-Finish the promotion's hosted check before moving to the next family.
+The promotion's hosted check passed; continue with the next family below.
 
 For the next unstarted family, assess Uro's escape cost against the existing
 announcement transaction. Exiling several other graveyard cards and composing

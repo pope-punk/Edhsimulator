@@ -74,7 +74,11 @@ retained clause, replacement timing, source identity, target legality and actor
 privacy against the references below and the authored conformance cases. Both
 programs now have catalog identities, source-fact SHA-256 bindings and explicit
 review-basis records. The same 24 methods now exercise the reviewed loader.
-Validation of that promotion is pending.
+[Reviewed-loader validation run 34771234815](https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815) passed **1,293 tests on each of Ubuntu and Windows**,
+plus source syntax, installation and packaged-asset checks, at
+`06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0`. Both cards now run through the reviewed loader.
+The following result-recording commit changes only documentation and inventory
+validation metadata; no runtime, card-program or test changes follow this result.
 
 The inventory contains **242 reviewed programs / 307 deck copies**, no drafts
 and **92 unstarted cards**. Next: Uro's complete escape permission/payment and

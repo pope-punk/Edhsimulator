@@ -278,7 +278,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "batch": "casting-sacrifices-2026-09-13",
       "shared_mechanics": [
         "ZoneCost",
@@ -292,6 +292,10 @@
       "draft_hosted_validation": {
         "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
         "run_id": 34770970728
+      },
+      "hosted_validation": {
+        "commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
+        "run_id": 34771234815
       }
     },
     {
@@ -660,7 +664,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "batch": "casting-sacrifices-2026-09-13",
       "shared_mechanics": [
         "ZoneCost",
@@ -675,6 +679,10 @@
       "draft_hosted_validation": {
         "commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa",
         "run_id": 34770970728
+      },
+      "hosted_validation": {
+        "commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
+        "run_id": 34771234815
       }
     },
     {
@@ -2248,8 +2256,17 @@
     }
   ],
   "hosted_validation": {
-    "conclusion": "pending",
-    "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling"
+    "commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
+    "run_id": 34771234815,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815",
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "tests_per_platform": 1293,
+    "new_test_methods": 24,
+    "conclusion": "success",
+    "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling, accepted spell sacrifice payments, paid characteristics, replay, source syntax, installation and packaged assets; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2270,12 +2287,12 @@
     "shared_corrections": [],
     "runtime_checkpoint_schema": 113,
     "new_test_methods": 24,
-    "validation_status": "pending_reviewed_loader_ci",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
       "uro-titan-of-nature-s-wrath"
     ],
-    "review_work_remaining": "Both cards have complete printed-face review and source bindings. Validate their reviewed-loader promotion. 92 catalog cards remain unstarted; Uro escape is next. Production admission remains closed.",
+    "review_work_remaining": "Crop Rotation and Fling completed printed-face review, source binding and successful hosted validation through the reviewed loader. No unfinished work remains for this batch. 92 catalog cards remain unstarted. Next implement Uro's graveyard-only escape cost/permission and missing attack trigger; production admission remains closed.",
     "next_batch_implementation_notes": {
       "shared_sources": [
         "src/edh_gauntlet/rules_casting.py",
@@ -2327,7 +2344,11 @@
         "resolution": "Correct the fixture expectations and explicitly answer the commander return choice; no runtime change.",
         "resolution_commit": "679a0e5971fdb21deb36d39a484a2b3c2fffdafa"
       }
-    ]
+    ],
+    "validated_commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
+    "ci_run_id": 34771234815,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815",
+    "tests_per_platform": 1293
   },
   "hosted_validation_history": [
     {
