@@ -3,8 +3,8 @@
 Branch: `codex/remaining-card-programs`. Source base:
 `9d918d1db85ef64337615c98b52d0ff546b02ddd`.
 
-This cycle authors four complete printed faces. Initial programs remain in the
-isolated draft bundle until their first successful hosted validation. Promotion
+This cycle authors four complete printed faces. The isolated drafts passed
+hosted validation and now enter the reviewed bundle with source bindings. Promotion
 uses exact catalog source-fact hashes and the reviewed loader; it does not grant
 production certification. No project code or Python was executed locally.
 
@@ -59,7 +59,9 @@ departures, multiple opponents, simultaneous returns, phasing, tokens, commander
 choices, Aura attachment, replacement redirects, actor privacy, replay and
 checkpoint reconstruction.
 
-Successful combined hosted validation and reviewed-loader promotion are pending.
+[Hosted draft validation 34774446530](https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530) passed **1,338 tests on each Ubuntu and Windows runner**, plus source syntax,
+installation and packaged assets, at `a806a1822952084aa4fddf1510af6db899036914`. All 45 new methods
+passed. The same methods now use the reviewed loader; that validation is pending.
 The first run rejected an extra GainLife JSON field and an obsolete exact schema
 assertion; those authoring/fixture errors are corrected and retained in the
 inventory's validation history. No successful result is inferred from a commit.

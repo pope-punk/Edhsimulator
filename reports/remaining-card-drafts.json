@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 242,
-    "remaining_outside_reviewed_bundle": 92,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 246,
+    "remaining_outside_reviewed_bundle": 88,
+    "drafts_written": 0,
     "not_started_on_this_branch": 88,
-    "reviewed_bundle_copies": 307,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 311,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 15
+    "promoted_on_this_branch": 19
   },
   "cards": [
     {
@@ -190,7 +190,7 @@
     {
       "card_id": "bulk-up",
       "name": "Bulk Up",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -204,7 +204,18 @@
           "text": "Double target creature's power until end of turn.\nFlashback {4}{R}{R}"
         }
       ],
-      "validation_status": "pending_github_hosted_ci"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "batch": "graveyard-and-exile-2026-09-13",
+      "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:bulk-up",
+      "previous_draft_definition": "draft:bulk-up",
+      "source_facts_sha256": "1422387ff17f6aa9b02f558f7298a1295385866a23ed7c8c9dcd983b26f9ea54",
+      "draft_hosted_validation": {
+        "commit": "a806a1822952084aa4fddf1510af6db899036914",
+        "run_id": 34774446530
+      }
     },
     {
       "card_id": "changing-loyalty",
@@ -853,7 +864,7 @@
     {
       "card_id": "grasp-of-fate",
       "name": "Grasp of Fate",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -867,7 +878,18 @@
           "text": "When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield."
         }
       ],
-      "validation_status": "pending_github_hosted_ci"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "batch": "graveyard-and-exile-2026-09-13",
+      "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:grasp-of-fate",
+      "previous_draft_definition": "draft:grasp-of-fate",
+      "source_facts_sha256": "0c39d4d1ebc0e21fd916797496925b6ba0d85bb252f75e0cdd963297e2e1c411",
+      "draft_hosted_validation": {
+        "commit": "a806a1822952084aa4fddf1510af6db899036914",
+        "run_id": 34774446530
+      }
     },
     {
       "card_id": "hakbal-of-the-surging-soul",
@@ -1533,7 +1555,7 @@
     {
       "card_id": "prayer-of-binding",
       "name": "Prayer of Binding",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1547,7 +1569,18 @@
           "text": "Flash\nWhen this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life."
         }
       ],
-      "validation_status": "pending_github_hosted_ci"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "batch": "graveyard-and-exile-2026-09-13",
+      "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:prayer-of-binding",
+      "previous_draft_definition": "draft:prayer-of-binding",
+      "source_facts_sha256": "72001b0432a623710f91e2db40938076f495d105205e71c9e8edd74023f39af2",
+      "draft_hosted_validation": {
+        "commit": "a806a1822952084aa4fddf1510af6db899036914",
+        "run_id": 34774446530
+      }
     },
     {
       "card_id": "propaganda",
@@ -2045,7 +2078,7 @@
     {
       "card_id": "uro-titan-of-nature-s-wrath",
       "name": "Uro, Titan of Nature's Wrath",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2059,7 +2092,18 @@
           "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard."
         }
       ],
-      "validation_status": "pending_github_hosted_ci"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "batch": "graveyard-and-exile-2026-09-13",
+      "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:uro-titan-of-nature-s-wrath",
+      "previous_draft_definition": "draft:uro-titan-of-nature-s-wrath",
+      "source_facts_sha256": "16596c98bb602560722dd3f2023d9f602e0f74863f7fe0e44c1264708ff9431c",
+      "draft_hosted_validation": {
+        "commit": "a806a1822952084aa4fddf1510af6db899036914",
+        "run_id": 34774446530
+      }
     },
     {
       "card_id": "urza-s-saga",
@@ -2260,17 +2304,17 @@
     }
   ],
   "hosted_validation": {
-    "commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
-    "run_id": 34771234815,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815",
+    "commit": "a806a1822952084aa4fddf1510af6db899036914",
+    "run_id": 34774446530,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1293,
-    "new_test_methods": 24,
+    "tests_per_platform": 1338,
+    "new_test_methods": 45,
     "conclusion": "success",
-    "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling, accepted spell sacrifice payments, paid characteristics, replay, source syntax, installation and packaged assets; no production certification"
+    "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2281,7 +2325,12 @@
       "grasp-of-fate",
       "prayer-of-binding"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "uro-titan-of-nature-s-wrath",
+      "bulk-up",
+      "grasp-of-fate",
+      "prayer-of-binding"
+    ],
     "shared_mechanics": [
       "GraveyardAlternativeCost",
       "Exact spell stack-exit replacement",
@@ -2292,14 +2341,14 @@
     ],
     "runtime_checkpoint_schema": 114,
     "new_test_methods": 45,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "pending_reviewed_loader_validation",
     "unresolved_defects": [],
     "next_batch": [
       "dawn-of-hope",
       "rhystic-study",
       "smothering-tithe"
     ],
-    "review_work_remaining": "Run all four drafts and both shared mechanics through hosted validation, then complete source-bound promotion and validate the reviewed loader.",
+    "review_work_remaining": "All four printed faces and source bindings are reviewed. The same 45 conformance methods now use load_reviewed(); its hosted run is pending.",
     "resolved_validation_issues": [
       {
         "commit": "d0bc4fb57b2b7c8c98cb25d5fcf60ecdf602c559",
@@ -2327,7 +2376,43 @@
         ],
         "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed."
       }
-    ]
+    ],
+    "draft_validation": {
+      "commit": "a806a1822952084aa4fddf1510af6db899036914",
+      "run_id": 34774446530,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1338,
+      "new_test_methods": 45,
+      "conclusion": "success",
+      "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
+    },
+    "next_batch_implementation_notes": {
+      "cards": [
+        "dawn-of-hope",
+        "rhystic-study",
+        "smothering-tithe"
+      ],
+      "reuse": [
+        "ACTOR_EVENTS event_controllers capture",
+        "GainLife/life_gained and Draw/card_drawn events",
+        "Token creation with embedded Soldier or Treasure definitions",
+        "Mana satisfaction and atomic ResourcePayment validation",
+        "Authenticated actor adapter, checkpoints and accepted replay journal"
+      ],
+      "requirements": [
+        "Add an optional mana-payment instruction with paid/unpaid branches and a captured paying actor; do not re-use the trigger controller when the opponent owes the payment.",
+        "Provide a resolution-time mana-ability window. Current quote_activation requires idle priority and cannot be called while a spell or trigger is resolving. Merely checking already-banked mana would omit a printed option.",
+        "Permit only valid mana abilities in the payment window, preserving suspension, mana choices, zone costs, once-only payment, generated triggers and absence of ordinary priority.",
+        "Bind each resolution-stage request and accepted mana action to the paused effect so checkpoint restore and actor replay cannot pay, draw or create tokens twice.",
+        "Dawn pays optionally then draws, Rhystic lets the opponent pay before the controller's optional draw, and Tithe creates one Treasure after an opponent declines or cannot pay. Each draw and life-gain event retains its own trigger.",
+        "Keep private hand and mana-choice data actor-scoped; add rejection, insufficient resources, repeated events, opponent departure and checkpoint tests on hosted runners."
+      ],
+      "guard": "No local execution. Unsupported payment shapes stay rejected; keep new cards isolated until every printed clause and hosted validation are complete."
+    }
   },
   "hosted_validation_history": [
     {
@@ -2456,6 +2541,19 @@
       "new_test_methods": 24,
       "conclusion": "success",
       "scope": "Shared spell sacrifice-cost transaction, Crop Rotation and Fling as opted-in drafts, all reviewed programs, replay, syntax, installation and packaged assets"
+    },
+    {
+      "commit": "06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0",
+      "run_id": 34771234815,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1293,
+      "new_test_methods": 24,
+      "conclusion": "success",
+      "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling, accepted spell sacrifice payments, paid characteristics, replay, source syntax, installation and packaged assets; no production certification"
     }
   ],
   "cycle_history": [

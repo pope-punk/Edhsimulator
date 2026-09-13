@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**242 reviewed programs / 307 deck copies**. There are **92 cards outside the
-reviewed bundle**, including four drafts and 88 unstarted cards. Reviewed coverage is not production certification.
+**246 reviewed programs / 311 deck copies**. There are **88 cards outside the
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,37 +22,31 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-The next candidate queue is **Uro and Bulk Up** for graveyard alternative casting,
-followed by **Dawn of Hope, Rhystic Study and Smothering Tithe** for optional mana
-payments during resolution. Inspect the actual shared mechanics and adjust the
-queue as needed. These five candidates remain unstarted. Uro's detailed escape
-notes remain in the inventory. The hourly heartbeat now carries this policy.
+The next candidate queue is **Dawn of Hope, Rhystic Study and Smothering Tithe**.
+They need a shared optional payment boundary during resolution, with the paying
+player permitted to activate mana abilities. The inventory records concrete
+implementation notes and the existing primitives to reuse. Continue into another
+coherent family when useful context remains.
 
-## Current cycle: graveyard casting and exile durations
+## Current cycle: four-card graveyard casting and exile durations
 
-Uro and Bulk Up are isolated drafts using GraveyardAlternativeCost. The ordinary
-cost retains its original casting permissions; the alternative binds graveyard
-permission to its specific payment. Uro composes the existing entry facts,
-sacrifice, gain/draw/land and attack trigger primitives. Bulk Up composes a signed
-recipient-power modifier with an exact stack-incarnation Flashback replacement.
-The graveyard-casting pair has 23 authored conformance methods; successful
-hosted validation remains pending.
-Checkpoint schema is 114. No local Python or game execution is permitted.
+Uro, Bulk Up, Grasp of Fate and Prayer of Binding have complete printed-face
+review and exact source bindings. GraveyardAlternativeCost adds origin-bound
+payment; Bulk Up's Flashback replacement follows the paid spell's exact stack
+incarnation. ExileUntilSourceLeaves provides immediate, simultaneous returns
+without adding a return trigger. Existing gain/draw, land, signed power, target,
+replacement and attachment primitives supply the remaining behavior.
 
-Grasp of Fate and Prayer of Binding are also isolated drafts. Their new
-ExileUntilSourceLeaves primitive returns surviving exact exile incarnations
-before the next instruction, state-based actions or priority. Simultaneous
-source departures share one return batch. Source phasing/control/copy changes
-preserve the obligation. Per-opponent targeting freezes each selected player's
-clause at announcement. Twenty-two further conformance methods cover this pair.
-The combined 45-method batch awaits successful hosted validation.
+The same **45 conformance methods** now use the reviewed loader.
+[Draft validation 34774446530](https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530)
+passed **1,338 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged-asset checks, at `a806a1822952084aa4fddf1510af6db899036914`.
+Reviewed-loader validation is pending. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
+records the complete mappings, public projection and historical fixture fixes.
 
-The initial hosted run rejected an extra GainLife JSON field and a historical
-test pinned to schema 113. The draft JSON and historical compatibility assertion
-are corrected. The next run caught two tuple-versus-JSON fixture comparisons
-and a grouping-attribute typo; those are corrected too. Both failed runs remain
-recorded in the inventory. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
-records printed-clause mapping and the current validation scope.
+Checkpoint schema is **114**. Existing games and checkpoints are not migrated.
+Production admission remains closed. The next family is the three payment
+triggers above; all project execution remains hosted.
 
 ## Prior cycle: casting sacrifices for Crop Rotation and Fling
 
@@ -233,7 +227,7 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the fifteen now promoted. It records
+originally outstanding card IDs, including the nineteen now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
@@ -241,11 +235,11 @@ card-level review. Crop Rotation and Fling also completed printed-face review;
 their same conformance methods now load the source-bound reviewed programs.
 The promotion's hosted check passed; continue with the next family below.
 
-For the next unstarted family, assess Uro's escape cost against the existing
-announcement transaction. Exiling several other graveyard cards and composing
-additional costs with alternative payments require a further supported cost
-shape; those paths remain rejected. Saga, Room, planeswalker and transforming
-programs require their own shared lifecycle support before whole-card coverage.
+Uro's graveyard alternative now supports its five-card exile group. Separately
+ordered cost groups and mana during announcement remain rejected. Next, add
+resolution-time optional mana payments for the three queued enchantments. Saga,
+Room, planeswalker and transforming programs still need their shared lifecycle
+support before whole-card coverage.
 
 ## Rules references used while writing
 

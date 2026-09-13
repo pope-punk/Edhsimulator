@@ -18,10 +18,9 @@ class GraveyardCastingTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         cls.reviewed=load_reviewed(cls.root)
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={r['card_id']:r for r in draft['drafts']}
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in ('uro-titan-of-nature-s-wrath','bulk-up')}
-        cls.base=tuple(r['program'] for r in cls.reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:cls.reviewed[key]['review'] for key in ('uro-titan-of-nature-s-wrath','bulk-up')}
+        cls.cards={key:cls.reviewed[key]['program'] for key in cls.rows}
+        cls.base=tuple(r['program'] for r in cls.reviewed.values())
 
     def game(self,key='bulk-up',zone=Zone.GRAVEYARD,*,power=3,extra=(),players=('A','B')):
         self.key=key;self.program=self.cards[key]
@@ -63,7 +62,7 @@ class GraveyardCastingTests(unittest.TestCase):
     def test_complete_source_facts_and_codec(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         for key,p in self.cards.items():
-            self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+            self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
             self.assertEqual(p,validate(decode(encode(p))))
             self.assertEqual((Zone.HAND,Zone.COMMAND),p.cast.origin_zones)
             self.assertIsInstance(p.cast.alternatives[0],GraveyardAlternativeCost)

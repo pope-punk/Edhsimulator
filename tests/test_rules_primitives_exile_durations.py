@@ -18,10 +18,9 @@ class ExileDurationTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={r['card_id']:r for r in draft['drafts']}
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in ('grasp-of-fate','prayer-of-binding')}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in ('grasp-of-fate','prayer-of-binding')}
+        cls.cards={key:reviewed[key]['program'] for key in cls.rows}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,key='prayer-of-binding',*,players=('A','B','C','D'),extra=(),body=None):
         self.key=key
@@ -60,7 +59,7 @@ class ExileDurationTests(unittest.TestCase):
     def test_source_facts_and_card_metadata(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         for key,p in self.cards.items():
-            self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+            self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
             self.assertEqual(p,validate(decode(encode(p))))
             self.assertEqual(1,len(p.abilities));self.assertIsInstance(p.abilities[0].effects[0],ExileUntilSourceLeaves)
             self.assertIsNone(p.abilities[0].source_must_remain)

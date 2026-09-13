@@ -9,7 +9,7 @@ class AdmissionTests(unittest.TestCase):
         report = readiness()
         self.assertFalse(report['production_ready'])
         self.assertEqual(RulesKernel(RulesState(('A','B')),()).snapshot()['schema'],report['kernel_checkpoint_schema'])
-        self.assertEqual(1, report['fixture_card_count'])
+        self.assertEqual(0, report['fixture_card_count'])
         self.assertEqual(7, sum(card['fixture_program'] is not None for card in report['cards']))
         body = next(card for card in report['cards'] if card['card_id'] == 'body-double')
         self.assertEqual('program_authored', body['status'])
