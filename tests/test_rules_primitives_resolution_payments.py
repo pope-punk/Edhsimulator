@@ -346,12 +346,17 @@ class ResolutionPaymentTests(unittest.TestCase):
         adapter.submit('B',command);self.assertEqual('choice',adapter.packet('A')['decision']['kind'])
 
     def test_paid_and_unpaid_nested_effects_keep_lexical_bindings(self):
-        self.game()
-        selector=Selector(Zone.BATTLEFIELD,('Creature',),relation='controlled')
-        self.effect('A',Select(selector,1,1,(PayMana(ManaCost(1),(AddCounters('selected','+1/+1',1),),
-            (AddCounters('selected','+1/+1',2),)),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,'A',[0]);self.payment()
-        self.assertEqual(2,dict(self.state.get(self.bodies['A']).counters).get('+1/+1'))
+        for paid in (False,True):
+            with self.subTest(paid=paid):
+                self.game();self.state.add_card('second','payment-body','A',Zone.BATTLEFIELD)
+                selector=Selector(Zone.BATTLEFIELD,('Creature',),relation='controlled')
+                self.effect('A',Select(selector,1,1,(PayMana(ManaCost(1),(AddCounters('selected','+1/+1',1),),
+                    (AddCounters('selected','+1/+1',2),)),)))
+                q=self.kernel.pending_choice
+                self.kernel.answer(q.request_id,'A',[next(i for i,o in enumerate(q.options) if o.ref==self.bodies['A'])])
+                if paid:self.state.add_mana('A',('C',))
+                self.payment({'C':1} if paid else None)
+                self.assertEqual(1 if paid else 2,dict(self.state.get(self.bodies['A']).counters).get('+1/+1'))
 
     def test_multiple_payment_instructions_resume_once_in_order(self):
         self.game();self.effect('A',PayMana(ManaCost(),(GainLife(1),)),PayMana(ManaCost(),(Draw(1),)))
@@ -405,7 +410,7 @@ class ResolutionPaymentTests(unittest.TestCase):
 
     def test_gleaming_ordinary_hand_addition_does_not_count_as_draw(self):
         self.game('gleaming-splendor')
-        self.state.move((ZoneMove(self.bodies['B'],Zone.HAND,'B'),),'fixture-hand-add')
+        self.state.move((ZoneMove(self.state.objects(Zone.LIBRARY,owner='B')[0].ref,Zone.HAND,'B'),),'fixture-hand-add')
         self.effect('B',Draw(1));self.assertFalse(self.kernel.stack)
         self.assertEqual(1,self.kernel.draw_counts['B'])
 
@@ -448,7 +453,6 @@ class ResolutionPaymentTests(unittest.TestCase):
         self.top();self.assertIsNone(self.kernel.mana_payment);self.assertEqual(1,len(self.tokens('Treasure')))
 
     def test_trigger_keeps_original_controller_after_source_control_changes(self):
-        self.game('dawn-of-hope');self.effect('A',GainLife(1))
         # A response changes control without rewriting the existing trigger.
         control=CardProgram('control','Control',('Instant',),cast=CastSpec(CostSpec(),timing='instant'),
             spell_targets=TargetSpec(Selector(Zone.BATTLEFIELD)),spell_effects=(GainControl('target'),))

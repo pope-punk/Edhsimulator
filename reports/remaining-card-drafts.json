@@ -67,7 +67,7 @@
       "oracle_text": [
         {
           "face_id": "aminatou-the-fateshifter",
-          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
+          "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[−1]: Exile another target permanent you own, then return it to the battlefield under your control.\n[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
         }
       ]
     },
@@ -495,7 +495,7 @@
       "oracle_text": [
         {
           "face_id": "domri-anarch-of-bolas",
-          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control."
+          "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[−2]: Target creature you control fights target creature you don't control."
         }
       ]
     },
@@ -513,7 +513,7 @@
       "oracle_text": [
         {
           "face_id": "elspeth-conquers-death",
-          "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
+          "text": "I — Exile target permanent an opponent controls with mana value 3 or greater.\nII — Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
         }
       ]
     },
@@ -531,7 +531,7 @@
       "oracle_text": [
         {
           "face_id": "entity-tracker",
-          "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
+          "text": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
         }
       ]
     },
@@ -585,7 +585,7 @@
       "oracle_text": [
         {
           "face_id": "fanatic-of-rhonas",
-          "text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
+          "text": "{T}: Add {G}.\nFerocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
         }
       ]
     },
@@ -793,7 +793,7 @@
       "oracle_text": [
         {
           "face_id": "ghostly-dancers",
-          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
+          "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
         }
       ]
     },
@@ -1290,7 +1290,7 @@
       "oracle_text": [
         {
           "face_id": "midnight-snack",
-          "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
+          "text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
         }
       ]
     },
@@ -1308,7 +1308,7 @@
       "oracle_text": [
         {
           "face_id": "minsc-boo-timeless-heroes",
-          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
+          "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
         }
       ]
     },
@@ -1420,7 +1420,7 @@
       "oracle_text": [
         {
           "face_id": "nissa-steward-of-elements",
-          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
+          "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
         }
       ]
     },
@@ -1808,7 +1808,7 @@
       "oracle_text": [
         {
           "face_id": "scute-swarm",
-          "text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+          "text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
         }
       ]
     },
@@ -1904,7 +1904,7 @@
         },
         {
           "face_id": "sorin-ravenous-neonate",
-          "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
+          "text": "Extort\n[+2]: Create a Food token.\n[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
         }
       ]
     },
@@ -1922,7 +1922,7 @@
       "oracle_text": [
         {
           "face_id": "sorin-vengeful-bloodlord",
-          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
+          "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
         }
       ]
     },
@@ -2009,7 +2009,7 @@
       "oracle_text": [
         {
           "face_id": "the-cruelty-of-gix",
-          "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
+          "text": "Read ahead\nI — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII — Put target creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2063,7 +2063,7 @@
       "oracle_text": [
         {
           "face_id": "the-restoration-of-eiganjo",
-          "text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control."
+          "text": "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control."
         },
         {
           "face_id": "architect-of-restoration",
@@ -2103,7 +2103,7 @@
       "oracle_text": [
         {
           "face_id": "touch-the-spirit-realm",
-          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
+          "text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step."
         }
       ]
     },
@@ -2121,7 +2121,7 @@
       "oracle_text": [
         {
           "face_id": "uro-titan-of-nature-s-wrath",
-          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard."
+          "text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard."
         }
       ],
       "authoring_status": "complete_printed_program",
@@ -2155,7 +2155,7 @@
       "oracle_text": [
         {
           "face_id": "urza-s-saga",
-          "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
+          "text": "I — This Saga gains \"{T}: Add {C}.\"\nII — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"\nIII — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
         }
       ]
     },
@@ -2214,7 +2214,7 @@
       "oracle_text": [
         {
           "face_id": "victor-valgavoth-s-seneschal",
-          "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
+          "text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
         }
       ]
     },
@@ -2372,7 +2372,22 @@
     "new_test_methods": 46,
     "validation_status": "awaiting_github_hosted_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "Validate the four isolated drafts on hosted runners, complete printed-face review and source binding, then promote and validate through the reviewed loader. No local execution."
+    "review_work_remaining": "Validate the four isolated drafts on hosted runners, complete printed-face review and source binding, then promote and validate through the reviewed loader. No local execution.",
+    "resolved_validation_issues": [
+      {
+        "commit": "f94894b36674f0be871abb333c2385baf84b210b",
+        "run_id": 34776728530,
+        "conclusion": "failure",
+        "tests_run": 1384,
+        "failures": 0,
+        "errors": 2,
+        "issues": [
+          "A direct hand-addition fixture moved its scenario source and then reused the stale object reference.",
+          "The lexical-binding fixture expected a selection prompt when its sole legal selection was automatically chosen."
+        ],
+        "resolution": "Move a separate library card for the non-draw hand addition; provide two legal selection options and verify both paid and unpaid lexical branches. No runtime change."
+      }
+    ]
   },
   "hosted_validation_history": [
     {
