@@ -2,7 +2,7 @@
 
 This cycle starts at `c1f5e17d0fbfee7a5dfe147e086243025797e319` on
 `codex/remaining-card-programs`. It promotes Oblivion Ring and Leonin
-Relic-Warder after full printed-face review, and authors Animate Dead using
+Relic-Warder after full printed-face review, and authors and reviews Animate Dead using
 existing shared attachment primitives.
 
 ## Linked-exile promotion
@@ -26,7 +26,7 @@ They now have `catalog:` identities, exact source-fact hashes and specific
 
 ## Animate Dead composition
 
-Animate Dead is a black {1}{B} Enchantment — Aura with mana value two. The draft
+Animate Dead is a black {1}{B} Enchantment — Aura with mana value two. The program
 retains all printed source facts and uses the existing attachment fixture's
 composition, adding complete catalog identity, color and subtype declarations.
 
@@ -70,10 +70,17 @@ noncreature Gods, prohibited/replaced reanimation, exact enchant restrictions,
 Starfield and Oblivion Ring return, three optional Relic-Warder cycles with
 explicit decline, actor replay and checkpoint restoration.
 
-Validation of this cycle is pending on GitHub-hosted Ubuntu and Windows.
-The current inventory is 239 reviewed programs / 304 deck copies, one Animate
-Dead draft, and 94 unstarted cards. Authoring, review and validation statuses
-remain distinct.
+[Hosted run 34769235605](https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605)
+passed **1,269 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged-asset checks, at `c2d994dfe95d2202f1d13c32033b769f63c6e832`.
+That run included Animate Dead as a source-bound draft and both linked-exile
+cards through the reviewed loader. It found no unresolved failure.
+
+Animate Dead subsequently completed printed-face review and received its exact
+source-fact hash, complete review basis and `catalog:animate-dead` definition.
+Its same 19 methods now load the reviewed program. Validation of that promotion
+is pending. The inventory now contains **240 reviewed programs / 305 deck copies**,
+no drafts and **94 unstarted cards**.
 
 ## Compatibility and scope
 
@@ -104,5 +111,7 @@ confirm Oblivion Ring's separate triggers and Aura returns.
 explains why a returned noncreature God cannot be attached, and is sacrificed
 after Animate Dead falls off.
 
-Next: finish hosted validation and Animate Dead's source-bound review, then
-casting zone-cost transactions for Crop Rotation and Fling.
+Next: finish the promotion's hosted validation, then implement casting zone-cost
+transactions for Crop Rotation and Fling using the existing activation-cost
+transaction code where applicable. Fling needs the sacrificed creature's derived
+power captured before payment; a selector alone cannot supply that information.

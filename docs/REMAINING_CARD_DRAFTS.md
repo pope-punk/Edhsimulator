@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**239 reviewed programs / 304 deck copies**. The **95 cards outside the reviewed
-bundle** comprise one Animate Dead draft and 94 unstarted cards. Reviewed
+**240 reviewed programs / 305 deck copies**. There are **94 cards outside the
+reviewed bundle**, all unstarted. The isolated draft bundle is currently empty. Reviewed
 coverage is not production certification.
 
 ## Current cycle: Animate Dead and linked-exile review
@@ -18,12 +18,18 @@ attachment, exact-reference movement, delayed sacrifice and attached P/T
 primitives. A shared correction restricts shroud/hexproof targeting protection
 to battlefield permanents while preserving printed keywords in other zones.
 
-Nineteen new methods cover casting, targeting, attachment failures, controller
+Animate Dead also completed its printed-face review and source binding. Its
+same fixtures now use `load_reviewed()`. Nineteen new methods cover casting,
+targeting, attachment failures, controller
 changes, blink, Starfield/Oblivion Ring return, finite optional Relic-Warder
 cycles, replay and checkpoints. See [the cycle review](ANIMATE_DEAD_CARD_REVIEW.md).
 The cycle source base is `c1f5e17d0fbfee7a5dfe147e086243025797e319`.
-Hosted validation is pending. Next: finish Animate Dead's validation/review,
-then implement casting zone costs for Crop Rotation and Fling.
+[Hosted run 34769235605](https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605)
+passed **1,269 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged-asset checks, at `c2d994dfe95d2202f1d13c32033b769f63c6e832`.
+This validated the target correction, Animate Dead draft and linked-exile
+promotions. Validation of Animate Dead's reviewed-loader promotion is pending.
+Next: casting zone costs for Crop Rotation and Fling.
 
 Checkpoint schema is 112. Existing checkpoints and started games are not
 migrated. Authoring, card review, hosted conformance and production admission
@@ -149,13 +155,16 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the twelve now promoted. It records
+originally outstanding card IDs, including the thirteen now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 After the completed ten-draft review, the linked
 exile and return family (Oblivion Ring, Leonin Relic-Warder) has completed
 card-level review. The next implementation family is casting costs
-with zone-changing payments (Crop Rotation, Fling). These require shared mechanics
+with zone-changing payments (Crop Rotation, Fling). Reuse `_zone_cost_refs`,
+`_continue_announcement` and `_commit_prepared` where they preserve the complete
+spell-announcement transaction. Fling also needs pre-payment derived-power
+capture; do not infer it from the post-sacrifice graveyard object. These require shared mechanics
 and complete card behavior; the existing gate against casting zone costs should
 remain until the full announcement transaction is implemented. Saga, Room,
 planeswalker, and transforming-card programs need their corresponding shared

@@ -1,5 +1,4 @@
 """Printed Animate Dead through shared casting, attachment and delayed-trigger code."""
-from dataclasses import replace
 import json
 from pathlib import Path
 import unittest
@@ -11,7 +10,7 @@ from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_kernel import RulesKernel
 from edh_gauntlet.rules_program import (
     Attach, CardProgram, CastSpec, CostSpec, Counter, CounterAbilities, ManaCost,
-    Move, SelectAll, Selector, TargetSpec, WithMoved, ZoneReplacement, decode, validate,
+    Move, SelectAll, Selector, TargetSpec, WithMoved, ZoneReplacement,
 )
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
@@ -20,9 +19,9 @@ class AnimateDeadCardTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root = Path(__file__).resolve().parents[1]
-        rows = json.loads((root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.animate = validate(decode(next(row['program'] for row in rows if row['card_id'] == 'animate-dead')))
-        cls.reviewed = tuple(row['program'] for row in load_reviewed(root).values())
+        rows = load_reviewed(root)
+        cls.animate = rows['animate-dead']['program']
+        cls.reviewed = tuple(row['program'] for row in rows.values())
         cls.fixtures = (
             CardProgram('fixture:body', 'Body', ('Creature',), power=3, toughness=4),
             CardProgram('fixture:elf', 'Unrelated Elf', ('Creature',), subtypes=('Elf',), power=2, toughness=3),
@@ -45,7 +44,7 @@ class AnimateDeadCardTests(unittest.TestCase):
         )
 
     def game(self, *extra):
-        self.programs = self.reviewed + (self.animate,) + self.fixtures + extra
+        self.programs = self.reviewed + self.fixtures + extra
         self.state = RulesState(('A', 'B'))
         self.kernel = RulesKernel(self.state, self.programs)
         self.kernel.open_window_for_scenario('A')

@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 239,
-    "remaining_outside_reviewed_bundle": 95,
-    "drafts_written": 1,
+    "reviewed_bundle_unique": 240,
+    "remaining_outside_reviewed_bundle": 94,
+    "drafts_written": 0,
     "not_started_on_this_branch": 94,
-    "reviewed_bundle_copies": 304,
-    "draft_copies": 1,
+    "reviewed_bundle_copies": 305,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 12
+    "promoted_on_this_branch": 13
   },
   "cards": [
     {
@@ -92,7 +92,7 @@
     {
       "card_id": "animate-dead",
       "name": "Animate Dead",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -107,9 +107,8 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:animate-dead",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_reviewed_loader_ci",
       "batch": "animate-dead-2026-09-13",
       "shared_mechanics": [
         "WithAttached",
@@ -120,7 +119,15 @@
         "Sacrifice",
         "ContinuousProgram",
         "ModifyPT"
-      ]
+      ],
+      "reviewed_definition": "catalog:animate-dead",
+      "previous_draft_definition": "draft:animate-dead",
+      "source_facts_sha256": "8e8ff57fa34cf27d4112ba87b04adab2caca6364ce4e919266d493b5b43ac8a6",
+      "review_record": "docs/ANIMATE_DEAD_CARD_REVIEW.md",
+      "draft_hosted_validation": {
+        "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+        "run_id": 34769235605
+      }
     },
     {
       "card_id": "apex-devastator",
@@ -1107,7 +1114,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
@@ -1120,6 +1127,10 @@
       "draft_hosted_validation": {
         "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
         "run_id": 34767597799
+      },
+      "hosted_validation": {
+        "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+        "run_id": 34769235605
       }
     },
     {
@@ -1361,7 +1372,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "batch": "linked-exile-2026-09-13",
       "shared_mechanics": [
         "ExileLinked",
@@ -1374,6 +1385,10 @@
       "draft_hosted_validation": {
         "commit": "2617d40e0a55f40892cd1a3f43d37558c12b5a4e",
         "run_id": 34767597799
+      },
+      "hosted_validation": {
+        "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+        "run_id": 34769235605
       }
     },
     {
@@ -2195,7 +2210,7 @@
   ],
   "hosted_validation": {
     "conclusion": "pending",
-    "scope": "Animate Dead draft, permanent-only shroud/hexproof targeting, and promoted linked-exile definitions through reviewed loader"
+    "scope": "All 240 source-bound reviewed programs including newly promoted Animate Dead"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2205,7 +2220,8 @@
     ],
     "cards_promoted": [
       "oblivion-ring",
-      "leonin-relic-warder"
+      "leonin-relic-warder",
+      "animate-dead"
     ],
     "shared_mechanics": [],
     "shared_corrections": [
@@ -2213,14 +2229,35 @@
     ],
     "runtime_checkpoint_schema": 112,
     "new_test_methods": 19,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "pending_reviewed_loader_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "review-animate-dead",
       "crop-rotation",
       "fling"
     ],
-    "review_work_remaining": "Validate the full Animate Dead draft and shared target correction on hosted runners, then complete its source-bound promotion. 94 catalog cards remain unstarted; production admission remains closed."
+    "review_work_remaining": "All three cards have complete printed-face review; validate Animate Dead through the reviewed loader. 94 catalog cards remain unstarted; production admission remains closed.",
+    "draft_validation": {
+      "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+      "run_id": 34769235605,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1269,
+      "new_test_methods": 19,
+      "conclusion": "success",
+      "scope": "Animate Dead as a draft, shroud/hexproof zone correction, promoted linked-exile programs, replay and packaged assets"
+    },
+    "next_batch_implementation_notes": {
+      "shared_source": "src/edh_gauntlet/rules_casting.py",
+      "reuse_candidates": [
+        "_zone_cost_refs",
+        "_continue_announcement",
+        "_commit_prepared"
+      ],
+      "scope": "Extend existing atomic activation cost handling to accepted spell announcements, preserving payment/replacement choices and pre-sacrifice derived characteristics for Fling. Keep unsupported cost combinations rejected; do not relax the casting zone-cost gate before implementing the complete transaction."
+    }
   },
   "hosted_validation_history": [
     {
@@ -2274,6 +2311,19 @@
       "new_test_methods": 18,
       "conclusion": "success",
       "scope": "Shared linked exile/return, both opted-in drafts, all reviewed programs, source syntax, installation and packaged-asset checks; no production certification"
+    },
+    {
+      "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+      "run_id": 34769235605,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1269,
+      "new_test_methods": 19,
+      "conclusion": "success",
+      "scope": "Animate Dead as a draft, shroud/hexproof zone correction, promoted linked-exile programs, replay and packaged assets"
     }
   ]
 }
