@@ -4,13 +4,31 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 `e9c94a41b722a15621a1ab6352e96e97ccc5f8a7`.
 
 This is a writing head start, with no local Python execution, test run, package
-installation, game launch, or paused-game migration. The seven new card programs
-are **unvalidated drafts**. The reviewed bundle contains 227 programs;
-107 catalog cards remain outside that bundle, comprising these seven drafts and
-100 cards not yet started on this branch. Reviewed-program coverage is not a
+installation, game launch, or paused-game migration. The ten new card programs
+remain separate drafts awaiting card-level review. The reviewed bundle contains 227 programs;
+107 catalog cards remain outside that bundle, comprising these ten drafts and
+97 cards not yet started on this branch. Reviewed-program coverage is not a
 production certificate.
 
-## Written in this batch
+## Current cycle: evoke
+
+Mulldrifter, Reveillark and Vesperlark now have complete printed programs in the
+draft bundle, using shared `EntryAlternativeCost` and `EntryFlagCondition`
+nodes with ordinary entry, sacrifice and return triggers. Eighteen new conformance
+methods cover casting costs, trigger order, blink, control changes, LTB targeting,
+replay and checkpoints. See [the evoke batch record](EVOKE_CARD_DRAFTS.md).
+
+The source base for this cycle is `dbf4fd69fb345f86d2ec701e845eb323bb2dcbac`.
+GitHub-hosted CI is pending. Finish that validation and fix any introduced failure
+before the next batch. The earlier seven land drafts passed hosted conformance;
+their inventory status now distinguishes that result from the pending rules review.
+
+Checkpoint schema is now 110. No local execution or live-game migration is
+authorized. The next cycle should finish the rules review and source bindings
+for the ten drafts, then implement linked exile/return for Oblivion Ring and
+Leonin Relic-Warder.
+
+## Entry-land batch
 
 | Card | Shared entry behavior |
 | --- | --- |
@@ -88,7 +106,8 @@ complete the existing rules review, examine replay and actor projections, and
 review interactions with replacement ordering, departures, entry copying, and
 any future life-payment prohibitions. Card programs must follow the reviewed-bundle
 process; passing these conformance scenarios does not certify whole-pod production
-readiness. The seven programs therefore remain separate drafts.
+readiness. These seven entry-land programs remain separate drafts; the three evoke programs
+also require the reviewed-bundle process before promotion.
 
 ## Library review follow-up
 
@@ -107,9 +126,9 @@ admission remain separate review steps.
 outstanding card IDs, their deck membership, printed text, and this branch's
 authoring status. It is an authoring report, not an executable-coverage report.
 
-Useful next families are evoke (Mulldrifter, Reveillark, Vesperlark), linked exile
-and return (Oblivion Ring, Leonin Relic-Warder), and alternate casting costs with
-zone-changing payments (Crop Rotation, Fling). Each requires shared mechanics
+After the ten-draft review, the next concrete implementation family is linked
+exile and return (Oblivion Ring, Leonin Relic-Warder), followed by casting costs
+with zone-changing payments (Crop Rotation, Fling). These require shared mechanics
 and complete card behavior; the existing gate against casting zone costs should
 remain until the full announcement transaction is implemented. Saga, Room,
 planeswalker, and transforming-card programs need their corresponding shared
@@ -128,3 +147,10 @@ lifecycle support before claiming whole-card coverage.
 The catalog source facts are retained beside each draft. These references inform
 the draft and its regression cases; they do not replace the project's bound
 rules review or silently update its Comprehensive Rules baseline.
+
+## Connector read note
+
+The reviewed program JSON now exceeds GitHub's inline contents limit. If the file
+read returns an empty body with a blob SHA, retrieve that Git blob through the
+GitHub connector. Do not interpret an empty contents response as an empty file
+or overwrite the reviewed bundle from it.

@@ -10,7 +10,7 @@ import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -91,6 +91,8 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
         return all(answers) if isinstance(condition,AllConditions) else any(answers)
     if isinstance(condition,NotCondition):
         return not condition_holds(condition.condition,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players)
+    if isinstance(condition,EntryFlagCondition):
+        return condition.flag in source.entry_flags
     if isinstance(condition,PlayerCountCondition):
         if live_players is None:raise RulesViolation('Player-count conditions require live-player state')
         count=sum(1 for player in live_players if condition.players=='all'
@@ -188,7 +190,7 @@ def condition_selectors(condition):
         for child in condition.conditions:yield from condition_selectors(child)
     elif isinstance(condition,NotCondition):
         yield from condition_selectors(condition.condition)
-    elif condition is not None and not isinstance(condition,(LifeCondition,PlayerCountCondition,DevotionCondition)):
+    elif condition is not None and not isinstance(condition,(EntryFlagCondition,LifeCondition,PlayerCountCondition,DevotionCondition)):
         yield condition.selector
 
 

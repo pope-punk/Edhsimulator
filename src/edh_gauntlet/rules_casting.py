@@ -2,14 +2,14 @@
 
 This experimental slice uses already-produced, unrestricted mana and one atomic
 activation zone-cost group or fixed source-counter costs. Casting zone costs, separately ordered activation
-cost groups, keyword-specific alternative-cost consequences, restricted mana and mana during announcement
-remain unsupported. Life payments reach the shared loss boundary. Creature readiness and basic land
+cost groups, restricted mana and mana during announcement remain unsupported.
+Fixed alternative costs may carry entry facts; their consequences compose ordinary triggers. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
 """
 from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
-from .rules_program import ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -320,7 +320,11 @@ class CastingRules:
                 effects = (Move('source', Zone.BATTLEFIELD),)
             frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                                 target_spec=program.spell_targets,chosen_x=quote.x_value)
-            if quote.alternative_id is not None:frame['alternative_id']=quote.alternative_id
+            if quote.alternative_id is not None:
+                frame['alternative_id']=quote.alternative_id
+                alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
+                if isinstance(alternative,EntryAlternativeCost):
+                    frame['entry_flags']=list(alternative.entry_flags)
             if program.modal is not None:
                 selected=dict(quote.mode_choices)
                 frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]

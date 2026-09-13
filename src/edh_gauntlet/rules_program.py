@@ -402,9 +402,9 @@ class AbilityProgram:
     effects:tuple
     targets:TargetSpec|None=None
     source_must_remain:Zone|None=None
-    intervening_if:CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|AllConditions|AnyConditions|NotCondition|None=None
+    intervening_if:EntryFlagCondition|CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|AllConditions|AnyConditions|NotCondition|None=None
     trigger_limit:int|None=None
-    occurrence_condition:CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|AllConditions|AnyConditions|NotCondition|None=None
+    occurrence_condition:EntryFlagCondition|CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|AllConditions|AnyConditions|NotCondition|None=None
     optional_once_per_turn:bool=False
 
 
@@ -441,6 +441,12 @@ class LifeCondition:
 
 
 @dataclass(frozen=True)
+class EntryFlagCondition:
+    """A fact recorded on this exact battlefield incarnation as it entered."""
+    flag: str
+
+
+@dataclass(frozen=True)
 class CountCondition:
     selector: Selector
     minimum: int
@@ -458,14 +464,14 @@ class AnyConditions:
 
 @dataclass(frozen=True)
 class NotCondition:
-    condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition
 
 
 @dataclass(frozen=True)
 class EntryModifier:
     modifier_id: str
     tapped: bool = True
-    condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
     unless: bool = False
     selector: Selector | None = None
 
@@ -483,7 +489,7 @@ class EntryPayment(EntryModifier):
 
 @dataclass(frozen=True)
 class IfCondition:
-    condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition
     effects: tuple
     otherwise: tuple = ()
 
@@ -545,7 +551,7 @@ class ContinuousProgram:
     selector: Selector
     changes: tuple
     subject: str = 'any'
-    condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
 
 
 @dataclass(frozen=True)
@@ -591,7 +597,13 @@ class CostSpec:
 class AlternativeCost:
     alternative_id: str
     cost: CostSpec
-    condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
+
+
+@dataclass(frozen=True)
+class EntryAlternativeCost(AlternativeCost):
+    """Fixed alternative payment recording noncopiable facts on cast entry."""
+    entry_flags: tuple[str,...] = ()
 
 
 @dataclass(frozen=True)
@@ -720,7 +732,7 @@ class ModalSpec:
     modes: tuple[SpellMode,...]
     minimum: int = 1
     maximum: int = 1
-    extra_mode_condition: CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
+    extra_mode_condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | AllConditions | AnyConditions | NotCondition | None = None
     conditional_maximum: int | None = None
 
 
@@ -765,7 +777,7 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+TYPES={cls.__name__:cls for cls in (EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
 EFFECTS=(UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
@@ -986,6 +998,9 @@ def validate(program,_depth=0):
             return
         if isinstance(value,NotCondition):
             condition(value.condition,depth+1)
+            return
+        if isinstance(value,EntryFlagCondition):
+            if type(value.flag) is not str or not value.flag:raise RulesViolation('Invalid entry fact condition')
             return
         if isinstance(value,PlayerCountCondition):
             if type(value.minimum) is not int or value.minimum<0 or type(value.players) is not str or value.players not in {'all','opponents','controller'}:
@@ -1303,9 +1318,17 @@ def validate(program,_depth=0):
             if (not isinstance(alternative,AlternativeCost) or type(alternative.alternative_id) is not str
                     or not alternative.alternative_id or alternative.alternative_id in alternative_ids):raise RulesViolation('Invalid alternative cost identity')
             alternative_ids.add(alternative.alternative_id);cost(alternative.cost)
+            if isinstance(alternative,EntryAlternativeCost):
+                if (not strings(alternative.entry_flags) or not alternative.entry_flags
+                        or any(not flag for flag in alternative.entry_flags)
+                        or len(alternative.entry_flags)!=len(set(alternative.entry_flags))
+                        or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                        or set(program.types)&{'Instant','Sorcery'}):
+                    raise RulesViolation('Entry alternative costs require a permanent spell and unique entry facts')
             if alternative.condition is not None:condition(alternative.condition)
             if (program.cast.cost.life or program.cast.cost.mana.x_symbols or alternative.cost.mana.x_symbols
-                    or alternative.cost.tap_source or alternative.cost.zone_costs or alternative.cost.counter_costs):
+                    or alternative.cost.tap_source or alternative.cost.tap_selector is not None
+                    or alternative.cost.zone_costs or alternative.cost.counter_costs):
                 raise RulesViolation('Alternative costs currently support fixed mana and life payments')
         quantity(program.cast.generic_reduction,allow_source=False)
         if program.cast.cost.counter_costs:raise RulesViolation('Source counter costs require a battlefield activation')

@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=109
+    CHECKPOINT_SCHEMA=110
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production

@@ -18,6 +18,7 @@ class DraftCardTests(unittest.TestCase):
         cls.bundle = json.loads((cls.root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
         cls.rows = cls.bundle['drafts']
         cls.drafts = {row['card_id']: validate(decode(row['program'])) for row in cls.rows}
+        cls.land_drafts = {key: program for key, program in cls.drafts.items() if 'Land' in program.types}
         cls.reviewed = load_reviewed(cls.root)
         cls.programs = tuple(row['program'] for row in cls.reviewed.values()) + tuple(cls.drafts.values())
 
@@ -29,8 +30,9 @@ class DraftCardTests(unittest.TestCase):
         self.assertEqual({
             'game-trail', 'shineshadow-snarl', 'vineglimmer-snarl',
             'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
+            'mulldrifter', 'reveillark', 'vesperlark',
         }, set(self.drafts))
-        self.assertEqual(7, len(self.rows))
+        self.assertEqual(10, len(self.rows))
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
         for row in self.rows:
             key = row['card_id']
@@ -49,7 +51,11 @@ class DraftCardTests(unittest.TestCase):
                     self.assertEqual(set(getattr(face, field)), set(getattr(program, field)))
                 for field in ('mana_value', 'power', 'toughness'):
                     self.assertEqual(getattr(face, field), getattr(program, field))
-                self.assertIsNone(program.cast)
+                if 'Land' in program.types:
+                    self.assertIsNone(program.cast)
+                else:
+                    self.assertIsNotNone(program.cast)
+                    self.assertEqual('sorcery', program.cast.timing)
 
     def test_shock_lands_keep_both_intrinsic_mana_abilities(self):
         symbols = {'Plains': 'W', 'Island': 'U', 'Swamp': 'B', 'Mountain': 'R', 'Forest': 'G'}
@@ -101,7 +107,7 @@ class DraftCardTests(unittest.TestCase):
 
     def test_play_land_choice_resumes_without_spending_a_second_land_play(self):
         matching = {'game-trail': 'mountain', 'shineshadow-snarl': 'plains', 'vineglimmer-snarl': 'island'}
-        for key, program in self.drafts.items():
+        for key, program in self.land_drafts.items():
             with self.subTest(card=key):
                 state = RulesState(('A', 'B'))
                 ref = state.add_card('entry', program.definition_id, 'A', Zone.HAND)
@@ -126,8 +132,8 @@ class DraftCardTests(unittest.TestCase):
                     kernel.play_land('play', 'A', state.current('entry'), revision=kernel.revision)
                 self.assertEqual(1, kernel.turn_schedule['land_plays'])
 
-    def test_all_drafts_use_shared_entry_payment_nodes(self):
-        for program in self.drafts.values():
+    def test_land_drafts_use_shared_entry_payment_nodes(self):
+        for program in self.land_drafts.values():
             self.assertEqual(1, len(program.entry_modifiers))
             self.assertIsInstance(program.entry_modifiers[0], EntryPayment)
             self.assertEqual((), program.abilities)
