@@ -1,4 +1,4 @@
-"""Draft conformance cases for paid/revealed entry; execution is still pending."""
+"""Conformance cases for draft paid/revealed entry; production remains gated."""
 import json
 import unittest
 from dataclasses import replace

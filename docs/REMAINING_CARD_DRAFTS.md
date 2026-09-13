@@ -64,7 +64,7 @@ and SQLite corruption/backup fixtures explicitly close their temporary database
 connections. SQLite transaction context managers do not close connections. The
 durable runtime and reviewed source fingerprints are unchanged.
 
-## Validation still required
+## Validation and remaining review
 
 Twenty-four regression test methods were written across
 [test_rules_primitives_entry_payment.py](../tests/test_rules_primitives_entry_payment.py)
@@ -75,14 +75,20 @@ budgets, pre-payment conditions, redirects, private options, public reveals,
 shared hand reveals, checkpoint restoration, compiler rejection, mana production,
 source bindings, and once-only land-play accounting.
 
-These tests were not run locally. GitHub's existing push workflow may run them
-on GitHub-hosted Ubuntu and Windows runners; this document does not claim a
-successful workflow result. No reviewed coverage report or certificate was
-regenerated. Before promotion, obtain syntax and conformance results, examine
-replay and actor projections, and review interactions with replacement ordering,
-departures, entry copying, and any future life-payment prohibitions. Card programs
-must then follow the existing reviewed-bundle process; do not relabel drafts as
-reviewed merely because they decode or pass an isolated scenario.
+No Python or tests were run on the user's computer. GitHub-hosted
+[validation run 34759002475](https://github.com/pope-punk/Edhsimulator/actions/runs/34759002475)
+passed source syntax, distribution installation, installed catalog/runtime asset
+verification, and **1,205 primitive conformance tests on each of Ubuntu and
+Windows**, including all 24 new test methods. The validated code/test commit is
+`90b2612d588bf0386f8e6c595316f9c929b19b21`; this result update changes only
+documentation, the inventory's validation metadata, and a test-module docstring.
+
+No reviewed coverage report or certificate was regenerated. Before promotion,
+complete the existing rules review, examine replay and actor projections, and
+review interactions with replacement ordering, departures, entry copying, and
+any future life-payment prohibitions. Card programs must follow the reviewed-bundle
+process; passing these conformance scenarios does not certify whole-pod production
+readiness. The seven programs therefore remain separate drafts.
 
 ## Continuing the remaining cards
 

@@ -1977,5 +1977,18 @@
         }
       ]
     }
-  ]
+  ],
+  "hosted_validation": {
+    "commit": "90b2612d588bf0386f8e6c595316f9c929b19b21",
+    "run_id": 34759002475,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34759002475",
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "tests_per_platform": 1205,
+    "new_test_methods": 24,
+    "conclusion": "success",
+    "scope": "Primitive conformance and distribution checks; rules review and production admission remain separate"
+  }
 }
