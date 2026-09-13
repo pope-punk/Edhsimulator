@@ -20,6 +20,7 @@ PROMOTED_CARDS = frozenset((
     'uro-titan-of-nature-s-wrath', 'bulk-up', 'grasp-of-fate', 'prayer-of-binding',
     'dawn-of-hope', 'rhystic-study', 'smothering-tithe', 'gleaming-splendor',
     'forgotten-ancient', 'the-ozolith', 'aven-courier', 'essence-channeler',
+    'xolatoyac-the-smiling-flood', 'the-earth-crystal', 'dark-depths', 'parallax-wave',
 ))
 
 
@@ -30,7 +31,8 @@ class CardProgramReviewTests(unittest.TestCase):
         cls.bundle = json.loads((cls.root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
         cls.reviewed = load_reviewed(cls.root)
         cls.cards = {key: cls.reviewed[key]['program'] for key in PROMOTED_CARDS}
-        cls.lands = {key: program for key, program in cls.cards.items() if 'Land' in program.types}
+        cls.lands = {key: program for key, program in cls.cards.items()
+                     if program.entry_modifiers and isinstance(program.entry_modifiers[0], EntryPayment)}
         cls.programs = tuple(row['program'] for row in cls.reviewed.values())
 
     def test_draft_bundle_stays_separate_and_source_bound(self):
@@ -58,7 +60,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(27, len(self.cards))
+        self.assertEqual(31, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):

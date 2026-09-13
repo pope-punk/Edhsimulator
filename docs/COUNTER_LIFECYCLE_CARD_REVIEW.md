@@ -2,8 +2,8 @@
 
 Source branch: `codex/remaining-card-programs`.
 Cycle base: `2cbc5f63a54aa67ae71cddbce5219da350aeec5a`.
-Status: all four printed programs are authored in the isolated draft bundle.
-Hosted draft validation and reviewed-bundle promotion are pending.
+Status: all four printed programs completed source binding and are promoted to
+the reviewed bundle. Hosted draft validation passed; reviewed-loader CI is pending.
 No project code or Python was executed on the user's computer.
 
 ## Printed-face mapping
@@ -80,8 +80,8 @@ Relevant rules are 601.2d/602.2b (announced division), 603.8 (state triggers),
 - [Final Fantasy release notes](https://magic.wizards.com/en/news/feature/final-fantasy-release-notes) support The Earth Crystal's reduction, counter replacements and announced division.
 - [Dominaria Remastered release notes](https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes) support Dark Depths' state-trigger lifecycle, no mana ability and successful sacrifice requirement.
 
-The complete catalog source facts are retained with each draft. Promotion binds
-those exact facts using the normal reviewed loader:
+The complete catalog source facts were retained with each isolated draft.
+The reviewed bundle now binds those exact facts through the normal loader:
 
 | Card ID | Source-facts SHA-256 |
 | --- | --- |
@@ -107,7 +107,7 @@ Draft isolation, source-bound review, hosted conformance and production admissio
 remain distinct; production admission stays closed. General unsupported rules,
 including counter-removal prohibitions, are not silently admitted.
 
-Validation is pending. Do not treat the authored scenarios as execution evidence.
+The initial validation status was pending. Exact hosted results are recorded below.
 
 ## Initial hosted findings
 
@@ -118,4 +118,20 @@ a land. Windows was cancelled by matrix fail-fast. The fixture now captures the
 returned incarnation explicitly. Independent static review also retained the
 suspended resolution-payment parent in state-trigger occupancy, with a new
 regression while a mana ability runs. The corrected suite has 62 new methods;
-its execution is pending.
+its successful execution is recorded below.
+
+## Draft validation and promotion
+
+[Draft run 34782390422](https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422)
+passed **1,499 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `bc189ee62527bf3655e16b7b54b7b361cc9ab145`.
+All four programs now have `catalog:` definitions and exact reviewed source
+bindings. The 62 cycle methods use `load_reviewed()`; the shared promotion
+checks include all 31 cards completed from the original queue. The historical
+entry-payment land fixtures remain restricted to entry-payment lands so Dark
+Depths' different entry mechanism is tested by its own complete land-play case.
+The existing 254 reviewed rows are unchanged.
+
+The library now contains **258 reviewed programs / 323 deck copies**; **76 cards /
+77 copies remain unstarted** and the draft bundle is empty. Reviewed-loader
+hosted validation is pending. No production certification or game migration is implied.

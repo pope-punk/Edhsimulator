@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**254 source-bound reviewed programs / 319 deck copies**. There are **80 cards outside the
-reviewed bundle**: four authored drafts and 76 unstarted. Reviewed coverage is not production certification.
+**258 source-bound reviewed programs / 323 deck copies**. There are **76 cards outside the
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -24,22 +24,28 @@ successful hosted validation.
 
 ## Current cycle: counter durations, division, state triggers and Fading
 
-Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave are authored as four
-isolated drafts. The shared runtime adds exact-recipient counter-conditioned
-durations, nonduplicating state triggers, fixed target counter division during
-announcement and best-effort removal. Existing continuous layers, replacement
-planning, counter costs and linked exile provide the remaining behavior.
+Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave have complete
+printed-face review and exact source bindings. The shared runtime provides
+exact-recipient counter-conditioned durations, nonduplicating state triggers,
+fixed target counter division during announcement and best-effort removal.
+Existing continuous layers, replacement planning, counter costs and linked exile
+provide the remaining behavior.
 
 Kernel checkpoint schema is **117**; state schema remains **13**.
-The **62 new conformance methods** are written for GitHub-hosted validation.
-No local execution is authorized. Draft CI and source-bound promotion are pending;
-the reviewed library remains at 254 cards until these steps complete.
+The **62 new conformance methods** now use the reviewed loader.
+[Draft validation 34782390422](https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422)
+passed **1,499 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `bc189ee62527bf3655e16b7b54b7b361cc9ab145`.
+Reviewed-loader validation is pending; do not record this cycle as complete yet.
 See [the cycle review](COUNTER_LIFECYCLE_CARD_REVIEW.md).
 
-Complete draft validation, address failures, bind all four printed programs to
-their source facts and promote them, then validate the reviewed loader before
-recording completion. Existing games are not migrated and production admission
-remains closed.
+After reviewed validation, continue **Dance of the Dead, Mystic Remora, Touch the
+Spirit Realm and Talon Gates of Madara**. The JSON inventory records the exact
+requirements and source findings: attached-controller upkeep and untap
+suppression; computed cumulative-upkeep payments; one-shot next-end-step returns;
+and full phasing plus announcement-bound hand reveal. Reuse the current
+attachment, payment, movement and duration primitives. Existing games are not
+migrated and production admission remains closed.
 
 ## Previous cycle: counter transfers and turn life-loss history
 
@@ -292,7 +298,7 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the twenty-seven now promoted. It records
+originally outstanding card IDs, including the thirty-one now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed

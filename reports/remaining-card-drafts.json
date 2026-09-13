@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 254,
-    "remaining_outside_reviewed_bundle": 80,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 258,
+    "remaining_outside_reviewed_bundle": 76,
+    "drafts_written": 0,
     "not_started_on_this_branch": 76,
-    "reviewed_bundle_copies": 319,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 323,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 27
+    "promoted_on_this_branch": 31
   },
   "cards": [
     {
@@ -359,7 +359,7 @@
     {
       "card_id": "dark-depths",
       "name": "Dark Depths",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -374,10 +374,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "counter-lifecycles-2026-09-13",
-      "draft_definition": "draft:dark-depths",
       "shared_mechanics": [
         "WhileCounter",
         "RemoveCounters",
@@ -386,7 +385,14 @@
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:dark-depths",
+      "previous_draft_definition": "draft:dark-depths",
+      "source_facts_sha256": "f21ac0e6360b17a10ecf19314864436a4b2b4776a69e0111728cef923a8c9c5d",
+      "draft_hosted_validation": {
+        "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+        "run_id": 34782390422
+      }
     },
     {
       "card_id": "darksteel-mutation",
@@ -1609,7 +1615,7 @@
     {
       "card_id": "parallax-wave",
       "name": "Parallax Wave",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1624,10 +1630,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "counter-lifecycles-2026-09-13",
-      "draft_definition": "draft:parallax-wave",
       "shared_mechanics": [
         "WhileCounter",
         "RemoveCounters",
@@ -1636,7 +1641,14 @@
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:parallax-wave",
+      "previous_draft_definition": "draft:parallax-wave",
+      "source_facts_sha256": "fa1e1c46b9e526bfbdc1eb978118fb9ac8ef435c93c72388b8b1c18a3bf2a398",
+      "draft_hosted_validation": {
+        "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+        "run_id": 34782390422
+      }
     },
     {
       "card_id": "parasitic-impetus",
@@ -2160,7 +2172,7 @@
     {
       "card_id": "the-earth-crystal",
       "name": "The Earth Crystal",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2175,10 +2187,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "counter-lifecycles-2026-09-13",
-      "draft_definition": "draft:the-earth-crystal",
       "shared_mechanics": [
         "WhileCounter",
         "RemoveCounters",
@@ -2187,7 +2198,14 @@
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:the-earth-crystal",
+      "previous_draft_definition": "draft:the-earth-crystal",
+      "source_facts_sha256": "0cabcb8c3fc889dfaedf0d74e1fef0e44797fddbafac8f398d34be5ac513faaa",
+      "draft_hosted_validation": {
+        "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+        "run_id": 34782390422
+      }
     },
     {
       "card_id": "the-ozolith",
@@ -2505,7 +2523,7 @@
     {
       "card_id": "xolatoyac-the-smiling-flood",
       "name": "Xolatoyac, the Smiling Flood",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2520,10 +2538,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "counter-lifecycles-2026-09-13",
-      "draft_definition": "draft:xolatoyac-the-smiling-flood",
       "shared_mechanics": [
         "WhileCounter",
         "RemoveCounters",
@@ -2532,21 +2549,28 @@
         "ExileLinked",
         "WithLinkedExile"
       ],
-      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md",
+      "reviewed_definition": "catalog:xolatoyac-the-smiling-flood",
+      "previous_draft_definition": "draft:xolatoyac-the-smiling-flood",
+      "source_facts_sha256": "dec7453e5735bac0ef01878b37a2ce0fae130d6081c9f8e1edffb15eba183b45",
+      "draft_hosted_validation": {
+        "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+        "run_id": 34782390422
+      }
     }
   ],
   "hosted_validation": {
-    "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
-    "run_id": 34779503219,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
+    "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+    "run_id": 34782390422,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1437,
-    "new_test_methods": 53,
+    "tests_per_platform": 1499,
+    "new_test_methods": 62,
     "conclusion": "success",
-    "scope": "All 254 source-bound reviewed programs including Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler; all 53 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
+    "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2557,7 +2581,12 @@
       "dark-depths",
       "parallax-wave"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "xolatoyac-the-smiling-flood",
+      "the-earth-crystal",
+      "dark-depths",
+      "parallax-wave"
+    ],
     "shared_mechanics": [
       "Exact-recipient counter-conditioned continuous durations",
       "Nonduplicating counter state triggers",
@@ -2567,9 +2596,9 @@
     "runtime_checkpoint_schema": 117,
     "state_checkpoint_schema": 13,
     "new_test_methods": 62,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "pending_reviewed_loader_github_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "All four printed programs and 62 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind exact source facts and promote, then validate the reviewed loader. No project execution is authorized locally.",
+    "review_work_remaining": "All four complete printed programs have exact source bindings and passed hosted draft validation. The 62 new methods now use the reviewed loader. Validate that promoted bundle before recording completion.",
     "resolved_validation_issues": [
       {
         "commit": "f20404e234e443c6951141d429f015f6c4ef7307",
@@ -2586,9 +2615,74 @@
         "issues": [
           "The new-land-incarnation fixture returned a land from exile and then attempted to add a counter through its stale exile reference."
         ],
-        "resolution": "Nest the second WithMoved binding so the flood counter is added to the actual returned incarnation. Separately retain a state trigger's suspended resolution-payment parent in the occupied set and add a regression for mana abilities during that payment."
+        "resolution": "Nest the second WithMoved binding so the flood counter is added to the actual returned incarnation. Separately retain a state trigger's suspended resolution-payment parent in the occupied set and add a regression for mana abilities during that payment.",
+        "resolution_commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145"
       }
-    ]
+    ],
+    "next_batch": [
+      "dance-of-the-dead",
+      "mystic-remora",
+      "touch-the-spirit-realm",
+      "talon-gates-of-madara"
+    ],
+    "next_batch_implementation_notes": {
+      "cards": [
+        "dance-of-the-dead",
+        "mystic-remora",
+        "touch-the-spirit-realm",
+        "talon-gates-of-madara"
+      ],
+      "reuse": [
+        "Animate Dead's exact attachment replacement and delayed sacrifice",
+        "PayMana's authenticated resolution window and frozen payment request",
+        "Origin-bound hand activation and source discard costs",
+        "ExileUntilSourceLeaves and WithMoved exact references",
+        "Counter lifecycle expiration and existing combat pruning"
+      ],
+      "requirements": [
+        "Dance of the Dead needs the complete Animate Dead-style return/attachment lifecycle with tapped return, +1/+1, attached creature untap suppression, and upkeep discovery bound to that creature's controller. PayMana must charge that captured controller, who can differ from the Aura's controller, before optionally untapping the exact creature.",
+        "Mystic Remora requires the own-upkeep battlefield condition, replacement-aware age addition, and one optional all-or-nothing payment equal to the resulting age count. Extend the fixed PayMana shape with a validated computed generic amount captured when the request opens; do not repeatedly recalculate during mana abilities. Its noncreature opponent spell trigger reuses the captured payer and optional draw.",
+        "Touch the Spirit Realm reuses immediate source-duration exile for its entry ability. Its channel ability pays discard from hand and needs a one-shot next-end-step delayed return bound to the actual exiled reference and owner. A delay created after an end step begins waits for a subsequent end step. Tokens or changed exile incarnations do not return.",
+        "Talon Gates needs full direct and indirect phasing, attachment propagation, automatic phase-in under the appropriate untap controller, retained counters/identity and immediate combat removal. Its hand activation must reveal the exact card during the public ability's lifetime without revealing the rest of the hand; a stale source cannot put a different incarnation onto the battlefield.",
+        "Use the current source and pinned rules, implement the practical complete subset together, and validate only on GitHub-hosted runners. Do not weaken existing gates before supplying the missing semantics."
+      ],
+      "source_paths": [
+        "src/edh_gauntlet/rules_attachments.py",
+        "src/edh_gauntlet/rules_turns.py",
+        "src/edh_gauntlet/rules_casting.py",
+        "src/edh_gauntlet/rules_actor.py",
+        "src/edh_gauntlet/rules_program.py",
+        "src/edh_gauntlet/rules_state.py",
+        "src/edh_gauntlet/rules_kernel.py"
+      ],
+      "implementation_findings": [
+        "PayMana currently validates a fixed ManaCost; a computed cumulative-upkeep amount needs explicit quantity validation plus capture in the existing serialized payment window.",
+        "DelayedTrigger currently rejects every event except exact-source battlefield departure. Extend delayed step discovery and its one-shot identity, rather than pretending the existing node already supports next end step.",
+        "Attached EventPattern currently permits only battlefield departure. Dance of the Dead needs a separate attached-controller upkeep predicate and exact payer capture.",
+        "TurnRules._validate_untap explicitly rejects automatic phasing and attachment propagation. RulesState.phase alone only toggles one object; it is insufficient for Talon Gates.",
+        "Hand-origin activation permission already uses the card owner and specified zone. Public frame_summary currently hides foreign-hand sources, so announcement-bound reveal lifetime must accompany new hand abilities."
+      ],
+      "primary_references": [
+        "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
+        "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+        "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+        "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
+      ],
+      "guard": "No local execution, no card-name shortcuts, no existing game/checkpoint migration and no production admission. Review each full printed face before promotion."
+    },
+    "draft_validation": {
+      "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+      "run_id": 34782390422,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1499,
+      "new_test_methods": 62,
+      "conclusion": "success",
+      "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
+    }
   },
   "hosted_validation_history": [
     {
@@ -2769,6 +2863,19 @@
       "new_test_methods": 46,
       "conclusion": "success",
       "scope": "All 250 source-bound reviewed programs including Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor; all 46 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+      "run_id": 34779503219,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1437,
+      "new_test_methods": 53,
+      "conclusion": "success",
+      "scope": "All 254 source-bound reviewed programs including Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler; all 53 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
     }
   ],
   "cycle_history": [
@@ -3269,12 +3376,12 @@
     "candidate_families": [
       {
         "cards": [
-          "xolatoyac-the-smiling-flood",
-          "the-earth-crystal",
-          "dark-depths",
-          "parallax-wave"
+          "dance-of-the-dead",
+          "mystic-remora",
+          "touch-the-spirit-realm",
+          "talon-gates-of-madara"
         ],
-        "focus": "Extend shared counter/lifecycle primitives while preserving each card's announcement, duration, state-trigger and upkeep semantics."
+        "focus": "Complete remaining upkeep, exact delayed-return and hand-activation lifecycles; Talon Gates also requires full phasing."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
