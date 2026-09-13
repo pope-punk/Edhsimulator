@@ -36,7 +36,11 @@ The **47 new conformance methods** now use the reviewed loader.
 [Draft validation 34787026975](https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975)
 passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`.
-Required reviewed-loader validation is pending for this promotion.
+[Reviewed-loader validation 34787728272](https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272)
+passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `0a9259b8142247880f7493d7ee02d8e415d996b2`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
 See [the cycle review](UPKEEP_DELAY_CARD_REVIEW.md).
 
 Continue **Talon Gates of Madara, Desert Warfare, Necromancy and Indulgent

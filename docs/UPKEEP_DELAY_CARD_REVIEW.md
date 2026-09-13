@@ -1,8 +1,8 @@
 # Upkeep and delayed-step card review
 
 Cycle base: `e4aee73dd1af7739487ff3ac4919bcc5af394a75` on `codex/remaining-card-programs`.
-Four complete printed programs are source-bound and promoted after hosted draft
-validation. Required reviewed-loader validation is pending. No project code or Python ran locally.
+Four complete printed programs are source-bound and promoted after successful
+hosted draft and reviewed-loader validation. No project code or Python ran locally.
 
 ## Printed-face mapping
 
@@ -91,12 +91,16 @@ remain separate. Production admission remains closed.
 passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`. All 47 new methods passed.
 The four programs now use catalog identities and exact source-facts hashes;
-all 258 previously reviewed rows are unchanged. The suite now exercises these
-four through the reviewed loader, whose required hosted run is pending.
+all 258 previously reviewed rows are unchanged. [Reviewed-loader validation 34787728272](https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272)
+passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `0a9259b8142247880f7493d7ee02d8e415d996b2`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
+The suite exercises all four through the reviewed loader.
 
 The first reviewed-loader run [34787419424](https://github.com/pope-punk/Edhsimulator/actions/runs/34787419424)
 executed 1,546 Ubuntu tests and found four errors in one source-metadata test;
 Windows was cancelled by matrix fail-fast. The fixture used the wrong loader
 record level for the source hash. It now reads the nested review metadata while
 retaining the exact hash and encoded-program assertions. Card behavior and
-runtime are unchanged; the corrected reviewed-loader run is required.
+runtime are unchanged; the corrected reviewed-loader success is recorded above.
