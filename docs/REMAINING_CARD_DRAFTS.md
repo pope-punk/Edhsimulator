@@ -5,27 +5,36 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 This is a writing head start. Project execution and validation are restricted to
 GitHub-hosted runners; no local Python, installation, tests or games are authorized.
-The reviewed bundle now contains **237 unique programs / 302 deck copies**.
-There are **97 catalog cards outside that bundle**, all unstarted; the draft
-bundle is currently empty. Reviewed coverage is not production certification.
+The reviewed bundle contains **237 unique programs / 302 deck copies**.
+There are **97 catalog cards outside that bundle**: two authored drafts and
+95 unstarted cards. Reviewed coverage is not production certification.
 
-## Current cycle: promotion of ten reviewed drafts
+## Current cycle: linked exile and return
 
-The seven entry lands plus Mulldrifter, Reveillark and Vesperlark now have
-card-level printed-face review and exact source-fact bindings. Their programs
-load through `load_reviewed()`; land and evoke conformance fixtures now exercise
-that path. See [the promotion review](DRAFT_PROMOTION_REVIEW.md).
+Oblivion Ring and Leonin Relic-Warder have complete printed draft programs using
+shared `ExileLinked` and `WithLinkedExile` nodes, plus ordinary targeting,
+optional effects, departure triggers and owner-controlled movement. Eighteen
+new conformance methods cover incarnation isolation, early departure, ownership,
+replacement choices, Aura return, replay and public projections. See
+[the linked-exile batch record](LINKED_EXILE_CARD_DRAFTS.md).
 
-The source base is `7a9a593b998f5b8301c84fe3964b8d09cc77b227`.
-Previous draft validation passed 1,231 tests per Ubuntu/Windows platform at
-`c54c116f7c087290f4c4568f0f841dd6502c37e1`
-([run 34764423605](https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605)).
-Validation of this promotion is pending on GitHub-hosted runners.
+The source base is `0788981d6851606eced204e7fe39b805a0a053e7`.
+Validation of this implementation is pending on GitHub-hosted runners.
 
-Checkpoint schema remains 110; changed bundle identities still invalidate old
-bundle fingerprints. No checkpoint or game migration is supplied. Next: linked
-exile/return for Oblivion Ring and Leonin Relic-Warder, then casting zone costs
-for Crop Rotation and Fling.
+Checkpoint schema advances to 111 for the retained link registry. Old checkpoints
+and started games are not migrated. Next: review the two linked-exile drafts,
+then casting zone costs for Crop Rotation and Fling.
+
+## Completed promotion in this cycle
+
+The seven entry lands plus Mulldrifter, Reveillark and Vesperlark completed
+card-level printed-face review and exact source-fact bindings. They now load
+through `load_reviewed()`; their land and evoke fixtures exercise that path.
+See [the promotion review](DRAFT_PROMOTION_REVIEW.md).
+
+[Promotion validation run 34767022703](https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703)
+passed **1,232 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged-asset checks, at `0788981d6851606eced204e7fe39b805a0a053e7`.
 
 ## Earlier batch evidence
 
@@ -131,8 +140,9 @@ admission remain separate review steps.
 originally outstanding card IDs, including the ten now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
-After the completed ten-draft review, the next implementation family is linked
-exile and return (Oblivion Ring, Leonin Relic-Warder), followed by casting costs
+After the completed ten-draft review, the linked
+exile and return family (Oblivion Ring, Leonin Relic-Warder) is now authored and
+awaiting review. The next implementation family is casting costs
 with zone-changing payments (Crop Rotation, Fling). These require shared mechanics
 and complete card behavior; the existing gate against casting zone costs should
 remain until the full announcement transaction is implemented. Saga, Room,

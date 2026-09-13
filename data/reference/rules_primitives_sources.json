@@ -203,7 +203,10 @@
       "603.6e",
       "702.74a",
       "400.7d",
-      "603.3b"
+      "603.3b",
+      "607.1",
+      "607.2a",
+      "607.3"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -283,6 +286,10 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-horizons-release-notes-2019-05-31",
       "scope": "Vesperlark printed behavior and the priority window before evoke sacrifice."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/modern-masters-2015-edition-release-notes-2015-05-12",
+      "scope": "Oblivion Ring's separate exile/return triggers, early departure, and Aura entry on return; linked-exile draft conformance."
     }
   ]
 }

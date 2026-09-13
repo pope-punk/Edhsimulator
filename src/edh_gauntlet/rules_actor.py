@@ -4,6 +4,7 @@ This is an explicit allowlist, never a filtered kernel checkpoint. The current
 kernel has no face-down/reveal-permission vocabulary; production admission stays
 closed until those semantics and the complete transport/replay contract exist.
 """
+import json
 from copy import deepcopy
 from .rules_program import encode
 from .rules_creature_types import CREATURE_TYPES
@@ -125,6 +126,16 @@ def project_actor(kernel,actor):
                   for event in kernel.semantic_events
                   if event['kind']=='cards_revealed' and event.get('cause')=='entry_payment']
     if entry_reveals:packet['public_entry_reveals']=entry_reveals
+    # Links disclose only exact objects still face up in exile. Source refs
+    # describe their public historical incarnation, never its later hidden card.
+    links=[]
+    for key,values in sorted(kernel.linked_exile.items()):
+        refs=kernel._current_exiled_refs(values)
+        if not refs:continue
+        source,definition_id,link_id=json.loads(key)
+        links.append({'source':deepcopy(source),'source_name':kernel.definitions[definition_id].name,
+                      'link_id':link_id,'exiled':[ref.to_json() for ref in refs]})
+    if links:packet['linked_exile']=links
     if actor in kernel.library_observations:
         packet['library_observation']=deepcopy(kernel.library_observations[actor])
     if actor in state.live_players:

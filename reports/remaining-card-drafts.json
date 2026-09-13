@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 237,
     "remaining_outside_reviewed_bundle": 97,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 97,
+    "drafts_written": 2,
+    "not_started_on_this_branch": 95,
     "reviewed_bundle_copies": 302,
-    "draft_copies": 0,
+    "draft_copies": 2,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 10
   },
@@ -675,7 +675,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:game-trail",
       "previous_draft_definition": "draft:game-trail",
       "source_facts_sha256": "ea8842c50a10fb77c94c4d7e27053b5a049b3e488d1609f4051f0093a619d52c",
@@ -683,6 +683,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -762,7 +766,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:godless-shrine",
       "previous_draft_definition": "draft:godless-shrine",
       "source_facts_sha256": "07e67437462208d7d3174296e2879fadc4984d766ff93bf92cc727468e785756",
@@ -770,6 +774,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -827,7 +835,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:hallowed-fountain",
       "previous_draft_definition": "draft:hallowed-fountain",
       "source_facts_sha256": "a16da312f8c5610f7b38a6c420d87d8d5be2d7d453b502700324c1e74a5cff10",
@@ -835,6 +843,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -1064,7 +1076,7 @@
     {
       "card_id": "leonin-relic-warder",
       "name": "Leonin Relic-Warder",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1077,6 +1089,15 @@
           "face_id": "leonin-relic-warder",
           "text": "When this creature enters, you may exile target artifact or enchantment.\nWhen this creature leaves the battlefield, return the exiled card to the battlefield under its owner's control."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:leonin-relic-warder",
+      "batch": "linked-exile-2026-09-13",
+      "shared_mechanics": [
+        "ExileLinked",
+        "WithLinkedExile"
       ]
     },
     {
@@ -1206,7 +1227,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
@@ -1221,6 +1242,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -1298,7 +1323,7 @@
     {
       "card_id": "oblivion-ring",
       "name": "Oblivion Ring",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1311,6 +1336,15 @@
           "face_id": "oblivion-ring",
           "text": "When this enchantment enters, exile another target nonland permanent.\nWhen this enchantment leaves the battlefield, return the exiled card to the battlefield under its owner's control."
         }
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:oblivion-ring",
+      "batch": "linked-exile-2026-09-13",
+      "shared_mechanics": [
+        "ExileLinked",
+        "WithLinkedExile"
       ]
     },
     {
@@ -1530,7 +1564,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
@@ -1546,6 +1580,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -1639,7 +1677,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:shineshadow-snarl",
       "previous_draft_definition": "draft:shineshadow-snarl",
       "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86",
@@ -1647,6 +1685,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -1744,7 +1786,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:stomping-ground",
       "previous_draft_definition": "draft:stomping-ground",
       "source_facts_sha256": "de8d9dfb402c68722e07317b981869aed31465e768ea0519915bcc2941bdfe0c",
@@ -1752,6 +1794,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -1957,7 +2003,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
@@ -1973,6 +2019,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -2012,7 +2062,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:vineglimmer-snarl",
       "previous_draft_definition": "draft:vineglimmer-snarl",
       "source_facts_sha256": "e4e2b42bb524a496d251cff25e5f9dabada82d6f13fe59cebb2a920956e945d4",
@@ -2020,6 +2070,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -2059,7 +2113,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_ci",
+      "hosted_validation_status": "passed",
       "reviewed_definition": "catalog:watery-grave",
       "previous_draft_definition": "draft:watery-grave",
       "source_facts_sha256": "34b28a99693c24bdec7e7076b2d60fd0613d72789f05151b59c1c9c99466585f",
@@ -2067,6 +2121,10 @@
       "draft_hosted_validation": {
         "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
         "run_id": 34764423605
+      },
+      "hosted_validation": {
+        "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+        "run_id": 34767022703
       }
     },
     {
@@ -2108,11 +2166,15 @@
   ],
   "hosted_validation": {
     "conclusion": "pending",
-    "scope": "Promoted programs through reviewed loader on Ubuntu and Windows; previous draft evidence retained in history"
+    "scope": "Linked exile/return interpreter, both draft programs, source bindings, replay and hosted distribution checks"
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "7a9a593b998f5b8301c84fe3964b8d09cc77b227",
+    "base_commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+    "cards_written": [
+      "oblivion-ring",
+      "leonin-relic-warder"
+    ],
     "cards_promoted": [
       "game-trail",
       "godless-shrine",
@@ -2125,15 +2187,33 @@
       "vineglimmer-snarl",
       "watery-grave"
     ],
-    "shared_mechanics": [],
-    "runtime_checkpoint_schema": 110,
+    "promotion_validation": {
+      "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+      "run_id": 34767022703,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1232,
+      "new_test_methods": 1,
+      "conclusion": "success",
+      "scope": "All ten promoted programs loaded through source-bound reviewed loader; hosted conformance and packaged assets; no production certification"
+    },
+    "shared_mechanics": [
+      "ExileLinked",
+      "WithLinkedExile"
+    ],
+    "runtime_checkpoint_schema": 111,
+    "new_test_methods": 18,
     "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "oblivion-ring",
-      "leonin-relic-warder"
+      "review-linked-exile-drafts",
+      "crop-rotation",
+      "fling"
     ],
-    "review_work_remaining": "Ten source-bound printed programs reviewed; 97 catalog cards still need authoring. Production admission remains closed."
+    "review_work_remaining": "Linked exile/return drafts require card-level review after hosted validation; 95 catalog cards remain unstarted. Production admission remains closed."
   },
   "hosted_validation_history": [
     {
@@ -2161,6 +2241,19 @@
       "new_test_methods": 18,
       "conclusion": "success",
       "scope": "Primitive conformance and distribution checks, including all ten opted-in drafts; rules review and production admission remain separate"
+    },
+    {
+      "commit": "0788981d6851606eced204e7fe39b805a0a053e7",
+      "run_id": 34767022703,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1232,
+      "new_test_methods": 1,
+      "conclusion": "success",
+      "scope": "All ten promoted programs loaded through source-bound reviewed loader; hosted conformance and packaged assets; no production certification"
     }
   ]
 }

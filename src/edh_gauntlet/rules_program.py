@@ -373,6 +373,18 @@ class WithMoved:
 
 
 @dataclass(frozen=True)
+class ExileLinked:
+    subject: str
+    link_id: str
+
+
+@dataclass(frozen=True)
+class WithLinkedExile:
+    link_id: str
+    effects: tuple
+
+
+@dataclass(frozen=True)
 class WithAttached:
     effects: tuple
 
@@ -777,8 +789,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -808,7 +820,7 @@ def immediate_effect_nodes(nodes):
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(May,UnlessEntered,Select,SelectAll,WithMoved,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+        if isinstance(node,(May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
             yield from immediate_effect_nodes(node.effects)
         if isinstance(node,(IfCondition,May)):
             yield from immediate_effect_nodes(node.otherwise)
@@ -1143,8 +1155,12 @@ def validate(program,_depth=0):
             if isinstance(node, AddMana) and (not isinstance(node.symbols, tuple) or not node.symbols
                     or any(symbol not in tuple('WUBRGC') for symbol in node.symbols)):
                 raise RulesViolation('Unsupported mana production')
-            if isinstance(node, (Move, Sacrifice, Destroy, Discard, Counter, Damage, GainControl, AddCounters, MultiplyCounters, WithMoved, WithControllers, SetTapped, UntilEndOfTurn, Attach)) and (type(node.subject) is not str or node.subject not in bindings and not (isinstance(node,Damage) and node.subject=='controller') and not (isinstance(node,(AddCounters,MultiplyCounters)) and node.subject in {'controller','opponents','all'})):
+            if isinstance(node, (Move, ExileLinked, Sacrifice, Destroy, Discard, Counter, Damage, GainControl, AddCounters, MultiplyCounters, WithMoved, WithControllers, SetTapped, UntilEndOfTurn, Attach)) and (type(node.subject) is not str or node.subject not in bindings and not (isinstance(node,Damage) and node.subject=='controller') and not (isinstance(node,(AddCounters,MultiplyCounters)) and node.subject in {'controller','opponents','all'})):
                 raise RulesViolation('Unbound subject: ' + str(node.subject))
+            if isinstance(node,(ExileLinked,WithLinkedExile)) and (type(node.link_id) is not str or not node.link_id.strip()):
+                raise RulesViolation('Invalid linked-ability identity')
+            if isinstance(node,WithLinkedExile):
+                effects(node.effects,bindings|{'linked'},allow_x,available_values)
             if isinstance(node,CounterAbilities) and (type(node.players) is not str or node.players not in {'controller','opponents','all'}):
                 raise RulesViolation('Invalid ability-counter controller domain')
             if isinstance(node,Damage):
@@ -1238,7 +1254,7 @@ def validate(program,_depth=0):
                 if spec is None or spec.players is None or spec.selector is not None:
                     raise RulesViolation('Player instructions require player-only targets')
             if spec is not None and spec.players is not None:
-                if (isinstance(node,(Move,Sacrifice,Destroy,Discard,Counter,GainControl,WithMoved,WithControllers,SetTapped,UntilEndOfTurn,Attach,May)) and node.subject=='target'
+                if (isinstance(node,(Move,ExileLinked,Sacrifice,Destroy,Discard,Counter,GainControl,WithMoved,WithControllers,SetTapped,UntilEndOfTurn,Attach,May)) and node.subject=='target'
                         or isinstance(node,Attach) and node.to=='target'
                         or isinstance(node,SetAttachmentRule) and node.exact_subject=='target'):
                     raise RulesViolation('Object instructions cannot consume player targets')
@@ -1370,6 +1386,9 @@ def validate(program,_depth=0):
                     else {Zone.HAND} if zone_cost.kind=='discard' else {Zone.BATTLEFIELD,Zone.HAND,Zone.GRAVEYARD})
                 if ability.zone not in allowed:raise RulesViolation('Source zone cost does not match activation zone')
         if ability.targets is not None:target(ability.targets,bool(ability.cost.mana.x_symbols))
+        if ability.zone not in {Zone.BATTLEFIELD,Zone.STACK} and any(
+                isinstance(node,ExileLinked) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Linked exile requires a public activation source')
         effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols))
         target_effects(ability.effects,ability.targets)
         if ability.mana_ability != activation_is_mana(ability):

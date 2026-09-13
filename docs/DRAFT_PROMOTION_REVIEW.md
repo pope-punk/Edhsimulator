@@ -5,7 +5,8 @@ clause and characteristic in the retained catalog at
 `7a9a593b998f5b8301c84fe3964b8d09cc77b227`. They now load through
 `load_reviewed()` as `catalog:` definitions. The reviewed bundle contains
 237 unique cards and 302 deck copies; 97 catalog cards remain unstarted.
-The isolated draft bundle is empty and remains available for future batches.
+The draft bundle was empty immediately after promotion; the subsequent
+[linked-exile batch](LINKED_EXILE_CARD_DRAFTS.md) adds two separate drafts.
 
 ## Printed-face decisions
 
@@ -45,8 +46,9 @@ at `c54c116f7c087290f4c4568f0f841dd6502c37e1`: 1,231 tests passed on each
 of Ubuntu and Windows while these programs were drafts. The land and evoke
 fixtures now obtain these programs from the reviewed loader without opting in
 draft definitions. A separate test keeps future drafts isolated and bound to
-their source facts and authoring inventory. Hosted validation of the promoted
-loading path is pending this commit.
+their source facts and authoring inventory. [Promotion validation run 34767022703](https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703)
+passed **1,232 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged-asset checks, at `0788981d6851606eced204e7fe39b805a0a053e7`.
 
 ## Scope and compatibility
 

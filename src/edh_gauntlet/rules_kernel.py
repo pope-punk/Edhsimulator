@@ -22,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (event_player_matches,SourceCounter,TargetStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=110
+    CHECKPOINT_SCHEMA=111
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -75,6 +75,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         self.stack=[];self.resolving=None;self.pending_triggers=[];self.placement=None
         self.pending_choice=None;self.answers={};self.accepted=[];self.semantic_events=[]
         self.priority=None;self.passes=[];self._serial=0;self._revision=0
+        self.linked_exile={}
         self.temporary_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
         self.phase=None;self.action_receipts={};self.turn_schedule=None;self.combat=None;self.departure=None;self.outcome=None;self.announcement=None
 
@@ -844,6 +845,22 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             return events
         raise UnsupportedRule('Unsupported zone-result operation')
 
+    @staticmethod
+    def _linked_exile_key(source,link_id):
+        # A link belongs to one printed program on one exact incarnation.
+        # Control changes preserve it; reentry and unrelated copy definitions do not.
+        return json.dumps([source.ref.to_json(),source.effective_definition,link_id],
+                          sort_keys=True,separators=(',',':'))
+
+    def _current_exiled_refs(self,values):
+        result=[]
+        for value in values:
+            ref=ObjectRef.from_json(value)
+            try:obj=self.state.get(ref)
+            except RulesViolation:continue
+            if obj.zone==Zone.EXILE and not obj.token:result.append(ref)
+        return tuple(dict.fromkeys(result))
+
     def _insert_zone_result(self,events,destination,frame,effects,selector=None):
         matching=[event for event in events if destination is None or event.after.zone==destination]
         if selector is not None:
@@ -910,6 +927,23 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 if obj.zone not in {Zone.BATTLEFIELD,Zone.STACK} or obj.phased:continue
                 captured.append(obj.controller)
             frame['values']['captured_controllers']=captured
+            self._insert(frame,effect.effects)
+        elif isinstance(effect,ExileLinked):
+            if source.zone not in {Zone.BATTLEFIELD,Zone.STACK}:
+                raise UnsupportedRule('Linked exile requires a public source')
+            # Register only the actual resulting exile incarnations, after the
+            # ordinary replacement/payment transaction commits. A suspended
+            # replacement choice cannot publish a speculative or duplicate link.
+            events=self._move(self._refs(frame,effect.subject),Zone.EXILE,frame,key)
+            refs=[event.after.ref.to_json() for event in events if event.after.zone==Zone.EXILE]
+            if refs:
+                linked=self.linked_exile.setdefault(self._linked_exile_key(source,effect.link_id),[])
+                for ref in refs:
+                    if ref not in linked:linked.append(ref)
+        elif isinstance(effect,WithLinkedExile):
+            refs=self._current_exiled_refs(self.linked_exile.get(
+                self._linked_exile_key(source,effect.link_id),()))
+            frame['bindings']['linked']=[ref.to_json() for ref in refs]
             self._insert(frame,effect.effects)
         elif isinstance(effect,WithZoneResult):
             events=self._zone_operation(effect.operation,frame,key)
@@ -1309,7 +1343,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             'pending_choice':self.pending_choice.to_json() if self.pending_choice else None,'answers':self.answers,
             'accepted':self.accepted,'semantic_events':self.semantic_events,'priority':self.priority,'passes':self.passes,
             'serial':self._serial,'revision':self._revision,'phase':self.phase,'action_receipts':self.action_receipts,'turn_schedule':self.turn_schedule,'combat':self.combat,'departure':self.departure,'outcome':self.outcome,'announcement':self.announcement,
-            'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
+            'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1320,7 +1354,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn'):
+        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn'):
             setattr(kernel,name,value[name])
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
