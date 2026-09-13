@@ -22,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -75,7 +75,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         self.stack=[];self.resolving=None;self.pending_triggers=[];self.placement=None
         self.pending_choice=None;self.answers={};self.accepted=[];self.semantic_events=[]
         self.priority=None;self.passes=[];self._serial=0;self._revision=0
-        self.linked_exile={}
+        self.linked_exile={};self.exile_durations={}
         self.temporary_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
         self.phase=None;self.action_receipts={};self.turn_schedule=None;self.combat=None;self.departure=None;self.outcome=None;self.announcement=None
 
@@ -121,10 +121,13 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                     self._trigger(source,ability,values=captured)
 
     def _frame(self,source,controller,effects,*,spell=False,targets=(),target_spec=None,entry_flags=(),chosen_x=0):
-        return {'id':self._id('frame'),'source':source.to_json(),'controller':controller,'spell':spell,
+        frame={'id':self._id('frame'),'source':source.to_json(),'controller':controller,'spell':spell,
                 'targets':[ref.to_json() for ref in targets],'target_spec':encode(target_spec),
                 'bindings':{},'values':{},'entry_flags':list(entry_flags),'started':False,'chosen_x':chosen_x,
                 'tasks':[{'id':self._id('effect'),'effect':encode(effect)} for effect in effects]}
+        if target_spec is not None and target_spec.group_by_controller and target_spec.maximum is None:
+            frame['target_controller_groups']=[{'ref':ref.to_json(),'controller':self.state.get(ref).controller} for ref in targets]
+        return frame
 
     def _idle(self):
         if self.outcome:raise RulesViolation('Game has finished')
@@ -945,6 +948,20 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
                 captured.append(obj.controller)
             frame['values']['captured_controllers']=captured
             self._insert(frame,effect.effects)
+        elif isinstance(effect,ExileUntilSourceLeaves):
+            try:current_source=self.state.get(source.ref)
+            except RulesViolation:return
+            if current_source.zone!=Zone.BATTLEFIELD:return
+            refs=[]
+            for ref in self._refs(frame,effect.subject):
+                try:obj=self.state.get(ref)
+                except RulesViolation:continue
+                if obj.zone==Zone.BATTLEFIELD and not obj.phased:refs.append(ref)
+            events=self._move(refs,Zone.EXILE,frame,key)
+            exiled=[e.after.ref.to_json() for e in events if e.after.zone==Zone.EXILE]
+            if exiled:
+                self.exile_durations[key]={'source':current_source.to_json(),'refs':exiled}
+                self._event('exile_duration_created',duration=key,source=source.ref.to_json(),refs=exiled)
         elif isinstance(effect,ExileLinked):
             if source.zone not in {Zone.BATTLEFIELD,Zone.STACK}:
                 raise UnsupportedRule('Linked exile requires a public source')
@@ -1173,6 +1190,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         spec=decode(frame['target_spec'])
         if spec is None:return True
         legal={o.ref if o.ref is not None else PlayerRef(o.player) for o in self._target_options(spec,frame)}
+        if 'target_controller_groups' in frame:
+            # Each opponent's clause retains that player's selected target.
+            owners={ObjectRef.from_json(row['ref']):row['controller'] for row in frame['target_controller_groups']}
+            legal={ref for ref in legal if self.state.get(ref).controller==owners.get(ref)}
         # Shared target permissions are re-evaluated against current control.
         # Player protection, shroud/hexproof and ward remain separate unsupported permissions.
         original=tuple(target_from_json(v) for v in frame['targets'])
@@ -1290,11 +1311,30 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             placement['index']+=1
         self.priority=placement['return_priority'];self.placement=None;self.passes=[]
 
+    def _return_expired_exiles(self):
+        # CR 610.3: no triggered ability or priority window. Returns from
+        # simultaneous departures share one replacement-aware entry batch.
+        expired=[]
+        for key,row in self.exile_durations.items():
+            try:source=self.state.get(ObjectRef.from_json(row['source']['ref']))
+            except RulesViolation:source=None
+            if source is None or source.zone!=Zone.BATTLEFIELD:expired.append(key)
+        if not expired:return False
+        refs=self._current_exiled_refs([ref for key in expired for ref in self.exile_durations[key]['refs']])
+        context={'source':self.exile_durations[expired[0]]['source'],
+            'controller':self.priority_player(),'bindings':{}}
+        self._move(refs,Zone.BATTLEFIELD,context,'until-leaves:'+':'.join(expired),
+            cause='exile_duration_ended',controller_mode='owner')
+        for key in expired:del self.exile_durations[key]
+        self._event('exile_durations_ended',durations=expired)
+        return True
+
     def advance(self):
         if self.pending_choice:return self.pending_choice
         try:
             while True:
                 if self.outcome:return GameResult(self.outcome['kind'],tuple(self.outcome['winners']),tuple(self.outcome['departed']))
+                if self._return_expired_exiles():continue
                 if self.announcement:self._continue_announcement();continue
                 if self.departure:self._continue_departure();continue
                 if self._exile_abandoned_control():continue
@@ -1360,7 +1400,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             'pending_choice':self.pending_choice.to_json() if self.pending_choice else None,'answers':self.answers,
             'accepted':self.accepted,'semantic_events':self.semantic_events,'priority':self.priority,'passes':self.passes,
             'serial':self._serial,'revision':self._revision,'phase':self.phase,'action_receipts':self.action_receipts,'turn_schedule':self.turn_schedule,'combat':self.combat,'departure':self.departure,'outcome':self.outcome,'announcement':self.announcement,
-            'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
+            'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1371,7 +1411,7 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn'):
+        for name in ('temporary_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn'):
             setattr(kernel,name,value[name])
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']

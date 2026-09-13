@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 242,
     "remaining_outside_reviewed_bundle": 92,
-    "drafts_written": 2,
-    "not_started_on_this_branch": 90,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 88,
     "reviewed_bundle_copies": 307,
-    "draft_copies": 2,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 15
   },
@@ -853,7 +853,7 @@
     {
       "card_id": "grasp-of-fate",
       "name": "Grasp of Fate",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -866,7 +866,8 @@
           "face_id": "grasp-of-fate",
           "text": "When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield."
         }
-      ]
+      ],
+      "validation_status": "pending_github_hosted_ci"
     },
     {
       "card_id": "hakbal-of-the-surging-soul",
@@ -1532,7 +1533,7 @@
     {
       "card_id": "prayer-of-binding",
       "name": "Prayer of Binding",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1545,7 +1546,8 @@
           "face_id": "prayer-of-binding",
           "text": "Flash\nWhen this enchantment enters, exile up to one target nonland permanent an opponent controls until this enchantment leaves the battlefield. You gain 2 life."
         }
-      ]
+      ],
+      "validation_status": "pending_github_hosted_ci"
     },
     {
       "card_id": "propaganda",
@@ -2275,22 +2277,43 @@
     "base_commit": "9d918d1db85ef64337615c98b52d0ff546b02ddd",
     "cards_written": [
       "uro-titan-of-nature-s-wrath",
-      "bulk-up"
+      "bulk-up",
+      "grasp-of-fate",
+      "prayer-of-binding"
     ],
     "cards_promoted": [],
     "shared_mechanics": [
       "GraveyardAlternativeCost",
-      "Exact spell stack-exit replacement"
+      "Exact spell stack-exit replacement",
+      "ExileUntilSourceLeaves",
+      "Simultaneous replacement-aware immediate returns",
+      "Frozen per-controller target clauses"
     ],
     "runtime_checkpoint_schema": 114,
-    "new_test_methods": 20,
+    "new_test_methods": 39,
     "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "grasp-of-fate",
-      "prayer-of-binding"
+      "dawn-of-hope",
+      "rhystic-study",
+      "smothering-tithe"
     ],
-    "review_work_remaining": "Validate the two graveyard-casting drafts remotely, complete printed-face review, and implement the exile-until-source-leaves pair during the same larger cycle."
+    "review_work_remaining": "Run all four drafts and both shared mechanics through hosted validation, then complete source-bound promotion and validate the reviewed loader.",
+    "resolved_validation_issues": [
+      {
+        "commit": "d0bc4fb57b2b7c8c98cb25d5fcf60ecdf602c559",
+        "run_id": 34773794049,
+        "conclusion": "failure",
+        "tests_run": 1293,
+        "failures": 1,
+        "errors": 2,
+        "issues": [
+          "Uro's draft GainLife JSON incorrectly included a players field, rejected by the strict codec before the new fixture class ran.",
+          "An earlier schema assertion required exactly 113; the new layout intentionally uses 114."
+        ],
+        "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout."
+      }
+    ]
   },
   "hosted_validation_history": [
     {

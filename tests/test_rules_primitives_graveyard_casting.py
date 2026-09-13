@@ -51,7 +51,7 @@ class GraveyardCastingTests(unittest.TestCase):
             request=self.kernel.pending_choice
             if request:
                 if request.kind=='trigger_order':indexes=list(range(len(request.options)))
-                elif request.kind=='select':indexes=[] if land is None else [next(i for i,o in enumerate(request.options) if o.ref.card_id==land)]
+                elif request.kind=='selection':indexes=[] if land is None else [next(i for i,o in enumerate(request.options) if o.ref.card_id==land)]
                 else:self.fail('Unexpected choice '+request.kind)
                 self.kernel.answer(request.request_id,request.actor,indexes)
             elif self.kernel.stack or self.kernel.resolving is not None:self.kernel.pass_priority(self.kernel.priority)

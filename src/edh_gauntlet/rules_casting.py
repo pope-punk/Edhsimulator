@@ -140,7 +140,7 @@ class CastingRules:
                 raise RulesViolation('Action has no target specification')
             return
         minimum=x_value if isinstance(spec.minimum,ChosenX) else spec.minimum
-        maximum=x_value if isinstance(spec.maximum,ChosenX) else spec.maximum
+        maximum=x_value if isinstance(spec.maximum,ChosenX) else len(self.state.live_players) if spec.maximum is None else spec.maximum
         if not minimum <= len(targets) <= maximum or len(set(targets)) != len(targets):raise RulesViolation('Illegal announced targets')
         if not targets:return
         legal = {o.ref if o.ref is not None else PlayerRef(o.player) for o in self._target_options(spec, {'source': source.to_json(), 'controller': actor})}

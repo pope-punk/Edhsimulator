@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **242 reviewed programs / 307 deck copies**. There are **92 cards outside the
-reviewed bundle**, including two graveyard-casting drafts and 90 unstarted cards. Reviewed coverage is not production certification.
+reviewed bundle**, including four drafts and 88 unstarted cards. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -35,13 +35,21 @@ cost retains its original casting permissions; the alternative binds graveyard
 permission to its specific payment. Uro composes the existing entry facts,
 sacrifice, gain/draw/land and attack trigger primitives. Bulk Up composes a signed
 recipient-power modifier with an exact stack-incarnation Flashback replacement.
-Twenty hosted conformance methods are authored; their results are pending.
+The graveyard-casting pair has 20 authored conformance methods; successful
+hosted validation remains pending.
 Checkpoint schema is 114. No local Python or game execution is permitted.
 
-The same cycle continues into Grasp of Fate and Prayer of Binding. Their printed
-exile-until-leaves semantics require a non-triggered return transaction distinct
-from the Oblivion Ring family. This is the next implementation work while hosted
-validation checks the graveyard-casting pair.
+Grasp of Fate and Prayer of Binding are also isolated drafts. Their new
+ExileUntilSourceLeaves primitive returns surviving exact exile incarnations
+before the next instruction, state-based actions or priority. Simultaneous
+source departures share one return batch. Source phasing/control/copy changes
+preserve the obligation. Per-opponent targeting freezes each selected player's
+clause at announcement. Nineteen further conformance methods cover this pair.
+The combined 39-method batch awaits successful hosted validation.
+
+The initial hosted run rejected an extra GainLife JSON field and a historical
+test pinned to schema 113. The draft JSON and historical compatibility assertion
+are corrected; the failure remains recorded in the inventory.
 
 ## Prior cycle: casting sacrifices for Crop Rotation and Fling
 
