@@ -45,7 +45,8 @@ permission to track hidden objects after movement or shuffling.
 [Draft programs](../data/rules/draft_cards.json) have a separate top-level schema,
 a `drafts` collection, `unvalidated_draft` status, and `draft:` definition IDs.
 The normal `load_reviewed()` path does not import them. The new card fixture
-tests opt in explicitly, compare the retained source facts with the catalog,
+tests read the drafts from their source checkout (not the installed distribution),
+opt in explicitly, compare the retained source facts with the catalog,
 and exercise the draft definitions with the shared interpreter.
 
 The experimental checkpoint schema moves from 108 to 109 because the entry

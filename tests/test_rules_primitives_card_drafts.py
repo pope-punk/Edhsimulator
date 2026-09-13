@@ -4,7 +4,6 @@ import unittest
 from pathlib import Path
 
 from edh_gauntlet.catalog import load_catalog
-from edh_gauntlet.paths import PROJECT_ROOT
 from edh_gauntlet.rules_bundle import digest, load_reviewed, source_facts
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_kernel import RulesKernel
@@ -15,10 +14,11 @@ from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 class DraftCardTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.bundle = json.loads((Path(PROJECT_ROOT) / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
+        cls.root = Path(__file__).resolve().parents[1]
+        cls.bundle = json.loads((cls.root / 'data/rules/draft_cards.json').read_text(encoding='utf-8'))
         cls.rows = cls.bundle['drafts']
         cls.drafts = {row['card_id']: validate(decode(row['program'])) for row in cls.rows}
-        cls.reviewed = load_reviewed()
+        cls.reviewed = load_reviewed(cls.root)
         cls.programs = tuple(row['program'] for row in cls.reviewed.values()) + tuple(cls.drafts.values())
 
     def test_exact_draft_inventory_is_source_bound_and_excluded_from_reviewed_coverage(self):
@@ -31,7 +31,7 @@ class DraftCardTests(unittest.TestCase):
             'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
         }, set(self.drafts))
         self.assertEqual(7, len(self.rows))
-        catalog = {card.card_id: card for card in load_catalog(Path(PROJECT_ROOT) / 'data/catalog/cards.json')}
+        catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
         for row in self.rows:
             key = row['card_id']
             with self.subTest(card=key):
