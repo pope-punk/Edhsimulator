@@ -38,7 +38,11 @@ The **53 new conformance methods** now use the reviewed loader.
 [Draft validation 34779216050](https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050)
 passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
 installation and packaged assets, at `3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910`.
-Reviewed-loader GitHub-hosted validation is pending.
+[Reviewed-loader validation 34779503219](https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219)
+passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `5a6f83af3add06da91a564212ccb2ef6b062c1a2`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
 See [the cycle review](COUNTER_TRANSFER_CARD_REVIEW.md).
 
 The next candidate queue is **Xolatoyac, the Smiling Flood; The Earth Crystal;

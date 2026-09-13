@@ -188,7 +188,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "counter-transfers-2026-09-13",
       "shared_mechanics": [
         "CopyEventCounters",
@@ -205,6 +205,10 @@
       "draft_hosted_validation": {
         "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
         "run_id": 34779216050
+      },
+      "hosted_validation": {
+        "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+        "run_id": 34779503219
       }
     },
     {
@@ -585,7 +589,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "counter-transfers-2026-09-13",
       "shared_mechanics": [
         "CopyEventCounters",
@@ -602,6 +606,10 @@
       "draft_hosted_validation": {
         "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
         "run_id": 34779216050
+      },
+      "hosted_validation": {
+        "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+        "run_id": 34779503219
       }
     },
     {
@@ -776,7 +784,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "counter-transfers-2026-09-13",
       "shared_mechanics": [
         "CopyEventCounters",
@@ -793,6 +801,10 @@
       "draft_hosted_validation": {
         "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
         "run_id": 34779216050
+      },
+      "hosted_validation": {
+        "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+        "run_id": 34779503219
       }
     },
     {
@@ -2154,7 +2166,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "counter-transfers-2026-09-13",
       "shared_mechanics": [
         "CopyEventCounters",
@@ -2171,6 +2183,10 @@
       "draft_hosted_validation": {
         "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
         "run_id": 34779216050
+      },
+      "hosted_validation": {
+        "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+        "run_id": 34779503219
       }
     },
     {
@@ -2464,17 +2480,17 @@
     }
   ],
   "hosted_validation": {
-    "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
-    "run_id": 34777218224,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
+    "commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+    "run_id": 34779503219,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1384,
-    "new_test_methods": 46,
+    "tests_per_platform": 1437,
+    "new_test_methods": 53,
     "conclusion": "success",
-    "scope": "All 250 source-bound reviewed programs including Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor; all 46 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
+    "scope": "All 254 source-bound reviewed programs including Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler; all 53 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2501,7 +2517,7 @@
     "runtime_checkpoint_schema": 116,
     "state_checkpoint_schema": 13,
     "new_test_methods": 53,
-    "validation_status": "pending_reviewed_loader_github_hosted_ci",
+    "validation_status": "passed_github_hosted_ci",
     "catalog_corrections": [
       {
         "card_id": "essence-channeler",
@@ -2513,7 +2529,7 @@
       }
     ],
     "unresolved_defects": [],
-    "review_work_remaining": "Printed review and exact source binding complete. Await hosted validation of the same 53 conformance methods through the reviewed loader.",
+    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue the retained Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave work order.",
     "resolved_validation_issues": [
       {
         "commit": "a95e7d4c88aa6e5a0adda0d9b76fdbe98da47c5e",
@@ -2578,7 +2594,11 @@
       "new_test_methods": 53,
       "conclusion": "success",
       "scope": "All four isolated counter-transfer cards; atomic replacements, authored allocation, last-known snapshots, life history, checkpoint/replay, source syntax, installation and packaged assets"
-    }
+    },
+    "validated_commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+    "ci_run_id": 34779503219,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
+    "tests_per_platform": 1437
   },
   "hosted_validation_history": [
     {
@@ -2746,6 +2766,19 @@
       "new_test_methods": 45,
       "conclusion": "success",
       "scope": "All 246 source-bound reviewed programs including Uro, Bulk Up, Grasp of Fate and Prayer of Binding; all 45 new methods use the reviewed loader; replay, source syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+      "run_id": 34777218224,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1384,
+      "new_test_methods": 46,
+      "conclusion": "success",
+      "scope": "All 250 source-bound reviewed programs including Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor; all 46 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
     }
   ],
   "cycle_history": [
@@ -3138,18 +3171,12 @@
     "candidate_families": [
       {
         "cards": [
-          "uro-titan-of-nature-s-wrath",
-          "bulk-up"
+          "xolatoyac-the-smiling-flood",
+          "the-earth-crystal",
+          "dark-depths",
+          "parallax-wave"
         ],
-        "focus": "Graveyard alternative casting permissions; escape payment and flashback departure semantics. Preserve Uro's detailed implementation notes."
-      },
-      {
-        "cards": [
-          "dawn-of-hope",
-          "rhystic-study",
-          "smothering-tithe"
-        ],
-        "focus": "Optional mana payments during resolution, correct paying player and payment-versus-effect branches; reuse existing draw and token primitives."
+        "focus": "Extend shared counter/lifecycle primitives while preserving each card's announcement, duration, state-trigger and upkeep semantics."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."

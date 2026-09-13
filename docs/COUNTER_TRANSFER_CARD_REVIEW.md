@@ -81,8 +81,8 @@ schemas while continuing to reject its unsupported predecessor.
 source facts, authenticated allocation, atomic failure, large budgets,
 replacement ordering, checkpoint/replay, exact departure copies, target and
 source changes, counter-kind timing, life history and compiler rejection.
-The same methods now load the four source-bound reviewed programs. A second
-hosted run through that loader is pending. This document records printed-card review;
+The same methods now load the four source-bound reviewed programs. The reviewed-loader
+hosted validation also passed; both results are recorded below. This document records printed-card review;
 it is not a production admission certificate.
 
 The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt)
@@ -102,7 +102,7 @@ installation and packaged assets, at `3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910`.
 All four complete printed programs are promoted with exact source-fact digests.
 The other 250 reviewed rows are unchanged. The bundle now contains **254 unique
 reviewed cards / 319 deck copies**, with **80 unstarted cards / 81 copies** and
-zero drafts. Reviewed-loader hosted validation is pending.
+zero drafts. The reviewed-loader validation below also passed.
 
 | Card | Source-facts SHA-256 |
 | --- | --- |
@@ -110,3 +110,15 @@ zero drafts. Reviewed-loader hosted validation is pending.
 | Essence Channeler | `a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862` |
 | Forgotten Ancient | `e3c90e3543c9d71797ec0c67d4bc4ee7f6de9b91b6fa31856a35102c65a1f07a` |
 | The Ozolith | `38d3ab4a07bf008fbe1252996c25ac9dff5ae755497ee1b7b4e0738fadf032ab` |
+
+[Reviewed-loader validation 34779503219](https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219)
+passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `5a6f83af3add06da91a564212ccb2ef6b062c1a2`.
+
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
+
+The next multi-card queue is Xolatoyac, the Smiling Flood; The Earth Crystal;
+Dark Depths; and Parallax Wave. The work order and inventory retain their
+source-independent counter durations, announcement-time distribution, state-trigger
+and Fading requirements. No unsupported clause is counted as complete.
