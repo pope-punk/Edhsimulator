@@ -6,10 +6,27 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **240 reviewed programs / 305 deck copies**. There are **94 cards outside the
-reviewed bundle**, all unstarted. The isolated draft bundle is currently empty. Reviewed
-coverage is not production certification.
+reviewed bundle**: **two complete drafts awaiting validation/review** and **92
+unstarted cards**. Reviewed coverage is not production certification.
 
-## Current cycle: Animate Dead and linked-exile review
+## Current cycle: casting sacrifices for Crop Rotation and Fling
+
+Both complete drafts reuse selected ZoneCost sacrifices. The shared casting
+transaction keeps the announced spell public on the stack during payment choices,
+commits payment once, and then collects cast triggers. PaidCostStat captures the
+sacrificed creature's derived power for Fling. Crop Rotation reuses SearchLibrary.
+
+Twenty-four new conformance methods cover the printed cards, atomic rejection,
+replacement/priority boundaries, exact source information, hidden zones, actor
+replay, checkpoints, cost reductions and modal/X casting. Hosted validation and
+printed-face/source-binding review are pending. See
+[the cycle record](CASTING_SACRIFICE_CARD_DRAFTS.md).
+
+Checkpoint schema is now **113**. Previous games and checkpoints are not migrated.
+Next: finish hosted validation, review and promotion for these two drafts, then
+refresh the next unstarted card family. All project execution remains hosted.
+
+## Prior cycle: Animate Dead and linked-exile review
 
 Oblivion Ring and Leonin Relic-Warder completed printed-face review and now
 have source-bound `catalog:` definitions. Their existing 18 conformance
@@ -35,9 +52,9 @@ plus source syntax, installation and packaged-asset checks, at
 `8a2f6ca5713fc56139dec706666231acb82f4be7`. All three cards load through the reviewed bundle.
 The subsequent result-recording commit changes only documentation and this
 inventory's validation metadata.
-Next: casting zone costs for Crop Rotation and Fling.
+This evidence precedes the current casting-sacrifice cycle.
 
-Checkpoint schema is 112. Existing checkpoints and started games are not
+That cycle's checkpoint schema was 112. Existing checkpoints and started games are not
 migrated. Authoring, card review, hosted conformance and production admission
 remain distinct.
 
@@ -164,17 +181,16 @@ admission remain separate review steps.
 originally outstanding card IDs, including the thirteen now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
-After the completed ten-draft review, the linked
-exile and return family (Oblivion Ring, Leonin Relic-Warder) has completed
-card-level review. The next implementation family is casting costs
-with zone-changing payments (Crop Rotation, Fling). Reuse `_zone_cost_refs`,
-`_continue_announcement` and `_commit_prepared` where they preserve the complete
-spell-announcement transaction. Fling also needs pre-payment derived-power
-capture; do not infer it from the post-sacrifice graveyard object. These require shared mechanics
-and complete card behavior; the existing gate against casting zone costs should
-remain until the full announcement transaction is implemented. Saga, Room,
-planeswalker, and transforming-card programs need their corresponding shared
-lifecycle support before claiming whole-card coverage.
+The entry lands, evoke cards, linked-exile cards and Animate Dead completed
+card-level review. Crop Rotation and Fling are now complete drafts using the
+new shared casting-sacrifice transaction. Finish their hosted conformance and
+source-bound review before promotion.
+
+For the next unstarted family, assess Uro's escape cost against the existing
+announcement transaction. Exiling several other graveyard cards and composing
+additional costs with alternative payments require a further supported cost
+shape; those paths remain rejected. Saga, Room, planeswalker and transforming
+programs require their own shared lifecycle support before whole-card coverage.
 
 ## Rules references used while writing
 

@@ -207,7 +207,8 @@
       "607.1",
       "607.2a",
       "607.3",
-      "113.6"
+      "113.6",
+      "601.2a"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -297,6 +298,14 @@
       "author": "Nathan Long, Wizards.Com Boards NetRep",
       "date": "2014-11-05",
       "scope": "Animate Dead cannot attach to a returned noncreature God; the Aura falls off and its delayed ability sacrifices that permanent. Protection remains outside this implementation's supported scope."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/outlaws-of-thunder-junction-release-notes",
+      "scope": "Fling requires exactly one creature sacrifice, uses its last battlefield power, and allows responses only after the full casting cost is paid."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
+      "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost."
     }
   ]
 }

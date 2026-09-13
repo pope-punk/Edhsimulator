@@ -3,5 +3,363 @@
   "status": "unvalidated_draft",
   "base_commit": "e9c94a41b722a15621a1ab6352e96e97ccc5f8a7",
   "production_ready": false,
-  "drafts": []
+  "drafts": [
+    {
+      "card_id": "crop-rotation",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "crop-rotation",
+        "name": "Crop Rotation",
+        "color_identity": [
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "crop-rotation",
+            "oracle_text": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put that card onto the battlefield, then shuffle.",
+            "type_line": "Instant",
+            "mana_cost": "{G}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "G"
+            ]
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:crop-rotation",
+        "name": "Crop Rotation",
+        "types": [
+          "Instant"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "SearchLibrary",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "library"
+              },
+              "types": [
+                "Land"
+              ],
+              "relation": "owned",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "destination": {
+              "zone": "battlefield"
+            },
+            "count": 1,
+            "reveal": false,
+            "optional_find": false,
+            "tapped": false,
+            "secondary_destination": null,
+            "primary_count": 1,
+            "secondary_tapped": false,
+            "distinct_names": false,
+            "partition_player": null
+          }
+        ],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 1,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 0,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [
+              {
+                "node": "ZoneCost",
+                "cost_id": "land",
+                "kind": "sacrifice",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [
+                    "Land"
+                  ],
+                  "relation": "controlled",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "count": 1
+              }
+            ],
+            "counter_costs": []
+          },
+          "timing": "instant",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "fling",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "fling",
+        "name": "Fling",
+        "color_identity": [
+          "R"
+        ],
+        "faces": [
+          {
+            "face_id": "fling",
+            "oracle_text": "As an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target.",
+            "type_line": "Instant",
+            "mana_cost": "{1}{R}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "R"
+            ]
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:fling",
+        "name": "Fling",
+        "types": [
+          "Instant"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "Damage",
+            "subject": "target",
+            "amount": {
+              "node": "PaidCostStat",
+              "cost_id": "creature",
+              "statistic": "power"
+            },
+            "source_subject": "source",
+            "players": null,
+            "exclude_damage_source": false
+          }
+        ],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [],
+            "relation": "any",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [
+              "Creature",
+              "Planeswalker",
+              "Battle"
+            ],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": "all",
+          "combat": null,
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "R"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [
+              {
+                "node": "ZoneCost",
+                "cost_id": "creature",
+                "kind": "sacrifice",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [
+                    "Creature"
+                  ],
+                  "relation": "controlled",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "count": 1
+              }
+            ],
+            "counter_costs": []
+          },
+          "timing": "instant",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "R"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    }
+  ]
 }

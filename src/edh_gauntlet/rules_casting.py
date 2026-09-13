@@ -1,7 +1,8 @@
 """Read-only action quotes and atomic resource-payment commits.
 
 This experimental slice uses already-produced, unrestricted mana and one atomic
-activation zone-cost group or fixed source-counter costs. Casting zone costs, separately ordered activation
+activation zone-cost group or fixed source-counter costs. Spells may pay one
+selected sacrifice group plus fixed/variable unrestricted mana. Separately ordered
 cost groups, restricted mana and mana during announcement remain unsupported.
 Fixed alternative costs may carry entry facts; their consequences compose ordinary triggers. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
@@ -233,10 +234,10 @@ class CastingRules:
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value)
 
-    def _resource_payment(self, quote, payment):
+    def _resource_payment(self, quote, payment, *, source=None):
         if not isinstance(payment, Payment):
             raise RulesViolation('Payment must be an authored payment packet')
-        source = self.state.get(quote.source)
+        source = source or self.state.get(quote.source)
         taps = payment.taps
         if not isinstance(taps, tuple) or any(not isinstance(ref, ObjectRef) for ref in taps) or len(taps) != quote.cost.tap_count:
             raise RulesViolation('Wrong number of tap-cost selections')
@@ -271,19 +272,27 @@ class CastingRules:
         resources = self._resource_payment(quote, payment)
         zone_refs=self._zone_cost_refs(quote,payment)
         if quote.cost.zone_costs:
-            source=self.state.get(quote.source)
-            ability=next(a for a in self.activated_abilities(source) if a.ability_id==quote.ability_id)
-            announced_frame=None
-            if not ability.mana_ability:
-                announced_frame=self._frame(source,quote.actor,ability.effects,targets=quote.targets,target_spec=ability.targets,chosen_x=quote.x_value)
-                announced_frame['ability_id']=ability.ability_id;self.stack.append(announced_frame)
+            source=self.state.get(quote.source);origin_source=source
+            ability=None;announced_frame=None
+            if quote.kind=='cast':
+                # The announced spell is public on the stack throughout payment.
+                # Validate the complete declaration/payment before this first mutation.
+                source=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value),),'spell_announced')[0].after
+                announced_frame=self._spell_frame(source,quote)
+            else:
+                ability=next(a for a in self.activated_abilities(source) if a.ability_id==quote.ability_id)
+                if not ability.mana_ability:
+                    announced_frame=self._frame(source,quote.actor,ability.effects,targets=quote.targets,target_spec=ability.targets,chosen_x=quote.x_value)
+                    announced_frame['ability_id']=ability.ability_id
+            if announced_frame is not None:self.stack.append(announced_frame)
             self.announcement={'frame_id':announced_frame['id'] if announced_frame else None,'quote':quote.to_json(),'payment':{'mana':dict(payment.mana),'taps':[r.to_json() for r in payment.taps],
                 'zone_costs':{key:[r.to_json() for r in refs] for key,refs in payment.zone_costs}},
-                'source':source.to_json(),'source_types':sorted(self.effective(source.ref).types),'ability':encode(ability),
+                'source':source.to_json(),'origin_source':origin_source.to_json(),
+                'source_types':sorted(self.effective(source.ref).types),'ability':encode(ability),
                 'refs':[ref.to_json() for ref in zone_refs]}
-            self._event('activation_announced',action_id=quote.action_id,actor=quote.actor)
+            self._event('spell_announced' if quote.kind=='cast' else 'activation_announced',action_id=quote.action_id,actor=quote.actor)
             boundary=self.advance()
-            if boundary is None and ability.mana_ability and quote.actor in self.state.live_players:self.priority=quote.actor
+            if boundary is None and ability is not None and ability.mana_ability and quote.actor in self.state.live_players:self.priority=quote.actor
             return boundary
         mana_ability=self._commit_prepared(quote,resources)
         boundary=self.advance()
@@ -304,39 +313,47 @@ class CastingRules:
         self.state.add_mana(player,symbols)
         self._event('mana_added',player=player,symbols=list(symbols))
 
+    def _spell_frame(self,source,quote):
+        program=self.definition(source)
+        effects = program.spell_effects
+        if not effects and not {'Instant', 'Sorcery'} & set(program.types):
+            effects = (Move('source', Zone.BATTLEFIELD),)
+        frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
+                            target_spec=program.spell_targets,chosen_x=quote.x_value)
+        if quote.alternative_id is not None:
+            frame['alternative_id']=quote.alternative_id
+            alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
+            if isinstance(alternative,EntryAlternativeCost):
+                frame['entry_flags']=list(alternative.entry_flags)
+        if program.modal is not None:
+            selected=dict(quote.mode_choices)
+            frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]
+            for mode in program.modal.modes:
+                if mode.mode_id not in selected:continue
+                refs=[ref.to_json() for ref in selected[mode.mode_id]]
+                frame['mode_groups'].append({'mode_id':mode.mode_id,'targets':refs,'target_spec':encode(mode.targets)})
+                frame['targets'].extend(refs)
+                frame['tasks'].extend({'id':self._id('effect'),'effect':encode(effect),'mode_id':mode.mode_id,'bindings':{},'values':{}} for effect in mode.effects)
+        return frame
+
     def _commit_prepared(self,quote,resources,*,paid=False,source=None,ability=None,zone_payment=None,previous_types=None,prepared_frame=None):
         source = source or self.state.get(quote.source)
-        program = self.definition(source)
         immediate_mana=();tapped_for_mana=False
         tap_observers=self._tap_observers(resources.taps) if not paid else ()
         if quote.kind == 'cast':
-            events = self.state.move((ZoneMove(source.ref, Zone.STACK, quote.actor, cast_x=quote.x_value),),
-                                     'cast', payment=resources)
-            if source.commander and source.zone == Zone.COMMAND:
-                self.state.record_command_cast(quote.actor, source.ref.card_id)
-            source = events[0].after
-            effects = program.spell_effects
-            if not effects and not {'Instant', 'Sorcery'} & set(program.types):
-                effects = (Move('source', Zone.BATTLEFIELD),)
-            frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
-                                target_spec=program.spell_targets,chosen_x=quote.x_value)
-            if quote.alternative_id is not None:
-                frame['alternative_id']=quote.alternative_id
-                alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
-                if isinstance(alternative,EntryAlternativeCost):
-                    frame['entry_flags']=list(alternative.entry_flags)
-            if program.modal is not None:
-                selected=dict(quote.mode_choices)
-                frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]
-                for mode in program.modal.modes:
-                    if mode.mode_id not in selected:continue
-                    refs=[ref.to_json() for ref in selected[mode.mode_id]]
-                    frame['mode_groups'].append({'mode_id':mode.mode_id,'targets':refs,'target_spec':encode(mode.targets)})
-                    frame['targets'].extend(refs)
-                    frame['tasks'].extend({'id':self._id('effect'),'effect':encode(effect),'mode_id':mode.mode_id,'bindings':{},'values':{}} for effect in mode.effects)
-            self.stack.append(frame)
-            event_kind = 'spell_cast'
-            mana_ability = False
+            if paid:
+                if prepared_frame is None:raise RulesViolation('Missing announced spell frame')
+                frame=prepared_frame
+                stack_source=self.state.get(ObjectRef.from_json(frame['source']['ref']))
+            else:
+                events=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value),),'cast',payment=resources)
+                stack_source=events[0].after
+                frame=self._spell_frame(stack_source,quote);self.stack.append(frame)
+            if source.commander and source.zone==Zone.COMMAND:
+                self.state.record_command_cast(quote.actor,source.ref.card_id)
+            source=stack_source
+            event_kind='spell_cast'
+            mana_ability=False
         else:
             ability = ability or next(ability for ability in self.activated_abilities(source) if ability.ability_id == quote.ability_id)
             if not paid:
@@ -392,15 +409,29 @@ class CastingRules:
 
     def _continue_announcement(self):
         pending=self.announcement;quote=PreparedAction.from_json(pending['quote']);payment=Payment.from_json(pending['payment'])
-        resources=self._resource_payment(quote,payment);cost=quote.cost.zone_costs[0]
         source=RulesObject.from_json(pending['source']);ability=decode(pending['ability'])
+        resources=self._resource_payment(quote,payment,source=source);cost=quote.cost.zone_costs[0]
+        prepared_frame=next((frame for frame in self.stack if frame['id']==pending['frame_id']),None)
+        if (quote.kind=='cast' or not ability.mana_ability) and prepared_frame is None:
+            raise RulesViolation('Announced action frame disappeared during payment')
+        refs=tuple(ObjectRef.from_json(ref) for ref in pending['refs'])
+        # Capture derived battlefield information immediately before payment.
+        # A suspended replacement choice reruns this pure read; it cannot pay twice.
+        paid_stats=None
+        if quote.kind=='cast':
+            views=self.characteristics()
+            paid_stats={cost.cost_id:{stat:sum(getattr(views[ref],stat) or 0 for ref in refs)
+                for stat in ('power','toughness','mana_value')}}
         frame={'source':pending['source'],'controller':quote.actor,'bindings':{}}
         destination={'sacrifice':Zone.GRAVEYARD,'discard':Zone.GRAVEYARD,'exile':Zone.EXILE,'return':Zone.HAND}[cost.kind]
-        events=self._move(tuple(ObjectRef.from_json(ref) for ref in pending['refs']),destination,frame,
-            quote.action_id+':cost',cause=cost.kind,controller_mode='owner',payment=resources)
-        source=next((event.before for event in events if event.before.ref==quote.source),source)
-        prepared_frame=next((frame for frame in self.stack if frame['id']==pending['frame_id']),None)
-        if not ability.mana_ability and prepared_frame is None:raise RulesViolation('Announced ability frame disappeared during payment')
+        events=self._move(refs,destination,frame,quote.action_id+':cost',cause=cost.kind,controller_mode='owner',payment=resources)
+        if quote.kind=='cast':
+            source=RulesObject.from_json(pending['origin_source'])
+            prepared_frame['values']['paid_cost_stats']=paid_stats
+            for task in prepared_frame['tasks']:
+                if 'values' in task:task['values']['paid_cost_stats']=paid_stats
+        else:
+            source=next((event.before for event in events if event.before.ref==quote.source),source)
         self.announcement=None
         self._commit_prepared(quote,resources,paid=True,source=source,ability=ability,
             zone_payment={cost.cost_id:pending['refs']},previous_types=pending['source_types'],prepared_frame=prepared_frame)

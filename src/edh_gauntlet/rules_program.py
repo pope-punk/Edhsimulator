@@ -8,8 +8,8 @@ from .rules_subtypes import SUBTYPE_SETS,SUBTYPE_SUPPORT
 @dataclass(frozen=True)
 class CharacteristicRange:
     statistic: str
-    minimum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | None = None
-    maximum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | None = None
+    minimum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat | None = None
+    maximum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat | None = None
 
 
 @dataclass(frozen=True)
@@ -78,6 +78,13 @@ class TargetStat:
 
 
 @dataclass(frozen=True)
+class PaidCostStat:
+    """Sum of a named spell sacrifice group's pre-payment derived statistics."""
+    cost_id: str
+    statistic: str = 'power'
+
+
+@dataclass(frozen=True)
 class SourceCounter:
     """Counters of one kind on the source, using exact last known information."""
     kind: str
@@ -106,7 +113,7 @@ class EventX:
 @dataclass(frozen=True)
 class DividedValue:
     """Nonnegative integer quotient, explicitly rounded down or up."""
-    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
     divisor: int
     rounding: str = "down"
 
@@ -124,14 +131,14 @@ class CountObjects:
 
 @dataclass(frozen=True)
 class ScaledValue:
-    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
     factor: int
 
 
 @dataclass(frozen=True)
 class ProduceMana:
     """Produce an amount of one chosen type without enumerating mana bundles."""
-    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
     options: tuple[str,...]
 
 
@@ -210,7 +217,7 @@ class CounterAbilities:
 @dataclass(frozen=True)
 class Damage:
     subject: str
-    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
 
     source_subject: str = 'source'
     players: str | None = None
@@ -267,33 +274,33 @@ class Scry:
 
 @dataclass(frozen=True)
 class Draw:
-    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat=1
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat=1
     players:str='controller'
 
 
 @dataclass(frozen=True)
 class Mill:
     """Move up to the requested number of top library cards simultaneously."""
-    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat = 1
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat = 1
     players: str = 'controller'
 
 
 @dataclass(frozen=True)
 class WithLifeLost:
     players: str
-    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
     effects: tuple
 
 
 @dataclass(frozen=True)
 class LoseLife:
     players:str
-    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
 
 
 @dataclass(frozen=True)
 class GainLife:
-    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
 
 
 @dataclass(frozen=True)
@@ -325,7 +332,7 @@ class MultiplyCounters:
 class AddCounters:
     subject:str
     kind:str
-    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
 
 
 @dataclass(frozen=True)
@@ -584,7 +591,7 @@ class ZoneCost:
 @dataclass(frozen=True)
 class CreateTokens:
     token: CardProgram
-    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat = 1
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat = 1
     players: str = 'controller'
 
 
@@ -789,7 +796,7 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+TYPES={cls.__name__:cls for cls in (ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
 EFFECTS=(ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
@@ -1048,6 +1055,11 @@ def validate(program,_depth=0):
         elif isinstance(value,SourceCounter):
             if not allow_source:raise RulesViolation('Incoming source counter expressions are not yet supported')
             if type(value.kind) is not str or not value.kind:raise RulesViolation('Invalid source counter kind')
+        elif isinstance(value,PaidCostStat):
+            if type(value.cost_id) is not str or not value.cost_id or 'paid_cost:'+value.cost_id not in available_values:
+                raise RulesViolation('Unbound paid-cost statistic')
+            if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value'}:
+                raise RulesViolation('Invalid paid-cost statistic')
         elif isinstance(value,TargetStat):
             if 'target_statistics' not in available_values:raise RulesViolation('Unbound target statistic')
             if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value','color_count'} or type(value.operation) is not str or value.operation not in {'sum','maximum'}:raise RulesViolation('Invalid target statistic')
@@ -1348,7 +1360,11 @@ def validate(program,_depth=0):
                 raise RulesViolation('Alternative costs currently support fixed mana and life payments')
         quantity(program.cast.generic_reduction,allow_source=False)
         if program.cast.cost.counter_costs:raise RulesViolation('Source counter costs require a battlefield activation')
-        if program.cast.cost.zone_costs:raise RulesViolation('Casting zone costs require the complete spell announcement transaction')
+        if program.cast.cost.zone_costs:
+            if (any(c.kind!='sacrifice' or c.selector is None for c in program.cast.cost.zone_costs)
+                    or program.cast.cost.life or program.cast.cost.tap_selector is not None
+                    or program.cast.alternatives):
+                raise RulesViolation('Casting zone costs currently require selected sacrifices plus mana only')
         if program.cast.cost.tap_source:
             raise RulesViolation('A spell cannot pay a tap-symbol source cost')
         if 'Land' in program.types:
@@ -1580,7 +1596,9 @@ def validate(program,_depth=0):
         selector(program.entry_copy)
     if program.spell_targets is not None:
         target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols))
-    effects(program.spell_effects, {'source', 'target'} if program.spell_targets is not None else {'source'},bool(program.cast and program.cast.cost.mana.x_symbols))
+    spell_values={'paid_cost:'+c.cost_id for c in program.cast.cost.zone_costs} if program.cast else frozenset()
+    effects(program.spell_effects, {'source', 'target'} if program.spell_targets is not None else {'source'},
+            bool(program.cast and program.cast.cost.mana.x_symbols),available_values=spell_values)
     target_effects(program.spell_effects,program.spell_targets)
     if program.modal is not None:
         modal=program.modal
@@ -1602,7 +1620,7 @@ def validate(program,_depth=0):
             if type(mode.mode_id) is not str or not mode.mode_id or len(mode.mode_id)>128:raise RulesViolation('Invalid spell mode identity')
             ids.append(mode.mode_id)
             if mode.targets is not None:target(mode.targets,bool(program.cast.cost.mana.x_symbols))
-            effects(mode.effects,{'source','target'} if mode.targets is not None else {'source'},bool(program.cast.cost.mana.x_symbols))
+            effects(mode.effects,{'source','target'} if mode.targets is not None else {'source'},bool(program.cast.cost.mana.x_symbols),available_values=spell_values)
             target_effects(mode.effects,mode.targets)
         if len(ids)!=len(set(ids)):raise RulesViolation('Duplicate spell mode identity')
     if program.enchant is not None and program.spell_targets is not None and program.spell_targets.players is not None:

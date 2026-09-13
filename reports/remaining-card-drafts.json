@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 240,
     "remaining_outside_reviewed_bundle": 94,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 94,
+    "drafts_written": 2,
+    "not_started_on_this_branch": 92,
     "reviewed_bundle_copies": 305,
-    "draft_copies": 0,
+    "draft_copies": 2,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 13
   },
@@ -262,7 +262,7 @@
     {
       "card_id": "crop-rotation",
       "name": "Crop Rotation",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -275,7 +275,18 @@
           "face_id": "crop-rotation",
           "text": "As an additional cost to cast this spell, sacrifice a land.\nSearch your library for a land card, put that card onto the battlefield, then shuffle."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "casting-sacrifices-2026-09-13",
+      "draft_definition": "draft:crop-rotation",
+      "shared_mechanics": [
+        "ZoneCost",
+        "spell announcement transaction",
+        "SearchLibrary"
+      ],
+      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md"
     },
     {
       "card_id": "dance-of-the-dead",
@@ -627,7 +638,7 @@
     {
       "card_id": "fling",
       "name": "Fling",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -640,7 +651,19 @@
           "face_id": "fling",
           "text": "As an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "casting-sacrifices-2026-09-13",
+      "draft_definition": "draft:fling",
+      "shared_mechanics": [
+        "ZoneCost",
+        "spell announcement transaction",
+        "PaidCostStat",
+        "Damage"
+      ],
+      "review_record": "docs/CASTING_SACRIFICE_CARD_DRAFTS.md"
     },
     {
       "card_id": "forgotten-ancient",
@@ -2213,90 +2236,32 @@
     }
   ],
   "hosted_validation": {
-    "commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
-    "run_id": 34769848367,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367",
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "tests_per_platform": 1269,
-    "new_test_methods": 19,
-    "conclusion": "success",
-    "scope": "All 240 source-bound reviewed programs including Animate Dead, the shared keyword targeting correction, replay, source syntax, installation and packaged assets; no production certification"
+    "conclusion": "pending",
+    "scope": "Shared spell sacrifice-cost transactions, both opted-in card drafts, all 240 reviewed programs and hosted conformance"
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "c1f5e17d0fbfee7a5dfe147e086243025797e319",
+    "base_commit": "374d00fc3b76d1820cb4cbafa1e24335f5a29d4c",
     "cards_written": [
-      "animate-dead"
+      "crop-rotation",
+      "fling"
     ],
-    "cards_promoted": [
-      "oblivion-ring",
-      "leonin-relic-warder",
-      "animate-dead"
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Selected sacrifice costs during spell announcement",
+      "PaidCostStat",
+      "Shared spell-frame construction"
     ],
-    "shared_mechanics": [],
-    "shared_corrections": [
-      "Apply shroud and hexproof target restrictions only to battlefield permanents; retain printed keywords in other zones"
-    ],
-    "runtime_checkpoint_schema": 112,
-    "new_test_methods": 19,
-    "validation_status": "passed_github_hosted_ci",
+    "shared_corrections": [],
+    "runtime_checkpoint_schema": 113,
+    "new_test_methods": 24,
+    "validation_status": "pending_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
       "crop-rotation",
       "fling"
     ],
-    "review_work_remaining": "All three cards in this cycle completed printed-face review and hosted validation through the reviewed loader. 94 catalog cards remain unstarted. Next implement casting zone-cost transactions for Crop Rotation and Fling; production admission remains closed.",
-    "draft_validation": {
-      "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
-      "run_id": 34769235605,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1269,
-      "new_test_methods": 19,
-      "conclusion": "success",
-      "scope": "Animate Dead as a draft, shroud/hexproof zone correction, promoted linked-exile programs, replay and packaged assets"
-    },
-    "next_batch_implementation_notes": {
-      "shared_source": "src/edh_gauntlet/rules_casting.py",
-      "reuse_candidates": [
-        "_zone_cost_refs",
-        "_continue_announcement",
-        "_commit_prepared"
-      ],
-      "scope": "Extend existing atomic activation cost handling to accepted spell announcements, preserving payment/replacement choices and pre-sacrifice derived characteristics for Fling. Keep unsupported cost combinations rejected; do not relax the casting zone-cost gate before implementing the complete transaction."
-    },
-    "validated_commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
-    "ci_run_id": 34769848367,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367",
-    "tests_per_platform": 1269,
-    "resolved_validation_issues": [
-      {
-        "commit": "489a001eb58bf09c0f99d1dea470a183901a1d68",
-        "run_id": 34769509663,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769509663",
-        "conclusion": "failure",
-        "failure": "The admission test still expected two fixture-only cards after Animate Dead was promoted; actual count was one.",
-        "platform_results": [
-          {
-            "platform": "ubuntu-latest",
-            "tests": 1269,
-            "failures": 1
-          },
-          {
-            "platform": "windows-latest",
-            "conclusion": "cancelled_after_matrix_failure"
-          }
-        ],
-        "resolution_commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
-        "resolution": "Update the fixture-only count to one and explicitly assert Animate Dead is source-bound reviewed while retaining its historical fixture fingerprint. No runtime or card-program change."
-      }
-    ]
+    "review_work_remaining": "Validate the two complete drafts remotely, then finish printed-face/source-binding review and promotion. 92 catalog cards remain unstarted; production admission remains closed."
   },
   "hosted_validation_history": [
     {
@@ -2383,6 +2348,94 @@
       ],
       "resolution_commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
       "resolution": "Update the fixture-only count to one and explicitly assert Animate Dead is source-bound reviewed while retaining its historical fixture fingerprint. No runtime or card-program change."
+    },
+    {
+      "commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
+      "run_id": 34769848367,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1269,
+      "new_test_methods": 19,
+      "conclusion": "success",
+      "scope": "All 240 source-bound reviewed programs including Animate Dead, the shared keyword targeting correction, replay, source syntax, installation and packaged assets; no production certification"
+    }
+  ],
+  "cycle_history": [
+    {
+      "date": "2026-09-13",
+      "base_commit": "c1f5e17d0fbfee7a5dfe147e086243025797e319",
+      "cards_written": [
+        "animate-dead"
+      ],
+      "cards_promoted": [
+        "oblivion-ring",
+        "leonin-relic-warder",
+        "animate-dead"
+      ],
+      "shared_mechanics": [],
+      "shared_corrections": [
+        "Apply shroud and hexproof target restrictions only to battlefield permanents; retain printed keywords in other zones"
+      ],
+      "runtime_checkpoint_schema": 112,
+      "new_test_methods": 19,
+      "validation_status": "passed_github_hosted_ci",
+      "unresolved_defects": [],
+      "next_batch": [
+        "crop-rotation",
+        "fling"
+      ],
+      "review_work_remaining": "All three cards in this cycle completed printed-face review and hosted validation through the reviewed loader. 94 catalog cards remain unstarted. Next implement casting zone-cost transactions for Crop Rotation and Fling; production admission remains closed.",
+      "draft_validation": {
+        "commit": "c2d994dfe95d2202f1d13c32033b769f63c6e832",
+        "run_id": 34769235605,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769235605",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1269,
+        "new_test_methods": 19,
+        "conclusion": "success",
+        "scope": "Animate Dead as a draft, shroud/hexproof zone correction, promoted linked-exile programs, replay and packaged assets"
+      },
+      "next_batch_implementation_notes": {
+        "shared_source": "src/edh_gauntlet/rules_casting.py",
+        "reuse_candidates": [
+          "_zone_cost_refs",
+          "_continue_announcement",
+          "_commit_prepared"
+        ],
+        "scope": "Extend existing atomic activation cost handling to accepted spell announcements, preserving payment/replacement choices and pre-sacrifice derived characteristics for Fling. Keep unsupported cost combinations rejected; do not relax the casting zone-cost gate before implementing the complete transaction."
+      },
+      "validated_commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
+      "ci_run_id": 34769848367,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367",
+      "tests_per_platform": 1269,
+      "resolved_validation_issues": [
+        {
+          "commit": "489a001eb58bf09c0f99d1dea470a183901a1d68",
+          "run_id": 34769509663,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34769509663",
+          "conclusion": "failure",
+          "failure": "The admission test still expected two fixture-only cards after Animate Dead was promoted; actual count was one.",
+          "platform_results": [
+            {
+              "platform": "ubuntu-latest",
+              "tests": 1269,
+              "failures": 1
+            },
+            {
+              "platform": "windows-latest",
+              "conclusion": "cancelled_after_matrix_failure"
+            }
+          ],
+          "resolution_commit": "8a2f6ca5713fc56139dec706666231acb82f4be7",
+          "resolution": "Update the fixture-only count to one and explicitly assert Animate Dead is source-bound reviewed while retaining its historical fixture fingerprint. No runtime or card-program change."
+        }
+      ]
     }
   ]
 }

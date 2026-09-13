@@ -96,6 +96,7 @@ def project_actor(kernel,actor):
             **({'defending_player':frame['values']['defending_player']} if 'defending_player' in frame.get('values',{}) else {}),
             **({'event_controllers':list(frame['values']['event_controllers'])} if 'event_controllers' in frame.get('values',{}) else {}),
             **({'event_subjects':[target_summary(value) for value in frame['bindings']['event_subject']]} if 'event_subject' in frame.get('bindings',{}) else {}),
+            **({'paid_cost_stats':deepcopy(frame['values']['paid_cost_stats'])} if 'paid_cost_stats' in frame.get('values',{}) else {}),
             'targets':[target_summary(value) for value in frame['targets']],
             **({'modes':[{'mode_id':g['mode_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['mode_groups']]} if 'mode_groups' in frame else {})}
     stack=[frame_summary(frame) for frame in reversed(kernel.stack)]

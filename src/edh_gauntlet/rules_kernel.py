@@ -22,7 +22,7 @@ from .rules_departure import DepartureRules,GameResult
 from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
-from .rules_program import (ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=112
+    CHECKPOINT_SCHEMA=113
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -251,7 +251,8 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
         self.accepted.append({'request_id':request_id,'actor':actor,'indexes':list(indexes)})
         self.pending_choice=None
         mana_actor=self.resolving.get('return_priority') if self.resolving and self.resolving.get('mana_ability') else None
-        if self.announcement and decode(self.announcement['ability']).mana_ability:mana_actor=self.announcement['quote']['actor']
+        if self.announcement and self.announcement['ability'] is not None and decode(self.announcement['ability']).mana_ability:
+            mana_actor=self.announcement['quote']['actor']
         boundary=self.advance()
         if boundary is None and mana_actor in self.state.live_players:self.priority=mana_actor
         return boundary
@@ -744,6 +745,10 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
 
     def _quantity(self,value,frame):
         if type(value) is int:return value
+        if isinstance(value,PaidCostStat):
+            try:amount=frame['values']['paid_cost_stats'][value.cost_id][value.statistic]
+            except KeyError as exc:raise UnsupportedRule('Missing paid-cost statistic') from exc
+            return max(0,amount)
         if isinstance(value,TargetStat):
             amounts=[]
             for ref in dict.fromkeys(self._refs(frame,'target')):
