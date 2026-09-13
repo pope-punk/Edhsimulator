@@ -12,7 +12,8 @@
     "drafts_written": 10,
     "not_started_on_this_branch": 97,
     "reviewed_bundle_copies": 292,
-    "draft_copies": 10
+    "draft_copies": 10,
+    "drafts_remotely_validated": 10
   },
   "cards": [
     {
@@ -674,7 +675,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "ghostly-dancers",
@@ -754,7 +759,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "grasp-of-fate",
@@ -812,7 +821,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "helm-of-the-host",
@@ -1167,7 +1180,7 @@
     {
       "card_id": "mulldrifter",
       "name": "Mulldrifter",
-      "status": "draft_written_validation_pending",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1184,14 +1197,18 @@
       "draft_definition": "draft:mulldrifter",
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
         "Sacrifice",
         "Draw"
       ],
-      "batch": "evoke-2026-09-13"
+      "batch": "evoke-2026-09-13",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "mystic-remora",
@@ -1484,7 +1501,7 @@
     {
       "card_id": "reveillark",
       "name": "Reveillark",
-      "status": "draft_written_validation_pending",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1501,7 +1518,7 @@
       "draft_definition": "draft:reveillark",
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
@@ -1509,7 +1526,11 @@
         "TargetSpec",
         "Move"
       ],
-      "batch": "evoke-2026-09-13"
+      "batch": "evoke-2026-09-13",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "rhystic-study",
@@ -1603,7 +1624,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "sigarda-s-splendor",
@@ -1701,7 +1726,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "sunken-palace",
@@ -1890,7 +1919,7 @@
     {
       "card_id": "vesperlark",
       "name": "Vesperlark",
-      "status": "draft_written_validation_pending",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1907,7 +1936,7 @@
       "draft_definition": "draft:vesperlark",
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "hosted_validation_status": "passed",
       "shared_mechanics": [
         "EntryAlternativeCost",
         "EntryFlagCondition",
@@ -1915,7 +1944,11 @@
         "TargetSpec",
         "Move"
       ],
-      "batch": "evoke-2026-09-13"
+      "batch": "evoke-2026-09-13",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "victor-valgavoth-s-seneschal",
@@ -1955,7 +1988,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "volatile-fault",
@@ -1995,7 +2032,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "pending",
-      "hosted_validation_status": "passed_previous_runtime"
+      "hosted_validation_status": "passed",
+      "hosted_validation": {
+        "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+        "run_id": 34764423605
+      }
     },
     {
       "card_id": "wonderscape-sage",
@@ -2035,17 +2076,17 @@
     }
   ],
   "hosted_validation": {
-    "commit": "90b2612d588bf0386f8e6c595316f9c929b19b21",
-    "run_id": 34759002475,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34759002475",
+    "commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+    "run_id": 34764423605,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1205,
-    "new_test_methods": 24,
+    "tests_per_platform": 1231,
+    "new_test_methods": 18,
     "conclusion": "success",
-    "scope": "Primitive conformance and distribution checks; rules review and production admission remain separate"
+    "scope": "Primitive conformance and distribution checks, including all ten opted-in drafts; rules review and production admission remain separate"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2060,13 +2101,33 @@
       "EntryFlagCondition"
     ],
     "runtime_checkpoint_schema": 110,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
       "review-and-promote-ten-drafts",
       "oblivion-ring",
       "leonin-relic-warder"
     ],
-    "review_work_remaining": "All ten drafts remain outside the reviewed bundle pending card-level review; runtime admission remains separate."
-  }
+    "review_work_remaining": "All ten drafts remain outside the reviewed bundle pending card-level review; runtime admission remains separate.",
+    "validated_commit": "c54c116f7c087290f4c4568f0f841dd6502c37e1",
+    "ci_run_id": 34764423605,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605",
+    "new_test_methods": 18,
+    "tests_per_platform": 1231
+  },
+  "hosted_validation_history": [
+    {
+      "commit": "90b2612d588bf0386f8e6c595316f9c929b19b21",
+      "run_id": 34759002475,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34759002475",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1205,
+      "new_test_methods": 24,
+      "conclusion": "success",
+      "scope": "Primitive conformance and distribution checks; rules review and production admission remain separate"
+    }
+  ]
 }

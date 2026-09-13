@@ -19,9 +19,12 @@ methods cover casting costs, trigger order, blink, control changes, LTB targetin
 replay and checkpoints. See [the evoke batch record](EVOKE_CARD_DRAFTS.md).
 
 The source base for this cycle is `dbf4fd69fb345f86d2ec701e845eb323bb2dcbac`.
-GitHub-hosted CI is pending. Finish that validation and fix any introduced failure
-before the next batch. The earlier seven land drafts passed hosted conformance;
-their inventory status now distinguishes that result from the pending rules review.
+GitHub-hosted [validation run 34764423605](https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605)
+passed source syntax, installation, packaged assets, and **1,231 conformance tests
+on each of Ubuntu and Windows** at code/test commit
+`c54c116f7c087290f4c4568f0f841dd6502c37e1`. All ten drafts now have passing hosted
+conformance evidence. The inventory keeps their pending card-level rules review
+separate. No unresolved failure was found in this batch.
 
 Checkpoint schema is now 110. No local execution or live-game migration is
 authorized. The next cycle should finish the rules review and source bindings

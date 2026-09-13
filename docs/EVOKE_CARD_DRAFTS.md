@@ -2,7 +2,7 @@
 
 This batch adds complete printed programs for Mulldrifter, Reveillark and
 Vesperlark to the isolated draft bundle on `codex/remaining-card-programs`.
-They are authored drafts awaiting hosted validation and card-level review.
+They passed hosted conformance and remain authored drafts awaiting card-level review.
 The reviewed bundle remains at 227 unique cards. The outstanding inventory now
 contains ten written drafts and 97 unstarted cards, still 107 outside that bundle.
 
@@ -61,8 +61,13 @@ Eighteen new methods in
 The existing draft inventory test now validates all ten source-bound programs.
 Land-play and entry-payment cases explicitly select only the seven land drafts.
 
-GitHub-hosted validation is pending. No project code, Python, imports, compilation,
-package installation, tests, or games ran on the user's computer.
+GitHub-hosted [validation run 34764423605](https://github.com/pope-punk/Edhsimulator/actions/runs/34764423605)
+passed source syntax, distribution installation, packaged-asset verification, and
+**1,231 conformance tests on each of Ubuntu and Windows**, including all 18 new
+methods. The validated code/test commit is
+`c54c116f7c087290f4c4568f0f841dd6502c37e1`. This result update changes only documentation
+and inventory metadata. No project code, Python, imports, compilation, package
+installation, tests, or games ran on the user's computer.
 
 ## Compatibility and remaining review
 
