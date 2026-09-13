@@ -387,7 +387,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "resolution-payment-2026-09-13",
       "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
       "reviewed_definition": "catalog:dawn-of-hope",
@@ -396,6 +396,10 @@
       "draft_hosted_validation": {
         "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
         "run_id": 34776935566
+      },
+      "hosted_validation": {
+        "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+        "run_id": 34777218224
       }
     },
     {
@@ -845,7 +849,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "resolution-payment-2026-09-13",
       "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
       "reviewed_definition": "catalog:gleaming-splendor",
@@ -854,6 +858,10 @@
       "draft_hosted_validation": {
         "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
         "run_id": 34776935566
+      },
+      "hosted_validation": {
+        "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+        "run_id": 34777218224
       }
     },
     {
@@ -1768,7 +1776,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "resolution-payment-2026-09-13",
       "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
       "reviewed_definition": "catalog:rhystic-study",
@@ -1777,6 +1785,10 @@
       "draft_hosted_validation": {
         "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
         "run_id": 34776935566
+      },
+      "hosted_validation": {
+        "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+        "run_id": 34777218224
       }
     },
     {
@@ -1903,7 +1915,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "resolution-payment-2026-09-13",
       "review_record": "docs/RESOLUTION_PAYMENT_CARD_REVIEW.md",
       "reviewed_definition": "catalog:smothering-tithe",
@@ -1912,6 +1924,10 @@
       "draft_hosted_validation": {
         "commit": "1d434de1fcabaf4d82d06baf17608df2fa76614f",
         "run_id": 34776935566
+      },
+      "hosted_validation": {
+        "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+        "run_id": 34777218224
       }
     },
     {
@@ -2368,17 +2384,17 @@
     }
   ],
   "hosted_validation": {
-    "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
-    "run_id": 34774679040,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
+    "commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+    "run_id": 34777218224,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1338,
-    "new_test_methods": 45,
+    "tests_per_platform": 1384,
+    "new_test_methods": 46,
     "conclusion": "success",
-    "scope": "All 246 source-bound reviewed programs including Uro, Bulk Up, Grasp of Fate and Prayer of Binding; all 45 new methods use the reviewed loader; replay, source syntax, installation and packaged assets; no production certification"
+    "scope": "All 250 source-bound reviewed programs including Dawn of Hope, Rhystic Study, Smothering Tithe and Gleaming Splendor; all 46 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2403,9 +2419,9 @@
     ],
     "runtime_checkpoint_schema": 115,
     "new_test_methods": 46,
-    "validation_status": "awaiting_reviewed_loader_ci",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "Complete reviewed-loader validation for the four source-bound payment/draw enchantments, then use the recorded counter-transfer family as the next multi-card work order.",
+    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler using the retained counter-transfer work order.",
     "resolved_validation_issues": [
       {
         "commit": "f94894b36674f0be871abb333c2385baf84b210b",
@@ -2447,6 +2463,22 @@
         "Aven Courier chooses the counter kind on resolution; target announcement happens first, and no counter is placed if the target already has that kind.",
         "Essence Channeler needs life-lost-this-turn history for its continuous keywords plus exact last-known death counters; do not approximate with current life total.",
         "Review every printed clause, draft together where useful, and run the new methods only on GitHub-hosted runners."
+      ],
+      "source_paths": [
+        "src/edh_gauntlet/rules_counters.py",
+        "src/edh_gauntlet/rules_state.py",
+        "src/edh_gauntlet/rules_kernel.py",
+        "src/edh_gauntlet/rules_program.py",
+        "src/edh_gauntlet/rules_actor.py",
+        "src/edh_gauntlet/rules_adapter.py"
+      ],
+      "implementation_findings": [
+        "CounterRules._put_counters currently combines replacement planning and the final put_counters_batch commit. Split out a reusable pure placement plan before introducing a transfer transaction; do not remove counters before a replacement choice can suspend.",
+        "RulesState has atomic placements and fixed activation counter costs, but no general removal/transfer transaction. Validate every source, recipient, kind and amount before applying source removals and destination placements once.",
+        "CounterRange.kind is currently a fixed string. Aven Courier needs an explicit serialized chosen-counter-kind binding, with legal options derived at resolution and its target's existing kind checked then.",
+        "Retain separate semantics for copying a departing object's last-known counters (The Ozolith and Essence Channeler death trigger) and actually moving current counters (The Ozolith combat trigger and Forgotten Ancient). Do not follow a stale reference into the new graveyard incarnation.",
+        "Extend current per-turn history carefully for life lost, including damage and life payments, and preserve it through checkpoints. Current life total alone cannot establish that life was lost this turn.",
+        "Current checkpoint schema is 115. If retained state changes, increment it and preserve historical fixtures as lower-bound assertions while rejecting their previous layouts."
       ]
     },
     "draft_validation": {
@@ -2461,7 +2493,11 @@
       "new_test_methods": 46,
       "conclusion": "success",
       "scope": "All four isolated payment/draw enchantments, authenticated resolution mana windows, draw ordinals, checkpoint/replay, source syntax, installation and packaged assets"
-    }
+    },
+    "validated_commit": "648829318cdfc1f6ebd73ff9a4354db55d00a337",
+    "ci_run_id": 34777218224,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
+    "tests_per_platform": 1384
   },
   "hosted_validation_history": [
     {
@@ -2616,6 +2652,19 @@
       "new_test_methods": 45,
       "conclusion": "success",
       "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
+    },
+    {
+      "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+      "run_id": 34774679040,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1338,
+      "new_test_methods": 45,
+      "conclusion": "success",
+      "scope": "All 246 source-bound reviewed programs including Uro, Bulk Up, Grasp of Fate and Prayer of Binding; all 45 new methods use the reviewed loader; replay, source syntax, installation and packaged assets; no production certification"
     }
   ],
   "cycle_history": [

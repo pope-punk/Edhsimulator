@@ -6,8 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **250 source-bound reviewed programs / 315 deck copies**. There are **84 cards outside the
-reviewed bundle**, all unstarted. The four new reviewed entries await final hosted
-reviewed-loader validation. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -27,7 +26,7 @@ The next candidate queue is **Forgotten Ancient, The Ozolith, Aven Courier and
 Essence Channeler**. They share counter-kind snapshots, placement and transfers.
 Implement replacement-aware transfers and authored allocation; Essence Channeler
 also needs life-lost-this-turn history. The inventory records the required work.
-Prioritize unfinished validation before beginning that family.
+Begin that family from the current remote head and preserve the execution policy.
 
 ## Current cycle: resolution payments and draw ordinals
 
@@ -40,7 +39,10 @@ including draws before the enchantment enters. Checkpoint schema is **115**.
 
 The **46 new conformance methods** now use the reviewed loader. [Draft validation 34776935566](https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566)
 passed **1,384 tests on each of Ubuntu and Windows** at `1d434de1fcabaf4d82d06baf17608df2fa76614f`,
-plus syntax, installation and packaged assets. The reviewed-loader run is pending.
+plus syntax, installation and packaged assets. [Reviewed-loader validation 34777218224](https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224)
+also passed **1,384 tests on each platform** at `648829318cdfc1f6ebd73ff9a4354db55d00a337`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after that validation.
 [The cycle review](RESOLUTION_PAYMENT_CARD_REVIEW.md) records the rules mapping,
 source bindings, scope and the two corrected fixture setup errors.
 

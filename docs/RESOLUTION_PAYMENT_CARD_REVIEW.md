@@ -67,7 +67,10 @@ resolution payments. Unsupported node shapes fail compilation.
 [Draft run 34776935566](https://github.com/pope-punk/Edhsimulator/actions/runs/34776935566) passed **1,384 tests on both
 Ubuntu and Windows** at `1d434de1fcabaf4d82d06baf17608df2fa76614f`, together with source syntax,
 installation and packaged-asset checks. The same 46 new methods now load the four
-source-bound reviewed programs; reviewed-loader validation is pending.
+source-bound reviewed programs. [Reviewed-loader run 34777218224](https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224)
+also passed **1,384 tests on both platforms** at `648829318cdfc1f6ebd73ff9a4354db55d00a337`.
+The result-recording commit changes documentation/inventory only, with no runtime,
+program or test changes after validation.
 
 The first draft run `f94894b36674f0be871abb333c2385baf84b210b` / 34776728530 exposed two
 fixture setup mistakes: a stale moved source reference and a prompt assertion for
