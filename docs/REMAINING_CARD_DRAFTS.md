@@ -8,6 +8,26 @@ local Python, installation, tests or games are authorized. The library contains
 **242 reviewed programs / 307 deck copies**. There are **92 cards outside the
 reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
+## Cycle ambition and context use
+
+The user requests slightly more ambitious cycles. Aim for **4–8 complete cards**
+where shared mechanics make that practical. This is a planning target: a difficult
+primitive may justify fewer, with the concrete reason recorded. Continue into
+another coherent family when useful context remains.
+
+Prefer primitives that unlock several cards, accompanied by cards that already
+fit existing vocabulary. During hosted CI waits, author or review independent
+work. Use focused reads, concise retained findings and meaningful commit
+boundaries; group related validation and avoid redundant full-suite runs.
+Completion still requires every printed clause, source-bound review and relevant
+successful hosted validation.
+
+The next candidate queue is **Uro and Bulk Up** for graveyard alternative casting,
+followed by **Dawn of Hope, Rhystic Study and Smothering Tithe** for optional mana
+payments during resolution. Inspect the actual shared mechanics and adjust the
+queue as needed. These five candidates remain unstarted. Uro's detailed escape
+notes remain in the inventory. The hourly heartbeat now carries this policy.
+
 ## Current cycle: casting sacrifices for Crop Rotation and Fling
 
 Both reviewed programs reuse selected ZoneCost sacrifices. The shared casting
@@ -32,7 +52,8 @@ The following result-recording commit changes only documentation and inventory
 validation metadata; no runtime, card-program or test changes follow this result.
 
 Checkpoint schema is now **113**. Previous games and checkpoints are not migrated.
-Next: Uro's escape payment/permission and attack trigger. All project execution remains hosted.
+Next: the multi-card queue above, starting with Uro's escape payment/permission
+and attack trigger. All project execution remains hosted.
 
 ## Prior cycle: Animate Dead and linked-exile review
 

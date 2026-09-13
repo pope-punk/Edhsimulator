@@ -2290,9 +2290,13 @@
     "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
-      "uro-titan-of-nature-s-wrath"
+      "uro-titan-of-nature-s-wrath",
+      "bulk-up",
+      "dawn-of-hope",
+      "rhystic-study",
+      "smothering-tithe"
     ],
-    "review_work_remaining": "Crop Rotation and Fling completed printed-face review, source binding and successful hosted validation through the reviewed loader. No unfinished work remains for this batch. 92 catalog cards remain unstarted. Next implement Uro's graveyard-only escape cost/permission and missing attack trigger; production admission remains closed.",
+    "review_work_remaining": "The previous casting-sacrifice batch is complete. 92 cards remain unstarted. The user requests larger cycles: assess Uro and Bulk Up together, then the Dawn of Hope/Rhystic Study/Smothering Tithe payment family within available context. Follow the execution policy without weakening completion standards.",
     "next_batch_implementation_notes": {
       "shared_sources": [
         "src/edh_gauntlet/rules_casting.py",
@@ -2553,5 +2557,39 @@
         }
       ]
     }
-  ]
+  ],
+  "execution_policy": {
+    "updated_date": "2026-09-13",
+    "user_direction": "Use the available context slightly more ambitiously to complete more cards.",
+    "target_cards_per_cycle": {
+      "minimum": 4,
+      "maximum": 8,
+      "kind": "soft planning target; complexity may justify fewer"
+    },
+    "priorities": [
+      "Reuse and extend shared primitives that unlock several cards.",
+      "Continue beyond the first small completed batch when useful context remains.",
+      "Use hosted CI waits for independent authoring or source review.",
+      "Read focused source ranges and avoid repeated full inventory or file dumps.",
+      "Keep exact validation evidence and all existing review, privacy and compatibility requirements."
+    ],
+    "candidate_families": [
+      {
+        "cards": [
+          "uro-titan-of-nature-s-wrath",
+          "bulk-up"
+        ],
+        "focus": "Graveyard alternative casting permissions; escape payment and flashback departure semantics. Preserve Uro's detailed implementation notes."
+      },
+      {
+        "cards": [
+          "dawn-of-hope",
+          "rhystic-study",
+          "smothering-tithe"
+        ],
+        "focus": "Optional mana payments during resolution, correct paying player and payment-versus-effect branches; reuse existing draw and token primitives."
+      }
+    ],
+    "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
+  }
 }
