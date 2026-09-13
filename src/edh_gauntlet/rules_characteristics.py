@@ -10,7 +10,7 @@ import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -62,6 +62,7 @@ def counters_match(ranges, obj):
 def matches(selector, obj, view, source):
     if selector.characteristics and obj.zone==Zone.BATTLEFIELD and 'Creature' not in view.types and any(bound.statistic in {'power','toughness'} for bound in selector.characteristics):return False
     return (not obj.phased and obj.zone == selector.zone
+        and (not isinstance(selector,SupertypeSelector) or not set(selector.excluded_supertypes)&view.supertypes)
         and counters_match(selector.counters,obj)
         and (selector.commander is None or obj.commander==selector.commander)
         and (selector.tapped is None or obj.tapped==selector.tapped)

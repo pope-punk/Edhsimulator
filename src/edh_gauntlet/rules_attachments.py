@@ -1,6 +1,7 @@
 """Exact-incarnation Aura and Equipment attachments and delayed leaves triggers.
 
-Protection, reconfigure, Fortifications and phasing propagation remain unsupported.
+Protection, reconfigure and Fortifications remain unsupported. Phasing propagation
+is supplied by the shared PhasingRules lifecycle.
 The mixin shares the kernel's mutation/choice/event boundaries; it has no card
 names, independent scheduler or alternate state store.
 """

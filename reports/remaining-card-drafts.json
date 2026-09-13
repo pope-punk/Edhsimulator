@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 262,
     "remaining_outside_reviewed_bundle": 72,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 72,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 68,
     "reviewed_bundle_copies": 327,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 35
   },
@@ -537,7 +537,7 @@
     {
       "card_id": "desert-warfare",
       "name": "Desert Warfare",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -550,7 +550,13 @@
           "face_id": "desert-warfare",
           "text": "Whenever you sacrifice a Desert and whenever a Desert card is put into your graveyard from your hand or library, put that card onto the battlefield under your control at the beginning of your next end step.\nAt the beginning of combat on your turn, if you control five or more Deserts, create that many 1/1 red, green, and white Sand Warrior creature tokens. They gain haste."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "phasing-choices-2026-09-13",
+      "draft_definition": "draft:desert-warfare",
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
     },
     {
       "card_id": "devouring-light",
@@ -1201,7 +1207,7 @@
     {
       "card_id": "indulgent-tormentor",
       "name": "Indulgent Tormentor",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1214,7 +1220,13 @@
           "face_id": "indulgent-tormentor",
           "text": "Flying\nAt the beginning of your upkeep, draw a card unless target opponent sacrifices a creature or pays 3 life."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "phasing-choices-2026-09-13",
+      "draft_definition": "draft:indulgent-tormentor",
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
     },
     {
       "card_id": "innkeeper-s-talent",
@@ -2216,7 +2228,7 @@
     {
       "card_id": "talon-gates-of-madara",
       "name": "Talon Gates of Madara",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2229,7 +2241,13 @@
           "face_id": "talon-gates-of-madara",
           "text": "When this land enters, up to one target creature phases out.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.\n{4}: Put this card from your hand onto the battlefield."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "phasing-choices-2026-09-13",
+      "draft_definition": "draft:talon-gates-of-madara",
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
     },
     {
       "card_id": "the-cruelty-of-gix",
@@ -2562,7 +2580,7 @@
     {
       "card_id": "volatile-fault",
       "name": "Volatile Fault",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2575,7 +2593,13 @@
           "face_id": "volatile-fault",
           "text": "{T}: Add {C}.\n{1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls. That player may search their library for a basic land card, put it onto the battlefield, then shuffle. You create a Treasure token."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "phasing-choices-2026-09-13",
+      "draft_definition": "draft:volatile-fault",
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
     },
     {
       "card_id": "watery-grave",
@@ -2673,117 +2697,57 @@
   ],
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "e4aee73dd1af7739487ff3ac4919bcc5af394a75",
+    "base_commit": "9c63ed66dbd07c6fc20deab92314e367c29203c5",
     "cards_written": [
-      "dance-of-the-dead",
-      "mystic-remora",
-      "touch-the-spirit-realm",
-      "arcane-denial"
-    ],
-    "cards_promoted": [
-      "dance-of-the-dead",
-      "mystic-remora",
-      "touch-the-spirit-realm",
-      "arcane-denial"
-    ],
-    "shared_mechanics": [
-      "Captured cumulative mana costs",
-      "Attached-controller upkeep and untap suppression",
-      "One-shot delayed steps with original lexical captures",
-      "Optional draw count chosen before draws",
-      "Spell type exclusions",
-      "Exact hand-origin announcement reveal"
-    ],
-    "runtime_checkpoint_schema": 118,
-    "state_checkpoint_schema": 13,
-    "new_test_methods": 47,
-    "validation_status": "passed_github_hosted_ci",
-    "unresolved_defects": [],
-    "review_work_remaining": "All four printed programs completed exact source binding and reviewed-loader hosted validation. Continue the retained Talon Gates, Desert Warfare, Necromancy and Indulgent Tormentor requirements, selecting a practical complete subset.",
-    "selection_note": "Arcane Denial replaces Talon Gates in this cycle because it shares the new delayed-step primitive. Talon Gates requires full direct/indirect phasing, untap restoration and multiplayer departure handling under CR 702.26n; a single state toggle is insufficient. Those requirements remain queued.",
-    "next_batch": [
       "talon-gates-of-madara",
       "desert-warfare",
+      "indulgent-tormentor",
+      "volatile-fault"
+    ],
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Direct/indirect phasing and departed-controller untap timing",
+      "Qualified zone observations and public successor bindings",
+      "Next-own-end-step delayed returns",
+      "Ongoing noncopiable token keyword grants",
+      "Opponent-authored life or sacrifice payment",
+      "Captured players optionally search their own libraries",
+      "Excluded-supertype selectors"
+    ],
+    "runtime_checkpoint_schema": 119,
+    "state_checkpoint_schema": 13,
+    "new_test_methods": 63,
+    "validation_status": "pending_github_hosted_ci",
+    "unresolved_defects": [],
+    "review_work_remaining": "Validate all four isolated drafts and 63 new conformance methods on GitHub-hosted Ubuntu/Windows; fix failures, bind exact source facts and promote, then validate the reviewed loader.",
+    "selection_note": "Talon Gates is implemented with its complete phasing lifecycle. Volatile Fault joins Desert Warfare and Indulgent Tormentor through captured-player choice support. Necromancy remains unstarted because cast-time sorcery eligibility and permanent-to-Aura conversion need separate support.",
+    "next_batch": [
       "necromancy",
-      "indulgent-tormentor"
+      "nullpriest-of-oblivion",
+      "karmic-guide",
+      "sigarda-s-splendor"
     ],
     "next_batch_implementation_notes": {
       "cards": [
-        "talon-gates-of-madara",
-        "desert-warfare",
         "necromancy",
-        "indulgent-tormentor"
-      ],
-      "reuse": [
-        "New DelayedNextStep captures and next-turn gate",
-        "PayMana/PayRepeatedMana and exact-source attachment primitives",
-        "Announcement-bound hand reveal",
-        "Captured controller values and exact zone-result bindings"
+        "nullpriest-of-oblivion",
+        "karmic-guide",
+        "sigarda-s-splendor"
       ],
       "requirements": [
-        "Talon Gates still needs full phasing with attachment propagation, retained identities and counters, controller-at-phase-out scheduling, combat removal and CR 702.26n for a departed controller. Do not enable automatic phasing via the existing single-object toggle alone.",
-        "Desert Warfare needs a sacrifice-specific battlefield Desert event plus Desert discards/mills, exact graveyard references, a next-own-end-step delay and combat creation of haste Sand Warriors. Extend the delayed-step shape explicitly for controller-only timing before authoring it.",
-        "Necromancy needs normal sorcery-versus-flash timing captured at cast announcement, optional instant permission, the complete permanent-to-Aura attachment change, and sacrifice at the next cleanup only for non-sorcery casting. Reuse the new delay lifecycle after supporting that exact step.",
-        "Indulgent Tormentor requires a target opponent's choice between sacrificing a creature, paying 3 life or allowing a draw. Add a complete resolution payment-choice transaction with correct paying actor and unavailable options; current PayMana only handles mana."
+        "Necromancy: record actual sorcery eligibility before cast announcement; support next-cleanup delay and noncopiable Aura conversion/attachment. Reuse new ongoing effects and exact attachment/departure handling.",
+        "Nullpriest of Oblivion: implement an actual optional additional kicker cost, not a disguised alternative total. Preserve announcement identity, reductions, kicked flags and cast-to-entry binding; reuse EntryFlagCondition and normal graveyard return.",
+        "Karmic Guide: add complete protection from black across damage, blocking, targeting and attachments, plus an echo condition keyed to control acquired since the previous upkeep. PayMana and reanimation already exist.",
+        "Sigarda's Splendor: capture life total as an entry replacement without using the stack, preserve per-incarnation noted totals and update after each upkeep comparison. Its white spell trigger needs actual spell-color filtering."
       ],
-      "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion.",
-      "implementation_findings": [
-        "DelayedNextStep currently accepts only unqualified upkeep/end_step patterns and an optional next-turn gate. Its retained controller and exact bindings are available; controller-only end steps and cleanup must be explicitly validated and tested before use.",
-        "TurnRules._begin_cleanup already begins the cleanup phase before discard/expiration and has cleanup-priority/repeated-cleanup handling. Necromancy must use those boundaries and preserve actual cast-time sorcery eligibility; a flash keyword alone does not record the required condition.",
-        "EventPattern lacks cause and subtype predicates. Desert Warfare must distinguish actual sacrifice from arbitrary battlefield departures and observe Desert cards arriving from hand/library using event-time characteristics and exact destination references.",
-        "PayMana has one authenticated payer and frozen mana payment. Indulgent Tormentor needs a distinct complete choice among life payment, creature sacrifice and allowing a draw, with selections/payments performed by the targeted opponent.",
-        "The hand-origin announcement reveal is now available. Talon Gates still cannot use RulesState.phase as a complete implementation: direct/indirect phase links, original untap scheduling and CR 702.26n remain absent."
+      "reuse": [
+        "OngoingEffect and WithCreatedTokens separate effects from copiable characteristics",
+        "PhasingRules exact physical identities and suspended attachment lifecycle",
+        "Existing PayMana and new PayLifeOrSacrifice transactions",
+        "Captured values and DelayedNextStep source-independent scheduling"
       ],
-      "source_paths": [
-        "src/edh_gauntlet/rules_attachments.py",
-        "src/edh_gauntlet/rules_turns.py",
-        "src/edh_gauntlet/rules_casting.py",
-        "src/edh_gauntlet/rules_program.py",
-        "src/edh_gauntlet/rules_state.py",
-        "src/edh_gauntlet/rules_kernel.py"
-      ],
-      "primary_references": [
-        "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-        "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
-      ]
-    },
-    "draft_validation": {
-      "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
-      "run_id": 34787026975,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1546,
-      "new_test_methods": 47,
-      "conclusion": "success",
-      "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
-    },
-    "resolved_validation_issues": [
-      {
-        "commit": "3ed90e487e98ed0239006217815b0d4f543df133",
-        "run_id": 34787419424,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787419424",
-        "conclusion": "failure",
-        "tests_run": 1546,
-        "failures": 0,
-        "errors": 4,
-        "platforms": {
-          "ubuntu": "1546 tests; four metadata assertion errors in one parametrized test",
-          "windows": "cancelled by matrix fail-fast"
-        },
-        "issues": [
-          "The promoted fixture looked for source_facts_sha256 directly on a loader result instead of its nested review metadata."
-        ],
-        "resolution": "Use the loader's review record for source-hash and encoded-program assertions and its program field for execution. Runtime, card programs and all assertions are retained; rerun the reviewed-loader suite.",
-        "resolution_commit": "0a9259b8142247880f7493d7ee02d8e415d996b2"
-      }
-    ],
-    "validated_commit": "0a9259b8142247880f7493d7ee02d8e415d996b2",
-    "ci_run_id": 34787728272,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272",
-    "tests_per_platform": 1546
+      "guard": "Refresh source and choose a practical complete subset. No local execution, no migration of games and no production admission."
+    }
   },
   "hosted_validation_history": [
     {
@@ -3612,6 +3576,120 @@
       "ci_run_id": 34782734602,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
       "tests_per_platform": 1499
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "e4aee73dd1af7739487ff3ac4919bcc5af394a75",
+      "cards_written": [
+        "dance-of-the-dead",
+        "mystic-remora",
+        "touch-the-spirit-realm",
+        "arcane-denial"
+      ],
+      "cards_promoted": [
+        "dance-of-the-dead",
+        "mystic-remora",
+        "touch-the-spirit-realm",
+        "arcane-denial"
+      ],
+      "shared_mechanics": [
+        "Captured cumulative mana costs",
+        "Attached-controller upkeep and untap suppression",
+        "One-shot delayed steps with original lexical captures",
+        "Optional draw count chosen before draws",
+        "Spell type exclusions",
+        "Exact hand-origin announcement reveal"
+      ],
+      "runtime_checkpoint_schema": 118,
+      "state_checkpoint_schema": 13,
+      "new_test_methods": 47,
+      "validation_status": "passed_github_hosted_ci",
+      "unresolved_defects": [],
+      "review_work_remaining": "All four printed programs completed exact source binding and reviewed-loader hosted validation. Continue the retained Talon Gates, Desert Warfare, Necromancy and Indulgent Tormentor requirements, selecting a practical complete subset.",
+      "selection_note": "Arcane Denial replaces Talon Gates in this cycle because it shares the new delayed-step primitive. Talon Gates requires full direct/indirect phasing, untap restoration and multiplayer departure handling under CR 702.26n; a single state toggle is insufficient. Those requirements remain queued.",
+      "next_batch": [
+        "talon-gates-of-madara",
+        "desert-warfare",
+        "necromancy",
+        "indulgent-tormentor"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "talon-gates-of-madara",
+          "desert-warfare",
+          "necromancy",
+          "indulgent-tormentor"
+        ],
+        "reuse": [
+          "New DelayedNextStep captures and next-turn gate",
+          "PayMana/PayRepeatedMana and exact-source attachment primitives",
+          "Announcement-bound hand reveal",
+          "Captured controller values and exact zone-result bindings"
+        ],
+        "requirements": [
+          "Talon Gates still needs full phasing with attachment propagation, retained identities and counters, controller-at-phase-out scheduling, combat removal and CR 702.26n for a departed controller. Do not enable automatic phasing via the existing single-object toggle alone.",
+          "Desert Warfare needs a sacrifice-specific battlefield Desert event plus Desert discards/mills, exact graveyard references, a next-own-end-step delay and combat creation of haste Sand Warriors. Extend the delayed-step shape explicitly for controller-only timing before authoring it.",
+          "Necromancy needs normal sorcery-versus-flash timing captured at cast announcement, optional instant permission, the complete permanent-to-Aura attachment change, and sacrifice at the next cleanup only for non-sorcery casting. Reuse the new delay lifecycle after supporting that exact step.",
+          "Indulgent Tormentor requires a target opponent's choice between sacrificing a creature, paying 3 life or allowing a draw. Add a complete resolution payment-choice transaction with correct paying actor and unavailable options; current PayMana only handles mana."
+        ],
+        "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion.",
+        "implementation_findings": [
+          "DelayedNextStep currently accepts only unqualified upkeep/end_step patterns and an optional next-turn gate. Its retained controller and exact bindings are available; controller-only end steps and cleanup must be explicitly validated and tested before use.",
+          "TurnRules._begin_cleanup already begins the cleanup phase before discard/expiration and has cleanup-priority/repeated-cleanup handling. Necromancy must use those boundaries and preserve actual cast-time sorcery eligibility; a flash keyword alone does not record the required condition.",
+          "EventPattern lacks cause and subtype predicates. Desert Warfare must distinguish actual sacrifice from arbitrary battlefield departures and observe Desert cards arriving from hand/library using event-time characteristics and exact destination references.",
+          "PayMana has one authenticated payer and frozen mana payment. Indulgent Tormentor needs a distinct complete choice among life payment, creature sacrifice and allowing a draw, with selections/payments performed by the targeted opponent.",
+          "The hand-origin announcement reveal is now available. Talon Gates still cannot use RulesState.phase as a complete implementation: direct/indirect phase links, original untap scheduling and CR 702.26n remain absent."
+        ],
+        "source_paths": [
+          "src/edh_gauntlet/rules_attachments.py",
+          "src/edh_gauntlet/rules_turns.py",
+          "src/edh_gauntlet/rules_casting.py",
+          "src/edh_gauntlet/rules_program.py",
+          "src/edh_gauntlet/rules_state.py",
+          "src/edh_gauntlet/rules_kernel.py"
+        ],
+        "primary_references": [
+          "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
+        ]
+      },
+      "draft_validation": {
+        "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+        "run_id": 34787026975,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1546,
+        "new_test_methods": 47,
+        "conclusion": "success",
+        "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
+      },
+      "resolved_validation_issues": [
+        {
+          "commit": "3ed90e487e98ed0239006217815b0d4f543df133",
+          "run_id": 34787419424,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787419424",
+          "conclusion": "failure",
+          "tests_run": 1546,
+          "failures": 0,
+          "errors": 4,
+          "platforms": {
+            "ubuntu": "1546 tests; four metadata assertion errors in one parametrized test",
+            "windows": "cancelled by matrix fail-fast"
+          },
+          "issues": [
+            "The promoted fixture looked for source_facts_sha256 directly on a loader result instead of its nested review metadata."
+          ],
+          "resolution": "Use the loader's review record for source-hash and encoded-program assertions and its program field for execution. Runtime, card programs and all assertions are retained; rerun the reviewed-loader suite.",
+          "resolution_commit": "0a9259b8142247880f7493d7ee02d8e415d996b2"
+        }
+      ],
+      "validated_commit": "0a9259b8142247880f7493d7ee02d8e415d996b2",
+      "ci_run_id": 34787728272,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272",
+      "tests_per_platform": 1546
     }
   ],
   "execution_policy": {

@@ -4,7 +4,7 @@ Combat and player departures delegate to shared interpreters. Initialization,
 mulligans and unsupported turn actions remain gated.
 """
 from dataclasses import dataclass
-from .rules_state import Zone, RulesViolation
+from .rules_state import ObjectRef, Zone, RulesViolation
 from .rules_program import decode, Draw, Move, Select, Selector, Discard
 from .rules_choices import PriorityBoundary
 
@@ -41,12 +41,9 @@ class TurnRules:
         self._start_turn(active)
         return self.advance()
 
-    def _validate_untap(self, active):
-        if any(obj.phased for obj in self.state.objects(Zone.BATTLEFIELD, controller=active)):
-            raise RulesViolation('Automatic phasing and attachment propagation are not yet supported')
-
     def _start_turn(self, active):
         self._validate_untap(active)
+        self._phase_at_untap(active)
         blocked=tuple(ref for ref,view in self.characteristics().items() if view.untap_blocked)
         self.state.empty_mana_pools(); self.state.start_turn(active,skip_untap=blocked)
         self.active = active; self.priority = active; self.passes = []
@@ -108,8 +105,17 @@ class TurnRules:
         else:self._finish_cleanup_actions()
 
     def _finish_cleanup_actions(self):
-        if self.temporary_effects:
-            self.temporary_effects=[]
+        retained=[]
+        for row in self.temporary_effects:
+            if row.get('duration')!='indefinite':continue
+            refs=[]
+            for value in row['refs']:
+                try:obj=self.state.get(ObjectRef.from_json(value))
+                except RulesViolation:continue
+                if obj.zone==Zone.BATTLEFIELD:refs.append(value)
+            if refs:retained.append({**row,'refs':refs})
+        if retained!=self.temporary_effects:
+            self.temporary_effects=retained
             self.state.allocate_effect_timestamp()
             self._event('temporary_effects_expired')
         if self.player_effects:

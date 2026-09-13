@@ -1,12 +1,13 @@
 """Actor-bound, fixed-quantity own-library searches with deterministic shuffling.
 
-Search replacements and opponents' libraries remain separate unsupported
-semantics. Tapped search placement modifies the initial entry proposal. Scry partitions only the authorized top
+Search replacements and searching another player's library remain unsupported.
+SearchByPlayer lets a captured player optionally search their own library. Tapped search placement modifies the initial entry proposal. Scry partitions only the authorized top
 cards in one ordered choice without showing the rest of the library. Production visibility adapters
 must keep search choices, shuffle seeds and physical library order private.
 """
 from .rules_state import ObjectRef,Zone,RulesViolation
 from .rules_choices import Option
+from .rules_program import SearchByPlayer,decode
 from .rules_characteristics import matches
 
 
@@ -14,16 +15,33 @@ class LibraryRules:
     def inspect_library_search(self,actor):
         """The searching player may look at the whole library, not only matches."""
         frame=self.resolving
-        if (frame is None or frame['controller']!=actor or actor not in self.state.live_players
-                or not frame['tasks'] or frame['tasks'][0]['effect']['node']!='SearchLibrary'
-                or frame['tasks'][0]['effect'].get('partition_player') is not None and 'search_plan' in frame['tasks'][0]):
+        task=frame['tasks'][0] if frame is not None and frame['tasks'] else None
+        effect=decode(task['effect']) if task is not None else None
+        context={**frame,'values':task.get('values',frame.get('values',{}))} if task is not None else None
+        search_actor=self._search_actor(effect,context) if task is not None and task['effect']['node'] in {'SearchLibrary','SearchByPlayer'} else None
+        if (search_actor!=actor or actor not in self.state.live_players
+                or isinstance(effect,SearchByPlayer) and effect.optional_search and not task.get('search_accepted')
+                or effect.partition_player is not None and 'search_plan' in task):
             raise RulesViolation('No authorized library search inspection')
         objects=sorted(self.state.zone(actor,Zone.LIBRARY),key=lambda obj:(self.definition(obj).name,obj.ref.card_id))
         return tuple(Option(obj.ref.card_id+'@'+str(obj.ref.incarnation),self.definition(obj).name,ref=obj.ref) for obj in objects)
 
+    def _search_actor(self,effect,frame):
+        if not isinstance(effect,SearchByPlayer):return frame['controller']
+        players=self._players(frame,effect.players)
+        if len(players)>1:raise RulesViolation('Search requires one captured player')
+        return players[0] if players else None
+
     def _search_library(self,effect,frame,task):
-        actor=frame['controller']
+        actor=self._search_actor(effect,frame)
         if actor not in self.state.live_players:return
+        if isinstance(effect,SearchByPlayer):
+            if effect.optional_search and 'search_accepted' not in task:
+                chosen=self._choose(task['id']+':search-offer',actor,'optional_search',
+                    'Search your library?',(Option('yes','Search'),Option('no','Do not search')),1,1)
+                task['search_accepted']=chosen[0].key=='yes'
+            if effect.optional_search and not task['search_accepted']:return
+            frame={**frame,'controller':actor}
         if 'search_plan' not in task:
             selector=effect.selector;source=self._source(frame)
             # The source's controller may have changed since the ability began;

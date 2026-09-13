@@ -237,7 +237,22 @@
       "611.3",
       "613.11",
       "702.24a",
-      "702.24b"
+      "702.24b",
+      "118.3b",
+      "400.7e",
+      "502.1",
+      "702.26a",
+      "702.26c",
+      "702.26d",
+      "702.26e",
+      "702.26g",
+      "702.26h",
+      "702.26i",
+      "702.26j",
+      "702.26k",
+      "702.26m",
+      "702.26n",
+      "707.2"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -296,7 +311,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules."
+      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules. Talon Gates of Madara's optional creature phasing, both mana abilities and revealed hand activation; Desert Warfare's sacrifice/hand/library observations, exact delayed returns, combat threshold and noncopiable haste."
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-01-22",
@@ -358,7 +373,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/the-lost-caverns-of-ixalan-release-notes",
-      "scope": "Xolatoyac's printed 6/6 body, targeted flood counter and source-independent Island duration; intrinsic Island mana and retained types."
+      "scope": "Xolatoyac's printed 6/6 body, targeted flood counter and source-independent Island duration; intrinsic Island mana and retained types. Volatile Fault's complete costs, optional opponent search even if destruction fails, Treasure creation and all-illegal-target resolution rule."
     },
     {
       "url": "https://magic.wizards.com/en/news/announcements/foundations-update-bulletin",

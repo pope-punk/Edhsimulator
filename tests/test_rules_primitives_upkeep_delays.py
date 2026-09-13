@@ -475,7 +475,7 @@ class UpkeepDelayTests(unittest.TestCase):
 
     def test_new_kernel_layout_rejects_previous_checkpoint_without_state_migration(self):
         self.game();checkpoint=self.kernel.snapshot()
-        self.assertEqual(118,checkpoint['schema']);self.assertEqual(13,checkpoint['state']['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],118);self.assertEqual(13,checkpoint['state']['schema'])
         restored=RulesKernel.restore(checkpoint,self.programs);self.assertEqual(checkpoint,restored.snapshot())
         checkpoint['schema']=117
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)

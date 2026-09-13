@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **262 source-bound reviewed programs / 327 deck copies**. There are **72 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**: four authored drafts and 68 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,26 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: upkeep payments and delayed steps
+## Current cycle: phasing and player-authored choices
+
+Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault
+are complete printed programs in the isolated draft bundle. Shared work supplies
+direct/indirect phasing with departed-controller timing, qualified Desert zone
+observations, next-own-end-step returns, permanent noncopiable token grants,
+opponent-authored life/sacrifice payments and optional own-library searches by
+captured players. Volatile Fault uses that search work; Necromancy remains queued
+for cast-time sorcery eligibility, cleanup delay and full Aura conversion.
+
+Kernel schema is **119**, state schema **13**. The **63 new conformance methods**
+are ready for GitHub-hosted validation. Draft validation and reviewed-bundle
+promotion remain pending; reviewed coverage stays at 262 until completion.
+See [the cycle review](PHASING_CHOICE_CARD_REVIEW.md).
+
+Finish hosted draft validation, bind the exact source facts, promote complete
+programs and run the required reviewed-loader checks. Keep all project execution
+on GitHub-hosted runners, with no game migration or production admission.
+
+## Previous cycle: upkeep payments and delayed steps
 
 Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Arcane Denial have
 complete printed-face review and exact source bindings. Shared additions provide
