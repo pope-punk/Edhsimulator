@@ -81,8 +81,8 @@ schemas while continuing to reject its unsupported predecessor.
 source facts, authenticated allocation, atomic failure, large budgets,
 replacement ordering, checkpoint/replay, exact departure copies, target and
 source changes, counter-kind timing, life history and compiler rejection.
-Hosted draft validation is pending. Promotion and a second hosted run through
-the reviewed loader remain required. This document records printed-card review;
+The same methods now load the four source-bound reviewed programs. A second
+hosted run through that loader is pending. This document records printed-card review;
 it is not a production admission certificate.
 
 The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt)
@@ -93,4 +93,20 @@ The first [draft run](https://github.com/pope-punk/Edhsimulator/actions/runs/347
 ran 1,437 tests on Ubuntu with one scenario-window fixture error; Windows was
 cancelled by matrix fail-fast. The fixture now opens each empty-stack caster's
 scenario window explicitly. Runtime and card programs were unchanged. The corrected
-run is pending.
+run passed; see the result below.
+
+[Draft validation 34779216050](https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050)
+passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910`.
+
+All four complete printed programs are promoted with exact source-fact digests.
+The other 250 reviewed rows are unchanged. The bundle now contains **254 unique
+reviewed cards / 319 deck copies**, with **80 unstarted cards / 81 copies** and
+zero drafts. Reviewed-loader hosted validation is pending.
+
+| Card | Source-facts SHA-256 |
+| --- | --- |
+| Aven Courier | `8b3b0586224fa7b9478aa813bac65808142d8b026cadade3ad18a4326de0992b` |
+| Essence Channeler | `a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862` |
+| Forgotten Ancient | `e3c90e3543c9d71797ec0c67d4bc4ee7f6de9b91b6fa31856a35102c65a1f07a` |
+| The Ozolith | `38d3ab4a07bf008fbe1252996c25ac9dff5ae755497ee1b7b4e0738fadf032ab` |

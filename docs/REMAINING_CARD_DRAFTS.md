@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**250 source-bound reviewed programs / 315 deck copies**. There are **84 cards outside the
-reviewed bundle**, 80 unstarted and four isolated drafts awaiting hosted validation. Reviewed coverage is not production certification.
+**254 source-bound reviewed programs / 319 deck copies**. There are **80 cards outside the
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,16 +25,29 @@ successful hosted validation.
 ## Current cycle: counter transfers and turn life-loss history
 
 Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler have complete
-draft programs and printed-face mappings. The shared code adds atomic
-replacement-aware transfers, authored allocation, departure snapshots and gross
-life-lost-this-turn history. Essence Channeler's source toughness is corrected
-from 2 to 1 using Wizards' release notes. Kernel checkpoint schema is **116**;
-state schema is **13**.
+printed-face review and exact source bindings. Shared primitives provide
+atomic replacement-aware counter movement, authenticated authored allocation,
+last-known departure snapshots and resolution-time counter-kind choice.
+Gross life-loss history includes damage and life payments even when gain offsets
+the loss. Essence Channeler's catalog toughness is corrected from 2 to 1 using
+Wizards' release notes.
 
-The **53 new conformance methods** await GitHub-hosted validation. Keep these
-programs isolated until the draft run passes, then promote exact source bindings
-and validate the same methods through the reviewed loader.
+Kernel checkpoint schema is **116** and state schema is **13**. Existing games
+and checkpoints are not migrated; production admission remains closed.
+The **53 new conformance methods** now use the reviewed loader.
+[Draft validation 34779216050](https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050)
+passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910`.
+Reviewed-loader GitHub-hosted validation is pending.
 See [the cycle review](COUNTER_TRANSFER_CARD_REVIEW.md).
+
+The next candidate queue is **Xolatoyac, the Smiling Flood; The Earth Crystal;
+Dark Depths; and Parallax Wave**. The inventory records concrete requirements:
+counter-conditioned type grants independent of their source; target division
+during activation announcement; nonduplicating state triggers and successful
+sacrifice; and the Fading removal/sacrifice lifecycle. Reuse the current counter,
+linked-exile and layer primitives, but retain each card's printed timing and
+choice semantics.
 
 ## Previous cycle: resolution payments and draw ordinals
 
@@ -100,7 +113,7 @@ plus source syntax, installation and packaged-asset checks, at
 The following result-recording commit changes only documentation and inventory
 validation metadata; no runtime, card-program or test changes follow this result.
 
-That cycle used checkpoint schema **113**. The current cycle above adds Uro's
+That cycle used checkpoint schema **113**. A subsequent cycle added Uro's
 escape permission/payment and attack trigger alongside three further cards.
 All project execution remains hosted.
 
@@ -256,18 +269,19 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the nineteen now promoted. It records
+originally outstanding card IDs, including the twenty-seven now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
 card-level review. Crop Rotation and Fling also completed printed-face review;
 their same conformance methods now load the source-bound reviewed programs.
-The current four-card cycle adds Uro, Bulk Up, Grasp of Fate and Prayer of Binding.
-Continue from the current queue and validation record at the top of this file.
+The graveyard/exile and payment/draw families also completed review. The latest
+counter-transfer family adds four more reviewed programs. Continue from the current
+queue and validation record at the top of this file.
 
 Uro's graveyard alternative now supports its five-card exile group. Separately
-ordered cost groups and mana during announcement remain rejected. Next, add
-resolution-time optional mana payments for the three queued enchantments. Saga,
+ordered cost groups and mana during announcement remain rejected. Resolution-time optional
+mana payments are also implemented and reviewed. Saga,
 Room, planeswalker and transforming programs still need their shared lifecycle
 support before whole-card coverage.
 

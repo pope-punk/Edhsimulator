@@ -22,10 +22,9 @@ class CounterTransferTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={row['card_id']:row for row in drafts if row['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(row['program'] for row in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(row['program'] for row in reviewed.values())
 
     def game(self,key='forgotten-ancient',*,extra=(),source_zone=Zone.BATTLEFIELD):
         body=CardProgram('transfer-body','Body',('Creature',),power=3,toughness=10)
@@ -134,7 +133,7 @@ class CounterTransferTests(unittest.TestCase):
         self.assertEqual(set(CARDS),set(self.cards))
         for key,program in self.cards.items():
             with self.subTest(card=key):
-                self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+                self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
                 self.assertEqual(self.rows[key]['program'],encode(program))
                 face=catalog[key].faces[0]
                 self.assertEqual(1,len(catalog[key].faces))
