@@ -227,7 +227,12 @@
       "800.4f",
       "122.5",
       "122.8",
-      "119.4"
+      "119.4",
+      "603.8",
+      "611.2b",
+      "702.26f",
+      "702.32a",
+      "601.2d"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -324,7 +329,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/dominaria-remastered-release-notes",
-      "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost."
+      "scope": "Crop Rotation requires exactly one land sacrifice as an additional casting cost. Dark Depths has no mana ability; its no-ice state trigger cannot duplicate while waiting, can retrigger after being countered, and requires a successful sacrifice to create Marit Lage."
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
@@ -345,6 +350,18 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
       "scope": "Essence Channeler's printed 2/1 body, gross turn life loss, one trigger per life-gain event, all-kind death snapshot and independent departure copies."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/the-lost-caverns-of-ixalan-release-notes",
+      "scope": "Xolatoyac's printed 6/6 body, targeted flood counter and source-independent Island duration; intrinsic Island mana and retained types."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/announcements/foundations-update-bulletin",
+      "scope": "Counter-conditioned durations can begin at a new resolution after an earlier flood-counter condition ended."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/final-fantasy-release-notes",
+      "scope": "The Earth Crystal's green generic reduction, replacement-aware +1/+1 doubling including entry, positive target division during announcement, and lost illegal-target shares."
     }
   ]
 }

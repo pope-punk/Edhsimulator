@@ -1,7 +1,1104 @@
 {
   "schema": "edh-card-drafts:1",
   "status": "unvalidated_draft",
-  "base_commit": "5285058b45badafddf7fa740ef6ef377deb5e75a",
+  "base_commit": "2cbc5f63a54aa67ae71cddbce5219da350aeec5a",
   "production_ready": false,
-  "drafts": []
+  "drafts": [
+    {
+      "card_id": "xolatoyac-the-smiling-flood",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:xolatoyac-the-smiling-flood",
+        "name": "Xolatoyac, the Smiling Flood",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "entry-flood",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "AddCounters",
+                "subject": "target",
+                "kind": "flood",
+                "amount": 1
+              },
+              {
+                "node": "WhileCounter",
+                "subject": "target",
+                "changes": [
+                  {
+                    "node": "AddSubtypes",
+                    "card_type": "Land",
+                    "subtypes": [
+                      "Island"
+                    ],
+                    "sets": []
+                  }
+                ],
+                "counter_kind": "flood"
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Land"
+                ],
+                "relation": "any",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "attack-flood",
+            "event": {
+              "node": "EventPattern",
+              "kind": "creature_attacks",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "AddCounters",
+                "subject": "target",
+                "kind": "flood",
+                "amount": 1
+              },
+              {
+                "node": "WhileCounter",
+                "subject": "target",
+                "changes": [
+                  {
+                    "node": "AddSubtypes",
+                    "card_type": "Land",
+                    "subtypes": [
+                      "Island"
+                    ],
+                    "sets": []
+                  }
+                ],
+                "counter_kind": "flood"
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Land"
+                ],
+                "relation": "any",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "end-step-untap",
+            "event": {
+              "node": "EventPattern",
+              "kind": "step_began",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": "end_step",
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "SelectAll",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [],
+                  "relation": "controlled",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [
+                    {
+                      "node": "CounterRange",
+                      "kind": null,
+                      "minimum": 1,
+                      "maximum": null
+                    }
+                  ],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "effects": [
+                  {
+                    "node": "SetTapped",
+                    "subject": "selected",
+                    "tapped": false
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Salamander",
+          "Serpent"
+        ],
+        "mana_value": 6,
+        "power": 6,
+        "toughness": 6,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 4,
+              "symbols": [
+                "G",
+                "U"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [
+          "Legendary"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U",
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      },
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "xolatoyac-the-smiling-flood",
+        "name": "Xolatoyac, the Smiling Flood",
+        "color_identity": [
+          "U",
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "xolatoyac-the-smiling-flood",
+            "oracle_text": "Whenever Xolatoyac enters or attacks, put a flood counter on target land. That land is an Island in addition to its other types for as long as it has a flood counter on it.\nAt the beginning of your end step, untap each permanent you control with a counter on it.",
+            "type_line": "Legendary Creature \u2014 Salamander Serpent",
+            "mana_cost": "{4}{G}{U}",
+            "power": 6,
+            "toughness": 6,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "U",
+              "G"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "card_id": "the-earth-crystal",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:the-earth-crystal",
+        "name": "The Earth Crystal",
+        "types": [
+          "Artifact"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 4,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "G",
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "distribute",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 4,
+                "symbols": [
+                  "G",
+                  "G"
+                ],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "PlaceDividedCounters",
+                "kind": "+1/+1",
+                "amount": 2
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "controlled",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 2,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [
+          {
+            "node": "CostModifier",
+            "modifier_id": "green-spells",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "stack"
+              },
+              "types": [],
+              "relation": "controlled",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [
+                "G"
+              ],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "generic_delta": -1,
+            "origin_zones": []
+          }
+        ],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [
+          "Legendary"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [
+          {
+            "node": "CounterReplacement",
+            "replacement_id": "double-plus-one",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "controlled",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "players": null,
+            "kind": "+1/+1",
+            "multiplier": 2,
+            "additional": 0,
+            "subject": "any",
+            "divisor": 1,
+            "actor_relation": "any"
+          }
+        ],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      },
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "the-earth-crystal",
+        "name": "The Earth Crystal",
+        "color_identity": [
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "the-earth-crystal",
+            "oracle_text": "Green spells you cast cost {1} less to cast.\nIf one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.\n{4}{G}{G}, {T}: Distribute two +1/+1 counters among one or two target creatures you control.",
+            "type_line": "Legendary Artifact",
+            "mana_cost": "{2}{G}{G}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "G"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "card_id": "dark-depths",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:dark-depths",
+        "name": "Dark Depths",
+        "types": [
+          "Land"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "no-ice",
+            "event": {
+              "node": "EventPattern",
+              "kind": "counter_state",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": [
+                {
+                  "node": "CounterRange",
+                  "kind": "ice",
+                  "minimum": 0,
+                  "maximum": 0
+                }
+              ]
+            },
+            "effects": [
+              {
+                "node": "WithZoneResult",
+                "operation": {
+                  "node": "Sacrifice",
+                  "subject": "source",
+                  "by_subject_controller": false
+                },
+                "destination": null,
+                "effects": [
+                  {
+                    "node": "CreateTokens",
+                    "token": {
+                      "node": "CardProgram",
+                      "definition_id": "token:marit-lage-20-20-black",
+                      "name": "Marit Lage",
+                      "types": [
+                        "Creature"
+                      ],
+                      "abilities": [],
+                      "spell_effects": [],
+                      "spell_targets": null,
+                      "entry_copy": null,
+                      "replacements": [],
+                      "enchant": null,
+                      "subtypes": [
+                        "Avatar"
+                      ],
+                      "mana_value": 0,
+                      "power": 20,
+                      "toughness": 20,
+                      "continuous": [],
+                      "cast": null,
+                      "activated": [],
+                      "cost_modifiers": [],
+                      "target_restrictions": [],
+                      "keywords": [
+                        "flying",
+                        "indestructible"
+                      ],
+                      "supertypes": [
+                        "Legendary"
+                      ],
+                      "entry_modifiers": [],
+                      "player_permissions": {
+                        "node": "PlayerPermissions",
+                        "additional_land_plays": 0,
+                        "no_maximum_hand_size": false,
+                        "land_zones": []
+                      },
+                      "counter_replacements": [],
+                      "entry_counters": [],
+                      "colors": [
+                        "B"
+                      ],
+                      "modal": null,
+                      "entry_copy_tapped": false,
+                      "characteristic_pt": null,
+                      "life_gain_replacements": [],
+                      "block_restrictions": [],
+                      "tapped_mana_replacements": [],
+                      "all_subtype_sets": [],
+                      "entry_restrictions": [],
+                      "casting_restrictions": [],
+                      "entry_copy_add_types": []
+                    },
+                    "amount": 1,
+                    "players": "controller"
+                  }
+                ],
+                "selector": null
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "remove-ice",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 3,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "RemoveCounters",
+                "subject": "source",
+                "kind": "ice",
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [
+          "Legendary",
+          "Snow"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [
+          {
+            "node": "EntryCounters",
+            "replacement_id": "ice",
+            "kind": "ice",
+            "amount": 10,
+            "selector": null
+          }
+        ],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      },
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "dark-depths",
+        "name": "Dark Depths",
+        "color_identity": [],
+        "faces": [
+          {
+            "face_id": "dark-depths",
+            "oracle_text": "This land enters with ten ice counters on it.\n{3}: Remove an ice counter from this land.\nWhen this land has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible.",
+            "type_line": "Legendary Snow Land",
+            "mana_cost": "\u2014",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": []
+          }
+        ]
+      }
+    },
+    {
+      "card_id": "parallax-wave",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:parallax-wave",
+        "name": "Parallax Wave",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "fading-upkeep",
+            "event": {
+              "node": "EventPattern",
+              "kind": "step_began",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": "upkeep",
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "IfCondition",
+                "condition": {
+                  "node": "SourceCountersCondition",
+                  "kind": "fade",
+                  "minimum": 1
+                },
+                "effects": [
+                  {
+                    "node": "RemoveCounters",
+                    "subject": "source",
+                    "kind": "fade",
+                    "amount": 1
+                  }
+                ],
+                "otherwise": [
+                  {
+                    "node": "Sacrifice",
+                    "subject": "source",
+                    "by_subject_controller": false
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "return-exiled",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": {
+                "zone": "battlefield"
+              },
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "WithLinkedExile",
+                "link_id": "wave-exile",
+                "effects": [
+                  {
+                    "node": "Move",
+                    "subject": "linked",
+                    "destination": {
+                      "zone": "battlefield"
+                    },
+                    "controller": "owner",
+                    "tapped": false,
+                    "library_position": null,
+                    "counters": []
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 4,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "W",
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "exile-creature",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": [
+                {
+                  "node": "CounterCost",
+                  "kind": "fade",
+                  "amount": 1
+                }
+              ]
+            },
+            "effects": [
+              {
+                "node": "ExileLinked",
+                "subject": "target",
+                "link_id": "wave-exile"
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "any",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [
+          {
+            "node": "EntryCounters",
+            "replacement_id": "fading-five",
+            "kind": "fade",
+            "amount": 5,
+            "selector": null
+          }
+        ],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      },
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "parallax-wave",
+        "name": "Parallax Wave",
+        "color_identity": [
+          "W"
+        ],
+        "faces": [
+          {
+            "face_id": "parallax-wave",
+            "oracle_text": "Fading 5\nRemove a fade counter from this enchantment: Exile target creature.\nWhen this enchantment leaves the battlefield, each player returns to the battlefield all cards they own exiled with this enchantment.",
+            "type_line": "Enchantment",
+            "mana_cost": "{2}{W}{W}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "W"
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

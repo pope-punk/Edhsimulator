@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **254 source-bound reviewed programs / 319 deck copies**. There are **80 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**: four authored drafts and 76 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,26 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: counter transfers and turn life-loss history
+## Current cycle: counter durations, division, state triggers and Fading
+
+Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave are authored as four
+isolated drafts. The shared runtime adds exact-recipient counter-conditioned
+durations, nonduplicating state triggers, fixed target counter division during
+announcement and best-effort removal. Existing continuous layers, replacement
+planning, counter costs and linked exile provide the remaining behavior.
+
+Kernel checkpoint schema is **117**; state schema remains **13**.
+The **61 new conformance methods** are written for GitHub-hosted validation.
+No local execution is authorized. Draft CI and source-bound promotion are pending;
+the reviewed library remains at 254 cards until these steps complete.
+See [the cycle review](COUNTER_LIFECYCLE_CARD_REVIEW.md).
+
+Complete draft validation, address failures, bind all four printed programs to
+their source facts and promote them, then validate the reviewed loader before
+recording completion. Existing games are not migrated and production admission
+remains closed.
+
+## Previous cycle: counter transfers and turn life-loss history
 
 Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler have complete
 printed-face review and exact source bindings. Shared primitives provide

@@ -104,6 +104,7 @@ def project_actor(kernel,actor):
             **({'event_controllers':list(frame['values']['event_controllers'])} if 'event_controllers' in frame.get('values',{}) else {}),
             **({'event_subjects':[target_summary(value) for value in frame['bindings']['event_subject']]} if 'event_subject' in frame.get('bindings',{}) else {}),
             **({'paid_cost_stats':deepcopy(frame['values']['paid_cost_stats'])} if 'paid_cost_stats' in frame.get('values',{}) else {}),
+            **({'counter_division':[{'target':target_summary(row['ref']),'amount':row['amount']} for row in frame['values']['counter_division']]} if 'counter_division' in frame.get('values',{}) else {}),
             'targets':[target_summary(value) for value in frame['targets']],
             **({'modes':[{'mode_id':g['mode_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['mode_groups']]} if 'mode_groups' in frame else {})}
     stack=[frame_summary(frame) for frame in reversed(kernel.stack)]
@@ -124,6 +125,9 @@ def project_actor(kernel,actor):
     packet={'schema':1,'actor':actor,'revision':kernel.revision,
         'turn':{'active':kernel.active,'phase':kernel.phase,'number':state.turn_number,'land_plays_used':kernel.turn_schedule['land_plays'] if kernel.turn_schedule else 0},
         'players':players,'zones':zones,'stack':stack,'resolving':resolving,'announcement':announcement,'combat':combat,
+        'counter_durations':[{'effect_id':row['effect']['effect_id'],'counter_kind':row['counter_kind'],
+            'recipients':[ref.to_json() for ref in refs],'changes':deepcopy(row['effect']['changes'])}
+            for row in kernel.counter_effects if (refs:=kernel._counter_duration_refs(row))],
         'hand':[_card(kernel,obj,views) for obj in hand],
         'decision':decision_for_actor(kernel,actor),'outcome':deepcopy(kernel.outcome)}
     # These are historical disclosures, not permission to inspect a hand or to

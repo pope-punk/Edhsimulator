@@ -5,7 +5,7 @@ Replacement side effects and general counter-removal effects remain separate gat
 """
 from .rules_state import ObjectRef,PlayerRef,Zone,RulesViolation,target_from_json
 from .rules_choices import Option
-from .rules_program import CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind
+from .rules_program import RemoveCounters,PlaceDividedCounters,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind
 from .rules_characteristics import matches
 
 
@@ -102,7 +102,19 @@ class CounterRules:
             self._emit_counters(recipient,dict(counts),frame['controller'],self._source(frame).ref)
 
     def _execute_counter_instruction(self,effect,frame,key):
-        if isinstance(effect,CopyEventCounters):
+        if isinstance(effect,RemoveCounters):
+            removals=[]
+            for ref in self._refs(frame,effect.subject):
+                counts=self._counter_counts(ref)
+                amount=min(effect.amount,counts.get(effect.kind,0)) if counts is not None else 0
+                if amount:removals.append((ref,((effect.kind,amount),)))
+            self._commit_counters((),(),frame,tuple(removals))
+        elif isinstance(effect,PlaceDividedCounters):
+            legal=set(self._refs(frame,'target'))
+            self._put_counters(((ref,effect.kind,row['amount'])
+                for row in frame['values']['counter_division']
+                if (ref:=ObjectRef.from_json(row['ref'])) in legal),frame,key)
+        elif isinstance(effect,CopyEventCounters):
             counts=frame['values']['event_counters']
             self._put_counters(((ref,kind,n) for ref in self._refs(frame,effect.subject)
                 for kind,n in counts.items()),frame,key)

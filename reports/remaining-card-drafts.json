@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 254,
     "remaining_outside_reviewed_bundle": 80,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 80,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 76,
     "reviewed_bundle_copies": 319,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 27
   },
@@ -359,7 +359,7 @@
     {
       "card_id": "dark-depths",
       "name": "Dark Depths",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -372,7 +372,21 @@
           "face_id": "dark-depths",
           "text": "This land enters with ten ice counters on it.\n{3}: Remove an ice counter from this land.\nWhen this land has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "counter-lifecycles-2026-09-13",
+      "draft_definition": "draft:dark-depths",
+      "shared_mechanics": [
+        "WhileCounter",
+        "RemoveCounters",
+        "counter_state",
+        "PlaceDividedCounters",
+        "ExileLinked",
+        "WithLinkedExile"
+      ],
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
     },
     {
       "card_id": "darksteel-mutation",
@@ -1595,7 +1609,7 @@
     {
       "card_id": "parallax-wave",
       "name": "Parallax Wave",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1608,7 +1622,21 @@
           "face_id": "parallax-wave",
           "text": "Fading 5\nRemove a fade counter from this enchantment: Exile target creature.\nWhen this enchantment leaves the battlefield, each player returns to the battlefield all cards they own exiled with this enchantment."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "counter-lifecycles-2026-09-13",
+      "draft_definition": "draft:parallax-wave",
+      "shared_mechanics": [
+        "WhileCounter",
+        "RemoveCounters",
+        "counter_state",
+        "PlaceDividedCounters",
+        "ExileLinked",
+        "WithLinkedExile"
+      ],
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
     },
     {
       "card_id": "parasitic-impetus",
@@ -2132,7 +2160,7 @@
     {
       "card_id": "the-earth-crystal",
       "name": "The Earth Crystal",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2145,7 +2173,21 @@
           "face_id": "the-earth-crystal",
           "text": "Green spells you cast cost {1} less to cast.\nIf one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.\n{4}{G}{G}, {T}: Distribute two +1/+1 counters among one or two target creatures you control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "counter-lifecycles-2026-09-13",
+      "draft_definition": "draft:the-earth-crystal",
+      "shared_mechanics": [
+        "WhileCounter",
+        "RemoveCounters",
+        "counter_state",
+        "PlaceDividedCounters",
+        "ExileLinked",
+        "WithLinkedExile"
+      ],
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
     },
     {
       "card_id": "the-ozolith",
@@ -2463,7 +2505,7 @@
     {
       "card_id": "xolatoyac-the-smiling-flood",
       "name": "Xolatoyac, the Smiling Flood",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2476,7 +2518,21 @@
           "face_id": "xolatoyac-the-smiling-flood",
           "text": "Whenever Xolatoyac enters or attacks, put a flood counter on target land. That land is an Island in addition to its other types for as long as it has a flood counter on it.\nAt the beginning of your end step, untap each permanent you control with a counter on it."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "counter-lifecycles-2026-09-13",
+      "draft_definition": "draft:xolatoyac-the-smiling-flood",
+      "shared_mechanics": [
+        "WhileCounter",
+        "RemoveCounters",
+        "counter_state",
+        "PlaceDividedCounters",
+        "ExileLinked",
+        "WithLinkedExile"
+      ],
+      "review_record": "docs/COUNTER_LIFECYCLE_CARD_REVIEW.md"
     }
   ],
   "hosted_validation": {
@@ -2494,111 +2550,26 @@
   },
   "latest_cycle": {
     "date": "2026-09-13",
-    "base_commit": "5285058b45badafddf7fa740ef6ef377deb5e75a",
+    "base_commit": "2cbc5f63a54aa67ae71cddbce5219da350aeec5a",
     "cards_written": [
-      "forgotten-ancient",
-      "the-ozolith",
-      "aven-courier",
-      "essence-channeler"
-    ],
-    "cards_promoted": [
-      "forgotten-ancient",
-      "the-ozolith",
-      "aven-courier",
-      "essence-channeler"
-    ],
-    "shared_mechanics": [
-      "Departure counter snapshots",
-      "Atomic replacement-aware counter moves",
-      "Authored counter allocation",
-      "Resolution-time counter-kind choice",
-      "Gross life-lost-this-turn history"
-    ],
-    "runtime_checkpoint_schema": 116,
-    "state_checkpoint_schema": 13,
-    "new_test_methods": 53,
-    "validation_status": "passed_github_hosted_ci",
-    "catalog_corrections": [
-      {
-        "card_id": "essence-channeler",
-        "field": "toughness",
-        "before": 2,
-        "after": 1,
-        "source": "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
-        "source_facts_sha256": "a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862"
-      }
-    ],
-    "unresolved_defects": [],
-    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue the retained Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave work order.",
-    "resolved_validation_issues": [
-      {
-        "commit": "a95e7d4c88aa6e5a0adda0d9b76fdbe98da47c5e",
-        "run_id": 34778960568,
-        "conclusion": "failure",
-        "tests_run": 1437,
-        "errors": 1,
-        "failures": 0,
-        "platforms": {
-          "ubuntu": "1437 tests; one fixture setup error",
-          "windows": "cancelled by matrix fail-fast"
-        },
-        "issues": [
-          "The all-player Forgotten Ancient spell fixture tried to pass priority after the isolated stack had emptied. A fresh scenario window is required when no turn schedule is active."
-        ],
-        "resolution": "Open a scenario priority window for each caster when the stack is empty; retain actual priority passes for responses. No runtime or card program change.",
-        "resolution_commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910"
-      }
-    ],
-    "next_batch": [
       "xolatoyac-the-smiling-flood",
       "the-earth-crystal",
       "dark-depths",
       "parallax-wave"
     ],
-    "next_batch_implementation_notes": {
-      "cards": [
-        "xolatoyac-the-smiling-flood",
-        "the-earth-crystal",
-        "dark-depths",
-        "parallax-wave"
-      ],
-      "reuse": [
-        "CounterRange(None), CounterCost, entry counters and the replacement-aware placement planner",
-        "ExileLinked/WithLinkedExile exact-reference lifecycle",
-        "Shared continuous subtype layers and normal end-step discovery"
-      ],
-      "requirements": [
-        "Xolatoyac needs a source-independent continuous Island grant bound to the targeted land incarnation while it has a flood counter. The end-step untap can reuse CounterRange(None); do not model the type grant as an Aura from Xolatoyac.",
-        "The Earth Crystal distributes two counters among one or two targets chosen and divided during activation announcement. Reuse atomic placement planning, but do not reuse Forgotten Ancient's nontargeting resolution-time allocation unchanged.",
-        "Dark Depths needs a counter removal effect that does as much as possible, a state trigger that cannot duplicate while its own trigger is pending/on the stack, and a sacrifice-success-bound Marit Lage creation. A counter cost is not an exact substitute for its printed removal effect.",
-        "Parallax Wave needs Fading's five entry counters and mandatory upkeep remove-or-sacrifice lifecycle. Reuse linked exile and counter activation costs; preserve its independent return trigger and exact source links.",
-        "Select the practical complete subset after inspecting current source, and run all project validation only on GitHub-hosted runners."
-      ],
-      "source_paths": [
-        "src/edh_gauntlet/rules_counters.py",
-        "src/edh_gauntlet/rules_casting.py",
-        "src/edh_gauntlet/rules_characteristics.py",
-        "src/edh_gauntlet/rules_kernel.py",
-        "src/edh_gauntlet/rules_program.py"
-      ]
-    },
-    "draft_validation": {
-      "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
-      "run_id": 34779216050,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1437,
-      "new_test_methods": 53,
-      "conclusion": "success",
-      "scope": "All four isolated counter-transfer cards; atomic replacements, authored allocation, last-known snapshots, life history, checkpoint/replay, source syntax, installation and packaged assets"
-    },
-    "validated_commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
-    "ci_run_id": 34779503219,
-    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
-    "tests_per_platform": 1437
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Exact-recipient counter-conditioned continuous durations",
+      "Nonduplicating counter state triggers",
+      "Fixed target counter division during announcement",
+      "Best-effort counter removal"
+    ],
+    "runtime_checkpoint_schema": 117,
+    "state_checkpoint_schema": 13,
+    "new_test_methods": 61,
+    "validation_status": "pending_github_hosted_ci",
+    "unresolved_defects": [],
+    "review_work_remaining": "All four printed programs and 61 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind exact source facts and promote, then validate the reviewed loader. No project execution is authorized locally."
   },
   "hosted_validation_history": [
     {
@@ -3151,6 +3122,114 @@
       "ci_run_id": 34777218224,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34777218224",
       "tests_per_platform": 1384
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "5285058b45badafddf7fa740ef6ef377deb5e75a",
+      "cards_written": [
+        "forgotten-ancient",
+        "the-ozolith",
+        "aven-courier",
+        "essence-channeler"
+      ],
+      "cards_promoted": [
+        "forgotten-ancient",
+        "the-ozolith",
+        "aven-courier",
+        "essence-channeler"
+      ],
+      "shared_mechanics": [
+        "Departure counter snapshots",
+        "Atomic replacement-aware counter moves",
+        "Authored counter allocation",
+        "Resolution-time counter-kind choice",
+        "Gross life-lost-this-turn history"
+      ],
+      "runtime_checkpoint_schema": 116,
+      "state_checkpoint_schema": 13,
+      "new_test_methods": 53,
+      "validation_status": "passed_github_hosted_ci",
+      "catalog_corrections": [
+        {
+          "card_id": "essence-channeler",
+          "field": "toughness",
+          "before": 2,
+          "after": 1,
+          "source": "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
+          "source_facts_sha256": "a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862"
+        }
+      ],
+      "unresolved_defects": [],
+      "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation passed. Continue the retained Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave work order.",
+      "resolved_validation_issues": [
+        {
+          "commit": "a95e7d4c88aa6e5a0adda0d9b76fdbe98da47c5e",
+          "run_id": 34778960568,
+          "conclusion": "failure",
+          "tests_run": 1437,
+          "errors": 1,
+          "failures": 0,
+          "platforms": {
+            "ubuntu": "1437 tests; one fixture setup error",
+            "windows": "cancelled by matrix fail-fast"
+          },
+          "issues": [
+            "The all-player Forgotten Ancient spell fixture tried to pass priority after the isolated stack had emptied. A fresh scenario window is required when no turn schedule is active."
+          ],
+          "resolution": "Open a scenario priority window for each caster when the stack is empty; retain actual priority passes for responses. No runtime or card program change.",
+          "resolution_commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910"
+        }
+      ],
+      "next_batch": [
+        "xolatoyac-the-smiling-flood",
+        "the-earth-crystal",
+        "dark-depths",
+        "parallax-wave"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "xolatoyac-the-smiling-flood",
+          "the-earth-crystal",
+          "dark-depths",
+          "parallax-wave"
+        ],
+        "reuse": [
+          "CounterRange(None), CounterCost, entry counters and the replacement-aware placement planner",
+          "ExileLinked/WithLinkedExile exact-reference lifecycle",
+          "Shared continuous subtype layers and normal end-step discovery"
+        ],
+        "requirements": [
+          "Xolatoyac needs a source-independent continuous Island grant bound to the targeted land incarnation while it has a flood counter. The end-step untap can reuse CounterRange(None); do not model the type grant as an Aura from Xolatoyac.",
+          "The Earth Crystal distributes two counters among one or two targets chosen and divided during activation announcement. Reuse atomic placement planning, but do not reuse Forgotten Ancient's nontargeting resolution-time allocation unchanged.",
+          "Dark Depths needs a counter removal effect that does as much as possible, a state trigger that cannot duplicate while its own trigger is pending/on the stack, and a sacrifice-success-bound Marit Lage creation. A counter cost is not an exact substitute for its printed removal effect.",
+          "Parallax Wave needs Fading's five entry counters and mandatory upkeep remove-or-sacrifice lifecycle. Reuse linked exile and counter activation costs; preserve its independent return trigger and exact source links.",
+          "Select the practical complete subset after inspecting current source, and run all project validation only on GitHub-hosted runners."
+        ],
+        "source_paths": [
+          "src/edh_gauntlet/rules_counters.py",
+          "src/edh_gauntlet/rules_casting.py",
+          "src/edh_gauntlet/rules_characteristics.py",
+          "src/edh_gauntlet/rules_kernel.py",
+          "src/edh_gauntlet/rules_program.py"
+        ]
+      },
+      "draft_validation": {
+        "commit": "3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910",
+        "run_id": 34779216050,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1437,
+        "new_test_methods": 53,
+        "conclusion": "success",
+        "scope": "All four isolated counter-transfer cards; atomic replacements, authored allocation, last-known snapshots, life history, checkpoint/replay, source syntax, installation and packaged assets"
+      },
+      "validated_commit": "5a6f83af3add06da91a564212ccb2ef6b062c1a2",
+      "ci_run_id": 34779503219,
+      "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34779503219",
+      "tests_per_platform": 1437
     }
   ],
   "execution_policy": {

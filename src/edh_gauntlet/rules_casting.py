@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -70,12 +70,14 @@ class PreparedAction:
     cost: object
     mode_choices: tuple = ()
     alternative_id: str | None = None
+    counter_division: tuple = ()
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
             'source': self.source.to_json(), 'targets': [ref.to_json() for ref in self.targets],
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
+            'counter_division':[{'ref':ref.to_json(),'amount':amount} for ref,amount in self.counter_division],
             'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
@@ -84,6 +86,7 @@ class PreparedAction:
         value['source'] = ObjectRef.from_json(value['source'])
         value['targets'] = tuple(target_from_json(ref) for ref in value['targets'])
         value['cost'] = decode(value['cost'])
+        value['counter_division']=tuple((ObjectRef.from_json(row['ref']),row['amount']) for row in value.get('counter_division',[]))
         value['mode_choices']=tuple((row['mode_id'],tuple(target_from_json(ref) for ref in row['targets'])) for row in value.get('mode_choices',[]))
         return cls(**value)
 
@@ -185,7 +188,7 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=()):
         resolution_mana=kind=='activate' and self._payment_waiting()
         if not resolution_mana:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
@@ -242,6 +245,21 @@ class CastingRules:
         elif mode_choices:
             raise RulesViolation('Nonmodal action has no mode choices')
         self._announcement_targets(source, actor, target_spec, targets,x_value)
+        effect_nodes=program.spell_effects if kind=='cast' else specification.effects
+        division=division_spec(effect_nodes,target_spec)
+        if not isinstance(counter_division,tuple):raise RulesViolation('Counter division must be immutable')
+        if division is None:
+            if counter_division:raise RulesViolation('Action has no counter division')
+        else:
+            if (any(not isinstance(row,tuple) or len(row)!=2 or not isinstance(row[0],ObjectRef)
+                    or type(row[1]) is not int or row[1]<=0 for row in counter_division)
+                    or len(counter_division)!=len(targets)
+                    or len({row[0] for row in counter_division})!=len(counter_division)
+                    or {row[0] for row in counter_division}!=set(targets)
+                    or sum(row[1] for row in counter_division)!=division.amount):
+                raise RulesViolation('Counter division must assign the fixed total positively across every target')
+            amounts=dict(counter_division)
+            counter_division=tuple((target,amounts[target]) for target in targets)
         if cost.life > self.state.life(actor):
             raise RulesViolation('Insufficient life for payment')
         if any(dict(source.counters).get(c.kind,0)<c.amount for c in cost.counter_costs):
@@ -270,13 +288,13 @@ class CastingRules:
                         generic += modifier.generic_delta
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=()):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division)
 
-    def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0):
-        return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value)
+    def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0,counter_division=()):
+        return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value,counter_division=counter_division)
 
     def _resource_payment(self, quote, payment, *, source=None):
         if not isinstance(payment, Payment):
@@ -310,7 +328,7 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         resources = self._resource_payment(quote, payment)
@@ -328,7 +346,9 @@ class CastingRules:
                 if not ability.mana_ability:
                     announced_frame=self._frame(source,quote.actor,ability.effects,targets=quote.targets,target_spec=ability.targets,chosen_x=quote.x_value)
                     announced_frame['ability_id']=ability.ability_id
-            if announced_frame is not None:self.stack.append(announced_frame)
+            if announced_frame is not None:
+                self._bind_counter_division(announced_frame,quote)
+                self.stack.append(announced_frame)
             self.announcement={'frame_id':announced_frame['id'] if announced_frame else None,'quote':quote.to_json(),'payment':{'mana':dict(payment.mana),'taps':[r.to_json() for r in payment.taps],
                 'zone_costs':{key:[r.to_json() for r in refs] for key,refs in payment.zone_costs}},
                 'source':source.to_json(),'origin_source':origin_source.to_json(),
@@ -357,6 +377,10 @@ class CastingRules:
         self.state.add_mana(player,symbols)
         self._event('mana_added',player=player,symbols=list(symbols))
 
+    def _bind_counter_division(self,frame,quote):
+        if quote.counter_division:
+            frame['values']['counter_division']=[{'ref':ref.to_json(),'amount':amount} for ref,amount in quote.counter_division]
+
     def _spell_frame(self,source,quote):
         program=self.definition(source)
         effects = program.spell_effects
@@ -364,6 +388,7 @@ class CastingRules:
             effects = (Move('source', Zone.BATTLEFIELD),)
         frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                             target_spec=program.spell_targets,chosen_x=quote.x_value)
+        self._bind_counter_division(frame,quote)
         if quote.alternative_id is not None:
             frame['alternative_id']=quote.alternative_id
             alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
@@ -419,6 +444,7 @@ class CastingRules:
                 frame['source']=source.to_json();frame['ability_id'] = ability.ability_id
                 if prepared_frame is None:self.stack.append(frame)
             event_kind = 'ability_activated'
+        if frame is not None:self._bind_counter_division(frame,quote)
         receipt = {'action': quote.to_json(), 'payment': {'mana': dict(resources.mana), 'life': resources.life,
             'taps': [ref.to_json() for ref in resources.taps]}, 'frame': frame['id'] if frame else None,
             'mana_ability': mana_ability}

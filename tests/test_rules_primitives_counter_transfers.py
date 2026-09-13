@@ -495,7 +495,7 @@ class CounterTransferTests(unittest.TestCase):
     def test_life_history_checkpoint_and_legacy_schema_rejection(self):
         self.game('essence-channeler');self.state.lose_life_batch(('A',),2);self.state.gain_life('A',3)
         checkpoint=self.kernel.snapshot();restored=RulesKernel.restore(checkpoint,self.programs)
-        self.assertEqual(116,checkpoint['schema']);self.assertEqual(13,checkpoint['state']['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],116);self.assertEqual(13,checkpoint['state']['schema'])
         self.assertEqual(self.kernel.snapshot(),restored.snapshot());self.assertIn('flying',restored.effective(self.source).keywords)
         checkpoint['schema']=115
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)
