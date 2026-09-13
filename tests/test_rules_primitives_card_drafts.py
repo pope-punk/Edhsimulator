@@ -12,6 +12,7 @@ from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'dance-of-the-dead', 'mystic-remora', 'touch-the-spirit-realm', 'arcane-denial',
     'game-trail', 'shineshadow-snarl', 'vineglimmer-snarl',
     'godless-shrine', 'hallowed-fountain', 'stomping-ground', 'watery-grave',
     'mulldrifter', 'reveillark', 'vesperlark',
@@ -60,7 +61,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(31, len(self.cards))
+        self.assertEqual(35, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):

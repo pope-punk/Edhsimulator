@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**258 source-bound reviewed programs / 323 deck copies**. There are **76 cards outside the
-reviewed bundle**: four authored drafts and 72 unstarted. Reviewed coverage is not production certification.
+**262 source-bound reviewed programs / 327 deck copies**. There are **72 cards outside the
+reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -24,21 +24,29 @@ successful hosted validation.
 
 ## Current cycle: upkeep payments and delayed steps
 
-Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Arcane Denial are
-authored as four isolated drafts. Shared additions provide repeated mana payment
-capture, attached-controller upkeep, ordinary untap suppression, one-shot
-delayed upkeep/end-step events, optional draw counts and hand-activation reveals.
-Arcane Denial shares the delay work; Talon Gates remains queued because full
-phasing requires additional attachment and multiplayer departure support.
+Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Arcane Denial have
+complete printed-face review and exact source bindings. Shared additions provide
+captured repeated mana payment, attached-controller upkeep, ordinary untap
+suppression, one-shot delayed upkeep/end-step events, optional draw counts and
+hand-activation reveals. Arcane Denial shares the delay work; Talon Gates remains
+queued for complete phasing, indirect attachments and departed-player timing.
 
-Kernel schema is **118**, state schema **13**. The **47 new conformance methods**
-are ready for GitHub-hosted validation. Draft CI and reviewed promotion are
-pending; coverage remains at 258 reviewed cards until they complete.
-See [the review](UPKEEP_DELAY_CARD_REVIEW.md).
+Kernel checkpoint schema is **118**; state schema remains **13**.
+The **47 new conformance methods** now use the reviewed loader.
+[Draft validation 34787026975](https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975)
+passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`.
+Required reviewed-loader validation is pending for this promotion.
+See [the cycle review](UPKEEP_DELAY_CARD_REVIEW.md).
 
-Finish hosted draft validation, source-bind the complete programs, then run the
-reviewed-loader checks. No local project execution, existing-game migration or
-production admission is authorized.
+Continue **Talon Gates of Madara, Desert Warfare, Necromancy and Indulgent
+Tormentor**, refreshing the source and selecting a practical complete subset.
+The JSON inventory retains the exact remaining requirements: full phasing
+including CR 702.26n; sacrifice/discard/mill Desert events and next-own-end-step
+timing; cast-timing-dependent cleanup sacrifice and complete Aura conversion;
+and an opponent-authored choice between creature sacrifice, life payment and
+allowing a draw. Reuse the new delay and payment lifecycle where applicable.
+Existing games are not migrated and production admission remains closed.
 
 ## Previous cycle: counter durations, division, state triggers and Fading
 
@@ -61,8 +69,8 @@ The following result-recording commit changes only documentation and inventory;
 runtime, programs and tests are unchanged after this validation.
 See [the cycle review](COUNTER_LIFECYCLE_CARD_REVIEW.md).
 
-Continue **Dance of the Dead, Mystic Remora, Touch the
-Spirit Realm and Talon Gates of Madara**. The JSON inventory records the exact
+That cycle's next queue was **Dance of the Dead, Mystic Remora, Touch the
+Spirit Realm and Talon Gates of Madara**. Its retained requirements were
 requirements and source findings: attached-controller upkeep and untap
 suppression; computed cumulative-upkeep payments; one-shot next-end-step returns;
 and full phasing plus announcement-bound hand reveal. Reuse the current

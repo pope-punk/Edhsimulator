@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 258,
-    "remaining_outside_reviewed_bundle": 76,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 262,
+    "remaining_outside_reviewed_bundle": 72,
+    "drafts_written": 0,
     "not_started_on_this_branch": 72,
-    "reviewed_bundle_copies": 323,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 327,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 31
+    "promoted_on_this_branch": 35
   },
   "cards": [
     {
@@ -154,7 +154,7 @@
     {
       "card_id": "arcane-denial",
       "name": "Arcane Denial",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -169,10 +169,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "upkeep-delays-2026-09-13",
-      "draft_definition": "draft:arcane-denial",
       "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
       "shared_mechanics": [
         "PayRepeatedMana",
@@ -181,7 +180,14 @@
         "DrawUpTo",
         "SpellEventPattern",
         "announcement-bound reveals"
-      ]
+      ],
+      "reviewed_definition": "catalog:arcane-denial",
+      "previous_draft_definition": "draft:arcane-denial",
+      "source_facts_sha256": "50edb16e0afcd12531f002d411cddb9f8dbfb9d2ffacb33a16d5f4422b2838c3",
+      "draft_hosted_validation": {
+        "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+        "run_id": 34787026975
+      }
     },
     {
       "card_id": "aven-courier",
@@ -355,7 +361,7 @@
     {
       "card_id": "dance-of-the-dead",
       "name": "Dance of the Dead",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -370,10 +376,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "upkeep-delays-2026-09-13",
-      "draft_definition": "draft:dance-of-the-dead",
       "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
       "shared_mechanics": [
         "PayRepeatedMana",
@@ -382,7 +387,14 @@
         "DrawUpTo",
         "SpellEventPattern",
         "announcement-bound reveals"
-      ]
+      ],
+      "reviewed_definition": "catalog:dance-of-the-dead",
+      "previous_draft_definition": "draft:dance-of-the-dead",
+      "source_facts_sha256": "8a10f4f1e9403538bb8ed98fcab0c60d95f64a1e391e4596fe8b019a9cd90742",
+      "draft_hosted_validation": {
+        "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+        "run_id": 34787026975
+      }
     },
     {
       "card_id": "dark-depths",
@@ -1519,7 +1531,7 @@
     {
       "card_id": "mystic-remora",
       "name": "Mystic Remora",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1534,10 +1546,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "upkeep-delays-2026-09-13",
-      "draft_definition": "draft:mystic-remora",
       "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
       "shared_mechanics": [
         "PayRepeatedMana",
@@ -1546,7 +1557,14 @@
         "DrawUpTo",
         "SpellEventPattern",
         "announcement-bound reveals"
-      ]
+      ],
+      "reviewed_definition": "catalog:mystic-remora",
+      "previous_draft_definition": "draft:mystic-remora",
+      "source_facts_sha256": "049fc0391f3d8fd57dffc68e9db1153e5677bb547d2cb01e1e892273f4545c23",
+      "draft_hosted_validation": {
+        "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+        "run_id": 34787026975
+      }
     },
     {
       "card_id": "necromancy",
@@ -2346,7 +2364,7 @@
     {
       "card_id": "touch-the-spirit-realm",
       "name": "Touch the Spirit Realm",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -2361,10 +2379,9 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "upkeep-delays-2026-09-13",
-      "draft_definition": "draft:touch-the-spirit-realm",
       "review_record": "docs/UPKEEP_DELAY_CARD_REVIEW.md",
       "shared_mechanics": [
         "PayRepeatedMana",
@@ -2373,7 +2390,14 @@
         "DrawUpTo",
         "SpellEventPattern",
         "announcement-bound reveals"
-      ]
+      ],
+      "reviewed_definition": "catalog:touch-the-spirit-realm",
+      "previous_draft_definition": "draft:touch-the-spirit-realm",
+      "source_facts_sha256": "83aaac5ab0b65890aad8edb37ef6d71b9d246c222daf64c17c8cd03a3b39c168",
+      "draft_hosted_validation": {
+        "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+        "run_id": 34787026975
+      }
     },
     {
       "card_id": "uro-titan-of-nature-s-wrath",
@@ -2631,19 +2655,6 @@
       }
     }
   ],
-  "hosted_validation": {
-    "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
-    "run_id": 34782734602,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "tests_per_platform": 1499,
-    "new_test_methods": 62,
-    "conclusion": "success",
-    "scope": "All 258 source-bound reviewed programs, including Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave; all 62 new methods through the reviewed loader; actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
-  },
   "latest_cycle": {
     "date": "2026-09-13",
     "base_commit": "e4aee73dd1af7739487ff3ac4919bcc5af394a75",
@@ -2653,7 +2664,12 @@
       "touch-the-spirit-realm",
       "arcane-denial"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "dance-of-the-dead",
+      "mystic-remora",
+      "touch-the-spirit-realm",
+      "arcane-denial"
+    ],
     "shared_mechanics": [
       "Captured cumulative mana costs",
       "Attached-controller upkeep and untap suppression",
@@ -2665,9 +2681,9 @@
     "runtime_checkpoint_schema": 118,
     "state_checkpoint_schema": 13,
     "new_test_methods": 47,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Four complete printed programs and 47 conformance methods are authored. Validate the isolated drafts on hosted runners, fix any failures, bind source facts and promote, then validate the reviewed loader.",
+    "review_work_remaining": "Four full printed programs are source-bound and promoted following successful hosted draft validation. Required reviewed-loader hosted validation remains pending.",
     "selection_note": "Arcane Denial replaces Talon Gates in this cycle because it shares the new delayed-step primitive. Talon Gates requires full direct/indirect phasing, untap restoration and multiplayer departure handling under CR 702.26n; a single state toggle is insufficient. Those requirements remain queued.",
     "next_batch": [
       "talon-gates-of-madara",
@@ -2695,6 +2711,19 @@
         "Indulgent Tormentor requires a target opponent's choice between sacrificing a creature, paying 3 life or allowing a draw. Add a complete resolution payment-choice transaction with correct paying actor and unavailable options; current PayMana only handles mana."
       ],
       "guard": "Refresh current source and select a practical complete subset. No local project execution, no game migrations and no unsupported card promotion."
+    },
+    "draft_validation": {
+      "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+      "run_id": 34787026975,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1546,
+      "new_test_methods": 47,
+      "conclusion": "success",
+      "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
     }
   },
   "hosted_validation_history": [
@@ -2902,6 +2931,32 @@
       "new_test_methods": 62,
       "conclusion": "success",
       "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
+    },
+    {
+      "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+      "run_id": 34782734602,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1499,
+      "new_test_methods": 62,
+      "conclusion": "success",
+      "scope": "All 258 source-bound reviewed programs, including Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave; all 62 new methods through the reviewed loader; actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "d032e3c60caf22b585e641c050bc78372c15c611",
+      "run_id": 34787026975,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1546,
+      "new_test_methods": 47,
+      "conclusion": "success",
+      "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
     }
   ],
   "cycle_history": [

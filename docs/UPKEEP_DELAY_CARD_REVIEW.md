@@ -1,8 +1,8 @@
 # Upkeep and delayed-step card review
 
 Cycle base: `e4aee73dd1af7739487ff3ac4919bcc5af394a75` on `codex/remaining-card-programs`.
-Four complete printed programs are isolated drafts. Hosted validation and
-reviewed-bundle promotion are pending. No project code or Python ran locally.
+Four complete printed programs are source-bound and promoted after hosted draft
+validation. Required reviewed-loader validation is pending. No project code or Python ran locally.
 
 ## Printed-face mapping
 
@@ -52,7 +52,7 @@ inherit public source history without prolonging the hand reveal.
 
 ## Bound sources
 
-The catalog source facts are unchanged and retained with each draft.
+The catalog source facts are unchanged and bound by the exact hashes below.
 The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt)
 remain at SHA-256
 `4381ad1b39ab2c05f7d03633a20f711ed37277074d3266dcba5f38cbb527423f`.
@@ -87,4 +87,9 @@ newer while still rejecting schema 116. No existing game is migrated.
 Draft authoring, source-bound review, hosted validation and production admission
 remain separate. Production admission remains closed.
 
-Hosted execution is pending; no authored test is counted as passed yet.
+[Draft validation 34787026975](https://github.com/pope-punk/Edhsimulator/actions/runs/34787026975)
+passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`. All 47 new methods passed.
+The four programs now use catalog identities and exact source-facts hashes;
+all 258 previously reviewed rows are unchanged. The suite now exercises these
+four through the reviewed loader, whose required hosted run is pending.
