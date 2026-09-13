@@ -93,7 +93,7 @@ class DraftCardTests(unittest.TestCase):
                         'mana', 'A', state.current('entry'), 'mana'), Payment())
                     request = kernel.pending_choice
                     index = next(i for i, option in enumerate(request.options)
-                                 if program.activated[0].effects[0].options[int(option.key)] == (symbol,))
+                                 if option.key == symbol)
                     kernel.answer(request.request_id, 'A', [index])
                     self.assertEqual(((symbol, 1),), state.mana_pool('A'))
                     self.assertEqual(40, state.life('A'))

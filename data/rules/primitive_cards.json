@@ -163,7 +163,7 @@
       "card_id": "adarkar-wastes",
       "source_facts_sha256": "fdaa002051d52fbb5c7b9335fa1e780a165e272058759507865a7cd9e08751ba",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:adarkar-wastes",
@@ -240,15 +240,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "W",
+                  "U"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -738,7 +735,7 @@
       "card_id": "angel-of-invention",
       "source_facts_sha256": "d72b1c39d7f4d55a74fe412dab6b7b250978705cf788a422b6629a42a099c34f",
       "scope": "all_printed_faces",
-      "review_basis": "Printed 3WW 2/1 flying/vigilance/lifelink Angel Artificer and controlled-other-creature anthem. Fabricate composes optional +1/+1 counters with an exact-source availability check and a fallback creating two colorless 1/1 artifact creature Servos in one batch. Shared primitives only; production gates remain separate.",
+      "review_basis": "Printed 3WW 2/1 flying/vigilance/lifelink Angel Artificer and controlled-other-creature anthem. Fabricate composes optional +1/+1 counters with an exact-source availability check and a fallback creating two colorless 1/1 artifact creature Servos in one batch. Shared primitives only; production gates remain separate. Fabricate's unnamed tokens use Servo Token as their name (2026-09-13 audit; CR 111.4).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:angel-of-invention",
@@ -785,7 +782,7 @@
                     "token": {
                       "node": "CardProgram",
                       "definition_id": "token:servo-1-1-colorless",
-                      "name": "Servo",
+                      "name": "Servo Token",
                       "types": [
                         "Artifact",
                         "Creature"
@@ -1738,7 +1735,7 @@
       "card_id": "avenger-of-zendikar",
       "source_facts_sha256": "bf7dc9e7147dbe59f37b35162a753a639eb74a4419a5c164868ed0a4a25f9f76",
       "scope": "all_printed_faces",
-      "review_basis": "Printed characteristics compose embedded token programs and atomic token entry with existing ETB/landfall patterns, numeric land counts, optional complete-set counters, search/threshold sequencing, and resource/zone activation costs. Token definitions retain name, subtypes, colors and power/toughness; no card-name runtime handlers. Whole-pod and production adapter gates remain incomplete.",
+      "review_basis": "Printed characteristics compose embedded token programs and atomic token entry with existing ETB/landfall patterns, numeric land counts, optional complete-set counters, search/threshold sequencing, and resource/zone activation costs. Token definitions retain name, subtypes, colors and power/toughness; no card-name runtime handlers. Whole-pod and production adapter gates remain incomplete. Landfall selects Plant creatures, excluding noncreature Kindred Plants (2026-09-13 audit; CR 109.2).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:avenger-of-zendikar",
@@ -1891,7 +1888,9 @@
                       "zone": {
                         "zone": "battlefield"
                       },
-                      "types": [],
+                      "types": [
+                        "Creature"
+                      ],
                       "relation": "controlled",
                       "exclude_source": false,
                       "subtypes": [
@@ -2809,7 +2808,7 @@
       "card_id": "birds-of-paradise",
       "source_facts_sha256": "c926fcec5dbc81104bae80d3cf90e355074df245259107e7acaf11577baa7cee",
       "scope": "all_printed_faces",
-      "review_basis": "Printed characteristics and costs mapped to shared immediate mana choices. Commander identities bind at game creation, use the current controller, and distinguish unknown identities from colorless identities. General production readiness remains separately gated.",
+      "review_basis": "Printed characteristics and costs mapped to shared immediate mana choices. Commander identities bind at game creation, use the current controller, and distinguish unknown identities from colorless identities. General production readiness remains separately gated. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:birds-of-paradise",
@@ -2882,24 +2881,15 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ],
-                  [
-                    "B"
-                  ],
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "W",
+                  "U",
+                  "B",
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -4154,7 +4144,7 @@
       "card_id": "caves-of-koilos",
       "source_facts_sha256": "fb55102f8e4255b770f02be2c082ea6b6d12b418202799ae98331bbd91106e49",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:caves-of-koilos",
@@ -4231,15 +4221,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -6942,7 +6929,7 @@
       "card_id": "deserted-beach",
       "source_facts_sha256": "9220ee54d6cf8b1146405a590666c6a614a54d67a2fb5786a352a469a3823a74",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:deserted-beach",
@@ -7020,15 +7007,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "W",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -7192,7 +7176,7 @@
       "card_id": "doomwake-giant",
       "source_facts_sha256": "a7f02e3b59cc0d65ccd6c99a313c6240fe0000d9e62cd7ce90f6a38c0b46283e",
       "scope": "all_printed_faces",
-      "review_basis": "Printed clauses compose shared fixed-recipient temporary continuous effects and layer-six keyword grants with existing targeting, counters, event triggers, source statistics and mana/zone costs. Numeric values bind at resolution; exact incarnations and cleanup expiration govern lifetime. Production gates remain separate.",
+      "review_basis": "Printed clauses compose shared fixed-recipient temporary continuous effects and layer-six keyword grants with existing targeting, counters, event triggers, source statistics and mana/zone costs. Numeric values bind at resolution; exact incarnations and cleanup expiration govern lifetime. Production gates remain separate. Constellation's self-entry and other-controlled-enchantment events are disjoint EventPattern compositions, preserving self-entry when an external continuous effect removes Enchantment and avoiding duplicate normal-entry triggers (2026-09-13 audit; CR 603.6a).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:doomwake-giant",
@@ -7202,6 +7186,76 @@
           "Creature"
         ],
         "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "constellation-self",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "SelectAll",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [
+                    "Creature"
+                  ],
+                  "relation": "opponent_controlled",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "effects": [
+                  {
+                    "node": "UntilEndOfTurn",
+                    "subject": "selected",
+                    "changes": [
+                      {
+                        "node": "ModifyPT",
+                        "power": -1,
+                        "toughness": -1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
           {
             "node": "AbilityProgram",
             "ability_id": "constellation",
@@ -7222,7 +7276,7 @@
               "recipient_relation": "any",
               "characteristics": [],
               "any_types": [],
-              "exclude_source": false,
+              "exclude_source": true,
               "counters": []
             },
             "effects": [
@@ -7351,7 +7405,7 @@
       "card_id": "dreamroot-cascade",
       "source_facts_sha256": "868894aba1bc220b46af3bc43ca6a4200f1d5dcb6516427b6b577c99f1900d9a",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:dreamroot-cascade",
@@ -7429,15 +7483,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -12461,7 +12512,7 @@
       "card_id": "grim-guardian",
       "source_facts_sha256": "7bc167289bc36905009b95d37ae58dcf8b4ce2685428bb15bb8c71879261d2f8",
       "scope": "all_printed_faces",
-      "review_basis": "Full printed face composes shared card/player target domains, normal announcement and resolution checks, ETB/upkeep/life-gain triggers, atomic life loss, APNAP player draws and ordinary entry/cost/mana operations. Player defenses and the whole-pod production rules gates remain separate.",
+      "review_basis": "Full printed face composes shared card/player target domains, normal announcement and resolution checks, ETB/upkeep/life-gain triggers, atomic life loss, APNAP player draws and ordinary entry/cost/mana operations. Player defenses and the whole-pod production rules gates remain separate. Constellation's self-entry and other-controlled-enchantment events are disjoint EventPattern compositions, preserving self-entry when an external continuous effect removes Enchantment and avoiding duplicate normal-entry triggers (2026-09-13 audit; CR 603.6a).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:grim-guardian",
@@ -12471,6 +12522,41 @@
           "Creature"
         ],
         "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "constellation-self",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "LoseLife",
+                "players": "opponents",
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
           {
             "node": "AbilityProgram",
             "ability_id": "constellation",
@@ -12491,7 +12577,7 @@
               "recipient_relation": "any",
               "characteristics": [],
               "any_types": [],
-              "exclude_source": false,
+              "exclude_source": true,
               "counters": []
             },
             "effects": [
@@ -15543,7 +15629,7 @@
       "card_id": "karplusan-forest",
       "source_facts_sha256": "fe0576b4c84b43e282a45ba9f85563e4e0d09f6643cacdae438f1bd272b4977e",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:karplusan-forest",
@@ -15620,15 +15706,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -17177,7 +17260,7 @@
       "card_id": "lumbering-falls",
       "source_facts_sha256": "8c1b7501237d19598d7e13f284a7c3882d3b48ec20a4055dbdeabe33a932ee18",
       "scope": "all_printed_faces",
-      "review_basis": "Shared entry condition, mana production and instant-speed animation. Until end of turn adds Creature and the specified subtype while retaining previous types/subtypes (CR 205.1b), sets colors in layer 5 and base P/T in layer 7b. Lair binds positive X; Falls grants hexproof. Existing readiness, timing, cleanup and exact-incarnation rules apply. General production gates remain separate.",
+      "review_basis": "Shared entry condition, mana production and instant-speed animation. Until end of turn adds Creature and the specified subtype while retaining previous types/subtypes (CR 205.1b), sets colors in layer 5 and base P/T in layer 7b. Lair binds positive X; Falls grants hexproof. Existing readiness, timing, cleanup and exact-incarnation rules apply. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:lumbering-falls",
@@ -17228,15 +17311,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -17497,7 +17577,7 @@
       "card_id": "lyra-dawnbringer",
       "source_facts_sha256": "ac600bb0de21222c8d4810d61c066de8d9bc56f0b7b856b5b25720aa7f809542",
       "scope": "all_printed_faces",
-      "review_basis": "Printed characteristics and normal casting cost; shared continuous subtype/controller selection, source exclusion, layer-6 keyword grants and layer-7c modifiers. No card-specific engine branches. General ability-loss and dependency certification remain gated.",
+      "review_basis": "Printed characteristics and normal casting cost; shared continuous subtype/controller selection, source exclusion, layer-6 keyword grants and layer-7c modifiers. No card-specific engine branches. General ability-loss and dependency certification remain gated. The Angel subtype selector includes other controlled Kindred Angels for lifelink, without assigning P/T to noncreature permanents (2026-09-13 audit; CR 109.2, 208.3).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:lyra-dawnbringer",
@@ -17527,9 +17607,7 @@
               "zone": {
                 "zone": "battlefield"
               },
-              "types": [
-                "Creature"
-              ],
+              "types": [],
               "relation": "controlled",
               "exclude_source": true,
               "subtypes": [
@@ -17792,7 +17870,7 @@
       "card_id": "mana-confluence",
       "source_facts_sha256": "9f18efa274bb1ed680e1e33dc9059dd44c6bfbcb0f783de77b109fa92a084a61",
       "scope": "all_printed_faces",
-      "review_basis": "Printed tap and life payment use the shared resource transaction. Five-color choice resolves as a mana ability before state-based actions; no damage is dealt by the payment. General replacement and production gates remain separate.",
+      "review_basis": "Printed tap and life payment use the shared resource transaction. Five-color choice resolves as a mana ability before state-based actions; no damage is dealt by the payment. General replacement and production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:mana-confluence",
@@ -17834,24 +17912,15 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ],
-                  [
-                    "B"
-                  ],
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "W",
+                  "U",
+                  "B",
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -19104,7 +19173,7 @@
       "card_id": "morphic-pool",
       "source_facts_sha256": "6da4ae82b5a969d49fd1bc9cf7654029bd38aae688a9fbb7343be053241ec592",
       "scope": "all_printed_faces",
-      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification.",
+      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:morphic-pool",
@@ -19159,15 +19228,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "U"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "U",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -22935,7 +23001,7 @@
       "card_id": "restless-fortress",
       "source_facts_sha256": "3cb349ee371ff4fff6a86720a8116d80d7b88582c03f0679c44554e581cbc39b",
       "scope": "all_printed_faces",
-      "review_basis": "Shared tapped entry, mana choice, temporary animation layers and self attack trigger with the declared defending player captured per attacker. Nontargeted life loss and controller life gain survive source departure. Player-only combat slice; general production gates remain separate.",
+      "review_basis": "Shared tapped entry, mana choice, temporary animation layers and self attack trigger with the declared defending player captured per attacker. Nontargeted life loss and controller life gain survive source departure. Player-only combat slice; general production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:restless-fortress",
@@ -23024,15 +23090,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -23321,7 +23384,7 @@
       "card_id": "rockfall-vale",
       "source_facts_sha256": "4622d64972100f81121ff8f2f26212f76cc2e2334d05d31f0d76cee1b49ea4bf",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:rockfall-vale",
@@ -23399,15 +23462,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -23735,7 +23795,7 @@
       "card_id": "ruby-daring-tracker",
       "source_facts_sha256": "da5847d266838b50ccf57a4cf6bcbe9f573ea8f856c652e3e49df9c3be3cd2a5",
       "scope": "all_printed_faces",
-      "review_basis": "Printed costs/characteristics with shared numeric ranges, occurrence predicates, intervening clauses, temporary modifiers and optional targeted movement. Ruby occurrence-only timing checked against official Wilds of Eldraine release notes. General rules and production gates remain separate.",
+      "review_basis": "Printed costs/characteristics with shared numeric ranges, occurrence predicates, intervening clauses, temporary modifiers and optional targeted movement. Ruby occurrence-only timing checked against official Wilds of Eldraine release notes. General rules and production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:ruby-daring-tracker",
@@ -23885,15 +23945,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -24936,7 +24993,7 @@
       "card_id": "scoured-barrens",
       "source_facts_sha256": "ee3660a637def3c46359e45250158f61a6a1432e3374744fef17150c7bec8ceb",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:scoured-barrens",
@@ -25022,15 +25079,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -25072,7 +25126,7 @@
       "card_id": "sea-of-clouds",
       "source_facts_sha256": "c6c42c8739762ecfa390484f6e394f46340a7a71a01c41abbce00acc670a2c39",
       "scope": "all_printed_faces",
-      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification.",
+      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:sea-of-clouds",
@@ -25127,15 +25181,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "W",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -25335,7 +25386,7 @@
       "card_id": "shattered-sanctum",
       "source_facts_sha256": "cf6dd3d64bb2fa68eb6881833e39120442bddabba8fc022f5f923a7c7efd59e2",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:shattered-sanctum",
@@ -25413,15 +25464,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -25463,7 +25511,7 @@
       "card_id": "shipwreck-marsh",
       "source_facts_sha256": "8b96ea970be3aa2f04c4d4c799d9117c3effb334d91fb7f3c44511f63dc43199",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:shipwreck-marsh",
@@ -25541,15 +25589,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "U"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "U",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -25591,7 +25636,7 @@
       "card_id": "silent-clearing",
       "source_facts_sha256": "566f352d3ccb0c530e4a36c918d35957b33f0eb63bf9dfcb52c9e7c208c75e9f",
       "scope": "all_printed_faces",
-      "review_basis": "Printed characteristics and costs mapped to one atomic activation zone-cost group, ordinary stack resolution, shared search/scry/draw, subtype-union selectors and tapped-entry instructions where printed. Omen uses the generic flash casting permission. Replacement choices precede payment and accepted costs are never replayed. General production gates remain separate.",
+      "review_basis": "Printed characteristics and costs mapped to one atomic activation zone-cost group, ordinary stack resolution, shared search/scry/draw, subtype-union selectors and tapped-entry instructions where printed. Omen uses the generic flash casting permission. Replacement choices precede payment and accepted costs are never replayed. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:silent-clearing",
@@ -25633,15 +25678,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -25897,7 +25939,7 @@
       "card_id": "simic-guildgate",
       "source_facts_sha256": "df915c2ff292ed63b1d8562455761856e2771d03d81e855a632eca400aa8b258",
       "scope": "all_printed_faces",
-      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate.",
+      "review_basis": "Printed entry replacement, normal characteristics/costs and mana ability mapped to shared primitives. Conditional entry counts the existing battlefield, excluding simultaneous entrants. Cinder Glade uses intrinsic basic-land-type mana; Scoured Barrens uses the shared entry life trigger. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:simic-guildgate",
@@ -25950,15 +25992,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -26554,7 +26593,7 @@
       "card_id": "spire-garden",
       "source_facts_sha256": "8e1bf78e18bb1475c55add44dd5101ccae6528a231bc0887c6b857464a2e92d0",
       "scope": "all_printed_faces",
-      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification.",
+      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:spire-garden",
@@ -26609,15 +26648,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -27971,7 +28007,7 @@
       "card_id": "talisman-of-dominance",
       "source_facts_sha256": "a6b52ba3a549443a222fcec0fe4f92f46315872c00f00b8c853fb9eebf0c5b0d",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:talisman-of-dominance",
@@ -28076,15 +28112,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "U"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "U",
+                  "B"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -28134,7 +28167,7 @@
       "card_id": "talisman-of-hierarchy",
       "source_facts_sha256": "6b71e69613e348c03e25e85f8024ed4ce086451d7a4ce30768d6b8a5023363cf",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:talisman-of-hierarchy",
@@ -28239,15 +28272,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -28297,7 +28327,7 @@
       "card_id": "talisman-of-progress",
       "source_facts_sha256": "61c095ee26b6370b7ddfdbd4d5e2ca12efb6586790cf57b60baa2074d1c9ae3e",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:talisman-of-progress",
@@ -28402,15 +28432,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "W",
+                  "U"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",
@@ -28722,7 +28749,7 @@
       "card_id": "temple-of-mystery",
       "source_facts_sha256": "50f5ddedbba5b6724db273e63628badde188d4f3affefbacf570762d005ae732",
       "scope": "all_printed_faces",
-      "review_basis": "Printed normal cost or tapped-entry replacement and mana ability; shared scry orders only the authorized top cards in one private partition. Opt draws after the partition; Temple scry uses the normal entry-trigger stack. General production gates remain separate.",
+      "review_basis": "Printed normal cost or tapped-entry replacement and mana ability; shared scry orders only the authorized top cards in one private partition. Opt draws after the partition; Temple scry uses the normal entry-trigger stack. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:temple-of-mystery",
@@ -28808,15 +28835,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -28858,7 +28882,7 @@
       "card_id": "temple-of-silence",
       "source_facts_sha256": "328bc1db7ac64ffda9f42141f71f61a8904022d1dc3f6f7d928d6d40e2123663",
       "scope": "all_printed_faces",
-      "review_basis": "Printed normal cost or tapped-entry replacement and mana ability; shared scry orders only the authorized top cards in one private partition. Opt draws after the partition; Temple scry uses the normal entry-trigger stack. General production gates remain separate.",
+      "review_basis": "Printed normal cost or tapped-entry replacement and mana ability; shared scry orders only the authorized top cards in one private partition. Opt draws after the partition; Temple scry uses the normal entry-trigger stack. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:temple-of-silence",
@@ -28944,15 +28968,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -30739,7 +30760,7 @@
       "card_id": "underworld-coinsmith",
       "source_facts_sha256": "ab7ad5fadd82a02c56244119a29f5d5b776d3fdfd6aa635e4401480ed58dd96b",
       "scope": "all_printed_faces",
-      "review_basis": "Full printed face composes shared card/player target domains, normal announcement and resolution checks, ETB/upkeep/life-gain triggers, atomic life loss, APNAP player draws and ordinary entry/cost/mana operations. Player defenses and the whole-pod production rules gates remain separate.",
+      "review_basis": "Full printed face composes shared card/player target domains, normal announcement and resolution checks, ETB/upkeep/life-gain triggers, atomic life loss, APNAP player draws and ordinary entry/cost/mana operations. Player defenses and the whole-pod production rules gates remain separate. Constellation's self-entry and other-controlled-enchantment events are disjoint EventPattern compositions, preserving self-entry when an external continuous effect removes Enchantment and avoiding duplicate normal-entry triggers (2026-09-13 audit; CR 603.6a).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:underworld-coinsmith",
@@ -30749,6 +30770,40 @@
           "Creature"
         ],
         "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "constellation-self",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "GainLife",
+                "amount": 1
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
           {
             "node": "AbilityProgram",
             "ability_id": "constellation",
@@ -30769,7 +30824,7 @@
               "recipient_relation": "any",
               "characteristics": [],
               "any_types": [],
-              "exclude_source": false,
+              "exclude_source": true,
               "counters": []
             },
             "effects": [
@@ -32424,7 +32479,7 @@
       "card_id": "vault-of-champions",
       "source_facts_sha256": "85d1e66f1cf20d2949c5950861ff9b2b71edd24da57fbc41b1b057ad78a7ae5d",
       "scope": "all_printed_faces",
-      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification.",
+      "review_basis": "Catalog wording uses shared live-opponent count in an unless-entry modifier and ordinary choice of two mana colors. Eliminated players are excluded; no named-card execution branch or production certification. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:vault-of-champions",
@@ -32479,15 +32534,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -33820,7 +33872,7 @@
       "card_id": "yavimaya-coast",
       "source_facts_sha256": "f612201688af913a7625c69270a749401e022a907c792f39c6f61273b3b21ab3",
       "scope": "all_printed_faces",
-      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate.",
+      "review_basis": "Printed types and normal cost. Separate free colorless and colored-with-damage mana abilities use shared immediate effect classification, a single paid color choice, and the common damage pipeline. Damage is not a life payment; source lifelink and state-based loss timing remain shared. General production gates remain separate. Single-color mana choice uses ProduceMana(1) with the printed color order; mixed-color bundles and nonmana effects retain their distinct semantics (2026-09-13 library audit).",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:yavimaya-coast",
@@ -33897,15 +33949,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               },
               {
                 "node": "Damage",

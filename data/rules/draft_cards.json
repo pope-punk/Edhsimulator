@@ -69,15 +69,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "R"
-                  ],
-                  [
-                    "G"
-                  ]
-                ]
+                  "R",
+                  "G"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -218,15 +215,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "W"
-                  ],
-                  [
-                    "B"
-                  ]
-                ]
+                  "W",
+                  "B"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,
@@ -367,15 +361,12 @@
             },
             "effects": [
               {
-                "node": "ChooseMana",
+                "node": "ProduceMana",
                 "options": [
-                  [
-                    "G"
-                  ],
-                  [
-                    "U"
-                  ]
-                ]
+                  "G",
+                  "U"
+                ],
+                "amount": 1
               }
             ],
             "targets": null,

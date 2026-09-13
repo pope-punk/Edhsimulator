@@ -5,7 +5,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 This is a writing head start, with no local Python execution, test run, package
 installation, game launch, or paused-game migration. The seven new card programs
-are **unvalidated drafts**. The 227 programs in the reviewed bundle are unchanged;
+are **unvalidated drafts**. The reviewed bundle contains 227 programs;
 107 catalog cards remain outside that bundle, comprising these seven drafts and
 100 cards not yet started on this branch. Reviewed-program coverage is not a
 production certificate.
@@ -89,6 +89,14 @@ review interactions with replacement ordering, departures, entry copying, and
 any future life-payment prohibitions. Card programs must follow the reviewed-bundle
 process; passing these conformance scenarios does not certify whole-pod production
 readiness. The seven programs therefore remain separate drafts.
+
+## Library review follow-up
+
+The [2026-09-13 library audit](CARD_LIBRARY_AUDIT.md) records six corrected
+reviewed cards and consistent single-color mana composition for 26 reviewed
+cards and three drafts. It changes authored programs, not runtime modules or
+reviewed coverage. Its GitHub-hosted validation is pending; resolve any failures
+before adding the next card family.
 
 ## Continuing the remaining cards
 
