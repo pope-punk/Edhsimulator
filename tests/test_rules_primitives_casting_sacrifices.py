@@ -186,7 +186,7 @@ class CastingSacrificeTests(unittest.TestCase):
 
     def test_fling_retains_token_power_after_token_ceases_to_exist(self):
         self.game(token=True);self.state.add_counters(self.body,'+1/+1',3);self.cast()
-        self.assertEqual(Zone.OUTSIDE,self.state.get(self.state.current('paid')).zone)
+        self.assertNotIn('paid',{obj.ref.card_id for obj in self.state.objects()})
         self.drain();self.assertEqual(33,self.state.life('B'))
 
     def test_fling_with_negative_power_deals_no_damage(self):
@@ -298,7 +298,11 @@ class CastingSacrificeTests(unittest.TestCase):
         self.assertEqual(1,self.state.commander_casts('commander'))
         self.kernel.answer(request.request_id,'A',[1])
         self.assertEqual(2,self.state.commander_casts('commander'));self.assertEqual('A',self.kernel.priority)
-        self.drain();self.assertEqual(36,self.state.life('B'))
+        request=self.resolve();self.assertEqual('commander_sba',request.kind)
+        self.assertEqual(36,self.state.life('B'))
+        self.kernel.answer(request.request_id,'A',[0])
+        self.assertEqual(Zone.COMMAND,self.state.get(self.state.current('commander')).zone)
+        self.assertEqual(2,self.state.commander_casts('commander'))
 
     def test_modal_and_x_spell_keep_paid_statistics_in_the_selected_effect(self):
         cost=replace(self.cards['fling'].cast.cost,mana=ManaCost(0,('R',),1))
