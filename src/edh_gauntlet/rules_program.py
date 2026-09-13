@@ -626,6 +626,13 @@ class EntryAlternativeCost(AlternativeCost):
 
 
 @dataclass(frozen=True)
+class GraveyardAlternativeCost(AlternativeCost):
+    """Graveyard-only payment/permission, with cast-entry or stack-exit facts."""
+    entry_flags: tuple[str,...] = ()
+    exile_on_stack_exit: bool = False
+
+
+@dataclass(frozen=True)
 class CastSpec:
     cost: CostSpec
     timing: str = 'sorcery'
@@ -796,7 +803,7 @@ class CardProgram:
 
 KEYWORDS=frozenset(('haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+TYPES={cls.__name__:cls for cls in (GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
 EFFECTS=(ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
@@ -1346,17 +1353,25 @@ def validate(program,_depth=0):
             if (not isinstance(alternative,AlternativeCost) or type(alternative.alternative_id) is not str
                     or not alternative.alternative_id or alternative.alternative_id in alternative_ids):raise RulesViolation('Invalid alternative cost identity')
             alternative_ids.add(alternative.alternative_id);cost(alternative.cost)
-            if isinstance(alternative,EntryAlternativeCost):
+            if isinstance(alternative,EntryAlternativeCost) or isinstance(alternative,GraveyardAlternativeCost) and alternative.entry_flags:
                 if (not strings(alternative.entry_flags) or not alternative.entry_flags
                         or any(not flag for flag in alternative.entry_flags)
                         or len(alternative.entry_flags)!=len(set(alternative.entry_flags))
                         or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
                         or set(program.types)&{'Instant','Sorcery'}):
                     raise RulesViolation('Entry alternative costs require a permanent spell and unique entry facts')
+            if isinstance(alternative,GraveyardAlternativeCost):
+                if (not strings(alternative.entry_flags) or type(alternative.exile_on_stack_exit) is not bool
+                        or alternative.exile_on_stack_exit and not set(program.types)&{'Instant','Sorcery'}):
+                    raise RulesViolation('Invalid graveyard casting facts')
+                if any(c.kind!='exile' or c.selector is None or c.selector.zone!=Zone.GRAVEYARD
+                        or c.selector.relation!='owned' or not c.selector.exclude_source
+                        for c in alternative.cost.zone_costs):
+                    raise RulesViolation('Graveyard alternative zone costs require other owned graveyard cards')
             if alternative.condition is not None:condition(alternative.condition)
             if (program.cast.cost.life or program.cast.cost.mana.x_symbols or alternative.cost.mana.x_symbols
                     or alternative.cost.tap_source or alternative.cost.tap_selector is not None
-                    or alternative.cost.zone_costs or alternative.cost.counter_costs):
+                    or alternative.cost.zone_costs and not isinstance(alternative,GraveyardAlternativeCost) or alternative.cost.counter_costs):
                 raise RulesViolation('Alternative costs currently support fixed mana and life payments')
         quantity(program.cast.generic_reduction,allow_source=False)
         if program.cast.cost.counter_costs:raise RulesViolation('Source counter costs require a battlefield activation')

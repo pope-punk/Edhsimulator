@@ -99,6 +99,8 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
         commander_considered = True
         if accepted:
             destination = Zone.COMMAND
+    elif candidate.kind == 'flashback':
+        destination = Zone.EXILE
     elif candidate.kind == 'copy':
         if accepted:
             copy = copied_definition

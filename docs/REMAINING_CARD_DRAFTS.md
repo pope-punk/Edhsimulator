@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **242 reviewed programs / 307 deck copies**. There are **92 cards outside the
-reviewed bundle**, all unstarted. The draft bundle is empty. Reviewed coverage is not production certification.
+reviewed bundle**, including two graveyard-casting drafts and 90 unstarted cards. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -28,7 +28,22 @@ payments during resolution. Inspect the actual shared mechanics and adjust the
 queue as needed. These five candidates remain unstarted. Uro's detailed escape
 notes remain in the inventory. The hourly heartbeat now carries this policy.
 
-## Current cycle: casting sacrifices for Crop Rotation and Fling
+## Current cycle: graveyard casting and exile durations
+
+Uro and Bulk Up are isolated drafts using GraveyardAlternativeCost. The ordinary
+cost retains its original casting permissions; the alternative binds graveyard
+permission to its specific payment. Uro composes the existing entry facts,
+sacrifice, gain/draw/land and attack trigger primitives. Bulk Up composes a signed
+recipient-power modifier with an exact stack-incarnation Flashback replacement.
+Twenty hosted conformance methods are authored; their results are pending.
+Checkpoint schema is 114. No local Python or game execution is permitted.
+
+The same cycle continues into Grasp of Fate and Prayer of Binding. Their printed
+exile-until-leaves semantics require a non-triggered return transaction distinct
+from the Oblivion Ring family. This is the next implementation work while hosted
+validation checks the graveyard-casting pair.
+
+## Prior cycle: casting sacrifices for Crop Rotation and Fling
 
 Both reviewed programs reuse selected ZoneCost sacrifices. The shared casting
 transaction keeps the announced spell public on the stack during payment choices,

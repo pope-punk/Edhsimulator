@@ -2,7 +2,8 @@
 
 This experimental slice uses already-produced, unrestricted mana and one atomic
 activation zone-cost group or fixed source-counter costs. Spells may pay one
-selected sacrifice group plus fixed/variable unrestricted mana. Separately ordered
+selected sacrifice group plus fixed/variable unrestricted mana, or a graveyard
+alternative with one selected exile group and fixed unrestricted mana. Separately ordered
 cost groups, restricted mana and mana during announcement remain unsupported.
 Fixed alternative costs may carry entry facts; their consequences compose ordinary triggers. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
@@ -10,7 +11,7 @@ mana use shared turn-history and characteristic rules.
 from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
-from .rules_program import EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -158,7 +159,9 @@ class CastingRules:
         source = self.state.get(ref)
         program = self.definition(source)
         if kind == 'cast':
-            if program.cast is None or source.zone not in program.cast.origin_zones or source.owner != actor:
+            alternative=next((a for a in program.cast.alternatives if a.alternative_id==alternative_id),None) if program.cast else None
+            origins=(Zone.GRAVEYARD,) if isinstance(alternative,GraveyardAlternativeCost) else program.cast.origin_zones if program.cast else ()
+            if program.cast is None or source.zone not in origins or source.owner != actor:
                 raise RulesViolation('Unsupported spell origin or permission')
             if source.zone == Zone.COMMAND and not source.commander:
                 raise RulesViolation('Only a commander has this command-zone permission')
@@ -323,8 +326,10 @@ class CastingRules:
         if quote.alternative_id is not None:
             frame['alternative_id']=quote.alternative_id
             alternative=next(a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id)
-            if isinstance(alternative,EntryAlternativeCost):
+            if isinstance(alternative,(EntryAlternativeCost,GraveyardAlternativeCost)):
                 frame['entry_flags']=list(alternative.entry_flags)
+            if isinstance(alternative,GraveyardAlternativeCost) and alternative.exile_on_stack_exit:
+                frame['exile_on_stack_exit']=True
         if program.modal is not None:
             selected=dict(quote.mode_choices)
             frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]

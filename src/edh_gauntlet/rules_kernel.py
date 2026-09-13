@@ -38,7 +38,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=113
+    CHECKPOINT_SCHEMA=114
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -527,6 +527,15 @@ class RulesKernel(CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules
             entry_view=self._proposal_view(proposal) if proposal.destination==Zone.BATTLEFIELD else None
             types=entry_view[1].types if entry_view is not None else self._proposal_types(proposal)
             available = candidates(self.state, self.definitions, proposal, types,applicable)
+            # Flashback follows this exact spell incarnation through every stack
+            # departure, including counters, illegal targets and returns to hand.
+            flashback_key=f'flashback:{proposal.before.ref.card_id}@{proposal.before.ref.incarnation}'
+            frames=tuple(self.stack)+((self.resolving,) if self.resolving is not None else ())
+            if (proposal.before.zone==Zone.STACK and proposal.destination!=Zone.EXILE
+                    and flashback_key not in proposal.used
+                    and any(f['spell'] and f.get('exile_on_stack_exit') and self._source(f).ref==proposal.before.ref for f in frames)
+                    and (not available or available[0].priority>=3)):
+                available+=(ReplacementCandidate(flashback_key,'Exile this flashback spell','flashback',3,proposal.before.owner),)
             if not available or available[0].priority>=3:
                 available=available+self._entry_effect_candidates(proposal,entry_view)
             if not available:
