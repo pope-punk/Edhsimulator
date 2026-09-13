@@ -206,7 +206,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "hosted_validation_status": "passed",
       "batch": "graveyard-and-exile-2026-09-13",
       "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
       "reviewed_definition": "catalog:bulk-up",
@@ -215,6 +215,10 @@
       "draft_hosted_validation": {
         "commit": "a806a1822952084aa4fddf1510af6db899036914",
         "run_id": 34774446530
+      },
+      "hosted_validation": {
+        "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+        "run_id": 34774679040
       }
     },
     {
@@ -880,7 +884,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "hosted_validation_status": "passed",
       "batch": "graveyard-and-exile-2026-09-13",
       "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
       "reviewed_definition": "catalog:grasp-of-fate",
@@ -889,6 +893,10 @@
       "draft_hosted_validation": {
         "commit": "a806a1822952084aa4fddf1510af6db899036914",
         "run_id": 34774446530
+      },
+      "hosted_validation": {
+        "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+        "run_id": 34774679040
       }
     },
     {
@@ -1571,7 +1579,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "hosted_validation_status": "passed",
       "batch": "graveyard-and-exile-2026-09-13",
       "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
       "reviewed_definition": "catalog:prayer-of-binding",
@@ -1580,6 +1588,10 @@
       "draft_hosted_validation": {
         "commit": "a806a1822952084aa4fddf1510af6db899036914",
         "run_id": 34774446530
+      },
+      "hosted_validation": {
+        "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+        "run_id": 34774679040
       }
     },
     {
@@ -2094,7 +2106,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_reviewed_loader_validation",
+      "hosted_validation_status": "passed",
       "batch": "graveyard-and-exile-2026-09-13",
       "review_record": "docs/GRAVEYARD_AND_EXILE_CARD_REVIEW.md",
       "reviewed_definition": "catalog:uro-titan-of-nature-s-wrath",
@@ -2103,6 +2115,10 @@
       "draft_hosted_validation": {
         "commit": "a806a1822952084aa4fddf1510af6db899036914",
         "run_id": 34774446530
+      },
+      "hosted_validation": {
+        "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+        "run_id": 34774679040
       }
     },
     {
@@ -2304,9 +2320,9 @@
     }
   ],
   "hosted_validation": {
-    "commit": "a806a1822952084aa4fddf1510af6db899036914",
-    "run_id": 34774446530,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
+    "commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+    "run_id": 34774679040,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -2314,7 +2330,7 @@
     "tests_per_platform": 1338,
     "new_test_methods": 45,
     "conclusion": "success",
-    "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
+    "scope": "All 246 source-bound reviewed programs including Uro, Bulk Up, Grasp of Fate and Prayer of Binding; all 45 new methods use the reviewed loader; replay, source syntax, installation and packaged assets; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2341,14 +2357,14 @@
     ],
     "runtime_checkpoint_schema": 114,
     "new_test_methods": 45,
-    "validation_status": "pending_reviewed_loader_validation",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
     "next_batch": [
       "dawn-of-hope",
       "rhystic-study",
       "smothering-tithe"
     ],
-    "review_work_remaining": "All four printed faces and source bindings are reviewed. The same 45 conformance methods now use load_reviewed(); its hosted run is pending.",
+    "review_work_remaining": "The four-card batch is complete: printed-face review, exact source binding and reviewed-loader hosted validation all passed. Continue the optional resolution-payment family; assess Gleaming Splendor's second-draw trigger as a fourth card when practical.",
     "resolved_validation_issues": [
       {
         "commit": "d0bc4fb57b2b7c8c98cb25d5fcf60ecdf602c559",
@@ -2361,7 +2377,8 @@
           "Uro's draft GainLife JSON incorrectly included a players field, rejected by the strict codec before the new fixture class ran.",
           "An earlier schema assertion required exactly 113; the new layout intentionally uses 114."
         ],
-        "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout."
+        "resolution": "Remove the unsupported JSON field, and keep the historical test checking schema 113 or newer while rejecting its previous layout.",
+        "resolution_commit": "ddaefed0a115737dc907bc4f6365ab383f039143"
       },
       {
         "commit": "ddaefed0a115737dc907bc4f6365ab383f039143",
@@ -2374,7 +2391,8 @@
           "Two new fixtures compared catalog tuples directly with their JSON list representation rather than comparing canonical source-fact digests.",
           "The Grasp grouping assertion used a nonexistent ChoiceRequest.groups attribute."
         ],
-        "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed."
+        "resolution": "Use canonical source-fact digests and the actual grouped-choice field; other completed conformance methods passed.",
+        "resolution_commit": "a806a1822952084aa4fddf1510af6db899036914"
       }
     ],
     "draft_validation": {
@@ -2409,10 +2427,18 @@
         "Permit only valid mana abilities in the payment window, preserving suspension, mana choices, zone costs, once-only payment, generated triggers and absence of ordinary priority.",
         "Bind each resolution-stage request and accepted mana action to the paused effect so checkpoint restore and actor replay cannot pay, draw or create tokens twice.",
         "Dawn pays optionally then draws, Rhystic lets the opponent pay before the controller's optional draw, and Tithe creates one Treasure after an opponent declines or cannot pay. Each draw and life-gain event retains its own trigger.",
-        "Keep private hand and mana-choice data actor-scoped; add rejection, insufficient resources, repeated events, opponent departure and checkpoint tests on hosted runners."
+        "Keep private hand and mana-choice data actor-scoped; add rejection, insufficient resources, repeated events, opponent departure and checkpoint tests on hosted runners.",
+        "Assess Gleaming Splendor as a fourth card: track each player's second actual draw of the turn, including draws before it entered; hand additions are not draws. Its two-player draw activation can reuse existing player targets."
       ],
-      "guard": "No local execution. Unsupported payment shapes stay rejected; keep new cards isolated until every printed clause and hosted validation are complete."
-    }
+      "guard": "No local execution. Unsupported payment shapes stay rejected; keep new cards isolated until every printed clause and hosted validation are complete.",
+      "secondary_candidates": [
+        "gleaming-splendor"
+      ]
+    },
+    "validated_commit": "15fb17030a66d7c8e0e379645be3f5bf0eecd454",
+    "ci_run_id": 34774679040,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040",
+    "tests_per_platform": 1338
   },
   "hosted_validation_history": [
     {
@@ -2554,6 +2580,19 @@
       "new_test_methods": 24,
       "conclusion": "success",
       "scope": "All 242 source-bound reviewed programs including Crop Rotation and Fling, accepted spell sacrifice payments, paid characteristics, replay, source syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "a806a1822952084aa4fddf1510af6db899036914",
+      "run_id": 34774446530,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1338,
+      "new_test_methods": 45,
+      "conclusion": "success",
+      "scope": "All four isolated drafts, graveyard casting, Flashback stack departures, immediate exile returns, public projection, replay, syntax, installation and packaged assets"
     }
   ],
   "cycle_history": [

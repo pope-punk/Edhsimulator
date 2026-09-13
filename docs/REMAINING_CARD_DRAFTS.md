@@ -25,7 +25,8 @@ successful hosted validation.
 The next candidate queue is **Dawn of Hope, Rhystic Study and Smothering Tithe**.
 They need a shared optional payment boundary during resolution, with the paying
 player permitted to activate mana abilities. The inventory records concrete
-implementation notes and the existing primitives to reuse. Continue into another
+implementation notes and the existing primitives to reuse. Assess **Gleaming
+Splendor** as a fourth card using second-draw event tracking. Continue into another
 coherent family when useful context remains.
 
 ## Current cycle: four-card graveyard casting and exile durations
@@ -41,7 +42,11 @@ The same **45 conformance methods** now use the reviewed loader.
 [Draft validation 34774446530](https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530)
 passed **1,338 tests on each of Ubuntu and Windows**, plus source syntax,
 installation and packaged-asset checks, at `a806a1822952084aa4fddf1510af6db899036914`.
-Reviewed-loader validation is pending. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
+[Reviewed-loader validation 34774679040](https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040)
+also passed **1,338 tests on each of Ubuntu and Windows**, plus source syntax,
+installation and packaged assets, at `15fb17030a66d7c8e0e379645be3f5bf0eecd454`.
+The following result-recording commit changes only documentation and inventory
+metadata; runtime, programs and tests are unchanged after this validation. [The cycle review](GRAVEYARD_AND_EXILE_CARD_REVIEW.md)
 records the complete mappings, public projection and historical fixture fixes.
 
 Checkpoint schema is **114**. Existing games and checkpoints are not migrated.
@@ -71,9 +76,9 @@ plus source syntax, installation and packaged-asset checks, at
 The following result-recording commit changes only documentation and inventory
 validation metadata; no runtime, card-program or test changes follow this result.
 
-Checkpoint schema is now **113**. Previous games and checkpoints are not migrated.
-Next: the multi-card queue above, starting with Uro's escape payment/permission
-and attack trigger. All project execution remains hosted.
+That cycle used checkpoint schema **113**. The current cycle above adds Uro's
+escape permission/payment and attack trigger alongside three further cards.
+All project execution remains hosted.
 
 ## Prior cycle: Animate Dead and linked-exile review
 
@@ -233,7 +238,8 @@ deck membership, printed text and each card's current authoring/review status. I
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
 card-level review. Crop Rotation and Fling also completed printed-face review;
 their same conformance methods now load the source-bound reviewed programs.
-The promotion's hosted check passed; continue with the next family below.
+The current four-card cycle adds Uro, Bulk Up, Grasp of Fate and Prayer of Binding.
+Continue from the current queue and validation record at the top of this file.
 
 Uro's graveyard alternative now supports its five-card exile group. Separately
 ordered cost groups and mana during announcement remain rejected. Next, add

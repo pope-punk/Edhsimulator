@@ -61,7 +61,17 @@ checkpoint reconstruction.
 
 [Hosted draft validation 34774446530](https://github.com/pope-punk/Edhsimulator/actions/runs/34774446530) passed **1,338 tests on each Ubuntu and Windows runner**, plus source syntax,
 installation and packaged assets, at `a806a1822952084aa4fddf1510af6db899036914`. All 45 new methods
-passed. The same methods now use the reviewed loader; that validation is pending.
+passed. The same methods use the reviewed loader in
+[validation 34774679040](https://github.com/pope-punk/Edhsimulator/actions/runs/34774679040), which also passed **1,338 tests
+on each Ubuntu and Windows runner**, plus syntax, installation and packaged
+assets, at `15fb17030a66d7c8e0e379645be3f5bf0eecd454`. The four cards are source-bound reviewed
+programs. Library coverage is **246 unique cards / 311 deck copies**, with
+**88 unique cards remaining** and no drafts.
+
+The subsequent result-recording commit changes only this review, the work order
+and inventory metadata. No runtime, test or card-program changes follow the
+successful reviewed-loader result. Earlier failures remain recorded in the
+inventory, with their corrective commit identities.
 The first run rejected an extra GainLife JSON field and an obsolete exact schema
 assertion; those authoring/fixture errors are corrected and retained in the
 inventory's validation history. No successful result is inferred from a commit.
