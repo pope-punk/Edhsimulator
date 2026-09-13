@@ -58,6 +58,12 @@ The two existing count assertions now match the source branch's already-authored
 Fierce Guardianship: 227 reviewed-bundle programs and 107 remaining cards. This
 is a static inventory correction, not a new validation result.
 
+GitHub-hosted validation also reproduced two Windows-only fixture problems on
+the unchanged source branch. The fingerprint test now reads UTF-8 explicitly,
+and SQLite corruption/backup fixtures explicitly close their temporary database
+connections. SQLite transaction context managers do not close connections. The
+durable runtime and reviewed source fingerprints are unchanged.
+
 ## Validation still required
 
 Twenty-four regression test methods were written across

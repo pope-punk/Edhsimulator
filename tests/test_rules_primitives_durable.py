@@ -1,3 +1,4 @@
+from contextlib import closing
 """Durable acknowledgment boundaries, duplicate suppression and crash recovery."""
 import json
 import os
@@ -110,12 +111,14 @@ class DurableTests(unittest.TestCase):
 
     def test_corrupt_record_is_rejected(self):
         store=self.create();store.submit('A','request',self.command);store.close()
-        with sqlite3.connect(self.path) as db:db.execute("UPDATE commands SET request_id='tampered'")
+        with closing(sqlite3.connect(self.path)) as db:
+            with db:db.execute("UPDATE commands SET request_id='tampered'")
         with self.assertRaises(DurableStoreError):self.reopen()
 
     def test_corrupt_checkpoint_is_rejected(self):
         store=self.create();store.close()
-        with sqlite3.connect(self.path) as db:db.execute("UPDATE checkpoint SET state='{}'")
+        with closing(sqlite3.connect(self.path)) as db:
+            with db:db.execute("UPDATE checkpoint SET state='{}'")
         with self.assertRaises(DurableStoreError):self.reopen()
 
     def crash(self,stage):
@@ -167,7 +170,7 @@ s.submit('A','request',command)
 
     def test_retained_receipt_rejects_an_older_valid_backup(self):
         store=self.create();backup=Path(self.temp.name)/'old.sqlite'
-        with sqlite3.connect(backup) as destination:store.connection.backup(destination)
+        with closing(sqlite3.connect(backup)) as destination:store.connection.backup(destination)
         receipt=store.submit('A','request',self.command)['commit'];store.close()
         with self.assertRaisesRegex(DurableStoreError,'required commit receipt'):
             DurableRulesAdapter.open(backup,self.programs,binding=BINDING,minimum_commit=receipt)

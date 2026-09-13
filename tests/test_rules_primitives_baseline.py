@@ -50,8 +50,8 @@ class BaselineTests(unittest.TestCase):
     def test_fixture_card_text_matches_the_reviewed_source_fingerprints(self):
         import hashlib
         from edh_gauntlet.paths import PROJECT_ROOT
-        manifest = json.loads((PROJECT_ROOT / 'data/reference/rules_primitives_sources.json').read_text())
-        catalog = json.loads((PROJECT_ROOT / manifest['card_text_source']).read_text())
+        manifest = json.loads((PROJECT_ROOT / 'data/reference/rules_primitives_sources.json').read_text(encoding='utf-8'))
+        catalog = json.loads((PROJECT_ROOT / manifest['card_text_source']).read_text(encoding='utf-8'))
         rows = catalog['cards'] if isinstance(catalog, dict) else catalog
         cards = {card['card_id']: card for card in rows}
         self.assertEqual(6, len(manifest['card_text_fingerprints']))
