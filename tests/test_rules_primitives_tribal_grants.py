@@ -13,7 +13,7 @@ class TribalGrantTests(unittest.TestCase):
         self.programs=tuple(r['program'] for r in load_reviewed().values())+(
             CardProgram('illusion','Illusion',('Creature',),subtypes=('Illusion',),power=1,toughness=1),
             CardProgram('angel','Angel',('Creature',),subtypes=('Angel',),power=2,toughness=2),
-            CardProgram('false-angel','False Angel',('Artifact',),subtypes=('Angel',)),
+            CardProgram('kindred-angel','Kindred Angel',('Kindred','Artifact'),subtypes=('Angel',)),
             CardProgram('illusion-lord','Illusion Lord',('Creature',),subtypes=('Illusion',),power=2,toughness=2,
                 continuous=load_reviewed()['lord-of-the-unreal']['program'].continuous),)
         self.state=RulesState(('A','B'));self.kernel=RulesKernel(self.state,self.programs)
@@ -25,14 +25,16 @@ class TribalGrantTests(unittest.TestCase):
         while self.kernel.stack and not self.kernel.pending_choice:
             self.kernel.pass_priority(self.kernel.priority)
 
-    def test_lyra_excludes_self_opponents_and_noncreatures(self):
+    def test_lyra_excludes_self_and_opponents_but_grants_kindred_angels_lifelink(self):
         lyra=self.add('lyra','catalog:lyra-dawnbringer');angel=self.add('angel','angel')
-        enemy=self.add('enemy','angel','B');false=self.add('false','false-angel')
+        enemy=self.add('enemy','angel','B');kindred=self.add('kindred','kindred-angel')
         self.assertEqual(5,self.kernel.effective(lyra).power)
         self.assertTrue({'flying','first_strike','lifelink'}<=self.kernel.effective(lyra).keywords)
         self.assertEqual(3,self.kernel.effective(angel).power);self.assertIn('lifelink',self.kernel.effective(angel).keywords)
         self.assertEqual(2,self.kernel.effective(enemy).power);self.assertNotIn('lifelink',self.kernel.effective(enemy).keywords)
-        self.assertNotIn('lifelink',self.kernel.effective(false).keywords)
+        self.assertIn('lifelink',self.kernel.effective(kindred).keywords)
+        self.assertIsNone(self.kernel.effective(kindred).power)
+        self.assertIsNone(self.kernel.effective(kindred).toughness)
 
     def test_source_control_and_recipient_control_update_membership(self):
         lord=self.add('lord','catalog:lord-of-the-unreal');own=self.add('own','illusion');enemy=self.add('enemy','illusion','B')

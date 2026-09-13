@@ -193,8 +193,8 @@ class LibraryAuditTests(unittest.TestCase):
                     self.game()
                     ref = self.add(key)
                     self.state.start_turn('A')
-                    self.state.add_mana('A', pool)
                     self.kernel.open_window_for_scenario('A')
+                    self.state.add_mana('A', pool)
                     request = self.kernel.commit_action(
                         self.kernel.quote_activation('mana', 'A', ref, ability_id), payment)
                     self.assertEqual(len(bundles), len(request.options))
