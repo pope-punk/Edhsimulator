@@ -78,8 +78,19 @@ cards through the reviewed loader. It found no unresolved failure.
 
 Animate Dead subsequently completed printed-face review and received its exact
 source-fact hash, complete review basis and `catalog:animate-dead` definition.
-Its same 19 methods now load the reviewed program. Validation of that promotion
-is pending. The inventory now contains **240 reviewed programs / 305 deck copies**,
+Its same 19 methods now load the reviewed program. The first promotion run
+caught an outdated admission assertion: one fixture-only card remained, rather
+than two. The assertion now checks that count and explicitly identifies Animate
+Dead as reviewed while retaining its historical fixture fingerprint. No runtime
+or card-program change was needed for that correction.
+
+[Reviewed-loader validation run 34769848367](https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367) passed **1,269 tests on each of Ubuntu and Windows**,
+plus source syntax, installation and packaged-asset checks, at
+`8a2f6ca5713fc56139dec706666231acb82f4be7`. All three cards load through the reviewed bundle.
+The subsequent result-recording commit changes only documentation and this
+inventory's validation metadata.
+
+The inventory now contains **240 reviewed programs / 305 deck copies**,
 no drafts and **94 unstarted cards**.
 
 ## Compatibility and scope
@@ -111,7 +122,6 @@ confirm Oblivion Ring's separate triggers and Aura returns.
 explains why a returned noncreature God cannot be attached, and is sacrificed
 after Animate Dead falls off.
 
-Next: finish the promotion's hosted validation, then implement casting zone-cost
-transactions for Crop Rotation and Fling using the existing activation-cost
+Next: implement casting zone-cost transactions for Crop Rotation and Fling using the existing activation-cost
 transaction code where applicable. Fling needs the sacrificed creature's derived
 power captured before payment; a selector alone cannot supply that information.

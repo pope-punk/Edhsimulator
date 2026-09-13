@@ -28,7 +28,13 @@ The cycle source base is `c1f5e17d0fbfee7a5dfe147e086243025797e319`.
 passed **1,269 tests on each of Ubuntu and Windows**, plus source syntax,
 installation and packaged-asset checks, at `c2d994dfe95d2202f1d13c32033b769f63c6e832`.
 This validated the target correction, Animate Dead draft and linked-exile
-promotions. Validation of Animate Dead's reviewed-loader promotion is pending.
+promotions.
+
+[Reviewed-loader validation run 34769848367](https://github.com/pope-punk/Edhsimulator/actions/runs/34769848367) passed **1,269 tests on each of Ubuntu and Windows**,
+plus source syntax, installation and packaged-asset checks, at
+`8a2f6ca5713fc56139dec706666231acb82f4be7`. All three cards load through the reviewed bundle.
+The subsequent result-recording commit changes only documentation and this
+inventory's validation metadata.
 Next: casting zone costs for Crop Rotation and Fling.
 
 Checkpoint schema is 112. Existing checkpoints and started games are not
