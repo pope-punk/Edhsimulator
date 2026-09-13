@@ -36,10 +36,14 @@ The **62 new conformance methods** now use the reviewed loader.
 [Draft validation 34782390422](https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422)
 passed **1,499 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `bc189ee62527bf3655e16b7b54b7b361cc9ab145`.
-Reviewed-loader validation is pending; do not record this cycle as complete yet.
+[Reviewed-loader validation 34782734602](https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602)
+passed **1,499 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `26e46e4d37b7fcb0724d3265099c24a31a46aa0a`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
 See [the cycle review](COUNTER_LIFECYCLE_CARD_REVIEW.md).
 
-After reviewed validation, continue **Dance of the Dead, Mystic Remora, Touch the
+Continue **Dance of the Dead, Mystic Remora, Touch the
 Spirit Realm and Talon Gates of Madara**. The JSON inventory records the exact
 requirements and source findings: attached-controller upkeep and untap
 suppression; computed cumulative-upkeep payments; one-shot next-end-step returns;
@@ -70,8 +74,8 @@ The following result-recording commit changes only documentation and inventory;
 runtime, programs and tests are unchanged after this validation.
 See [the cycle review](COUNTER_TRANSFER_CARD_REVIEW.md).
 
-The next candidate queue is **Xolatoyac, the Smiling Flood; The Earth Crystal;
-Dark Depths; and Parallax Wave**. The inventory records concrete requirements:
+That cycle's next queue was **Xolatoyac, the Smiling Flood; The Earth Crystal;
+Dark Depths; and Parallax Wave**, now completed above. Its retained requirements were:
 counter-conditioned type grants independent of their source; target division
 during activation announcement; nonduplicating state triggers and successful
 sacrifice; and the Fading removal/sacrifice lifecycle. Reuse the current counter,
@@ -304,8 +308,7 @@ deck membership, printed text and each card's current authoring/review status. I
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
 card-level review. Crop Rotation and Fling also completed printed-face review;
 their same conformance methods now load the source-bound reviewed programs.
-The graveyard/exile and payment/draw families also completed review. The latest
-counter-transfer family adds four more reviewed programs. Continue from the current
+The graveyard/exile and payment/draw families also completed review. The counter-transfer and counter-lifecycle families each add four reviewed programs. Continue from the current
 queue and validation record at the top of this file.
 
 Uro's graveyard alternative now supports its five-card exile group. Separately

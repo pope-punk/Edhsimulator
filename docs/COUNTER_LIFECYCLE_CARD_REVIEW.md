@@ -3,7 +3,7 @@
 Source branch: `codex/remaining-card-programs`.
 Cycle base: `2cbc5f63a54aa67ae71cddbce5219da350aeec5a`.
 Status: all four printed programs completed source binding and are promoted to
-the reviewed bundle. Hosted draft validation passed; reviewed-loader CI is pending.
+the reviewed bundle. Hosted draft and reviewed-loader validation both passed.
 No project code or Python was executed on the user's computer.
 
 ## Printed-face mapping
@@ -134,4 +134,16 @@ The existing 254 reviewed rows are unchanged.
 
 The library now contains **258 reviewed programs / 323 deck copies**; **76 cards /
 77 copies remain unstarted** and the draft bundle is empty. Reviewed-loader
-hosted validation is pending. No production certification or game migration is implied.
+hosted validation passed as recorded below. No production certification or game migration is implied.
+
+## Reviewed-loader validation
+
+[Run 34782734602](https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602) passed **1,499 tests on each of Ubuntu
+and Windows**, plus source syntax, distribution installation and packaged-asset
+verification, at `26e46e4d37b7fcb0724d3265099c24a31a46aa0a`.
+All 62 new cycle methods use the source-bound reviewed loader. All four printed
+programs, exact source facts, replay and checkpoint behavior are included.
+
+The following result-recording commit changes only this review, the work order
+and the static inventory. No runtime, card-program or test change follows the
+validated code. The next cycle's four-card work order is retained in the inventory.

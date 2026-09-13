@@ -375,7 +375,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-lifecycles-2026-09-13",
       "shared_mechanics": [
         "WhileCounter",
@@ -392,6 +392,10 @@
       "draft_hosted_validation": {
         "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
         "run_id": 34782390422
+      },
+      "hosted_validation": {
+        "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+        "run_id": 34782734602
       }
     },
     {
@@ -1631,7 +1635,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-lifecycles-2026-09-13",
       "shared_mechanics": [
         "WhileCounter",
@@ -1648,6 +1652,10 @@
       "draft_hosted_validation": {
         "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
         "run_id": 34782390422
+      },
+      "hosted_validation": {
+        "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+        "run_id": 34782734602
       }
     },
     {
@@ -2188,7 +2196,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-lifecycles-2026-09-13",
       "shared_mechanics": [
         "WhileCounter",
@@ -2205,6 +2213,10 @@
       "draft_hosted_validation": {
         "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
         "run_id": 34782390422
+      },
+      "hosted_validation": {
+        "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+        "run_id": 34782734602
       }
     },
     {
@@ -2539,7 +2551,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-lifecycles-2026-09-13",
       "shared_mechanics": [
         "WhileCounter",
@@ -2556,13 +2568,17 @@
       "draft_hosted_validation": {
         "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
         "run_id": 34782390422
+      },
+      "hosted_validation": {
+        "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+        "run_id": 34782734602
       }
     }
   ],
   "hosted_validation": {
-    "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
-    "run_id": 34782390422,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
+    "commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+    "run_id": 34782734602,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -2570,7 +2586,7 @@
     "tests_per_platform": 1499,
     "new_test_methods": 62,
     "conclusion": "success",
-    "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
+    "scope": "All 258 source-bound reviewed programs, including Xolatoyac, The Earth Crystal, Dark Depths and Parallax Wave; all 62 new methods through the reviewed loader; actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
   },
   "latest_cycle": {
     "date": "2026-09-13",
@@ -2596,9 +2612,9 @@
     "runtime_checkpoint_schema": 117,
     "state_checkpoint_schema": 13,
     "new_test_methods": 62,
-    "validation_status": "pending_reviewed_loader_github_ci",
+    "validation_status": "passed_github_hosted_ci",
     "unresolved_defects": [],
-    "review_work_remaining": "All four complete printed programs have exact source bindings and passed hosted draft validation. The 62 new methods now use the reviewed loader. Validate that promoted bundle before recording completion.",
+    "review_work_remaining": "All four printed programs completed exact source binding and reviewed-loader hosted validation. Continue Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Talon Gates of Madara using the retained implementation findings.",
     "resolved_validation_issues": [
       {
         "commit": "f20404e234e443c6951141d429f015f6c4ef7307",
@@ -2682,7 +2698,11 @@
       "new_test_methods": 62,
       "conclusion": "success",
       "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
-    }
+    },
+    "validated_commit": "26e46e4d37b7fcb0724d3265099c24a31a46aa0a",
+    "ci_run_id": 34782734602,
+    "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782734602",
+    "tests_per_platform": 1499
   },
   "hosted_validation_history": [
     {
@@ -2876,6 +2896,19 @@
       "new_test_methods": 53,
       "conclusion": "success",
       "scope": "All 254 source-bound reviewed programs including Forgotten Ancient, The Ozolith, Aven Courier and Essence Channeler; all 53 new methods use the reviewed loader; actor replay, source syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "bc189ee62527bf3655e16b7b54b7b361cc9ab145",
+      "run_id": 34782390422,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1499,
+      "new_test_methods": 62,
+      "conclusion": "success",
+      "scope": "Four isolated counter-lifecycle drafts; source-independent durations, exact state triggers, announced target division, Fading/linked exile, suspended payments, actor projection, checkpoint/replay, syntax, installation and packaged assets"
     }
   ],
   "cycle_history": [
