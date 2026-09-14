@@ -60,6 +60,7 @@ class SpellCopyTests(unittest.TestCase):
         return Payment(tuple(sorted(Counts(symbols).items())),tagged_mana=tuple(tags),**kw)
 
     def cast(self,ref,normal='',targets=(),tags=(),**kw):
+        if self.kernel.priority is None and not self.kernel.stack:self.kernel.open_window_for_scenario('A')
         while self.kernel.priority!='A':self.kernel.pass_priority(self.kernel.priority)
         payment=self.payment(normal,tags)
         quote=self.kernel.quote_cast('cp-cast-'+str(len(self.kernel.action_receipts)),'A',ref,targets,**kw)

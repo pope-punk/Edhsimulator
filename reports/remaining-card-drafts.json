@@ -3517,7 +3517,20 @@
       "chthonian-nightmare",
       "entity-tracker"
     ],
-    "hosted_attempts": [],
+    "hosted_attempts": [
+      {
+        "stage": "initial_draft",
+        "commit": "e71206e2f609dbaf4e8ae85892db7024db552844",
+        "run_id": 34866722108,
+        "conclusion": "failure",
+        "tests_run_ubuntu": 2148,
+        "failures": 0,
+        "errors": 2,
+        "findings": [
+          "Both failures were fixture lifecycle errors: a second scenario cast lacked reopened priority, and the land-play fixture lacked an active turn schedule. Production behavior and all other conformance checks passed on Ubuntu; Windows was cancelled by matrix fail-fast."
+        ]
+      }
+    ],
     "review_work_remaining": "Hosted draft conformance, source-bound promotion, required reviewed-loader conformance.",
     "unresolved_defects": [],
     "next_batch_source_review": {
