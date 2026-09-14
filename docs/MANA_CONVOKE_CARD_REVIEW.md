@@ -72,14 +72,36 @@ activation costs and legality. Printed faces are bound to the repository catalog
 | horizon-of-progress | `868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16` |
 | devouring-light | `529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e` |
 
+## Existing-card source correction
+
+The first hosted run exposed an incorrect stored face for **Baldur's Gate**.
+The [official Wizards card image](https://media.wizards.com/2022/clb/en_Vp5dLGW0fI.png),
+linked from the [set mechanics article](https://magic.wizards.com/en/news/feature/commander-legends-battle-for-baldurs-gate-mechanics),
+shows `{T}: Add {C}.` and the variable Gate ability, with no tapped-entry clause.
+The reference text, mana annotation, generated catalog and reviewed program now
+agree. Its color identity is empty. The corrected source-facts SHA-256 is
+`219f1fd41ef5b9f0fa550f82f10d93d2b87625f13eb96dcad7125b5406ddb398`.
+
+This scoped correction retains the reference snapshot identifier and is audited
+here and in Git history. Of the prior 278 programs, 277 are unchanged; Baldur's
+Gate is the single intentional correction and is not counted as a new card.
+The old entry-threshold test now checks unconditional untapped entry. New tests
+check actual colorless production and byte-for-byte catalog regeneration from
+the corrected source inputs. Existing games retain their bound implementation.
+
+[Initial draft run 34805862822](https://github.com/pope-punk/Edhsimulator/actions/runs/34805862822)
+ran 1,851 tests on Ubuntu with one failure and two errors; Windows was cancelled
+by matrix fail-fast. Besides the source error, two scenario helpers needed to
+restore their unbound priority window after resolving an empty stack.
+
 ## Hosted evidence
 
-The **72 new methods** in `tests/test_rules_primitives_mana_convoke.py`
+The **74 new methods** in `tests/test_rules_primitives_mana_convoke.py`
 cover all four programs, recursion and pure reads, current/granted mana abilities,
 zero outputs, payment choices, full Horizon behavior, convoke resources, target
 legality, privacy and replay. Historical schema checks retain their earlier
 minimum layout while this suite requires schema 122/14.
 
 Draft and required reviewed-loader validation are pending. Expected full suite:
-**1851 tests on each of Ubuntu and Windows**, plus source syntax, full installation
+**1853 tests on each of Ubuntu and Windows**, plus source syntax, full installation
 and packaged-asset checks.

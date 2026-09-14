@@ -28,10 +28,12 @@ Exotic Orchard, Fellwar Stone, Horizon of Progress and Devouring Light have
 complete printed programs in the isolated draft bundle. This cycle implements
 two shared interpreters: current-land mana capabilities, including recursive
 dependencies, and authenticated convoke payment against the final spell cost.
-The prior 278 reviewed programs are unchanged.
+Of the prior 278 reviewed programs, 277 are unchanged. Baldur's Gate has a
+source-verified correction to untapped entry and colorless base mana; it does
+not count toward the new cards.
 
-Kernel schema is **122**, state schema **14**. The **72 new methods** are ready
-for hosted draft and required reviewed-loader validation: **1,851 tests per
+Kernel schema is **122**, state schema **14**. The **74 new methods** are ready
+for hosted draft and required reviewed-loader validation: **1,853 tests per
 platform** are expected. Source review covers CR 106.7 and 702.51, Horizon's
 complete three-ability face, replacement outcomes, payment atomicity and privacy.
 See [the review](MANA_CONVOKE_CARD_REVIEW.md).

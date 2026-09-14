@@ -64,6 +64,8 @@ class ManaConvokeTests(unittest.TestCase):
         return tuple((s,symbols.count(s)) for s in sorted(set(symbols)))
 
     def window(self,actor='A'):
+        if not self.kernel.stack and self.kernel.turn_schedule is None:
+            self.kernel.open_window_for_scenario(self.kernel.active,phase=self.kernel.phase,priority_actor=actor)
         while self.kernel.priority!=actor:self.kernel.pass_priority(self.kernel.priority)
 
     def round(self):
@@ -132,6 +134,25 @@ class ManaConvokeTests(unittest.TestCase):
         self.assertEqual(3,len(self.cards['horizon-of-progress'].activated))
         self.assertIsInstance(self.cards['devouring-light'].cast,ConvokeCast)
         self.assertEqual(ManaCost(1,('W','W')),self.cards['devouring-light'].cast.cost.mana)
+
+    def test_corrected_reference_regenerates_catalog_byte_for_byte(self):
+        import runpy
+        generator=runpy.run_path(str(self.root/'tools/generate_card_catalog.py'))
+        generated=generator['render_payload'](generator['build_payload'](
+            (self.root/'data/reference/four_deck_oracle.txt').resolve(),
+            (self.root/'data/reference/card_catalog_annotations.json').resolve()))
+        self.assertEqual(generated,(self.root/'data/catalog/cards.json').read_text(encoding='utf-8'))
+
+    def test_baldurs_gate_corrected_entry_and_base_mana(self):
+        self.game()
+        gate=self.add('catalog:baldur-s-gate','A',Zone.HAND)
+        self.kernel.enter(gate);gate=self.state.current(gate.card_id)
+        self.assertFalse(self.state.get(gate).tapped)
+        self.activate(source=gate)
+        self.assertEqual((('C',1),),self.state.mana_pool('A'))
+        catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
+        self.assertEqual((),catalog['baldur-s-gate'].color_identity)
+        self.assertEqual('219f1fd41ef5b9f0fa550f82f10d93d2b87625f13eb96dcad7125b5406ddb398',digest(source_facts(catalog['baldur-s-gate'])))
 
     def test_orchard_no_opposing_lands_still_pays_tap(self):
         self.game();self.activate()

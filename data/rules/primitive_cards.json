@@ -2928,9 +2928,9 @@
     },
     {
       "card_id": "baldur-s-gate",
-      "source_facts_sha256": "1ec13cda862bc3b49822790b8ab1e1bb43fd09cf855e06cef23c605f63a8b59c",
+      "source_facts_sha256": "219f1fd41ef5b9f0fa550f82f10d93d2b87625f13eb96dcad7125b5406ddb398",
       "scope": "all_printed_faces",
-      "review_basis": "Printed characteristics and abilities use shared battlefield-count quantities, mana production, normal costs and entry replacements. Counts use effective subtypes at resolution after payment; opponent and source inclusion follows the printed selector. Production admission remains separate.",
+      "review_basis": "Corrected against the official Wizards printed face on 2026-09-14: unconditional untapped entry and colorless base mana. The variable ability counts other controlled Gates at resolution after payment. See docs/MANA_CONVOKE_CARD_REVIEW.md for the source-data correction and hosted evidence.",
       "program": {
         "node": "CardProgram",
         "definition_id": "catalog:baldur-s-gate",
@@ -2942,43 +2942,7 @@
         "spell_effects": [],
         "spell_targets": null,
         "entry_copy": null,
-        "entry_modifiers": [
-          {
-            "node": "EntryModifier",
-            "modifier_id": "two-other-gates",
-            "tapped": true,
-            "condition": {
-              "node": "CountCondition",
-              "selector": {
-                "node": "Selector",
-                "zone": {
-                  "zone": "battlefield"
-                },
-                "types": [],
-                "relation": "controlled",
-                "exclude_source": true,
-                "subtypes": [
-                  "Gate"
-                ],
-                "excluded_subtypes": [],
-                "supertypes": [],
-                "any_types": [],
-                "excluded_types": [],
-                "any_subtypes": [],
-                "characteristics": [],
-                "commander": null,
-                "tapped": null,
-                "counters": [],
-                "colors": [],
-                "any_colors": [],
-                "excluded_colors": []
-              },
-              "minimum": 2
-            },
-            "unless": true,
-            "selector": null
-          }
-        ],
+        "entry_modifiers": [],
         "replacements": [],
         "enchant": null,
         "subtypes": [
@@ -3012,7 +2976,7 @@
               {
                 "node": "AddMana",
                 "symbols": [
-                  "G"
+                  "C"
                 ]
               }
             ],

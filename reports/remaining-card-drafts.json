@@ -3143,7 +3143,7 @@
     ],
     "runtime_checkpoint_schema": 122,
     "state_checkpoint_schema": 14,
-    "new_test_methods": 72,
+    "new_test_methods": 74,
     "validation_status": "draft_hosted_pending",
     "unresolved_defects": [],
     "review_work_remaining": "Run corrected hosted draft validation and then required source-bound reviewed-loader validation on Ubuntu and Windows.",
@@ -3162,9 +3162,62 @@
         "Fixed and X costs, sorcery activations, creature/Desert sacrifices",
         "Existing target grouping, source statistics and fight/damage inspection"
       ],
-      "guard": "Complete all printed clauses; preserve source bindings, privacy, checkpoint identity and hosted validation. No local project execution or game migration."
+      "guard": "Complete all printed clauses; preserve source bindings, privacy, checkpoint identity and hosted validation. No local project execution or game migration.",
+      "requirements": [
+        "Scute Swarm: choose Insect versus source-copy token at resolution from the current six-land threshold; preserve copied source values and normal landfall triggers.",
+        "Helm: remove legendary in the copiable token values, then grant permanent haste separately through exact created-token bindings.",
+        "Quarry: retain other card and land types while replacing creature types with Zombie, colors with black and base power/toughness with 4/4; retain copied entry effects and bind the graveyard target through exile.",
+        "Biomancy: add the entry-fight ability to copiable values. Implement a shared simultaneous Fight effect: both creatures must still be present, snapshot both powers before damage, then use the existing damage batch. Sequential Damage effects would mis-handle changing characteristics and departure.",
+        "RulesKernel freezes definitions and the trigger index at initialization. Introduce a deterministic, checkpointed registry for derived copy programs and bind their lineage; do not mutate the immutable base library or silently alter its bundle identity."
+      ]
     },
-    "hosted_attempts": []
+    "hosted_attempts": [
+      {
+        "stage": "draft",
+        "commit": "e5c95dd839f6cc2d363ebaff14e500ea2a3c98d6",
+        "run_id": 34805862822,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34805862822",
+        "conclusion": "failure",
+        "tests_run_ubuntu": 1851,
+        "failures": 1,
+        "errors": 2,
+        "findings": [
+          "Two scenario helper errors: reopen the unbound priority window after an empty stack before continuing.",
+          "Baldur's Gate source-data defect: official Wizards face has no tapped-entry clause and produces colorless mana. Correct reference, annotations, regenerated catalog, source-bound program and regression expectations together."
+        ]
+      }
+    ],
+    "next_batch_source_review": {
+      "inspected_commit": "e5c95dd839f6cc2d363ebaff14e500ea2a3c98d6",
+      "cards": [
+        "scute-swarm",
+        "helm-of-the-host",
+        "lazotep-quarry",
+        "aggressive-biomancy"
+      ],
+      "requirements": [
+        "Scute Swarm: choose Insect versus source-copy token at resolution from the current six-land threshold; preserve copied source values and normal landfall triggers.",
+        "Helm: remove legendary in the copiable token values, then grant permanent haste separately through exact created-token bindings.",
+        "Quarry: retain other card and land types while replacing creature types with Zombie, colors with black and base power/toughness with 4/4; retain copied entry effects and bind the graveyard target through exile.",
+        "Biomancy: add the entry-fight ability to copiable values. Implement a shared simultaneous Fight effect: both creatures must still be present, snapshot both powers before damage, then use the existing damage batch. Sequential Damage effects would mis-handle changing characteristics and departure."
+      ],
+      "note": "Source preparation only; no token-copy programs are authored in this cycle.",
+      "rules": [
+        "707.5",
+        "707.9a-d",
+        "701.14a-d"
+      ],
+      "immutable_registry": true
+    },
+    "existing_card_corrections": [
+      {
+        "card_id": "baldur-s-gate",
+        "source_facts_sha256": "219f1fd41ef5b9f0fa550f82f10d93d2b87625f13eb96dcad7125b5406ddb398",
+        "source": "https://media.wizards.com/2022/clb/en_Vp5dLGW0fI.png",
+        "change": "No tapped-entry restriction; {T}: Add {C}; empty color identity.",
+        "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md"
+      }
+    ]
   },
   "hosted_validation_history": [
     {

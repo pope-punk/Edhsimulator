@@ -133,13 +133,13 @@ class AuthoredCountManaTests(unittest.TestCase):
         self.state.add_card('other','catalog:cloudpost','B',Zone.BATTLEFIELD)
         self.activate();self.assertEqual((('C',2),),self.state.mana_pool('A'))
 
-    def test_baldurs_gate_entry_threshold_and_owned_other_gate_mana(self):
+    def test_baldurs_gate_untapped_entry_and_owned_other_gate_mana(self):
         for count in (1,2):
             self.setup_card('baldur-s-gate',Zone.HAND)
             for i in range(count):self.state.add_card('gate'+str(i),'catalog:simic-guildgate','A',Zone.BATTLEFIELD)
             self.state.add_card('enemy','catalog:simic-guildgate','B',Zone.BATTLEFIELD)
             self.kernel.enter(self.ref);self.ref=self.state.current('source')
-            self.assertEqual(count<2,self.state.get(self.ref).tapped)
+            self.assertFalse(self.state.get(self.ref).tapped)
             self.kernel.open_window_for_scenario('A');self.state.start_turn('A');self.state.add_mana('A',('C','C'))
             request=self.activate('gate-mana',(('C',2),));self.assertEqual(5,len(request.options))
             self.kernel.answer(request.request_id,'A',[0]);self.assertEqual((('W',count),),self.state.mana_pool('A'))

@@ -232,7 +232,7 @@
       "mana": {
         "base_amount": 1,
         "colors": [
-          "G"
+          "C"
         ],
         "is_mana_source": true,
         "production_rule": "printed",
@@ -927,6 +927,24 @@
         }
       ]
     },
+    "fanatic-of-rhonas": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
     "fanatical-devotion": {
       "registered_abilities": [
         {
@@ -946,24 +964,6 @@
           "zone": "battlefield"
         }
       ]
-    },
-    "fanatic-of-rhonas": {
-      "combat": {
-        "power": 1,
-        "toughness": 4
-      },
-      "mana": {
-        "base_amount": 1,
-        "colors": [
-          "G"
-        ],
-        "is_mana_source": true,
-        "production_rule": "dynamic",
-        "source_kinds": [
-          "mana_dork"
-        ],
-        "variable_output": true
-      }
     },
     "felidar-guardian": {
       "combat": {

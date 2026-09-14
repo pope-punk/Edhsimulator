@@ -1,27 +1,27 @@
 {
   "audit": {
-    "abilities": 728,
+    "abilities": 727,
     "ability_kinds": {
       "activated": 272,
       "loyalty": 13,
-      "replacement": 60,
+      "replacement": 59,
       "special_action": 1,
       "spell": 90,
       "static": 139,
       "triggered": 153
     },
     "ability_origins": {
-      "oracle": 649,
+      "oracle": 648,
       "registry": 79
     },
-    "entry_replacements": 49,
+    "entry_replacements": 48,
     "faces": 340,
-    "oracle_ability_clauses": 649,
+    "oracle_ability_clauses": 648,
     "physical_deck_slots": 400,
     "registered_actions": 79,
     "support_statuses": {
       "generic": 118,
-      "oracle_only": 531,
+      "oracle_only": 530,
       "registered": 79
     },
     "unique_cards": 334
@@ -1899,22 +1899,6 @@
       "abilities": [
         {
           "ability_id": "baldur-s-gate:oracle:001",
-          "cost_text": null,
-          "event": "permanent_entered",
-          "face_id": "baldur-s-gate",
-          "handler": null,
-          "kind": "replacement",
-          "mana_ability": false,
-          "optional": false,
-          "origin": "oracle",
-          "rules_text": "This land enters tapped unless you control two or more other Gates.",
-          "support_status": "oracle_only",
-          "timing": "replacement",
-          "uses_stack": true,
-          "zone": "battlefield"
-        },
-        {
-          "ability_id": "baldur-s-gate:oracle:002",
           "cost_text": "{T}",
           "event": null,
           "face_id": "baldur-s-gate",
@@ -1923,14 +1907,14 @@
           "mana_ability": true,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "{T}: Add {G}.",
+          "rules_text": "{T}: Add {C}.",
           "support_status": "generic",
           "timing": "priority",
           "uses_stack": false,
           "zone": "battlefield"
         },
         {
-          "ability_id": "baldur-s-gate:oracle:003",
+          "ability_id": "baldur-s-gate:oracle:002",
           "cost_text": "{2}, {T}",
           "event": null,
           "face_id": "baldur-s-gate",
@@ -1947,24 +1931,8 @@
         }
       ],
       "card_id": "baldur-s-gate",
-      "color_identity": [
-        "G"
-      ],
-      "entry_replacements": [
-        {
-          "event": "enter_battlefield",
-          "face_id": "baldur-s-gate",
-          "handler": "primitive:conditional_entry_tapped",
-          "kind": "tapped_unless",
-          "optional": false,
-          "parameters": {
-            "condition_text": " you control two or more other gates"
-          },
-          "replacement_id": "baldur-s-gate:entry:01",
-          "rules_text": "This land enters tapped unless you control two or more other Gates.",
-          "support_status": "catalogued"
-        }
-      ],
+      "color_identity": [],
+      "entry_replacements": [],
       "faces": [
         {
           "colors": [],
@@ -1975,7 +1943,7 @@
           "mana_cost": "—",
           "mana_value": 0,
           "name": "Baldur's Gate",
-          "oracle_text": "This land enters tapped unless you control two or more other Gates.\n{T}: Add {G}.\n{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
+          "oracle_text": "{T}: Add {C}.\n{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
           "power": null,
           "subtypes": [
             "Gate"
@@ -1999,7 +1967,7 @@
       "mana": {
         "base_amount": 1,
         "colors": [
-          "G"
+          "C"
         ],
         "is_mana_source": true,
         "production_rule": "printed",
@@ -2009,7 +1977,7 @@
         "variable_output": false
       },
       "name": "Baldur's Gate",
-      "oracle_text": "This land enters tapped unless you control two or more other Gates.\n{T}: Add {G}.\n{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
+      "oracle_text": "{T}: Add {C}.\n{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
       "source_decks": [
         {
           "deck": "Omo",

@@ -419,6 +419,10 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/foundations-release-notes",
       "scope": "Midnight Snack checks the entire turn's declared attacks even if its source entered later; its life-gain amount is evaluated when the activated ability resolves."
+    },
+    {
+      "url": "https://media.wizards.com/2022/clb/en_Vp5dLGW0fI.png",
+      "scope": "Official Baldur's Gate face inspected 2026-09-14: no tapped-entry clause, colorless base mana, unchanged other-Gates variable ability. Corrects the stored source, catalog and reviewed program; see MANA_CONVOKE_CARD_REVIEW.md."
     }
   ]
 }
