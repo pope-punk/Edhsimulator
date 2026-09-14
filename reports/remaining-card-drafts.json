@@ -3502,7 +3502,7 @@
       "delighted-halfling"
     ],
     "cards_promoted": [],
-    "new_test_methods": 53,
+    "new_test_methods": 61,
     "runtime_checkpoint_schema": 127,
     "state_checkpoint_schema": 17,
     "validation_status": "pending_hosted_draft",
@@ -3519,7 +3519,22 @@
     ],
     "hosted_attempts": [],
     "review_work_remaining": "Hosted draft conformance, source-bound promotion, required reviewed-loader conformance.",
-    "unresolved_defects": []
+    "unresolved_defects": [],
+    "next_batch_source_review": {
+      "status": "preparation_only",
+      "cards": [
+        "rishkar-s-expertise",
+        "hidden-nursery",
+        "chthonian-nightmare",
+        "entity-tracker"
+      ],
+      "requirements": [
+        "Rishkar's Expertise requires optional free casting during resolution, with mana value, X, timing and nonmana additional-cost rules.",
+        "Hidden Nursery requires discover 4, sequential exile, optional free casting or hand placement, and random-bottom handling.",
+        "Chthonian Nightmare requires player energy counters and ordered payment of energy, sacrifice and source return.",
+        "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause."
+      ]
+    }
   },
   "hosted_validation_history": [
     {

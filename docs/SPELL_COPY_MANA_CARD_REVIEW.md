@@ -49,7 +49,7 @@ that rider is spent. Mana abilities cannot be copied.
 
 ## Validation
 
-53 new hosted methods cover complete source faces and serialization, compiler
+61 new hosted methods cover complete source faces and serialization, compiler
 rejections, ordinary cast and activation payments, opponent target visibility,
 checkpoint continuation, countered originals, copied Aura entry/death/exile,
 exact seven-card payment, special-mana identity, doubled and separate riders,

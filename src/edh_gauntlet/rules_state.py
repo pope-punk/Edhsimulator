@@ -715,6 +715,7 @@ class RulesState:
         return {key:json.loads(value) for key,value in self._mana_tags[player].items()}
 
     def add_special_mana(self,player,symbols,rider,source):
+        symbols=tuple(symbols)
         if (rider not in {'copy','legendary'} or not isinstance(source,RulesObject)
                 or source.controller!=player or source.zone!=Zone.BATTLEFIELD):
             raise RulesViolation('Invalid special mana source')

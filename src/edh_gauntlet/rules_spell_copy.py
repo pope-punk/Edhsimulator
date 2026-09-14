@@ -60,7 +60,8 @@ class SpellCopyRules:
             context={**copy,'controller':controller,'targets':old}
             legal=self._target_options(spec,context)
             options=[];controller_groups=[];retained=[];bounds=[]
-            original_groups=group.get('target_controller_groups',copy.get('target_controller_groups',{}))
+            records=group.get('target_controller_groups',copy.get('target_controller_groups',[]))
+            original_groups={ObjectRef.from_json(row['ref']):row['controller'] for row in records}
             for position,value in enumerate(old):
                 slot=str(position);bounds.append((slot,1,1));ref=target_from_json(value)
                 # Keeping a target is expressly allowed even if it is now illegal.
@@ -72,7 +73,7 @@ class SpellCopyRules:
                     if isinstance(ref,PlayerRef):current_group=ref.player
                     else:
                         try:current_group=self.state.get(ref).controller
-                        except RulesViolation:current_group=original_groups.get(ref.card_id+'@'+str(ref.incarnation))
+                        except RulesViolation:current_group=original_groups.get(ref)
                 controller_groups.append(current_group);retained.append(True)
                 for option in legal:
                     options.append(replace(option,key=slot+':'+option.key,
@@ -89,15 +90,15 @@ class SpellCopyRules:
                 remap={json.dumps(a,sort_keys=True):b for a,b in zip(old,new)}
                 for row in division:row['ref']=deepcopy(remap.get(json.dumps(row['ref'],sort_keys=True),row['ref']))
             if spec.group_by_controller and spec.maximum is None:
-                changed={}
+                changed=[]
                 for i in range(len(old)):
                     option=by_slot[i];ref=option.ref
                     if ref is None:continue
-                    refkey=ref.card_id+'@'+str(ref.incarnation)
-                    if option.key.endswith(':keep') and refkey in original_groups:changed[refkey]=original_groups[refkey]
+                    if option.key.endswith(':keep') and ref in original_groups:owner=original_groups[ref]
                     else:
-                        try:changed[refkey]=self.state.get(ref).controller
-                        except RulesViolation:pass
+                        try:owner=self.state.get(ref).controller
+                        except RulesViolation:continue
+                    changed.append({'ref':ref.to_json(),'controller':owner})
                 group['target_controller_groups']=changed
             group['targets']=new
         if groups!=[copy]:copy['targets']=[value for group in groups for value in group['targets']]

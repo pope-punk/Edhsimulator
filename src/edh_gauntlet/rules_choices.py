@@ -80,6 +80,15 @@ class CopyTargetRequest(ChoiceRequest):
     controller_groups: tuple[str|None,...] = ()
     retained: tuple[bool,...] = ()
 
+    def __post_init__(self):
+        super().__post_init__()
+        if (self.kind!='copy_targets' or not isinstance(self.controller_groups,tuple)
+                or not isinstance(self.retained,tuple) or len(self.options)!=len(self.controller_groups)
+                or len(self.options)!=len(self.retained)
+                or any(type(value) is not bool for value in self.retained)
+                or any(value is not None and type(value) is not str for value in self.controller_groups)):
+            raise RulesViolation('Invalid copied-target constraints')
+
     def validate(self,actor,indexes):
         indexes=super().validate(actor,indexes)
         refs=[(self.options[i].ref,self.options[i].player) for i in indexes]

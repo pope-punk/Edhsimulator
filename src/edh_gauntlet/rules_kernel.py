@@ -768,7 +768,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
                 obj = get_source(ref)
             except RulesViolation:
                 continue  # A departed incarnation is no longer affected.
-            if (obj.phased and cause!='departed_controller_exile') or obj.zone==destination or ref not in created and (obj.zone==Zone.OUTSIDE or obj.token and obj.zone not in {Zone.BATTLEFIELD, Zone.STACK}):
+            if (obj.phased and cause!='departed_controller_exile') or obj.zone==destination or ref not in created and (obj.zone==Zone.OUTSIDE or (obj.token or obj.spell_copy) and obj.zone not in {Zone.BATTLEFIELD, Zone.STACK}):
                 continue
             if destination==Zone.BATTLEFIELD and controller_mode=='effect' and frame['controller'] not in self.state.live_players:continue
             if destination==Zone.BATTLEFIELD:

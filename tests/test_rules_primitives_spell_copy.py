@@ -272,7 +272,7 @@ class SpellCopyTests(unittest.TestCase):
 
     def test_sunken_palace_enters_tapped(self):
         self.game();ref=self.add(self.cards['sunken-palace'].definition_id,zone=Zone.HAND)
-        self.kernel.play_land('palace-play','A',ref,revision=self.kernel.revision)
+        self.kernel.execute_for_scenario(ref,'A',(Move('source',Zone.BATTLEFIELD),))
         self.assertTrue(self.current(ref).tapped)
 
     def test_sunken_palace_basic_blue_is_unrestricted(self):
@@ -481,3 +481,88 @@ class SpellCopyTests(unittest.TestCase):
         self.until_choice();self.copy_targets(self.other,self.body);self.restore();self.drain()
         self.assertEqual(3,dict(self.current(self.body).counters)['+1/+1'])
         self.assertEqual(3,dict(self.current(self.other).counters)['+1/+1'])
+
+    def test_copy_retains_opponent_controller_target_groups(self):
+        spell=CardProgram('cp-groups','Groups',('Instant',),cast=CastSpec(CostSpec(ManaCost(1)),timing='instant'),
+            spell_targets=TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),
+                minimum=1,maximum=None,group_by_controller=True),
+            spell_effects=(AddCounters('target','+1/+1',1),))
+        self.game((spell,));third=self.add(actor='C');fourth=self.add(actor='D');tags=self.tagged()
+        self.cast(self.add('cp-groups',zone=Zone.HAND),targets=(self.enemy,third),tags=tags)
+        self.until_choice();self.copy_targets(self.enemy,fourth);self.restore();self.drain()
+        self.assertEqual(2,dict(self.current(self.enemy).counters)['+1/+1'])
+        self.assertEqual(1,dict(self.current(third).counters)['+1/+1'])
+        self.assertEqual(1,dict(self.current(fourth).counters)['+1/+1'])
+
+    def test_copied_target_request_rejects_illegal_duplicate_without_accepting(self):
+        spell=CardProgram('cp-targets','Targets',('Instant',),cast=CastSpec(CostSpec(ManaCost(1)),timing='instant'),
+            spell_targets=TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',)),2,2),
+            spell_effects=(AddCounters('target','+1/+1',1),))
+        self.game((spell,));tags=self.tagged()
+        self.cast(self.add('cp-targets',zone=Zone.HAND),targets=(self.body,self.other),tags=tags);self.until_choice()
+        q=self.kernel.pending_choice;indexes=[next(i for i,o in enumerate(q.options) if o.ref==self.body and o.group==str(slot)) for slot in range(2)]
+        before=self.kernel.snapshot()
+        with self.assertRaises(RulesViolation):self.answer(indexes)
+        self.assertEqual(before,self.kernel.snapshot());self.copy_targets(None,None);self.drain()
+
+    def test_copy_retains_paid_sacrifice_facts(self):
+        spell=CardProgram('cp-sac','Sacrifice draw',('Sorcery',),
+            cast=CastSpec(CostSpec(ManaCost(1),zone_costs=(ZoneCost('sac','sacrifice',
+                Selector(Zone.BATTLEFIELD,types=('Creature',),relation='controlled'),1),))),
+            spell_effects=(Draw(PaidCostStat('sac','power')),))
+        self.game((spell,));tags=self.tagged();ref=self.add('cp-sac',zone=Zone.HAND)
+        payment=self.payment(tags=tags,zone_costs=(('sac',(self.body,)),))
+        quote=self.kernel.quote_cast('sac-cast','A',ref);self.kernel.commit_action(quote,payment)
+        self.restore();self.drain()
+        self.assertEqual(4,len(self.state.zone('A',Zone.HAND)));self.assertEqual(Zone.GRAVEYARD,self.current(self.body).zone)
+
+    def test_two_replicated_auras_do_not_return_one_creature_twice(self):
+        self.game();self.cast(self.hand('changing-loyalty'),'CCCB',(self.enemy,),replicate=1)
+        self.until_choice();self.copy_targets(None);self.drain()
+        before=len(self.state.events)
+        self.kernel.execute_for_scenario(self.palace,'A',(SelectAll(Selector(Zone.BATTLEFIELD,relation='opponent_controlled'),(Destroy('selected'),)),))
+        self.drain()
+        returned=[event for event in self.state.events[before:] if event.after.ref.card_id==self.enemy.card_id and event.after.zone==Zone.BATTLEFIELD]
+        self.assertEqual(1,len(returned));self.assertEqual('A',self.current(self.enemy).controller)
+
+    def test_replicate_trigger_can_be_countered_without_countering_original(self):
+        stopper=CardProgram('cp-stop','Stop abilities',('Instant',),cast=CastSpec(CostSpec(),timing='instant'),
+            spell_effects=(CounterAbilities('all'),))
+        self.game((stopper,));aura=self.hand('changing-loyalty');self.cast(aura,'CCCB',(self.enemy,),replicate=1)
+        self.cast(self.add('cp-stop',zone=Zone.HAND));self.drain()
+        self.assertEqual(self.enemy,self.current(aura).attached_to);self.assertEqual([],self.events('stack_object_copied'))
+
+    def test_new_target_hexproof_uses_copy_controller(self):
+        protected=CardProgram('cp-protected','Protected',('Creature',),power=2,toughness=2,keywords=('hexproof',))
+        self.game((protected,));protected_ref=self.add('cp-protected',actor='B')
+        self.cast(self.hand('replication-technique'),'CCCCU',(self.body,))
+        self.until_choice();self.choose('yes');self.copy_targets(None);self.choose('B')
+        self.assertIn(protected_ref,{o.ref for o in self.kernel.pending_choice.options})
+        self.copy_targets(protected_ref);self.drain()
+        self.assertEqual(2,len([o for o in self.state.objects(Zone.BATTLEFIELD,controller='B') if self.kernel.definition(o).name=='Protected']))
+
+    def test_actor_adapter_replays_replicate_and_target_choices(self):
+        from edh_gauntlet.rules_adapter import RulesActorAdapter
+        self.game();ref=self.hand('changing-loyalty');payment=self.payment('CCCB')
+        adapter=RulesActorAdapter(self.kernel)
+        adapter.submit('A',{'kind':'cast','revision':self.kernel.revision,'action_id':'adapter-replicate',
+            'source':ref.to_json(),'targets':[self.enemy.to_json()],'x_value':0,'replicate':1,'payment':payment.to_json()})
+        for _ in range(80):
+            q=self.kernel.pending_choice
+            if q:
+                indexes=[i for i,o in enumerate(q.options) if o.key.endswith(':keep')] if q.kind=='copy_targets' else list(range(q.minimum))
+                adapter.submit(q.actor,{'kind':'answer','revision':self.kernel.revision,'request_id':q.request_id,'indexes':indexes})
+            elif self.kernel.stack:adapter.submit(self.kernel.priority,{'kind':'pass','revision':self.kernel.revision})
+            else:break
+        else:self.fail('Adapter did not finish')
+        archive=adapter.archive();replayed=RulesActorAdapter.replay(archive,self.programs)
+        self.assertEqual(archive,replayed.archive());self.assertEqual(1,len(self.events('stack_object_copied')))
+
+    def test_actor_adapter_replays_explicit_mana_payment(self):
+        from edh_gauntlet.rules_adapter import RulesActorAdapter
+        self.game();tags=self.tagged('legendary','G');ref=self.add('cp-legend',zone=Zone.HAND)
+        adapter=RulesActorAdapter(self.kernel)
+        adapter.submit('A',{'kind':'cast','revision':self.kernel.revision,'action_id':'adapter-legend',
+            'source':ref.to_json(),'targets':[],'x_value':0,'payment':Payment((('G',1),),tagged_mana=tags).to_json()})
+        self.assertTrue(self.kernel.stack[-1]['cannot_be_countered'])
+        archive=adapter.archive();self.assertEqual(archive,RulesActorAdapter.replay(archive,self.programs).archive())
