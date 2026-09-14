@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 320,
-    "remaining_outside_reviewed_bundle": 14,
-    "drafts_written": 7,
+    "reviewed_bundle_unique": 327,
+    "remaining_outside_reviewed_bundle": 7,
+    "drafts_written": 0,
     "not_started_on_this_branch": 7,
-    "reviewed_bundle_copies": 386,
-    "draft_copies": 7,
+    "reviewed_bundle_copies": 393,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 93,
-    "remaining_outside_reviewed_bundle_copies": 14
+    "promoted_on_this_branch": 100,
+    "remaining_outside_reviewed_bundle_copies": 7
   },
   "cards": [
     {
@@ -885,7 +885,7 @@
     {
       "card_id": "elspeth-conquers-death",
       "name": "Elspeth Conquers Death",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -899,8 +899,19 @@
           "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
         }
       ],
-      "draft_definition": "draft:elspeth-conquers-death",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "dbd945febb95618afa07581bdccdaab7c2cb2c943586fbd73d16d40168d96845",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:elspeth-conquers-death",
+      "reviewed_definition": "catalog:elspeth-conquers-death",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "entity-tracker",
@@ -1358,7 +1369,7 @@
     {
       "card_id": "glasswing-grace-age-graced-chapel",
       "name": "Glasswing Grace // Age-Graced Chapel",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1376,8 +1387,19 @@
           "text": "This land enters tapped.\n{T}: Add {W} or {B}."
         }
       ],
-      "draft_definition": "draft:glasswing-grace-age-graced-chapel",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "f6714c051ec38380893825b93fb8b4d8bc60bb43423a7b5f0abc5165c81c2743",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:glasswing-grace-age-graced-chapel",
+      "reviewed_definition": "catalog:glasswing-grace-age-graced-chapel",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "gleaming-splendor",
@@ -1776,7 +1798,7 @@
     {
       "card_id": "invasion-of-theros",
       "name": "Invasion of Theros",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1794,8 +1816,19 @@
           "text": "Ephara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card."
         }
       ],
-      "draft_definition": "draft:invasion-of-theros",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "aa820cbaf5d95300c167d4986558a74248ea9afb69d0edc2ce3c581a4a58572d",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:invasion-of-theros",
+      "reviewed_definition": "catalog:invasion-of-theros",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "jyoti-moag-ancient",
@@ -1892,7 +1925,7 @@
     {
       "card_id": "kazuul-s-fury-kazuul-s-cliffs",
       "name": "Kazuul's Fury // Kazuul's Cliffs",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1910,8 +1943,19 @@
           "text": "This land enters tapped.\n{T}: Add {R}."
         }
       ],
-      "draft_definition": "draft:kazuul-s-fury-kazuul-s-cliffs",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "05649eb3d07f0ee3caffe0f8bb9df1f95a5d65a3d6b6e3c0dece789a6bc495c2",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:kazuul-s-fury-kazuul-s-cliffs",
+      "reviewed_definition": "catalog:kazuul-s-fury-kazuul-s-cliffs",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "kodama-of-the-west-tree",
@@ -2646,7 +2690,7 @@
     {
       "card_id": "pontiff-of-blight",
       "name": "Pontiff of Blight",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2660,8 +2704,19 @@
           "text": "Extort\nOther creatures you control have extort."
         }
       ],
-      "draft_definition": "draft:pontiff-of-blight",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "0b3e23aa155b3b9814739f215f94af02361a3377d16d1b8e0278babccadaaa16",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:pontiff-of-blight",
+      "reviewed_definition": "catalog:pontiff-of-blight",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "prayer-of-binding",
@@ -3177,7 +3232,7 @@
     {
       "card_id": "sorin-of-house-markov",
       "name": "Sorin of House Markov",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -3195,8 +3250,19 @@
           "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
         }
       ],
-      "draft_definition": "draft:sorin-of-house-markov",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "db89bb263f7353bfe4a11a2295670f82bbfe82b1dafbb13adcadbe00d8237716",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:sorin-of-house-markov",
+      "reviewed_definition": "catalog:sorin-of-house-markov",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "sorin-vengeful-bloodlord",
@@ -3450,7 +3516,7 @@
     {
       "card_id": "the-restoration-of-eiganjo",
       "name": "The Restoration of Eiganjo",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3468,8 +3534,19 @@
           "text": "Vigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token."
         }
       ],
-      "draft_definition": "draft:the-restoration-of-eiganjo",
-      "review_status": "pending_hosted_validation"
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
+      "source_facts_sha256": "0f40894b696a053b7300ae0f1ce18db9541665cac970dac663cb700ef86c6018",
+      "batch": "faces-sagas-extort-2026-09-14",
+      "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
+      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:the-restoration-of-eiganjo",
+      "reviewed_definition": "catalog:the-restoration-of-eiganjo",
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812
+      }
     },
     {
       "card_id": "thespian-s-stage",
@@ -3869,8 +3946,16 @@
       "the-restoration-of-eiganjo",
       "elspeth-conquers-death"
     ],
-    "cards_promoted": [],
-    "validation_status": "pending",
+    "cards_promoted": [
+      "glasswing-grace-age-graced-chapel",
+      "kazuul-s-fury-kazuul-s-cliffs",
+      "sorin-of-house-markov",
+      "pontiff-of-blight",
+      "invasion-of-theros",
+      "the-restoration-of-eiganjo",
+      "elspeth-conquers-death"
+    ],
+    "validation_status": "required_reviewed_loader_pending",
     "runtime_checkpoint_schema": 131,
     "state_checkpoint_schema": 19,
     "new_test_methods": 90,
@@ -3887,11 +3972,40 @@
           "Give existing Battle fixtures explicit protector designations.",
           "Restore scenario action windows before independent Sorin and tax actions."
         ]
+      },
+      {
+        "commit": "0bbde8df92664bf567f752fc558265dde31e769a",
+        "run_id": 34901124410,
+        "status": "failed",
+        "test_count": 2536,
+        "failures": 2,
+        "errors": 2,
+        "corrections": [
+          "Open modal-land mana action windows.",
+          "Separate Sorin-copy fixture controllers so the legend rule does not suspend the intended scenario."
+        ]
+      },
+      {
+        "commit": "58bfc1f4e33dfd14786adb9e6ef271de96922989",
+        "run_id": 34901196896,
+        "status": "failed",
+        "test_count": 2536,
+        "failures": 2,
+        "errors": 1,
+        "corrections": [
+          "Use indexed ChooseMana options in the Chapel fixture.",
+          "Separate Sorin-copy fixture controllers and assert no pending legend choice."
+        ]
+      },
+      {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812,
+        "status": "passed",
+        "test_count": 2536
       }
     ],
     "review_work_remaining": [
-      "Hosted draft conformance and source review",
-      "Complete edge-case audit, then source-bound promotion and required reviewed-loader validation"
+      "Required reviewed-loader validation and result recording"
     ],
     "shared_mechanics": [
       "Physical-card face choices and transformation",
@@ -4869,6 +4983,40 @@
         "sorin-vengeful-bloodlord",
         "innkeeper-s-talent",
         "leyline-of-hope"
+      ]
+    },
+    {
+      "stage": "draft",
+      "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+      "run_id": 34902156812,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
+      "conclusion": "success",
+      "tests_per_platform": 2536,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104170381916,
+          "name": "verify (windows-latest)",
+          "tests": 2536,
+          "seconds": 595.899,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104170382160,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2536,
+          "seconds": 493.37,
+          "conclusion": "success"
+        }
       ]
     }
   ],
@@ -7851,11 +7999,11 @@
     "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
   },
   "draft_hosted_validation": {
-    "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
-    "run_id": 34892851623,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
+    "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+    "run_id": 34902156812,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
     "conclusion": "success",
-    "tests_per_platform": 2446,
+    "tests_per_platform": 2536,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -7868,17 +8016,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104139518890,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2446,
-        "seconds": 521.52,
+        "job_id": 104170381916,
+        "name": "verify (windows-latest)",
+        "tests": 2536,
+        "seconds": 595.899,
         "conclusion": "success"
       },
       {
-        "job_id": 104139519023,
-        "name": "verify (windows-latest)",
-        "tests": 2446,
-        "seconds": 515.09,
+        "job_id": 104170382160,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2536,
+        "seconds": 493.37,
         "conclusion": "success"
       }
     ]
@@ -8011,7 +8159,11 @@
         ],
         "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives.",
         "status": "in_progress",
-        "base_commit": "2586180f67645ca9cc8511e979933511ea883551"
+        "base_commit": "2586180f67645ca9cc8511e979933511ea883551",
+        "draft_hosted_validation": {
+          "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+          "run_id": 34902156812
+        }
       },
       {
         "pass": 4,
@@ -8033,6 +8185,6 @@
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
     "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
     "remaining_passes_in_target": 2,
-    "remaining_unique": 14
+    "remaining_unique": 7
   }
 }

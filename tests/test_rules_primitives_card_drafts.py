@@ -7,11 +7,12 @@ from edh_gauntlet.catalog import load_catalog
 from edh_gauntlet.rules_bundle import digest, load_reviewed, source_facts
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_kernel import RulesKernel
-from edh_gauntlet.rules_program import CleanupCast, EntryPayment, decode, encode, validate
+from edh_gauntlet.rules_program import CleanupCast, DoubleFacedProgram, EntryPayment, decode, encode, validate
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'glasswing-grace-age-graced-chapel', 'kazuul-s-fury-kazuul-s-cliffs', 'sorin-of-house-markov', 'pontiff-of-blight', 'invasion-of-theros', 'the-restoration-of-eiganjo', 'elspeth-conquers-death',
     'aminatou-the-fateshifter', 'domri-anarch-of-bolas', 'minsc-boo-timeless-heroes', 'nissa-steward-of-elements', 'sorin-vengeful-bloodlord', 'innkeeper-s-talent', 'leyline-of-hope',
     'chthonian-nightmare', 'maze-s-end', 'rhythm-of-the-wild', 'parasitic-impetus', 'propaganda', 'defiler-of-vigor', 'darksteel-mutation',
     'rishkar-s-expertise', 'hidden-nursery', 'apex-devastator', 'oracle-of-mul-daya',
@@ -73,7 +74,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(93, len(self.cards))
+        self.assertEqual(100, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):
@@ -83,19 +84,21 @@ class CardProgramReviewTests(unittest.TestCase):
                 self.assertTrue(review['review_basis'])
                 self.assertEqual(digest(source_facts(catalog[key])), review['source_facts_sha256'])
                 self.assertEqual(review['program'], encode(program))
-                self.assertEqual(catalog[key].name, program.name)
-                self.assertEqual(1, len(catalog[key].faces))
-                face = catalog[key].faces[0]
-                for field in ('types', 'subtypes', 'supertypes', 'colors'):
-                    self.assertEqual(set(getattr(face, field)), set(getattr(program, field)))
-                for field in ('mana_value', 'power', 'toughness'):
-                    self.assertEqual(getattr(face, field), getattr(program, field))
-                if 'Land' in program.types:
-                    self.assertIsNone(program.cast)
-                else:
-                    self.assertIsNotNone(program.cast)
-                    expected_timing = 'instant' if 'Instant' in face.types or isinstance(program.cast, CleanupCast) else 'sorcery'
-                    self.assertEqual(expected_timing, program.cast.timing)
+                printed=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,)
+                self.assertEqual(len(catalog[key].faces),len(printed))
+                if isinstance(program,DoubleFacedProgram):self.assertEqual(catalog[key].layout,program.layout)
+                for face,face_program in zip(catalog[key].faces,printed):
+                    self.assertEqual(face.name,face_program.name)
+                    for field in ('types', 'subtypes', 'supertypes', 'colors'):
+                        self.assertEqual(set(getattr(face, field)), set(getattr(face_program, field)))
+                    for field in ('mana_value', 'power', 'toughness'):
+                        self.assertEqual(getattr(face, field), getattr(face_program, field))
+                    if 'Land' in face_program.types:
+                        self.assertIsNone(face_program.cast)
+                    else:
+                        self.assertIsNotNone(face_program.cast)
+                        expected_timing = 'instant' if 'Instant' in face.types or isinstance(face_program.cast, CleanupCast) else 'sorcery'
+                        self.assertEqual(expected_timing, face_program.cast.timing)
 
     def test_shock_lands_keep_both_intrinsic_mana_abilities(self):
         symbols = {'Plains': 'W', 'Island': 'U', 'Swamp': 'B', 'Mountain': 'R', 'Forest': 'G'}

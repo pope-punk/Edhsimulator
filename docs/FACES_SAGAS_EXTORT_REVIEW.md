@@ -1,8 +1,9 @@
 # Pass 3: faces, Sagas, extort and Battles
 
-Status: seven complete card programs drafted; hosted conformance and promotion
-are pending. This is Pass 3 of the original four-pass plan, not a new baseline.
-Reviewed coverage remains 320/334 unique cards and 386/400 deck copies.
+Status: all seven cards have complete source-bound review and are promoted.
+Draft conformance passed; required reviewed-loader validation is pending.
+This is Pass 3 of the original four-pass plan. Reviewed coverage is 327/334
+unique cards and 393/400 deck copies, with seven cards remaining.
 
 ## Printed-card review
 
@@ -66,12 +67,20 @@ Sorin and the gained creature. Keyword counters have retained placement timestam
 All execution is confined to GitHub-hosted runners. No local Python, imports,
 installation, tests, simulations, games, checkout or clone were run.
 
-The initial 90 methods are in
-[test_rules_primitives_faces_sagas_extort.py](../tests/test_rules_primitives_faces_sagas_extort.py).
-The ongoing review expands those scenarios before promotion. Syntax, installation,
-installed assets, the complete existing primitive suite, and the new scenarios
-must pass on Ubuntu and Windows. After promotion, the same card tests must use
-the required source-bound reviewed loader and pass again.
+The 90 methods in
+[test_rules_primitives_faces_sagas_extort.py](../tests/test_rules_primitives_faces_sagas_extort.py)
+cover all seven cards and the shared interactions described above.
+Hosted draft [run 34902156812](https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812) at `a2700d1b61aecfd9dd2e42ede5eed2d12788ec34` passed 2536 tests per platform.
+Promotion removes the draft fallback; the same suite must now pass through the
+required reviewed loader.
+
+The first hosted run exposed repeated trigger-view queries, older Battle fixtures
+without protectors, and scenario action-window gaps. The fixes retain the query
+optimization and give fixtures explicit rules state. A later fixture correction
+uses ChooseMana's indexed options and separates Sorin-copy controllers so a legend-rule
+choice does not suspend the intended transformation scenario. Lore counters still advance on a Saga whose
+chapter abilities are absent; such a Saga has no final chapter to sacrifice for.
+No existing expected result was weakened.
 
 Production admission and historical/started-game contracts are unchanged.
 No merge, deployment, gameplay or automatic contract migration is part of this pass.

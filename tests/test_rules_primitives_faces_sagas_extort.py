@@ -24,11 +24,9 @@ class FacesSagasExtortTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={key:reviewed[key]['review'] for key in CARDS if key in reviewed}
-        cls.rows.update({r['card_id']:r for r in drafts if r['card_id'] in CARDS})
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in CARDS}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards[k] for k in CARDS if k not in reviewed)
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,extra=(),players=('A','B','C','D')):
         body=CardProgram('fs-body','Body',('Creature',),power=4,toughness=4,mana_value=2,cast=CastSpec(CostSpec(ManaCost(2))))
@@ -375,8 +373,10 @@ class FacesSagasExtortTests(unittest.TestCase):
         self.assertTrue(token.back_face);self.assertIsInstance(self.kernel.definitions[token.definition],DoubleFacedProgram)
         self.assertEqual(3,self.kernel.effective(token.ref).mana_value);self.restore()
 
-    def test_original_reviewed_rows_are_unchanged(self):
-        self.assertGreaterEqual(len(load_reviewed(self.root)),320)
+    def test_all_seven_cards_require_reviewed_loader(self):
+        reviewed=load_reviewed(self.root)
+        self.assertEqual(327,len(reviewed))
+        self.assertEqual({'catalog:'+key for key in CARDS},{p.definition_id for p in self.cards.values()})
 
     def test_sorin_ultimate_excludes_sorin_and_target(self):
         white=CardProgram('fs-white','White',('Creature',),power=2,toughness=3,colors=('W',))

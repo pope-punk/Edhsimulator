@@ -60,17 +60,17 @@ class BundleTests(unittest.TestCase):
 
     def test_exact_pod_counts_and_unmapped_cards_remain_visible(self):
         coverage=deck_coverage()
-        self.assertEqual(320,coverage['authored_unique_cards'])
+        self.assertEqual(327,coverage['authored_unique_cards'])
         self.assertEqual(400,sum(deck['cards'] for deck in coverage['decks']))
         self.assertEqual(4,len(coverage['decks']));self.assertFalse(coverage['production_ready'])
         expected={
-            "Reaminatour — Aminatou, Veil Piercer": 90,
-            "Minsc & Boo, Timeless Heroes": 99,
+            "Reaminatour — Aminatou, Veil Piercer": 93,
+            "Minsc & Boo, Timeless Heroes": 100,
             "Omo, Queen of Vesuva": 100,
-            "Elenda, Saint of Dusk": 97,
+            "Elenda, Saint of Dusk": 100,
         }
         self.assertEqual(expected,{deck['deck']:deck['authored_copies'] for deck in coverage['decks']})
-        self.assertEqual(14,sum(deck['unmapped_copies'] for deck in coverage['decks']))
+        self.assertEqual(7,sum(deck['unmapped_copies'] for deck in coverage['decks']))
         for deck in coverage['decks']:
             self.assertEqual(deck['cards'],deck['authored_copies']+deck['unmapped_copies'])
             self.assertTrue(all(not row['production_certified'] for row in deck['entries']))

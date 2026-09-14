@@ -5,24 +5,29 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**320 source-bound reviewed programs / 386 deck copies**. There are **14 cards / 14 deck
-copies outside the reviewed bundle**, seven drafted in Pass 3 and seven unstarted. Reviewed coverage is not production certification.
+**327 source-bound reviewed programs / 393 deck copies**. Seven cards remain.
+Pass 3 promotion is pending required reviewed-loader validation.
+Reviewed coverage is not production certification.
 
-## Pass 3 in progress
+## Pass 3 promotion verification
 
-All seven planned cards are drafted. Reviewed coverage remains **320/334 unique
-cards and 386/400 copies** until hosted conformance and printed-face review finish.
-The shared implementation adds face choices, transformation, Saga chapters,
-extort grants, Siege defense/protection/defeat, temporary spell taxes, and paired
-token copies. The 90 conformance methods include the follow-up edge audit. The first hosted
-run completed 2,495 tests and exposed a trigger-query regression and scenario
-fixture gaps, now corrected for the next hosted run.
+Glasswing Grace // Age-Graced Chapel; Kazuul's Fury // Kazuul's Cliffs;
+Sorin of House Markov; Pontiff of Blight; Invasion of Theros;
+The Restoration of Eiganjo; and Elspeth Conquers Death have complete printed-face
+programs and source-bound review. Shared support covers face choice and
+transformation, Saga lore/chapters, independent extort grants, Siege protection
+and defeat, temporary spell taxes, paired token copies, and keyword counters.
 
-Catalog annotations now retain the five double-face layouts, three back-face
-color indicators, and Invasion of Theros's defense. Runtime mana value derives
-from the front face for transforming objects; the back's printed mana cost
-remains absent. All 320 prior reviewed program records and source hashes remain
-unchanged. Production admission and started-game contracts are unchanged.
+Hosted draft [run 34902156812](https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812) at `a2700d1b61aecfd9dd2e42ede5eed2d12788ec34` passed **2536 tests per platform**, including **90 new methods**.
+The required reviewed-loader run must pass before this pass is counted complete.
+
+Coverage is **327/334 unique cards and 393/400 copies**: Omo, Minsc & Boo and
+Elenda each have **100/100** authored copies; Reaminatour has **93/100**.
+The draft bundle is empty. All 320 previous reviewed rows and source hashes are
+unchanged. Kernel/state schemas are **131/19**. No local project execution occurred.
+See [the printed-card review and validation record](FACES_SAGAS_EXTORT_REVIEW.md).
+
+Two passes are complete; Pass 3 remains in progress until required verification.
 
 ## Four-pass completion plan
 
@@ -68,15 +73,19 @@ family where useful. Group related validation and avoid redundant full-suite
 runs. All existing GitHub-only execution constraints remain in force, and the
 heartbeat remains active every 40 minutes.
 
-## Next pass: multiple faces, transformation and Sagas
+## Next pass: Rooms, miracle and remaining Sagas
 
-**Two passes are complete; fourteen cards remain in two planned groups of seven.**
-Begin Pass 3 with Glasswing Grace // Age-Graced Chapel, Kazuul's Fury // Kazuul's
-Cliffs, Sorin of House Markov, Pontiff of Blight, Invasion of Theros, The Restoration
-of Eiganjo and Elspeth Conquers Death. Implement both faces, extort and granted
-instances, Siege protection/defeat and complete Saga chapters/lifecycle. Reuse the
-shared loyalty, targeting, cost and entry machinery. The JSON report retains the
-catalog requirements and existing-primitive preparation.
+After required Pass 3 validation, begin Pass 4 with Aminatou, Veil Piercer; Entity Tracker;
+Funeral Room // Awakening Hall; Ghostly Dancers; Victor, Valgavoth's Seneschal;
+The Cruelty of Gix; and Urza's Saga.
+
+Reuse the shared trigger, counter, target, search, return, continuous-effect and
+resolution-cast primitives. Rooms need separate door state and unlock events;
+their two doors must not be modeled as front/back transformation. Add miracle's
+first-draw reveal/cast window, per-turn resolved-ability counts, read ahead, and
+the remaining complete Saga clauses. Urza's Saga's search checks printed mana
+cost rather than mana value. Keep all seven in scope and finish with the complete
+334-card inventory and cross-family audit.
 
 ## Completed pass 2: planeswalkers, Class and opening choices
 
