@@ -34,7 +34,11 @@ official release notes. Kernel/state schemas are **125/16**.
 The **64 new methods** passed expanded hosted draft validation: **2,037 tests on
 each of Ubuntu and Windows**, plus syntax, installation and assets, at
 `7e7106bf0fa5c8c83e21ce1affac48d5f530c196` ([run 34851080921](https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921)).
-The programs are promoted and required reviewed-loader validation is pending. No local project execution
+Required reviewed-loader validation also passed **2,037 tests on each platform**,
+plus syntax, installation and assets, at
+`217fc9397506c8b5157c19a856b34c399f2ca447` ([run 34852043326](https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326)).
+The following result-recording commit changes only documentation and inventory;
+runtime, programs, source references and tests are unchanged after validation. No local project execution
 is authorized. See [the current review](TRANSITION_CARD_REVIEW.md).
 
 ## Previous cycle: copies of existing permanents and power damage
@@ -45,7 +49,7 @@ adds durable, timestamped layer-one copies, copiable retained activations,
 nonbasic subtype selection, fixed-arity spell target groups and simultaneous
 excess damage. The prior 286 reviewed programs are unchanged.
 
-Kernel schema is **124**, state schema **15**. The **64 new methods** now use the
+Kernel schema is **124**, state schema **15**. The **56 new methods** now use the
 reviewed loader. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355)
 passed **1,973 tests per platform**, plus syntax, installation and assets, at
 `2936bde63ebdcef71a9d1e928e55b640698d89eb`. [Required reviewed-loader validation 34846671618](https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618) passed
@@ -136,7 +140,7 @@ See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
 ## Next work order: stack copies and damage/library results
 
-Finish the four current programs' required reviewed-loader validation first. Then aim
+The current cycle's required reviewed-loader validation is complete. Next aim
 for a coherent **4-card cycle**, selecting **Replication Technique, Sunken Palace,
 Kodama of the West Tree and Rampant Frogantua**. All four next candidates remain
 unstarted. Reassess shared dependencies before writing their programs.

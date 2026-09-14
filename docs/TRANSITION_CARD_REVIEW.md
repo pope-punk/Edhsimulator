@@ -73,8 +73,10 @@ Ubuntu and Windows**, plus syntax, installation and packaged assets, at
 `7e7106bf0fa5c8c83e21ce1affac48d5f530c196`. All 64 focused methods passed.
 
 The four source-bound programs have now been promoted into the reviewed bundle;
-the conformance module requires the reviewed loader. This promotion's required
-hosted validation is pending. Coverage is 294 unique cards / 360 deck copies,
+the conformance module requires the reviewed loader. [Required reviewed-loader
+validation](https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326) passed **2,037 tests on each platform**, plus syntax,
+installation and packaged assets, at `217fc9397506c8b5157c19a856b34c399f2ca447`.
+The following result-recording commit changes only documentation and inventory. Coverage is 294 unique cards / 360 deck copies,
 with 40 unique cards / 40 copies unstarted and zero drafts.
 
 No local Python, installation, compilation, tests or games have been run.

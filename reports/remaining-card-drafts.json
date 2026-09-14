@@ -867,11 +867,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "f9972af4f92c8e113d0c7d190f99b01bc2f4524242b715c74914b6e8e6867aa0",
-      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "implementation_notes": "Complete source-bound reviewed program; expanded draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:fanatic-of-rhonas",
       "reviewed_definition": "catalog:fanatic-of-rhonas",
       "draft_hosted_validation": {
@@ -879,9 +879,8 @@
         "run_id": 34851080921
       },
       "hosted_validation": {
-        "conclusion": "pending",
-        "stage": "required_reviewed_loader",
-        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+        "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+        "run_id": 34852043326
       }
     },
     {
@@ -949,11 +948,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "0435b0fba9ece9ca7d19c741f24c08d8fd1b1a305b0ed39e302a3408dadafeae",
-      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "implementation_notes": "Complete source-bound reviewed program; expanded draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:fangs-of-kalonia",
       "reviewed_definition": "catalog:fangs-of-kalonia",
       "draft_hosted_validation": {
@@ -961,9 +960,8 @@
         "run_id": 34851080921
       },
       "hosted_validation": {
-        "conclusion": "pending",
-        "stage": "required_reviewed_loader",
-        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+        "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+        "run_id": 34852043326
       }
     },
     {
@@ -1031,11 +1029,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "c2f04ec9ecdcba06db5bdf4248f6ef95c3e61c024340fa9ce477e07f58fa1d72",
-      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "implementation_notes": "Complete source-bound reviewed program; expanded draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:finale-of-revelation",
       "reviewed_definition": "catalog:finale-of-revelation",
       "draft_hosted_validation": {
@@ -1043,9 +1041,8 @@
         "run_id": 34851080921
       },
       "hosted_validation": {
-        "conclusion": "pending",
-        "stage": "required_reviewed_loader",
-        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+        "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+        "run_id": 34852043326
       }
     },
     {
@@ -1490,11 +1487,11 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "b3541bdc62118fbd6bb4d8f42ad9ef59e690a4cf9c0c7de79f5ca2f2982e1168",
-      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "implementation_notes": "Complete source-bound reviewed program; expanded draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:hydra-broodmaster",
       "reviewed_definition": "catalog:hydra-broodmaster",
       "draft_hosted_validation": {
@@ -1502,9 +1499,8 @@
         "run_id": 34851080921
       },
       "hosted_validation": {
-        "conclusion": "pending",
-        "stage": "required_reviewed_loader",
-        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+        "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+        "run_id": 34852043326
       }
     },
     {
@@ -3422,9 +3418,9 @@
     "new_test_methods": 64,
     "runtime_checkpoint_schema": 125,
     "state_checkpoint_schema": 16,
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "passed",
     "unresolved_defects": [],
-    "review_work_remaining": "Required reviewed-loader conformance on both hosted platforms remains.",
+    "review_work_remaining": "",
     "shared_mechanics": [
       "Nontargeted overload alternatives and actual counter placement recipients",
       "Monstrous designation and immutable variable-size token characteristics",
@@ -3532,9 +3528,63 @@
       "inspected_commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196"
     },
     "hosted_validation": {
-      "conclusion": "pending",
-      "stage": "required_reviewed_loader",
-      "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+      "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+      "run_id": 34852043326,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
+      "conclusion": "success",
+      "tests_per_platform": 2037,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104002142695,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2037,
+          "seconds": 280.551,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104002143012,
+          "name": "verify (windows-latest)",
+          "tests": 2037,
+          "seconds": 350.568,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 294,
+      "totalCopies": 400,
+      "reviewedCopies": 360,
+      "remainingUnique": 40,
+      "remainingCopies": 40,
+      "byDeck": {
+        "Omo": {
+          "total": 100,
+          "reviewed": 90
+        },
+        "Reaminatour": {
+          "total": 100,
+          "reviewed": 87
+        },
+        "Elenda": {
+          "total": 100,
+          "reviewed": 93
+        },
+        "Minsc & Boo": {
+          "total": 100,
+          "reviewed": 90
+        }
+      }
     }
   },
   "hosted_validation_history": [
@@ -4116,6 +4166,39 @@
           "name": "verify (ubuntu-latest)",
           "tests": 2037,
           "seconds": 380.324,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+      "run_id": 34852043326,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
+      "conclusion": "success",
+      "tests_per_platform": 2037,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104002142695,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2037,
+          "seconds": 280.551,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104002143012,
+          "name": "verify (windows-latest)",
+          "tests": 2037,
+          "seconds": 350.568,
           "conclusion": "success"
         }
       ]
@@ -5744,9 +5827,37 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "conclusion": "pending",
-    "stage": "required_reviewed_loader",
-    "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+    "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+    "run_id": 34852043326,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
+    "conclusion": "success",
+    "tests_per_platform": 2037,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "checks": [
+      "source syntax",
+      "full distribution installation",
+      "packaged assets",
+      "required reviewed-loader conformance"
+    ],
+    "jobs": [
+      {
+        "job_id": 104002142695,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2037,
+        "seconds": 280.551,
+        "conclusion": "success"
+      },
+      {
+        "job_id": 104002143012,
+        "name": "verify (windows-latest)",
+        "tests": 2037,
+        "seconds": 350.568,
+        "conclusion": "success"
+      }
+    ]
   },
   "draft_hosted_validation": {
     "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
@@ -5843,25 +5954,25 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "4ced453d79a9df87d0e63823c9c3e7d469267939",
+    "base_commit": "5fd2f0071f9bcb2d52996cd1b1537976d449ab5a",
     "cards": [
-      "mirage-mirror",
-      "thespian-s-stage",
-      "march-from-velis-vel",
-      "ram-through"
+      "fangs-of-kalonia",
+      "hydra-broodmaster",
+      "fanatic-of-rhonas",
+      "finale-of-revelation"
     ],
     "unique_cards_completed": 4,
     "deck_copies_completed": 4,
-    "new_test_methods": 56,
-    "reviewed_before": 286,
-    "reviewed_after": 290,
-    "remaining_after": 44,
+    "new_test_methods": 64,
+    "reviewed_before": 290,
+    "reviewed_after": 294,
+    "remaining_after": 40,
     "validation": {
-      "commit": "e8bb4f97f82573565eafbae3ec4910068e377057",
-      "run_id": 34846671618,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618",
+      "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
+      "run_id": 34852043326,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
       "conclusion": "success",
-      "tests_per_platform": 1973,
+      "tests_per_platform": 2037,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -5871,6 +5982,22 @@
         "full distribution installation",
         "packaged assets",
         "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104002142695,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2037,
+          "seconds": 280.551,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104002143012,
+          "name": "verify (windows-latest)",
+          "tests": 2037,
+          "seconds": 350.568,
+          "conclusion": "success"
+        }
       ]
     },
     "local_project_code_executed": false
