@@ -2867,6 +2867,21 @@
           "Remove the extra GainLife field.",
           "Bind new subtype comparisons only to public battlefield costs, preserve existing activation-statistic rejection, and omit new paid summaries for hidden hand costs. Add regression coverage."
         ]
+      },
+      {
+        "run_id": 34796570052,
+        "commit": "58f7eca27f817bd4d693d5016273173db5800014",
+        "windows_tests": 1672,
+        "failures": 0,
+        "errors": 61,
+        "ubuntu": "cancelled_after_matrix_failure",
+        "issues": [
+          "A shared test helper constructed LoseLife without its required player domain; 61 new methods stopped during setup."
+        ],
+        "corrections": [
+          "Pass the explicit controller domain in the test life-loss fixtures; preserve the runtime API.",
+          "Include exact source life notes on waiting ability packets after their source leaves, with regression coverage."
+        ]
       }
     ]
   },

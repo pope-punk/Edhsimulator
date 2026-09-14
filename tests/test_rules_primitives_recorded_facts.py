@@ -40,7 +40,7 @@ class RecordedFactTests(unittest.TestCase):
         returner=replace(remove,definition_id='n-return',name='Return',spell_targets=TargetSpec(Selector(Zone.EXILE)),
             spell_effects=(Move('target',Zone.BATTLEFIELD),))
         life=tuple(replace(noop,definition_id='n-'+kind+'-'+str(n),name=kind+str(n),
-            spell_effects=((GainLife(n) if kind=='gain' else LoseLife(n)),))
+            spell_effects=((GainLife(n) if kind=='gain' else LoseLife('controller',n)),))
             for kind in ('gain','lose') for n in (1,3,4,5,6,7))
         self.programs=self.base+(body,land,basic,cave,remove,counter,stifle,noop,white,exile,control,returner)+life+extra
         self.state=RulesState(('A','B','C','D'));self.kernel=RulesKernel(self.state,self.programs)
@@ -353,17 +353,17 @@ class RecordedFactTests(unittest.TestCase):
         self.assertEqual(before+1,self.hand());self.assertEqual(40,self.note())
 
     def test_sigarda_lower_life_skips_draw_but_sets_next_baseline(self):
-        self.splendor();self.effect(self.source,LoseLife(5));before=self.hand()
+        self.splendor();self.effect(self.source,LoseLife('controller',5));before=self.hand()
         self.kernel.begin_step('A','upkeep');self.top();self.assertEqual(before,self.hand());self.assertEqual(35,self.note())
         self.kernel.begin_step('A','upkeep');self.top();self.assertEqual(before+1,self.hand())
 
     def test_sigarda_comparison_uses_resolution_life(self):
-        self.splendor();self.kernel.begin_step('A','upkeep');self.effect(self.source,LoseLife(1))
+        self.splendor();self.kernel.begin_step('A','upkeep');self.effect(self.source,LoseLife('controller',1))
         self.top();self.assertEqual(0,self.hand());self.assertEqual(39,self.note())
 
     def test_sigarda_notes_before_separate_draw_trigger_resolves(self):
         observer=CardProgram('draw-loss','Draw loss',('Enchantment',),abilities=(
-            AbilityProgram('draw-loss',EventPattern('card_drawn',controller_only=True),(LoseLife(1),)),))
+            AbilityProgram('draw-loss',EventPattern('card_drawn',controller_only=True),(LoseLife('controller',1),)),))
         self.game('sigarda-s-splendor',extra=(observer,));self.state.add_card('observer','draw-loss','A',Zone.BATTLEFIELD)
         self.kernel.enter(self.source);self.source=self.current();self.kernel.begin_step('A','upkeep');self.top()
         self.assertEqual(40,self.note());self.assertEqual(40,self.state.life('A'))
@@ -371,20 +371,21 @@ class RecordedFactTests(unittest.TestCase):
 
     def test_sigarda_trigger_survives_source_departure(self):
         self.splendor();old=self.source;self.kernel.begin_step('A','upkeep')
-        self.response((self.source,));self.top();self.top()
-        self.assertEqual(1,self.hand());self.assertEqual(40,self.note(old))
+        self.response((self.source,));self.top()
+        self.assertEqual({'life':40},RulesActorAdapter(self.kernel).packet('B')['stack'][0]['source_notes'])
+        self.top();self.assertEqual(1,self.hand());self.assertEqual(40,self.note(old))
 
     def test_sigarda_new_incarnation_has_independent_note_from_old_trigger(self):
         self.splendor();old=self.source;self.kernel.begin_step('A','upkeep')
         self.effect(self.source,Move('source',Zone.EXILE));self.effect(self.own,GainLife(7))
         self.response((self.current(),),definition='n-return',actor='A');self.top()
         new=self.current();self.assertEqual(47,self.note(new))
-        self.effect(self.own,LoseLife(3));self.top()
+        self.effect(self.own,LoseLife('controller',3));self.top()
         self.assertEqual(44,self.note(old));self.assertEqual(47,self.note(new))
 
     def test_sigarda_control_change_keeps_note_and_uses_current_trigger_controller(self):
         self.splendor();self.effect(self.source,GainControl('source'),actor='B')
-        self.effect(self.own,LoseLife(5),actor='B');before=self.hand('B')
+        self.effect(self.own,LoseLife('controller',5),actor='B');before=self.hand('B')
         self.kernel.begin_step('B','upkeep');self.top()
         self.assertEqual(before,self.hand('B'));self.assertEqual(35,self.note())
 
@@ -407,14 +408,14 @@ class RecordedFactTests(unittest.TestCase):
         self.assertEqual(41,self.state.life('A'));self.assertEqual(Zone.GRAVEYARD,self.zone('multi'))
 
     def test_sigarda_phasing_preserves_notes_and_suppresses_upkeep(self):
-        self.splendor();self.effect(self.source,LoseLife(3));self.effect(self.source,PhaseOut('source'))
+        self.splendor();self.effect(self.source,LoseLife('controller',3));self.effect(self.source,PhaseOut('source'))
         self.kernel.begin_step('A','upkeep');self.assertFalse(self.kernel.stack);self.assertEqual(40,self.note())
         self.kernel.begin_turn_for_scenario('A');self.top();self.assertEqual(37,self.note())
 
     def test_sigarda_entry_copy_notes_own_controller_life(self):
         copy=CardProgram('copy','Copy',('Enchantment',),entry_copy=Selector(Zone.BATTLEFIELD,types=('Enchantment',)))
         self.game('sigarda-s-splendor',extra=(copy,));self.kernel.enter(self.source);self.source=self.current()
-        self.effect(self.own,LoseLife(6),actor='B');ref=self.state.add_card('copy','copy','B',Zone.HAND);self.kernel.enter(ref)
+        self.effect(self.own,LoseLife('controller',6),actor='B');ref=self.state.add_card('copy','copy','B',Zone.HAND);self.kernel.enter(ref)
         q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[next(i for i,o in enumerate(q.options) if o.ref==self.source)])
         self.assertEqual(34,self.note(self.current('copy')));self.assertEqual(40,self.note())
 
@@ -433,7 +434,7 @@ class RecordedFactTests(unittest.TestCase):
         self.kernel.enter(self.source);self.assertFalse(self.kernel.object_notes);self.assertEqual(Zone.GRAVEYARD,self.zone())
 
     def test_sigarda_checkpoint_and_actor_replay_keep_exact_note(self):
-        self.splendor();self.effect(self.source,LoseLife(4));self.kernel.begin_step('A','upkeep')
+        self.splendor();self.effect(self.source,LoseLife('controller',4));self.kernel.begin_step('A','upkeep')
         adapter=RulesActorAdapter(self.kernel)
         for _ in self.state.live_players:adapter.submit(self.kernel.priority,{'kind':'pass','revision':self.kernel.revision})
         self.assertEqual(self.kernel.snapshot(),RulesActorAdapter.replay(adapter.archive(),self.programs).kernel.snapshot())

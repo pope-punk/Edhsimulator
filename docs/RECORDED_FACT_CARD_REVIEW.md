@@ -87,3 +87,10 @@ an existing intentionally fenced activation-statistic path. The correction
 removes that field and restricts new subtype bindings to public battlefield
 payments, preserving the old statistic gate and hidden-cost privacy. A corrected
 hosted run remains required before promotion.
+
+Run `34796570052` loaded all drafts and ran 1,672 tests. The 1,609
+existing methods passed; 61 new methods stopped in a shared fixture that omitted
+LoseLife's required player domain. The corrected helper supplies that domain.
+Waiting ability packets also retain their exact source life note after source
+departure, so public decision context remains self-contained. Both changes
+are covered by the next required hosted run.

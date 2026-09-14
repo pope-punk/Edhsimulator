@@ -99,6 +99,8 @@ def project_actor(kernel,actor):
             **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
             **({'kicker':frame['kicker']} if 'kicker' in frame else {}),
             **({'cast_timing':frame['cast_timing']} if 'cast_timing' in frame else {}),
+            **({'source_notes':deepcopy(kernel.object_notes[kernel._attachment_key(source.ref)]['values'])}
+                if kernel._attachment_key(source.ref) in kernel.object_notes else {}),
             **({'exile_on_stack_exit':True} if frame.get('exile_on_stack_exit') else {}),
             **({'target_controller_groups':[{'target':target_summary(row['ref']),'controller':row['controller']}
                 for row in frame['target_controller_groups']]} if 'target_controller_groups' in frame else {}),
