@@ -2940,7 +2940,7 @@
       "Echo occurrence based on existing control timestamps and explicit previous-upkeep observations",
       "Public attack and qualifying combat-damage history; actual turn life gains including lifelink",
       "Resolving player-statistic quantities and reusable bound library selectors",
-      "Fear blocker predicate; signed power snapshots; complete Food and Forest Dryad tokens",
+      "Fear blocker predicate; frozen nonnegative power snapshots; complete Food and Forest Dryad tokens",
       "Guard and phasing files included in implementation identity"
     ],
     "runtime_checkpoint_schema": 121,
@@ -2978,6 +2978,14 @@
           "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
         ],
         "production_defects_found": []
+      }
+    ],
+    "source_review_corrections": [
+      {
+        "rule": "107.1b",
+        "card_id": "jyoti-moag-ancient",
+        "issue": "The initial program and negative-power test incorrectly treated calculated +X/+X as signed.",
+        "correction": "Reuse SourceStat with allow_negative false; test current and last-known negative power producing a zero bonus; remove the unnecessary signed-modifier compiler permission."
       }
     ]
   },

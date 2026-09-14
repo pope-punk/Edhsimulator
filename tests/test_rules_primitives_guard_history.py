@@ -747,11 +747,18 @@ class GuardHistoryTests(unittest.TestCase):
         self.step('begin_combat');self.response(targets=(self.source,));self.top();self.top()
         self.assertEqual(7,self.kernel.effective(land).power)
 
-    def test_jyoti_negative_power_applies_negative_modifier(self):
-        self.game('jyoti-moag-ancient');land=self.add('g-dryad')
-        self.fx(self.source,UntilEndOfTurn('source',(ModifyPT(-3,0),)))
-        self.step('begin_combat');self.top()
-        self.assertEqual((1,2),(self.kernel.effective(land).power,self.kernel.effective(land).toughness))
+    def test_jyoti_negative_power_uses_zero_bonus_including_last_known_power(self):
+        # CR 107.1b: +X/+X uses zero for a negative calculated X.
+        for departed in (False,True):
+            with self.subTest(departed=departed):
+                self.game('jyoti-moag-ancient');land=self.add('g-dryad')
+                self.fx(self.source,UntilEndOfTurn('source',(ModifyPT(-3,0),)))
+                self.assertEqual(-1,self.kernel.effective(self.source).power)
+                self.step('begin_combat')
+                if departed:
+                    self.response(targets=(self.source,));self.top()
+                self.top()
+                self.assertEqual((2,3),(self.kernel.effective(land).power,self.kernel.effective(land).toughness))
 
     def test_jyoti_land_creatures_entering_later_do_not_receive_old_grant(self):
         self.game('jyoti-moag-ancient');land=self.add('g-dryad');self.step('begin_combat');self.top()
@@ -788,6 +795,7 @@ class GuardHistoryTests(unittest.TestCase):
             CardProgram('bad','Bad',('Creature',),power=1,toughness=1,keywords=('protection_everything',)),
             CardProgram('bad','Bad',('Enchantment',),continuous=(ContinuousProgram('bad',Selector(Zone.BATTLEFIELD),(ModifyPT(1,1),),condition=TurnHistoryCondition('attacked')),)),
             CardProgram('bad','Bad',('Sorcery',),spell_effects=(GainLife(PlayerStatistic('secret')),)),
+            CardProgram('bad','Bad',('Creature',),power=1,toughness=1,spell_effects=(UntilEndOfTurn('source',(ModifyPT(SourceStat('power',True),0),)),)),
             CardProgram('bad','Bad',('Enchantment',),abilities=(EchoAbility('bad',EventPattern('step_began',step='upkeep'),()),)),
         )
         for program in bad:

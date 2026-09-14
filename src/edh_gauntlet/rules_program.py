@@ -1450,7 +1450,7 @@ def validate(program,_depth=0):
                 for change in node.changes:
                     if isinstance(change,(ModifyPT,SetPT)):
                         for value in (change.power,change.toughness):
-                            if type(value) is not int:quantity(value,allow_x,available_values=available_values|{'recipient_stat','signed_scaling','signed_bound'})
+                            if type(value) is not int:quantity(value,allow_x,available_values=available_values|{'recipient_stat','signed_scaling'})
                     elif isinstance(change,AddKeywords):
                         if not strings(change.keywords) or not change.keywords or set(change.keywords)-KEYWORDS:raise RulesViolation('Invalid keyword grants')
                     elif isinstance(change,SetColors):

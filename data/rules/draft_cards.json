@@ -1732,12 +1732,12 @@
                         "power": {
                           "node": "SourceStat",
                           "statistic": "power",
-                          "allow_negative": true
+                          "allow_negative": false
                         },
                         "toughness": {
                           "node": "SourceStat",
                           "statistic": "power",
-                          "allow_negative": true
+                          "allow_negative": false
                         }
                       }
                     ]

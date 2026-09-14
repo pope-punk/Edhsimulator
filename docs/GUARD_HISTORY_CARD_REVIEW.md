@@ -16,7 +16,7 @@ compilation, tests or games ran on the user's computer.
 | Dimir House Guard | {3}{B} 2/3 Skeleton with fear. Sacrifice a creature to regenerate itself. Transmute {1}{B}{B} is a sorcery-timed hand activation with source discard, mana-value-bound search, reveal, optional failure to find and shuffle. |
 | Midnight Snack | {2}{B} enchantment. Own end-step raid creates a complete Food token. Pay {2}{B} and sacrifice the source to make a targeted opponent lose the controller's actual life gained this turn, read at resolution. |
 | Restart Sequence | {3}{B} sorcery returning an own-graveyard creature. Freerunning {1}{B} reuses alternative-cost selection with an authenticated qualifying combat-damage fact. Ordinary timing remains required. |
-| Jyoti, Moag Ancient | {2}{G}{U} legendary 2/4 Elemental. Entry creates complete 1/1 green Forest Dryad land creatures for all own command-zone casts. Each combat grants current own land creatures a frozen modifier equal to current or last-known source power, including negative values, through cleanup. |
+| Jyoti, Moag Ancient | {2}{G}{U} legendary 2/4 Elemental. Entry creates complete 1/1 green Forest Dryad land creatures for all own command-zone casts. Each combat grants current own land creatures a frozen modifier equal to current or last-known source power, through cleanup; a negative source power yields a zero bonus (CR 107.1b). |
 
 ## Shared implementation and review
 
@@ -51,8 +51,8 @@ lifelink gains independently of life loss and reset on every turn.
 
 Resolving player statistics reuse the effect quantity interpreter. Dynamic
 selector bounds now share one helper between ordinary queries and authorized
-library searches, preserving the search visibility protocol. Signed source
-statistics are accepted for temporary power/toughness changes. The kernel
+library searches, preserving the search visibility protocol. Temporary power/toughness grants reuse the existing frozen nonnegative source
+statistic. Signed comparison and explicit doubling paths retain their existing semantics. The kernel
 implementation manifest includes both the new guard module and the previously
 omitted phasing module.
 
@@ -66,7 +66,7 @@ The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicC
 retain SHA-256 `4381ad1b39ab2c05f7d03633a20f711ed37277074d3266dcba5f38cbb527423f`.
 Relevant rules include color protection 702.16b-f, echo 702.30a, fear 702.36b,
 transmute 702.53a, freerunning 702.173a, regeneration 701.19a-c and 614.8,
-and combat removal 506.4/506.4a.
+combat removal 506.4/506.4a, and negative calculated amounts 107.1b.
 [Modern Horizons 3 release notes](https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes)
 support Jyoti's commander count and power snapshot.
 [Foundations release notes](https://magic.wizards.com/en/news/feature/foundations-release-notes)
@@ -98,6 +98,12 @@ completed 1779 tests on Ubuntu with two historical state-schema assertion failur
 and one incomplete replay-command fixture. These are corrected while preserving
 legacy checkpoint rejection and the actor command's strict field validation.
 Windows was cancelled by matrix fail-fast. No runtime defect was reported by this run.
+Source review then caught an incorrect signed quantity in Jyoti's program.
+CR 107.1b requires zero for a negative calculated +X/+X bonus. The program now
+uses the existing clamped source statistic. The regression checks both a present
+source and last-known negative power after departure; the unnecessary compiler
+permission for signed temporary source modifiers is removed. This source-review
+correction requires fresh draft validation even if the fixture-only run passes.
 Corrected draft and required reviewed-loader checks are pending. Expected full suite:
 **1779 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged-asset verification.

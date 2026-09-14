@@ -31,7 +31,8 @@ draft bundle. They remain pending hosted validation and source-bound promotion.
 
 Shared work covers color protection, fear, regeneration, echo upkeep history,
 attack and qualifying combat-damage observations, actual turn life gains,
-resolving player statistics, bound library selectors and signed power snapshots.
+resolving player statistics, bound library selectors and frozen power snapshots.
+Source review corrected Jyoti's negative-power bonus to zero under CR 107.1b.
 The implementation identity now includes both guard and phasing interpreters.
 
 Kernel schema is **121**, state schema **14**. The **107 new methods** are
