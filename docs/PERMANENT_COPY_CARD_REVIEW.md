@@ -56,7 +56,7 @@ SHA-256: 4381ad1b39ab2c05f7d03633a20f711ed37277074d3266dcba5f38cbb527423f.
 
 ## Validation
 
-54 new hosted conformance methods cover complete source bindings, copy lifetime,
+56 new hosted conformance methods cover complete source bindings, copy lifetime,
 identity and noncopiable state, current and copied abilities, static timestamps,
 Dark Depths, entry copies, later token copies, registry restoration and tamper
 rejection, actor replay, subtype decisions, flashback, target groups and excess

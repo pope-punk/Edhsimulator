@@ -771,7 +771,7 @@ class GuardHistoryTests(unittest.TestCase):
 
     def test_guard_checkpoint_versions_reject_legacy_state_and_kernel(self):
         self.game('fanatical-devotion');self.shield();checkpoint=self.kernel.snapshot()
-        self.assertGreaterEqual(checkpoint['schema'],121);self.assertEqual(14,checkpoint['state']['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],121);self.assertGreaterEqual(checkpoint['state']['schema'],14)
         legacy=json.loads(json.dumps(checkpoint));legacy['schema']=120
         with self.assertRaises(RulesViolation):RulesKernel.restore(legacy,self.programs)
         legacy=json.loads(json.dumps(checkpoint));legacy['state']['schema']=13

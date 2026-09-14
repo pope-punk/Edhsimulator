@@ -200,7 +200,7 @@ class PermanentCopyTests(unittest.TestCase):
         self.assertTrue(self.state.get(self.source).phased);self.assertEqual('Mirage Mirror',self.name(self.source))
 
     def test_mirror_as_unattached_aura_goes_to_graveyard(self):
-        self.game();self.copy(self.add('pc-aura'))
+        self.game();aura=self.add('pc-aura');self.state.attach(aura,self.body);self.copy(aura)
         self.assertEqual(Zone.GRAVEYARD,self.zone(self.source))
 
     def test_equipment_copy_detaches_when_it_expires(self):
@@ -443,3 +443,20 @@ class PermanentCopyTests(unittest.TestCase):
         self.game();self.copy(self.add('catalog:forest'))
         self.activate((),ability='intrinsic-land:Forest',mana='')
         self.assertEqual((('G',1),),self.state.mana_pool('A'))
+
+    def test_fixed_spell_groups_can_target_same_object_in_separate_clauses(self):
+        target=TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',)))
+        p=CardProgram('pc-two-clauses','Two clauses',('Instant',),cast=CastSpec(CostSpec(),timing='instant'),
+            spell_targets=TargetSpec(minimum=2,maximum=2,groups=(TargetGroup('one',target),TargetGroup('two',target))),
+            spell_effects=(AddCounters('target:one','+1/+1',1),AddCounters('target:two','+1/+1',2)))
+        self.game(extra=(p,));spell=self.add(p.definition_id,'A',Zone.HAND)
+        self.cast((self.body,self.body),spell,mana='');self.restore();self.drain()
+        self.assertEqual(3,dict(self.state.get(self.body).counters)['+1/+1'])
+
+    def test_spell_group_compiler_rejects_variable_or_unbounded_clauses(self):
+        selector=Selector(Zone.BATTLEFIELD,types=('Creature',))
+        for target in (TargetSpec(selector,0,None,True),
+                TargetSpec(minimum=0,maximum=1,groups=(TargetGroup('optional',TargetSpec(selector,0,1)),))):
+            with self.subTest(target=target),self.assertRaises(RulesViolation):
+                validate(CardProgram('bad','Bad',('Instant',),cast=CastSpec(CostSpec(),timing='instant'),
+                    spell_targets=target,spell_effects=(AddCounters('target','+1/+1',1),)))

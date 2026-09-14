@@ -526,7 +526,7 @@ class ManaConvokeTests(unittest.TestCase):
             validate(CardProgram('bad','Bad',('Land',),activated=(ActivatedProgram('mana',CostSpec(),(LandMana(),),mana_ability=False),)))
 
     def test_checkpoint_identity_rejects_prior_kernel_layout(self):
-        self.game();checkpoint=self.kernel.snapshot();self.assertGreaterEqual(checkpoint['schema'],122);self.assertEqual(14,checkpoint['state']['schema'])
+        self.game();checkpoint=self.kernel.snapshot();self.assertGreaterEqual(checkpoint['schema'],122);self.assertGreaterEqual(checkpoint['state']['schema'],14)
         checkpoint['schema']=121
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)
         from edh_gauntlet.rules_identity import IMPLEMENTATION_MANIFEST

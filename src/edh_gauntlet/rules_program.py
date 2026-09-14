@@ -2114,6 +2114,7 @@ def validate(program,_depth=0):
         selector(program.entry_copy)
     if program.spell_targets is not None:
         target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols),allow_groups=True)
+        if program.spell_targets.maximum is None:raise RulesViolation('Spell targets require a finite announced bound')
         if program.spell_targets.groups and any(g.targets.minimum!=g.targets.maximum for g in program.spell_targets.groups):
             raise RulesViolation('Announced spell target groups require fixed clause sizes')
     if any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(program.spell_effects)):

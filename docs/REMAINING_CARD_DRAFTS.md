@@ -27,7 +27,7 @@ successful hosted validation.
 Mirage Mirror, Thespian's Stage, March from Velis Vel and Ram Through have complete
 printed drafts. Shared work adds durable, timestamped layer-one copies,
 copiable retained activations, nonbasic subtype selection, fixed-arity spell
-target groups and simultaneous excess damage. **54 new conformance methods** are
+target groups and simultaneous excess damage. **56 new conformance methods** are
 awaiting hosted draft validation. Kernel schema 124, state schema 15.
 
 The 286 reviewed programs remain unchanged. Promotion and the required
