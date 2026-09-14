@@ -15,6 +15,7 @@ from edh_gauntlet.rules_adapter import RulesActorAdapter
 from edh_gauntlet.rules_bundle import load_reviewed,digest,source_facts
 from edh_gauntlet.rules_characteristics import evaluate,evaluate_exhaustive
 from edh_gauntlet.catalog import load_catalog
+from edh_gauntlet.rules_replacements import ZoneProposal
 
 CARDS=('chthonian-nightmare','maze-s-end','rhythm-of-the-wild','parasitic-impetus',
        'propaganda','defiler-of-vigor','darksteel-mutation')
@@ -320,6 +321,13 @@ class PaymentsCombatTests(unittest.TestCase):
         obj=next(o for o in self.state.objects(Zone.BATTLEFIELD) if o.token)
         self.assertEqual((),obj.counters);self.assertNotIn('haste',self.kernel.effective(obj.ref).keywords)
 
+    def test_riot_haste_changes_entry_lookahead_without_stale_cache(self):
+        self.game();ref=self.add(zone=Zone.HAND)
+        proposal=ZoneProposal(self.state.get(ref),Zone.BATTLEFIELD,'A')
+        self.assertNotIn('haste',self.kernel._proposal_view(proposal)[1].keywords)
+        self.assertIn('haste',self.kernel._proposal_view(replace(proposal,riot_haste=True))[1].keywords)
+        self.assertNotIn('haste',self.kernel._proposal_view(proposal)[1].keywords)
+
     def test_riot_checkpoint_keeps_the_exact_choice(self):
         self.game();self.card('rhythm-of-the-wild');ref=self.add(zone=Zone.HAND);self.cast(ref,'CG');self.top()
         request=self.kernel.pending_choice.to_json();self.restore()
@@ -405,7 +413,9 @@ class PaymentsCombatTests(unittest.TestCase):
     def test_repeated_goad_from_one_player_adds_no_requirements(self):
         self.game();ref=self.add();self.aura('parasitic-impetus',ref,'B');self.aura('parasitic-impetus',ref,'B');self.combat()
         self.assertEqual(frozenset({'B'}),self.kernel.effective(ref).goaded_by)
-        self.attack({ref:'C'});self.assertEqual(2,len(self.kernel.stack))
+        self.attack({ref:'C'})
+        while self.kernel.pending_choice:self.answer(list(range(self.kernel.pending_choice.minimum)))
+        self.assertEqual(2,len(self.kernel.stack))
 
     def test_goad_all_other_players_ties_are_legal(self):
         self.game();ref=self.add()
@@ -609,3 +619,63 @@ class PaymentsCombatTests(unittest.TestCase):
         p=Payment(cost_order=('player:energy','zone:creature','zone:return'))
         self.assertEqual(p,Payment.from_json(p.to_json()))
         with self.assertRaises(RulesViolation):Payment.from_json({'mana':{},'taps':[],'cost_order':[1]})
+
+    def test_later_granted_activation_survives_mutation(self):
+        grant=CardProgram('pc-grant','Grant',('Enchantment',),continuous=(ContinuousProgram('grant',
+            Selector(Zone.BATTLEFIELD,types=('Creature',)),(AddActivated(ActivatedProgram('mana',
+                CostSpec(tap_source=True),(AddMana(('G',)),),mana_ability=True)),)),))
+        self.game((grant,));ref=self.add();self.aura('darksteel-mutation',ref);self.add('pc-grant')
+        abilities=self.kernel.activated_abilities(self.current(ref))
+        self.assertEqual(1,len(abilities));self.assertTrue(abilities[0].ability_id.startswith('granted:'))
+
+    def test_earlier_granted_activation_is_removed_by_mutation(self):
+        grant=CardProgram('pc-grant','Grant',('Enchantment',),continuous=(ContinuousProgram('grant',
+            Selector(Zone.BATTLEFIELD,types=('Creature',)),(AddActivated(ActivatedProgram('mana',
+                CostSpec(tap_source=True),(AddMana(('G',)),),mana_ability=True)),)),))
+        self.game((grant,));ref=self.add();self.add('pc-grant');self.aura('darksteel-mutation',ref)
+        self.assertEqual((),self.kernel.activated_abilities(self.current(ref)))
+
+    def test_intrinsic_basic_land_mana_is_removed_in_ability_layer(self):
+        land=CardProgram('pc-land-creature','Land creature',('Land','Creature'),subtypes=('Forest',),power=2,toughness=2)
+        restore_land=CardProgram('pc-land-grant','Land grant',('Enchantment',),continuous=(ContinuousProgram('land',
+            Selector(Zone.BATTLEFIELD,types=('Creature',)),(ChangeTypes(add=('Land',)),AddSubtypes('Land',('Forest',)))),))
+        self.game((land,restore_land));ref=self.add('pc-land-creature');self.aura('darksteel-mutation',ref);self.add('pc-land-grant')
+        self.assertIn('Forest',self.kernel.effective(ref).subtypes)
+        self.assertEqual((),self.kernel.activated_abilities(self.current(ref)))
+
+    def test_mutation_dependency_matches_exhaustive_evaluator(self):
+        source=CardProgram('pc-keywords','Keywords',('Creature',),power=2,toughness=2,
+            continuous=(ContinuousProgram('grant',Selector(Zone.BATTLEFIELD,types=('Creature',)),(AddKeywords(('flying',)),)),))
+        self.game((source,));ref=self.add('pc-keywords');self.add();self.aura('darksteel-mutation',ref)
+        args={'life_totals':{p:self.state.life(p) for p in self.state.players},
+              'starting_life_totals':{p:self.state.starting_life(p) for p in self.state.players},
+              'live_players':self.state.live_players,'life_lost_totals':{p:0 for p in self.state.players}}
+        a=evaluate(self.state.objects(),self.kernel.definitions,**args)
+        b=evaluate_exhaustive(self.state.objects(),self.kernel.definitions,**args)
+        self.assertEqual(a,b);self.assertNotIn('flying',a[ref].keywords)
+
+    def test_nonvigilant_attacker_cannot_tap_for_attack_mana(self):
+        dork=CardProgram('pc-dork','Dork',('Creature',),power=1,toughness=1,
+            activated=(ActivatedProgram('mana',CostSpec(tap_source=True),(AddMana(('G','G')),),mana_ability=True),))
+        self.game((dork,));ref=self.add('pc-dork');self.card('propaganda','B');self.combat();before=self.kernel.snapshot()
+        with self.assertRaises(RulesViolation):
+            self.attack({ref:'B'},Payment((('G',2),),mana_actions=(self.mana_command(ref,'mana'),)))
+        self.assertEqual(before,self.kernel.snapshot())
+
+    def test_vigilant_attacker_can_tap_for_attack_mana(self):
+        dork=CardProgram('pc-dork','Dork',('Creature',),power=1,toughness=1,keywords=('vigilance',),
+            activated=(ActivatedProgram('mana',CostSpec(tap_source=True),(AddMana(('G','G')),),mana_ability=True),))
+        self.game((dork,));ref=self.add('pc-dork');self.card('propaganda','B');self.combat()
+        self.attack({ref:'B'},Payment((('G',2),),mana_actions=(self.mana_command(ref,'mana'),)))
+        self.assertTrue(self.current(ref).tapped);self.assertEqual(1,len(self.kernel.combat['attackers']))
+
+    def test_attack_cost_stays_locked_when_mana_payment_removes_tax_source(self):
+        source=CardProgram('pc-exile-mana','Exile mana',('Artifact',),activated=(ActivatedProgram('mana',
+            CostSpec(zone_costs=(ZoneCost('exile','exile',Selector(Zone.BATTLEFIELD,types=('Enchantment',),relation='owned')),)),
+            (AddMana(('C','C')),),mana_ability=True),))
+        self.game((source,));ref=self.add();engine=self.add('pc-exile-mana')
+        tax=self.card('propaganda',controller='B');self.combat()
+        command=self.mana_command(engine,'mana',Payment(zone_costs=(('exile',(tax,)),)))
+        self.attack({ref:'B'},Payment((('C',2),),mana_actions=(command,)))
+        self.assertEqual(Zone.EXILE,self.current(tax).zone);self.assertEqual(0,self.kernel._attack_tax('B'))
+        self.assertEqual(2,self.events('attackers_declared')[-1]['attack_cost'])

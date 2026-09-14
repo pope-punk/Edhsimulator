@@ -7,7 +7,7 @@ Cards: Chthonian Nightmare, Maze's End, Rhythm of the Wild, Parasitic Impetus,
 Propaganda, Defiler of Vigor, and Darksteel Mutation.
 
 This is pass 1 of the user's four-pass completion target, beginning with
-306 reviewed unique cards and 28 remaining. It includes 80 new conformance
+306 reviewed unique cards and 28 remaining. It includes 88 new conformance
 methods. Kernel/state schemas are 129/17. No local project code was executed.
 
 ## Shared implementation
@@ -31,6 +31,11 @@ methods. Kernel/state schemas are 129/17. No local project code was executed.
   artifact subtypes, counters and later grants. Trigger discovery retains
   pre-departure ability presence. Effects already begun in earlier layers keep
   their recipient sets, while later-layer-only effects can stop.
+
+Review corrections include basic-land mana suppression, historical tap-trigger
+ability presence, and riot haste in entry lookahead. The first hosted attempt
+found a scanning-reference signature mismatch and an unanswered trigger-order
+fixture; both are repaired for the corrected draft.
 
 The remaining gate is review plus hosted draft and reviewed-loader validation.
 These programs do not change production admission or any existing game.

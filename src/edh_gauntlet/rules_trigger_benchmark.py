@@ -14,7 +14,11 @@ from .rules_identity import IMPLEMENTATION_ID
 
 class ScanningRulesKernel(RulesKernel):
     """Reference bypasses only indexing; collectors retain all original filters."""
-    def _trigger_abilities(self,source,kind):
+    def _trigger_abilities(self,source,kind,views=None):
+        if views is not None:
+            view=views.get(source.ref)
+            if view is not None and view.abilities_removed:return ()
+            return self.definitions[source.effective_definition].abilities
         return self.definition(source).abilities
 
 

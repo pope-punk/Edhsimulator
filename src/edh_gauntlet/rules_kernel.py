@@ -433,19 +433,18 @@ class RulesKernel(RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,Ma
         # Observe the tap before its departure, including copied abilities.
         objects=tuple(replace(obj,tapped=True) if obj.ref in refs else obj for obj in before)
         subjects=tuple(obj for obj in objects if obj.ref in refs and not obj.phased)
-        views=None
+        views=evaluate_characteristics(objects,self.definitions,temporary=self._temporary_rows(),
+            life_totals={p:self.state.life(p) for p in self.state.players},
+            starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},
+            live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})
         for source in objects:
             if source.phased:continue
-            for ability in self._trigger_abilities(source,'becomes_tapped'):
+            for ability in self._trigger_abilities(source,'becomes_tapped',views):
                 pattern=ability.event
                 if pattern.kind!='becomes_tapped':continue
                 for subject in subjects:
                     if pattern.subject=='self' and source.ref!=subject.ref:continue
                     if pattern.controller_only and source.controller!=subject.controller:continue
-                    if views is None and (pattern.types or ability.occurrence_condition or ability.intervening_if):
-                        views=evaluate_characteristics(objects,self.definitions,temporary=self._temporary_rows(),
-                            life_totals={p:self.state.life(p) for p in self.state.players},
-                            starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})
                     if pattern.types and not set(pattern.types)<=views[subject.ref].types:continue
                     self._trigger(source,ability,bindings={'event_subject':[subject.ref.to_json()]},
                         condition_objects=objects,condition_views=views)
@@ -603,7 +602,7 @@ class RulesKernel(RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,Ma
         epoch=(self.state,self.state.sequence)
         if getattr(self,'_entry_view_epoch',None)!=epoch:
             self._entry_view_epoch=epoch;self._entry_view_cache=OrderedDict()
-        key=(proposal.before,proposal.controller,proposal.copied_definition,proposal.counters,proposal.tapped,proposal.copied_add_types)
+        key=(proposal.before,proposal.controller,proposal.copied_definition,proposal.counters,proposal.tapped,proposal.copied_add_types,proposal.riot_haste)
         cache=self._entry_view_cache
         if key in cache:
             cache.move_to_end(key)
@@ -616,7 +615,8 @@ class RulesKernel(RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,Ma
     def _compute_proposal_view(self, proposal):
         entering=replace(proposal.before,ref=ObjectRef(proposal.before.ref.card_id,proposal.before.ref.incarnation+1),
             zone=Zone.BATTLEFIELD,controller=proposal.controller,copied_definition=proposal.copied_definition,copied_add_types=proposal.copied_add_types,
-            counters=proposal.counters,tapped=proposal.tapped,attached_to=None,phased=False,timestamp=self.state.sequence+1,copy_effects=())
+            counters=proposal.counters,tapped=proposal.tapped,entry_flags=frozenset({'riot_haste'} if proposal.riot_haste else ()),
+            attached_to=None,phased=False,timestamp=self.state.sequence+1,copy_effects=())
         objects=tuple(obj for obj in self.state.objects() if obj.ref.card_id!=entering.ref.card_id)+(entering,)
         return entering,evaluate_characteristics(objects,self.definitions,entering_ref=entering.ref,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})[entering.ref]
 

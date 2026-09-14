@@ -191,7 +191,7 @@ class CastingRules:
         abilities = self.definition(source).activated
         view = self.effective(source.ref)
         if source.zone == Zone.BATTLEFIELD:abilities+=view.granted_abilities
-        if source.zone == Zone.BATTLEFIELD and 'Land' in view.types:
+        if source.zone == Zone.BATTLEFIELD and 'Land' in view.types and not view.abilities_removed:
             intrinsic = tuple(ActivatedProgram('intrinsic-land:' + subtype, CostSpec(tap_source=True),
                 (AddMana((symbol,)),), mana_ability=True)
                 for subtype, symbol in (('Plains','W'),('Island','U'),('Swamp','B'),('Mountain','R'),('Forest','G'))

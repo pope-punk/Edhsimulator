@@ -2222,7 +2222,7 @@ def validate(program,_depth=0):
         for change in effect.changes:
             if isinstance(change,SetCardTypes):
                 if (not strings(change.types) or not change.types or len(set(change.types))!=len(change.types)
-                        or not set(change.types)<= {'Artifact','Creature','Enchantment','Land','Planeswalker','Battle','Kindred'}
+                        or not set(change.types)<= {'Artifact','Creature','Land','Kindred'}
                         or not strings(change.creature_subtypes) or not set(change.creature_subtypes)<=CREATURE_TYPES):
                     raise RulesViolation('Invalid replacement types')
             elif isinstance(change,(LoseAbilities,Goaded,AddRiot)):
