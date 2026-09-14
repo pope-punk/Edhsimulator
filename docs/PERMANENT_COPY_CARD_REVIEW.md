@@ -61,7 +61,11 @@ Dark Depths, entry copies, later token copies, registry restoration and tamper
 rejection, actor replay, subtype decisions, flashback, target groups and excess
 damage. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355) passed 1,973 tests on
 each of Ubuntu and Windows, plus syntax, installation and packaged assets, at
-`2936bde63ebdcef71a9d1e928e55b640698d89eb`. Required reviewed-loader validation is pending. No local Python, installation,
+`2936bde63ebdcef71a9d1e928e55b640698d89eb`. [Required reviewed-loader validation 34846671618](https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618) passed
+**1,973 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at `e8bb4f97f82573565eafbae3ec4910068e377057`. The following result-recording
+commit changes only documentation and inventory; runtime, programs, references
+and tests are unchanged after validation. No local Python, installation,
 compilation, tests or games were run.
 
 Replication Technique remains unstarted. Demonstrate needs genuine stack copies

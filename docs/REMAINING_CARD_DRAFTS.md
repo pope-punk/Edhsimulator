@@ -33,7 +33,11 @@ excess damage. The prior 286 reviewed programs are unchanged.
 Kernel schema is **124**, state schema **15**. The **56 new methods** now use the
 reviewed loader. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355)
 passed **1,973 tests per platform**, plus syntax, installation and assets, at
-`2936bde63ebdcef71a9d1e928e55b640698d89eb`. Required reviewed-loader validation is pending.
+`2936bde63ebdcef71a9d1e928e55b640698d89eb`. [Required reviewed-loader validation 34846671618](https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618) passed
+**1,973 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at `e8bb4f97f82573565eafbae3ec4910068e377057`. The following result-recording
+commit changes only documentation and inventory; runtime, programs, references
+and tests are unchanged after validation.
 See [the current review](PERMANENT_COPY_CARD_REVIEW.md).
 
 ## Previous cycle: token copies and fight
