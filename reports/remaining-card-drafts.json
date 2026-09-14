@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 270,
-    "remaining_outside_reviewed_bundle": 64,
-    "drafts_written": 8,
+    "reviewed_bundle_unique": 278,
+    "remaining_outside_reviewed_bundle": 56,
+    "drafts_written": 0,
     "not_started_on_this_branch": 56,
-    "reviewed_bundle_copies": 335,
-    "draft_copies": 8,
+    "reviewed_bundle_copies": 343,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 43
+    "promoted_on_this_branch": 51
   },
   "cards": [
     {
@@ -38,7 +38,7 @@
     {
       "card_id": "alseid-of-life-s-bounty",
       "name": "Alseid of Life's Bounty",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -52,11 +52,30 @@
           "text": "Lifelink\n{1}, Sacrifice this creature: Target creature or enchantment you control gains protection from the color of your choice until end of turn."
         }
       ],
-      "draft_definition": "draft:alseid-of-life-s-bounty",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "72aafe6173c47fe7afdb2abee41877c7e4efa16850be102e2ad0c4cf797eceea",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:alseid-of-life-s-bounty",
+      "reviewed_definition": "catalog:alseid-of-life-s-bounty",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "aminatou-the-fateshifter",
@@ -604,7 +623,7 @@
     {
       "card_id": "dimir-house-guard",
       "name": "Dimir House Guard",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -618,11 +637,30 @@
           "text": "Fear\nSacrifice a creature: Regenerate this creature.\nTransmute {1}{B}{B}"
         }
       ],
-      "draft_definition": "draft:dimir-house-guard",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:dimir-house-guard",
+      "reviewed_definition": "catalog:dimir-house-guard",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "domri-anarch-of-bolas",
@@ -759,7 +797,7 @@
     {
       "card_id": "fanatical-devotion",
       "name": "Fanatical Devotion",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -773,11 +811,30 @@
           "text": "Sacrifice a creature: Regenerate target creature."
         }
       ],
-      "draft_definition": "draft:fanatical-devotion",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:fanatical-devotion",
+      "reviewed_definition": "catalog:fanatical-devotion",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "fangs-of-kalonia",
@@ -1326,7 +1383,7 @@
     {
       "card_id": "jyoti-moag-ancient",
       "name": "Jyoti, Moag Ancient",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1340,16 +1397,35 @@
           "text": "When Jyoti enters, create a 1/1 green Forest Dryad land creature token for each time you've cast your commander from the command zone this game.\nAt the beginning of each combat, land creatures you control get +X/+X until end of turn, where X is Jyoti's power."
         }
       ],
-      "draft_definition": "draft:jyoti-moag-ancient",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:jyoti-moag-ancient",
+      "reviewed_definition": "catalog:jyoti-moag-ancient",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "karmic-guide",
       "name": "Karmic Guide",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1363,11 +1439,30 @@
           "text": "Flying, protection from black\nEcho {3}{W}{W}\nWhen this creature enters, return target creature card from your graveyard to the battlefield."
         }
       ],
-      "draft_definition": "draft:karmic-guide",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "d81e7f6361414795c44c79d16030b188b1e401c21230cc20929a650c03923a1a",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:karmic-guide",
+      "reviewed_definition": "catalog:karmic-guide",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "kazuul-s-fury-kazuul-s-cliffs",
@@ -1522,7 +1617,7 @@
     {
       "card_id": "midnight-snack",
       "name": "Midnight Snack",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1536,11 +1631,30 @@
           "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
         }
       ],
-      "draft_definition": "draft:midnight-snack",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:midnight-snack",
+      "reviewed_definition": "catalog:midnight-snack",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "minsc-boo-timeless-heroes",
@@ -1885,7 +1999,7 @@
     {
       "card_id": "pongify",
       "name": "Pongify",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1899,11 +2013,30 @@
           "text": "Destroy target creature. It can't be regenerated. Its controller creates a 3/3 green Ape creature token."
         }
       ],
-      "draft_definition": "draft:pongify",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "59a5d0c1e859a1c3ed9aa299e6fe9786660dddd0e679631871283f73f923c979",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:pongify",
+      "reviewed_definition": "catalog:pongify",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "pontiff-of-blight",
@@ -2032,7 +2165,7 @@
     {
       "card_id": "restart-sequence",
       "name": "Restart Sequence",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2046,11 +2179,30 @@
           "text": "Freerunning {1}{B}\nReturn target creature card from your graveyard to the battlefield."
         }
       ],
-      "draft_definition": "draft:restart-sequence",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "4fa4d35aedf7420ba12a2f72b63bf96344e3d8d74a8ca3e8f9f7d0bc8966e5d5",
-      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "guard-history-2026-09-14",
+      "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:restart-sequence",
+      "reviewed_definition": "catalog:restart-sequence",
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555
+      },
+      "shared_mechanics": [
+        "Color protection",
+        "Regenerate",
+        "DestroyWithoutRegeneration",
+        "EchoAbility",
+        "Fear",
+        "TurnHistoryCondition",
+        "PlayerStatistic",
+        "Bound library selectors",
+        "Frozen source power"
+      ]
     },
     {
       "card_id": "reveillark",
@@ -2933,7 +3085,16 @@
       "restart-sequence",
       "jyoti-moag-ancient"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "karmic-guide",
+      "alseid-of-life-s-bounty",
+      "fanatical-devotion",
+      "pongify",
+      "dimir-house-guard",
+      "midnight-snack",
+      "restart-sequence",
+      "jyoti-moag-ancient"
+    ],
     "shared_mechanics": [
       "Shared derived-color protection for targeting, damage, blocking and attachment legality",
       "Atomic regeneration shields integrated with destruction and simultaneous state actions",
@@ -2946,9 +3107,9 @@
     "runtime_checkpoint_schema": 121,
     "state_checkpoint_schema": 14,
     "new_test_methods": 107,
-    "validation_status": "draft_hosted_pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Run hosted Ubuntu/Windows draft checks, correct any failures, source-bind all eight programs, then run required reviewed-loader checks.",
+    "review_work_remaining": "Complete required Ubuntu/Windows validation through the reviewed loader.",
     "next_batch": [
       "exotic-orchard",
       "fellwar-stone",
@@ -2978,6 +3139,16 @@
           "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
         ],
         "production_defects_found": []
+      },
+      {
+        "stage": "draft_fixture_correction",
+        "commit": "4c8e634887275bb68bde64186e858995281d16b3",
+        "run_id": 34801536529,
+        "ubuntu": "success",
+        "windows": "success",
+        "tests_per_platform": 1779,
+        "conclusion": "success_superseded",
+        "limitation": "Both full suites passed, but subsequent independent source review found Jyoti's negative +X/+X expectation incorrect under CR 107.1b. Fresh draft validation is required for the corrected program and test."
       }
     ],
     "source_review_corrections": [
@@ -2987,7 +3158,75 @@
         "issue": "The initial program and negative-power test incorrectly treated calculated +X/+X as signed.",
         "correction": "Reuse SourceStat with allow_negative false; test current and last-known negative power producing a zero bonus; remove the unnecessary signed-modifier compiler permission."
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+      "run_id": 34801795555,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1779,
+      "new_test_methods": 107,
+      "conclusion": "success",
+      "scope": "All 270 prior reviewed programs and eight isolated complete drafts, including corrected Jyoti negative-power semantics; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+    },
+    "next_batch_source_review": {
+      "inspected_commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+      "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+      "rules": [
+        "106.7",
+        "702.51a-d",
+        "707.5",
+        "707.9a-d"
+      ],
+      "implementation_points": [
+        {
+          "cards": [
+            "exotic-orchard",
+            "fellwar-stone",
+            "horizon-of-progress"
+          ],
+          "paths": [
+            "rules_casting.py:activated_abilities",
+            "rules_casting.py:_produce_mana",
+            "rules_program.py:ChooseMana",
+            "rules_subtypes.py"
+          ],
+          "finding": "Add a pure could-produce query over current derived land abilities, including intrinsic basic-land mana and applicable mana replacement outcomes. Ignore costs and activation legality. Resolve recursive Orchard/Horizon dependencies to a finite set; an ungrounded cycle produces nothing. Orchard/Stone allow only colors, while Horizon also permits colorless. Reuse existing tap/life/sacrifice costs and optional hand-land movement for Horizon's other abilities."
+        },
+        {
+          "cards": [
+            "devouring-light"
+          ],
+          "paths": [
+            "rules_casting.py:_prepare_action",
+            "rules_casting.py:_resource_payment",
+            "rules_casting.py:commit_action",
+            "rules_adapter.py"
+          ],
+          "finding": "Implement convoke as authenticated payment against the final total cost, not as a fixed reduction or alternative cost. Each controlled untapped creature pays one generic or matching colored requirement once; summoning sickness does not prohibit this tap. Preserve prepayment validation and actor replay. Reuse existing attacking-or-blocking target filtering and exile."
+        },
+        {
+          "cards": [
+            "scute-swarm",
+            "helm-of-the-host",
+            "lazotep-quarry",
+            "aggressive-biomancy"
+          ],
+          "paths": [
+            "rules_program.py:CreateTokens",
+            "rules_kernel.py:_execute",
+            "rules_kernel.py:_compute_proposal_view",
+            "rules_state.py:RulesObject",
+            "rules_characteristics.py"
+          ],
+          "finding": "Existing CreateTokens takes a fixed CardProgram; add persisted runtime copiable token snapshots with proper entry replacements and triggers. Keep copy exceptions copiable and post-creation grants separate: Helm removes legendary in the copy but grants haste afterward; Quarry fixes 4/4, black and Zombie; Biomancy adds a copiable entry-fight trigger. Scute chooses its token form at resolution from the land count. Preserve source/target identity, last-known information, exact created tokens, source binding, checkpoint identity and actor replay."
+        }
+      ],
+      "boundary": "Preparation only; these eight candidates remain unstarted. Select complete compatible families after refreshing the latest branch."
+    }
   },
   "hosted_validation_history": [
     {
@@ -3360,6 +3599,36 @@
       "conclusion": "failure",
       "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34797724871",
       "resolution_commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846"
+    },
+    {
+      "stage": "draft",
+      "commit": "a819021073fa048c74899d64b19ad1844c2788a5",
+      "run_id": 34800692440,
+      "ubuntu": "failure",
+      "windows": "cancelled",
+      "tests_run": 1779,
+      "failures": 2,
+      "errors": 1,
+      "causes": [
+        "Two historical checkpoint tests still required state schema 13 exactly; retain their historical minimum and rejection checks while the new suite requires schema 14.",
+        "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
+      ],
+      "production_defects_found": [],
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34800692440",
+      "conclusion": "failure",
+      "resolution_commit": "f7aa71651971da75381805bbbb30a04b59226bd5"
+    },
+    {
+      "stage": "draft_fixture_correction",
+      "commit": "4c8e634887275bb68bde64186e858995281d16b3",
+      "run_id": 34801536529,
+      "ubuntu": "success",
+      "windows": "success",
+      "tests_per_platform": 1779,
+      "conclusion": "success_superseded",
+      "limitation": "Both full suites passed, but subsequent independent source review found Jyoti's negative +X/+X expectation incorrect under CR 107.1b. Fresh draft validation is required for the corrected program and test.",
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801536529",
+      "resolution_commit": "f7aa71651971da75381805bbbb30a04b59226bd5"
     }
   ],
   "cycle_history": [
@@ -4420,5 +4689,18 @@
     "new_test_methods": 63,
     "conclusion": "success",
     "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+  },
+  "draft_hosted_validation": {
+    "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+    "run_id": 34801795555,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555",
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "tests_per_platform": 1779,
+    "new_test_methods": 107,
+    "conclusion": "success",
+    "scope": "All 270 prior reviewed programs and eight isolated complete drafts, including corrected Jyoti negative-power semantics; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
   }
 }

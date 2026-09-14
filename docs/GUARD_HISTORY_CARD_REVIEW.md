@@ -1,8 +1,8 @@
 # Eight cards: guards, replacement effects and history
 
 Cycle base: `cecda2894b3afb4f67aacd1656acdaff7096fe04`, branch `codex/remaining-card-programs`.
-All eight complete printed programs remain isolated drafts until hosted checks
-and source-bound promotion. No project code, Python, imports, installation,
+All eight complete printed programs are source-bound in the reviewed bundle.
+Corrected draft checks passed; required reviewed-loader validation is pending. No project code, Python, imports, installation,
 compilation, tests or games ran on the user's computer.
 
 ## Complete printed-face mapping
@@ -103,7 +103,12 @@ CR 107.1b requires zero for a negative calculated +X/+X bonus. The program now
 uses the existing clamped source statistic. The regression checks both a present
 source and last-known negative power after departure; the unnecessary compiler
 permission for signed temporary source modifiers is removed. This source-review
-correction requires fresh draft validation even if the fixture-only run passes.
-Corrected draft and required reviewed-loader checks are pending. Expected full suite:
-**1779 tests on each of Ubuntu and Windows**, plus syntax, installation
-and packaged-asset verification.
+correction supersedes [fixture-only validation 34801536529](https://github.com/pope-punk/Edhsimulator/actions/runs/34801536529),
+which passed 1779 tests on both platforms at `4c8e634887275bb68bde64186e858995281d16b3`.
+Passing that run did not validate the incorrect negative-power expectation.
+[Corrected draft validation 34801795555](https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555)
+passed **1779 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged-asset verification, at `f7aa71651971da75381805bbbb30a04b59226bd5`.
+All eight source bindings are promoted; the 107 new methods now use the reviewed
+loader. Required reviewed-loader validation is pending.
+

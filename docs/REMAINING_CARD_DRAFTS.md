@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**270 source-bound reviewed programs / 335 deck copies**. There are **64 cards outside the
-reviewed bundle**, eight authored drafts and 56 unstarted. Reviewed coverage is not production certification.
+**278 source-bound reviewed programs / 343 deck copies**. There are **56 cards / 57 deck
+copies outside the reviewed bundle**, all unstarted, and no outstanding drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -26,24 +26,47 @@ successful hosted validation.
 
 The user explicitly requested **eight more cards**. Karmic Guide, Alseid of Life's
 Bounty, Fanatical Devotion, Pongify, Dimir House Guard, Midnight Snack, Restart
-Sequence and Jyoti, Moag Ancient have complete printed programs in the isolated
-draft bundle. They remain pending hosted validation and source-bound promotion.
+Sequence and Jyoti, Moag Ancient have complete printed review and exact source
+bindings. The prior 270 reviewed programs are unchanged.
 
 Shared work covers color protection, fear, regeneration, echo upkeep history,
 attack and qualifying combat-damage observations, actual turn life gains,
-resolving player statistics, bound library selectors and frozen power snapshots.
-Source review corrected Jyoti's negative-power bonus to zero under CR 107.1b.
-The implementation identity now includes both guard and phasing interpreters.
+resolving player statistics and bound library selectors. Jyoti reuses a frozen
+source statistic; CR 107.1b clamps a negative calculated bonus to zero.
+The implementation identity includes guard and phasing interpreters.
 
-Kernel schema is **121**, state schema **14**. The **107 new methods** are
-ready for GitHub-hosted draft and reviewed-loader checks. Existing games remain
-bound to their own implementation; no local execution or production admission.
+Kernel schema is **121**, state schema **14**. The **107 new methods** now
+use the reviewed loader. [Corrected draft validation 34801795555](https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555)
+passed **1,779 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `f7aa71651971da75381805bbbb30a04b59226bd5`.
+Required reviewed-loader validation is pending. Existing games remain bound to
+their implementation; no local execution or production admission.
 See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
-Finish both required hosted stages for all eight cards. Then inspect Exotic
-Orchard, Fellwar Stone, Horizon of Progress, Devouring Light, Scute Swarm,
-Helm of the Host, Lazotep Quarry and Aggressive Biomancy for the next coherent
-family. The inventory records the missing shared requirements.
+## Next work order: mana, convoke and token copies
+
+Refresh the branch and inventory, then choose complete compatible families from
+**Exotic Orchard, Fellwar Stone, Horizon of Progress, Devouring Light,
+Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**.
+All eight remain unstarted.
+
+- Orchard, Stone and Horizon need a shared query for mana that derived land
+  abilities could produce, including intrinsic abilities and replacement effects.
+  Ignore activation costs and legality; handle recursive dependencies and empty
+  outcomes. Horizon also allows colorless and needs both other printed abilities.
+- Devouring Light needs authenticated convoke payment against the final total
+  cost, with matching creature colors, no double use and ordinary target checks.
+  Reuse existing combat-target filtering and exile.
+- The four token cards need durable copiable snapshots beyond fixed
+  `CreateTokens` programs. Preserve entry effects and copied abilities.
+  Helm's legendary exception is copiable; its later haste grant is separate.
+  Quarry changes power, toughness, color and creature type. Biomancy supplies a
+  copiable entry-fight ability. Scute reads the land threshold at resolution.
+
+The [pinned Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
+106.7, 702.51 and 707.5/707.9, guide this preparation.
+The JSON inventory records exact source reuse points. This preparation does not
+count as authored or validated cards.
 
 ## Previous cycle: casting, entry and paid-cost facts
 
@@ -52,8 +75,8 @@ have complete printed-face review and exact source bindings. Shared support
 records real kicker declarations and additional costs, cast-time sorcery
 eligibility, exact next-cleanup sacrifice, entry-life notes, spell colors and
 paid lands' derived subtypes. Necromancy composes existing ongoing effects and
-attachment rules to become an Aura. Karmic Guide remains queued for complete
-protection and echo; Sage shares the existing payment and subtype machinery.
+attachment rules to become an Aura. Karmic Guide's subsequent implementation is recorded above;
+Sage shares the existing payment and subtype machinery.
 
 Kernel schema is **120**, state schema **13**. The **63 new methods** now
 use the reviewed loader. [Draft validation 34797317071](https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071)
@@ -66,43 +89,8 @@ The following result-recording commit changes only documentation and inventory;
 runtime, programs and tests are unchanged after validation.
 See [the cycle review](RECORDED_FACT_CARD_REVIEW.md).
 
-Continue **Karmic Guide,
-Alseid of Life's Bounty, Fanatical Devotion and Pongify**. The inventory retains
-protection's targeting/damage/blocking/attachment requirements, echo control
-history, regeneration shields and cannot-regenerate destruction. No local
-execution, game migration or production admission.
-
-
-### Next-batch source review
-
-At `15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98`, the existing implementation offers these
-specific reuse points. This is preparation; all four next-batch cards remain
-unstarted.
-
-- **Protection:** Share a derived-color predicate across `_target_query`,
-  `CombatView.can_block`, `_deal_damage`, `_attachment_legal` and
-  `_aura_entry`. Include nontargeting Aura entry and existing source-information
-  lookup. Apply prevention before lifelink and damage-event aggregation.
-- **Echo:** `RulesObject.controlled_since` already tracks real control changes,
-  including expiring control effects. Add previous-own-upkeep observations;
-  the existing turn-start ledger measures a different boundary. Retain the
-  applicable prior marker on the waiting trigger. Reuse `PayMana` and
-  controller-limited `Sacrifice`.
-- **Regeneration:** `_state_based_actions` currently combines lethal damage,
-  zero toughness, legend and illegal Aura moves under `permanent_sba`.
-  Distinguish destruction while preserving simultaneous processing and
-  replacement-choice atomicity. Add explicit combat removal: `_combat_prune`
-  alone will retain an available creature that regenerated. Reuse exact
-  identities, cleanup expiry and public actor projection.
-- **Pongify:** `Destroy` currently accepts only a subject. Add an explicit
-  nonregenerable operation and compose `WithControllers` with
-  `CreateTokens`; token creation must not depend on successful destruction.
-
-The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
-702.16b-f, 702.30a, 701.19a-c and 614.8, ground the next review. Cover
-protection gained after legal blocks, upkeep history under extra upkeeps and
-phasing, and shields that expire unused or cannot apply. These checks belong
-on GitHub-hosted runners.
+The former protection, echo and regeneration work order is complete in the
+current cycle. Its original preparation remains in the inventory's cycle history.
 
 ## Previous cycle: phasing and player-authored choices
 
