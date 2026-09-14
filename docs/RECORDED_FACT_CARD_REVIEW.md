@@ -2,7 +2,7 @@
 
 Cycle base: `ce0631cfcf0171463dfc58d7f11718b5230a0001` on `codex/remaining-card-programs`.
 Four complete printed programs are source-bound and promoted after hosted draft checks.
-The required reviewed-loader check remains pending.
+The required reviewed-loader check also passed.
 No project code, Python, imports, installation, compilation, tests or games ran locally.
 
 ## Printed-face mapping
@@ -76,7 +76,7 @@ checkpoint restoration and authenticated actor replay.
 Kernel schema is **120**; state schema remains **13**. The historical
 schema-119 test accepts its layout or newer and still rejects 118.
 No started game or checkpoint is migrated. Production admission remains closed.
-The corrected draft check passed. The required reviewed-loader check is pending.
+Both required hosted validation stages passed.
 
 ## Initial hosted attempt
 
@@ -109,8 +109,8 @@ remains intact. The corrected draft validation below passed on both required pla
 packaged assets, at `825827f67c5d3f4fc8397b6cede516d1d1b0862c`.
 All four programs now load through source-bound reviewed metadata. Coverage is
 **270 unique cards / 335 deck copies**, with **64 unstarted / 65 copies**.
-All 266 prior reviewed rows are unchanged. The required reviewed-loader run
-is pending; production and gameplay admission remain separate.
+All 266 prior reviewed rows are unchanged. The reviewed-loader run passed;
+production and gameplay admission remain separate.
 
 ## Reviewed-loader correction
 
@@ -119,4 +119,17 @@ assertion failure; Ubuntu was cancelled by matrix fail-fast. The shared
 promotion audit still expected 39 cards after its explicit set grew to 43.
 The correction updates that count and also recognizes `CleanupCast`'s printed
 instant permission in the following generic timing assertion. Source, printed
-face and codec checks remain intact. The corrected reviewed-loader run is pending.
+face and codec checks remain intact. The corrected reviewed-loader run below passed on both required platforms.
+
+## Final hosted result
+
+[Reviewed-loader validation 34798075383](https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383) passed
+**1,672 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at `1927f33f436a76e920d261b02c87ba9cc6e8a846`. All **63 new methods**
+load the four source-bound reviewed programs. No unresolved defect remains
+in this cycle. No project code or Python ran locally.
+
+The following result-recording commit changes only this review, the work order
+and inventory; runtime, programs, source bindings and tests remain unchanged
+after validation. Continue Karmic Guide, Alseid of Life's Bounty, Fanatical
+Devotion and Pongify, with full requirements retained in the inventory.

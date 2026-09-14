@@ -1649,7 +1649,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "recorded-facts-2026-09-14",
       "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md",
       "previous_draft_definition": "draft:necromancy",
@@ -1668,7 +1668,11 @@
         "NoteLife",
         "ColoredSpellEvent",
         "IfPaidCostSubtype"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+        "run_id": 34798075383
+      }
     },
     {
       "card_id": "nissa-steward-of-elements",
@@ -1707,7 +1711,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "recorded-facts-2026-09-14",
       "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md",
       "previous_draft_definition": "draft:nullpriest-of-oblivion",
@@ -1726,7 +1730,11 @@
         "NoteLife",
         "ColoredSpellEvent",
         "IfPaidCostSubtype"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+        "run_id": 34798075383
+      }
     },
     {
       "card_id": "oblivion-ring",
@@ -2185,7 +2193,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "recorded-facts-2026-09-14",
       "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md",
       "previous_draft_definition": "draft:sigarda-s-splendor",
@@ -2204,7 +2212,11 @@
         "NoteLife",
         "ColoredSpellEvent",
         "IfPaidCostSubtype"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+        "run_id": 34798075383
+      }
     },
     {
       "card_id": "smothering-tithe",
@@ -2799,7 +2811,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "recorded-facts-2026-09-14",
       "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md",
       "previous_draft_definition": "draft:wonderscape-sage",
@@ -2818,7 +2830,11 @@
         "NoteLife",
         "ColoredSpellEvent",
         "IfPaidCostSubtype"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+        "run_id": 34798075383
+      }
     },
     {
       "card_id": "xolatoyac-the-smiling-flood",
@@ -2889,9 +2905,9 @@
     "runtime_checkpoint_schema": 120,
     "state_checkpoint_schema": 13,
     "new_test_methods": 63,
-    "validation_status": "draft_passed_reviewed_loader_correction_pending",
+    "validation_status": "reviewed_loader_passed",
     "unresolved_defects": [],
-    "review_work_remaining": "Rerun reviewed-loader hosted checks after updating the exact promotion count and recognizing CleanupCast instant permission in the generic full-face audit.",
+    "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
     "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
     "next_batch": [
       "karmic-guide",
@@ -2993,6 +3009,78 @@
       "new_test_methods": 63,
       "conclusion": "success",
       "scope": "All 266 prior reviewed programs and four isolated complete drafts: Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+    },
+    "hosted_validation": {
+      "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+      "run_id": 34798075383,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1672,
+      "new_test_methods": 63,
+      "conclusion": "success",
+      "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    },
+    "completed_utc": "2026-09-14T02:12:35Z",
+    "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, sources and tests remain at the validated commit.",
+    "next_batch_source_review": {
+      "inspected_commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
+      "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+      "rules": [
+        "702.16b-f",
+        "702.30a",
+        "701.19a-c",
+        "614.8"
+      ],
+      "implementation_points": [
+        {
+          "area": "Protection",
+          "paths": [
+            "rules_kernel.py:_target_query",
+            "rules_combat.py:CombatView.can_block",
+            "rules_combat.py:_deal_damage",
+            "rules_attachments.py:_attachment_legal",
+            "rules_attachments.py:_aura_entry"
+          ],
+          "finding": "Use one derived-color predicate for targeting, blocking, prevention and attachment legality, including nontargeting Aura entry. Resolve source characteristics with the existing last-known information helper. Prevent damage before lifelink and damage-trigger aggregation. Preserve already-legal blocks when protection is gained later."
+        },
+        {
+          "area": "Echo",
+          "paths": [
+            "rules_state.py:RulesObject.controlled_since",
+            "rules_state.py:change_control_batch",
+            "rules_state.py:end_control_effects",
+            "rules_turns.py:_begin_phase",
+            "rules_kernel.py:_collect_step"
+          ],
+          "finding": "Reuse exact-incarnation continuous-control timestamps, but add explicit previous-own-upkeep observations; the turn-start ledger measures a different boundary. Capture the prior marker for an intervening-if trigger and retain it through resolution, control changes, extra upkeeps and phasing. Reuse PayMana and normal controller-limited Sacrifice."
+        },
+        {
+          "area": "Regeneration",
+          "paths": [
+            "rules_kernel.py:_zone_operation",
+            "rules_kernel.py:_state_based_actions",
+            "rules_replacements.py:ZoneProposal",
+            "rules_combat.py:_combat_prune",
+            "rules_state.py:damage_batch",
+            "rules_turns.py:_finish_cleanup_actions"
+          ],
+          "finding": "Separate destruction from other graveyard moves. Current permanent_sba batches lethal damage together with zero toughness, legend and illegal Aura actions. Preserve simultaneous processing and replacement-choice atomicity while permitting shields only for destruction. A shield must survive creation without immediate tapping, then be consumed once with damage removal, tapping and explicit combat removal; expire unused shields at cleanup and never follow a new incarnation. The present combat prune only detects unavailable objects and control changes, so it cannot itself remove a regenerated creature that stays on the battlefield."
+        },
+        {
+          "area": "Pongify",
+          "paths": [
+            "rules_program.py:Destroy",
+            "rules_kernel.py:_zone_operation",
+            "rules_program.py:WithControllers",
+            "rules_program.py:CreateTokens"
+          ],
+          "finding": "Destroy currently only accepts subject; introduce an explicit nonregenerable destruction operation. Capture the legal target's controller before the operation and create the Ape independently of successful destruction. Preserve existing invalid-target handling."
+        }
+      ],
+      "boundary": "This is source review and implementation guidance for the next cycle, not authored cards or validation."
     }
   },
   "hosted_validation_history": [
@@ -3349,6 +3437,23 @@
       "new_test_methods": 63,
       "conclusion": "success",
       "scope": "All 266 prior reviewed programs and four isolated complete drafts: Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "run_id": 34797724871,
+      "commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
+      "windows_tests": 1672,
+      "failures": 1,
+      "errors": 0,
+      "ubuntu": "cancelled_after_matrix_failure",
+      "issues": [
+        "The promotion review retained a hard-coded 39-card count after expanding PROMOTED_CARDS to 43. Its following generic timing assertion also assumed every non-Instant must use sorcery timing."
+      ],
+      "corrections": [
+        "Update the exact promoted count to 43 and account explicitly for CleanupCast's printed instant permission in the shared full-face audit. Keep all per-card source, type, cost and codec assertions."
+      ],
+      "conclusion": "failure",
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34797724871",
+      "resolution_commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846"
     }
   ],
   "cycle_history": [
@@ -4194,16 +4299,16 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "91496fa01239b6261bd27e0582278f695029dcbc",
-    "run_id": 34792219355,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355",
+    "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+    "run_id": 34798075383,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1609,
+    "tests_per_platform": 1672,
     "new_test_methods": 63,
     "conclusion": "success",
-    "scope": "All 266 source-bound reviewed programs including Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault; all 63 new methods through the reviewed loader; phasing projection, search filtering, actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
   }
 }

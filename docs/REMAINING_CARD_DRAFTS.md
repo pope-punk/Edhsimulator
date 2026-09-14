@@ -36,14 +36,50 @@ Kernel schema is **120**, state schema **13**. The **63 new methods** now
 use the reviewed loader. [Draft validation 34797317071](https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071)
 passed **1,672 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `825827f67c5d3f4fc8397b6cede516d1d1b0862c`.
-The required reviewed-loader check remains pending.
+[Reviewed-loader validation 34798075383](https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383)
+passed **1,672 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `1927f33f436a76e920d261b02c87ba9cc6e8a846`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after validation.
 See [the cycle review](RECORDED_FACT_CARD_REVIEW.md).
 
-Finish reviewed-loader checks, then continue **Karmic Guide,
+Continue **Karmic Guide,
 Alseid of Life's Bounty, Fanatical Devotion and Pongify**. The inventory retains
 protection's targeting/damage/blocking/attachment requirements, echo control
 history, regeneration shields and cannot-regenerate destruction. No local
 execution, game migration or production admission.
+
+
+### Next-batch source review
+
+At `15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98`, the existing implementation offers these
+specific reuse points. This is preparation; all four next-batch cards remain
+unstarted.
+
+- **Protection:** Share a derived-color predicate across `_target_query`,
+  `CombatView.can_block`, `_deal_damage`, `_attachment_legal` and
+  `_aura_entry`. Include nontargeting Aura entry and existing source-information
+  lookup. Apply prevention before lifelink and damage-event aggregation.
+- **Echo:** `RulesObject.controlled_since` already tracks real control changes,
+  including expiring control effects. Add previous-own-upkeep observations;
+  the existing turn-start ledger measures a different boundary. Retain the
+  applicable prior marker on the waiting trigger. Reuse `PayMana` and
+  controller-limited `Sacrifice`.
+- **Regeneration:** `_state_based_actions` currently combines lethal damage,
+  zero toughness, legend and illegal Aura moves under `permanent_sba`.
+  Distinguish destruction while preserving simultaneous processing and
+  replacement-choice atomicity. Add explicit combat removal: `_combat_prune`
+  alone will retain an available creature that regenerated. Reuse exact
+  identities, cleanup expiry and public actor projection.
+- **Pongify:** `Destroy` currently accepts only a subject. Add an explicit
+  nonregenerable operation and compose `WithControllers` with
+  `CreateTokens`; token creation must not depend on successful destruction.
+
+The pinned [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
+702.16b-f, 702.30a, 701.19a-c and 614.8, ground the next review. Cover
+protection gained after legal blocks, upkeep history under extra upkeeps and
+phasing, and shields that expire unused or cannot apply. These checks belong
+on GitHub-hosted runners.
 
 ## Previous cycle: phasing and player-authored choices
 
