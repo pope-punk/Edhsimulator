@@ -2,9 +2,9 @@
 import hashlib
 import json
 from collections import ChainMap
-from dataclasses import replace
+from dataclasses import replace,fields
 from types import MappingProxyType
-from .rules_program import CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
+from .rules_program import DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
 from .rules_state import RulesViolation,Zone,ObjectRef
 from .rules_choices import Option
 from .rules_subtypes import SUBTYPE_SETS
@@ -22,6 +22,12 @@ class CopyRules:
         self.copy_programs=[]
         if not isinstance(records,(tuple,list)):raise RulesViolation('Invalid copy registry')
         for row in records:
+            if isinstance(row,dict) and row.get('kind')=='double_face':
+                if set(row)!={'kind','front','back','layout','definition_id'}:raise RulesViolation('Invalid paired copy lineage')
+                before=len(self.copy_programs)
+                program=self._register_face_pair(row['front'],row['back'],row['layout'])
+                if program.definition_id!=row['definition_id'] or len(self.copy_programs)!=before+1:raise RulesViolation('Invalid paired copy identity')
+                continue
             if not isinstance(row,dict) or set(row)!={'parent','added_types','changes','definition_id','retained_activation','remove_mana_cost'}:
                 raise RulesViolation('Invalid copy lineage')
             if type(row['remove_mana_cost']) is not bool:raise RulesViolation('Invalid mana-cost copy exception')
@@ -40,6 +46,9 @@ class CopyRules:
         validate(CardProgram('copy:validation','Copy validation',('Artifact',),
             spell_effects=(CopyTokens('source',**changes),)))
         original=self.definitions[parent]
+        if isinstance(original,DoubleFacedProgram):
+            cls=BattleProgram if original.defense else CardProgram
+            original=cls(**{f.name:getattr(original,f.name) for f in fields(cls)})
         attrs={'types':tuple(dict.fromkeys(original.types+tuple(added_types)))}
         if remove_mana_cost:attrs.update(cast=None,mana_value=0)
         if changes['nonlegendary']:attrs['supertypes']=tuple(s for s in original.supertypes if s!='Legendary')
@@ -81,6 +90,33 @@ class CopyRules:
             'changes':{k:encode(v) for k,v in changes.items()},'definition_id':program.definition_id,
             'retained_activation':encode(retained_activation),'remove_mana_cost':remove_mana_cost})
         return program
+
+    def _register_face_pair(self,front,back,layout):
+        if layout not in {'modal','transform'} or front not in self.definitions or back not in self.definitions:raise RulesViolation('Invalid paired copy parents')
+        identity='copy-pair:'+hashlib.sha256(json.dumps([front,back,layout],separators=(',',':')).encode()).hexdigest()
+        if identity in self.definitions:return self.definitions[identity]
+        a=self.definitions[front];b=self.definitions[back]
+        b=CardProgram(**{f.name:getattr(b,f.name) for f in fields(CardProgram)})
+        b=replace(b,definition_id=identity+':back')
+        program=DoubleFacedProgram(**{f.name:getattr(a,f.name) for f in fields(CardProgram) if f.name!='definition_id'},
+            definition_id=identity,back=b,layout=layout,defense=getattr(a,'defense',0))
+        validate(program)
+        for p in (program,b):
+            self._derived_definitions[p.definition_id]=p
+            grouped={}
+            for ability in p.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
+            self._derived_trigger_index[p.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
+        self.copy_programs.append({'kind':'double_face','front':front,'back':back,'layout':layout,'definition_id':identity})
+        return program
+
+    def _copy_token_program(self,obj,changes,remove_mana_cost=False):
+        physical=self.definitions[obj.definition]
+        if isinstance(physical,DoubleFacedProgram):
+            override=obj.copy_effects[-1][0] if obj.copy_effects else obj.copied_definition
+            front=self._register_copy_program(override or physical.definition_id,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost)
+            back=self._register_copy_program(override or physical.back.definition_id,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost)
+            return self._register_face_pair(front.definition_id,back.definition_id,physical.layout),obj.back_face
+        return self._register_copy_program(obj.effective_definition,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost),False
 
     def _copy_information(self,ref):
         try:return self.state.get(ref)
@@ -163,7 +199,7 @@ class CopyRules:
         if obj is None:return True
         original=self.definition(obj)
         changes={name:getattr(effect,name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
-        program=self._register_copy_program(original.definition_id,obj.effective_add_types,changes,remove_mana_cost=isinstance(effect,CostlessCopyTokens))
+        program,back_face=self._copy_token_program(obj,changes,remove_mana_cost=isinstance(effect,CostlessCopyTokens))
         token_effect=WithCreatedTokens(program,effect.amount,'controller',effect.effects)
-        self._execute(frame,{'id':key,'effect':encode(token_effect)})
+        self._execute(frame,{'id':key,'effect':encode(token_effect),'token_back_face':back_face})
         return True

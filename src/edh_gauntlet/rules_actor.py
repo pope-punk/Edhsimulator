@@ -20,7 +20,8 @@ def _card(kernel,obj,views):
     limits=[{'ability_id':ability.ability_id,'remaining':kernel.remaining_trigger_uses(obj,ability)}
             for ability in kernel.definition(obj).abilities if ability.trigger_limit is not None] if obj.zone==Zone.BATTLEFIELD else []
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
-        'definition_id':obj.effective_definition,'owner':obj.owner,'controller':obj.controller,
+        'definition_id':obj.effective_definition,'face':'back' if obj.back_face else 'front',
+        **({'protector':obj.protector} if 'Battle' in view.types else {}),'owner':obj.owner,'controller':obj.controller,
         **({'convoke':True} if isinstance(kernel.definition(obj).cast,ConvokeCast) else {}),
         **({'copy_cast':encode(kernel.definition(obj).cast)} if isinstance(kernel.definition(obj).cast,CopyCast) else {}),
         'zone':obj.zone.value,'types':sorted(view.types),'subtypes':sorted(view.subtypes-CREATURE_TYPES if all_creature_types else view.subtypes),
@@ -39,7 +40,8 @@ def _card(kernel,obj,views):
         'damage':obj.damage_marked,'commander':obj.commander,'token':obj.token,
         'attached_to':obj.attached_to.to_json() if obj.attached_to else None,
         **({'limited_triggers':limits} if limits else {}),
-        **({'granted_abilities':encode(view.granted_abilities)} if view.granted_abilities else {})}
+        **({'granted_abilities':encode(view.granted_abilities)} if view.granted_abilities else {}),
+        **({'granted_triggers':encode(view.granted_triggers)} if view.granted_triggers else {})}
 
 
 def decision_for_actor(kernel,actor):
@@ -59,7 +61,7 @@ def decision_for_actor(kernel,actor):
         window=kernel.resolution_cast
         if actor!=window['actor']:return {'kind':'waiting','actor':window['actor']}
         return {'kind':'resolution_cast','request_id':window['id'],'maximum':window['maximum'],
-            'origin':window['origin'],'candidates':[ref.to_json() for ref in kernel._resolution_cast_candidates()],
+            'origin':window['origin'],'face':'back' if window.get('transformed') else 'front','candidates':[ref.to_json() for ref in kernel._resolution_cast_candidates()],
             'revision':kernel.revision}
     if kernel._payment_waiting():
         window=kernel.mana_payment
@@ -223,6 +225,10 @@ def project_actor(kernel,actor):
     packet['attack_destinations']=[{'player':p} for p in state.live_players if p!=actor]+[
         {'ref':obj.ref.to_json(),'defending_player':obj.controller} for obj in state.objects(Zone.BATTLEFIELD)
         if not obj.phased and obj.controller!=actor and 'Planeswalker' in kernel.effective(obj.ref).types]
+    packet['attack_destinations']=[row for row in packet['attack_destinations'] if 'ref' not in row or 'Battle' not in kernel.effective(ObjectRef.from_json(row['ref'])).types]
+    packet['attack_destinations']+=[{'ref':obj.ref.to_json(),'defending_player':obj.protector} for obj in state.objects(Zone.BATTLEFIELD)
+        if not obj.phased and obj.protector in state.live_players and obj.protector!=actor and 'Battle' in kernel.effective(obj.ref).types and 'Creature' not in kernel.effective(obj.ref).types]
+    packet['timed_spell_taxes']=[{'controller':r['controller'],'generic':r['generic'],'selector':deepcopy(r['selector'])} for r in kernel.timed_spell_taxes]
     if actor in state.live_players:
         packet['optional_life_costs']=[{'card':obj.ref.to_json(),'options':[{'key':key,'life':rule.life,'color':rule.color}
             for key,(_,rule) in kernel._life_cost_options(obj,actor).items()]} for obj in state.objects()

@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 from .catalog import load_catalog
 from .paths import PROJECT_ROOT
-from .rules_program import decode, validate
+from .rules_program import DoubleFacedProgram,BattleProgram,decode,validate
 from .rules_state import RulesViolation
 
 
@@ -20,9 +20,33 @@ def digest(value):
 
 def source_facts(card):
     return {'card_id':card.card_id,'name':card.name,'color_identity':card.color_identity,
+        **({'layout':card.layout} if card.layout is not None else {}),
         'faces':[{'face_id':face.face_id,'oracle_text':face.oracle_text,'type_line':face.type_line,
             'mana_cost':face.mana_cost,'power':face.power,'toughness':face.toughness,
-            'loyalty':face.loyalty,'loyalty_variable':face.loyalty_variable,'colors':face.colors} for face in card.faces]}
+            'loyalty':face.loyalty,'loyalty_variable':face.loyalty_variable,'colors':face.colors,
+            **({'defense':face.defense} if face.defense is not None else {})} for face in card.faces]}
+
+
+def validate_printed_face(key,face,program,*,back=False):
+    if program.name!=face.name:raise RulesViolation('Printed face name mismatch: '+key)
+    for field in ('types','subtypes','supertypes','colors'):
+        if set(getattr(program,field))!=set(getattr(face,field)):
+            raise RulesViolation('Printed characteristic mismatch: '+key+' '+field)
+    for field in ('mana_value','power','toughness'):
+        if getattr(program,field)!=getattr(face,field):
+            raise RulesViolation('Printed characteristic mismatch: '+key+' '+field)
+    if getattr(program,'defense',0)!=(face.defense or 0):raise RulesViolation('Printed defense mismatch: '+key)
+    if 'Instant' in face.types and (program.cast is None or program.cast.timing!='instant'):
+        raise RulesViolation('Printed instant requires instant casting timing: '+key)
+    printed_cost=face.mana_cost not in {'','—'}
+    if 'Land' not in face.types and (printed_cost or back) and program.cast is None:
+        raise RulesViolation('Missing face casting specification: '+key)
+    if program.cast:
+        if not printed_cost and not back:raise RulesViolation('Printed casting cost absent: '+key)
+        symbols=re.findall(r'\{([^}]+)\}',face.mana_cost);mana=program.cast.cost.mana
+        printed=(sum(int(x) for x in symbols if x.isdigit()),Counter(x for x in symbols if not x.isdigit() and x!='X'),symbols.count('X'))
+        if (mana.generic,Counter(mana.symbols),mana.x_symbols)!=printed:
+            raise RulesViolation('Printed casting cost mismatch: '+key)
 
 
 def load_reviewed(root=PROJECT_ROOT):
@@ -39,25 +63,13 @@ def load_reviewed(root=PROJECT_ROOT):
         if row.get('scope')!='all_printed_faces' or not row.get('review_basis'):
             raise RulesViolation('Program needs an explicit reviewed scope and basis')
         program=validate(decode(row['program']))
-        if len(card.faces)!=1 or program.name!=card.name or program.definition_id in identities:
-            raise RulesViolation('Reviewed program does not match a unique single-face card')
-        face=card.faces[0]
-        for field in ('types','subtypes','supertypes','colors'):
-            if set(getattr(program,field))!=set(getattr(face,field)):
-                raise RulesViolation('Printed characteristic mismatch: '+key+' '+field)
-        for field in ('mana_value','power','toughness'):
-            if getattr(program,field)!=getattr(face,field):
-                raise RulesViolation('Printed characteristic mismatch: '+key+' '+field)
-        if 'Instant' in face.types and (program.cast is None or program.cast.timing!='instant'):
-            raise RulesViolation('Printed instant requires instant casting timing: '+key)
-        if 'Land' not in face.types and face.mana_cost and program.cast is None:
-            raise RulesViolation('Missing printed casting cost: '+key)
-        if program.cast:
-            if not face.mana_cost:raise RulesViolation('Printed casting cost absent: '+key)
-            symbols=re.findall(r'\{([^}]+)\}',face.mana_cost);mana=program.cast.cost.mana
-            printed=(sum(int(x) for x in symbols if x.isdigit()),Counter(x for x in symbols if not x.isdigit() and x!='X'),symbols.count('X'))
-            if (mana.generic,Counter(mana.symbols),mana.x_symbols)!=printed:
-                raise RulesViolation('Printed casting cost mismatch: '+key)
+        faces=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,)
+        if len(faces)!=len(card.faces) or isinstance(program,DoubleFacedProgram) and card.layout!=program.layout:
+            raise RulesViolation('Reviewed program does not match the printed faces or layout')
+        if any(p.definition_id in identities for p in faces):raise RulesViolation('Duplicate reviewed face identity')
+        for index,(face,face_program) in enumerate(zip(card.faces,faces)):
+            validate_printed_face(key,face,face_program,back=index==1 and card.layout=='transform')
+        identities.update(p.definition_id for p in faces)
         identities.add(program.definition_id);result[key]={'program':program,'review':row}
     return result
 

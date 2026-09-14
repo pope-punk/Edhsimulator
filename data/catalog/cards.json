@@ -10145,6 +10145,7 @@
         ],
         "fetch_types": []
       },
+      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -13269,7 +13270,8 @@
       ],
       "card_id": "invasion-of-theros",
       "color_identity": [
-        "W"
+        "W",
+        "U"
       ],
       "entry_replacements": [],
       "faces": [
@@ -13277,6 +13279,7 @@
           "colors": [
             "W"
           ],
+          "defense": 4,
           "face_id": "invasion-of-theros",
           "keywords": [],
           "loyalty": null,
@@ -13297,7 +13300,10 @@
           ]
         },
         {
-          "colors": [],
+          "colors": [
+            "W",
+            "U"
+          ],
           "face_id": "ephara-ever-sheltering",
           "keywords": [],
           "loyalty": null,
@@ -13322,6 +13328,7 @@
         }
       ],
       "land": null,
+      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],
@@ -14105,6 +14112,7 @@
         ],
         "fetch_types": []
       },
+      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -24103,6 +24111,7 @@
       ],
       "card_id": "sorin-of-house-markov",
       "color_identity": [
+        "W",
         "B"
       ],
       "entry_replacements": [],
@@ -24136,7 +24145,10 @@
           ]
         },
         {
-          "colors": [],
+          "colors": [
+            "W",
+            "B"
+          ],
           "face_id": "sorin-ravenous-neonate",
           "keywords": [],
           "loyalty": 3,
@@ -24160,6 +24172,7 @@
         }
       ],
       "land": null,
+      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],
@@ -26830,9 +26843,13 @@
           ]
         },
         {
-          "colors": [],
+          "colors": [
+            "W"
+          ],
           "face_id": "architect-of-restoration",
-          "keywords": [],
+          "keywords": [
+            "vigilance"
+          ],
           "loyalty": null,
           "loyalty_variable": null,
           "mana_cost": "—",
@@ -26854,6 +26871,7 @@
         }
       ],
       "land": null,
+      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],

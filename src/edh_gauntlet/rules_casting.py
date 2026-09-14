@@ -77,6 +77,7 @@ class PreparedAction:
     replicate: int = 0
     life_costs: tuple[str,...] = ()
     hybrid_choices: tuple[str,...] = ()
+    face: str = 'front'
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
@@ -84,7 +85,7 @@ class PreparedAction:
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
             'counter_division':[{'ref':ref.to_json(),'amount':amount} for ref,amount in self.counter_division],
-            'hybrid_choices':list(self.hybrid_choices),'life_costs':list(self.life_costs),'replicate':self.replicate,'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
+            'face':self.face,'hybrid_choices':list(self.hybrid_choices),'life_costs':list(self.life_costs),'replicate':self.replicate,'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
     def from_json(cls, value):
@@ -240,7 +241,7 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=()):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=(),face=None):
         resolution_cast=kind=='cast' and self._cast_waiting()
         casting_mana=kind=='activate' and self._casting_mana_waiting()
         declaration_mana=kind=='activate' and self._announcement_mana_waiting()
@@ -254,6 +255,9 @@ class CastingRules:
         if actor not in self.state.live_players or owner != actor:
             raise RulesViolation('Actor does not own the action window')
         source = self.state.get(ref)
+        face=('back' if resolution_cast and self.resolution_cast.get('transformed') else 'front') if face is None else face
+        if kind=='cast':source=self._announced_face(source,face,resolution_cast=resolution_cast)
+        elif face!='front':raise RulesViolation('Face selection is available only when casting or playing a land')
         program = self.definition(source)
         if kind == 'cast':
             alternative=next((a for a in program.cast.alternatives if a.alternative_id==alternative_id),None) if program.cast else None
@@ -261,7 +265,7 @@ class CastingRules:
             if resolution_cast:
                 if ref not in self._resolution_cast_candidates():raise RulesViolation('Card is outside the current resolution-cast permission')
                 origins=(Zone(self.resolution_cast['origin']),)
-            if program.cast is None or source.zone not in origins or source.owner != actor:
+            if program.cast is None or source.zone not in origins or source.owner != actor and not (resolution_cast and self.resolution_cast.get('transformed')):
                 raise RulesViolation('Unsupported spell origin or permission')
             if source.zone == Zone.COMMAND and not source.commander:
                 raise RulesViolation('Only a commander has this command-zone permission')
@@ -285,7 +289,7 @@ class CastingRules:
             target_spec = specification.targets
         else:
             raise RulesViolation('Unsupported action kind')
-        if not resolution_cast and specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in self.effective(ref).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
+        if not resolution_cast and specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in base(source,self.definitions).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
             raise RulesViolation('Action requires sorcery timing')
         if type(kicker) is not bool or kicker and (kind!='cast' or not isinstance(specification,KickerCast)):
             raise RulesViolation('Invalid kicker declaration')
@@ -391,12 +395,13 @@ class CastingRules:
                 for modifier in self.definition(permanent).cost_modifiers:
                     if (not modifier.origin_zones or source.zone in modifier.origin_zones) and matches(modifier.selector, proposed, proposed_view, permanent):
                         generic += modifier.generic_delta
+        if kind=='cast':generic+=self._temporary_spell_tax(proposed,proposed_view)
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices,face)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=()):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=(),face=None):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices,face)
 
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0,counter_division=()):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value,counter_division=counter_division)
@@ -405,6 +410,7 @@ class CastingRules:
         if not isinstance(payment, Payment):
             raise RulesViolation('Payment must be an authored payment packet')
         source = source or self.state.get(quote.source)
+        if quote.kind=='cast':source=replace(source,back_face=quote.face=='back')
         taps = payment.taps
         if not isinstance(taps, tuple) or any(not isinstance(ref, ObjectRef) for ref in taps) or len(taps) != quote.cost.tap_count:
             raise RulesViolation('Wrong number of tap-cost selections')
@@ -437,7 +443,7 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate,quote.life_costs,quote.hybrid_choices)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate,quote.life_costs,quote.hybrid_choices,quote.face)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         if not isinstance(payment,Payment):raise RulesViolation('Payment must be an authored payment packet')
@@ -453,7 +459,7 @@ class CastingRules:
             if quote.kind=='cast':
                 # The announced spell is public on the stack throughout payment.
                 # Validate the complete declaration/payment before this first mutation.
-                source=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value),),'spell_announced')[0].after
+                source=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back'),),'spell_announced')[0].after
                 announced_frame=self._spell_frame(source,quote)
             else:
                 ability=next(a for a in self.activated_abilities(source) if a.ability_id==quote.ability_id)
@@ -557,7 +563,7 @@ class CastingRules:
                 frame=prepared_frame
                 stack_source=self.state.get(ObjectRef.from_json(frame['source']['ref']))
             else:
-                events=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value),),'cast',payment=resources)
+                events=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back'),),'cast',payment=resources)
                 stack_source=events[0].after
                 frame=self._spell_frame(stack_source,quote);self.stack.append(frame)
             if source.commander and source.zone==Zone.COMMAND:

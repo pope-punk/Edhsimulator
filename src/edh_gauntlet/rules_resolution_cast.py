@@ -34,10 +34,16 @@ class ResolutionCastingRules:
                 try:obj=self.state.get(ObjectRef.from_json(value))
                 except RulesViolation:continue
                 if obj.zone==Zone.EXILE:objects.append(obj)
-        return tuple(obj.ref for obj in objects if obj.owner==window['actor'] and not obj.token
-            and not obj.spell_copy and self.definition(obj).cast is not None
-            and 'Land' not in self.effective(obj.ref).types
-            and self.effective(obj.ref).mana_value<=window['maximum'])
+        result=[]
+        for obj in objects:
+            if obj.token or obj.spell_copy or obj.owner!=window['actor'] and not window.get('transformed'):continue
+            try:announced=self._announced_face(obj,'back' if window.get('transformed') else 'front',resolution_cast=True)
+            except RulesViolation:continue
+            program=self.definition(announced)
+            from .rules_characteristics import base
+            view=base(announced,self.definitions)
+            if program.cast is not None and 'Land' not in view.types and view.mana_value<=window['maximum']:result.append(obj.ref)
+        return tuple(result)
 
     def _cast_boundary(self):
         window=self.resolution_cast
@@ -56,11 +62,11 @@ class ResolutionCastingRules:
         self._event('resolution_cast_declined',action_id=action_id,actor=actor,request_id=request_id)
         return self.advance()
 
-    def _offer_resolution_cast(self,frame,task,maximum,origin,refs=()):
+    def _offer_resolution_cast(self,frame,task,maximum,origin,refs=(),*,transformed=False):
         window=self.resolution_cast
         if window is None:
             self.resolution_cast={'id':task['id'],'actor':frame['controller'],'maximum':maximum,
-                'origin':origin.value,'refs':[ref.to_json() for ref in refs],
+                'origin':origin.value,'refs':[ref.to_json() for ref in refs],'transformed':transformed,
                 'parent':self.resolving,'completed':False,'cast':False}
             self.priority=None;self.passes=[]
             self._event('resolution_cast_opened',request_id=task['id'],actor=frame['controller'],
@@ -136,7 +142,7 @@ class ResolutionCastingRules:
         trial=type(self).restore(self.snapshot(),self._base_definitions.values())
         source=trial.state.get(quote.source)
         trial._zone_cost_refs(quote,replace(payment,mana_actions=()))
-        stack_source=trial.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value),),'spell_announced')[0].after
+        stack_source=trial.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back'),),'spell_announced')[0].after
         frame=trial._spell_frame(stack_source,quote);trial.stack.append(frame)
         trial.resolution_cast['announcing']=True
         trial._event('spell_announced',action_id=quote.action_id,actor=quote.actor)

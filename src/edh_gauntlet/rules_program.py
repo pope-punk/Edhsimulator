@@ -228,6 +228,11 @@ class Move:
 
 
 @dataclass(frozen=True)
+class MoveFace(Move):
+    back_face: bool = False
+
+
+@dataclass(frozen=True)
 class PhaseOut:
     subject: str = 'target'
 
@@ -632,6 +637,11 @@ class AbilityProgram:
 
 
 @dataclass(frozen=True)
+class ChapterAbility(AbilityProgram):
+    chapter: int = 1
+
+
+@dataclass(frozen=True)
 class EchoAbility(AbilityProgram):
     """Own-upkeep occurrence bound to acquisition since the previous upkeep."""
     pass
@@ -679,6 +689,11 @@ class SourceCountersCondition:
 
 @dataclass(frozen=True)
 class LifeLostCondition:
+    minimum: int = 1
+
+
+@dataclass(frozen=True)
+class LifeGainedCondition:
     minimum: int = 1
 
 
@@ -823,6 +838,12 @@ class SwitchPT:
 @dataclass(frozen=True)
 class AddActivated:
     ability: ActivatedProgram
+
+
+@dataclass(frozen=True)
+class AddTriggered:
+    """Grant an independent triggered ability to each current recipient."""
+    ability: AbilityProgram
 
 
 @dataclass(frozen=True)
@@ -1356,6 +1377,58 @@ class SacrificeThenTrigger:
 
 
 @dataclass(frozen=True)
+class BattleProgram(CardProgram):
+    defense: int = 0
+
+
+@dataclass(frozen=True)
+class DoubleFacedProgram(BattleProgram):
+    back: CardProgram | None = None
+    layout: str = 'transform'
+
+
+@dataclass(frozen=True)
+class ReturnTransformed:
+    subject: str = 'source'
+    controller: str = 'effect'
+
+
+@dataclass(frozen=True)
+class Transform:
+    subject: str = 'source'
+
+
+@dataclass(frozen=True)
+class DiscardThenTrigger:
+    targets: TargetSpec
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class SpellTaxUntilNextTurn:
+    selector: Selector
+    generic: int = 2
+
+
+@dataclass(frozen=True)
+class ChooseCounter:
+    subject: str
+    kinds: tuple[str,...]
+
+
+@dataclass(frozen=True)
+class IfOtherPermanent:
+    selector: Selector
+    excluded: str
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class DefeatBattle:
+    pass
+
+
+@dataclass(frozen=True)
 class WardPayment:
     """Interpreter-bound ward trigger, retaining the spell/ability being targeted."""
     mana: ManaCost
@@ -1379,8 +1452,8 @@ class OpeningHandPermissions(PlayerPermissions):
 
 KEYWORDS=frozenset(('fear','protection_white','protection_blue','protection_black','protection_red','protection_green','phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (CommanderProgram,KeywordSelector,LoyaltyCost,ClassLevelCondition,ControllerTurnCondition,ClassCounterReplacement,AddWard,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,OpeningHandPermissions,WithLastKnownControllers,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,CountDistinctNames,WinGame,RulePermissions,SetCardTypes,LoseAbilities,Goaded,AddRiot,TopLibraryPermissions,CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,WithLastKnownControllers,WinGame,CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (BattleProgram,MoveFace,DoubleFacedProgram,ChapterAbility,LifeGainedCondition,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,AddTriggered,CommanderProgram,KeywordSelector,LoyaltyCost,ClassLevelCondition,ControllerTurnCondition,ClassCounterReplacement,AddWard,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,OpeningHandPermissions,WithLastKnownControllers,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,CountDistinctNames,WinGame,RulePermissions,SetCardTypes,LoseAbilities,Goaded,AddRiot,TopLibraryPermissions,CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(MoveFace,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,WithLastKnownControllers,WinGame,CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -1410,7 +1483,7 @@ def immediate_effect_nodes(nodes):
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(MayMill,WithCountersPlaced,SelectBySubtype,IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,CopyTokens,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+        if isinstance(node,(IfOtherPermanent,MayMill,WithCountersPlaced,SelectBySubtype,IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,CopyTokens,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
             yield from immediate_effect_nodes(node.effects)
         if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,PayLifeOrSacrifice,PayMana,IfCondition,May)):
             yield from immediate_effect_nodes(node.otherwise)
@@ -1487,6 +1560,10 @@ def activation_is_mana(ability):
 
 
 def validate(program,_depth=0):
+    if isinstance(program,BattleProgram) and (type(program.defense) is not int or program.defense<0 or bool(program.defense)!=('Battle' in program.types)):raise RulesViolation('Invalid printed defense')
+    if isinstance(program,DoubleFacedProgram):
+        if program.layout not in {'modal','transform'} or type(program.back) is not CardProgram or program.back.definition_id!=program.definition_id+':back':raise RulesViolation('Invalid double-faced program')
+        validate(program.back,_depth+1)
     if isinstance(program,CommanderProgram) and program.can_be_commander is not True:raise RulesViolation('Invalid printed commander permission')
     if _depth>16:raise RulesViolation('Token program nesting is too deep')
     """Reject malformed programs and unresolved bindings before execution."""
@@ -1654,6 +1731,9 @@ def validate(program,_depth=0):
                 raise RulesViolation('Invalid Class level condition')
             return
         if isinstance(value,ControllerTurnCondition):return
+        if isinstance(value,LifeGainedCondition):
+            if not allow_history or type(value.minimum) is not int or value.minimum<1:raise RulesViolation('Invalid life-gain history condition')
+            return
         if isinstance(value,TurnHistoryCondition):
             if not allow_history or type(value.kind) is not str or value.kind not in {'attacked','freerunning'}:
                 raise RulesViolation('Turn history requires a supported resolution, trigger or casting condition')
@@ -1756,7 +1836,7 @@ def validate(program,_depth=0):
         for node in nodes:
             if type(node) not in EFFECTS:
                 raise RulesViolation('Unregistered effect node')
-            if isinstance(node,(WardPayment,CounterBoundStack)):
+            if isinstance(node,(DefeatBattle,WardPayment,CounterBoundStack)):
                 raise RulesViolation('Ward continuation is interpreter-bound')
             if isinstance(node,SetClassLevel) and (type(node.level) is not int or node.level not in {2,3}):
                 raise RulesViolation('Invalid Class level transition')
@@ -1767,6 +1847,22 @@ def validate(program,_depth=0):
             if isinstance(node,MoveWithSubtypes):
                 if node.destination!=Zone.BATTLEFIELD or not strings(node.added_subtypes) or not node.added_subtypes or not set(node.added_subtypes)<=CREATURE_TYPES:
                     raise RulesViolation('Invalid entry subtype addition')
+            if isinstance(node,MoveFace) and (node.destination!=Zone.BATTLEFIELD or type(node.back_face) is not bool):raise RulesViolation('Invalid face entry')
+            if isinstance(node,(ReturnTransformed,Transform,ChooseCounter)):
+                if type(node.subject) is not str or node.subject not in bindings:raise RulesViolation('Unbound face or counter subject')
+                if isinstance(node,ReturnTransformed) and node.controller not in {'owner','effect'}:raise RulesViolation('Invalid transformed-return controller')
+                if isinstance(node,ChooseCounter) and (not strings(node.kinds) or not node.kinds or len(set(node.kinds))!=len(node.kinds)):raise RulesViolation('Invalid counter choice')
+            if isinstance(node,DiscardThenTrigger):
+                target(node.targets)
+                effects(node.effects,{'source','target'})
+                target_effects(node.effects,node.targets)
+            if isinstance(node,SpellTaxUntilNextTurn):
+                selector(node.selector)
+                if node.selector.zone!=Zone.STACK or type(node.generic) is not int or node.generic<1:raise RulesViolation('Invalid temporary spell tax')
+            if isinstance(node,IfOtherPermanent):
+                selector(node.selector)
+                if node.selector.zone!=Zone.BATTLEFIELD or node.excluded not in bindings:raise RulesViolation('Invalid excluded permanent binding')
+                effects(node.effects,bindings,allow_x,available_values)
             if isinstance(node,SacrificeThenTrigger):
                 selector(node.selector);target(node.targets)
                 if node.selector.zone!=Zone.BATTLEFIELD or node.selector.relation!='controlled':raise RulesViolation('Reflexive sacrifice requires controlled permanents')
@@ -2362,6 +2458,9 @@ def validate(program,_depth=0):
             elif isinstance(change,AddSubtypes):
                 subtype_addition(change)
                 if change.card_type not in effect.selector.types:raise RulesViolation('Subtype additions require a matching typed selector')
+            elif isinstance(change,AddTriggered):
+                if not isinstance(change.ability,AbilityProgram):raise RulesViolation('Granted trigger must be an ability')
+                validate(CardProgram('grant-trigger-validation','Grant trigger validation',('Artifact',),abilities=(change.ability,)),_depth+1)
             elif isinstance(change,AddActivated):
                 if not isinstance(change.ability,ActivatedProgram) or change.ability.zone!=Zone.BATTLEFIELD:
                     raise RulesViolation('Granted activation must be a battlefield ability')
@@ -2427,6 +2526,7 @@ def validate(program,_depth=0):
         raise RulesViolation('Duplicate replacement ID')
     ids = []
     for ability in program.abilities:
+        if isinstance(ability,ChapterAbility) and (type(ability.chapter) is not int or ability.chapter<1 or ability.event!=EventPattern('counters_added',subject='self',counter_kind='lore')):raise RulesViolation('Invalid Saga chapter trigger')
         if (not isinstance(ability, AbilityProgram) or not isinstance(ability.event, EventPattern)
                 or type(ability.ability_id) is not str or not ability.ability_id):
             raise RulesViolation('Invalid ability')
@@ -2592,4 +2692,6 @@ def token_programs(program):
             for item in value:yield from walk(item)
         elif hasattr(type(value),'__dataclass_fields__'):
             for field in fields(value):yield from walk(getattr(value,field.name))
-    for field in fields(program):yield from walk(getattr(program,field.name))
+    if isinstance(program,DoubleFacedProgram):yield program.back
+    for field in fields(program):
+        if field.name!='back':yield from walk(getattr(program,field.name))

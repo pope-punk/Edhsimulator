@@ -29,6 +29,11 @@ class ZoneProposal:
     regenerated: str | None = None
     riot_haste: bool = False
     entry_subtypes: tuple = ()
+    back_face: bool = False
+
+    @property
+    def entry_definition(self):
+        return self.copied_definition or (self.before.definition+':back' if self.back_face else self.before.definition)
 
 
 @dataclass(frozen=True)
@@ -51,7 +56,7 @@ def affected_player(proposal):
 
 def candidates(state, definitions, proposal, affected_types=None, applicable_entry_ids=None, inactive_sources=frozenset()):
     obj = proposal.before
-    definition = definitions[proposal.copied_definition or obj.effective_definition]
+    definition = definitions[proposal.entry_definition if proposal.destination==Zone.BATTLEFIELD else obj.effective_definition]
     result = []
     if obj.commander and proposal.destination in {Zone.HAND, Zone.LIBRARY} and not proposal.commander_considered:
         result.append(ReplacementCandidate('rule:903.9b', 'Commander destination', 'commander', 3, obj.owner))

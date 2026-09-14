@@ -9,7 +9,7 @@ from dataclasses import dataclass, replace
 import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
-from .rules_program import KeywordSelector,ClassLevelCondition,ControllerTurnCondition,AddWard,ContinuousProgram,Selector,SetCardTypes,LoseAbilities,Goaded,AddRiot
+from .rules_program import KEYWORDS,DoubleFacedProgram,AddTriggered,KeywordSelector,ClassLevelCondition,ControllerTurnCondition,AddWard,ContinuousProgram,Selector,SetCardTypes,LoseAbilities,Goaded,AddRiot
 
 ARTIFACT_TYPES=frozenset('Attraction Blood Bobblehead Book Clue Contraption Equipment Food Fortification Gold Incubator Infinity Junk Lander Map Mutagen Powerstone Spacecraft Stone Treasure Vehicle Vibranium'.split())
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
@@ -29,6 +29,7 @@ class Characteristics:
     supertypes: frozenset[str] = frozenset()
     colors: frozenset[str] = frozenset()
     granted_abilities: tuple = ()
+    granted_triggers: tuple = ()
     mana_symbols: tuple[str,...] = ()
     untap_blocked: bool = False
     modified: bool = False
@@ -40,10 +41,12 @@ class Characteristics:
 
 def base(obj, definitions):
     definition = definitions[obj.effective_definition]
+    physical=definitions[obj.definition]
+    mana_value=(physical.mana_value if obj.back_face and isinstance(physical,DoubleFacedProgram) and physical.layout=='transform' and not obj.copy_effects and not obj.copied_definition else definition.mana_value)
     subtypes = frozenset(definition.subtypes) | ({'Aura'} if definition.enchant else set())
     subtypes=expanded_subtypes(tuple(sorted(subtypes)),definition.all_subtype_sets) if definition.all_subtype_sets else subtypes
     return Characteristics(frozenset(definition.types) | frozenset(obj.effective_add_types), frozenset(subtypes),
-                           definition.mana_value + (definition.cast.cost.mana.x_symbols * obj.cast_x
+                           mana_value + (definition.cast.cost.mana.x_symbols * obj.cast_x
                                if obj.zone == Zone.STACK and definition.cast else 0), definition.power, definition.toughness,
                            target_restrictions=definition.target_restrictions if obj.zone == Zone.BATTLEFIELD else (),
                            keywords=frozenset(definition.keywords)|({'haste'} if obj.zone==Zone.BATTLEFIELD and 'riot_haste' in obj.entry_flags else set()),
@@ -93,7 +96,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {AddWard:6,SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
+    return {AddTriggered:6,AddWard:6,SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
@@ -191,7 +194,7 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
                 if {'Creature','Kindred'}&types:subtypes.update(change.creature_subtypes)
                 view=replace(view,types=types,subtypes=frozenset(subtypes))
             elif isinstance(change,LoseAbilities):
-                view=replace(view,abilities_removed=True,keywords=frozenset(),granted_abilities=(),target_restrictions=(),riot=(),wards=())
+                view=replace(view,abilities_removed=True,keywords=frozenset(),granted_abilities=(),granted_triggers=(),target_restrictions=(),riot=(),wards=())
             elif isinstance(change,AddWard):
                 view=replace(view,wards=view.wards+((grant_key[0],grant_key[1]+':'+str(change_index),change.mana),))
             elif isinstance(change,AddRiot):
@@ -210,6 +213,10 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
                 if change.card_type in view.types:view=replace(view,subtypes=view.subtypes|expanded_subtypes(change.subtypes,change.sets))
             elif isinstance(change,SetColors):
                 view=replace(view,colors=frozenset(change.colors))
+            elif isinstance(change,AddTriggered):
+                identity=[grant_key[0].to_json() if grant_key else None,key,change_index,change.ability.ability_id]
+                ability=replace(change.ability,ability_id='granted-trigger:'+json.dumps(identity,sort_keys=True,separators=(',',':')))
+                view=replace(view,granted_triggers=view.granted_triggers+(ability,))
             elif isinstance(change,AddActivated):
                 identity=[grant_key[0].to_json() if grant_key else None,key,change_index,change.ability.ability_id]
                 ability=replace(change.ability,ability_id='granted:'+json.dumps(identity,sort_keys=True,separators=(',',':')))
@@ -284,7 +291,7 @@ def _may_change_recipients(changes, effect):
             if subtype_reads.intersection(expanded_subtypes(change.subtypes,change.sets)):return True
         elif isinstance(change,(SetPT,ModifyPT,SwitchPT)):
             if statistics & {'power','toughness'}:return True
-        elif not isinstance(change,(AddKeywords,AddActivated,SkipUntap)):
+        elif not isinstance(change,(AddKeywords,AddActivated,AddTriggered,SkipUntap)):
             return True
     return False
 
@@ -320,7 +327,9 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
     entry_rows=tuple((replace(obj,copy_effects=()),ContinuousProgram('entry-subtypes',Selector(Zone.BATTLEFIELD),
         (AddSubtypes('Creature',obj.entry_subtypes),)),(obj.ref,))
         for obj in objects if obj.zone==Zone.BATTLEFIELD and obj.entry_subtypes)
-    for source,effect,refs in tuple(temporary)+entry_rows:
+    counter_rows=tuple((replace(obj,timestamp=stamp,copy_effects=()),ContinuousProgram('counter-keyword:'+kind,Selector(Zone.BATTLEFIELD),(AddKeywords((kind,)),)),(obj.ref,))
+        for obj in objects if obj.zone==Zone.BATTLEFIELD for kind,stamp in obj.counter_timestamps if kind in KEYWORDS and dict(obj.counters).get(kind,0))
+    for source,effect,refs in tuple(temporary)+entry_rows+counter_rows:
         key=(source.ref,effect.effect_id)
         effects.append((key,source,effect))
         locked[key]=tuple(ref for ref in refs if ref in current and current[ref].zone==Zone.BATTLEFIELD and not current[ref].phased)

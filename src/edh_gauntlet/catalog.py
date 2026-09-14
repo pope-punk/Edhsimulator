@@ -89,6 +89,7 @@ class CardFace:
     loyalty: Optional[int] = None
     loyalty_variable: Optional[str] = None
     keywords: tuple[str, ...] = ()
+    defense: Optional[int] = None
 
     def starting_loyalty(self, *, x_value: Optional[int] = None) -> Optional[int]:
         if self.loyalty is not None:
@@ -181,6 +182,7 @@ class CardDefinition:
     mana: ManaMetadata
     land: Optional[LandMetadata]
     source_decks: tuple[DeckOccurrence, ...]
+    layout: Optional[str] = None
 
     @property
     def front(self) -> CardFace:
@@ -524,11 +526,13 @@ class CardCatalog:
                 continue
             if not card.oracle_text.strip():
                 errors.append(f"{card.name}: empty Oracle text")
+            if card.layout is not None and (card.layout not in {'modal','transform'} or len(card.faces)!=2):errors.append(f"{card.name}: invalid double-face layout")
             face_ids = {face.face_id for face in card.faces}
             if len(face_ids) != len(card.faces):
                 errors.append(f"{card.name}: duplicate face IDs")
             face_count += len(card.faces)
             for face in card.faces:
+                if face.defense is not None and (type(face.defense) is not int or face.defense<=0 or 'Battle' not in face.types):errors.append(f"{card.name}/{face.face_id}: invalid defense")
                 if not face.name or not face.type_line:
                     errors.append(f"{card.name}/{face.face_id}: incomplete face identity")
                 if face.mana_value != mana_value(face.mana_cost):
@@ -616,6 +620,7 @@ class CardCatalog:
 
 def _face_from_json(row: Mapping[str, Any]) -> CardFace:
     return CardFace(
+        defense=row.get("defense"),
         face_id=str(row["face_id"]),
         name=str(row["name"]),
         mana_cost=str(row.get("mana_cost", "—")),
@@ -676,6 +681,7 @@ def _card_from_json(row: Mapping[str, Any]) -> CardDefinition:
     mana_row = row.get("mana", {})
     land_row = row.get("land")
     return CardDefinition(
+        layout=row.get("layout"),
         card_id=str(row["card_id"]),
         name=str(row["name"]),
         oracle_text=str(row.get("oracle_text", "")),

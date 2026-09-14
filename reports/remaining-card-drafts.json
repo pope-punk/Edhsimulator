@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 320,
     "remaining_outside_reviewed_bundle": 14,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 14,
+    "drafts_written": 7,
+    "not_started_on_this_branch": 7,
     "reviewed_bundle_copies": 386,
-    "draft_copies": 0,
+    "draft_copies": 7,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 93,
     "remaining_outside_reviewed_bundle_copies": 14
@@ -885,7 +885,7 @@
     {
       "card_id": "elspeth-conquers-death",
       "name": "Elspeth Conquers Death",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -898,7 +898,9 @@
           "face_id": "elspeth-conquers-death",
           "text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it."
         }
-      ]
+      ],
+      "draft_definition": "draft:elspeth-conquers-death",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "entity-tracker",
@@ -1356,7 +1358,7 @@
     {
       "card_id": "glasswing-grace-age-graced-chapel",
       "name": "Glasswing Grace // Age-Graced Chapel",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1373,7 +1375,9 @@
           "face_id": "age-graced-chapel",
           "text": "This land enters tapped.\n{T}: Add {W} or {B}."
         }
-      ]
+      ],
+      "draft_definition": "draft:glasswing-grace-age-graced-chapel",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "gleaming-splendor",
@@ -1772,7 +1776,7 @@
     {
       "card_id": "invasion-of-theros",
       "name": "Invasion of Theros",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1789,7 +1793,9 @@
           "face_id": "ephara-ever-sheltering",
           "text": "Ephara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card."
         }
-      ]
+      ],
+      "draft_definition": "draft:invasion-of-theros",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "jyoti-moag-ancient",
@@ -1886,7 +1892,7 @@
     {
       "card_id": "kazuul-s-fury-kazuul-s-cliffs",
       "name": "Kazuul's Fury // Kazuul's Cliffs",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1903,7 +1909,9 @@
           "face_id": "kazuul-s-cliffs",
           "text": "This land enters tapped.\n{T}: Add {R}."
         }
-      ]
+      ],
+      "draft_definition": "draft:kazuul-s-fury-kazuul-s-cliffs",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "kodama-of-the-west-tree",
@@ -2638,7 +2646,7 @@
     {
       "card_id": "pontiff-of-blight",
       "name": "Pontiff of Blight",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2651,7 +2659,9 @@
           "face_id": "pontiff-of-blight",
           "text": "Extort\nOther creatures you control have extort."
         }
-      ]
+      ],
+      "draft_definition": "draft:pontiff-of-blight",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "prayer-of-binding",
@@ -3167,7 +3177,7 @@
     {
       "card_id": "sorin-of-house-markov",
       "name": "Sorin of House Markov",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -3184,7 +3194,9 @@
           "face_id": "sorin-ravenous-neonate",
           "text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin."
         }
-      ]
+      ],
+      "draft_definition": "draft:sorin-of-house-markov",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "sorin-vengeful-bloodlord",
@@ -3438,7 +3450,7 @@
     {
       "card_id": "the-restoration-of-eiganjo",
       "name": "The Restoration of Eiganjo",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3455,7 +3467,9 @@
           "face_id": "architect-of-restoration",
           "text": "Vigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token."
         }
-      ]
+      ],
+      "draft_definition": "draft:the-restoration-of-eiganjo",
+      "review_status": "pending_hosted_validation"
     },
     {
       "card_id": "thespian-s-stage",
@@ -3844,102 +3858,9 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
-    "pass": 2,
+    "base_commit": "2586180f67645ca9cc8511e979933511ea883551",
+    "pass": 3,
     "cards_written": [
-      "aminatou-the-fateshifter",
-      "domri-anarch-of-bolas",
-      "minsc-boo-timeless-heroes",
-      "nissa-steward-of-elements",
-      "sorin-vengeful-bloodlord",
-      "innkeeper-s-talent",
-      "leyline-of-hope"
-    ],
-    "cards_promoted": [
-      "aminatou-the-fateshifter",
-      "domri-anarch-of-bolas",
-      "minsc-boo-timeless-heroes",
-      "nissa-steward-of-elements",
-      "sorin-vengeful-bloodlord",
-      "innkeeper-s-talent",
-      "leyline-of-hope"
-    ],
-    "validation_status": "passed",
-    "runtime_checkpoint_schema": 130,
-    "state_checkpoint_schema": 18,
-    "new_test_methods": 100,
-    "unresolved_defects": [],
-    "review_work_remaining": [],
-    "review_findings": [
-      "Reused existing zero-loyalty state actions and damage counter removal.",
-      "Any-target reflexive damage includes creatures, players, planeswalkers and battles.",
-      "Class activation conditions apply at announcement; resolution sets the printed level without repeating that restriction.",
-      "Entry subtype effects retain their original timestamp through later copies and are not copiable.",
-      "Every current ward instance captures the exact targeted stack object and payer.",
-      "Static keyword-selector dependencies include later keyword grants.",
-      "Avoid rebuilding unchanged CardProgram records while checking Class counter replacement gates.",
-      "Characteristic and proposal caches bind the active player; Class and controller-turn predicates do not claim selector reads.",
-      "Fixed-size activated target clauses reuse announcement validation while optional-size clauses remain closed."
-    ],
-    "validation_attempts": [
-      {
-        "commit": "983aaae5cd60fba08d9cd2668bcb27343ffe1ce2",
-        "status": "source_review_correction",
-        "findings": [
-          "Fixed a positional argument after keyword arguments in active-player context forwarding before waiting for CI."
-        ]
-      },
-      {
-        "commit": "b67857c78bace19569fc2ff9874ce6025c52b77f",
-        "run_id": 34891304108,
-        "status": "failed",
-        "platform": "ubuntu-latest",
-        "tests": 2427,
-        "failures": 3,
-        "errors": 9,
-        "findings": [
-          "Minsc's only available sacrifice now proceeds without an unnecessary choice.",
-          "Sorin turn condition requires active-player cache invalidation.",
-          "Scenario fixtures need correct window, token-cessation, phase and combat-blocker interfaces.",
-          "Variable-size activation target groups remain unsupported and must be rejected."
-        ]
-      },
-      {
-        "commit": "c07f3aca12c6c2066a9ac837a32954976c5a72ce",
-        "run_id": 34892047736,
-        "status": "failed",
-        "platform": "ubuntu-latest",
-        "tests": 2446,
-        "failures": 2,
-        "errors": 8,
-        "findings": [
-          "The expanded ward regression exposed Class/turn conditions missing from selector-free dependency predicates.",
-          "Minsc and the additional rules edge cases passed; remaining earlier findings are corrected in the follow-up."
-        ]
-      },
-      {
-        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
-        "run_id": 34892851623,
-        "status": "success",
-        "tests_per_platform": 2446,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ]
-      },
-      {
-        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
-        "run_id": 34893959319,
-        "status": "success",
-        "stage": "required_reviewed_loader",
-        "tests_per_platform": 2446,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ]
-      }
-    ],
-    "next_batch": [
       "glasswing-grace-age-graced-chapel",
       "kazuul-s-fury-kazuul-s-cliffs",
       "sorin-of-house-markov",
@@ -3948,179 +3869,33 @@
       "the-restoration-of-eiganjo",
       "elspeth-conquers-death"
     ],
-    "shared_mechanics": [
-      "Loyalty activation costs and limits",
-      "Planeswalker combat destinations",
-      "Class levels and ward",
-      "Opening-hand choices",
-      "Reflexive sacrifice triggers",
-      "Simultaneous directional control rotation",
-      "Entry subtype effects"
+    "cards_promoted": [],
+    "validation_status": "pending",
+    "runtime_checkpoint_schema": 131,
+    "state_checkpoint_schema": 19,
+    "new_test_methods": 49,
+    "validation_attempts": [],
+    "review_work_remaining": [
+      "Hosted draft conformance and source review",
+      "Complete edge-case audit, then source-bound promotion and required reviewed-loader validation"
     ],
-    "draft_hosted_validation": {
-      "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
-      "run_id": 34892851623,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
-      "conclusion": "success",
-      "tests_per_platform": 2446,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104139518890,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2446,
-          "seconds": 521.52,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104139519023,
-          "name": "verify (windows-latest)",
-          "tests": 2446,
-          "seconds": 515.09,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "hosted_validation": {
-      "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
-      "run_id": 34893959319,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
-      "conclusion": "success",
-      "tests_per_platform": 2446,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104143175589,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2446,
-          "seconds": 524.737,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104143175873,
-          "name": "verify (windows-latest)",
-          "tests": 2446,
-          "seconds": 529.81,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "draft_test_methods": 100,
-    "reviewed_test_methods": 100,
-    "coverage_audit": {
-      "totalUnique": 334,
-      "reviewedUnique": 320,
-      "totalCopies": 400,
-      "reviewedCopies": 386,
-      "remainingUnique": 14,
-      "remainingCopies": 14,
-      "byDeck": {
-        "Reaminatour \u2014 Aminatou, Veil Piercer": {
-          "total": 100,
-          "reviewed": 90
-        },
-        "Minsc & Boo, Timeless Heroes": {
-          "total": 100,
-          "reviewed": 99
-        },
-        "Omo, Queen of Vesuva": {
-          "total": 100,
-          "reviewed": 100
-        },
-        "Elenda, Saint of Dusk": {
-          "total": 100,
-          "reviewed": 97
-        }
-      }
-    },
-    "next_batch_source_review": {
-      "status": "catalog_and_primary_source_preparation_only",
-      "card_ids": [
-        "glasswing-grace-age-graced-chapel",
-        "kazuul-s-fury-kazuul-s-cliffs",
-        "sorin-of-house-markov",
-        "pontiff-of-blight",
-        "invasion-of-theros",
-        "the-restoration-of-eiganjo",
-        "elspeth-conquers-death"
-      ],
-      "requirements": [
-        "Replace the reviewed loader's single-face restriction coherently with face-aware source validation, cast/land choice, mana value, copy values and exact physical-card identity. A modal back-face land is not a transformed permanent.",
-        "Glasswing Grace / Age-Graced Chapel needs the complete +2/+2 flying/lifelink Aura and tapped W/B land. Kazuul's Fury / Kazuul's Cliffs reuses Fling's additional sacrifice, captured power and any-target domain plus a tapped R land.",
-        "Pontiff of Blight needs its own extort and dynamically granted independent extort instances on other controlled creatures. Preserve optional hybrid payment, opponent-by-opponent life loss and actual life gained.",
-        "Sorin of House Markov needs life gained this turn, a postcombat-main intervening-if trigger, exact exile/owner-controlled transformed return, and both faces' extort. The walker adds Food, life-gained damage, indefinite control/Vampire changes and a conditional lifelink counter excluding Sorin and the stolen creature from the white-permanent condition.",
-        "Invasion of Theros needs full Siege protection/attack/defeat lifecycle and transformed casting, alongside Aura/God/Demigod search. Ephara retains other-enchantment entry draw and the three-other-enchantments lifelink/indestructible condition.",
-        "The Restoration of Eiganjo needs all chapters, an optional discard followed by a separately targeted reflexive return, exact exile/transformed return and Architect's attack/block Spirit triggers.",
-        "Elspeth Conquers Death needs full Saga timing/lifecycle, opposing mana-value-three-plus exile, a noncreature spell tax lasting until the controller's next turn, and creature/planeswalker return followed by a +1/+1-or-loyalty counter choice."
-      ],
-      "reuse_audit": [
-        "Pass 2 already supplies loyalty costs/timing/entry, planeswalker combat, exact bound triggers, Class/turn predicates and noncopiable entry subtypes.",
-        "Reuse source-bound cost, Aura, conditional keyword, library search, hybrid payment, token, counter, move-result and current/LKI machinery.",
-        "The existing SacrificeThenTrigger is specific to mandatory sacrifice; do not silently treat optional discard as that event. Generalize captured reflexive-event handling deliberately.",
-        "Keep private inspections and actor commands face-aware, and include both printed faces in source review and hosted conformance."
-      ],
-      "sources": [
-        "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-        "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
-        "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
-        "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
-        "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10"
-      ],
-      "source_notes": [
-        {
-          "source": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-          "notes": "Sorin counts life gained rather than net life change, including gains before entering. Extort is untargeted, paid once per trigger, and gains the total actual opponent life loss. His control effect is indefinite."
-        },
-        {
-          "source": "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
-          "notes": "Siege protection is separate from control: its controller may attack it, while only its protector blocks for it. Defeat creates a triggered exile-and-optional-transformed-cast sequence. Ephara can die to previously marked lethal damage if its indestructible condition stops holding."
-        },
-        {
-          "source": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
-          "notes": "Restoration's discard happens before its reflexive return target is chosen, so the discarded card itself can be an eligible target."
-        },
-        {
-          "source": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
-          "notes": "Elspeth's counter type is chosen after return and need not match the permanent's type. Its tax survives the Saga leaving; if the controller departs, it expires when that player's next turn would have begun."
-        },
-        {
-          "source": "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10",
-          "notes": "Kazuul's additional sacrifice is paid before responses and uses the creature's last battlefield power."
-        }
-      ],
-      "notes": [
-        "These are implementation preparation, not completed source-bound programs or validation. Recheck current Comprehensive Rules for both-face characteristics, Siege/Saga state actions and timing when implementing."
-      ],
-      "projected_coverage_after_complete_pass3": {
-        "reviewed_unique": 327,
-        "reviewed_copies": 393,
-        "remaining_unique": 7,
-        "by_deck": {
-          "Reaminatour": 93,
-          "Minsc & Boo": 100,
-          "Omo": 100,
-          "Elenda": 100
-        }
-      }
-    }
+    "shared_mechanics": [
+      "Physical-card face choices and transformation",
+      "Independent granted triggers and extort",
+      "Saga chapters and intrinsic lore",
+      "Siege defense, protector and transformed casting",
+      "Timed spell taxes and reflexive discard",
+      "Double-face token copies and keyword-counter timestamps"
+    ],
+    "next_batch": [
+      "aminatou-veil-piercer",
+      "entity-tracker",
+      "funeral-room-awakening-hall",
+      "ghostly-dancers",
+      "victor-valgavoth-s-seneschal",
+      "the-cruelty-of-gix",
+      "urza-s-saga"
+    ]
   },
   "hosted_validation_history": [
     {
@@ -7724,6 +7499,286 @@
         "Type and ability layers with historical trigger information",
         "Current/last known controller capture for the original attacking creature"
       ]
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
+      "pass": 2,
+      "cards_written": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
+      ],
+      "cards_promoted": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
+      ],
+      "validation_status": "passed",
+      "runtime_checkpoint_schema": 130,
+      "state_checkpoint_schema": 18,
+      "new_test_methods": 100,
+      "unresolved_defects": [],
+      "review_work_remaining": [],
+      "review_findings": [
+        "Reused existing zero-loyalty state actions and damage counter removal.",
+        "Any-target reflexive damage includes creatures, players, planeswalkers and battles.",
+        "Class activation conditions apply at announcement; resolution sets the printed level without repeating that restriction.",
+        "Entry subtype effects retain their original timestamp through later copies and are not copiable.",
+        "Every current ward instance captures the exact targeted stack object and payer.",
+        "Static keyword-selector dependencies include later keyword grants.",
+        "Avoid rebuilding unchanged CardProgram records while checking Class counter replacement gates.",
+        "Characteristic and proposal caches bind the active player; Class and controller-turn predicates do not claim selector reads.",
+        "Fixed-size activated target clauses reuse announcement validation while optional-size clauses remain closed."
+      ],
+      "validation_attempts": [
+        {
+          "commit": "983aaae5cd60fba08d9cd2668bcb27343ffe1ce2",
+          "status": "source_review_correction",
+          "findings": [
+            "Fixed a positional argument after keyword arguments in active-player context forwarding before waiting for CI."
+          ]
+        },
+        {
+          "commit": "b67857c78bace19569fc2ff9874ce6025c52b77f",
+          "run_id": 34891304108,
+          "status": "failed",
+          "platform": "ubuntu-latest",
+          "tests": 2427,
+          "failures": 3,
+          "errors": 9,
+          "findings": [
+            "Minsc's only available sacrifice now proceeds without an unnecessary choice.",
+            "Sorin turn condition requires active-player cache invalidation.",
+            "Scenario fixtures need correct window, token-cessation, phase and combat-blocker interfaces.",
+            "Variable-size activation target groups remain unsupported and must be rejected."
+          ]
+        },
+        {
+          "commit": "c07f3aca12c6c2066a9ac837a32954976c5a72ce",
+          "run_id": 34892047736,
+          "status": "failed",
+          "platform": "ubuntu-latest",
+          "tests": 2446,
+          "failures": 2,
+          "errors": 8,
+          "findings": [
+            "The expanded ward regression exposed Class/turn conditions missing from selector-free dependency predicates.",
+            "Minsc and the additional rules edge cases passed; remaining earlier findings are corrected in the follow-up."
+          ]
+        },
+        {
+          "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+          "run_id": 34892851623,
+          "status": "success",
+          "tests_per_platform": 2446,
+          "platforms": [
+            "ubuntu-latest",
+            "windows-latest"
+          ]
+        },
+        {
+          "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+          "run_id": 34893959319,
+          "status": "success",
+          "stage": "required_reviewed_loader",
+          "tests_per_platform": 2446,
+          "platforms": [
+            "ubuntu-latest",
+            "windows-latest"
+          ]
+        }
+      ],
+      "next_batch": [
+        "glasswing-grace-age-graced-chapel",
+        "kazuul-s-fury-kazuul-s-cliffs",
+        "sorin-of-house-markov",
+        "pontiff-of-blight",
+        "invasion-of-theros",
+        "the-restoration-of-eiganjo",
+        "elspeth-conquers-death"
+      ],
+      "shared_mechanics": [
+        "Loyalty activation costs and limits",
+        "Planeswalker combat destinations",
+        "Class levels and ward",
+        "Opening-hand choices",
+        "Reflexive sacrifice triggers",
+        "Simultaneous directional control rotation",
+        "Entry subtype effects"
+      ],
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
+        "conclusion": "success",
+        "tests_per_platform": 2446,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104139518890,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2446,
+            "seconds": 521.52,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104139519023,
+            "name": "verify (windows-latest)",
+            "tests": 2446,
+            "seconds": 515.09,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
+        "conclusion": "success",
+        "tests_per_platform": 2446,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104143175589,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2446,
+            "seconds": 524.737,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104143175873,
+            "name": "verify (windows-latest)",
+            "tests": 2446,
+            "seconds": 529.81,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "draft_test_methods": 100,
+      "reviewed_test_methods": 100,
+      "coverage_audit": {
+        "totalUnique": 334,
+        "reviewedUnique": 320,
+        "totalCopies": 400,
+        "reviewedCopies": 386,
+        "remainingUnique": 14,
+        "remainingCopies": 14,
+        "byDeck": {
+          "Reaminatour \u2014 Aminatou, Veil Piercer": {
+            "total": 100,
+            "reviewed": 90
+          },
+          "Minsc & Boo, Timeless Heroes": {
+            "total": 100,
+            "reviewed": 99
+          },
+          "Omo, Queen of Vesuva": {
+            "total": 100,
+            "reviewed": 100
+          },
+          "Elenda, Saint of Dusk": {
+            "total": 100,
+            "reviewed": 97
+          }
+        }
+      },
+      "next_batch_source_review": {
+        "status": "catalog_and_primary_source_preparation_only",
+        "card_ids": [
+          "glasswing-grace-age-graced-chapel",
+          "kazuul-s-fury-kazuul-s-cliffs",
+          "sorin-of-house-markov",
+          "pontiff-of-blight",
+          "invasion-of-theros",
+          "the-restoration-of-eiganjo",
+          "elspeth-conquers-death"
+        ],
+        "requirements": [
+          "Replace the reviewed loader's single-face restriction coherently with face-aware source validation, cast/land choice, mana value, copy values and exact physical-card identity. A modal back-face land is not a transformed permanent.",
+          "Glasswing Grace / Age-Graced Chapel needs the complete +2/+2 flying/lifelink Aura and tapped W/B land. Kazuul's Fury / Kazuul's Cliffs reuses Fling's additional sacrifice, captured power and any-target domain plus a tapped R land.",
+          "Pontiff of Blight needs its own extort and dynamically granted independent extort instances on other controlled creatures. Preserve optional hybrid payment, opponent-by-opponent life loss and actual life gained.",
+          "Sorin of House Markov needs life gained this turn, a postcombat-main intervening-if trigger, exact exile/owner-controlled transformed return, and both faces' extort. The walker adds Food, life-gained damage, indefinite control/Vampire changes and a conditional lifelink counter excluding Sorin and the stolen creature from the white-permanent condition.",
+          "Invasion of Theros needs full Siege protection/attack/defeat lifecycle and transformed casting, alongside Aura/God/Demigod search. Ephara retains other-enchantment entry draw and the three-other-enchantments lifelink/indestructible condition.",
+          "The Restoration of Eiganjo needs all chapters, an optional discard followed by a separately targeted reflexive return, exact exile/transformed return and Architect's attack/block Spirit triggers.",
+          "Elspeth Conquers Death needs full Saga timing/lifecycle, opposing mana-value-three-plus exile, a noncreature spell tax lasting until the controller's next turn, and creature/planeswalker return followed by a +1/+1-or-loyalty counter choice."
+        ],
+        "reuse_audit": [
+          "Pass 2 already supplies loyalty costs/timing/entry, planeswalker combat, exact bound triggers, Class/turn predicates and noncopiable entry subtypes.",
+          "Reuse source-bound cost, Aura, conditional keyword, library search, hybrid payment, token, counter, move-result and current/LKI machinery.",
+          "The existing SacrificeThenTrigger is specific to mandatory sacrifice; do not silently treat optional discard as that event. Generalize captured reflexive-event handling deliberately.",
+          "Keep private inspections and actor commands face-aware, and include both printed faces in source review and hosted conformance."
+        ],
+        "sources": [
+          "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
+          "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+          "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
+          "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10"
+        ],
+        "source_notes": [
+          {
+            "source": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+            "notes": "Sorin counts life gained rather than net life change, including gains before entering. Extort is untargeted, paid once per trigger, and gains the total actual opponent life loss. His control effect is indefinite."
+          },
+          {
+            "source": "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
+            "notes": "Siege protection is separate from control: its controller may attack it, while only its protector blocks for it. Defeat creates a triggered exile-and-optional-transformed-cast sequence. Ephara can die to previously marked lethal damage if its indestructible condition stops holding."
+          },
+          {
+            "source": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+            "notes": "Restoration's discard happens before its reflexive return target is chosen, so the discarded card itself can be an eligible target."
+          },
+          {
+            "source": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
+            "notes": "Elspeth's counter type is chosen after return and need not match the permanent's type. Its tax survives the Saga leaving; if the controller departs, it expires when that player's next turn would have begun."
+          },
+          {
+            "source": "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10",
+            "notes": "Kazuul's additional sacrifice is paid before responses and uses the creature's last battlefield power."
+          }
+        ],
+        "notes": [
+          "These are implementation preparation, not completed source-bound programs or validation. Recheck current Comprehensive Rules for both-face characteristics, Siege/Saga state actions and timing when implementing."
+        ],
+        "projected_coverage_after_complete_pass3": {
+          "reviewed_unique": 327,
+          "reviewed_copies": 393,
+          "remaining_unique": 7,
+          "by_deck": {
+            "Reaminatour": 93,
+            "Minsc & Boo": 100,
+            "Omo": 100,
+            "Elenda": 100
+          }
+        }
+      }
     }
   ],
   "execution_policy": {
@@ -7814,120 +7869,8 @@
       }
     ]
   },
-  "completed_request_batch": {
-    "date": "2026-09-14",
-    "base_commit": "107f2e9069d2631646cc0fbb4dbad2e0d9cf10f8",
-    "cards": [
-      "exotic-orchard",
-      "fellwar-stone",
-      "horizon-of-progress",
-      "devouring-light",
-      "scute-swarm",
-      "helm-of-the-host",
-      "lazotep-quarry",
-      "aggressive-biomancy"
-    ],
-    "unique_cards_completed": 8,
-    "deck_copies_completed": 9,
-    "new_test_methods": 138,
-    "reviewed_before": 278,
-    "reviewed_after": 286,
-    "remaining_after": 48,
-    "existing_card_corrections": [
-      "baldur-s-gate"
-    ],
-    "validation": [
-      {
-        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
-        "run_id": 34836442046,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046",
-        "conclusion": "success",
-        "tests_per_platform": 1853,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ],
-        "checks": [
-          "source syntax",
-          "full distribution installation",
-          "packaged assets",
-          "reviewed-loader conformance"
-        ]
-      },
-      {
-        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
-        "run_id": 34839294402,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
-        "conclusion": "success",
-        "tests_per_platform": 1917,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ],
-        "checks": [
-          "source syntax",
-          "full distribution installation",
-          "packaged assets",
-          "required reviewed-loader conformance"
-        ]
-      }
-    ],
-    "local_project_code_executed": false
-  },
-  "completed_heartbeat_cycle": {
-    "date": "2026-09-14",
-    "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
-    "pass": 2,
-    "cards": [
-      "aminatou-the-fateshifter",
-      "domri-anarch-of-bolas",
-      "minsc-boo-timeless-heroes",
-      "nissa-steward-of-elements",
-      "sorin-vengeful-bloodlord",
-      "innkeeper-s-talent",
-      "leyline-of-hope"
-    ],
-    "unique_cards_completed": 7,
-    "deck_copies_completed": 7,
-    "new_test_methods": 100,
-    "reviewed_before": 313,
-    "reviewed_after": 320,
-    "remaining_after": 14,
-    "validation": {
-      "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
-      "run_id": 34893959319,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
-      "conclusion": "success",
-      "tests_per_platform": 2446,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104143175589,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2446,
-          "seconds": 524.737,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104143175873,
-          "name": "verify (windows-latest)",
-          "tests": 2446,
-          "seconds": 529.81,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "local_project_code_executed": false
-  },
+  "completed_request_batch": false,
+  "completed_heartbeat_cycle": false,
   "hosted_validation": {
     "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
     "run_id": 34893959319,
@@ -8053,7 +7996,8 @@
           "elspeth-conquers-death"
         ],
         "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives.",
-        "status": "planned"
+        "status": "in_progress",
+        "base_commit": "2586180f67645ca9cc8511e979933511ea883551"
       },
       {
         "pass": 4,

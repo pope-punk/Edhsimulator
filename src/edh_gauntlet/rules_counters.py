@@ -94,7 +94,9 @@ class CounterRules:
         self._commit_counters(final,trace,frame)
 
     def _commit_counters(self,final,trace,frame,removals=()):
+        before={ref:self.state.get(ref) for ref,_ in removals if isinstance(ref,ObjectRef)}
         self.state.put_counters_batch(final,removals=removals)
+        self._collect_defeated_battles(before.values())
         for ref,counts in removals:
             self._event('counters_removed',ref=ref.to_json(),counters=dict(counts),player=frame['controller'])
         for row in trace:self._event('counter_replacement_applied',**row)
@@ -199,4 +201,8 @@ class CounterRules:
                 if event.recipient_relation=='opponent_controlled' and recipient_controller==source.controller:continue
                 if not set(event.types)<=types:continue
                 amount=counts.get(event.counter_kind,0) if event.counter_kind else sum(counts.values())
+                from .rules_program import ChapterAbility
+                if isinstance(ability,ChapterAbility):
+                    current=dict(obj.counters).get('lore',0) if obj else 0
+                    if not current-amount<ability.chapter<=current:continue
                 if amount:self._trigger(source,ability,values={'event_amount':amount})

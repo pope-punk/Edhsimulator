@@ -6,7 +6,21 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **320 source-bound reviewed programs / 386 deck copies**. There are **14 cards / 14 deck
-copies outside the reviewed bundle**, all unstarted; the draft bundle is empty. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, seven drafted in Pass 3 and seven unstarted. Reviewed coverage is not production certification.
+
+## Pass 3 in progress
+
+All seven planned cards are drafted. Reviewed coverage remains **320/334 unique
+cards and 386/400 copies** until hosted conformance and printed-face review finish.
+The shared implementation adds face choices, transformation, Saga chapters,
+extort grants, Siege defense/protection/defeat, temporary spell taxes, and paired
+token copies. The first 49 conformance methods are written but not yet validated.
+
+Catalog annotations now retain the five double-face layouts, three back-face
+color indicators, and Invasion of Theros's defense. Runtime mana value derives
+from the front face for transforming objects; the back's printed mana cost
+remains absent. All 320 prior reviewed program records and source hashes remain
+unchanged. Production admission and started-game contracts are unchanged.
 
 ## Four-pass completion plan
 

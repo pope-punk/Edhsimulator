@@ -22,7 +22,7 @@ class SpellCopyRules:
         # flashback's stack-exit replacement and execution progress are not.
         fields=('source','controller','spell','targets','target_spec','bindings','values',
             'entry_flags','chosen_x','mode_groups','target_groups','target_controller_groups',
-            'kicker','replicate','alternative_id','activated_program','ability_id',
+            'kicker','replicate','alternative_id','activated_program','ability_id','triggered',
             'source_must_remain','intervening_if','announced_source')
         result={key:deepcopy(frame[key]) for key in fields if key in frame}
         result['tasks']=[{k:deepcopy(v) for k,v in task.items() if k!='id'} for task in frame['tasks']]

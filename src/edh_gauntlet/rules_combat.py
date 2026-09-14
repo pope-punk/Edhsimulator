@@ -69,8 +69,12 @@ class CombatRules:
         if isinstance(destination,str):
             if destination not in self.state.live_players or destination==actor:raise RulesViolation('Illegal defending player')
             return destination,None
-        if not isinstance(destination,ObjectRef):raise RulesViolation('Expected an exact planeswalker reference or player')
+        if not isinstance(destination,ObjectRef):raise RulesViolation('Expected an exact permanent reference or player')
         obj=self.state.get(destination)
+        view=self.effective(destination)
+        if obj.zone==Zone.BATTLEFIELD and not obj.phased and 'Battle' in view.types:
+            if 'Creature' in view.types or obj.protector==actor or obj.protector not in self.state.live_players:raise RulesViolation('Illegal defending battle')
+            return obj.protector,{'ref':destination.to_json(),'protector':obj.protector,'battle':True,'combat_departure':obj.combat_departure,'controller':obj.controller,'controlled_since':obj.controlled_since}
         if (obj.zone!=Zone.BATTLEFIELD or obj.phased or obj.controller==actor
                 or obj.controller not in self.state.live_players or 'Planeswalker' not in self.effective(destination).types):
             raise RulesViolation('Illegal defending planeswalker')
@@ -78,11 +82,16 @@ class CombatRules:
             'controlled_since':obj.controlled_since,'combat_departure':obj.combat_departure}
 
     def _defender_present(self,row):
-        if row.get('defender_removed') or row['defender'] not in self.state.live_players:return False
+        if row.get('defender_removed') or (row['defender'] not in self.state.live_players and not row.get('defender_object',{}).get('battle')):return False
         target=row.get('defender_object')
         if target is None:return True
         try:obj=self.state.get(ObjectRef.from_json(target['ref']))
         except RulesViolation:return False
+        if target.get('battle'):
+            view=self.effective(obj.ref)
+            return (obj.zone==Zone.BATTLEFIELD and not obj.phased and obj.protector==target['protector']
+                and obj.controller==target['controller'] and obj.controlled_since==target['controlled_since']
+                and obj.combat_departure==target['combat_departure'] and 'Battle' in view.types and 'Creature' not in view.types)
         return (obj.zone==Zone.BATTLEFIELD and not obj.phased and obj.controller==target['controller']
             and obj.controlled_since==target['controlled_since'] and obj.combat_departure==target['combat_departure']
             and 'Planeswalker' in self.effective(obj.ref).types)
@@ -113,7 +122,7 @@ class CombatRules:
         for row in self.combat['attackers']:
             if row.get('defender_object') is not None and not self._defender_present(row):row['defender_removed']=True
         before={row['uid'] for row in self.combat['attackers']}
-        self.combat['attackers']=[row for row in self.combat['attackers'] if self._combat_present(row) and row['defender'] in self.state.live_players]
+        self.combat['attackers']=[row for row in self.combat['attackers'] if self._combat_present(row) and (row['defender'] in self.state.live_players or row.get('defender_object',{}).get('battle'))]
         remaining={row['uid'] for row in self.combat['attackers']}
         for key,rows in self.combat['blocks'].items():
             self.combat['blocks'][key]=[row for row in rows if self._combat_present(row)]
@@ -125,7 +134,7 @@ class CombatRules:
         if self.combat is None:return frozenset()
         rows=[]
         if kind in {'attacking','attacking_or_blocking'}:
-            rows.extend(row for row in self.combat['attackers'] if row['defender'] in self.state.live_players)
+            rows.extend(row for row in self.combat['attackers'] if row['defender'] in self.state.live_players or row.get('defender_object',{}).get('battle'))
         if kind in {'blocking','attacking_or_blocking'}:
             rows.extend(row for group in self.combat['blocks'].values() for row in group)
         return frozenset(ObjectRef.from_json(row['ref']) for row in rows if self._combat_present(row))
@@ -157,7 +166,8 @@ class CombatRules:
         # paid destination, obey the maximum number of distinct goad requirements.
         free=tuple(p for p in self.state.live_players if p!=actor and self._attack_tax(p)==0)
         free+=tuple(obj.ref for obj in self.state.objects(Zone.BATTLEFIELD) if not obj.phased
-            and obj.controller!=actor and obj.controller in self.state.live_players and 'Planeswalker' in self.effective(obj.ref).types)
+            and ((obj.controller!=actor and obj.controller in self.state.live_players and 'Planeswalker' in self.effective(obj.ref).types and 'Battle' not in self.effective(obj.ref).types)
+                or ('Battle' in self.effective(obj.ref).types and 'Creature' not in self.effective(obj.ref).types and obj.protector in self.state.live_players and obj.protector!=actor)))
         for ref,(_,view) in eligible.items():
             goaders=view.goaded_by
             if not goaders:continue
@@ -328,7 +338,9 @@ class CombatRules:
             if row['lifelink'] and row['amount']:
                 key=(row['source'].controller,row['source'].ref)
                 row['lifelink_gain']=row['amount']+bonuses.pop(key,0)
+        before_damage=tuple(self.state.get(ref) for ref in dict.fromkeys(row['target'] for row in payments if not isinstance(row['target'],str)))
         self.state.damage_batch(payments)
+        self._collect_defeated_battles(before_damage)
         for row in payments:
             if row['freerunning'] and row['amount'] and isinstance(row['target'],str):
                 self._record_turn_fact('freerunning',row['source'].controller)

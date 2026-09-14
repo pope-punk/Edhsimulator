@@ -42,7 +42,7 @@ class AttachmentRules:
         return matches(selector,attached,self.effective(target),source) and not protection_matches(self.effective(target),view)
 
     def _aura_entry(self, proposal, frame, key):
-        definition = self.definitions[proposal.copied_definition or proposal.before.effective_definition]
+        definition = self.definitions[proposal.entry_definition]
         if definition.enchant is None:
             return True, None
         context = {**frame, 'source': proposal.before.to_json(), 'controller': proposal.controller}

@@ -46,6 +46,7 @@ class TurnRules:
 
     def _start_turn(self, active):
         self._validate_untap(active)
+        self._expire_spell_taxes(active)
         self._phase_at_untap(active)
         blocked=tuple(ref for ref,view in self.characteristics().items() if view.untap_blocked)
         self.state.empty_mana_pools(); self.state.start_turn(active,skip_untap=blocked)
@@ -59,7 +60,9 @@ class TurnRules:
         self.state.empty_mana_pools(); self.phase = phase; self.priority = self.priority_player(); self.passes = []
         if phase=='postcombat_main':self.combat=None
         self._event('step_began', active=self.active, step=phase)
-        self._collect_step(phase)
+        if phase=='precombat_main':
+            self.phase_action={'id':self._id('lore'),'actor':self.active}
+        else:self._collect_step(phase)
 
     def _advance_phase(self):
         self.turn_schedule['advance'] = False
@@ -151,25 +154,26 @@ class TurnRules:
         if self.turn_schedule is not None and self.phase == 'cleanup':
             self.turn_schedule['cleanup_priority'] = True
 
-    def play_land(self, action_id, actor, ref, *, revision):
+    def play_land(self, action_id, actor, ref, *, revision,face='front'):
         self._idle()
         if not isinstance(action_id,str) or not action_id or len(action_id)>128 or action_id in self.action_receipts:
             raise RulesViolation('Invalid or already accepted action identity')
         if (self.turn_schedule is None or revision != self.revision or actor != self.active
                 or self.priority != actor or self.stack or self.phase not in {'precombat_main','postcombat_main'}):
             raise RulesViolation('Land play requires current main-phase priority and an empty stack')
-        source = self.state.get(ref)
+        source = self._announced_face(self.state.get(ref),face,land=True)
         permissions=self.player_permissions()[actor]
         top=self._visible_library_top(actor,actor)
         permitted_top=(source.zone==Zone.LIBRARY and permissions.get('play_library_top') and top is not None and top.ref==ref)
-        if (source.zone.value not in permissions['land_zones'] and not permitted_top) or source.owner != actor or 'Land' not in self.effective(ref).types:
+        if (source.zone.value not in permissions['land_zones'] and not permitted_top) or source.owner != actor or 'Land' not in self.definition(source).types:
             raise RulesViolation('No permission to play this land')
         if self.turn_schedule['land_plays'] >= permissions['land_play_limit']:
             raise RulesViolation('No land plays remaining this turn')
         self.turn_schedule['land_plays'] += 1
         self.action_receipts[action_id] = {'kind':'play_land','actor':actor,'source':ref.to_json(),'revision':revision}
         self._event('land_played', actor=actor, source=ref.to_json(), action_id=action_id)
-        self.resolving = self._frame(source, actor, (Move('source', Zone.BATTLEFIELD),))
+        from .rules_program import MoveFace
+        self.resolving = self._frame(source, actor, (MoveFace('source', Zone.BATTLEFIELD,back_face=face=='back'),))
         self.resolving['special_action'] = True
         self.priority = None; self.passes = []
         return self.advance()
