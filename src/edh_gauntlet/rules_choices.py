@@ -67,7 +67,33 @@ class ChoiceRequest:
     def from_json(cls,value):
         value=dict(value);value['options']=tuple(Option(**{**o,'ref':ObjectRef.from_json(o['ref']) if o['ref'] else None}) for o in value['options'])
         value['group_bounds']=tuple(tuple(row) for row in value.get('group_bounds',()))
-        return cls(**value)
+        target=CopyTargetRequest if value.get('kind')=='copy_targets' else cls
+        if target is CopyTargetRequest:
+            value['controller_groups']=tuple(value['controller_groups'])
+            value['retained']=tuple(value['retained'])
+        return target(**value)
+
+
+@dataclass(frozen=True)
+class CopyTargetRequest(ChoiceRequest):
+    """One option per old target slot, with simultaneous retarget validation."""
+    controller_groups: tuple[str|None,...] = ()
+    retained: tuple[bool,...] = ()
+
+    def validate(self,actor,indexes):
+        indexes=super().validate(actor,indexes)
+        refs=[(self.options[i].ref,self.options[i].player) for i in indexes]
+        if len(set(refs))!=len(refs):raise RulesViolation('A copied target clause cannot repeat a target')
+        for offset,i in enumerate(indexes):
+            group=self.controller_groups[i]
+            if group is None:continue
+            for j in indexes[offset+1:]:
+                if group==self.controller_groups[j] and not (self.retained[i] and self.retained[j]):
+                    raise RulesViolation('New copied targets must have different controllers')
+        return indexes
+
+    def to_json(self):
+        return {**super().to_json(),'controller_groups':list(self.controller_groups),'retained':list(self.retained)}
 
 
 @dataclass(frozen=True)

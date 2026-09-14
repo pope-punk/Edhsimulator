@@ -7,6 +7,7 @@ from __future__ import annotations
 from dataclasses import dataclass,replace,asdict
 from enum import Enum
 import hashlib
+import json
 from typing import Iterable
 
 
@@ -80,6 +81,7 @@ class RulesObject:
     # Frozen layer-one snapshots: (definition, duration, creation timestamp).
     copy_effects:tuple[tuple[str,str,int],...]=()
     monstrous:bool=False
+    spell_copy:bool=False
 
     @property
     def effective_definition(self):return self.copy_effects[-1][0] if self.copy_effects else self.copied_definition or self.definition
@@ -110,6 +112,7 @@ class ResourcePayment:
     life: int = 0
     taps: tuple[ObjectRef, ...] = ()
     counters: tuple[tuple[ObjectRef,str,int], ...] = ()
+    tagged_mana: tuple[tuple[str,str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -141,7 +144,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=16
+    CHECKPOINT_SCHEMA=17
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -169,6 +172,7 @@ class RulesState:
         self._life=dict(totals);self._player_counters={p:{} for p in self.players}
         self._command_casts={p:0 for p in self.players}
         self._commander_casts={};self._mana={p:{} for p in self.players}
+        self._mana_tags={p:{} for p in self.players}
         self._turn_starts={p:0 for p in self.players};self._turn_number=0;self._turn_active=None
         self._commander_damage={}
         self._control_effects={};self._control_bases={}
@@ -194,7 +198,7 @@ class RulesState:
         if not players or len(set(players))!=len(players) or any(p not in self.live_players for p in players):
             raise RulesViolation('Invalid departing players')
         self._departed.update(players);self._sequence+=1
-        for player in players:self._mana[player]={}
+        for player in players:self._mana[player]={};self._mana_tags[player]={}
 
     def remove_owned_objects(self,players):
         # OUTSIDE is an archival location, not a replacement-eligible zone move.
@@ -205,7 +209,7 @@ class RulesState:
             self._control_effects={k:r for k,r in self._control_effects.items() if r['ref']!=before.ref}
             self._sequence+=1
             after=RulesObject(ObjectRef(before.ref.card_id,before.ref.incarnation+1),before.definition,before.owner,before.owner,Zone.OUTSIDE,
-                token=before.token,commander=before.commander,timestamp=self._sequence,controlled_since=self._sequence)
+                token=before.token,spell_copy=before.spell_copy,commander=before.commander,timestamp=self._sequence,controlled_since=self._sequence)
             self._order[(before.owner,before.zone)].remove(before.ref.card_id)
             self._order[(before.owner,Zone.OUTSIDE)].append(before.ref.card_id);self._objects[before.ref.card_id]=after
             events.append(ZoneEvent(self._sequence,self._batch,'owner_left_game',before,after))
@@ -310,7 +314,7 @@ class RulesState:
             if payment is not None and before.ref in payment.taps:before=replace(before,tapped=True)
             if before.zone==destination:raise RulesViolation('Same-zone movement is not a zone change')
             if before.phased and cause!='departed_controller_exile':raise RulesViolation('Phased object is unavailable')
-            if before.ref.card_id not in new and before.token and before.zone not in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('A departed token cannot change zones again')
+            if before.ref.card_id not in new and (before.token or before.spell_copy) and before.zone not in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('A departed token cannot change zones again')
             if before.zone==Zone.OUTSIDE and before.ref.card_id not in new:raise RulesViolation('Out-of-game object cannot return without a supported rule')
             controller=move.controller or before.owner
             if controller not in self.players:raise RulesViolation('Unknown destination controller')
@@ -324,7 +328,8 @@ class RulesState:
             if type(move.tapped) is not bool:raise RulesViolation('Invalid entry tapped status')
             if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters or move.copied_add_types):raise RulesViolation('Entry attributes require battlefield entry')
             after=RulesObject(ObjectRef(before.ref.card_id,before.ref.incarnation+1),before.definition,before.owner,
-                controller,destination,before.token,before.commander,move.copied_definition,
+                controller,destination,before.token or before.spell_copy and destination==Zone.BATTLEFIELD,before.commander,move.copied_definition,
+                spell_copy=before.spell_copy and destination!=Zone.BATTLEFIELD,
                 copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
         if not pending and not detaches and not counter_pairs and not regenerations and payment is None and not entry_life:return ()
@@ -357,6 +362,7 @@ class RulesState:
             for symbol,amount in payment.mana:
                 pool[symbol]-=amount
                 if not pool[symbol]:del pool[symbol]
+            for unit,_ in payment.tagged_mana:del self._mana_tags[payment.actor][unit]
             self._life[payment.actor]-=payment.life
             self._life_lost[payment.actor]+=payment.life
             moved_refs={before.ref for _,before,_ in pending}
@@ -384,7 +390,7 @@ class RulesState:
 
     def cease_token(self,ref):
         obj=self.get(ref)
-        if not obj.token or obj.zone in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('Token cannot cease in this zone')
+        if not (obj.token or obj.spell_copy) or obj.zone in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('Token cannot cease in this zone')
         self._order[(obj.owner,obj.zone)].remove(ref.card_id);del self._objects[ref.card_id]
         self._sequence+=1;self.assert_invariants()
 
@@ -693,9 +699,48 @@ class RulesState:
         for symbol in symbols:self._mana[player][symbol]=self._mana[player].get(symbol,0)+1
         if symbols:self._sequence+=1
 
+    def add_spell_copy(self,card_id,original,controller):
+        """Create a noncard spell on the stack, without a cast or token event."""
+        if (not isinstance(original,RulesObject) or controller not in self.live_players
+                or not card_id or card_id in self._issued):
+            raise RulesViolation('Invalid spell copy')
+        self._sequence+=1
+        obj=RulesObject(ObjectRef(card_id,0),original.effective_definition,controller,controller,Zone.STACK,
+            spell_copy=True,cast_x=original.cast_x,timestamp=self._sequence,controlled_since=self._sequence)
+        self._issued.add(card_id);self._objects[card_id]=obj
+        self._order[(controller,Zone.STACK)].append(card_id)
+        self.assert_invariants();return obj
+
+    def mana_tags(self,player):
+        return {key:json.loads(value) for key,value in self._mana_tags[player].items()}
+
+    def add_special_mana(self,player,symbols,rider,source):
+        if (rider not in {'copy','legendary'} or not isinstance(source,RulesObject)
+                or source.controller!=player or source.zone!=Zone.BATTLEFIELD):
+            raise RulesViolation('Invalid special mana source')
+        self.add_mana(player,symbols)
+        batch='mana:'+str(self._sequence)
+        for index,symbol in enumerate(symbols):
+            row={'symbol':symbol,'rider':rider,'batch':batch,'source':source.to_json()}
+            self._mana_tags[player][batch+':'+str(index)]=json.dumps(row,sort_keys=True,separators=(',',':'))
+        self.assert_invariants()
+
+    def tagged_payment(self,player,units):
+        if (not isinstance(units,tuple) or any(type(unit) is not str for unit in units)
+                or len(set(units))!=len(units) or any(unit not in self._mana_tags[player] for unit in units)):
+            raise RulesViolation('Unavailable or duplicate tagged mana unit')
+        return tuple((unit,self._mana_tags[player][unit]) for unit in units)
+
+    def consume_mana_rider(self,player,batch):
+        for unit,row in self.mana_tags(player).items():
+            if row['batch']==batch and row['rider']=='copy':
+                row['rider']='spent_copy'
+                self._mana_tags[player][unit]=json.dumps(row,sort_keys=True,separators=(',',':'))
+                self._sequence+=1
+
     def empty_mana_pools(self):
         if any(self._mana.values()):
-            self._mana={player:{} for player in self.players};self._sequence+=1
+            self._mana={player:{} for player in self.players};self._mana_tags={player:{} for player in self.players};self._sequence+=1
 
     def validate_payment(self, payment):
         if not isinstance(payment,ResourcePayment) or payment.actor not in self.live_players:
@@ -710,6 +755,17 @@ class RulesState:
         for symbol,amount in payment.mana:
             if type(amount) is not int or amount<=0 or self._mana[payment.actor].get(symbol,0)<amount:
                 raise RulesViolation('Insufficient or invalid mana payment')
+        if (not isinstance(payment.tagged_mana,tuple)
+                or any(not isinstance(row,tuple) or len(row)!=2 or any(type(v) is not str for v in row) for row in payment.tagged_mana)
+                or len({unit for unit,_ in payment.tagged_mana})!=len(payment.tagged_mana)
+                or any(self._mana_tags[payment.actor].get(unit)!=row for unit,row in payment.tagged_mana)):
+            raise RulesViolation('Stale or invalid tagged mana payment')
+        selected=[json.loads(row)['symbol'] for _,row in payment.tagged_mana]
+        tagged=[row['symbol'] for row in self.mana_tags(payment.actor).values()]
+        for symbol in 'WUBRGC':
+            amount=dict(payment.mana).get(symbol,0)
+            if selected.count(symbol)>amount or amount-selected.count(symbol)>self._mana[payment.actor].get(symbol,0)-tagged.count(symbol):
+                raise RulesViolation('Tagged mana must be selected explicitly')
         if not isinstance(payment.taps,tuple) or any(not isinstance(ref,ObjectRef) for ref in payment.taps) or len(set(payment.taps))!=len(payment.taps):
             raise RulesViolation('Duplicate tap payment')
         for ref in payment.taps:
@@ -756,6 +812,21 @@ class RulesState:
         for counts in self._player_counters.values():
             if any(type(kind) is not str or not kind or type(amount) is not int or amount<=0 for kind,amount in counts.items()):
                 raise RulesViolation('Invalid player counter ledger')
+        if set(self._mana_tags)!=set(self.players):raise RulesViolation('Invalid tagged mana ledger')
+        for player,records in self._mana_tags.items():
+            counts={}
+            for unit,raw in records.items():
+                try:
+                    row=json.loads(raw);source=RulesObject.from_json(row['source'])
+                except (ValueError,KeyError,TypeError) as exc:raise RulesViolation('Malformed tagged mana') from exc
+                if (set(row)!={'symbol','rider','batch','source'} or type(unit) is not str
+                        or type(row['batch']) is not str or not unit.startswith(row['batch']+':')
+                        or row['symbol'] not in tuple('WUBRGC') or row['rider'] not in {'copy','spent_copy','legendary'}
+                        or source.controller!=player or source.zone!=Zone.BATTLEFIELD
+                        or raw!=json.dumps(row,sort_keys=True,separators=(',',':'))):
+                    raise RulesViolation('Invalid tagged mana record')
+                counts[row['symbol']]=counts.get(row['symbol'],0)+1
+            if any(n>self._mana[player].get(c,0) for c,n in counts.items()):raise RulesViolation('Tagged mana exceeds pool')
         for pool in self._mana.values():
             if any(symbol not in tuple('WUBRGC') or type(amount) is not int or amount<=0 for symbol,amount in pool.items()):raise RulesViolation('Invalid mana ledger')
         if set(self._command_casts)!=set(self.players) or any(type(n) is not int or n<0 for n in self._command_casts.values()):raise RulesViolation('Invalid command cast ledger')
@@ -775,6 +846,8 @@ class RulesState:
                 if type(obj.damage_marked) is not int or obj.damage_marked<0 or type(obj.deathtouch_hit) is not bool or type(obj.combat_departure) is not int or not 0<=obj.combat_departure<=self._sequence:raise RulesViolation('Invalid damage/combat history')
                 if (not isinstance(obj.counters,tuple) or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0] or type(row[1]) is not int or row[1]<=0 for row in obj.counters)
                         or len({row[0] for row in obj.counters})!=len(obj.counters)):raise RulesViolation('Invalid object counter ledger')
+                if type(obj.spell_copy) is not bool or obj.spell_copy and (obj.token or obj.commander or obj.zone==Zone.BATTLEFIELD):
+                    raise RulesViolation('Invalid spell-copy designation')
                 if type(obj.monstrous) is not bool or obj.monstrous and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid monstrous designation')
                 if (not isinstance(obj.copy_effects,tuple) or obj.copy_effects and obj.zone!=Zone.BATTLEFIELD
                         or any(not isinstance(row,tuple) or len(row)!=3 or type(row[0]) is not str or not row[0]
@@ -785,7 +858,7 @@ class RulesState:
                 seen.append(card_id)
         if len(seen)!=len(set(seen)) or set(seen)!=set(self._objects):raise RulesViolation('Physical card location is not unique')
         if not set(self._objects)<=self._issued:raise RulesViolation('Unissued object identity')
-        if self._physical!={obj.ref.card_id for obj in self._objects.values() if not obj.token}:raise RulesViolation('Physical card conservation failed')
+        if self._physical!={obj.ref.card_id for obj in self._objects.values() if not obj.token and not obj.spell_copy}:raise RulesViolation('Physical card conservation failed')
 
     def snapshot(self):
         return {'schema':self.CHECKPOINT_SCHEMA,'starting_life':dict(self._starting_life),'commander_identities':None if self._commander_identities is None else {p:list(c) for p,c in self._commander_identities.items()},'players':list(self.players),'objects':[o.to_json() for o in self._objects.values()],
@@ -794,6 +867,7 @@ class RulesState:
             'events':[e.to_json() for e in self._events],'life':dict(self._life),'life_lost_this_turn':dict(self._life_lost),'life_gained_this_turn':dict(self._life_gained),
             'player_counters':{p:dict(c) for p,c in self._player_counters.items()},'command_casts':dict(self._command_casts),'commander_casts':dict(self._commander_casts),
             'mana':{player:dict(pool) for player,pool in self._mana.items()},
+            'mana_tags':{player:dict(pool) for player,pool in self._mana_tags.items()},
             'turn_starts':dict(self._turn_starts),'turn_number':self._turn_number,'turn_active':self._turn_active,
             'commander_damage':[{'player':player,'card_id':card,'amount':amount} for (player,card),amount in sorted(self._commander_damage.items())],
             'shuffle_seed':self._shuffle_seed,'shuffle_nonce':self._shuffle_nonce,
@@ -815,6 +889,7 @@ class RulesState:
         state._life_gained=dict(value['life_gained_this_turn'])
         state._life=dict(value['life']);state._player_counters={p:dict(c) for p,c in value['player_counters'].items()};state._command_casts=dict(value['command_casts'])
         state._commander_casts=dict(value['commander_casts']);state._mana={player:dict(pool) for player,pool in value['mana'].items()}
+        state._mana_tags={player:dict(pool) for player,pool in value['mana_tags'].items()}
         state._turn_starts=dict(value['turn_starts']);state._turn_number=value['turn_number'];state._turn_active=value['turn_active']
         state._commander_damage={(row['player'],row['card_id']):row['amount'] for row in value['commander_damage']}
         state._shuffle_seed=value['shuffle_seed'];state._shuffle_nonce=value['shuffle_nonce']

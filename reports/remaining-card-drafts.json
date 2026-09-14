@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "static_authoring_inventory",
-  "base_commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+  "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
   "branch": "codex/remaining-card-programs",
   "production_ready": false,
   "local_python_executed": false,
@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 298,
     "remaining_outside_reviewed_bundle": 36,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 36,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 32,
     "reviewed_bundle_copies": 364,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 71,
     "remaining_outside_reviewed_bundle_copies": 36
@@ -318,7 +318,7 @@
     {
       "card_id": "changing-loyalty",
       "name": "Changing Loyalty",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -331,7 +331,13 @@
           "face_id": "changing-loyalty",
           "text": "Flash\nReplicate {2}\nEnchant creature\nWhen enchanted creature dies, return it to the battlefield under your control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "spell-copy-mana-2026-09-14",
+      "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
     },
     {
       "card_id": "chaos-warp",
@@ -582,7 +588,7 @@
     {
       "card_id": "delighted-halfling",
       "name": "Delighted Halfling",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -595,7 +601,13 @@
           "face_id": "delighted-halfling",
           "text": "{T}: Add {C}.\n{T}: Add one mana of any color. Spend this mana only to cast a legendary spell, and that spell can't be countered."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "spell-copy-mana-2026-09-14",
+      "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
     },
     {
       "card_id": "desert-warfare",
@@ -2506,7 +2518,7 @@
     {
       "card_id": "replication-technique",
       "name": "Replication Technique",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2519,7 +2531,13 @@
           "face_id": "replication-technique",
           "text": "Demonstrate\nCreate a token that's a copy of target permanent you control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "spell-copy-mana-2026-09-14",
+      "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
     },
     {
       "card_id": "restart-sequence",
@@ -2900,7 +2918,7 @@
     {
       "card_id": "sunken-palace",
       "name": "Sunken Palace",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2913,7 +2931,13 @@
           "face_id": "sunken-palace",
           "text": "This land enters tapped.\n{T}: Add {U}.\n{1}{U}, {T}, Exile seven cards from your graveyard: Add {U}. When you spend this mana to cast a spell or activate an ability, copy that spell or ability. You may choose new targets for the copy."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "spell-copy-mana-2026-09-14",
+      "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
     },
     {
       "card_id": "talon-gates-of-madara",
@@ -3470,190 +3494,32 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
+    "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
     "cards_written": [
-      "kodama-of-the-west-tree",
-      "rampant-frogantua",
-      "hakbal-of-the-surging-soul",
-      "chaos-warp"
+      "replication-technique",
+      "changing-loyalty",
+      "sunken-palace",
+      "delighted-halfling"
     ],
-    "cards_promoted": [
-      "kodama-of-the-west-tree",
-      "rampant-frogantua",
-      "hakbal-of-the-surging-soul",
-      "chaos-warp"
-    ],
-    "new_test_methods": 58,
-    "runtime_checkpoint_schema": 126,
-    "state_checkpoint_schema": 16,
-    "validation_status": "passed",
-    "unresolved_defects": [],
-    "review_work_remaining": "",
+    "cards_promoted": [],
+    "new_test_methods": 53,
+    "runtime_checkpoint_schema": 127,
+    "state_checkpoint_schema": 17,
+    "validation_status": "pending_hosted_draft",
     "shared_mechanics": [
-      "Modified creature predicate and combat damage event snapshots",
-      "Live lost-player modifiers and actual optional-mill results",
-      "Sequential APNAP exploration and public top-card reveal",
-      "Owner capture, library shuffle and replacement-aware top permanent entry"
+      "Noncard spell copies and permanent-copy token entry",
+      "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
+      "Explicit mana-unit spending, one-shot copy riders and legendary-only counter immunity"
     ],
     "next_batch": [
-      "replication-technique",
-      "sunken-palace",
-      "changing-loyalty",
-      "rishkar-s-expertise"
+      "rishkar-s-expertise",
+      "hidden-nursery",
+      "chthonian-nightmare",
+      "entity-tracker"
     ],
-    "hosted_attempts": [
-      {
-        "stage": "initial_draft",
-        "commit": "268cbb27fdcbe24a84759b85bd2b3be189b7e9bc",
-        "run_id": 34859257062,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34859257062",
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2087,
-        "failures": 0,
-        "errors": 107,
-        "findings": [
-          "Two missing kernel imports caused selection and owner-capture failures; both are corrected without changing existing test expectations.",
-          "Added seven focused exploration, replay, privacy, source-departure and Aura cases."
-        ]
-      },
-      {
-        "stage": "expanded_draft",
-        "commit": "b8314ca8ee91a619fa78a1380955da6c03c910f2",
-        "run_id": 34860189545,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860189545",
-        "conclusion": "failure",
-        "tests_run_windows": 2094,
-        "failures": 0,
-        "errors": 1,
-        "findings": [
-          "The token test expected an OUTSIDE object, but tokens correctly cease to exist and are removed. Assert absence while retaining the top-card entry check.",
-          "Review added an attachment-type-loss regression: Equipment/Aura labels alone cannot modify after the corresponding card type is lost."
-        ]
-      }
-    ],
-    "draft_hosted_validation": {
-      "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
-      "run_id": 34860964382,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
-      "conclusion": "success",
-      "tests_per_platform": 2095,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104032740594,
-          "name": "verify (windows-latest)",
-          "tests": 2095,
-          "seconds": 291.743,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104032741027,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2095,
-          "seconds": 381.077,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "coverage_audit": {
-      "totalUnique": 334,
-      "reviewedUnique": 298,
-      "totalCopies": 400,
-      "reviewedCopies": 364,
-      "remainingUnique": 36,
-      "remainingCopies": 36,
-      "byDeck": {
-        "Reaminatour \u2014 Aminatou, Veil Piercer": {
-          "total": 100,
-          "reviewed": 87
-        },
-        "Minsc & Boo, Timeless Heroes": {
-          "total": 100,
-          "reviewed": 92
-        },
-        "Omo, Queen of Vesuva": {
-          "total": 100,
-          "reviewed": 92
-        },
-        "Elenda, Saint of Dusk": {
-          "total": 100,
-          "reviewed": 93
-        }
-      }
-    },
-    "next_batch_source_review": {
-      "date": "2026-09-14",
-      "status": "preparation_only",
-      "cards": [
-        "replication-technique",
-        "sunken-palace",
-        "changing-loyalty",
-        "rishkar-s-expertise"
-      ],
-      "requirements": [
-        "Replication Technique requires true copied stack frames, demonstrate choices and independently authored target reselection. Preserve original X, modes, divisions and paid additional-cost facts; copies are not cast.",
-        "Sunken Palace requires exact seven-card graveyard exile, particular mana-unit identity and a delayed spent-mana copy trigger. Retain the original announcement even after its source leaves the stack.",
-        "Changing Loyalty needs flash, repeatable replicate additional payments and a cast trigger retaining the original spell. Permanent copies resolve into Aura tokens without a token-created event; ordinary attached-object successor bindings support its death return.",
-        "Rishkar's Expertise reuses greatest-power draw but needs an optional cast during resolution. Preserve mana value limits, ordinary target/cost legality, zero X when appropriate and non-mana additional costs."
-      ],
-      "sources": [
-        {
-          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
-          "scope": "Demonstrate; retained previous review."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-          "scope": "Sunken Palace; retained previous review."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/secrets-of-strixhaven-release-notes",
-          "scope": "Changing Loyalty and replicate permanence, copied choices and token entry."
-        }
-      ],
-      "inspected_commit": "c723b4518af3555124ea1720778e5292d53fb17c"
-    },
-    "hosted_validation": {
-      "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
-      "run_id": 34861920441,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
-      "conclusion": "success",
-      "tests_per_platform": 2095,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104036054477,
-          "name": "verify (windows-latest)",
-          "tests": 2095,
-          "seconds": 435.159,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104036054678,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2095,
-          "seconds": 370.819,
-          "conclusion": "success"
-        }
-      ]
-    }
+    "hosted_attempts": [],
+    "review_work_remaining": "Hosted draft conformance, source-bound promotion, required reviewed-loader conformance.",
+    "unresolved_defects": []
   },
   "hosted_validation_history": [
     {
@@ -6111,6 +5977,193 @@
             "reviewed": 90
           }
         }
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
+      "cards_written": [
+        "kodama-of-the-west-tree",
+        "rampant-frogantua",
+        "hakbal-of-the-surging-soul",
+        "chaos-warp"
+      ],
+      "cards_promoted": [
+        "kodama-of-the-west-tree",
+        "rampant-frogantua",
+        "hakbal-of-the-surging-soul",
+        "chaos-warp"
+      ],
+      "new_test_methods": 58,
+      "runtime_checkpoint_schema": 126,
+      "state_checkpoint_schema": 16,
+      "validation_status": "passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "",
+      "shared_mechanics": [
+        "Modified creature predicate and combat damage event snapshots",
+        "Live lost-player modifiers and actual optional-mill results",
+        "Sequential APNAP exploration and public top-card reveal",
+        "Owner capture, library shuffle and replacement-aware top permanent entry"
+      ],
+      "next_batch": [
+        "replication-technique",
+        "sunken-palace",
+        "changing-loyalty",
+        "rishkar-s-expertise"
+      ],
+      "hosted_attempts": [
+        {
+          "stage": "initial_draft",
+          "commit": "268cbb27fdcbe24a84759b85bd2b3be189b7e9bc",
+          "run_id": 34859257062,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34859257062",
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2087,
+          "failures": 0,
+          "errors": 107,
+          "findings": [
+            "Two missing kernel imports caused selection and owner-capture failures; both are corrected without changing existing test expectations.",
+            "Added seven focused exploration, replay, privacy, source-departure and Aura cases."
+          ]
+        },
+        {
+          "stage": "expanded_draft",
+          "commit": "b8314ca8ee91a619fa78a1380955da6c03c910f2",
+          "run_id": 34860189545,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860189545",
+          "conclusion": "failure",
+          "tests_run_windows": 2094,
+          "failures": 0,
+          "errors": 1,
+          "findings": [
+            "The token test expected an OUTSIDE object, but tokens correctly cease to exist and are removed. Assert absence while retaining the top-card entry check.",
+            "Review added an attachment-type-loss regression: Equipment/Aura labels alone cannot modify after the corresponding card type is lost."
+          ]
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+        "run_id": 34860964382,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
+        "conclusion": "success",
+        "tests_per_platform": 2095,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104032740594,
+            "name": "verify (windows-latest)",
+            "tests": 2095,
+            "seconds": 291.743,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104032741027,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2095,
+            "seconds": 381.077,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "coverage_audit": {
+        "totalUnique": 334,
+        "reviewedUnique": 298,
+        "totalCopies": 400,
+        "reviewedCopies": 364,
+        "remainingUnique": 36,
+        "remainingCopies": 36,
+        "byDeck": {
+          "Reaminatour \u2014 Aminatou, Veil Piercer": {
+            "total": 100,
+            "reviewed": 87
+          },
+          "Minsc & Boo, Timeless Heroes": {
+            "total": 100,
+            "reviewed": 92
+          },
+          "Omo, Queen of Vesuva": {
+            "total": 100,
+            "reviewed": 92
+          },
+          "Elenda, Saint of Dusk": {
+            "total": 100,
+            "reviewed": 93
+          }
+        }
+      },
+      "next_batch_source_review": {
+        "date": "2026-09-14",
+        "status": "preparation_only",
+        "cards": [
+          "replication-technique",
+          "sunken-palace",
+          "changing-loyalty",
+          "rishkar-s-expertise"
+        ],
+        "requirements": [
+          "Replication Technique requires true copied stack frames, demonstrate choices and independently authored target reselection. Preserve original X, modes, divisions and paid additional-cost facts; copies are not cast.",
+          "Sunken Palace requires exact seven-card graveyard exile, particular mana-unit identity and a delayed spent-mana copy trigger. Retain the original announcement even after its source leaves the stack.",
+          "Changing Loyalty needs flash, repeatable replicate additional payments and a cast trigger retaining the original spell. Permanent copies resolve into Aura tokens without a token-created event; ordinary attached-object successor bindings support its death return.",
+          "Rishkar's Expertise reuses greatest-power draw but needs an optional cast during resolution. Preserve mana value limits, ordinary target/cost legality, zero X when appropriate and non-mana additional costs."
+        ],
+        "sources": [
+          {
+            "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+            "scope": "Demonstrate; retained previous review."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+            "scope": "Sunken Palace; retained previous review."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/secrets-of-strixhaven-release-notes",
+            "scope": "Changing Loyalty and replicate permanence, copied choices and token entry."
+          }
+        ],
+        "inspected_commit": "c723b4518af3555124ea1720778e5292d53fb17c"
+      },
+      "hosted_validation": {
+        "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+        "run_id": 34861920441,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
+        "conclusion": "success",
+        "tests_per_platform": 2095,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104036054477,
+            "name": "verify (windows-latest)",
+            "tests": 2095,
+            "seconds": 435.159,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104036054678,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2095,
+            "seconds": 370.819,
+            "conclusion": "success"
+          }
+        ]
       }
     }
   ],

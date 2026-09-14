@@ -1,9 +1,9 @@
 """Pure could-produce queries and authored convoke contributions."""
 from .rules_state import Zone,ObjectRef,RulesViolation
-from .rules_program import (LandMana,ConvokeCast,AddMana,ChooseMana,ChooseCommanderMana,
+from .rules_program import (SpecialMana,LandMana,ConvokeCast,AddMana,ChooseMana,ChooseCommanderMana,
     ProduceMana,IfCondition,IfQuantityAtLeast,May,UnlessEntered,immediate_effect_nodes)
 
-MANA_EFFECTS=(AddMana,ChooseMana,ChooseCommanderMana,ProduceMana,LandMana)
+MANA_EFFECTS=(SpecialMana,AddMana,ChooseMana,ChooseCommanderMana,ProduceMana,LandMana)
 
 
 class ManaRules:
@@ -31,6 +31,7 @@ class ManaRules:
         result=set()
         for index,node in enumerate(nodes):
             if isinstance(node,AddMana):result.update(node.symbols)
+            elif isinstance(node,SpecialMana):result.update(node.options)
             elif isinstance(node,ChooseMana):result.update(symbol for option in node.options for symbol in option)
             elif isinstance(node,ChooseCommanderMana):result.update(self.state.commander_identity(source.controller))
             elif isinstance(node,LandMana):result.update(self._land_mana_from_table(node,source.controller,table,lands))

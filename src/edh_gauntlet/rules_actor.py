@@ -6,7 +6,7 @@ face-down objects remain unsupported. Production admission stays closed.
 """
 import json
 from copy import deepcopy
-from .rules_program import encode,ConvokeCast
+from .rules_program import encode,ConvokeCast,CopyCast
 from .rules_creature_types import CREATURE_TYPES
 from .rules_state import Zone,RulesViolation,RulesObject,ObjectRef
 
@@ -22,6 +22,7 @@ def _card(kernel,obj,views):
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
         'definition_id':obj.effective_definition,'owner':obj.owner,'controller':obj.controller,
         **({'convoke':True} if isinstance(kernel.definition(obj).cast,ConvokeCast) else {}),
+        **({'copy_cast':encode(kernel.definition(obj).cast)} if isinstance(kernel.definition(obj).cast,CopyCast) else {}),
         'zone':obj.zone.value,'types':sorted(view.types),'subtypes':sorted(view.subtypes-CREATURE_TYPES if all_creature_types else view.subtypes),
         **({'all_creature_types':True} if all_creature_types else {}),
         'supertypes':sorted(view.supertypes),'keywords':sorted(view.keywords),'colors':sorted(view.colors),
@@ -79,6 +80,7 @@ def project_actor(kernel,actor):
              'permissions':permissions[seat],'hand_count':len(state.zone(seat,Zone.HAND)),'library_count':len(state.zone(seat,Zone.LIBRARY))}
         try:row['commander_identity']=list(state.commander_identity(seat))
         except RulesViolation:pass # Unbound fixture metadata is not an inferred identity.
+        if seat==actor and state.mana_tags(seat):row['tagged_mana']=state.mana_tags(seat)
         players.append(row)
     zones={zone.value:{seat:[_card(kernel,obj,views) for obj in state.zone(seat,zone)]
                       for seat in state.players} for zone in PUBLIC_ZONES}
@@ -100,6 +102,9 @@ def project_actor(kernel,actor):
             'controller':frame['controller'],'ability_id':frame.get('ability_id'),'chosen_x':frame['chosen_x'],
             **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
             **({'kicker':frame['kicker']} if 'kicker' in frame else {}),
+            **({'replicate':frame['replicate']} if 'replicate' in frame else {}),
+            **({'copied':True} if frame.get('copied') else {}),
+            **({'cannot_be_countered':True} if frame.get('cannot_be_countered') else {}),
             **({'cast_timing':frame['cast_timing']} if 'cast_timing' in frame else {}),
             **({'source_notes':deepcopy(kernel.object_notes[kernel._attachment_key(source.ref)]['values'])}
                 if kernel._attachment_key(source.ref) in kernel.object_notes else {}),

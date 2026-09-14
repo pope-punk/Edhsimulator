@@ -18,6 +18,7 @@ from .rules_attachments import AttachmentRules
 from .rules_phasing import PhasingRules
 from .rules_casting import CastingRules
 from .rules_mana import ManaRules
+from .rules_spell_copy import SpellCopyRules
 from .rules_copy import CopyRules
 from .rules_turns import TurnRules, TurnActionBoundary
 from .rules_combat import CombatRules
@@ -42,8 +43,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=126
+class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=127
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -278,7 +279,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
     def _options(self,objects):
         return tuple(Option(f'{obj.ref.card_id}@{obj.ref.incarnation}',f'{obj.controller}: {self.definition(obj).name} [{obj.ref.card_id}@{obj.ref.incarnation}]',ref=obj.ref,group=obj.controller) for obj in objects)
 
-    def _choose(self,key,actor,kind,prompt,options,minimum=0,maximum=None,ordered=False,groups=False,group_bounds=()):
+    def _choose(self,key,actor,kind,prompt,options,minimum=0,maximum=None,ordered=False,groups=False,group_bounds=(),copy_groups=(),retained=()):
         options=tuple(options);capacity=choice_capacity(options,groups,group_bounds)
         maximum=capacity if maximum is None else min(maximum,capacity)
         if minimum>maximum:raise RulesViolation('Required choice has insufficient legal options')
@@ -286,6 +287,9 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         if actor not in self.state.live_players:actor=self.next_live_player(actor)
         request=ChoiceRequest(key,actor,kind,prompt,options,minimum,maximum,ordered,groups,self.revision,group_bounds)
         if not options:return ()
+        if kind=='copy_targets':
+            from .rules_choices import CopyTargetRequest
+            request=CopyTargetRequest(**request.__dict__,controller_groups=tuple(copy_groups),retained=tuple(retained))
         accepted=self.answers.get(key)
         if accepted is not None:
             # Each execution frame retains exactly the request which was answered.
@@ -990,7 +994,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
             for ref in self._refs(frame,effect.subject):
                 try:obj=self.state.get(ref)
                 except RulesViolation:continue
-                if obj.zone==Zone.STACK:refs.append(ref)
+                if obj.zone==Zone.STACK and not any(f['spell'] and self._source(f).ref==ref and f.get('cannot_be_countered') for f in self.stack):refs.append(ref)
             events=self._move(refs,effect.destination,frame,key,cause='counter')
             removed={e.before.ref for e in events}
             self.stack=[f for f in self.stack if not (f['spell'] and self._source(f).ref in removed)]
@@ -1035,6 +1039,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
+        if self._execute_spell_copy(effect,frame,task):return
         if self._execute_library(effect,frame,task):return
         if self._execute_copy(effect,frame,key):return
         if self._execute_guard(effect,frame,key):return
@@ -1467,8 +1472,8 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         self.state.clear_deathtouch_history()
         if losses:self._depart_players(losses);return True
         for obj in self.state.objects():
-            if obj.token and obj.zone not in {Zone.BATTLEFIELD,Zone.STACK}:
-                self.state.cease_token(obj.ref);self._event('token_ceased',ref=obj.ref.to_json());return True
+            if (obj.token or obj.spell_copy) and obj.zone not in {Zone.BATTLEFIELD,Zone.STACK}:
+                self.state.cease_token(obj.ref);self._event('spell_copy_ceased' if obj.spell_copy else 'token_ceased',ref=obj.ref.to_json());return True
         handled=getattr(self,'_commander_sba_handled',set())
         self._commander_sba_handled=handled
         for obj in self.state.objects():

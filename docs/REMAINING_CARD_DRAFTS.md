@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **298 source-bound reviewed programs / 364 deck copies**. There are **36 cards / 36 deck
-copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, including four complete drafts awaiting hosted review and 32 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,17 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: modified creatures, exploration and library movement
+## Current cycle: spell copies and special mana
+
+Replication Technique, Changing Loyalty, Sunken Palace and Delighted Halfling
+have complete drafts. Shared work covers noncard stack objects, demonstrate,
+replicate additional payments, retained announcements, simultaneous target
+reassignment, copied permanent entry and explicitly spent mana units.
+Kernel/state schemas are **127/17**. The **53 new methods** await hosted draft
+validation; no promotion or passing result is claimed yet.
+See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
+
+## Previous cycle: modified creatures, exploration and library movement
 
 Kodama of the West Tree, Rampant Frogantua, Hakbal of the Surging Soul and Chaos
 Warp have complete source-bound reviewed programs. Shared support covers current

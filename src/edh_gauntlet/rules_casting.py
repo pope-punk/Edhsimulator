@@ -1,10 +1,10 @@
 """Read-only action quotes and atomic resource-payment commits.
 
-This experimental slice uses already-produced, unrestricted mana and one atomic
-activation zone-cost group or fixed source-counter costs. Spells may pay one
-selected sacrifice group plus fixed/variable unrestricted mana, or a graveyard
-alternative with one selected exile group and fixed unrestricted mana. Separately ordered
-cost groups, restricted mana and mana during announcement remain unsupported.
+This experimental slice uses already-produced mana, including explicitly selected
+units with reviewed spending riders, and one atomic activation zone-cost group
+or fixed source-counter costs. Spells may pay one selected sacrifice group or a
+graveyard alternative with one exile group. Separately ordered cost groups and
+mana production during announcement remain unsupported.
 Fixed alternative costs may carry entry facts; their consequences compose ordinary triggers. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
 """
@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import CombatDamageToPlayer, OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import CopyCast, CombatDamageToPlayer, OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -72,6 +72,7 @@ class PreparedAction:
     alternative_id: str | None = None
     counter_division: tuple = ()
     kicker: bool = False
+    replicate: int = 0
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
@@ -79,7 +80,7 @@ class PreparedAction:
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
             'counter_division':[{'ref':ref.to_json(),'amount':amount} for ref,amount in self.counter_division],
-            'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
+            'replicate':self.replicate,'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
     def from_json(cls, value):
@@ -98,23 +99,27 @@ class Payment:
     taps: tuple[ObjectRef, ...] = ()
     zone_costs: tuple = ()
     convoke: tuple = ()
+    tagged_mana: tuple[str,...] = ()
 
     def to_json(self):
         result={'mana':dict(self.mana),'taps':[ref.to_json() for ref in self.taps],
             'zone_costs':{key:[ref.to_json() for ref in refs] for key,refs in self.zone_costs}}
+        if self.tagged_mana:result['tagged_mana']=list(self.tagged_mana)
         if self.convoke:result['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in self.convoke]
         return result
 
     @classmethod
     def from_json(cls, value):
-        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke'}
+        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke','tagged_mana'}
                 or not isinstance(value['mana'],dict) or not isinstance(value.get('zone_costs',{}),dict)
+                or not isinstance(value.get('tagged_mana',[]),list)
+                or any(type(unit) is not str for unit in value.get('tagged_mana',[]))
                 or not isinstance(value.get('convoke',[]),list)
                 or any(not isinstance(row,dict) or set(row)!={'ref','color'} for row in value.get('convoke',[]))):
             raise RulesViolation('Invalid payment packet')
         return cls(tuple(sorted(value['mana'].items())), tuple(ObjectRef.from_json(ref) for ref in value['taps']),
             tuple((key,tuple(ObjectRef.from_json(ref) for ref in refs)) for key,refs in sorted(value.get('zone_costs',{}).items())),
-            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])))
+            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])),tuple(value.get('tagged_mana',[])))
 
 
 class CastingRules:
@@ -139,7 +144,7 @@ class CastingRules:
         if payment is not None:
             if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=():
                 raise RulesViolation('Resolution payment accepts mana only')
-            resources=ResourcePayment(actor,payment.mana)
+            resources=ResourcePayment(actor,payment.mana,tagged_mana=self._tagged_resources(actor,payment.tagged_mana))
             self.state.validate_payment(resources)
             cost=decode(window['mana']);paid=dict(payment.mana)
             if (not _mana_symbols_satisfied(cost.symbols,paid)
@@ -208,7 +213,7 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0):
         resolution_mana=kind=='activate' and self._payment_waiting()
         if not resolution_mana:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
@@ -258,6 +263,13 @@ class CastingRules:
             if alternative is None or not self._condition_holds(alternative.condition,replace(source,controller=actor)):
                 raise RulesViolation('Alternative casting cost is unavailable')
             cost=alternative.cost
+        if (type(replicate) is not int or replicate<0 or replicate and
+                (kind!='cast' or not isinstance(specification,CopyCast) or specification.copy_kind!='replicate')):
+            raise RulesViolation('Invalid replicate declaration')
+        if replicate:
+            extra=specification.replicate_cost
+            cost=replace(cost,mana=replace(cost.mana,generic=cost.mana.generic+replicate*extra.generic,
+                symbols=cost.mana.symbols+extra.symbols*replicate))
         if kicker:
             extra=specification.kicker.mana
             cost=replace(cost,mana=ManaCost(cost.mana.generic+extra.generic,
@@ -316,10 +328,10 @@ class CastingRules:
                         generic += modifier.generic_delta
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker,replicate)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker,replicate)
 
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0,counter_division=()):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value,counter_division=counter_division)
@@ -341,7 +353,8 @@ class CastingRules:
         convoked,colors=self._convoke_contributions(quote,payment,source)
         taps+=convoked
         resources = ResourcePayment(quote.actor, payment.mana, quote.cost.life, taps,
-            tuple((quote.source,c.kind,c.amount) for c in quote.cost.counter_costs))
+            tuple((quote.source,c.kind,c.amount) for c in quote.cost.counter_costs),
+            self._tagged_resources(quote.actor,payment.tagged_mana,quote=quote,source=source))
         self.state.validate_payment(resources)
         paid = dict(payment.mana)
         for color,amount in colors.items():paid[color]=paid.get(color,0)+amount
@@ -359,7 +372,7 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         resources = self._resource_payment(quote, payment)
@@ -506,6 +519,7 @@ class CastingRules:
         receipt = {'action': quote.to_json(), 'payment': {'mana': dict(resources.mana), 'life': resources.life,
             'taps': [ref.to_json() for ref in resources.taps]}, 'frame': frame['id'] if frame else None,
             'mana_ability': mana_ability}
+        if resources.tagged_mana:receipt['payment']['tagged_mana']=[unit for unit,_ in resources.tagged_mana]
         if convoke:receipt['payment']['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in convoke]
         if resources.counters:
             receipt['payment']['counters']=[{'source':ref.to_json(),'kind':kind,'amount':amount} for ref,kind,amount in resources.counters]
@@ -517,6 +531,7 @@ class CastingRules:
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
         self._collect_tapped(resources.taps,tap_observers)
+        self._collect_copy_announcement(quote,resources,source,frame,mana_ability)
         for effect in immediate_mana:
             self._produce_mana(quote.actor,effect.symbols,tapped_for_mana=tapped_for_mana)
         return mana_ability
