@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 294,
-    "remaining_outside_reviewed_bundle": 40,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 298,
+    "remaining_outside_reviewed_bundle": 36,
+    "drafts_written": 0,
     "not_started_on_this_branch": 36,
-    "reviewed_bundle_copies": 360,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 364,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 67,
-    "remaining_outside_reviewed_bundle_copies": 40
+    "promoted_on_this_branch": 71,
+    "remaining_outside_reviewed_bundle_copies": 36
   },
   "cards": [
     {
@@ -336,7 +336,7 @@
     {
       "card_id": "chaos-warp",
       "name": "Chaos Warp",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -349,7 +349,20 @@
           "face_id": "chaos-warp",
           "text": "The owner of target permanent shuffles it into their library, then reveals the top card of their library. If it's a permanent card, they put it onto the battlefield."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "library-creatures-2026-09-14",
+      "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
+      "source_facts_sha256": "d71a7cccea38a8d4f21318069f24870713f24c88af9191882cd996da055d7ffd",
+      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:chaos-warp",
+      "reviewed_definition": "catalog:chaos-warp",
+      "draft_hosted_validation": {
+        "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+        "run_id": 34860964382
+      }
     },
     {
       "card_id": "chthonian-nightmare",
@@ -1326,7 +1339,7 @@
     {
       "card_id": "hakbal-of-the-surging-soul",
       "name": "Hakbal of the Surging Soul",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1339,7 +1352,20 @@
           "face_id": "hakbal-of-the-surging-soul",
           "text": "At the beginning of combat on your turn, each Merfolk creature you control explores.\nWhenever Hakbal attacks, you may put a land card from your hand onto the battlefield. If you don't, draw a card."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "library-creatures-2026-09-14",
+      "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
+      "source_facts_sha256": "9ccdcf5c34639456d004add864425dee5d121ca5e8967481e616cc7752417fdd",
+      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:hakbal-of-the-surging-soul",
+      "reviewed_definition": "catalog:hakbal-of-the-surging-soul",
+      "draft_hosted_validation": {
+        "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+        "run_id": 34860964382
+      }
     },
     {
       "card_id": "hallowed-fountain",
@@ -1704,7 +1730,7 @@
     {
       "card_id": "kodama-of-the-west-tree",
       "name": "Kodama of the West Tree",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1717,7 +1743,20 @@
           "face_id": "kodama-of-the-west-tree",
           "text": "Reach\nModified creatures you control have trample.\nWhenever a modified creature you control deals combat damage to a player, search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "library-creatures-2026-09-14",
+      "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
+      "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566",
+      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:kodama-of-the-west-tree",
+      "reviewed_definition": "catalog:kodama-of-the-west-tree",
+      "draft_hosted_validation": {
+        "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+        "run_id": 34860964382
+      }
     },
     {
       "card_id": "lazotep-quarry",
@@ -2420,7 +2459,7 @@
     {
       "card_id": "rampant-frogantua",
       "name": "Rampant Frogantua",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2433,7 +2472,20 @@
           "face_id": "rampant-frogantua",
           "text": "Trample\nRampant Frogantua gets +10/+10 for each player who has lost the game.\nWhenever Rampant Frogantua deals combat damage to a player, you may mill that many cards. Put any number of land cards from among them onto the battlefield tapped."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "library-creatures-2026-09-14",
+      "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
+      "source_facts_sha256": "a0317571b9a621c9278439fc329ccabb1b68eb490c9411d1ee4b8e99597ce0dc",
+      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:rampant-frogantua",
+      "reviewed_definition": "catalog:rampant-frogantua",
+      "draft_hosted_validation": {
+        "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+        "run_id": 34860964382
+      }
     },
     {
       "card_id": "replication-technique",
@@ -3409,13 +3461,18 @@
       "hakbal-of-the-surging-soul",
       "chaos-warp"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "kodama-of-the-west-tree",
+      "rampant-frogantua",
+      "hakbal-of-the-surging-soul",
+      "chaos-warp"
+    ],
     "new_test_methods": 58,
     "runtime_checkpoint_schema": 126,
     "state_checkpoint_schema": 16,
-    "validation_status": "pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Hosted draft verification and reviewed-loader promotion pending.",
+    "review_work_remaining": "Required reviewed-loader hosted validation.",
     "shared_mechanics": [
       "Modified creature predicate and combat damage event snapshots",
       "Live lost-player modifiers and actual optional-mill results",
@@ -3457,7 +3514,97 @@
           "Review added an attachment-type-loss regression: Equipment/Aura labels alone cannot modify after the corresponding card type is lost."
         ]
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+      "run_id": 34860964382,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
+      "conclusion": "success",
+      "tests_per_platform": 2095,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104032740594,
+          "name": "verify (windows-latest)",
+          "tests": 2095,
+          "seconds": 291.743,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104032741027,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2095,
+          "seconds": 381.077,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 298,
+      "totalCopies": 400,
+      "reviewedCopies": 364,
+      "remainingUnique": 36,
+      "remainingCopies": 36,
+      "byDeck": {
+        "Reaminatour \u2014 Aminatou, Veil Piercer": {
+          "total": 100,
+          "reviewed": 87
+        },
+        "Minsc & Boo, Timeless Heroes": {
+          "total": 100,
+          "reviewed": 92
+        },
+        "Omo, Queen of Vesuva": {
+          "total": 100,
+          "reviewed": 92
+        },
+        "Elenda, Saint of Dusk": {
+          "total": 100,
+          "reviewed": 93
+        }
+      }
+    },
+    "next_batch_source_review": {
+      "date": "2026-09-14",
+      "status": "preparation_only",
+      "cards": [
+        "replication-technique",
+        "sunken-palace",
+        "changing-loyalty",
+        "rishkar-s-expertise"
+      ],
+      "requirements": [
+        "Replication Technique requires true copied stack frames, demonstrate choices and independently authored target reselection. Preserve original X, modes, divisions and paid additional-cost facts; copies are not cast.",
+        "Sunken Palace requires exact seven-card graveyard exile, particular mana-unit identity and a delayed spent-mana copy trigger. Retain the original announcement even after its source leaves the stack.",
+        "Changing Loyalty needs flash, repeatable replicate additional payments and a cast trigger retaining the original spell. Permanent copies resolve into Aura tokens without a token-created event; ordinary attached-object successor bindings support its death return.",
+        "Rishkar's Expertise reuses greatest-power draw but needs an optional cast during resolution. Preserve mana value limits, ordinary target/cost legality, zero X when appropriate and non-mana additional costs."
+      ],
+      "sources": [
+        {
+          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+          "scope": "Demonstrate; retained previous review."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "scope": "Sunken Palace; retained previous review."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/secrets-of-strixhaven-release-notes",
+          "scope": "Changing Loyalty and replicate permanence, copied choices and token entry."
+        }
+      ],
+      "inspected_commit": "c723b4518af3555124ea1720778e5292d53fb17c"
+    }
   },
   "hosted_validation_history": [
     {
@@ -4071,6 +4218,39 @@
           "name": "verify (windows-latest)",
           "tests": 2037,
           "seconds": 350.568,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+      "run_id": 34860964382,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
+      "conclusion": "success",
+      "tests_per_platform": 2095,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104032740594,
+          "name": "verify (windows-latest)",
+          "tests": 2095,
+          "seconds": 291.743,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104032741027,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2095,
+          "seconds": 381.077,
           "conclusion": "success"
         }
       ]
@@ -5871,16 +6051,16 @@
       {
         "cards": [
           "replication-technique",
-          "sunken-palace"
+          "sunken-palace",
+          "changing-loyalty"
         ],
-        "focus": "Actual stack copies and authored target reselection; demonstrate and spent-mana lineage."
+        "focus": "Actual copied stack objects, independent target reselection, replicate payments and spent-mana lineage."
       },
       {
         "cards": [
-          "fangs-of-kalonia",
-          "hydra-broodmaster"
+          "rishkar-s-expertise"
         ],
-        "focus": "Overload, actual counter-placement recipients, monstrous transition history and captured-X tokens."
+        "focus": "Optional casting during resolution with no-mana-cost alternatives, ordinary targets and additional-cost legality."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
@@ -5919,11 +6099,11 @@
     ]
   },
   "draft_hosted_validation": {
-    "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
-    "run_id": 34851080921,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921",
+    "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
+    "run_id": 34860964382,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
     "conclusion": "success",
-    "tests_per_platform": 2037,
+    "tests_per_platform": 2095,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -5936,17 +6116,17 @@
     ],
     "jobs": [
       {
-        "job_id": 103998899425,
+        "job_id": 104032740594,
         "name": "verify (windows-latest)",
-        "tests": 2037,
-        "seconds": 367.883,
+        "tests": 2095,
+        "seconds": 291.743,
         "conclusion": "success"
       },
       {
-        "job_id": 103998899835,
+        "job_id": 104032741027,
         "name": "verify (ubuntu-latest)",
-        "tests": 2037,
-        "seconds": 380.324,
+        "tests": 2095,
+        "seconds": 381.077,
         "conclusion": "success"
       }
     ]

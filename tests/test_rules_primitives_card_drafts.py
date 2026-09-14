@@ -12,6 +12,7 @@ from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'kodama-of-the-west-tree', 'rampant-frogantua', 'hakbal-of-the-surging-soul', 'chaos-warp',
     'fangs-of-kalonia', 'hydra-broodmaster', 'fanatic-of-rhonas', 'finale-of-revelation',
     'mirage-mirror', 'thespian-s-stage', 'march-from-velis-vel', 'ram-through',
     'scute-swarm', 'helm-of-the-host', 'lazotep-quarry', 'aggressive-biomancy',
@@ -68,7 +69,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(67, len(self.cards))
+        self.assertEqual(71, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):

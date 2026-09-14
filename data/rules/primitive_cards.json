@@ -6051,6 +6051,145 @@
       }
     },
     {
+      "card_id": "chaos-warp",
+      "source_facts_sha256": "d71a7cccea38a8d4f21318069f24870713f24c88af9191882cd996da055d7ffd",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed program reviewed in docs/LIBRARY_CREATURE_CARD_REVIEW.md: modified-creature trample and combat search, live lost-player growth and exact optional-mill arrivals, sequential APNAP exploration, owner-bound library shuffle and replacement-aware top permanent entry. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:chaos-warp",
+        "name": "Chaos Warp",
+        "types": [
+          "Instant"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "WithOwners",
+            "subject": "target",
+            "effects": [
+              {
+                "node": "Move",
+                "subject": "target",
+                "destination": {
+                  "zone": "library"
+                },
+                "controller": "owner",
+                "tapped": false,
+                "library_position": null,
+                "counters": []
+              },
+              {
+                "node": "ShuffleLibrary",
+                "players": "captured_owners"
+              },
+              {
+                "node": "RevealTopPermanent",
+                "players": "captured_owners"
+              }
+            ]
+          }
+        ],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [],
+            "relation": "any",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": null,
+          "combat": null,
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "R"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "instant",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "R"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "charcoal-diamond",
       "source_facts_sha256": "b7fbd3d7825197795960c23f17b23649e548d1c679bcfe5941edd0d97baa8ada",
       "scope": "all_printed_faces",
@@ -18340,6 +18479,248 @@
       }
     },
     {
+      "card_id": "hakbal-of-the-surging-soul",
+      "source_facts_sha256": "9ccdcf5c34639456d004add864425dee5d121ca5e8967481e616cc7752417fdd",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed program reviewed in docs/LIBRARY_CREATURE_CARD_REVIEW.md: modified-creature trample and combat search, live lost-player growth and exact optional-mill arrivals, sequential APNAP exploration, owner-bound library shuffle and replacement-aware top permanent entry. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:hakbal-of-the-surging-soul",
+        "name": "Hakbal of the Surging Soul",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "combat-explore",
+            "event": {
+              "node": "EventPattern",
+              "kind": "step_began",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": "begin_combat",
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "SelectAll",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [
+                    "Creature"
+                  ],
+                  "relation": "controlled",
+                  "exclude_source": false,
+                  "subtypes": [
+                    "Merfolk"
+                  ],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "effects": [
+                  {
+                    "node": "Explore",
+                    "subject": "selected"
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "attack-land-or-draw",
+            "event": {
+              "node": "EventPattern",
+              "kind": "creature_attacks",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Select",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "hand"
+                  },
+                  "types": [
+                    "Land"
+                  ],
+                  "relation": "owned",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "minimum": 0,
+                "maximum": 1,
+                "effects": [
+                  {
+                    "node": "IfQuantityAtLeast",
+                    "value": {
+                      "node": "SelectedCount"
+                    },
+                    "minimum": 1,
+                    "effects": [
+                      {
+                        "node": "Move",
+                        "subject": "selected",
+                        "destination": {
+                          "zone": "battlefield"
+                        },
+                        "controller": "effect",
+                        "tapped": false,
+                        "library_position": null,
+                        "counters": []
+                      }
+                    ],
+                    "otherwise": [
+                      {
+                        "node": "Draw",
+                        "amount": 1,
+                        "players": "controller"
+                      }
+                    ]
+                  }
+                ],
+                "ordered": false,
+                "group_by_controller": false
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Merfolk",
+          "Scout"
+        ],
+        "mana_value": 4,
+        "power": 3,
+        "toughness": 3,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "G",
+                "U"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [
+          "Legendary"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U",
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "halana-and-alena-partners",
       "source_facts_sha256": "14b3835cb1189af023675d6e60e301b2308a44db1f1788bcad7100af96038c63",
       "scope": "all_printed_faces",
@@ -22358,6 +22739,207 @@
         "counter_replacements": [],
         "entry_counters": [],
         "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "kodama-of-the-west-tree",
+      "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed program reviewed in docs/LIBRARY_CREATURE_CARD_REVIEW.md: modified-creature trample and combat search, live lost-player growth and exact optional-mill arrivals, sequential APNAP exploration, owner-bound library shuffle and replacement-aware top permanent entry. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:kodama-of-the-west-tree",
+        "name": "Kodama of the West Tree",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "modified-combat-search",
+            "event": {
+              "node": "CombatDamageToPlayer",
+              "kind": "damage_dealt",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [
+                "Creature"
+              ],
+              "controller_only": true,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": [],
+              "modified": true
+            },
+            "effects": [
+              {
+                "node": "SearchLibrary",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "library"
+                  },
+                  "types": [
+                    "Land"
+                  ],
+                  "relation": "owned",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [
+                    "Basic"
+                  ],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "destination": {
+                  "zone": "battlefield"
+                },
+                "count": 1,
+                "reveal": false,
+                "optional_find": false,
+                "tapped": true,
+                "secondary_destination": null,
+                "primary_count": 1,
+                "secondary_tapped": false,
+                "distinct_names": false,
+                "partition_player": null
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Spirit"
+        ],
+        "mana_value": 3,
+        "power": 3,
+        "toughness": 3,
+        "continuous": [
+          {
+            "node": "ContinuousProgram",
+            "effect_id": "modified-trample",
+            "selector": {
+              "node": "ModifiedSelector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "controlled",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "changes": [
+              {
+                "node": "AddKeywords",
+                "keywords": [
+                  "trample"
+                ]
+              }
+            ],
+            "subject": "any",
+            "condition": null
+          }
+        ],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [
+          "reach"
+        ],
+        "supertypes": [
+          "Legendary"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
@@ -31807,6 +32389,215 @@
           "trample"
         ],
         "supertypes": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "rampant-frogantua",
+      "source_facts_sha256": "a0317571b9a621c9278439fc329ccabb1b68eb490c9411d1ee4b8e99597ce0dc",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed program reviewed in docs/LIBRARY_CREATURE_CARD_REVIEW.md: modified-creature trample and combat search, live lost-player growth and exact optional-mill arrivals, sequential APNAP exploration, owner-bound library shuffle and replacement-aware top permanent entry. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:rampant-frogantua",
+        "name": "Rampant Frogantua",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "combat-mill",
+            "event": {
+              "node": "CombatDamageToPlayer",
+              "kind": "damage_dealt",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": [],
+              "modified": false
+            },
+            "effects": [
+              {
+                "node": "MayMill",
+                "amount": {
+                  "node": "EventAmount"
+                },
+                "players": "controller",
+                "effects": [
+                  {
+                    "node": "SelectBound",
+                    "selector": {
+                      "node": "Selector",
+                      "zone": {
+                        "zone": "graveyard"
+                      },
+                      "types": [
+                        "Land"
+                      ],
+                      "relation": "owned",
+                      "exclude_source": false,
+                      "subtypes": [],
+                      "excluded_subtypes": [],
+                      "supertypes": [],
+                      "any_types": [],
+                      "excluded_types": [],
+                      "any_subtypes": [],
+                      "characteristics": [],
+                      "commander": null,
+                      "tapped": null,
+                      "counters": [],
+                      "colors": [],
+                      "any_colors": [],
+                      "excluded_colors": []
+                    },
+                    "minimum": 0,
+                    "maximum": null,
+                    "effects": [
+                      {
+                        "node": "Move",
+                        "subject": "selected",
+                        "destination": {
+                          "zone": "battlefield"
+                        },
+                        "controller": "effect",
+                        "tapped": true,
+                        "library_position": null,
+                        "counters": []
+                      }
+                    ],
+                    "ordered": false,
+                    "group_by_controller": false,
+                    "subject": "moved"
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Frog"
+        ],
+        "mana_value": 3,
+        "power": 3,
+        "toughness": 3,
+        "continuous": [
+          {
+            "node": "ContinuousProgram",
+            "effect_id": "lost-player-growth",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "any",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "changes": [
+              {
+                "node": "LostPlayerPT",
+                "power": 10,
+                "toughness": 10
+              }
+            ],
+            "subject": "self",
+            "condition": null
+          }
+        ],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [
+          "trample"
+        ],
+        "supertypes": [],
+        "entry_modifiers": [],
         "player_permissions": {
           "node": "PlayerPermissions",
           "additional_land_plays": 0,

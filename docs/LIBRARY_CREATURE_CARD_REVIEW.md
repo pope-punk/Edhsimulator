@@ -74,8 +74,11 @@ bound into implementation identity. Existing games are not migrated.
 
 ## Hosted validation
 
-Draft and reviewed-loader evidence will be recorded here after successful runs.
-The new test file contains **58 methods**, bringing the expected suite to
+Draft validation passed **2,095 tests on each of Ubuntu and Windows**, plus
+syntax, complete installation and packaged assets, at
+`c723b4518af3555124ea1720778e5292d53fb17c` ([run 34860964382](https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382)).
+Required reviewed-loader validation is pending on the promotion commit.
+The new test file contains **58 methods**, bringing the suite to
 **2,095 tests per platform**. Checks cover printed costs, static filters,
 event qualification, source departure, exact mill arrivals, replacement behavior,
 exploration order and empty libraries, owner-bound Warp, commander replacement,
@@ -84,6 +87,11 @@ Aura entry, actor privacy, strict compilation, and checkpoint/replay.
 All execution is on GitHub-hosted Ubuntu and Windows runners. No local Python,
 imports, compilation, installation, tests, simulation or gameplay occurred.
 This review is card-program coverage, not a production or gameplay certificate.
+
+Initial hosted attempts exposed two missing kernel imports, then an incorrect
+test assumption that a ceased token remains archived. Both were corrected.
+The final draft also includes the attachment-type-loss regression. No failing
+check was disabled and no expected card behavior was weakened.
 
 ## Next concrete work order
 

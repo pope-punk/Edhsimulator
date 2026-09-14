@@ -20,11 +20,10 @@ class LibraryCreatureTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={r['card_id']:r for r in draft['drafts'] if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
-        cls.prefix='draft:'
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
+        cls.prefix='catalog:'
 
     def game(self,card='kodama-of-the-west-tree',zone=Zone.BATTLEFIELD,extra=(),library=8):
         body=CardProgram('lc-body','Body',('Creature',),subtypes=('Merfolk',),colors=('G',),power=2,toughness=3)

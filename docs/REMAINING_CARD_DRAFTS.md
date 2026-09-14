@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**294 source-bound reviewed programs / 360 deck copies**. There are **40 cards / 40 deck
-copies outside the reviewed bundle**, including four authored drafts awaiting hosted validation and 36 unstarted. Reviewed coverage is not production certification.
+**298 source-bound reviewed programs / 364 deck copies**. There are **36 cards / 36 deck
+copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,11 +25,21 @@ successful hosted validation.
 ## Current cycle: modified creatures, exploration and library movement
 
 Kodama of the West Tree, Rampant Frogantua, Hakbal of the Surging Soul and Chaos
-Warp have complete draft programs. Shared instructions cover current modified
-creatures, combat damage to players, actual mill results, ordered exploration,
-owner capture, library shuffling and top-card permanent entry. Fifty-eight new hosted
-conformance methods are authored; validation and source-bound promotion are pending.
-Kernel/state schemas are **126/16**. No local project execution occurred.
+Warp have complete source-bound reviewed programs. Shared support covers current
+modified creatures, combat-damage snapshots, live lost-player growth, exact
+optional-mill arrivals, sequential exploration, owner capture, shuffling and
+top-card permanent entry. Kernel/state schemas are **126/16**.
+
+The **58 new methods** passed hosted draft validation: **2,095 tests on each of
+Ubuntu and Windows**, plus syntax, installation and assets, at
+`c723b4518af3555124ea1720778e5292d53fb17c` ([run 34860964382](https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382)).
+Required reviewed-loader validation is pending on this promotion commit.
+See [the current review](LIBRARY_CREATURE_CARD_REVIEW.md).
+No local project execution occurred.
+
+The next candidates are Replication Technique, Sunken Palace, Changing Loyalty
+and Rishkar's Expertise. See the review and JSON inventory for concrete stack-copy,
+replicate, spent-mana and resolution-casting requirements.
 
 ## Previous cycle: counter transitions, eternalize and Finale
 
