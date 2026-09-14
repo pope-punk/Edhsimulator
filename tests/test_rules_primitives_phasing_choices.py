@@ -92,8 +92,15 @@ class PhasingChoiceTests(unittest.TestCase):
     def hand(self,actor):return len(self.state.zone(actor,Zone.HAND))
     def token_refs(self,subtype):return tuple(o.ref for o in self.state.objects(Zone.BATTLEFIELD) if o.token and subtype in self.kernel.effective(o.ref).subtypes)
 
+    def discover_step(self,actor,step,*,kernel=None):
+        # Focused trigger fixture; integration cases below traverse real turns.
+        kernel=self.kernel if kernel is None else kernel
+        kernel._idle();self.assertIsNone(kernel.turn_schedule);self.assertFalse(kernel.stack)
+        kernel.active=actor;kernel._begin_phase(step)
+        return kernel.advance()
+
     def end_step(self,actor='A'):
-        self.kernel.begin_step(actor,'end_step')
+        self.discover_step(actor,'end_step')
         if self.kernel.pending_choice:self.order()
 
     def deserts(self,count=5,owner='A'):
@@ -247,6 +254,9 @@ class PhasingChoiceTests(unittest.TestCase):
         adapter=RulesActorAdapter(self.kernel)
         for _ in self.state.live_players:adapter.submit(self.kernel.priority,{'kind':'pass','revision':self.kernel.revision})
         self.assertEqual(self.kernel.snapshot(),RulesActorAdapter.replay(adapter.archive(),self.programs).kernel.snapshot())
+        packet=RulesActorAdapter(self.kernel).packet('C')
+        self.assertEqual('B',packet['phasing'][0]['return_controller'])
+        self.assertEqual(self.body.to_json(),packet['phasing'][0]['ref'])
         restored=RulesKernel.restore(self.kernel.snapshot(),self.programs)
         self.kernel.begin_turn_for_scenario('B');restored.begin_turn_for_scenario('B')
         self.assertEqual(self.kernel.snapshot(),restored.snapshot())
@@ -259,8 +269,9 @@ class PhasingChoiceTests(unittest.TestCase):
     def test_desert_sacrifice_returns_only_at_next_own_end_step(self):
         self.game('desert-warfare');ref=self.deserts(1)[0]
         self.effect(ref,Sacrifice('source'));self.top()
-        self.end_step('B');self.assertFalse(self.kernel.stack)
-        self.end_step('A');self.top()
+        self.kernel.begin_turn_for_scenario('B');self.advance_to('end_step','B')
+        self.assertFalse(self.kernel.stack)
+        self.advance_to('end_step','A');self.top()
         self.assertEqual(Zone.BATTLEFIELD,self.state.get(self.state.current(ref.card_id)).zone)
 
     def test_desert_destroy_does_not_count_as_sacrifice(self):
@@ -317,15 +328,15 @@ class PhasingChoiceTests(unittest.TestCase):
 
     def test_desert_combat_threshold_checked_at_occurrence_and_resolution(self):
         self.game('desert-warfare');refs=self.deserts(4)
-        self.kernel.begin_step('A','begin_combat');self.assertFalse(self.kernel.stack)
+        self.discover_step('A','begin_combat');self.assertFalse(self.kernel.stack)
         fifth=self.state.add_card('fifth','p-desert','A',Zone.BATTLEFIELD)
-        self.kernel.begin_step('A','begin_combat');self.response((fifth,));self.top();self.top()
+        self.discover_step('A','begin_combat');self.response((fifth,));self.top();self.top()
         self.assertFalse(self.token_refs('Sand'))
 
     def test_desert_combat_counts_resolution_deserts_and_grants_noncopyable_haste(self):
         copy=CardProgram('copy','Copy',('Creature',),power=0,toughness=0,
             entry_copy=Selector(Zone.BATTLEFIELD,types=('Creature',),subtypes=('Sand',)))
-        self.game('desert-warfare',extra=(copy,));self.deserts(5);self.kernel.begin_step('A','begin_combat')
+        self.game('desert-warfare',extra=(copy,));self.deserts(5);self.discover_step('A','begin_combat')
         self.state.add_card('sixth','p-desert','A',Zone.BATTLEFIELD);self.top()
         refs=self.token_refs('Sand');self.assertEqual(6,len(refs))
         for ref in refs:
@@ -339,26 +350,27 @@ class PhasingChoiceTests(unittest.TestCase):
         self.assertEqual(1,self.kernel.effective(self.state.current('copy')).power)
 
     def test_desert_granted_haste_survives_cleanup_and_phasing(self):
-        self.game('desert-warfare');self.deserts(5);self.kernel.begin_step('A','begin_combat');self.top()
-        ref=self.token_refs('Sand')[0];self.kernel._finish_cleanup_actions()
-        self.assertIn('haste',self.kernel.effective(ref).keywords)
-        self.effect(ref,PhaseOut('source'));self.kernel.begin_turn_for_scenario('A')
+        self.game('desert-warfare');self.deserts(5);self.kernel.begin_turn_for_scenario('A')
+        self.advance_to('begin_combat');self.top();ref=self.token_refs('Sand')[0]
+        self.effect(ref,PhaseOut('source'));self.advance_to('upkeep','B')
+        self.assertTrue(self.state.get(ref).phased)
+        self.advance_to('upkeep','A');self.assertFalse(self.state.get(ref).phased)
         self.assertIn('haste',self.kernel.effective(ref).keywords)
 
     def test_desert_granted_haste_does_not_apply_to_a_new_incarnation(self):
-        self.game('desert-warfare');self.deserts(5);self.kernel.begin_step('A','begin_combat');self.top()
+        self.game('desert-warfare');self.deserts(5);self.discover_step('A','begin_combat');self.top()
         refs=self.token_refs('Sand');self.effect(refs[0],Move('source',Zone.EXILE));self.kernel._finish_cleanup_actions()
         self.assertFalse(any(refs[0].to_json() in row['refs'] for row in self.kernel.temporary_effects))
 
     def test_desert_no_retroactive_recovery_and_no_opponent_combat_trigger(self):
         self.game('desert-warfare',zone=Zone.HAND);ref=self.deserts(1)[0];self.effect(ref,Sacrifice('source'))
         self.kernel.enter(self.source);self.end_step();self.assertFalse(self.kernel.stack)
-        self.deserts(5,owner='B');self.kernel.begin_step('B','begin_combat');self.assertFalse(self.kernel.stack)
+        self.deserts(5,owner='B');self.discover_step('B','begin_combat');self.assertFalse(self.kernel.stack)
 
     def test_desert_delayed_step_capture_checkpoint_replays(self):
         self.game('desert-warfare');ref=self.deserts(1)[0];self.effect(ref,Sacrifice('source'));self.top()
         restored=RulesKernel.restore(self.kernel.snapshot(),self.programs)
-        self.end_step();restored.begin_step('A','end_step')
+        self.end_step();self.discover_step('A','end_step',kernel=restored)
         adapter=RulesActorAdapter(self.kernel)
         for _ in self.state.live_players:adapter.submit(self.kernel.priority,{'kind':'pass','revision':self.kernel.revision})
         for _ in restored.state.live_players:restored.pass_priority(restored.priority)
@@ -480,7 +492,7 @@ class PhasingChoiceTests(unittest.TestCase):
 
     def test_fault_treasure_has_real_tap_sacrifice_mana_ability(self):
         self.game('volatile-fault');self.fault();self.top();self.choose('no')
-        treasure=self.token_refs('Treasure')[0]
+        treasure=self.token_refs('Treasure')[0];self.window('A')
         self.kernel.commit_action(self.kernel.quote_activation(self.ident(),'A',treasure,'mana'),Payment())
         self.choose('4');self.assertEqual((('G',1),),self.state.mana_pool('A'))
         self.assertFalse(self.token_refs('Treasure'))
@@ -506,9 +518,11 @@ class PhasingChoiceTests(unittest.TestCase):
         self.assertEqual(ref,self.state.current(ref.card_id));self.assertTrue(self.state.get(ref).token)
 
     def test_phasing_preserves_source_duration_exile_until_actual_departure(self):
-        self.game()
-        self.effect(self.source,SelectAll(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),
-            (ExileUntilSourceLeaves('selected'),)))
+        holder=CardProgram('holder','Holder',('Artifact',),activated=(
+            ActivatedProgram('hold',CostSpec(),(ExileUntilSourceLeaves('target'),),
+                targets=TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',)))),))
+        self.game(extra=(holder,));self.source=self.state.add_card('holder','holder','A',Zone.BATTLEFIELD)
+        self.activate('hold',(self.body,));self.top()
         self.effect(self.source,PhaseOut('source'));self.assertEqual(Zone.EXILE,self.state.get(self.state.current('body')).zone)
         self.kernel.begin_turn_for_scenario('A');self.effect(self.source,Move('source',Zone.GRAVEYARD))
         self.assertEqual(Zone.BATTLEFIELD,self.state.get(self.state.current('body')).zone)
@@ -519,6 +533,12 @@ class PhasingChoiceTests(unittest.TestCase):
         self.assertEqual(before,self.kernel.snapshot())
 
     def test_new_nodes_roundtrip_and_reject_uncaptured_players_or_wrong_targets(self):
+        parent=CardProgram('parent-token','Parent',('Creature',),power=1,toughness=1)
+        child=CardProgram('child-token','Child',('Creature',),power=1,toughness=1)
+        maker=CardProgram('nested-maker','Nested maker',('Sorcery',),
+            spell_effects=(WithCreatedTokens(parent,effects=(CreateTokens(child),)),))
+        self.game(extra=(maker,));self.effect(self.other,*maker.spell_effects)
+        self.assertEqual({'parent-token','child-token'},{o.definition for o in self.state.objects(Zone.BATTLEFIELD) if o.token})
         bad=(
             CardProgram('bad','Bad',('Instant',),spell_effects=(PhaseOut('missing'),)),
             CardProgram('bad','Bad',('Instant',),spell_effects=(PayLifeOrSacrifice(3,Selector(Zone.BATTLEFIELD,relation='controlled')),)),

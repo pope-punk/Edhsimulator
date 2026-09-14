@@ -2717,7 +2717,7 @@
     "runtime_checkpoint_schema": 119,
     "state_checkpoint_schema": 13,
     "new_test_methods": 63,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "draft_corrections_pending_github_hosted_ci",
     "unresolved_defects": [],
     "review_work_remaining": "Validate all four isolated drafts and 63 new conformance methods on GitHub-hosted Ubuntu/Windows; fix failures, bind exact source facts and promote, then validate the reviewed loader.",
     "selection_note": "Talon Gates is implemented with its complete phasing lifecycle. Volatile Fault joins Desert Warfare and Indulgent Tormentor through captured-player choice support. Necromancy remains unstarted because cast-time sorcery eligibility and permanent-to-Aura conversion need separate support.",
@@ -2747,7 +2747,20 @@
         "Captured values and DelayedNextStep source-independent scheduling"
       ],
       "guard": "Refresh source and choose a practical complete subset. No local execution, no migration of games and no production admission."
-    }
+    },
+    "hosted_attempts": [
+      {
+        "run_id": 34791142601,
+        "commit": "13d0a3060e17773462a8f79be9c41f8742964f81",
+        "windows": "1609 tests; 17 fixture errors, zero assertion failures",
+        "ubuntu": "cancelled by matrix fail-fast",
+        "corrections": [
+          "Use bounded trigger-discovery fixtures for focused non-upkeep cases and real turn progression for recovery/haste integration.",
+          "Restore A's actual priority before spending Treasure; use a real permanent ability for source-duration exile.",
+          "Discover nested token definitions, treat excluded supertypes as a search filter, and expose public phasing return bindings in actor packets."
+        ]
+      }
+    ]
   },
   "hosted_validation_history": [
     {

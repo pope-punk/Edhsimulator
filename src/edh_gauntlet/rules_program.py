@@ -1917,6 +1917,7 @@ def token_programs(program):
     def walk(value):
         if isinstance(value,CreateTokens):
             yield value.token
+            if isinstance(value,WithCreatedTokens):yield from walk(value.effects)
             return
         if isinstance(value,tuple):
             for item in value:yield from walk(item)

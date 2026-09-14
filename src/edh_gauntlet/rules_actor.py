@@ -159,6 +159,16 @@ def project_actor(kernel,actor):
         durations.append({'source':source.ref.to_json(),'source_name':kernel.definition(source).name,
             'exiled':[ref.to_json() for ref in refs]})
     if durations:packet['exile_until_source_leaves']=durations
+    phased=[]
+    for key,row in sorted(kernel.phase_links.items()):
+        try:obj=kernel.state.get(ObjectRef.from_json(row['ref']))
+        except RulesViolation:continue
+        if obj.zone!=Zone.BATTLEFIELD or not obj.phased:continue
+        root=kernel.phase_links.get(kernel._phase_key(ObjectRef.from_json(row['root'])))
+        phased.append({'ref':deepcopy(row['ref']),'root':deepcopy(row['root']),
+            'indirect':row['ref']!=row['root'],'controller_at_phase_out':row['controller'],
+            'return_controller':root['controller'] if root is not None else None})
+    if phased:packet['phasing']=phased
     if kernel.mana_payment:
         window=kernel.mana_payment
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],

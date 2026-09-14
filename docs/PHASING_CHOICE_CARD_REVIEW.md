@@ -26,7 +26,9 @@ were also selected directly. Indirect attachments wait for that root, including
 orphaned groups. Untap restoration uses the root's controller at phase-out;
 departed controllers use the skipped seat's next turn slot under CR 702.26n.
 Natural phasing phases in and out simultaneously before ordinary untap.
-Unregistered fixture-only phased states remain fenced. The existing source-
+Actor packets retain public exact-object phase groups and return controllers,
+including after checkpoint restoration. Unregistered fixture-only phased states
+remain fenced. The existing source-
 duration exile and counter-conditioned duration rules retain their distinct
 responses to phasing.
 
@@ -36,7 +38,8 @@ Controller-qualified delayed end steps use the existing one-shot captured
 trigger lifecycle. Desert recovery does not depend on its source remaining.
 
 WithCreatedTokens reuses replacement-aware token creation and exact zone-result
-bindings. OngoingEffect shares the characteristic layers while surviving cleanup
+bindings, including recursive discovery of token definitions nested in creation
+effects. OngoingEffect shares the characteristic layers while surviving cleanup
 and phasing. Its grants are not part of a token's copiable definition and cease
 to apply to a departed incarnation.
 
@@ -46,7 +49,7 @@ include only the payer's current eligible permanents and use the existing
 replacement-aware movement pipeline. SearchByPlayer captures a searching player
 and changes only that search's actor, choices and entry controller. Declining
 does not search or shuffle; accepting permits failure to find a filtered card
-but still shuffles. Full-library inspection is available only to that player
+but still shuffles; excluded supertypes also count as a filter. Full-library inspection is available only to that player
 during the actual search, after the optional offer is accepted. No other hand
 or library contents become public.
 
@@ -84,3 +87,11 @@ historical schema-118 test accepts its layout or newer and still rejects 117.
 No started game or legacy checkpoint is migrated. Production admission remains
 closed. Draft and required reviewed-loader hosted runs are pending; no new test
 is counted as passed yet.
+
+The initial draft run `34791142601` passed syntax, installation and packaged
+assets. Windows ran 1,609 tests with 17 fixture errors and no assertion failures;
+Ubuntu was cancelled by matrix fail-fast. Corrections preserve the upkeep-only
+scenario gate, action priority and permanent-source compiler validation. Focused
+non-upkeep trigger fixtures now call the internal phase collector explicitly;
+Desert recovery and haste/phasing integration traverse real turns. A corrective
+hosted run remains required before promotion.

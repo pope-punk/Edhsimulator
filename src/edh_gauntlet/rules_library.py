@@ -7,7 +7,7 @@ must keep search choices, shuffle seeds and physical library order private.
 """
 from .rules_state import ObjectRef,Zone,RulesViolation
 from .rules_choices import Option
-from .rules_program import SearchByPlayer,decode
+from .rules_program import SearchByPlayer,SupertypeSelector,decode
 from .rules_characteristics import matches
 
 
@@ -52,7 +52,7 @@ class LibraryRules:
             eligible=[obj for obj in self.state.zone(actor,Zone.LIBRARY) if matches(selector,obj,views[obj.ref],source)]
             eligible.sort(key=lambda obj:(self.definition(obj).name,obj.ref.card_id))
             options=tuple(Option(obj.ref.card_id+'@'+str(obj.ref.incarnation),self.definition(obj).name,ref=obj.ref,group=self.definition(obj).name if effect.distinct_names else None) for obj in eligible)
-            quality=any((selector.colors,selector.any_colors,selector.excluded_colors,selector.types,selector.any_subtypes,selector.any_types,selector.excluded_types,selector.subtypes,selector.excluded_subtypes,selector.supertypes,selector.characteristics,selector.commander is not None))
+            quality=any((selector.colors,selector.any_colors,selector.excluded_colors,selector.types,selector.any_subtypes,selector.any_types,selector.excluded_types,selector.subtypes,selector.excluded_subtypes,selector.supertypes,isinstance(selector,SupertypeSelector) and selector.excluded_supertypes,selector.characteristics,selector.commander is not None))
             maximum=min(effect.count,len({option.group for option in options}) if effect.distinct_names else len(options));minimum=0 if quality or effect.optional_find or effect.distinct_names else maximum
             split=effect.secondary_destination is not None
             prompt=(f'Search your library. Choose matching cards in order: the first {effect.primary_count} go to {effect.destination.value}'+(' tapped' if effect.tapped else '')+f'; the rest go to {effect.secondary_destination.value}'+(' tapped' if effect.secondary_tapped else '')+'. This menu does not show library order.') if split else ('Search your library. Choose matching cards in top-to-bottom order; this menu does not show library order.' if effect.destination==Zone.LIBRARY else 'Search your library. Choose matching cards; this menu does not show library order.')
