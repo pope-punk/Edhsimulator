@@ -2,7 +2,7 @@
 
 Cycle base: `9c63ed66dbd07c6fc20deab92314e367c29203c5` on `codex/remaining-card-programs`.
 Four complete printed programs are source-bound and promoted after hosted draft validation.
-The required reviewed-loader validation is pending.
+The required reviewed-loader validation also passed.
 No project code, Python, imports, compilation, installation or tests ran locally.
 
 ## Printed-face mapping
@@ -86,7 +86,7 @@ shuffling and control; checkpoint restore and actor replay; and compiler gates.
 Kernel checkpoint schema is **119** and state schema remains **13**. The
 historical schema-118 test accepts its layout or newer and still rejects 117.
 No started game or legacy checkpoint is migrated. Production admission remains
-closed. The required reviewed-loader hosted run remains pending.
+closed. Both required hosted validation stages passed.
 
 The initial draft run `34791142601` passed syntax, installation and packaged
 assets. Windows ran 1,609 tests with 17 fixture errors and no assertion failures;
@@ -102,11 +102,24 @@ hosted run passed before promotion.
 packaged assets, at commit `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
 All four programs now use the source-bound reviewed loader, bringing coverage
 to **266 unique cards / 331 deck copies**, with **68 unstarted / 69 copies**.
-All 262 prior reviewed rows are unchanged. The required reviewed-loader run
-is pending; no production or gameplay admission is granted.
+All 262 prior reviewed rows are unchanged. The reviewed-loader run passed;
+no production or gameplay admission is granted.
 
 The promotion also tightens public phasing projection: an orphan has no return
 controller immediately after its exact root leaves, even before the next untap
 prunes metadata. The existing orphan test covers this timing. The compiler/search
 test also explicitly permits failure to find with eligible cards when the only
-filter excludes a supertype. Both follow-ups require the reviewed-loader run.
+filter excludes a supertype. Both follow-ups passed the reviewed-loader run.
+
+## Final hosted result
+
+[Reviewed-loader validation 34792219355](https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355) passed
+**1,609 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at commit `91496fa01239b6261bd27e0582278f695029dcbc`. All **63 new methods**
+load the four source-bound reviewed programs. No unresolved defect remains
+in this cycle. No project code or Python ran locally.
+
+The following result-recording commit changes only this review, the work order
+and inventory. Runtime, programs, source bindings and tests remain unchanged
+after the validated commit. The next queue is Necromancy, Nullpriest of Oblivion,
+Karmic Guide and Sigarda's Splendor, with requirements retained in the inventory.

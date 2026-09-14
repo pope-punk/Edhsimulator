@@ -36,7 +36,11 @@ Kernel schema is **119**, state schema **13**. The **63 new methods**
 now use the reviewed loader. [Draft validation 34791775813](https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813)
 passed **1,609 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
-The required reviewed-loader check is pending.
+[Reviewed-loader validation 34792219355](https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355)
+passed **1,609 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `91496fa01239b6261bd27e0582278f695029dcbc`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests are unchanged after this validation.
 See [the cycle review](PHASING_CHOICE_CARD_REVIEW.md).
 
 Continue **Necromancy, Nullpriest of Oblivion, Karmic Guide and Sigarda's
