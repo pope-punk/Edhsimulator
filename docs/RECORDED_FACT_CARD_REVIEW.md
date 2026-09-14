@@ -1,7 +1,8 @@
 # Recorded casting, entry and payment facts
 
 Cycle base: `ce0631cfcf0171463dfc58d7f11718b5230a0001` on `codex/remaining-card-programs`.
-Four complete printed programs remain isolated drafts pending hosted checks.
+Four complete printed programs are source-bound and promoted after hosted draft checks.
+The required reviewed-loader check remains pending.
 No project code, Python, imports, installation, compilation, tests or games ran locally.
 
 ## Printed-face mapping
@@ -75,7 +76,7 @@ checkpoint restoration and authenticated actor replay.
 Kernel schema is **120**; state schema remains **13**. The historical
 schema-119 test accepts its layout or newer and still rejects 118.
 No started game or checkpoint is migrated. Production admission remains closed.
-Draft and required reviewed-loader hosted checks are pending.
+The corrected draft check passed. The required reviewed-loader check is pending.
 
 ## Initial hosted attempt
 
@@ -86,7 +87,7 @@ draft and prevented the 63 new methods from loading. The compiler also exposed
 an existing intentionally fenced activation-statistic path. The correction
 removes that field and restricts new subtype bindings to public battlefield
 payments, preserving the old statistic gate and hidden-cost privacy. A corrected
-hosted run remains required before promotion.
+hosted run passed before promotion.
 
 Run `34796570052` loaded all drafts and ran 1,672 tests. The 1,609
 existing methods passed; 61 new methods stopped in a shared fixture that omitted
@@ -100,4 +101,13 @@ and no assertion failures. Those Necromancy cases requested an unsupported
 end-step scenario window. They now use an opponent's supported main-phase
 window, which still cannot satisfy the caster's sorcery timing. The actual
 turn/cleanup integration passed and is unchanged; the runtime fixture gate
-remains intact. Hosted validation of the correction is pending.
+remains intact. The corrected draft validation below passed on both required platforms.
+
+
+[Corrected draft validation 34797317071](https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071) passed
+**1,672 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at `825827f67c5d3f4fc8397b6cede516d1d1b0862c`.
+All four programs now load through source-bound reviewed metadata. Coverage is
+**270 unique cards / 335 deck copies**, with **64 unstarted / 65 copies**.
+All 266 prior reviewed rows are unchanged. The required reviewed-loader run
+is pending; production and gameplay admission remain separate.

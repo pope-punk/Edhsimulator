@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**266 source-bound reviewed programs / 331 deck copies**. There are **68 cards outside the
-reviewed bundle**, four authored drafts and 64 unstarted. Reviewed coverage is not production certification.
+**270 source-bound reviewed programs / 335 deck copies**. There are **64 cards outside the
+reviewed bundle**, all unstarted. No drafts remain. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,19 +25,21 @@ successful hosted validation.
 ## Current cycle: casting, entry and paid-cost facts
 
 Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage
-are complete printed programs in the isolated draft bundle. Shared support
+have complete printed-face review and exact source bindings. Shared support
 records real kicker declarations and additional costs, cast-time sorcery
 eligibility, exact next-cleanup sacrifice, entry-life notes, spell colors and
 paid lands' derived subtypes. Necromancy composes existing ongoing effects and
 attachment rules to become an Aura. Karmic Guide remains queued for complete
 protection and echo; Sage shares the existing payment and subtype machinery.
 
-Kernel schema is **120**, state schema **13**. The **63 new methods** are ready
-for GitHub-hosted validation. Draft and required reviewed-loader checks remain
-pending. Reviewed coverage stays at 266 until promotion.
+Kernel schema is **120**, state schema **13**. The **63 new methods** now
+use the reviewed loader. [Draft validation 34797317071](https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071)
+passed **1,672 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `825827f67c5d3f4fc8397b6cede516d1d1b0862c`.
+The required reviewed-loader check remains pending.
 See [the cycle review](RECORDED_FACT_CARD_REVIEW.md).
 
-Finish hosted checks and source-bound promotion, then continue **Karmic Guide,
+Finish reviewed-loader checks, then continue **Karmic Guide,
 Alseid of Life's Bounty, Fanatical Devotion and Pongify**. The inventory retains
 protection's targeting/damage/blocking/attachment requirements, echo control
 history, regeneration shields and cannot-regenerate destruction. No local

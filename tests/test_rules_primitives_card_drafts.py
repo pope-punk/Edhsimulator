@@ -12,6 +12,7 @@ from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'necromancy', 'nullpriest-of-oblivion', 'sigarda-s-splendor', 'wonderscape-sage',
     'talon-gates-of-madara', 'desert-warfare', 'indulgent-tormentor', 'volatile-fault',
     'dance-of-the-dead', 'mystic-remora', 'touch-the-spirit-realm', 'arcane-denial',
     'game-trail', 'shineshadow-snarl', 'vineglimmer-snarl',
