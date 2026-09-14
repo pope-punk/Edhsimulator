@@ -1607,6 +1607,7 @@ def validate(program,_depth=0):
             if isinstance(node,UntilEndOfTurn):
                 if not isinstance(node.changes,tuple) or not node.changes:raise RulesViolation('Empty or mutable temporary changes')
                 for change in node.changes:
+                    if isinstance(change,LostPlayerPT):raise RulesViolation('Lost-player modifiers require static continuous programs')
                     if isinstance(change,(ModifyPT,SetPT)):
                         for value in (change.power,change.toughness):
                             if type(value) is not int:quantity(value,allow_x,available_values=available_values|{'recipient_stat','signed_scaling'})

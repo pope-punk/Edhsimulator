@@ -7,6 +7,7 @@ from edh_gauntlet.rules_program import *
 from edh_gauntlet.rules_state import RulesState,RulesViolation,Zone,ZoneMove
 from edh_gauntlet.rules_kernel import RulesKernel
 from edh_gauntlet.rules_casting import Payment
+from edh_gauntlet.rules_actor import project_actor
 from edh_gauntlet.rules_bundle import load_reviewed,digest,source_facts
 from edh_gauntlet.rules_characteristics import evaluate,evaluate_exhaustive
 from edh_gauntlet.catalog import load_catalog
@@ -391,6 +392,62 @@ class LibraryCreatureTests(unittest.TestCase):
         ):
             with self.subTest(program=program):
                 with self.assertRaises(RulesViolation):validate(program)
+
+
+    def test_explore_three_creatures_choose_again_after_first_reveal(self):
+        self.game('hakbal-of-the-surging-soul');third=self.add();self.add('lc-instant','A',Zone.LIBRARY)
+        self.combat();self.until_choice();self.answer([0])
+        self.assertEqual('explore_card',self.kernel.pending_choice.kind);self.answer([1])
+        self.assertEqual('explore_order',self.kernel.pending_choice.kind)
+        self.assertEqual(1,len(self.events('cards_revealed')))
+        self.assertEqual(2,len(self.kernel.pending_choice.options))
+        self.restore();self.answer([1]);self.drain();self.assertEqual(3,len(self.events('explored')))
+
+    def test_explore_multiple_controllers_choose_in_apnap_order(self):
+        self.game('hakbal-of-the-surging-soul',library=0)
+        self.kernel.active='B'
+        self.fx(SelectAll(Selector(Zone.BATTLEFIELD,types=('Creature',)),(Explore('selected'),)))
+        self.drain();self.assertEqual(['B','A','A'],[r['player'] for r in self.events('explored')])
+
+    def test_explore_reveal_is_public_but_later_library_cards_are_hidden(self):
+        self.game('hakbal-of-the-surging-soul');hidden=self.top().ref;shown=self.add('lc-instant','A',Zone.LIBRARY)
+        self.fx(Explore('source'))
+        for actor in self.state.players:
+            observation=project_actor(self.kernel,actor)['library_observation']
+            self.assertEqual([shown.to_json()],[r['ref'] for r in observation['cards']])
+            self.assertNotIn(hidden.card_id,json.dumps(observation))
+        self.restore();self.answer([0]);self.drain()
+
+    def test_explore_counter_replacement_choice_preserves_top_and_replay(self):
+        double=CardProgram('lc-double','Double',('Enchantment',),counter_replacements=(
+            CounterReplacement('double',Selector(Zone.BATTLEFIELD),kind='+1/+1',multiplier=2),))
+        extra=CardProgram('lc-extra','Extra',('Enchantment',),counter_replacements=(
+            CounterReplacement('extra',Selector(Zone.BATTLEFIELD),kind='+1/+1',additional=1),))
+        self.game('hakbal-of-the-surging-soul',extra=(double,extra));self.add('lc-double');self.add('lc-extra')
+        top=self.add('lc-instant','A',Zone.LIBRARY);self.fx(Explore('source'))
+        self.assertEqual(0,self.count(self.source));self.assertEqual(1,len(self.events('cards_revealed')))
+        self.restore();self.drain();self.assertIn(self.count(self.source),(3,4))
+        self.assertEqual(top,self.top().ref);self.assertEqual(1,len(self.events('cards_revealed')))
+
+    def test_frog_source_departure_does_not_cancel_captured_mill(self):
+        self.game('rampant-frogantua');self.damage(amount=2)
+        self.state.move((ZoneMove(self.source,Zone.GRAVEYARD),),'scenario')
+        self.until_choice();self.answer([0]);self.drain()
+        self.assertEqual(6,len(self.state.zone('A',Zone.LIBRARY)))
+
+    def test_warp_legal_aura_attachment_is_chosen_by_owner(self):
+        self.game('chaos-warp',Zone.HAND,library=0);target=self.add(actor='B',token=True)
+        aura=self.add('lc-aura','B',Zone.LIBRARY);self.cast((target,));q=self.until_choice()
+        self.assertEqual('B',q.actor);self.assertGreaterEqual(len(q.options),2)
+        self.restore();self.answer([0]);self.drain()
+        self.assertEqual(Zone.BATTLEFIELD,self.current(aura).zone);self.assertIsNotNone(self.current(aura).attached_to)
+        self.assertEqual(1,len(self.events('library_shuffled')));self.assertEqual(1,len(self.events('cards_revealed')))
+
+    def test_lost_player_modifier_requires_player_history_and_static_context(self):
+        self.game('rampant-frogantua')
+        with self.assertRaises(RulesViolation):evaluate(self.state.objects(),self.kernel.definitions)
+        with self.assertRaises(RulesViolation):
+            validate(CardProgram('bad','Bad',(),spell_effects=(UntilEndOfTurn('source',(LostPlayerPT(1,1),)),)))
 
 
 if __name__=='__main__':unittest.main()

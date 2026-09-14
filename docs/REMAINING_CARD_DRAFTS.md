@@ -27,7 +27,7 @@ successful hosted validation.
 Kodama of the West Tree, Rampant Frogantua, Hakbal of the Surging Soul and Chaos
 Warp have complete draft programs. Shared instructions cover current modified
 creatures, combat damage to players, actual mill results, ordered exploration,
-owner capture, library shuffling and top-card permanent entry. Fifty new hosted
+owner capture, library shuffling and top-card permanent entry. Fifty-seven new hosted
 conformance methods are authored; validation and source-bound promotion are pending.
 Kernel/state schemas are **126/16**. No local project execution occurred.
 

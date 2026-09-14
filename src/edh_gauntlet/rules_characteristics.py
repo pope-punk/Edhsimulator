@@ -162,7 +162,7 @@ def _refresh_modified(views, objects):
                 'Equipment' in views[a.ref].subtypes
                 or 'Aura' in views[a.ref].subtypes and a.controller==obj.controller
                 for a in attached.get(obj.ref,()))))
-        views[obj.ref]=replace(view,modified=bool(modified))
+        if view.modified!=bool(modified):views[obj.ref]=replace(view,modified=bool(modified))
 
 
 def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0):
