@@ -1,7 +1,7 @@
 # Pass 1: payments, combat and continuous effects
 
-Status: seven complete printed programs authored in the separate draft bundle;
-source-bound promotion and required hosted validation are pending.
+Status: seven complete printed programs reviewed and promoted. Hosted draft
+validation passed; required reviewed-loader validation is pending.
 
 Cards: Chthonian Nightmare, Maze's End, Rhythm of the Wild, Parasitic Impetus,
 Propaganda, Defiler of Vigor, and Darksteel Mutation.
@@ -44,7 +44,7 @@ The expanded run also correctly rejected a synthetic Forest grant without a
 Land-typed selector. Its fixture now separates the type and subtype grants;
 the compiler restriction is unchanged.
 
-The remaining gate is review plus hosted draft and reviewed-loader validation.
+The remaining gate is successful required reviewed-loader validation.
 These programs do not change production admission or any existing game.
 
 ## Rules evidence
@@ -63,4 +63,7 @@ These programs do not change production admission or any existing game.
   effective August 7, 2026: 104.2b, 118.8, 205.3g, 508.1, 601.2, 613,
   701.15 and 702.136.
 
-Source facts are retained on every draft row and will be bound at promotion.
+Source facts are bound on all seven reviewed rows. The prior 306 reviewed rows
+are unchanged. Draft proof: [run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504) at
+`ddea5e3f16c56224f920181a7642ab72a0041f30`, 2346 tests per platform. Promotion changes
+the loader and inventory; the same 91 conformance methods now require reviewed programs.

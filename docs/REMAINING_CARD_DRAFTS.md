@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**306 source-bound reviewed programs / 372 deck copies**. There are **28 cards / 28 deck
-copies outside the reviewed bundle**: seven drafts and 21 unstarted cards. Reviewed coverage is not production certification.
+**313 source-bound reviewed programs / 379 deck copies**. There are **21 cards / 21 deck
+copies outside the reviewed bundle**, all unstarted; the draft bundle is empty. Reviewed coverage is not production certification.
 
 ## Four-pass completion plan
 
@@ -54,12 +54,18 @@ heartbeat remains active every 40 minutes.
 
 ## Current pass: payments, combat and continuous effects
 
-The seven Pass 1 programs are authored in the separate draft bundle with 91 new
-conformance methods. Hosted draft validation and complete source review are
-pending. Coverage remains 306 reviewed unique cards / 372 copies; the 28
-remaining cards comprise seven drafts and 21 unstarted cards. Pass 1 remains
-open through required reviewed-loader validation. See
-[the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md). No local execution occurred.
+The seven Pass 1 cards have complete printed-face review and are promoted to
+the source-bound bundle. Hosted draft validation passed **2346 tests on
+each platform**, including 91 new methods, at `ddea5e3f16c56224f920181a7642ab72a0041f30`
+([run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504)). The required reviewed-loader run remains pending.
+
+Coverage is 313 reviewed unique cards / 379 copies, with 21 cards remaining.
+Pass 1 remains open until the required reviewed-loader run succeeds. No local
+project execution occurred. See [the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md).
+
+The next pass includes loyalty entry/costs, loyalty damage, attacking and defending
+planeswalkers, Class levels and opening-hand choices. Its seven-card group remains
+unchanged; see [the source-review preparation](PLANESWALKER_CLASS_OPENING_REVIEW.md) for each complete printed behavior.
 
 ## Previous cycle: resolution casting and top-library permissions
 
@@ -643,7 +649,7 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the thirty-one now promoted. It records
+originally outstanding card IDs, including the 86 now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
@@ -652,8 +658,8 @@ their same conformance methods now load the source-bound reviewed programs.
 The graveyard/exile and payment/draw families also completed review. The counter-transfer and counter-lifecycle families each add four reviewed programs. Continue from the current
 queue and validation record at the top of this file.
 
-Uro's graveyard alternative now supports its five-card exile group. Separately
-ordered cost groups and mana during announcement remain rejected. Resolution-time optional
+Uro's graveyard alternative now supports its five-card exile group. Ordered public activation cost groups are now supported for Nightmare, and
+bounded authored mana plans support resolution casting and paid attack declarations. Resolution-time optional
 mana payments are also implemented and reviewed. Saga,
 Room, planeswalker and transforming programs still need their shared lifecycle
 support before whole-card coverage.

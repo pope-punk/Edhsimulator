@@ -6918,6 +6918,257 @@
       }
     },
     {
+      "card_id": "chthonian-nightmare",
+      "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Player energy gain, X energy payment, authored order of sacrifice/return/counter costs, target-before-cost legality and sorcery timing. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:chthonian-nightmare",
+        "name": "Chthonian Nightmare",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "entry-energy",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "AddCounters",
+                "subject": "controller",
+                "kind": "energy",
+                "amount": 3
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "B"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "reanimate",
+            "cost": {
+              "node": "OrderedCostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "creature",
+                  "kind": "sacrifice",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [
+                      "Creature"
+                    ],
+                    "relation": "controlled",
+                    "exclude_source": false,
+                    "subtypes": [],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  },
+                  "count": 1
+                },
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "return",
+                  "kind": "return",
+                  "selector": null,
+                  "count": 1
+                }
+              ],
+              "counter_costs": [],
+              "player_counter_costs": [
+                {
+                  "node": "PlayerCounterCost",
+                  "kind": "energy",
+                  "amount": {
+                    "node": "ChosenX"
+                  }
+                }
+              ]
+            },
+            "effects": [
+              {
+                "node": "Move",
+                "subject": "target",
+                "destination": {
+                  "zone": "battlefield"
+                },
+                "controller": "effect",
+                "tapped": false,
+                "library_position": null,
+                "counters": []
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "graveyard"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "owned",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [
+                  {
+                    "node": "CharacteristicRange",
+                    "statistic": "mana_value",
+                    "minimum": {
+                      "node": "ChosenX"
+                    },
+                    "maximum": {
+                      "node": "ChosenX"
+                    }
+                  }
+                ],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "timing": "sorcery",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "B"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "cinder-glade",
       "source_facts_sha256": "fcc373986221c37ccede0de87412747a6af939a1a42d04a37ad565302ca065fc",
       "scope": "all_printed_faces",
@@ -8858,6 +9109,203 @@
       }
     },
     {
+      "card_id": "darksteel-mutation",
+      "source_facts_sha256": "33a082ee71ee29e786c8036d3f99483be786d4de38eb317b306a5ad5928bf824",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Attached type and creature-subtype replacement, base 0/1, ability removal with indestructible, timestamps/dependencies, and retained colors, supertypes, counters and artifact subtypes. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:darksteel-mutation",
+        "name": "Darksteel Mutation",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [
+              "Creature"
+            ],
+            "relation": "any",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": null,
+          "combat": null,
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": {
+          "node": "Selector",
+          "zone": {
+            "zone": "battlefield"
+          },
+          "types": [
+            "Creature"
+          ],
+          "relation": "any",
+          "exclude_source": false,
+          "subtypes": [],
+          "excluded_subtypes": [],
+          "supertypes": [],
+          "any_types": [],
+          "excluded_types": [],
+          "any_subtypes": [],
+          "characteristics": [],
+          "commander": null,
+          "tapped": null,
+          "counters": [],
+          "colors": [],
+          "any_colors": [],
+          "excluded_colors": []
+        },
+        "subtypes": [
+          "Aura"
+        ],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [
+          {
+            "node": "ContinuousProgram",
+            "effect_id": "mutation",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "any",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "changes": [
+              {
+                "node": "SetCardTypes",
+                "types": [
+                  "Artifact",
+                  "Creature"
+                ],
+                "creature_subtypes": [
+                  "Insect"
+                ]
+              },
+              {
+                "node": "LoseAbilities"
+              },
+              {
+                "node": "AddKeywords",
+                "keywords": [
+                  "indestructible"
+                ]
+              },
+              {
+                "node": "SetPT",
+                "power": 0,
+                "toughness": 1
+              }
+            ],
+            "subject": "attached",
+            "condition": null
+          }
+        ],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "dawn-of-hope",
       "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4",
       "scope": "all_printed_faces",
@@ -9566,6 +10014,202 @@
         "entry_counters": [],
         "colors": [
           "B"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "defiler-of-vigor",
+      "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Trample, per-source optional two-life additional cost, green-only reduction after hybrid choice, and controlled green-permanent cast counter triggers. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:defiler-of-vigor",
+        "name": "Defiler of Vigor",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "green-permanent-cast",
+            "event": {
+              "node": "ColoredSpellEvent",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": [],
+              "excluded_types": [
+                "Instant",
+                "Sorcery"
+              ],
+              "colors": [
+                "G"
+              ]
+            },
+            "effects": [
+              {
+                "node": "SelectAll",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "battlefield"
+                  },
+                  "types": [
+                    "Creature"
+                  ],
+                  "relation": "controlled",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "effects": [
+                  {
+                    "node": "AddCounters",
+                    "subject": "selected",
+                    "kind": "+1/+1",
+                    "amount": 1
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Phyrexian",
+          "Wurm"
+        ],
+        "mana_value": 5,
+        "power": 6,
+        "toughness": 6,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 3,
+              "symbols": [
+                "G",
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [
+          {
+            "node": "LifeCostModifier",
+            "modifier_id": "green-life",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "stack"
+              },
+              "types": [],
+              "relation": "controlled",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [
+                "Instant",
+                "Sorcery"
+              ],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [
+                "G"
+              ],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "generic_delta": 0,
+            "origin_zones": [],
+            "color": "G",
+            "life": 2
+          }
+        ],
+        "target_restrictions": [],
+        "keywords": [
+          "trample"
+        ],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
         ],
         "modal": null,
         "entry_copy_tapped": false,
@@ -26983,6 +27627,219 @@
       }
     },
     {
+      "card_id": "maze-s-end",
+      "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Tapped entry, colorless mana, full search payment and shuffle, ten distinct controlled Gate names and immediate controller win. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:maze-s-end",
+        "name": "Maze's End",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "AddMana",
+                "symbols": [
+                  "C"
+                ]
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "gate-search",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 3,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "return",
+                  "kind": "return",
+                  "selector": null,
+                  "count": 1
+                }
+              ],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "SearchLibrary",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "library"
+                  },
+                  "types": [
+                    "Land"
+                  ],
+                  "relation": "owned",
+                  "exclude_source": false,
+                  "subtypes": [
+                    "Gate"
+                  ],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "destination": {
+                  "zone": "battlefield"
+                },
+                "count": 1,
+                "reveal": false,
+                "optional_find": true,
+                "tapped": false,
+                "secondary_destination": null,
+                "primary_count": 1,
+                "secondary_tapped": false,
+                "distinct_names": false,
+                "partition_player": null
+              },
+              {
+                "node": "IfQuantityAtLeast",
+                "value": {
+                  "node": "CountDistinctNames",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [
+                      "Land"
+                    ],
+                    "relation": "controlled",
+                    "exclude_source": false,
+                    "subtypes": [
+                      "Gate"
+                    ],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  }
+                },
+                "minimum": 10,
+                "effects": [
+                  {
+                    "node": "WinGame"
+                  }
+                ],
+                "otherwise": []
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryModifier",
+            "modifier_id": "tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "midnight-snack",
       "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d",
       "scope": "all_printed_faces",
@@ -31580,6 +32437,231 @@
       }
     },
     {
+      "card_id": "parasitic-impetus",
+      "source_facts_sha256": "cd1941d0ae8c0774226ac83ae4b672395ae6224134573fcdf29ada50fdf75591",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Attached +2/+2, goad requirements, original attacking creature identity, current/last known controller life loss at resolution and sequential controller life gain. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:parasitic-impetus",
+        "name": "Parasitic Impetus",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "attached-attacks",
+            "event": {
+              "node": "EventPattern",
+              "kind": "creature_attacks",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "attached",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "WithLastKnownControllers",
+                "subject": "event_subject",
+                "effects": [
+                  {
+                    "node": "LoseLife",
+                    "players": "captured_controllers",
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "node": "GainLife",
+                "amount": 2
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [
+              "Creature"
+            ],
+            "relation": "any",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": null,
+          "combat": null,
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": {
+          "node": "Selector",
+          "zone": {
+            "zone": "battlefield"
+          },
+          "types": [
+            "Creature"
+          ],
+          "relation": "any",
+          "exclude_source": false,
+          "subtypes": [],
+          "excluded_subtypes": [],
+          "supertypes": [],
+          "any_types": [],
+          "excluded_types": [],
+          "any_subtypes": [],
+          "characteristics": [],
+          "commander": null,
+          "tapped": null,
+          "counters": [],
+          "colors": [],
+          "any_colors": [],
+          "excluded_colors": []
+        },
+        "subtypes": [
+          "Aura"
+        ],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [
+          {
+            "node": "ContinuousProgram",
+            "effect_id": "impetus",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "any",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "changes": [
+              {
+                "node": "ModifyPT",
+                "power": 2,
+                "toughness": 2
+              },
+              {
+                "node": "Goaded"
+              }
+            ],
+            "subject": "attached",
+            "condition": null
+          }
+        ],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "B"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "B"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "phyrexian-arena",
       "source_facts_sha256": "deca80d168ba1aaa461d3923fab6389823992ef99302949500956e450418e4de",
       "scope": "all_printed_faces",
@@ -32735,6 +33817,91 @@
         "counter_replacements": [],
         "entry_counters": [],
         "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "propaganda",
+      "source_facts_sha256": "843cf0e31cd630835298c0d4c13b69b8714032b07b3a9827f1a20da1b6c03c07",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Per-attacker cumulative attack tax, optional paid destinations for goad, locked costs, mana-ability declaration window and atomic failed declarations. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:propaganda",
+        "name": "Propaganda",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "U"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "RulePermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": [],
+          "creature_spells_uncounterable": false,
+          "attack_tax": 2
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U"
+        ],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
@@ -34993,6 +36160,129 @@
         "entry_counters": [],
         "colors": [
           "U"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "rhythm-of-the-wild",
+      "source_facts_sha256": "126a6d8e385f9efaa54dc8229f42b33651b2d2829e07ad40b2cbd80c1f6ccd6d",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/PAYMENTS_COMBAT_CARD_REVIEW.md against official release notes and CR 104.2b, 118.8, 205.3g, 508.1, 601.2, 608.2h/k, 613, 701.15 and 702.136. Current creature-spell counter immunity and every independent nontoken riot entry choice, with counter replacements and indefinite haste. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:rhythm-of-the-wild",
+        "name": "Rhythm of the Wild",
+        "types": [
+          "Enchantment"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [
+          {
+            "node": "ContinuousProgram",
+            "effect_id": "riot",
+            "selector": {
+              "node": "Selector",
+              "zone": {
+                "zone": "battlefield"
+              },
+              "types": [
+                "Creature"
+              ],
+              "relation": "controlled",
+              "exclude_source": false,
+              "subtypes": [],
+              "excluded_subtypes": [],
+              "supertypes": [],
+              "any_types": [],
+              "excluded_types": [],
+              "any_subtypes": [],
+              "characteristics": [],
+              "commander": null,
+              "tapped": null,
+              "counters": [],
+              "colors": [],
+              "any_colors": [],
+              "excluded_colors": []
+            },
+            "changes": [
+              {
+                "node": "AddRiot"
+              }
+            ],
+            "subject": "any",
+            "condition": null
+          }
+        ],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "R",
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "RulePermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": [],
+          "creature_spells_uncounterable": true,
+          "attack_tax": 0
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "R",
+          "G"
         ],
         "modal": null,
         "entry_copy_tapped": false,

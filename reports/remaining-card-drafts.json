@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 306,
-    "remaining_outside_reviewed_bundle": 28,
-    "drafts_written": 7,
+    "reviewed_bundle_unique": 313,
+    "remaining_outside_reviewed_bundle": 21,
+    "drafts_written": 0,
     "not_started_on_this_branch": 21,
-    "reviewed_bundle_copies": 372,
-    "draft_copies": 7,
+    "reviewed_bundle_copies": 379,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 79,
-    "remaining_outside_reviewed_bundle_copies": 28
+    "promoted_on_this_branch": 86,
+    "remaining_outside_reviewed_bundle_copies": 21
   },
   "cards": [
     {
@@ -405,7 +405,7 @@
     {
       "card_id": "chthonian-nightmare",
       "name": "Chthonian Nightmare",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -420,10 +420,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473",
+      "previous_draft_definition": "draft:chthonian-nightmare",
+      "reviewed_definition": "catalog:chthonian-nightmare",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "crop-rotation",
@@ -551,7 +559,7 @@
     {
       "card_id": "darksteel-mutation",
       "name": "Darksteel Mutation",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -566,10 +574,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "33a082ee71ee29e786c8036d3f99483be786d4de38eb317b306a5ad5928bf824",
+      "previous_draft_definition": "draft:darksteel-mutation",
+      "reviewed_definition": "catalog:darksteel-mutation",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "dawn-of-hope",
@@ -608,7 +624,7 @@
     {
       "card_id": "defiler-of-vigor",
       "name": "Defiler of Vigor",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -623,10 +639,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd",
+      "previous_draft_definition": "draft:defiler-of-vigor",
+      "reviewed_definition": "catalog:defiler-of-vigor",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "delighted-halfling",
@@ -1982,7 +2006,7 @@
     {
       "card_id": "maze-s-end",
       "name": "Maze's End",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1997,10 +2021,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2",
+      "previous_draft_definition": "draft:maze-s-end",
+      "reviewed_definition": "catalog:maze-s-end",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "midnight-snack",
@@ -2407,7 +2439,7 @@
     {
       "card_id": "parasitic-impetus",
       "name": "Parasitic Impetus",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2422,10 +2454,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "cd1941d0ae8c0774226ac83ae4b672395ae6224134573fcdf29ada50fdf75591",
+      "previous_draft_definition": "draft:parasitic-impetus",
+      "reviewed_definition": "catalog:parasitic-impetus",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "pongify",
@@ -2528,7 +2568,7 @@
     {
       "card_id": "propaganda",
       "name": "Propaganda",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2543,10 +2583,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "843cf0e31cd630835298c0d4c13b69b8714032b07b3a9827f1a20da1b6c03c07",
+      "previous_draft_definition": "draft:propaganda",
+      "reviewed_definition": "catalog:propaganda",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "ram-through",
@@ -2777,7 +2825,7 @@
     {
       "card_id": "rhythm-of-the-wild",
       "name": "Rhythm of the Wild",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2792,10 +2840,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "four-pass-1-2026-09-14",
-      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
+      "source_facts_sha256": "126a6d8e385f9efaa54dc8229f42b33651b2d2829e07ad40b2cbd80c1f6ccd6d",
+      "previous_draft_definition": "draft:rhythm-of-the-wild",
+      "reviewed_definition": "catalog:rhythm-of-the-wild",
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504
+      },
+      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
     },
     {
       "card_id": "rishkar-s-expertise",
@@ -3652,13 +3708,21 @@
       "defiler-of-vigor",
       "darksteel-mutation"
     ],
-    "cards_promoted": [],
-    "validation_status": "pending",
+    "cards_promoted": [
+      "chthonian-nightmare",
+      "maze-s-end",
+      "rhythm-of-the-wild",
+      "parasitic-impetus",
+      "propaganda",
+      "defiler-of-vigor",
+      "darksteel-mutation"
+    ],
+    "validation_status": "reviewed_loader_pending",
     "runtime_checkpoint_schema": 129,
     "state_checkpoint_schema": 17,
     "new_test_methods": 91,
     "unresolved_defects": [],
-    "review_work_remaining": "Run hosted draft conformance, finish shared-rule review, then promote and require reviewed-loader conformance.",
+    "review_work_remaining": "Require successful hosted reviewed-loader conformance, then record the result and close pass 1.",
     "review_findings": [
       "Basic-land intrinsic mana is removed along with other abilities; later explicitly granted activations remain available.",
       "Tap-trigger discovery evaluates ability presence on the actual tap-event battlefield, including sources that subsequently pay zone costs.",
@@ -3701,9 +3765,15 @@
         "commit": "ed0cc1875f604e666553df7fc0a4ff3270c0b42b",
         "run_id": 34885623950,
         "stage": "impetus_review_draft",
-        "status": "in_progress_with_known_fixture_error",
-        "tests_expected": 2346,
-        "known_issue": "Inherited malformed Forest subtype fixture corrected in the next revision; Impetus review cases also run here."
+        "status": "failed",
+        "tests_per_platform": 2346,
+        "failures": [
+          "Inherited malformed land-subtype fixture; no other conformance failure."
+        ],
+        "platform_results": {
+          "ubuntu": "one fixture error after 2346 tests",
+          "windows": "cancelled by matrix fail-fast"
+        }
       }
     ],
     "next_batch_source_review": {
@@ -3726,6 +3796,19 @@
         "Sorin needs active-turn lifelink for creatures and planeswalkers, player-or-planeswalker damage, and exact-X graveyard return with permanent additive Vampire subtype.",
         "Innkeeper's Talent needs Class levels and sorcery activation timing, counter-bearing permanent ward triggers, and player/permanent counter doubling determined by the putting player.",
         "Leyline of Hope needs an explicit optional opening-hand placement before turn one; its life replacement and starting-life-relative anthem reuse existing primitives."
+      ],
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "sources": [
+        "https://magic.wizards.com/en/news/feature/commander-2018-edition-release-notes-2018-07-27",
+        "https://magic.wizards.com/en/news/feature/war-spark-release-notes-2019-04-19",
+        "https://magic.wizards.com/en/news/feature/commander-legends-battle-baldurs-gate-release-notes-2022-06-01",
+        "https://magic.wizards.com/en/news/feature/amonkhet-release-notes-2017-04-14",
+        "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
+        "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes"
+      ],
+      "notes": [
+        "Read the preparation document alongside the current catalog and CR; older release notes use historical terminology.",
+        "Omo is projected to reach 100/100 after Nissa in pass 2. Update the old every-deck-has-unmapped assertion to retain explicit totals without incorrectly requiring omissions."
       ]
     },
     "next_batch": [
@@ -3736,7 +3819,66 @@
       "sorin-vengeful-bloodlord",
       "innkeeper-s-talent",
       "leyline-of-hope"
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+      "run_id": 34886471504,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
+      "conclusion": "success",
+      "tests_per_platform": 2346,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104118262290,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2346,
+          "seconds": 510.655,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104118262497,
+          "name": "verify (windows-latest)",
+          "tests": 2346,
+          "seconds": 464.524,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 313,
+      "totalCopies": 400,
+      "reviewedCopies": 379,
+      "remainingUnique": 21,
+      "remainingCopies": 21,
+      "byDeck": {
+        "Reaminatour \u2014 Aminatou, Veil Piercer": {
+          "total": 100,
+          "reviewed": 89
+        },
+        "Minsc & Boo, Timeless Heroes": {
+          "total": 100,
+          "reviewed": 96
+        },
+        "Omo, Queen of Vesuva": {
+          "total": 100,
+          "reviewed": 99
+        },
+        "Elenda, Saint of Dusk": {
+          "total": 100,
+          "reviewed": 95
+        }
+      }
+    }
   },
   "hosted_validation_history": [
     {
@@ -4524,6 +4666,49 @@
         "hidden-nursery",
         "apex-devastator",
         "oracle-of-mul-daya"
+      ]
+    },
+    {
+      "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+      "run_id": 34886471504,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
+      "conclusion": "success",
+      "tests_per_platform": 2346,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104118262290,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2346,
+          "seconds": 510.655,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104118262497,
+          "name": "verify (windows-latest)",
+          "tests": 2346,
+          "seconds": 464.524,
+          "conclusion": "success"
+        }
+      ],
+      "stage": "draft",
+      "cards": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus",
+        "propaganda",
+        "defiler-of-vigor",
+        "darksteel-mutation"
       ]
     }
   ],
@@ -6989,11 +7174,11 @@
     "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
   },
   "draft_hosted_validation": {
-    "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
-    "run_id": 34876806875,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875",
+    "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+    "run_id": 34886471504,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
     "conclusion": "success",
-    "tests_per_platform": 2245,
+    "tests_per_platform": 2346,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -7006,17 +7191,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104085905904,
+        "job_id": 104118262290,
         "name": "verify (ubuntu-latest)",
-        "tests": 2245,
-        "seconds": 441.625,
+        "tests": 2346,
+        "seconds": 510.655,
         "conclusion": "success"
       },
       {
-        "job_id": 104085906105,
+        "job_id": 104118262497,
         "name": "verify (windows-latest)",
-        "tests": 2245,
-        "seconds": 439.011,
+        "tests": 2346,
+        "seconds": 464.524,
         "conclusion": "success"
       }
     ]
@@ -7190,8 +7375,12 @@
           "darksteel-mutation"
         ],
         "focus": "Reuse payment, entry, Aura and characteristic primitives; complete energy and authored cost ordering, Gate-name wins, riot, goad and attack payments, optional life-based green reduction, and ability/type replacement.",
-        "status": "draft_written_validation_pending",
-        "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761"
+        "status": "reviewed_loader_pending",
+        "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
+        "draft_hosted_validation": {
+          "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+          "run_id": 34886471504
+        }
       },
       {
         "pass": 2,

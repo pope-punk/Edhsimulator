@@ -26,11 +26,10 @@ class PaymentsCombatTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={row['card_id']:row for row in draft['drafts'] if row['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(row['program'] for row in reviewed.values())+tuple(cls.cards.values())
-        cls.prefix='draft:'
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(row['program'] for row in reviewed.values())
+        cls.prefix='catalog:'
 
     def game(self,extra=(),players=('A','B','C','D')):
         body=CardProgram('pc-body','Body',('Creature',),power=2,toughness=3,mana_value=2,colors=('G',),
