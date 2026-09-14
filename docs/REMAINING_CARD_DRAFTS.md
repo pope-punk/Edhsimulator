@@ -33,8 +33,8 @@ entry behavior and restores from checked lineage. Copy exceptions remain
 copiable, while Helm's later haste remains separate. Biomancy reuses a shared
 simultaneous fight instruction. The prior 282 reviewed programs are unchanged.
 
-Kernel schema is **123**, state schema **14**. **62 new methods** bring the
-expected hosted suite to **1,915 tests per platform**. Draft and required
+Kernel schema is **123**, state schema **14**. **63 new methods** bring the
+expected hosted suite to **1,916 tests per platform**. Draft and required
 reviewed-loader checks are pending. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
 
 Next, reuse this foundation for Mirage Mirror, Thespian's Stage, March from
@@ -55,7 +55,9 @@ Kernel schema is **122**, state schema **14**. The **74 new methods** now use
 the reviewed loader. [Draft validation 34835807492](https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492)
 passed **1853 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `b5a59145faa7bee3dba851c53af173ddcbd35004`.
-Required reviewed-loader checks are pending. See [the review](MANA_CONVOKE_CARD_REVIEW.md).
+[Required reviewed-loader validation 34836442046](https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046) passed **1853 tests on each platform**
+at `3c6b2b548c677bc0a0f4326b878f7f390885e63d`, plus syntax, installation and assets.
+See [the review](MANA_CONVOKE_CARD_REVIEW.md).
 
 Continue **Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**
 with durable copiable token snapshots, copied entry behavior and copy exceptions.
@@ -94,31 +96,21 @@ Existing games remain bound to their implementation; no local execution or
 production admission.
 See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
-## Next work order: mana, convoke and token copies
+## Next work order: copies of existing permanents and spells
 
-Refresh the branch and inventory, then choose complete compatible families from
-**Exotic Orchard, Fellwar Stone, Horizon of Progress, Devouring Light,
-Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**.
-The first four are complete in the current cycle; the four token-copy cards
-remain unstarted.
+Refresh the remote branch and finish any pending token-copy validation first.
+Then consider **Mirage Mirror, Thespian's Stage, March from Velis Vel and
+Replication Technique**, reusing the copiable-value registry.
 
-- Orchard, Stone and Horizon need a shared query for mana that derived land
-  abilities could produce, including intrinsic abilities and replacement effects.
-  Ignore activation costs and legality; handle recursive dependencies and empty
-  outcomes. Horizon also allows colorless and needs both other printed abilities.
-- Devouring Light needs authenticated convoke payment against the final total
-  cost, with matching creature colors, no double use and ordinary target checks.
-  Reuse existing combat-target filtering and exile.
-- The four token cards need durable copiable snapshots beyond fixed
-  `CreateTokens` programs. Preserve entry effects and copied abilities.
-  Helm's legendary exception is copiable; its later haste grant is separate.
-  Quarry changes power, toughness, color and creature type. Biomancy supplies a
-  copiable entry-fight ability. Scute reads the land threshold at resolution.
+- Existing-permanent copies require timestamped layer-one effects that preserve
+  object identity, counters, damage and attachments. Support expiration without
+  causing entry events.
+- Stage retains its copy activation as a copiable exception. March adds a chosen
+  nonbasic land-type filter, exact recipient set, temporary haste and flashback.
+- Demonstrate requires actual stack copies, an authored opponent offer and target
+  reselection. It cannot be replaced with extra token creation.
 
-The [pinned Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
-106.7, 702.51 and 707.5/707.9, guide this preparation.
-The JSON inventory records exact source reuse points. This preparation does not
-count as authored or validated cards.
+The JSON work order retains concrete requirements. All four remain unstarted.
 
 ## Previous cycle: casting, entry and paid-cost facts
 
@@ -215,7 +207,7 @@ Existing continuous layers, replacement planning, counter costs and linked exile
 provide the remaining behavior.
 
 Kernel checkpoint schema is **117**; state schema remains **13**.
-The **62 new conformance methods** now use the reviewed loader.
+The **63 new conformance methods** now use the reviewed loader.
 [Draft validation 34782390422](https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422)
 passed **1,499 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `bc189ee62527bf3655e16b7b54b7b361cc9ab145`.

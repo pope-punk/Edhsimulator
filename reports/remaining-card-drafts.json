@@ -21,7 +21,7 @@
     {
       "card_id": "aggressive-biomancy",
       "name": "Aggressive Biomancy",
-      "status": "unvalidated_draft",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -633,9 +633,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e",
-      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and reviewed-loader validation passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "mana-convoke-2026-09-14",
       "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
@@ -650,7 +650,11 @@
         "ConvokeCast",
         "Shared mana replacement transform",
         "Authored convoke contributions"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046
+      }
     },
     {
       "card_id": "dimir-house-guard",
@@ -812,9 +816,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c",
-      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and reviewed-loader validation passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "mana-convoke-2026-09-14",
       "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
@@ -829,7 +833,11 @@
         "ConvokeCast",
         "Shared mana replacement transform",
         "Authored convoke contributions"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046
+      }
     },
     {
       "card_id": "fanatic-of-rhonas",
@@ -936,9 +944,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
-      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and reviewed-loader validation passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "mana-convoke-2026-09-14",
       "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
@@ -953,7 +961,11 @@
         "ConvokeCast",
         "Shared mana replacement transform",
         "Authored convoke contributions"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046
+      }
     },
     {
       "card_id": "finale-of-revelation",
@@ -1305,7 +1317,7 @@
     {
       "card_id": "helm-of-the-host",
       "name": "Helm of the Host",
-      "status": "unvalidated_draft",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1364,9 +1376,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16",
-      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and reviewed-loader validation passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "mana-convoke-2026-09-14",
       "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
@@ -1381,7 +1393,11 @@
         "ConvokeCast",
         "Shared mana replacement transform",
         "Authored convoke contributions"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046
+      }
     },
     {
       "card_id": "hydra-broodmaster",
@@ -1620,7 +1636,7 @@
     {
       "card_id": "lazotep-quarry",
       "name": "Lazotep Quarry",
-      "status": "unvalidated_draft",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2451,7 +2467,7 @@
     {
       "card_id": "scute-swarm",
       "name": "Scute Swarm",
-      "status": "unvalidated_draft",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -3222,7 +3238,7 @@
       "aggressive-biomancy"
     ],
     "cards_promoted": [],
-    "new_test_methods": 62,
+    "new_test_methods": 63,
     "runtime_checkpoint_schema": 123,
     "state_checkpoint_schema": 14,
     "validation_status": "draft_hosted_pending",
@@ -3249,7 +3265,23 @@
         "Replication Technique requires demonstrate, authenticated offer/acceptance, stack spell copy state and target reselection. Do not approximate it with extra CreateTokens."
       ]
     },
-    "hosted_attempts": []
+    "hosted_attempts": [
+      {
+        "stage": "draft",
+        "commit": "755b487545a26a9bb615a60b873f4bfd32828576",
+        "run_id": 34837070723,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723",
+        "conclusion": "failure",
+        "tests_run_windows": 1853,
+        "failures": 1,
+        "errors": 1,
+        "findings": [
+          "Target compiler failed to pass action X permission into characteristic filters, preventing the token test class from loading. Propagate allow_x and verify that non-X costs still reject those bounds.",
+          "Draft inventory rows used an incorrect status label. Retain the established draft_written_review_pending status.",
+          "Static fixture review also replaced an unsupported add_card setup argument with the existing ZoneMove entry attributes."
+        ]
+      }
+    ]
   },
   "hosted_validation_history": [
     {
@@ -3665,6 +3697,23 @@
       "findings": [
         "Two scenario helper errors: reopen the unbound priority window after an empty stack before continuing.",
         "Baldur's Gate source-data defect: official Wizards face has no tapped-entry clause and produces colorless mana. Correct reference, annotations, regenerated catalog, source-bound program and regression expectations together."
+      ]
+    },
+    {
+      "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+      "run_id": 34836442046,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046",
+      "conclusion": "success",
+      "tests_per_platform": 1853,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "reviewed-loader conformance"
       ]
     }
   ],
@@ -4882,9 +4931,9 @@
       "runtime_checkpoint_schema": 122,
       "state_checkpoint_schema": 14,
       "new_test_methods": 74,
-      "validation_status": "reviewed_loader_pending",
+      "validation_status": "passed",
       "unresolved_defects": [],
-      "review_work_remaining": "Complete required Ubuntu/Windows reviewed-loader checks.",
+      "review_work_remaining": "",
       "selection_note": "Complete the three could-produce mana cards and Devouring Light together. Two shared interpreters require broad payment, recursion, source and replay coverage; the four token-copy cards remain a coherent next family.",
       "next_batch": [
         "scute-swarm",
@@ -4971,6 +5020,23 @@
           "full distribution installation",
           "packaged assets",
           "rules primitive conformance"
+        ]
+      },
+      "hosted_validation": {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046",
+        "conclusion": "success",
+        "tests_per_platform": 1853,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "reviewed-loader conformance"
         ]
       }
     }

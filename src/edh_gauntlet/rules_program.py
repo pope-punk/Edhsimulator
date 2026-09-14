@@ -1244,7 +1244,7 @@ def validate(program,_depth=0):
             if (value.minimum,value.maximum)!=(sum(g.targets.minimum for g in value.groups),sum(g.targets.maximum for g in value.groups)):
                 raise RulesViolation('Grouped target bounds must equal the clause totals')
             return
-        if value.selector is not None:selector(value.selector,dynamic=True)
+        if value.selector is not None:selector(value.selector,dynamic=True,allow_x=allow_x)
         if (value.combat is not None and (type(value.combat) is not str or value.combat not in {'attacking','blocking','attacking_or_blocking'}
                 or value.selector is None or value.selector.zone!=Zone.BATTLEFIELD or value.players is not None)):
             raise RulesViolation('Invalid combat target domain')

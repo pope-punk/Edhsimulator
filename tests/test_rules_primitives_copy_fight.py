@@ -382,6 +382,16 @@ class CopyFightTests(unittest.TestCase):
             with self.subTest(change=change),self.assertRaises(RulesViolation):
                 validate(CardProgram('bad','Bad',('Artifact',),spell_effects=(CopyTokens('source',**change),)))
 
+    def test_target_compiler_requires_x_cost_for_x_characteristic_bounds(self):
+        selector=Selector(Zone.GRAVEYARD,types=('Creature',),relation='owned',
+            characteristics=(CharacteristicRange('mana_value',ChosenX(),ChosenX()),))
+        for x_symbols in (0,1):
+            p=CardProgram('cp-x','X target',('Land',),activated=(ActivatedProgram('copy',
+                CostSpec(ManaCost(x_symbols=x_symbols)),(Move('target',Zone.EXILE),),targets=TargetSpec(selector)),))
+            if x_symbols:validate(p)
+            else:
+                with self.assertRaises(RulesViolation):validate(p)
+
     def test_copy_compiler_rejects_unbound_subjects(self):
         for effect in (CopyTokens('missing'),Fight('missing','source')):
             with self.assertRaises(RulesViolation):validate(CardProgram('bad','Bad',('Artifact',),spell_effects=(effect,)))
@@ -410,7 +420,9 @@ class CopyFightTests(unittest.TestCase):
         self.assertEqual(Zone.GRAVEYARD,self.state.get(self.state.current(self.enemy.card_id)).zone)
 
     def test_copy_preserves_copiable_type_additions(self):
-        self.game();ref=self.add('cp-body',copied_definition='cp-body',copied_add_types=('Enchantment',))
+        self.game();ref=self.add('cp-body',zone=Zone.HAND)
+        self.state.move((ZoneMove(ref,Zone.BATTLEFIELD,copied_definition='cp-body',copied_add_types=('Enchantment',)),),'scenario')
+        ref=self.state.current(ref.card_id)
         self.clone(ref);view=self.kernel.effective(self.tokens()[0].ref)
         self.assertEqual({'Creature','Enchantment'},view.types);self.restore()
 

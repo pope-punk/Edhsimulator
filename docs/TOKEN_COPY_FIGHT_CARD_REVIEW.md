@@ -2,7 +2,7 @@
 
 Base: `3c6b2b548c677bc0a0f4326b878f7f390885e63d`, branch `codex/remaining-card-programs`.
 This is the second group of four in the continued eight-card batch. The four
-mana/convoke cards are in the reviewed library with final loader checks pending.
+mana/convoke cards are in the reviewed library with successful hosted draft and reviewed-loader checks.
 These four token programs remain isolated drafts. No local project execution.
 
 ## Printed programs
@@ -63,9 +63,16 @@ cover Quarry's creature-type/color exceptions and both cards' retained entry beh
 
 ## Hosted validation
 
-The **62 new methods** cover source bindings, printed costs and targets, copies
+The **63 new methods** cover source bindings, printed costs and targets, copies
 of copies, changing land thresholds, source departure, phasing, copy exceptions,
 entry replacements and triggers, target legality, simultaneous fight, payment
 atomicity, token disappearance, public projection and checkpoint recovery.
-Expected full suite: **1,915 tests on each of Ubuntu and Windows**.
+Expected full suite: **1,916 tests on each of Ubuntu and Windows**.
 Draft and required reviewed-loader checks are pending.
+
+Initial [draft run 34837070723](https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723)
+ran 1,853 existing methods on Windows and found one inventory failure and one
+class-setup error. The compiler now carries the action's X permission into its
+target-characteristic filter, with a regression rejecting X bounds on non-X
+actions. The inventory uses the established pending-review label. A fixture also
+uses the existing zone-entry attributes rather than unsupported setup keywords.

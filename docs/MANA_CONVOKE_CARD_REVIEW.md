@@ -2,7 +2,7 @@
 
 Cycle base: `107f2e9069d2631646cc0fbb4dbad2e0d9cf10f8`, branch `codex/remaining-card-programs`.
 All four programs are source-bound in the reviewed library after draft validation.
-Required reviewed-loader validation is pending. No project code ran on the user's computer.
+Required reviewed-loader validation passed on both platforms. No project code ran on the user's computer.
 
 ## Printed behavior
 
@@ -105,5 +105,6 @@ minimum layout while this suite requires schema 122/14.
 [Draft validation 34835807492](https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492) passed **1853 tests
 on each of Ubuntu and Windows**, plus source syntax, full installation and
 packaged-asset checks, at `b5a59145faa7bee3dba851c53af173ddcbd35004`.
-All 74 new methods now use the reviewed loader. Required reviewed-loader
-validation is pending.
+All 74 new methods now use the reviewed loader. [Required reviewed-loader validation 34836442046](https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046) passed
+**1853 tests on each platform**, plus syntax, installation and assets,
+at `3c6b2b548c677bc0a0f4326b878f7f390885e63d`.
