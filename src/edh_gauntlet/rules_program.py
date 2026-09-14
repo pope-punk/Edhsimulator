@@ -364,6 +364,23 @@ class MayMill(Mill):
 
 
 @dataclass(frozen=True)
+class CastDuringResolution:
+    """Offer one spell from the resolving controller's hand at a fixed limit."""
+    maximum: int
+
+
+@dataclass(frozen=True)
+class Discover:
+    amount: int
+
+
+@dataclass(frozen=True)
+class Cascade:
+    """Use the current or last-known source spell's mana value."""
+    pass
+
+
+@dataclass(frozen=True)
 class Explore:
     subject: str
 
@@ -1203,8 +1220,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('fear','protection_white','protection_blue','protection_black','protection_red','protection_green','phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -1737,6 +1754,11 @@ def validate(program,_depth=0):
                 if (not strings(node.options) or not node.options or len(set(node.options))!=len(node.options)
                         or any(symbol not in tuple('WUBRGC') for symbol in node.options)):
                     raise RulesViolation('Invalid mana type choices')
+            if isinstance(node,(CastDuringResolution,Discover)):
+                amount=node.maximum if isinstance(node,CastDuringResolution) else node.amount
+                if type(amount) is not int or amount<0:raise RulesViolation('Invalid resolution-casting mana-value limit')
+            if isinstance(node,Cascade) and 'cascade_source' not in available_values:
+                raise RulesViolation('Cascade requires an own spell-cast trigger')
             if isinstance(node,CopyCaptured):
                 raise RulesViolation('Captured copies are interpreter-bound instructions')
             if isinstance(node,SpecialMana):
@@ -2264,6 +2286,7 @@ def validate(program,_depth=0):
         if isinstance(event,ZoneEventPattern):bindings.add('event_successor')
         if event.kind=='zone_changed' and event.from_zone==Zone.BATTLEFIELD:values=values|{'event_counters'}
         if event.kind=='zone_changed' and event.to_zone==Zone.BATTLEFIELD:values=values|{'event_x'}
+        if event==EventPattern('spell_cast',subject='self'):values=values|{'cascade_source'}
         effects(ability.effects,bindings,available_values=values)
         target_effects(ability.effects,ability.targets)
         ids.append(ability.ability_id)

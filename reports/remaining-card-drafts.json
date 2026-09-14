@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 302,
     "remaining_outside_reviewed_bundle": 32,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 32,
+    "drafts_written": 3,
+    "not_started_on_this_branch": 29,
     "reviewed_bundle_copies": 368,
-    "draft_copies": 0,
+    "draft_copies": 3,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 75,
     "remaining_outside_reviewed_bundle_copies": 32
@@ -182,7 +182,7 @@
     {
       "card_id": "apex-devastator",
       "name": "Apex Devastator",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -195,7 +195,9 @@
           "face_id": "apex-devastator",
           "text": "Cascade, cascade, cascade, cascade"
         }
-      ]
+      ],
+      "draft_path": "data/rules/draft_cards.json",
+      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
     },
     {
       "card_id": "arcane-denial",
@@ -1480,7 +1482,7 @@
     {
       "card_id": "hidden-nursery",
       "name": "Hidden Nursery",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1493,7 +1495,9 @@
           "face_id": "hidden-nursery",
           "text": "This land enters tapped.\n{T}: Add {G}.\n{4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery."
         }
-      ]
+      ],
+      "draft_path": "data/rules/draft_cards.json",
+      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
     },
     {
       "card_id": "horizon-of-progress",
@@ -2714,7 +2718,7 @@
     {
       "card_id": "rishkar-s-expertise",
       "name": "Rishkar's Expertise",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2727,7 +2731,9 @@
           "face_id": "rishkar-s-expertise",
           "text": "Draw cards equal to the greatest power among creatures you control.\nYou may cast a spell with mana value 5 or less from your hand without paying its mana cost."
         }
-      ]
+      ],
+      "draft_path": "data/rules/draft_cards.json",
+      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
     },
     {
       "card_id": "scute-swarm",
@@ -3538,238 +3544,34 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
+    "base_commit": "8f2c947759f204e42014edfe1a654d0832d6ce46",
     "cards_written": [
-      "replication-technique",
-      "changing-loyalty",
-      "sunken-palace",
-      "delighted-halfling"
-    ],
-    "cards_promoted": [
-      "replication-technique",
-      "changing-loyalty",
-      "sunken-palace",
-      "delighted-halfling"
-    ],
-    "new_test_methods": 65,
-    "runtime_checkpoint_schema": 127,
-    "state_checkpoint_schema": 17,
-    "validation_status": "passed",
-    "shared_mechanics": [
-      "Noncard spell copies and permanent-copy token entry",
-      "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
-      "Explicit mana-unit spending, one-shot copy riders and legendary-only counter immunity",
-      "Separate copied cost decisions from actual casting history: escaped status, flashback exit and Necromancy cleanup are not inherited"
-    ],
-    "next_batch": [
       "rishkar-s-expertise",
       "hidden-nursery",
-      "apex-devastator",
-      "chthonian-nightmare"
+      "apex-devastator"
     ],
-    "hosted_attempts": [
-      {
-        "stage": "initial_draft_fixture",
-        "commit": "28321cdd5e9d99b398b87233151a2fc02b1b1556",
-        "run_id": 34866641618,
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2148,
-        "failures": 0,
-        "errors": 2,
-        "findings": [
-          "The initial two fixture errors were missing revision/turn scheduling on land play and missing reopened scenario priority for a second cast. Subsequent revisions corrected the fixtures."
-        ]
-      },
-      {
-        "stage": "initial_draft",
-        "commit": "e71206e2f609dbaf4e8ae85892db7024db552844",
-        "run_id": 34866722108,
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2148,
-        "failures": 0,
-        "errors": 2,
-        "findings": [
-          "Both failures were fixture lifecycle errors: a second scenario cast lacked reopened priority, and the land-play fixture lacked an active turn schedule. Production behavior and all other conformance checks passed on Ubuntu; Windows was cancelled by matrix fail-fast."
-        ]
-      },
-      {
-        "stage": "expanded_draft",
-        "commit": "551759d45d0c6049aadefe6bbfb245c3751a7053",
-        "run_id": 34867369551,
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2156,
-        "failures": 0,
-        "errors": 2,
-        "findings": [
-          "The expanded run still contained the already-corrected missing scenario priority fixture. The new controller-group fixture also used an unsupported unbounded spell target specification. Use its finite bound and retain explicit rejection of the unsupported form; no compiler gate was weakened."
-        ]
-      },
-      {
-        "stage": "priority_corrected_draft",
-        "commit": "9c5745a2d783cfde8cb23e0f159071960c0a9d1d",
-        "run_id": 34867570583,
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2156,
-        "failures": 0,
-        "errors": 1,
-        "findings": [
-          "Only the unsupported unbounded-target test fixture remained; the second-cast priority repair passed. The subsequent fixture uses a finite bound and explicitly verifies the compiler rejection."
-        ]
-      },
-      {
-        "commit": "1bea1dce6b3c789e365df5a38f00f453b6a20c76",
-        "run_id": 34868229398,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868229398",
-        "conclusion": "success",
-        "tests_per_platform": 2156,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ],
-        "checks": [
-          "source syntax",
-          "full distribution installation",
-          "packaged assets",
-          "draft conformance"
-        ],
-        "jobs": [
-          {
-            "job_id": 104057355600,
-            "name": "verify (ubuntu-latest)",
-            "tests": 2156,
-            "seconds": 331.383,
-            "conclusion": "success"
-          },
-          {
-            "job_id": 104057356208,
-            "name": "verify (windows-latest)",
-            "tests": 2156,
-            "seconds": 401.964,
-            "conclusion": "success"
-          }
-        ],
-        "stage": "superseded_draft",
-        "findings": [
-          "The 61-check revision passed both platforms, then source review added actual-casting-history corrections and three regressions before final draft validation."
-        ]
-      }
+    "cards_promoted": [],
+    "new_test_methods": 57,
+    "runtime_checkpoint_schema": 128,
+    "state_checkpoint_schema": 17,
+    "validation_status": "draft_pending",
+    "shared_mechanics": [
+      "Resolution-cast permissions with suspended parents and no priority",
+      "Discover/cascade public sequential exile and random-bottom continuations",
+      "Additional-cost payment and bounded authored announcement mana plans"
     ],
-    "review_work_remaining": "",
-    "unresolved_defects": [],
-    "next_batch_source_review": {
-      "status": "preparation_only",
-      "cards": [
-        "rishkar-s-expertise",
-        "hidden-nursery",
-        "apex-devastator",
-        "chthonian-nightmare"
-      ],
-      "requirements": [
-        "Rishkar's Expertise requires optional free casting during resolution, with mana value, X, timing and nonmana additional-cost rules.",
-        "Hidden Nursery requires discover 4, sequential exile, optional free casting or hand placement, and random-bottom handling.",
-        "Chthonian Nightmare requires player energy counters and ordered payment of energy, sacrifice and source return.",
-        "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause.",
-        "Apex Devastator shares free casting and ordered library exile with discover; implement four separate cascade cast triggers."
-      ]
-    },
-    "review_findings": [
-      "Source review caught two casting-history consequences that must not be copied: Necromancy's non-sorcery cleanup and Uro's escaped designation. Exclude both while retaining evoke/kicker/alternative cost decisions; add three cross-library regressions.",
-      "Promotion also retains already-public announced sources in copied hand abilities. A 65th actor-projection and continuation regression is included in required reviewed-loader validation; the passing draft evidence covers the preceding 64 methods."
+    "source_corrections": [
+      "Apex Devastator has both Chimera and Hydra subtypes, as printed in official Commander Legends notes."
     ],
-    "draft_hosted_validation": {
-      "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
-      "run_id": 34868673387,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
-      "conclusion": "success",
-      "tests_per_platform": 2159,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104058848709,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2159,
-          "seconds": 416.817,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104058848976,
-          "name": "verify (windows-latest)",
-          "tests": 2159,
-          "seconds": 414.866,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "coverage_audit": {
-      "totalUnique": 334,
-      "reviewedUnique": 302,
-      "totalCopies": 400,
-      "reviewedCopies": 368,
-      "remainingUnique": 32,
-      "remainingCopies": 32,
-      "byDeck": {
-        "Reaminatour \u2014 Aminatou, Veil Piercer": {
-          "total": 100,
-          "reviewed": 88
-        },
-        "Minsc & Boo, Timeless Heroes": {
-          "total": 100,
-          "reviewed": 93
-        },
-        "Omo, Queen of Vesuva": {
-          "total": 100,
-          "reviewed": 94
-        },
-        "Elenda, Saint of Dusk": {
-          "total": 100,
-          "reviewed": 93
-        }
-      }
-    },
-    "draft_test_methods": 64,
-    "reviewed_test_methods": 65,
-    "hosted_validation": {
-      "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
-      "run_id": 34869674458,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
-      "conclusion": "success",
-      "tests_per_platform": 2160,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104062164282,
-          "name": "verify (windows-latest)",
-          "tests": 2160,
-          "seconds": 417.057,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104062164495,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2160,
-          "seconds": 431.365,
-          "conclusion": "success"
-        }
-      ]
-    }
+    "next_batch": [
+      "chthonian-nightmare",
+      "oracle-of-mul-daya",
+      "maze-s-end",
+      "parasitic-impetus"
+    ],
+    "hosted_attempts": [],
+    "review_work_remaining": "Source and runtime review; draft hosted conformance; source-bound promotion; required reviewed-loader conformance.",
+    "unresolved_defects": []
   },
   "hosted_validation_history": [
     {
@@ -6477,6 +6279,241 @@
             "name": "verify (ubuntu-latest)",
             "tests": 2095,
             "seconds": 370.819,
+            "conclusion": "success"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
+      "cards_written": [
+        "replication-technique",
+        "changing-loyalty",
+        "sunken-palace",
+        "delighted-halfling"
+      ],
+      "cards_promoted": [
+        "replication-technique",
+        "changing-loyalty",
+        "sunken-palace",
+        "delighted-halfling"
+      ],
+      "new_test_methods": 65,
+      "runtime_checkpoint_schema": 127,
+      "state_checkpoint_schema": 17,
+      "validation_status": "passed",
+      "shared_mechanics": [
+        "Noncard spell copies and permanent-copy token entry",
+        "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
+        "Explicit mana-unit spending, one-shot copy riders and legendary-only counter immunity",
+        "Separate copied cost decisions from actual casting history: escaped status, flashback exit and Necromancy cleanup are not inherited"
+      ],
+      "next_batch": [
+        "rishkar-s-expertise",
+        "hidden-nursery",
+        "apex-devastator",
+        "chthonian-nightmare"
+      ],
+      "hosted_attempts": [
+        {
+          "stage": "initial_draft_fixture",
+          "commit": "28321cdd5e9d99b398b87233151a2fc02b1b1556",
+          "run_id": 34866641618,
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2148,
+          "failures": 0,
+          "errors": 2,
+          "findings": [
+            "The initial two fixture errors were missing revision/turn scheduling on land play and missing reopened scenario priority for a second cast. Subsequent revisions corrected the fixtures."
+          ]
+        },
+        {
+          "stage": "initial_draft",
+          "commit": "e71206e2f609dbaf4e8ae85892db7024db552844",
+          "run_id": 34866722108,
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2148,
+          "failures": 0,
+          "errors": 2,
+          "findings": [
+            "Both failures were fixture lifecycle errors: a second scenario cast lacked reopened priority, and the land-play fixture lacked an active turn schedule. Production behavior and all other conformance checks passed on Ubuntu; Windows was cancelled by matrix fail-fast."
+          ]
+        },
+        {
+          "stage": "expanded_draft",
+          "commit": "551759d45d0c6049aadefe6bbfb245c3751a7053",
+          "run_id": 34867369551,
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2156,
+          "failures": 0,
+          "errors": 2,
+          "findings": [
+            "The expanded run still contained the already-corrected missing scenario priority fixture. The new controller-group fixture also used an unsupported unbounded spell target specification. Use its finite bound and retain explicit rejection of the unsupported form; no compiler gate was weakened."
+          ]
+        },
+        {
+          "stage": "priority_corrected_draft",
+          "commit": "9c5745a2d783cfde8cb23e0f159071960c0a9d1d",
+          "run_id": 34867570583,
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2156,
+          "failures": 0,
+          "errors": 1,
+          "findings": [
+            "Only the unsupported unbounded-target test fixture remained; the second-cast priority repair passed. The subsequent fixture uses a finite bound and explicitly verifies the compiler rejection."
+          ]
+        },
+        {
+          "commit": "1bea1dce6b3c789e365df5a38f00f453b6a20c76",
+          "run_id": 34868229398,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868229398",
+          "conclusion": "success",
+          "tests_per_platform": 2156,
+          "platforms": [
+            "ubuntu-latest",
+            "windows-latest"
+          ],
+          "checks": [
+            "source syntax",
+            "full distribution installation",
+            "packaged assets",
+            "draft conformance"
+          ],
+          "jobs": [
+            {
+              "job_id": 104057355600,
+              "name": "verify (ubuntu-latest)",
+              "tests": 2156,
+              "seconds": 331.383,
+              "conclusion": "success"
+            },
+            {
+              "job_id": 104057356208,
+              "name": "verify (windows-latest)",
+              "tests": 2156,
+              "seconds": 401.964,
+              "conclusion": "success"
+            }
+          ],
+          "stage": "superseded_draft",
+          "findings": [
+            "The 61-check revision passed both platforms, then source review added actual-casting-history corrections and three regressions before final draft validation."
+          ]
+        }
+      ],
+      "review_work_remaining": "",
+      "unresolved_defects": [],
+      "next_batch_source_review": {
+        "status": "preparation_only",
+        "cards": [
+          "rishkar-s-expertise",
+          "hidden-nursery",
+          "apex-devastator",
+          "chthonian-nightmare"
+        ],
+        "requirements": [
+          "Rishkar's Expertise requires optional free casting during resolution, with mana value, X, timing and nonmana additional-cost rules.",
+          "Hidden Nursery requires discover 4, sequential exile, optional free casting or hand placement, and random-bottom handling.",
+          "Chthonian Nightmare requires player energy counters and ordered payment of energy, sacrifice and source return.",
+          "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause.",
+          "Apex Devastator shares free casting and ordered library exile with discover; implement four separate cascade cast triggers."
+        ]
+      },
+      "review_findings": [
+        "Source review caught two casting-history consequences that must not be copied: Necromancy's non-sorcery cleanup and Uro's escaped designation. Exclude both while retaining evoke/kicker/alternative cost decisions; add three cross-library regressions.",
+        "Promotion also retains already-public announced sources in copied hand abilities. A 65th actor-projection and continuation regression is included in required reviewed-loader validation; the passing draft evidence covers the preceding 64 methods."
+      ],
+      "draft_hosted_validation": {
+        "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+        "run_id": 34868673387,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
+        "conclusion": "success",
+        "tests_per_platform": 2159,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104058848709,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2159,
+            "seconds": 416.817,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104058848976,
+            "name": "verify (windows-latest)",
+            "tests": 2159,
+            "seconds": 414.866,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "coverage_audit": {
+        "totalUnique": 334,
+        "reviewedUnique": 302,
+        "totalCopies": 400,
+        "reviewedCopies": 368,
+        "remainingUnique": 32,
+        "remainingCopies": 32,
+        "byDeck": {
+          "Reaminatour \u2014 Aminatou, Veil Piercer": {
+            "total": 100,
+            "reviewed": 88
+          },
+          "Minsc & Boo, Timeless Heroes": {
+            "total": 100,
+            "reviewed": 93
+          },
+          "Omo, Queen of Vesuva": {
+            "total": 100,
+            "reviewed": 94
+          },
+          "Elenda, Saint of Dusk": {
+            "total": 100,
+            "reviewed": 93
+          }
+        }
+      },
+      "draft_test_methods": 64,
+      "reviewed_test_methods": 65,
+      "hosted_validation": {
+        "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+        "run_id": 34869674458,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+        "conclusion": "success",
+        "tests_per_platform": 2160,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104062164282,
+            "name": "verify (windows-latest)",
+            "tests": 2160,
+            "seconds": 417.057,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104062164495,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2160,
+            "seconds": 431.365,
             "conclusion": "success"
           }
         ]

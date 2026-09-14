@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **302 source-bound reviewed programs / 368 deck copies**. There are **32 cards / 32 deck
-copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, with three drafts and 29 unstarted cards. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,18 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: spell copies and special mana
+## Current cycle: casting during resolution
+
+Rishkar's Expertise, Hidden Nursery and Apex Devastator are drafted. The shared
+interpreter preserves the resolving parent, grants one bound free-cast permission,
+retains additional costs and supports authored mana-ability payment plans. Discover
+and cascade reuse exact exile identities and random-bottom movement. Apex's missing
+Hydra subtype is corrected from the official Commander Legends release notes.
+Kernel/state schemas are **128/17**. **57 new conformance methods** await hosted
+validation. Reviewed coverage remains **302/334** until promotion and required
+reviewed-loader validation complete. See [the review](RESOLUTION_CAST_CARD_REVIEW.md).
+
+## Previous cycle: spell copies and special mana
 
 Replication Technique, Changing Loyalty, Sunken Palace and Delighted Halfling
 have complete source-bound reviewed programs. Shared support covers noncard

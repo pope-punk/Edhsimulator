@@ -63,6 +63,7 @@ class RulesActorAdapter:
             raise RulesViolation('Invalid actor command')
         kind=command['kind']
         required={'answer':{'request_id','indexes'},'allocate_counters':{'request_id','allocations'},'pass':set(),
+            'decline_cast':{'action_id','request_id'},
             'pay_mana':{'action_id','request_id','payment'},
             'cast':{'action_id','source','targets','x_value','payment'},
             'activate':{'action_id','source','targets','x_value','payment','ability_id'},
@@ -73,13 +74,14 @@ class RulesActorAdapter:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
         decision=decision_for_actor(self.kernel,actor)['kind']
-        expected={'answer':'choice','allocate_counters':'choice','pass':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment',
+        expected={'answer':'choice','allocate_counters':'choice','pass':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
                   'play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
-        if decision!=expected[kind] and not (kind=='activate' and decision=='mana_payment'):
+        if decision!=expected[kind] and not (kind=='activate' and decision in {'mana_payment','casting_mana'} or kind=='cast' and decision=='resolution_cast'):
             raise RulesViolation('Actor does not own this decision stage')
         k=self.kernel
         if kind=='answer':return k.answer(command['request_id'],actor,command['indexes'])
         if kind=='allocate_counters':return k.allocate_counters(command['request_id'],actor,command['allocations'])
+        if kind=='decline_cast':return k.decline_resolution_cast(command['action_id'],actor,command['request_id'],revision=command['revision'])
         if kind=='pass':return k.pass_priority(actor)
         if kind=='pay_mana':
             try:payment=None if command['payment'] is None else Payment.from_json(command['payment'])

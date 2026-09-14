@@ -19,6 +19,7 @@ from .rules_phasing import PhasingRules
 from .rules_casting import CastingRules
 from .rules_mana import ManaRules
 from .rules_spell_copy import SpellCopyRules
+from .rules_resolution_cast import ResolutionCastingRules
 from .rules_copy import CopyRules
 from .rules_turns import TurnRules, TurnActionBoundary
 from .rules_combat import CombatRules
@@ -43,8 +44,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=127
+class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=128
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -88,6 +89,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
         self.linked_exile={};self.exile_durations={};self.phase_links={};self.object_notes={}
         self.regeneration_shields={};self.upkeep_history={p:0 for p in state.players}
         self.turn_history={'turn':state.turn_number,'attacked':[],'freerunning':[]}
+        self.resolution_cast=None
         self.mana_payment=None;self.draw_counts={};self.draw_count_turn=state.turn_number
         self.temporary_effects=[];self.counter_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
         self.phase=None;self.action_receipts={};self.turn_schedule=None;self.combat=None;self.departure=None;self.outcome=None;self.announcement=None
@@ -552,6 +554,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
         waiting=list(self.pending_triggers)+list(self.stack)
         if self.resolving is not None:waiting.append(self.resolving)
         if self.mana_payment is not None:waiting.append(self.mana_payment['parent'])
+        if self.resolution_cast is not None:waiting.append(self.resolution_cast['parent'])
         occupied={row.get('values',{}).get('state_trigger_key') for row in waiting}
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
@@ -651,6 +654,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
             flashback_key=f'flashback:{proposal.before.ref.card_id}@{proposal.before.ref.incarnation}'
             frames=tuple(self.stack)+((self.resolving,) if self.resolving is not None else ())
             if self.mana_payment:frames+=(self.mana_payment['parent'],)
+            if self.resolution_cast:frames+=(self.resolution_cast['parent'],)
             if (proposal.before.zone==Zone.STACK and proposal.destination!=Zone.EXILE
                     and flashback_key not in proposal.used
                     and any(f['spell'] and f.get('exile_on_stack_exit') and self._source(f).ref==proposal.before.ref for f in frames)
@@ -1039,6 +1043,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
+        if self._execute_resolution_cast(effect,frame,task):return
         if self._execute_spell_copy(effect,frame,task):return
         if self._execute_library(effect,frame,task):return
         if self._execute_copy(effect,frame,key):return
@@ -1564,6 +1569,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
                 if self._return_expired_exiles():continue
                 if self.announcement:self._continue_announcement();continue
                 if self._payment_waiting():return self._payment_boundary()
+                if self._cast_waiting() or self._casting_mana_waiting():return self._cast_boundary()
                 if self.departure:self._continue_departure();continue
                 if self._exile_abandoned_control():continue
                 frame=self.resolving
@@ -1580,6 +1586,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
                         task=frame['tasks'][0];sequence=self.state.sequence
                         self._execute(frame,task)
                         if self._payment_waiting():return self._payment_boundary()
+                        if self._cast_waiting() or self._casting_mana_waiting():return self._cast_boundary()
                         # Combat removal is immediate, even between instructions
                         # of one resolution; it is not a state-based action.
                         if self.combat is not None and self.state.sequence!=sequence:self._combat_prune()
@@ -1594,6 +1601,8 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
                     self._event('resolution_finished',frame=frame['id']);self.resolving=None;self.priority=frame.get('return_priority',self.priority_player());self.passes=[]
                     if self.mana_payment:
                         self.resolving=self.mana_payment['parent'];self.priority=None
+                    elif self.resolution_cast:
+                        self.resolving=self.resolution_cast['parent'];self.priority=None
                     continue
                 if self.turn_schedule is not None and self.priority is None:
                     if self.phase=='declare_attackers' and self.active not in self.state.live_players:
@@ -1634,7 +1643,7 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'phase_links':self.phase_links,'object_notes':self.object_notes,
             'regeneration_shields':self.regeneration_shields,'upkeep_history':self.upkeep_history,'turn_history':self.turn_history,
-            'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
+            'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1645,10 +1654,12 @@ class RulesKernel(SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,Cou
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'],copy_programs=value['copy_programs'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','mana_payment','draw_counts','draw_count_turn'):
+        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
         if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
             kernel.resolving=kernel.mana_payment['parent']
+        if kernel.resolution_cast and kernel.resolving and kernel.resolving['id']==kernel.resolution_cast['parent']['id']:
+            kernel.resolving=kernel.resolution_cast['parent']
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
             kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))

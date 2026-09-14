@@ -43,6 +43,15 @@ def decision_for_actor(kernel,actor):
         if request.revision!=kernel.revision:raise RulesViolation('Choice no longer matches current state')
         if request.actor==actor:return {'kind':'choice','choice':request.to_json()}
         return {'kind':'waiting','actor':request.actor}
+    if kernel._casting_mana_waiting():
+        owner=kernel.resolution_cast['actor']
+        return {'kind':'casting_mana' if actor==owner else 'waiting','actor':owner}
+    if kernel._cast_waiting():
+        window=kernel.resolution_cast
+        if actor!=window['actor']:return {'kind':'waiting','actor':window['actor']}
+        return {'kind':'resolution_cast','request_id':window['id'],'maximum':window['maximum'],
+            'origin':window['origin'],'candidates':[ref.to_json() for ref in kernel._resolution_cast_candidates()],
+            'revision':kernel.revision}
     if kernel._payment_waiting():
         window=kernel.mana_payment
         if actor!=window['actor']:return {'kind':'waiting','actor':window['actor']}
@@ -103,6 +112,7 @@ def project_actor(kernel,actor):
             **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
             **({'kicker':frame['kicker']} if 'kicker' in frame else {}),
             **({'replicate':frame['replicate']} if 'replicate' in frame else {}),
+            **({'without_mana_cost':True} if frame.get('without_mana_cost') else {}),
             **({'copied':True} if frame.get('copied') else {}),
             **({'cannot_be_countered':True} if frame.get('cannot_be_countered') else {}),
             **({'cast_timing':frame['cast_timing']} if 'cast_timing' in frame else {}),

@@ -100,18 +100,23 @@ class Payment:
     zone_costs: tuple = ()
     convoke: tuple = ()
     tagged_mana: tuple[str,...] = ()
+    mana_actions: tuple = ()
 
     def to_json(self):
         result={'mana':dict(self.mana),'taps':[ref.to_json() for ref in self.taps],
             'zone_costs':{key:[ref.to_json() for ref in refs] for key,refs in self.zone_costs}}
+        if self.mana_actions:result['mana_actions']=list(self.mana_actions)
         if self.tagged_mana:result['tagged_mana']=list(self.tagged_mana)
         if self.convoke:result['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in self.convoke]
         return result
 
     @classmethod
     def from_json(cls, value):
-        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke','tagged_mana'}
+        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke','tagged_mana','mana_actions'}
                 or not isinstance(value['mana'],dict) or not isinstance(value.get('zone_costs',{}),dict)
+                or not isinstance(value.get('mana_actions',[]),list)
+                or len(value.get('mana_actions',[]))>128
+                or any(type(row) is not dict for row in value.get('mana_actions',[]))
                 or not isinstance(value.get('tagged_mana',[]),list)
                 or any(type(unit) is not str for unit in value.get('tagged_mana',[]))
                 or not isinstance(value.get('convoke',[]),list)
@@ -119,7 +124,7 @@ class Payment:
             raise RulesViolation('Invalid payment packet')
         return cls(tuple(sorted(value['mana'].items())), tuple(ObjectRef.from_json(ref) for ref in value['taps']),
             tuple((key,tuple(ObjectRef.from_json(ref) for ref in refs)) for key,refs in sorted(value.get('zone_costs',{}).items())),
-            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])),tuple(value.get('tagged_mana',[])))
+            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])),tuple(value.get('tagged_mana',[])),tuple(value.get('mana_actions',[])))
 
 
 class CastingRules:
@@ -142,7 +147,7 @@ class CastingRules:
             raise RulesViolation('Resolution payment requires a fresh bounded action identity')
         resources=None
         if payment is not None:
-            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=():
+            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=() or payment.mana_actions!=():
                 raise RulesViolation('Resolution payment accepts mana only')
             resources=ResourcePayment(actor,payment.mana,tagged_mana=self._tagged_resources(actor,payment.tagged_mana))
             self.state.validate_payment(resources)
@@ -214,13 +219,15 @@ class CastingRules:
             raise RulesViolation('More than one target in a controller group')
 
     def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0):
-        resolution_mana=kind=='activate' and self._payment_waiting()
-        if not resolution_mana:self._idle()
+        resolution_cast=kind=='cast' and self._cast_waiting()
+        casting_mana=kind=='activate' and self._casting_mana_waiting()
+        resolution_mana=kind=='activate' and (self._payment_waiting() or casting_mana)
+        if not resolution_mana and not resolution_cast:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
             raise RulesViolation('Action requires a bounded nonempty identity')
         if action_id in self.action_receipts:
             raise RulesViolation('Action was already accepted')
-        owner=self.mana_payment['actor'] if resolution_mana else self.priority
+        owner=self.resolution_cast['actor'] if resolution_cast or casting_mana else self.mana_payment['actor'] if resolution_mana else self.priority
         if actor not in self.state.live_players or owner != actor:
             raise RulesViolation('Actor does not own the action window')
         source = self.state.get(ref)
@@ -228,6 +235,9 @@ class CastingRules:
         if kind == 'cast':
             alternative=next((a for a in program.cast.alternatives if a.alternative_id==alternative_id),None) if program.cast else None
             origins=(Zone.GRAVEYARD,) if isinstance(alternative,GraveyardAlternativeCost) else program.cast.origin_zones if program.cast else ()
+            if resolution_cast:
+                if ref not in self._resolution_cast_candidates():raise RulesViolation('Card is outside the current resolution-cast permission')
+                origins=(Zone(self.resolution_cast['origin']),)
             if program.cast is None or source.zone not in origins or source.owner != actor:
                 raise RulesViolation('Unsupported spell origin or permission')
             if source.zone == Zone.COMMAND and not source.commander:
@@ -252,11 +262,14 @@ class CastingRules:
             target_spec = specification.targets
         else:
             raise RulesViolation('Unsupported action kind')
-        if specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in self.effective(ref).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
+        if not resolution_cast and specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in self.effective(ref).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
             raise RulesViolation('Action requires sorcery timing')
         if type(kicker) is not bool or kicker and (kind!='cast' or not isinstance(specification,KickerCast)):
             raise RulesViolation('Invalid kicker declaration')
         cost = specification.cost
+        if resolution_cast:
+            if alternative_id is not None or x_value!=0:raise RulesViolation('Free casts require X zero and forbid other alternative costs')
+            cost=replace(cost,mana=ManaCost())
         if alternative_id is not None:
             if kind!='cast' or type(alternative_id) is not str:raise RulesViolation('Invalid alternative casting declaration')
             alternative=next((a for a in specification.alternatives if a.alternative_id==alternative_id),None)
@@ -375,6 +388,8 @@ class CastingRules:
                                      quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
+        if not isinstance(payment,Payment):raise RulesViolation('Payment must be an authored payment packet')
+        if payment.mana_actions:return self._commit_cast_mana_plan(quote,payment)
         resources = self._resource_payment(quote, payment)
         zone_refs=self._zone_cost_refs(quote,payment)
         if quote.cost.zone_costs:
@@ -439,7 +454,7 @@ class CastingRules:
         target_spec=None if isinstance(alternative,OverloadAlternative) else program.spell_targets
         if not effects and not {'Instant', 'Sorcery'} & set(program.types):
             effects = (Move('source', Zone.BATTLEFIELD),)
-        sorcery_timing=self.active==quote.actor and self.phase in {'precombat_main','postcombat_main'} and not self.stack
+        sorcery_timing=self.resolving is None and self.active==quote.actor and self.phase in {'precombat_main','postcombat_main'} and not self.stack
         if isinstance(program.cast,CleanupCast) and not sorcery_timing:
             effects=(WithZoneResult(Move('source',Zone.BATTLEFIELD),Zone.BATTLEFIELD,(
                 IfQuantityAtLeast(MovedCount(),1,(
@@ -527,7 +542,10 @@ class CastingRules:
         self.action_receipts[quote.action_id] = receipt
         self._event('costs_paid', action_id=quote.action_id, **receipt['payment'])
         self._event(event_kind, action_id=quote.action_id, source=source.ref.to_json(), controller=quote.actor)
-        self.priority = None if self.mana_payment else quote.actor
+        if quote.kind=='cast' and self.resolution_cast and not self.resolution_cast['completed']:
+            self.resolution_cast['completed']=True;self.resolution_cast['cast']=True
+            frame['without_mana_cost']=True
+        self.priority = None if self.mana_payment or self.resolution_cast else quote.actor
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
         self._collect_tapped(resources.taps,tap_observers)

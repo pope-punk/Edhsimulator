@@ -1298,11 +1298,12 @@
           "oracle_text": "Cascade, cascade, cascade, cascade",
           "power": 10,
           "subtypes": [
-            "Chimera"
+            "Chimera",
+            "Hydra"
           ],
           "supertypes": [],
           "toughness": 10,
-          "type_line": "Creature — Chimera",
+          "type_line": "Creature — Chimera Hydra",
           "types": [
             "Creature"
           ]

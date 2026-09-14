@@ -164,3 +164,13 @@ def choice_capacity(options, one_per_group=False, group_bounds=()):
         counts=Counter(option.group for option in options)
         return sum(min(maximum,counts[name]) for name,minimum,maximum in group_bounds)
     return len({option.group for option in options}) if one_per_group else len(options)
+
+
+@dataclass(frozen=True)
+class ResolutionCastBoundary:
+    actor: str
+    request_id: str
+    maximum: int
+    origin: str
+    candidates: tuple[ObjectRef,...]
+    revision: str
