@@ -14,7 +14,7 @@ from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
 from .rules_program import CopyCast, CombatDamageToPlayer, OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
-from .rules_program import OrderedCostSpec,PlayerCounterCost,LifeCostModifier,cost_has_x
+from .rules_program import LoyaltyCost,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,cost_has_x
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -312,6 +312,12 @@ class CastingRules:
                 cost.mana.symbols+extra.symbols,cost.mana.x_symbols))
         if type(x_value) is not int or x_value < 0 or x_value and not cost_has_x(cost):
             raise RulesViolation('Invalid announced X')
+        if isinstance(cost,LoyaltyCost):
+            if kind!='activate':raise RulesViolation('Loyalty symbols cannot pay for spells')
+            if self.loyalty_used(source.ref):raise RulesViolation('A loyalty ability of this permanent was already activated this turn')
+            delta=-x_value if isinstance(cost.loyalty,ChosenX) else cost.loyalty
+            if delta<0 and dict(source.counters).get('loyalty',0)<-delta:raise RulesViolation('Insufficient loyalty counters')
+            cost=replace(cost,loyalty=delta)
         if kind=='activate' and x_value<specification.minimum_x:raise RulesViolation('Announced X is below the activation minimum')
         if not isinstance(mode_choices,tuple):raise RulesViolation('Mode choices must be immutable')
         modal=self.definition(source).modal if kind=='cast' else None
@@ -435,6 +441,7 @@ class CastingRules:
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         if not isinstance(payment,Payment):raise RulesViolation('Payment must be an authored payment packet')
+        if isinstance(quote.cost,LoyaltyCost):return self._commit_loyalty_action(quote,payment)
         if isinstance(quote.cost,OrderedCostSpec):return self._commit_ordered_action(quote,payment)
         if payment.cost_order:raise RulesViolation('This cost does not accept an ordered payment')
         if payment.mana_actions:return self._commit_cast_mana_plan(quote,payment)
@@ -597,6 +604,7 @@ class CastingRules:
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
         self._collect_tapped(resources.taps,tap_observers)
+        if frame is not None:self._collect_ward(frame)
         self._collect_copy_announcement(quote,resources,source,frame,mana_ability)
         for effect in immediate_mana:
             self._produce_mana(quote.actor,effect.symbols,tapped_for_mana=tapped_for_mana)
@@ -620,6 +628,7 @@ class CastingRules:
         return tuple(refs)
 
     def _continue_announcement(self):
+        if self.announcement.get('loyalty'):return self._continue_loyalty_announcement()
         if self.announcement.get('ordered'):return self._continue_ordered_announcement()
         pending=self.announcement;quote=PreparedAction.from_json(pending['quote']);payment=Payment.from_json(pending['payment'])
         source=RulesObject.from_json(pending['source']);ability=decode(pending['ability'])

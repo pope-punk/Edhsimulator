@@ -29,6 +29,9 @@ def _card(kernel,obj,views):
         'mana_value':view.mana_value,'power':view.power,'toughness':view.toughness,
         'tapped':obj.tapped,'phased':obj.phased,'counters':dict(obj.counters),
         **({'monstrous':True} if obj.monstrous else {}),
+        **({'class_level':obj.class_level} if 'Class' in view.subtypes or obj.class_level>1 else {}),
+        **({'loyalty_used_this_turn':kernel.loyalty_used(obj.ref)} if 'Planeswalker' in view.types else {}),
+        **({'ward_costs':[encode(mana) for _,_,mana in view.wards]} if view.wards else {}),
         **({'untap_blocked':True} if view.untap_blocked else {}),
         **({'goaded_by':sorted(view.goaded_by)} if view.goaded_by else {}),
         **({'riot_instances':len(view.riot)} if view.riot else {}),
@@ -215,6 +218,9 @@ def project_actor(kernel,actor):
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],
             'mana':deepcopy(window['mana']),'parent_frame':window['parent']['id']}
     packet['attack_taxes']={p:kernel._attack_tax(p) for p in state.live_players}
+    packet['attack_destinations']=[{'player':p} for p in state.live_players if p!=actor]+[
+        {'ref':obj.ref.to_json(),'defending_player':obj.controller} for obj in state.objects(Zone.BATTLEFIELD)
+        if not obj.phased and obj.controller!=actor and 'Planeswalker' in kernel.effective(obj.ref).types]
     if actor in state.live_players:
         packet['optional_life_costs']=[{'card':obj.ref.to_json(),'options':[{'key':key,'life':rule.life,'color':rule.color}
             for key,(_,rule) in kernel._life_cost_options(obj,actor).items()]} for obj in state.objects()

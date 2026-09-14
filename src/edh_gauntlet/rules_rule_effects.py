@@ -93,10 +93,12 @@ class RuleEffects:
     def _spell_uncounterable(self,ref):
         if any(f['spell'] and self._source(f).ref==ref and f.get('cannot_be_countered') for f in self.stack):return True
         obj=self.state.get(ref)
-        return 'Creature' in self.effective(ref).types and any(
+        turn_permission=any(row['controller']==obj.controller and isinstance((rule:=decode(row['permissions'])),RulePermissions)
+            and rule.creature_spells_uncounterable for row in self.player_effects)
+        return 'Creature' in self.effective(ref).types and (turn_permission or any(
             not source.phased and source.controller==obj.controller
             and isinstance((rule:=self.definition(source).player_permissions),RulePermissions)
-            and rule.creature_spells_uncounterable for source in self.state.objects(Zone.BATTLEFIELD))
+            and rule.creature_spells_uncounterable for source in self.state.objects(Zone.BATTLEFIELD)))
 
     def _announcement_mana_waiting(self):
         return bool(self.declaration_mana and not self.pending_choice and not self.announcement and self.resolving is None)

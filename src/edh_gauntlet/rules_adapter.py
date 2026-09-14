@@ -114,11 +114,14 @@ class RulesActorAdapter:
             if type(command['attackers']) is not list:raise RulesViolation('Invalid attackers')
             attackers={}
             for row in command['attackers']:
-                if type(row) is not dict or set(row)!={'source','defender'} or row['defender'] not in k.state.live_players:
+                if type(row) is not dict or set(row)!={'source','defender'}:
                     raise RulesViolation('Invalid attack declaration')
                 ref=self._visible_ref(row['source'],actor)
                 if ref in attackers:raise RulesViolation('Duplicate attacker')
-                attackers[ref]=row['defender']
+                destination=row['defender']
+                if isinstance(destination,dict):destination=self._visible_ref(destination,actor)
+                elif type(destination) is not str:raise RulesViolation('Invalid defending object or player')
+                attackers[ref]=destination
             return k.declare_attackers(actor,attackers,revision=command['revision'],payment=Payment.from_json(command['payment']) if 'payment' in command else None)
         if kind=='block':return k.declare_blockers(actor,command['assignments'],revision=command['revision'])
         return k.assign_combat_damage(actor,command['assignments'],revision=command['revision'])

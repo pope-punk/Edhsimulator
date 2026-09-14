@@ -9,7 +9,7 @@ from dataclasses import dataclass, replace
 import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
-from .rules_program import SetCardTypes,LoseAbilities,Goaded,AddRiot
+from .rules_program import KeywordSelector,ClassLevelCondition,ControllerTurnCondition,AddWard,ContinuousProgram,Selector,SetCardTypes,LoseAbilities,Goaded,AddRiot
 
 ARTIFACT_TYPES=frozenset('Attraction Blood Bobblehead Book Clue Contraption Equipment Food Fortification Gold Incubator Infinity Junk Lander Map Mutagen Powerstone Spacecraft Stone Treasure Vehicle Vibranium'.split())
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
@@ -35,6 +35,7 @@ class Characteristics:
     abilities_removed: bool = False
     riot: tuple = ()
     goaded_by: frozenset[str] = frozenset()
+    wards: tuple = ()
 
 
 def base(obj, definitions):
@@ -67,6 +68,7 @@ def counters_match(ranges, obj):
 
 
 def matches(selector, obj, view, source):
+    if isinstance(selector,KeywordSelector) and not set(selector.any_keywords)&view.keywords:return False
     if isinstance(selector,ModifiedSelector) and not view.modified:return False
     if selector.characteristics and obj.zone==Zone.BATTLEFIELD and 'Creature' not in view.types and any(bound.statistic in {'power','toughness'} for bound in selector.characteristics):return False
     return (not obj.phased and obj.zone == selector.zone
@@ -91,17 +93,22 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
+    return {AddWard:6,SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
 
 
-def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
     if condition is None:
         return True
     if isinstance(condition,(AllConditions,AnyConditions)):
-        answers=(condition_holds(child,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals) for child in condition.conditions)
+        answers=(condition_holds(child,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals,active_player=active_player) for child in condition.conditions)
         return all(answers) if isinstance(condition,AllConditions) else any(answers)
     if isinstance(condition,NotCondition):
-        return not condition_holds(condition.condition,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
+        return not condition_holds(condition.condition,source,objects,views,excluding_ref=excluding_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals,active_player=active_player)
+    if isinstance(condition,ClassLevelCondition):
+        return source.class_level>=condition.minimum and (condition.maximum is None or source.class_level<=condition.maximum)
+    if isinstance(condition,ControllerTurnCondition):
+        if active_player is None:raise RulesViolation('Controller-turn condition requires an active player')
+        return source.controller==active_player
     if isinstance(condition,LifeLostCondition):
         if life_lost_totals is None or source.controller not in life_lost_totals:
             raise RulesViolation('Life-loss conditions require explicit turn history')
@@ -147,9 +154,9 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
     return remaining <= 0
 
 
-def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
     if source.ref in views and views[source.ref].abilities_removed:return ()
-    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals):
+    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals, active_player):
         return ()
     return tuple(obj.ref for obj in objects if matches(effect.selector, obj, views[obj.ref], source)
         and (source.ref != entering_ref or obj.ref == entering_ref)
@@ -184,7 +191,9 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
                 if {'Creature','Kindred'}&types:subtypes.update(change.creature_subtypes)
                 view=replace(view,types=types,subtypes=frozenset(subtypes))
             elif isinstance(change,LoseAbilities):
-                view=replace(view,abilities_removed=True,keywords=frozenset(),granted_abilities=(),target_restrictions=(),riot=())
+                view=replace(view,abilities_removed=True,keywords=frozenset(),granted_abilities=(),target_restrictions=(),riot=(),wards=())
+            elif isinstance(change,AddWard):
+                view=replace(view,wards=view.wards+((grant_key[0],grant_key[1]+':'+str(change_index),change.mana),))
             elif isinstance(change,AddRiot):
                 if not next(obj for obj in objects if obj.ref==ref).token:
                     view=replace(view,riot=view.riot+((grant_key[0],grant_key[1]+':'+str(change_index)),))
@@ -278,16 +287,16 @@ def _may_change_recipients(changes, effect):
     return False
 
 
-def evaluate(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
-    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=True,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
+def evaluate(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
+    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=True,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals,active_player=active_player)
 
 
-def evaluate_exhaustive(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+def evaluate_exhaustive(objects, definitions, *, entering_ref=None, temporary=(), life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
     """Slow comparison oracle for tests/benchmarks, never selected by the kernel."""
-    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=False,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals)
+    return _evaluate(objects, definitions, entering_ref=entering_ref, temporary=temporary, dependency_pruning=False,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals,active_player=active_player)
 
 
-def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruning, life_totals, starting_life_totals, live_players, life_lost_totals):
+def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruning, life_totals, starting_life_totals, live_players, life_lost_totals, active_player):
     objects = tuple(objects)
     views = {obj.ref: base(obj, definitions) for obj in objects}
     _refresh_modified(views,objects)
@@ -306,7 +315,10 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             effects.append((key, source, effect))
     locked = {}
     current={obj.ref:obj for obj in objects}
-    for source,effect,refs in temporary:
+    entry_rows=tuple((obj,ContinuousProgram('entry-subtypes',Selector(Zone.BATTLEFIELD),
+        (AddSubtypes('Creature',obj.entry_subtypes),)),(obj.ref,))
+        for obj in objects if obj.zone==Zone.BATTLEFIELD and obj.entry_subtypes)
+    for source,effect,refs in tuple(temporary)+entry_rows:
         key=(source.ref,effect.effect_id)
         effects.append((key,source,effect))
         locked[key]=tuple(ref for ref in refs if ref in current and current[ref].zone==Zone.BATTLEFIELD and not current[ref].phased)
@@ -327,13 +339,13 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             # Proven independent: timestamp order is sufficient, with one
             # recipient calculation per effect instead of repeated graph passes.
             for key, source, effect in pending:
-                refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals)
+                refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals, active_player)
                 locked.setdefault(key, refs)
                 _apply(views, refs, changes[key], effect.effect_id, key, objects, lost_players)
             pending = []
         while pending:
             def recipients(row, state):
-                return locked[row[0]] if row[0] in locked else _recipients(row[1], row[2], objects, state, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals)
+                return locked[row[0]] if row[0] in locked else _recipients(row[1], row[2], objects, state, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals, active_player)
             # A cache lives only within this dependency pass. Applying an effect
             # invalidates it; cross-layer recipient locking remains separate.
             current = {row[0]: recipients(row, views) for row in pending}

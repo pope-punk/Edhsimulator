@@ -28,6 +28,7 @@ class ZoneProposal:
     destruction: bool = False
     regenerated: str | None = None
     riot_haste: bool = False
+    entry_subtypes: tuple = ()
 
 
 @dataclass(frozen=True)

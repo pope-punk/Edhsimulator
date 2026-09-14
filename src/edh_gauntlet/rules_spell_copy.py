@@ -125,6 +125,7 @@ class SpellCopyRules:
         copy['id']=self._id('frame');copy['started']=False;copy['copied']=True
         for task in copy['tasks']:task['id']=self._id('effect')
         self.stack.append(copy)
+        self._collect_ward(copy)
         self._event('stack_object_copied',frame=copy['id'],controller=controller,
             spell=copy['spell'],source=copy['source']['ref'],targets=deepcopy(copy['targets']))
         return copy

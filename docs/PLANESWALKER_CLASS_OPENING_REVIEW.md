@@ -1,9 +1,14 @@
-# Pass 2 preparation: planeswalkers, Class and opening choices
+# Pass 2 review: planeswalkers, Class and opening choices
 
-Status: source-review preparation only. These seven cards remain unstarted and
-outside the reviewed bundle. This record is a head start for pass 2, not a
-completion or validation claim. Read the current work order and sources before
-implementation. Keep the original four-pass, 28-card baseline.
+Status: all seven complete printed programs are authored as isolated drafts.
+Hosted draft conformance and final source review are pending. No cards have been
+promoted in this pass. The original four-pass, 28-card baseline is unchanged.
+
+The runtime adds signed loyalty costs, Class designations, ward, planeswalker
+combat destinations, explicit post-mulligan opening actions, reflexive sacrifice
+triggers, directional control rotation and entry subtype effects. Kernel/state
+checkpoint schemas are 130/18. The new suite has 81 conformance methods.
+All project execution remains on GitHub-hosted runners.
 
 ## Shared scope
 

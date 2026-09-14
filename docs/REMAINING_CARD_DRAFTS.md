@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **313 source-bound reviewed programs / 379 deck copies**. There are **21 cards / 21 deck
-copies outside the reviewed bundle**, all unstarted; the draft bundle is empty. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, seven drafted and fourteen unstarted. Reviewed coverage is not production certification.
 
 ## Four-pass completion plan
 
@@ -52,7 +52,15 @@ family where useful. Group related validation and avoid redundant full-suite
 runs. All existing GitHub-only execution constraints remain in force, and the
 heartbeat remains active every 40 minutes.
 
-## Current pass: payments, combat and continuous effects
+## Current pass: planeswalkers, Class and opening choices
+
+All seven Pass 2 programs are drafted with shared runtime support and 81 new
+hosted conformance methods. Validation and full source review are pending;
+reviewed coverage remains **313/334**, with seven drafts and fourteen unstarted
+cards. Pass 2 remains in progress within the original four-pass baseline.
+No local project execution occurred. See [the review record](PLANESWALKER_CLASS_OPENING_REVIEW.md).
+
+## Completed pass 1: payments, combat and continuous effects
 
 The seven Pass 1 cards have complete printed-face review and are promoted to
 the source-bound bundle. Hosted draft validation passed **2346 tests on
@@ -66,7 +74,7 @@ Coverage is 313 reviewed unique cards / 379 copies, with 21 cards remaining.
 **Pass 1 is complete. Three passes remain within the original four-pass target.** No local
 project execution occurred. See [the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md).
 
-The next pass includes loyalty entry/costs, loyalty damage, attacking and defending
+The current pass includes loyalty entry/costs, loyalty damage, attacking and defending
 planeswalkers, Class levels and opening-hand choices. Its seven-card group remains
 unchanged; see [the source-review preparation](PLANESWALKER_CLASS_OPENING_REVIEW.md) for each complete printed behavior.
 

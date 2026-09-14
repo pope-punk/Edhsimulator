@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 313,
     "remaining_outside_reviewed_bundle": 21,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 21,
+    "drafts_written": 7,
+    "not_started_on_this_branch": 14,
     "reviewed_bundle_copies": 379,
-    "draft_copies": 0,
+    "draft_copies": 7,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 86,
     "remaining_outside_reviewed_bundle_copies": 21
@@ -102,7 +102,7 @@
     {
       "card_id": "aminatou-the-fateshifter",
       "name": "Aminatou, the Fateshifter",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -115,7 +115,15 @@
           "face_id": "aminatou-the-fateshifter",
           "text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:aminatou-the-fateshifter",
+      "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "aminatou-veil-piercer",
@@ -833,7 +841,7 @@
     {
       "card_id": "domri-anarch-of-bolas",
       "name": "Domri, Anarch of Bolas",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -846,7 +854,15 @@
           "face_id": "domri-anarch-of-bolas",
           "text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:domri-anarch-of-bolas",
+      "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "elspeth-conquers-death",
@@ -1703,7 +1719,7 @@
     {
       "card_id": "innkeeper-s-talent",
       "name": "Innkeeper's Talent",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1716,7 +1732,15 @@
           "face_id": "innkeeper-s-talent",
           "text": "At the beginning of combat on your turn, put a +1/+1 counter on target creature you control.\n{G}: Level 2\nPermanents you control with counters on them have ward {1}.\n{3}{G}: Level 3\nIf you would put one or more counters on a permanent or player, put twice that many of each of those kinds of counters on that permanent or player instead."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:innkeeper-s-talent",
+      "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "invasion-of-theros",
@@ -1965,7 +1989,7 @@
     {
       "card_id": "leyline-of-hope",
       "name": "Leyline of Hope",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1978,7 +2002,15 @@
           "face_id": "leyline-of-hope",
           "text": "If this card is in your opening hand, you may begin the game with it on the battlefield.\nIf you would gain life, you gain that much life plus 1 instead.\nAs long as you have at least 7 life more than your starting life total, creatures you control get +2/+2."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:leyline-of-hope",
+      "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "march-from-velis-vel",
@@ -2099,7 +2131,7 @@
     {
       "card_id": "minsc-boo-timeless-heroes",
       "name": "Minsc & Boo, Timeless Heroes",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2112,7 +2144,15 @@
           "face_id": "minsc-boo-timeless-heroes",
           "text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:minsc-boo-timeless-heroes",
+      "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "mirage-mirror",
@@ -2278,7 +2318,7 @@
     {
       "card_id": "nissa-steward-of-elements",
       "name": "Nissa, Steward of Elements",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2291,7 +2331,15 @@
           "face_id": "nissa-steward-of-elements",
           "text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:nissa-steward-of-elements",
+      "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "nullpriest-of-oblivion",
@@ -3087,7 +3135,7 @@
     {
       "card_id": "sorin-vengeful-bloodlord",
       "name": "Sorin, Vengeful Bloodlord",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -3100,7 +3148,15 @@
           "face_id": "sorin-vengeful-bloodlord",
           "text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:sorin-vengeful-bloodlord",
+      "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8",
+      "batch": "planeswalkers-class-opening-2026-09-14",
+      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "stomping-ground",
@@ -3725,129 +3781,9 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
-    "pass": 1,
+    "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
+    "pass": 2,
     "cards_written": [
-      "chthonian-nightmare",
-      "maze-s-end",
-      "rhythm-of-the-wild",
-      "parasitic-impetus",
-      "propaganda",
-      "defiler-of-vigor",
-      "darksteel-mutation"
-    ],
-    "cards_promoted": [
-      "chthonian-nightmare",
-      "maze-s-end",
-      "rhythm-of-the-wild",
-      "parasitic-impetus",
-      "propaganda",
-      "defiler-of-vigor",
-      "darksteel-mutation"
-    ],
-    "validation_status": "passed",
-    "runtime_checkpoint_schema": 129,
-    "state_checkpoint_schema": 17,
-    "new_test_methods": 91,
-    "unresolved_defects": [],
-    "review_work_remaining": "",
-    "review_findings": [
-      "Basic-land intrinsic mana is removed along with other abilities; later explicitly granted activations remain available.",
-      "Tap-trigger discovery evaluates ability presence on the actual tap-event battlefield, including sources that subsequently pay zone costs.",
-      "Riot haste participates in entry lookahead and its material-proposal cache key.",
-      "Parasitic Impetus reads the original attacking creature's current controller on resolution, falling back to exact-incarnation last known information after departure (CR 608.2h/k)."
-    ],
-    "validation_attempts": [
-      {
-        "commit": "02c8d0c20953b2f5ea6eb377985f4d4cb1c2f8b8",
-        "run_id": 34884257593,
-        "stage": "draft",
-        "status": "failed",
-        "tests_per_platform": 2335,
-        "failures": [
-          "ScanningRulesKernel override lacked optional historical views parameter.",
-          "Repeated-goad fixture omitted the trigger-order response before stack assertion."
-        ],
-        "corrections": "Both repaired; eight additional source-review cases included in the corrected draft.",
-        "platform_results": {
-          "ubuntu": "failed: one fixture assertion and one reference override error",
-          "windows": "same two failures in logs; job cancelled"
-        }
-      },
-      {
-        "commit": "437ffc8353ea986a8431dc8ae387ac97d6a0c72a",
-        "run_id": 34885207854,
-        "stage": "expanded_draft",
-        "status": "failed",
-        "tests_per_platform": 2343,
-        "failures": [
-          "Synthetic land-subtype fixture lacked the compiler's required Land selector."
-        ],
-        "corrections": "Separate land-type restoration from the typed Forest-subtype grant; keep the compiler gate intact.",
-        "platform_results": {
-          "ubuntu": "failed: one invalid synthetic fixture",
-          "windows": "cancelled by matrix fail-fast"
-        }
-      },
-      {
-        "commit": "ed0cc1875f604e666553df7fc0a4ff3270c0b42b",
-        "run_id": 34885623950,
-        "stage": "impetus_review_draft",
-        "status": "failed",
-        "tests_per_platform": 2346,
-        "failures": [
-          "Inherited malformed land-subtype fixture; no other conformance failure."
-        ],
-        "platform_results": {
-          "ubuntu": "one fixture error after 2346 tests",
-          "windows": "cancelled by matrix fail-fast"
-        }
-      }
-    ],
-    "next_batch_source_review": {
-      "status": "source_review_preparation_only",
-      "card_ids": [
-        "aminatou-the-fateshifter",
-        "domri-anarch-of-bolas",
-        "minsc-boo-timeless-heroes",
-        "nissa-steward-of-elements",
-        "sorin-vengeful-bloodlord",
-        "innkeeper-s-talent",
-        "leyline-of-hope"
-      ],
-      "requirements": [
-        "Five planeswalkers share printed/X loyalty entry, once-per-turn sorcery activations, immediate loyalty costs, zero-loyalty state actions, loyalty damage and attacking/defending planeswalkers. A mana-producing loyalty ability still uses the stack.",
-        "Aminatou's +1 reuses draw then authored hand-to-library-top placement; -1 returns another owned permanent under her controller; -6 needs one left/right choice and simultaneous nonland control rotation excluding its source.",
-        "Domri reuses the controlled +1/+0 layer and opposing/controlled fight target groups; +1 needs a turn-duration rule applying to creature spells cast that turn.",
-        "Minsc & Boo needs optional legendary Boo entry/upkeep creation, trample-or-haste targeting, and a separate reflexive trigger after resolution sacrifice with captured power/Hamster subtype and later damage target choice.",
-        "Nissa needs X loyalty entry, private top inspection with a land-or-bounded-creature predicate using resolution-time loyalty, and targeted untap plus temporary land animation/flying/haste.",
-        "Sorin needs active-turn lifelink for creatures and planeswalkers, player-or-planeswalker damage, and exact-X graveyard return with permanent additive Vampire subtype.",
-        "Innkeeper's Talent needs Class levels and sorcery activation timing, counter-bearing permanent ward triggers, and player/permanent counter doubling determined by the putting player.",
-        "Leyline of Hope needs an explicit optional opening-hand placement before turn one; its life replacement and starting-life-relative anthem reuse existing primitives."
-      ],
-      "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "sources": [
-        "https://magic.wizards.com/en/news/feature/commander-2018-edition-release-notes-2018-07-27",
-        "https://magic.wizards.com/en/news/feature/war-spark-release-notes-2019-04-19",
-        "https://magic.wizards.com/en/news/feature/commander-legends-battle-baldurs-gate-release-notes-2022-06-01",
-        "https://magic.wizards.com/en/news/feature/amonkhet-release-notes-2017-04-14",
-        "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
-        "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes"
-      ],
-      "notes": [
-        "Read the preparation document alongside the current catalog and CR; older release notes use historical terminology.",
-        "Omo is projected to reach 100/100 after Nissa in pass 2. Update the old every-deck-has-unmapped assertion to retain explicit totals without incorrectly requiring omissions."
-      ],
-      "reuse_audit": [
-        "RulesKernel._state_based_actions already handles zero loyalty; retain and exercise it through new entry and activation paths.",
-        "RulesState.damage_batch already removes loyalty/defense counters according to recipient types. Route planeswalker combat through that pipeline.",
-        "SourceCounter already uses _object_information for exact last known counters; reuse it for Nissa's zero ability.",
-        "CounterReplacement already has actor_relation and both permanent/player recipient support; Innkeeper's counter doubling needs level gating around this existing primitive.",
-        "GrantPermissions/player_effects already retain turn-duration permissions; extend their rule interpretation for Domri instead of creating a parallel lifetime mechanism.",
-        "OngoingEffect/AddSubtypes already express indefinite additive types; Sorin's return additionally requires the type to be present in entry lookahead."
-      ]
-    },
-    "next_batch": [
       "aminatou-the-fateshifter",
       "domri-anarch-of-bolas",
       "minsc-boo-timeless-heroes",
@@ -3856,108 +3792,34 @@
       "innkeeper-s-talent",
       "leyline-of-hope"
     ],
-    "draft_hosted_validation": {
-      "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
-      "run_id": 34886471504,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
-      "conclusion": "success",
-      "tests_per_platform": 2346,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104118262290,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2346,
-          "seconds": 510.655,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104118262497,
-          "name": "verify (windows-latest)",
-          "tests": 2346,
-          "seconds": 464.524,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "coverage_audit": {
-      "totalUnique": 334,
-      "reviewedUnique": 313,
-      "totalCopies": 400,
-      "reviewedCopies": 379,
-      "remainingUnique": 21,
-      "remainingCopies": 21,
-      "byDeck": {
-        "Reaminatour \u2014 Aminatou, Veil Piercer": {
-          "total": 100,
-          "reviewed": 89
-        },
-        "Minsc & Boo, Timeless Heroes": {
-          "total": 100,
-          "reviewed": 96
-        },
-        "Omo, Queen of Vesuva": {
-          "total": 100,
-          "reviewed": 99
-        },
-        "Elenda, Saint of Dusk": {
-          "total": 100,
-          "reviewed": 95
-        }
-      }
-    },
-    "hosted_validation": {
-      "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
-      "run_id": 34887525636,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
-      "conclusion": "success",
-      "tests_per_platform": 2346,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104121745743,
-          "name": "verify (windows-latest)",
-          "tests": 2346,
-          "seconds": 396.445,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104121746149,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2346,
-          "seconds": 474.326,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "draft_test_methods": 91,
-    "reviewed_test_methods": 91,
+    "cards_promoted": [],
+    "validation_status": "draft_validation_pending",
+    "runtime_checkpoint_schema": 130,
+    "state_checkpoint_schema": 18,
+    "new_test_methods": 81,
+    "unresolved_defects": [],
+    "review_work_remaining": [
+      "Complete hosted draft conformance, source review, promotion and required reviewed-loader validation."
+    ],
+    "review_findings": [],
+    "validation_attempts": [],
+    "next_batch": [
+      "glasswing-grace-age-graced-chapel",
+      "kazuul-s-fury-kazuul-s-cliffs",
+      "sorin-of-house-markov",
+      "pontiff-of-blight",
+      "invasion-of-theros",
+      "the-restoration-of-eiganjo",
+      "elspeth-conquers-death"
+    ],
     "shared_mechanics": [
-      "Player energy and authored ordered public activation costs",
-      "Distinct Gate names and immediate win",
-      "Current creature-spell counter immunity and independent riot replacements",
-      "Goad requirements, attack taxes and declaration mana payment",
-      "Per-source optional life cost and colored/hybrid cost reduction",
-      "Type and ability layers with historical trigger information",
-      "Current/last known controller capture for the original attacking creature"
+      "Loyalty activation costs and limits",
+      "Planeswalker combat destinations",
+      "Class levels and ward",
+      "Opening-hand choices",
+      "Reflexive sacrifice triggers",
+      "Simultaneous directional control rotation",
+      "Entry subtype effects"
     ]
   },
   "hosted_validation_history": [
@@ -7239,6 +7101,243 @@
           }
         ]
       }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
+      "pass": 1,
+      "cards_written": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus",
+        "propaganda",
+        "defiler-of-vigor",
+        "darksteel-mutation"
+      ],
+      "cards_promoted": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus",
+        "propaganda",
+        "defiler-of-vigor",
+        "darksteel-mutation"
+      ],
+      "validation_status": "passed",
+      "runtime_checkpoint_schema": 129,
+      "state_checkpoint_schema": 17,
+      "new_test_methods": 91,
+      "unresolved_defects": [],
+      "review_work_remaining": "",
+      "review_findings": [
+        "Basic-land intrinsic mana is removed along with other abilities; later explicitly granted activations remain available.",
+        "Tap-trigger discovery evaluates ability presence on the actual tap-event battlefield, including sources that subsequently pay zone costs.",
+        "Riot haste participates in entry lookahead and its material-proposal cache key.",
+        "Parasitic Impetus reads the original attacking creature's current controller on resolution, falling back to exact-incarnation last known information after departure (CR 608.2h/k)."
+      ],
+      "validation_attempts": [
+        {
+          "commit": "02c8d0c20953b2f5ea6eb377985f4d4cb1c2f8b8",
+          "run_id": 34884257593,
+          "stage": "draft",
+          "status": "failed",
+          "tests_per_platform": 2335,
+          "failures": [
+            "ScanningRulesKernel override lacked optional historical views parameter.",
+            "Repeated-goad fixture omitted the trigger-order response before stack assertion."
+          ],
+          "corrections": "Both repaired; eight additional source-review cases included in the corrected draft.",
+          "platform_results": {
+            "ubuntu": "failed: one fixture assertion and one reference override error",
+            "windows": "same two failures in logs; job cancelled"
+          }
+        },
+        {
+          "commit": "437ffc8353ea986a8431dc8ae387ac97d6a0c72a",
+          "run_id": 34885207854,
+          "stage": "expanded_draft",
+          "status": "failed",
+          "tests_per_platform": 2343,
+          "failures": [
+            "Synthetic land-subtype fixture lacked the compiler's required Land selector."
+          ],
+          "corrections": "Separate land-type restoration from the typed Forest-subtype grant; keep the compiler gate intact.",
+          "platform_results": {
+            "ubuntu": "failed: one invalid synthetic fixture",
+            "windows": "cancelled by matrix fail-fast"
+          }
+        },
+        {
+          "commit": "ed0cc1875f604e666553df7fc0a4ff3270c0b42b",
+          "run_id": 34885623950,
+          "stage": "impetus_review_draft",
+          "status": "failed",
+          "tests_per_platform": 2346,
+          "failures": [
+            "Inherited malformed land-subtype fixture; no other conformance failure."
+          ],
+          "platform_results": {
+            "ubuntu": "one fixture error after 2346 tests",
+            "windows": "cancelled by matrix fail-fast"
+          }
+        }
+      ],
+      "next_batch_source_review": {
+        "status": "source_review_preparation_only",
+        "card_ids": [
+          "aminatou-the-fateshifter",
+          "domri-anarch-of-bolas",
+          "minsc-boo-timeless-heroes",
+          "nissa-steward-of-elements",
+          "sorin-vengeful-bloodlord",
+          "innkeeper-s-talent",
+          "leyline-of-hope"
+        ],
+        "requirements": [
+          "Five planeswalkers share printed/X loyalty entry, once-per-turn sorcery activations, immediate loyalty costs, zero-loyalty state actions, loyalty damage and attacking/defending planeswalkers. A mana-producing loyalty ability still uses the stack.",
+          "Aminatou's +1 reuses draw then authored hand-to-library-top placement; -1 returns another owned permanent under her controller; -6 needs one left/right choice and simultaneous nonland control rotation excluding its source.",
+          "Domri reuses the controlled +1/+0 layer and opposing/controlled fight target groups; +1 needs a turn-duration rule applying to creature spells cast that turn.",
+          "Minsc & Boo needs optional legendary Boo entry/upkeep creation, trample-or-haste targeting, and a separate reflexive trigger after resolution sacrifice with captured power/Hamster subtype and later damage target choice.",
+          "Nissa needs X loyalty entry, private top inspection with a land-or-bounded-creature predicate using resolution-time loyalty, and targeted untap plus temporary land animation/flying/haste.",
+          "Sorin needs active-turn lifelink for creatures and planeswalkers, player-or-planeswalker damage, and exact-X graveyard return with permanent additive Vampire subtype.",
+          "Innkeeper's Talent needs Class levels and sorcery activation timing, counter-bearing permanent ward triggers, and player/permanent counter doubling determined by the putting player.",
+          "Leyline of Hope needs an explicit optional opening-hand placement before turn one; its life replacement and starting-life-relative anthem reuse existing primitives."
+        ],
+        "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
+        "sources": [
+          "https://magic.wizards.com/en/news/feature/commander-2018-edition-release-notes-2018-07-27",
+          "https://magic.wizards.com/en/news/feature/war-spark-release-notes-2019-04-19",
+          "https://magic.wizards.com/en/news/feature/commander-legends-battle-baldurs-gate-release-notes-2022-06-01",
+          "https://magic.wizards.com/en/news/feature/amonkhet-release-notes-2017-04-14",
+          "https://magic.wizards.com/en/news/feature/bloomburrow-release-notes",
+          "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes"
+        ],
+        "notes": [
+          "Read the preparation document alongside the current catalog and CR; older release notes use historical terminology.",
+          "Omo is projected to reach 100/100 after Nissa in pass 2. Update the old every-deck-has-unmapped assertion to retain explicit totals without incorrectly requiring omissions."
+        ],
+        "reuse_audit": [
+          "RulesKernel._state_based_actions already handles zero loyalty; retain and exercise it through new entry and activation paths.",
+          "RulesState.damage_batch already removes loyalty/defense counters according to recipient types. Route planeswalker combat through that pipeline.",
+          "SourceCounter already uses _object_information for exact last known counters; reuse it for Nissa's zero ability.",
+          "CounterReplacement already has actor_relation and both permanent/player recipient support; Innkeeper's counter doubling needs level gating around this existing primitive.",
+          "GrantPermissions/player_effects already retain turn-duration permissions; extend their rule interpretation for Domri instead of creating a parallel lifetime mechanism.",
+          "OngoingEffect/AddSubtypes already express indefinite additive types; Sorin's return additionally requires the type to be present in entry lookahead."
+        ]
+      },
+      "next_batch": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
+      ],
+      "draft_hosted_validation": {
+        "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
+        "run_id": 34886471504,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
+        "conclusion": "success",
+        "tests_per_platform": 2346,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104118262290,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2346,
+            "seconds": 510.655,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104118262497,
+            "name": "verify (windows-latest)",
+            "tests": 2346,
+            "seconds": 464.524,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "coverage_audit": {
+        "totalUnique": 334,
+        "reviewedUnique": 313,
+        "totalCopies": 400,
+        "reviewedCopies": 379,
+        "remainingUnique": 21,
+        "remainingCopies": 21,
+        "byDeck": {
+          "Reaminatour \u2014 Aminatou, Veil Piercer": {
+            "total": 100,
+            "reviewed": 89
+          },
+          "Minsc & Boo, Timeless Heroes": {
+            "total": 100,
+            "reviewed": 96
+          },
+          "Omo, Queen of Vesuva": {
+            "total": 100,
+            "reviewed": 99
+          },
+          "Elenda, Saint of Dusk": {
+            "total": 100,
+            "reviewed": 95
+          }
+        }
+      },
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
+        "conclusion": "success",
+        "tests_per_platform": 2346,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104121745743,
+            "name": "verify (windows-latest)",
+            "tests": 2346,
+            "seconds": 396.445,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104121746149,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2346,
+            "seconds": 474.326,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "draft_test_methods": 91,
+      "reviewed_test_methods": 91,
+      "shared_mechanics": [
+        "Player energy and authored ordered public activation costs",
+        "Distinct Gate names and immediate win",
+        "Current creature-spell counter immunity and independent riot replacements",
+        "Goad requirements, attack taxes and declaration mana payment",
+        "Per-source optional life cost and colored/hybrid cost reduction",
+        "Type and ability layers with historical trigger information",
+        "Current/last known controller capture for the original attacking creature"
+      ]
     }
   ],
   "execution_policy": {
@@ -7535,7 +7634,8 @@
           "leyline-of-hope"
         ],
         "focus": "Share loyalty activation support, X loyalty and entry, loyalty damage and attacking/defending planeswalkers, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
-        "status": "planned"
+        "status": "in_progress",
+        "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c"
       },
       {
         "pass": 3,

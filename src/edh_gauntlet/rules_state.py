@@ -82,6 +82,8 @@ class RulesObject:
     copy_effects:tuple[tuple[str,str,int],...]=()
     monstrous:bool=False
     spell_copy:bool=False
+    class_level:int=1
+    entry_subtypes:tuple[str,...]=()
 
     @property
     def effective_definition(self):return self.copy_effects[-1][0] if self.copy_effects else self.copied_definition or self.definition
@@ -102,6 +104,7 @@ class RulesObject:
         value['entry_flags']=frozenset(value['entry_flags']);value['counters']=tuple(tuple(row) for row in value['counters'])
         value['copied_add_types']=tuple(value['copied_add_types'])
         value['copy_effects']=tuple(tuple(row) for row in value['copy_effects'])
+        value['entry_subtypes']=tuple(value['entry_subtypes'])
         return cls(**value)
 
 
@@ -130,6 +133,7 @@ class ZoneMove:
     tapped:bool=False
     counters:tuple[tuple[str,int],...]=()
     copied_add_types:tuple[str,...]=()
+    entry_subtypes:tuple[str,...]=()
 
 
 @dataclass(frozen=True)
@@ -145,7 +149,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=17
+    CHECKPOINT_SCHEMA=18
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -326,12 +330,13 @@ class RulesState:
                     or len({row[0] for row in move.counters})!=len(move.counters)):raise RulesViolation('Invalid entry counters')
             if (not isinstance(move.copied_add_types,tuple) or any(type(t) is not str or t not in {'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'} for t in move.copied_add_types)
                     or len(set(move.copied_add_types))!=len(move.copied_add_types) or move.copied_add_types and not move.copied_definition):raise RulesViolation('Invalid copiable type exception')
+            if not isinstance(move.entry_subtypes,tuple) or any(type(t) is not str or not t for t in move.entry_subtypes):raise RulesViolation('Invalid entry subtype effect')
             if type(move.tapped) is not bool:raise RulesViolation('Invalid entry tapped status')
-            if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters or move.copied_add_types):raise RulesViolation('Entry attributes require battlefield entry')
+            if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters or move.copied_add_types or move.entry_subtypes):raise RulesViolation('Entry attributes require battlefield entry')
             after=RulesObject(ObjectRef(before.ref.card_id,before.ref.incarnation+1),before.definition,before.owner,
                 controller,destination,before.token or before.spell_copy and destination==Zone.BATTLEFIELD,before.commander,move.copied_definition,
                 spell_copy=before.spell_copy and destination!=Zone.BATTLEFIELD,
-                copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
+                entry_subtypes=move.entry_subtypes,copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
         if not pending and not detaches and not counter_pairs and not regenerations and payment is None and not entry_life:return ()
         self._batch+=1;events=[]
@@ -457,15 +462,20 @@ class RulesState:
         return keys[0] if keys else None
 
     def change_control_batch(self,refs,controller,*,duration='indefinite'):
-        refs=tuple(refs)
-        if controller not in self.players or duration not in {'indefinite','until_end_of_turn'}:
+        if controller not in self.players:raise RulesViolation('Invalid control effect')
+        if controller not in self.live_players:return ()
+        return self.change_control_map(tuple((ref,controller) for ref in refs),duration=duration)
+
+    def change_control_map(self,assignments,*,duration='indefinite'):
+        assignments=tuple(assignments);refs=tuple(ref for ref,_ in assignments)
+        if any(controller not in self.live_players for _,controller in assignments):raise RulesViolation('Invalid control recipient')
+        if duration not in {'indefinite','until_end_of_turn'}:
             raise RulesViolation('Invalid control effect')
         if len(set(refs))!=len(refs):raise RulesViolation('Duplicate control recipient')
-        if controller not in self.live_players:return ()
         objects=[self.get(ref) for ref in refs]
         if any(obj.zone!=Zone.BATTLEFIELD or obj.phased for obj in objects):raise RulesViolation('Invalid control change')
         keys=[]
-        for obj in objects:
+        for obj,(_,controller) in zip(objects,assignments):
             self._control_bases.setdefault(obj.ref.card_id,obj.controller)
             self._sequence+=1;key='control:'+str(self._sequence);keys.append(key)
             self._control_effects[key]={'ref':obj.ref,'controller':controller,'timestamp':self._sequence,'duration':duration}
@@ -590,6 +600,13 @@ class RulesState:
         """Order a new continuous effect against permanent and attachment timestamps."""
         self._sequence+=1
         return self._sequence
+
+    def advance_class(self,ref,level):
+        obj=self.get(ref)
+        if obj.zone!=Zone.BATTLEFIELD or obj.phased or type(level) is not int or level!=obj.class_level+1:
+            raise RulesViolation('Unavailable Class level transition')
+        self._objects[ref.card_id]=replace(obj,class_level=level)
+        self._sequence+=1
 
     def mark_monstrous(self,ref):
         obj=self.get(ref)
@@ -868,6 +885,8 @@ class RulesState:
                         or len({row[0] for row in obj.counters})!=len(obj.counters)):raise RulesViolation('Invalid object counter ledger')
                 if type(obj.spell_copy) is not bool or obj.spell_copy and (obj.token or obj.commander or obj.zone==Zone.BATTLEFIELD):
                     raise RulesViolation('Invalid spell-copy designation')
+                if type(obj.class_level) is not int or obj.class_level<1 or obj.class_level!=1 and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid Class designation')
+                if not isinstance(obj.entry_subtypes,tuple) or any(type(t) is not str or not t for t in obj.entry_subtypes) or obj.entry_subtypes and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid entry subtype effect')
                 if type(obj.monstrous) is not bool or obj.monstrous and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid monstrous designation')
                 if (not isinstance(obj.copy_effects,tuple) or obj.copy_effects and obj.zone!=Zone.BATTLEFIELD
                         or any(not isinstance(row,tuple) or len(row)!=3 or type(row[0]) is not str or not row[0]

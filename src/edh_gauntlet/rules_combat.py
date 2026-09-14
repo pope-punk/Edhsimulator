@@ -1,6 +1,6 @@
 """Shared combat declarations, batched assignments and nonprevented damage.
 
-Player-target combat is supported. Planeswalker/battle defense, attack/block
+Player and planeswalker combat destinations are supported. Battle defense, attack/block
 requirements and general prevention remain gated. Color protection and\nregeneration share the kernel's replacement and guard interpreter. Ordinary player losses
 reach the shared departure interpreter.
 """
@@ -65,6 +65,36 @@ class CombatView:
 
 
 class CombatRules:
+    def _attack_destination(self,actor,destination):
+        if isinstance(destination,str):
+            if destination not in self.state.live_players or destination==actor:raise RulesViolation('Illegal defending player')
+            return destination,None
+        if not isinstance(destination,ObjectRef):raise RulesViolation('Expected an exact planeswalker reference or player')
+        obj=self.state.get(destination)
+        if (obj.zone!=Zone.BATTLEFIELD or obj.phased or obj.controller==actor
+                or obj.controller not in self.state.live_players or 'Planeswalker' not in self.effective(destination).types):
+            raise RulesViolation('Illegal defending planeswalker')
+        return obj.controller,{'ref':destination.to_json(),'controller':obj.controller,
+            'controlled_since':obj.controlled_since,'combat_departure':obj.combat_departure}
+
+    def _defender_present(self,row):
+        if row.get('defender_removed') or row['defender'] not in self.state.live_players:return False
+        target=row.get('defender_object')
+        if target is None:return True
+        try:obj=self.state.get(ObjectRef.from_json(target['ref']))
+        except RulesViolation:return False
+        return (obj.zone==Zone.BATTLEFIELD and not obj.phased and obj.controller==target['controller']
+            and obj.controlled_since==target['controlled_since'] and obj.combat_departure==target['combat_departure']
+            and 'Planeswalker' in self.effective(obj.ref).types)
+
+    def _defender_damage(self,row,amount):
+        target=row.get('defender_object')
+        if target is not None:
+            # An attacker remains attacking after its planeswalker leaves combat.
+            # It cannot redirect unblocked/trample damage to the former controller.
+            return {'source':row['ref'],'target':target['ref'],'amount':amount} if self._defender_present(row) else None
+        return {'source':row['ref'],'player':row['defender'],'amount':amount} if self._defender_present(row) else None
+
     def _combat_record(self,ref,**fields):
         obj=self.state.get(ref)
         return {'uid':uid(ref),'ref':ref.to_json(),'controller':obj.controller,
@@ -80,6 +110,8 @@ class CombatRules:
 
     def _combat_prune(self):
         if self.combat is None:return
+        for row in self.combat['attackers']:
+            if row.get('defender_object') is not None and not self._defender_present(row):row['defender_removed']=True
         before={row['uid'] for row in self.combat['attackers']}
         self.combat['attackers']=[row for row in self.combat['attackers'] if self._combat_present(row) and row['defender'] in self.state.live_players]
         remaining={row['uid'] for row in self.combat['attackers']}
@@ -111,22 +143,27 @@ class CombatRules:
                 eligible[obj.ref]=(obj,view)
         rows=[];taps=[];total=0
         for ref,defender in attackers.items():
-            if ref not in eligible or defender not in self.state.live_players or defender==actor:
+            if ref not in eligible:
                 raise RulesViolation('Illegal attacker or defender')
             obj,view=eligible[ref]
-            rows.append(self._combat_record(ref,defender=defender))
+            player,target=self._attack_destination(actor,defender)
+            fields={'defender':player}
+            if target is not None:fields['defender_object']=target
+            rows.append(self._combat_record(ref,**fields))
             if 'vigilance' not in view.keywords:taps.append(ref)
-            total+=self._attack_tax(defender)
+            total+=self._attack_tax(player) if target is None else 0
         # With this closed vocabulary each creature's requirements are independent.
         # Paying an attack cost is optional. Among free destinations and the chosen
         # paid destination, obey the maximum number of distinct goad requirements.
         free=tuple(p for p in self.state.live_players if p!=actor and self._attack_tax(p)==0)
+        free+=tuple(obj.ref for obj in self.state.objects(Zone.BATTLEFIELD) if not obj.phased
+            and obj.controller!=actor and obj.controller in self.state.live_players and 'Planeswalker' in self.effective(obj.ref).types)
         for ref,(_,view) in eligible.items():
             goaders=view.goaded_by
             if not goaders:continue
             selected=attackers.get(ref)
             choices=free+((selected,) if selected is not None else ())
-            score=lambda p:len(goaders)+sum(p!=g for g in goaders) if p is not None else 0
+            score=lambda p:len(goaders)+(sum(p!=g for g in goaders) if isinstance(p,str) else 0) if p is not None else 0
             if score(selected)<max((score(p) for p in choices),default=0):
                 raise RulesViolation('Attack declaration does not satisfy the available goad requirements')
         return rows,tuple(taps),total
@@ -142,7 +179,7 @@ class CombatRules:
         # CR 508.1f: attackers tap before mana abilities and payment. All of this
         # happens on the trial; an incomplete plan or wrong payment commits nothing.
         trial.state.move((),'attack_taps',payment=ResourcePayment(actor,taps=taps))
-        total=sum(trial._attack_tax(row['defender']) for row in rows)
+        total=sum(trial._attack_tax(row['defender']) for row in rows if row.get('defender_object') is None)
         trial._collect_tapped(taps,observers)
         if payment.mana_actions:
             if not total:raise RulesViolation('There is no attack mana payment to produce mana for')
@@ -155,7 +192,7 @@ class CombatRules:
             'defender_index':0,'first_strikers':[],'had_first_step':False,'damage_pending':None,'damage_done':False}
         trial._combat_prune()
         if attackers:trial._record_turn_fact('attacked',actor)
-        trial._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row['defender']} for row in trial.combat['attackers']],
+        trial._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row.get('defender_object',{}).get('ref',row['defender'])} for row in trial.combat['attackers']],
             mana_paid=dict(payment.mana),attack_cost=total)
         for row in trial.combat['attackers']:
             trial._collect_announcement('creature_attacks',trial.state.get(ObjectRef.from_json(row['ref'])),actor,
@@ -228,7 +265,8 @@ class CombatRules:
                 power=max(0,source.power);trample='trample' in source.keywords
                 if not blockers:
                     if attacker['uid'] not in self.combat['blocked'] or trample:
-                        assignments.append({'source':attacker['ref'],'player':attacker['defender'],'amount':power})
+                        damage=self._defender_damage(attacker,power)
+                        if damage is not None:assignments.append(damage)
                 else:
                     spec,forced=combat_damage.specification(view,[(source,[view.card(ObjectRef.from_json(row['ref'])) for row in blockers],power,trample)],
                         self.phase,SimpleNamespace(name=attacker['defender']),None)
@@ -245,7 +283,9 @@ class CombatRules:
         by_uid={row['uid']:row for row in self.combat['blocks'].get(attacker['uid'],[])}
         for key,amount in allocation['blockers'].items():
             result.append({'source':attacker['ref'],'target':by_uid[key]['ref'],'amount':amount})
-        if allocation['defender']:result.append({'source':attacker['ref'],'player':attacker['defender'],'amount':allocation['defender']})
+        if allocation['defender']:
+            damage=self._defender_damage(attacker,allocation['defender'])
+            if damage is not None:result.append(damage)
         return result
 
     def assign_combat_damage(self,actor,assignments,*,revision):
