@@ -1,7 +1,7 @@
 # Pass 3: faces, Sagas, extort and Battles
 
 Status: all seven cards have complete source-bound review and are promoted.
-Draft conformance passed; required reviewed-loader validation is pending.
+Draft and required reviewed-loader validation passed on Ubuntu and Windows.
 This is Pass 3 of the original four-pass plan. Reviewed coverage is 327/334
 unique cards and 393/400 deck copies, with seven cards remaining.
 
@@ -71,8 +71,10 @@ The 90 methods in
 [test_rules_primitives_faces_sagas_extort.py](../tests/test_rules_primitives_faces_sagas_extort.py)
 cover all seven cards and the shared interactions described above.
 Hosted draft [run 34902156812](https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812) at `a2700d1b61aecfd9dd2e42ede5eed2d12788ec34` passed 2536 tests per platform.
-Promotion removes the draft fallback; the same suite must now pass through the
-required reviewed loader.
+Required reviewed-loader [run 34904127697](https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697) at `60a62fa568428be6987f7f97463df955e5dc583f` passed 2536 tests per platform.
+The card suite now requires all seven programs from the reviewed bundle; no draft
+fallback remains. Syntax, installation and installed assets also passed on both
+platforms.
 
 The first hosted run exposed repeated trigger-view queries, older Battle fixtures
 without protectors, and scenario action-window gaps. The fixes retain the query
@@ -82,7 +84,10 @@ choice does not suspend the intended transformation scenario. Current CR 714.3c 
 chapter abilities neither gains turn-based lore nor sacrifices itself. The final
 source audit corrected the lore guard and its regression expectation; the later
 required reviewed-loader run covers this promotion correction.
-No existing expected result was weakened.
+The reviewed-loader pass also exposed a legacy printed-only trigger assertion.
+Its immutable index check is retained, current grants are checked separately,
+and the scanning reference now includes grants. The existing announcement parity
+scenario covers granted activation triggers as well as ordinary printed triggers.
 
 Production admission and historical/started-game contracts are unchanged.
 No merge, deployment, gameplay or automatic contract migration is part of this pass.

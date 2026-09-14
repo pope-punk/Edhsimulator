@@ -901,16 +901,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "dbd945febb95618afa07581bdccdaab7c2cb2c943586fbd73d16d40168d96845",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:elspeth-conquers-death",
       "reviewed_definition": "catalog:elspeth-conquers-death",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -1389,16 +1393,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "f6714c051ec38380893825b93fb8b4d8bc60bb43423a7b5f0abc5165c81c2743",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:glasswing-grace-age-graced-chapel",
       "reviewed_definition": "catalog:glasswing-grace-age-graced-chapel",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -1818,16 +1826,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "aa820cbaf5d95300c167d4986558a74248ea9afb69d0edc2ce3c581a4a58572d",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:invasion-of-theros",
       "reviewed_definition": "catalog:invasion-of-theros",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -1945,16 +1957,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "05649eb3d07f0ee3caffe0f8bb9df1f95a5d65a3d6b6e3c0dece789a6bc495c2",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:kazuul-s-fury-kazuul-s-cliffs",
       "reviewed_definition": "catalog:kazuul-s-fury-kazuul-s-cliffs",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -2706,16 +2722,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "0b3e23aa155b3b9814739f215f94af02361a3377d16d1b8e0278babccadaaa16",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:pontiff-of-blight",
       "reviewed_definition": "catalog:pontiff-of-blight",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -3252,16 +3272,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "db89bb263f7353bfe4a11a2295670f82bbfe82b1dafbb13adcadbe00d8237716",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:sorin-of-house-markov",
       "reviewed_definition": "catalog:sorin-of-house-markov",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -3536,16 +3560,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "0f40894b696a053b7300ae0f1ce18db9541665cac970dac663cb700ef86c6018",
       "batch": "faces-sagas-extort-2026-09-14",
       "review_record": "docs/FACES_SAGAS_EXTORT_REVIEW.md",
-      "implementation_notes": "All printed faces source-bound; hosted draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 90 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:the-restoration-of-eiganjo",
       "reviewed_definition": "catalog:the-restoration-of-eiganjo",
       "draft_hosted_validation": {
         "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
         "run_id": 34902156812
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697
       }
     },
     {
@@ -3955,7 +3983,7 @@
       "the-restoration-of-eiganjo",
       "elspeth-conquers-death"
     ],
-    "validation_status": "required_reviewed_loader_pending",
+    "validation_status": "passed",
     "runtime_checkpoint_schema": 131,
     "state_checkpoint_schema": 19,
     "new_test_methods": 90,
@@ -4015,11 +4043,40 @@
           "Keep the printed trigger index invariant separate from current granted triggers.",
           "Extend the scanning reference and announcement parity fixture to cover granted abilities."
         ]
+      },
+      {
+        "commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
+        "run_id": 34903599852,
+        "status": "failed",
+        "stage": "required_reviewed_loader",
+        "test_count": 2536,
+        "failures": 1,
+        "errors": 0,
+        "corrections": [
+          "Legacy printed-only trigger assertion corrected in the subsequent index/parity revision."
+        ]
+      },
+      {
+        "commit": "fc6dcd90dbba7896bf89bcb9408a0adb660369b7",
+        "run_id": 34904056105,
+        "status": "failed",
+        "stage": "required_reviewed_loader",
+        "test_count": 2536,
+        "failures": 1,
+        "errors": 0,
+        "corrections": [
+          "Use a battlefield activation event in the granted-trigger parity fixture; this avoids a synthetic battlefield spell announcement counting its source twice."
+        ]
+      },
+      {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697,
+        "status": "passed",
+        "stage": "required_reviewed_loader",
+        "test_count": 2536
       }
     ],
-    "review_work_remaining": [
-      "Required reviewed-loader validation and result recording"
-    ],
+    "review_work_remaining": [],
     "shared_mechanics": [
       "Physical-card face choices and transformation",
       "Independent granted triggers and extort",
@@ -4043,14 +4100,98 @@
         "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
         "change": "Turn-based lore requires at least one chapter ability. Corrected the lore guard and the no-chapters regression expectation; no card program changed.",
         "supersedes_required_commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
-        "supersedes_required_run": 34903230871
+        "supersedes_required_run": 34903230871,
+        "validated_by": {
+          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+          "run_id": 34904127697
+        }
       },
       {
         "change": "Reviewed-loader trigger-index conformance includes dynamic grants while retaining immutable printed indexes. The scanning reference and existing parity test now cover granted triggers.",
         "supersedes_required_commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
-        "supersedes_required_run": 34903599852
+        "supersedes_required_run": 34903599852,
+        "validated_by": {
+          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+          "run_id": 34904127697
+        }
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+      "run_id": 34902156812,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
+      "conclusion": "success",
+      "tests_per_platform": 2536,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104170381916,
+          "name": "verify (windows-latest)",
+          "tests": 2536,
+          "seconds": 595.899,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104170382160,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2536,
+          "seconds": 493.37,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "hosted_validation": {
+      "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+      "run_id": 34904127697,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
+      "conclusion": "success",
+      "tests_per_platform": 2536,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104176706230,
+          "name": "verify (windows-latest)",
+          "tests": 2536,
+          "seconds": 551.635,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104176706491,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2536,
+          "seconds": 572.624,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "next_batch_source_review": {
+      "status": "preparation_only",
+      "record": "docs/REMAINING_CARD_DRAFTS.md#final-pass-source-preparation",
+      "sources": [
+        "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes",
+        "https://magic.wizards.com/en/news/feature/dominaria-united-release-notes-2022-08-26",
+        "https://magic.wizards.com/en/news/feature/modern-horizons-2-release-notes-2021-06-04",
+        "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -5042,6 +5183,40 @@
           "name": "verify (ubuntu-latest)",
           "tests": 2536,
           "seconds": 493.37,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "stage": "required_reviewed_loader",
+      "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+      "run_id": 34904127697,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
+      "conclusion": "success",
+      "tests_per_platform": 2536,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104176706230,
+          "name": "verify (windows-latest)",
+          "tests": 2536,
+          "seconds": 551.635,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104176706491,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2536,
+          "seconds": 572.624,
           "conclusion": "success"
         }
       ]
@@ -8058,14 +8233,14 @@
       }
     ]
   },
-  "completed_request_batch": false,
-  "completed_heartbeat_cycle": false,
+  "completed_request_batch": true,
+  "completed_heartbeat_cycle": true,
   "hosted_validation": {
-    "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
-    "run_id": 34893959319,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
+    "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+    "run_id": 34904127697,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
     "conclusion": "success",
-    "tests_per_platform": 2446,
+    "tests_per_platform": 2536,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -8078,17 +8253,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104143175589,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2446,
-        "seconds": 524.737,
+        "job_id": 104176706230,
+        "name": "verify (windows-latest)",
+        "tests": 2536,
+        "seconds": 551.635,
         "conclusion": "success"
       },
       {
-        "job_id": 104143175873,
-        "name": "verify (windows-latest)",
-        "tests": 2446,
-        "seconds": 529.81,
+        "job_id": 104176706491,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2536,
+        "seconds": 572.624,
         "conclusion": "success"
       }
     ]
@@ -8098,7 +8273,7 @@
     "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
     "baseline_remaining_unique": 28,
     "target_maximum_passes": 4,
-    "completed_passes": 2,
+    "completed_passes": 3,
     "baseline_cards_per_pass": 7,
     "usual_target_range": [
       7,
@@ -8185,11 +8360,24 @@
           "elspeth-conquers-death"
         ],
         "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives.",
-        "status": "in_progress",
+        "status": "complete",
         "base_commit": "2586180f67645ca9cc8511e979933511ea883551",
         "draft_hosted_validation": {
           "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
           "run_id": 34902156812
+        },
+        "cards_completed": [
+          "glasswing-grace-age-graced-chapel",
+          "kazuul-s-fury-kazuul-s-cliffs",
+          "sorin-of-house-markov",
+          "pontiff-of-blight",
+          "invasion-of-theros",
+          "the-restoration-of-eiganjo",
+          "elspeth-conquers-death"
+        ],
+        "hosted_validation": {
+          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+          "run_id": 34904127697
         }
       },
       {
@@ -8211,7 +8399,7 @@
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
     "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
-    "remaining_passes_in_target": 2,
+    "remaining_passes_in_target": 1,
     "remaining_unique": 7
   }
 }

@@ -6,10 +6,10 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **327 source-bound reviewed programs / 393 deck copies**. Seven cards remain.
-Pass 3 promotion is pending required reviewed-loader validation.
+All seven Pass 3 cards have passed draft and required reviewed-loader validation.
 Reviewed coverage is not production certification.
 
-## Pass 3 promotion verification
+## Pass 3 complete
 
 Glasswing Grace // Age-Graced Chapel; Kazuul's Fury // Kazuul's Cliffs;
 Sorin of House Markov; Pontiff of Blight; Invasion of Theros;
@@ -19,7 +19,9 @@ transformation, Saga lore/chapters, independent extort grants, Siege protection
 and defeat, temporary spell taxes, paired token copies, and keyword counters.
 
 Hosted draft [run 34902156812](https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812) at `a2700d1b61aecfd9dd2e42ede5eed2d12788ec34` passed **2536 tests per platform**, including **90 new methods**.
-The required reviewed-loader run must pass before this pass is counted complete.
+Required reviewed-loader [run 34904127697](https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697) at `60a62fa568428be6987f7f97463df955e5dc583f` passed **2536 tests per platform**.
+Both Ubuntu and Windows also passed syntax, full distribution installation and
+packaged assets.
 
 Coverage is **327/334 unique cards and 393/400 copies**: Omo, Minsc & Boo and
 Elenda each have **100/100** authored copies; Reaminatour has **93/100**.
@@ -27,7 +29,8 @@ The draft bundle is empty. All 320 previous reviewed rows and source hashes are
 unchanged. Kernel/state schemas are **131/19**. No local project execution occurred.
 See [the printed-card review and validation record](FACES_SAGAS_EXTORT_REVIEW.md).
 
-Two passes are complete; Pass 3 remains in progress until required verification.
+Three passes are complete within the original four-pass, 28-card baseline.
+The final seven cards remain in Pass 4. Validation repairs stayed within Pass 3.
 
 ## Four-pass completion plan
 
@@ -75,7 +78,7 @@ heartbeat remains active every 40 minutes.
 
 ## Next pass: Rooms, miracle and remaining Sagas
 
-After required Pass 3 validation, begin Pass 4 with Aminatou, Veil Piercer; Entity Tracker;
+Begin Pass 4 with Aminatou, Veil Piercer; Entity Tracker;
 Funeral Room // Awakening Hall; Ghostly Dancers; Victor, Valgavoth's Seneschal;
 The Cruelty of Gix; and Urza's Saga.
 
@@ -86,6 +89,34 @@ first-draw reveal/cast window, per-turn resolved-ability counts, read ahead, and
 the remaining complete Saga clauses. Urza's Saga's search checks printed mana
 cost rather than mana value. Keep all seven in scope and finish with the complete
 334-card inventory and cross-family audit.
+
+## Final-pass source preparation
+
+Preparation only; no Pass 4 program is implemented by these notes.
+
+Rooms need independent locked/unlocked doors, a stack choice of one half, and
+combined characteristics outside the stack/battlefield. Entry from elsewhere
+leaves both doors locked. Paying to unlock is a sorcery-timed special action.
+Door-unlock triggers differ from entry triggers. Eerie observes enchantment entry
+and full unlocking. Miracle reveals the first drawn card of any turn immediately;
+casting occurs through its resolving trigger, with additional costs still paid.
+Victor counts resolutions and does nothing after the third.
+See [Duskmourn release notes](https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes).
+
+Read ahead chooses entry lore before counter replacements. During the entry
+turn, only a chapter matching the resulting lore count triggers; subsequent turns
+use ordinary Saga thresholds. See
+[Dominaria United release notes](https://magic.wizards.com/en/news/feature/dominaria-united-release-notes-2022-08-26).
+
+Urza's Saga keeps its chapter-granted abilities and searches for exact printed
+mana costs. See [Modern Horizons 2 notes](https://magic.wizards.com/en/news/feature/modern-horizons-2-release-notes-2021-06-04).
+Its older no-chapter sacrifice ruling is superseded by current CR 714.3c/714.4:
+without chapter abilities, a Saga gets no turn-based lore and is not sacrificed.
+Use the [current rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt).
+
+Implementation review must additionally check current Comprehensive Rules for
+Room copies and miracle visibility, and bind Victor's counter to the exact
+ability identity across copies, countered triggers and checkpoints.
 
 ## Completed pass 2: planeswalkers, Class and opening choices
 
