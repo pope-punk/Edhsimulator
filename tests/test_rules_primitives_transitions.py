@@ -190,6 +190,7 @@ class TransitionCardTests(unittest.TestCase):
         self.game('hydra-broodmaster',Zone.BATTLEFIELD);self.activate();self.round()
         self.assertTrue(self.state.get(self.source).monstrous);self.assertEqual(0,self.counts(self.source))
         self.assertEqual(1,len(self.kernel.stack));self.drain();self.assertEqual((),self.tokens())
+        self.assertEqual([],self.kernel.copy_programs)
 
     def test_hydra_counter_multiplier_does_not_multiply_captured_x(self):
         rule=self.replacement();self.game('hydra-broodmaster',Zone.BATTLEFIELD,extra=(rule,));self.add(rule.definition_id)
@@ -437,3 +438,57 @@ class TransitionCardTests(unittest.TestCase):
         self.assertFalse(activation_is_mana(ability))
         with self.assertRaises(RulesViolation):
             validate(CardProgram('bad','Bad',('Artifact',),activated=(replace(ability,mana_ability=True),)))
+
+    def test_fangs_replacement_choice_checkpoint_does_not_repeat_first_placement(self):
+        double=self.replacement();plus=self.replacement('tr-plus',multiplier=1,additional=1)
+        self.game(extra=(double,plus));self.add(double.definition_id);self.add(plus.definition_id)
+        self.cast((self.body,));self.round();self.assertIsNotNone(self.kernel.pending_choice)
+        self.assertEqual(0,self.counts(self.body));self.restore()
+        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0])
+        self.assertIsNotNone(self.kernel.pending_choice);first=self.counts(self.body);self.assertIn(first,(3,4))
+        self.restore();self.drain();self.assertIn(self.counts(self.body),(first*3+1,first*3+2))
+
+    def test_fangs_overload_only_doubles_successful_first_recipients(self):
+        rule=CardProgram('tr-elf-half','Elf half',('Enchantment',),counter_replacements=(
+            CounterReplacement('half',Selector(Zone.BATTLEFIELD,subtypes=('Elf',)),kind='+1/+1',divisor=2),))
+        other=CardProgram('tr-human','Human',('Creature',),subtypes=('Human',),power=2,toughness=2)
+        self.game(extra=(rule,other));self.add(rule.definition_id);human=self.add(other.definition_id)
+        self.state.add_counters(self.body,'+1/+1',4);self.state.add_counters(human,'+1/+1',2)
+        self.cast(mana='CCCCGG',alternative='overload');self.drain()
+        self.assertEqual(4,self.counts(self.body));self.assertEqual(6,self.counts(human))
+
+    def test_monstrous_trigger_has_an_independently_counterable_stack_frame(self):
+        self.game('hydra-broodmaster',Zone.BATTLEFIELD);self.activate(mana='CCG',x=1);self.round()
+        self.respond('tr-stop');self.drain()
+        self.assertTrue(self.state.get(self.source).monstrous);self.assertEqual(1,self.counts(self.source))
+        self.assertEqual((),self.tokens())
+
+    def test_monstrous_transition_applies_to_a_permanent_that_is_no_longer_a_creature(self):
+        land=CardProgram('tr-monstrous-land','Land with trigger',('Land',),abilities=(
+            AbilityProgram('transition',EventPattern('becomes_monstrous',subject='self'),(GainLife(3),)),))
+        self.game('hydra-broodmaster',Zone.BATTLEFIELD,extra=(land,));self.activate(mana='CCG',x=1)
+        ref=self.add(land.definition_id);self.state.apply_copy((self.source,),land.definition_id)
+        self.drain();self.assertTrue(self.state.get(self.source).monstrous)
+        self.assertEqual(1,self.counts(self.source));self.assertEqual(43,self.state.life('A'));self.assertEqual((),self.tokens())
+
+    def test_finale_untaps_even_a_land_with_an_untap_step_restriction(self):
+        land=CardProgram('tr-still-land','Still land',('Land',),continuous=(ContinuousProgram('skip',Selector(Zone.BATTLEFIELD),(SkipUntap(),),subject='self'),))
+        self.game('finale-of-revelation',extra=(land,));ref=self.add(land.definition_id);self.state.set_tapped_batch((ref,),True)
+        self.cast(mana='CCCCCCCCCCUU',x=10);self.round();q=self.kernel.pending_choice
+        self.kernel.answer(q.request_id,q.actor,[0]);self.drain();self.assertFalse(self.state.get(ref).tapped)
+
+    def test_shuffle_instruction_respects_zone_replacement_then_still_shuffles(self):
+        rule=CardProgram('tr-grave-exile','Grave exile',('Enchantment',),replacements=(
+            ZoneReplacement('exile',Zone.LIBRARY,Zone.EXILE,from_zone=Zone.GRAVEYARD),))
+        self.game(extra=(rule,));self.add(rule.definition_id);grave=self.add(zone=Zone.GRAVEYARD)
+        self.fx(self.body,ShuffleGraveyard());self.drain()
+        self.assertEqual(Zone.EXILE,self.zone(grave));self.assertEqual(1,self.state.snapshot()['shuffle_nonce'])
+
+    def test_compiler_rejects_sized_token_without_a_program(self):
+        with self.assertRaises(RulesViolation):
+            validate(CardProgram('bad','Bad',('Sorcery',),spell_effects=(CreateSizedTokens(None),)))
+
+    def test_costless_copy_registry_rejects_tampered_mana_exception(self):
+        self.game('fanatic-of-rhonas',Zone.GRAVEYARD);self.activate('eternalize',mana='CCGG');self.drain()
+        snap=self.kernel.snapshot();snap['copy_programs'][0]['remove_mana_cost']=False
+        with self.assertRaises(RulesViolation):RulesKernel.restore(snap,self.programs)

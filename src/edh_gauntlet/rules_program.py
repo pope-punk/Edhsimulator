@@ -1605,7 +1605,7 @@ def validate(program,_depth=0):
             if isinstance(node,Monstrosity):
                 quantity(node.amount,allow_x,available_values=available_values)
             if isinstance(node,CreateSizedTokens):
-                if 'Creature' not in node.token.types:
+                if not isinstance(node.token,CardProgram) or 'Creature' not in node.token.types:
                     raise RulesViolation('Sized tokens require a creature program')
                 quantity(node.power,allow_x,available_values=available_values)
                 quantity(node.toughness,allow_x,available_values=available_values)

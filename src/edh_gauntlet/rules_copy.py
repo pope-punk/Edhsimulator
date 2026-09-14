@@ -90,6 +90,7 @@ class CopyRules:
 
     def _execute_copy(self,effect,frame,key):
         if isinstance(effect,CreateSizedTokens):
+            if not self._quantity(effect.amount,frame):return True
             changes={name:getattr(CopyTokens('source'),name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
             changes.update(power=self._quantity(effect.power,frame),toughness=self._quantity(effect.toughness,frame))
             program=self._register_copy_program(effect.token.definition_id,(),changes)

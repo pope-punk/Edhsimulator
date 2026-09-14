@@ -31,7 +31,7 @@ conditional activations, costless copies, graveyard shuffling and indefinite
 player permissions. Hydra's source mana cost is corrected to {4}{G}{G} from the
 official release notes. Kernel/state schemas are **125/16**.
 
-The **56 new methods** await hosted draft validation, followed by source-bound
+The **64 new methods** await hosted draft validation, followed by source-bound
 promotion and required reviewed-loader validation. No local project execution
 is authorized. See [the current review](TRANSITION_CARD_REVIEW.md).
 
@@ -43,7 +43,7 @@ adds durable, timestamped layer-one copies, copiable retained activations,
 nonbasic subtype selection, fixed-arity spell target groups and simultaneous
 excess damage. The prior 286 reviewed programs are unchanged.
 
-Kernel schema is **124**, state schema **15**. The **56 new methods** now use the
+Kernel schema is **124**, state schema **15**. The **64 new methods** now use the
 reviewed loader. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355)
 passed **1,973 tests per platform**, plus syntax, installation and assets, at
 `2936bde63ebdcef71a9d1e928e55b640698d89eb`. [Required reviewed-loader validation 34846671618](https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618) passed
@@ -132,26 +132,33 @@ Existing games remain bound to their implementation; no local execution or
 production admission.
 See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
-## Next work order: stack copies and counter transitions
+## Next work order: stack copies and damage/library results
 
-Finish any pending reviewed-loader validation first. Then select from
-**Replication Technique, Sunken Palace, Fangs of Kalonia and Hydra Broodmaster**.
-All four remain unstarted; the inventory contains primary-source preparation.
+Finish the four current drafts' hosted validation and promotion first. Then aim
+for a coherent **4-card cycle**, selecting **Replication Technique, Sunken Palace,
+Kodama of the West Tree and Rampant Frogantua**. All four next candidates remain
+unstarted. Reassess shared dependencies before writing their programs.
 
 - Replication Technique needs real stack spell copies, the demonstrate cast
   trigger, optional caster copy, caster-chosen opponent and independent target
-  reselection. Copies are not cast.
+  reselection. Copies preserve announcement choices and are not cast.
 - Sunken Palace needs distinct mana-unit lineage and a delayed trigger when that
   unit pays for a cast or activation; preserve a copyable record after the
   original is countered. Reuse tapped entry and seven-card graveyard exile costs.
-- Fangs needs a true nontargeted overload alternative and the actual recipients
-  of its first counter placement before replacement-aware doubling.
-- Hydra needs a monstrous designation independent of counters, once-only
-  transition, captured X and an independent token-creation trigger.
+- Kodama needs a reusable modified predicate (counters, Equipment, or an Aura
+  controlled by the creature's controller), both static trample and a filtered
+  combat-damage trigger from each qualifying creature, then ordinary basic search.
+- Rampant Frogantua needs an exact departed-player count, current combat damage
+  amount, optional milling, and a captured actual mill result from which any
+  number of lands can enter tapped. The official MH3 notes forbid choosing its
+  optional mill when the library has fewer cards than the damage amount; a
+  partial ordinary mill is insufficient. Reuse the existing mill, departure and
+  entry replacement infrastructure, preserving this choice prerequisite.
 
-Reuse the durable copy registry, existing-permanent layer-one snapshots and
-named spell target clauses. Do not substitute extra token creation for a spell
-copy or ordinary color totals for Sunken Palace's spent-mana identity.
+Reuse durable copy definitions, existing-permanent snapshots, named spell target
+clauses, counter transitions and library continuations. Keep direct token copies,
+stack copies and paid-mana lineage as distinct operations. Fangs, Hydra, Fanatic
+and Finale are tracked in the current cycle above, not in this next queue.
 
 ## Previous cycle: casting, entry and paid-cost facts
 

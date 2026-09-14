@@ -59,7 +59,7 @@ migrated. The 290 earlier reviewed programs remain byte-for-byte unchanged.
 
 ## Hosted conformance
 
-The focused module currently contains **56 new test methods**. It covers source
+The focused module currently contains **64 new test methods**. It covers source
 bindings, costs and target domains, actual counter recipients, both replacement
 stages, multiple queued monstrosity activations, copied and reset designations,
 captured X, frozen token values, conditional mana, exile-as-cost, token copying,

@@ -3370,7 +3370,7 @@
       "finale-of-revelation"
     ],
     "cards_promoted": [],
-    "new_test_methods": 56,
+    "new_test_methods": 64,
     "runtime_checkpoint_schema": 125,
     "state_checkpoint_schema": 16,
     "validation_status": "pending",
@@ -3384,7 +3384,9 @@
     ],
     "next_batch": [
       "replication-technique",
-      "sunken-palace"
+      "sunken-palace",
+      "kodama-of-the-west-tree",
+      "rampant-frogantua"
     ],
     "source_corrections": [
       {
