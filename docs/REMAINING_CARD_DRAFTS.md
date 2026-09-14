@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**298 source-bound reviewed programs / 364 deck copies**. There are **36 cards / 36 deck
-copies outside the reviewed bundle**, including four complete drafts awaiting hosted review and 32 unstarted. Reviewed coverage is not production certification.
+**302 source-bound reviewed programs / 368 deck copies**. There are **32 cards / 32 deck
+copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,12 +25,23 @@ successful hosted validation.
 ## Current cycle: spell copies and special mana
 
 Replication Technique, Changing Loyalty, Sunken Palace and Delighted Halfling
-have complete drafts. Shared work covers noncard stack objects, demonstrate,
-replicate additional payments, retained announcements, simultaneous target
-reassignment, copied permanent entry and explicitly spent mana units.
-Kernel/state schemas are **127/17**. The **64 new methods** await hosted draft
-validation; no promotion or passing result is claimed yet.
-See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
+have complete source-bound reviewed programs. Shared support covers noncard
+stack objects, demonstrate, replicate, copied permanent entry, simultaneous
+target reassignment and explicitly spent mana. Copies preserve paid cost
+decisions without inheriting escaped status, Necromancy casting history or
+counter immunity. Kernel/state schemas are **127/17**.
+
+The **64 new methods** passed hosted draft validation: **2,159 tests on each of
+Ubuntu and Windows**, plus syntax, installation and assets, at
+`5f13db33ccca589d11e1d6c4feae1785ade8d13a` ([run 34868673387](https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387)).
+Required reviewed-loader validation is pending, including a 65th check and a
+visibility correction preserving public sources of copied hand abilities. See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
+No local project execution occurred.
+
+The next candidates are Rishkar's Expertise, Hidden Nursery, Apex Devastator and
+Chthonian Nightmare. The first three share casting during resolution, discover
+and cascade; Nightmare requires energy and ordered additional costs. Entity
+Tracker remains incomplete until Room-unlock events are supported.
 
 ## Previous cycle: modified creatures, exploration and library movement
 

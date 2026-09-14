@@ -22,11 +22,10 @@ class SpellCopyTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={r['card_id']:r for r in drafts if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
-        cls.prefix='draft:'
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
+        cls.prefix='catalog:'
 
     def game(self,extra=()):
         body=CardProgram('cp-body','Body',('Creature',),power=2,toughness=3,cast=CastSpec(CostSpec(ManaCost(1))))
@@ -601,3 +600,15 @@ class SpellCopyTests(unittest.TestCase):
         self.assertEqual(original['entry_flags'],copy['entry_flags']);self.assertIn('evoked',copy['entry_flags'])
         self.drain();self.assertEqual(4,len(self.state.zone('A',Zone.HAND)))
         self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+
+    def test_copy_retains_publicly_announced_hand_ability_source(self):
+        self.game();tags=self.tagged();source=self.add('catalog:dimir-house-guard',zone=Zone.HAND)
+        self.activate(source,'transmute','BB',tags=tags)
+        self.top();copy=self.kernel.stack[-1]
+        self.assertTrue(copy['copied']);self.assertIn('announced_source',copy)
+        packet=project_actor(self.kernel,'B')
+        self.assertEqual(['Dimir House Guard','Dimir House Guard'],[row['name'] for row in packet['stack']])
+        self.assertTrue(all(row['kind']=='ability' for row in packet['stack']))
+        self.restore();self.drain()
+        self.assertEqual(2,len(self.events('library_searched')))
+        self.assertEqual(Zone.GRAVEYARD,self.current(source).zone)

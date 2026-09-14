@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 298,
-    "remaining_outside_reviewed_bundle": 36,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 302,
+    "remaining_outside_reviewed_bundle": 32,
+    "drafts_written": 0,
     "not_started_on_this_branch": 32,
-    "reviewed_bundle_copies": 364,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 368,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 71,
-    "remaining_outside_reviewed_bundle_copies": 36
+    "promoted_on_this_branch": 75,
+    "remaining_outside_reviewed_bundle_copies": 32
   },
   "cards": [
     {
@@ -318,7 +318,7 @@
     {
       "card_id": "changing-loyalty",
       "name": "Changing Loyalty",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -333,11 +333,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
+      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "44674452cfbab449325f86c6e75485a61cb199b961d9f778a11b62274b00fb34",
+      "previous_draft_definition": "draft:changing-loyalty",
+      "reviewed_definition": "catalog:changing-loyalty",
+      "draft_hosted_validation": {
+        "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+        "run_id": 34868673387
+      }
     },
     {
       "card_id": "chaos-warp",
@@ -588,7 +595,7 @@
     {
       "card_id": "delighted-halfling",
       "name": "Delighted Halfling",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -603,11 +610,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
+      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "2d0e6ba4c2924cca986b52bba1b261dd6f82cede41d4dffcd448cf5bad95e9b1",
+      "previous_draft_definition": "draft:delighted-halfling",
+      "reviewed_definition": "catalog:delighted-halfling",
+      "draft_hosted_validation": {
+        "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+        "run_id": 34868673387
+      }
     },
     {
       "card_id": "desert-warfare",
@@ -2518,7 +2532,7 @@
     {
       "card_id": "replication-technique",
       "name": "Replication Technique",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2533,11 +2547,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
+      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "567938c6529bfc7261d06df950f64fcff12a29047eaa9ad68b9150d9b9e3bedc",
+      "previous_draft_definition": "draft:replication-technique",
+      "reviewed_definition": "catalog:replication-technique",
+      "draft_hosted_validation": {
+        "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+        "run_id": 34868673387
+      }
     },
     {
       "card_id": "restart-sequence",
@@ -2918,7 +2939,7 @@
     {
       "card_id": "sunken-palace",
       "name": "Sunken Palace",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2933,11 +2954,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft staged with shared spell-copy and authored special-mana primitives; awaiting GitHub-hosted validation."
+      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca",
+      "previous_draft_definition": "draft:sunken-palace",
+      "reviewed_definition": "catalog:sunken-palace",
+      "draft_hosted_validation": {
+        "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+        "run_id": 34868673387
+      }
     },
     {
       "card_id": "talon-gates-of-madara",
@@ -3501,11 +3529,16 @@
       "sunken-palace",
       "delighted-halfling"
     ],
-    "cards_promoted": [],
-    "new_test_methods": 64,
+    "cards_promoted": [
+      "replication-technique",
+      "changing-loyalty",
+      "sunken-palace",
+      "delighted-halfling"
+    ],
+    "new_test_methods": 65,
     "runtime_checkpoint_schema": 127,
     "state_checkpoint_schema": 17,
-    "validation_status": "pending_hosted_draft",
+    "validation_status": "pending_required_reviewed_loader",
     "shared_mechanics": [
       "Noncard spell copies and permanent-copy token entry",
       "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
@@ -3515,8 +3548,8 @@
     "next_batch": [
       "rishkar-s-expertise",
       "hidden-nursery",
-      "chthonian-nightmare",
-      "entity-tracker"
+      "apex-devastator",
+      "chthonian-nightmare"
     ],
     "hosted_attempts": [
       {
@@ -3566,28 +3599,128 @@
         "findings": [
           "Only the unsupported unbounded-target test fixture remained; the second-cast priority repair passed. The subsequent fixture uses a finite bound and explicitly verifies the compiler rejection."
         ]
+      },
+      {
+        "commit": "1bea1dce6b3c789e365df5a38f00f453b6a20c76",
+        "run_id": 34868229398,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868229398",
+        "conclusion": "success",
+        "tests_per_platform": 2156,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104057355600,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2156,
+            "seconds": 331.383,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104057356208,
+            "name": "verify (windows-latest)",
+            "tests": 2156,
+            "seconds": 401.964,
+            "conclusion": "success"
+          }
+        ],
+        "stage": "superseded_draft",
+        "findings": [
+          "The 61-check revision passed both platforms, then source review added actual-casting-history corrections and three regressions before final draft validation."
+        ]
       }
     ],
-    "review_work_remaining": "Hosted draft conformance, source-bound promotion, required reviewed-loader conformance.",
+    "review_work_remaining": "Required reviewed-loader conformance on both hosted platforms.",
     "unresolved_defects": [],
     "next_batch_source_review": {
       "status": "preparation_only",
       "cards": [
         "rishkar-s-expertise",
         "hidden-nursery",
-        "chthonian-nightmare",
-        "entity-tracker"
+        "apex-devastator",
+        "chthonian-nightmare"
       ],
       "requirements": [
         "Rishkar's Expertise requires optional free casting during resolution, with mana value, X, timing and nonmana additional-cost rules.",
         "Hidden Nursery requires discover 4, sequential exile, optional free casting or hand placement, and random-bottom handling.",
         "Chthonian Nightmare requires player energy counters and ordered payment of energy, sacrifice and source return.",
-        "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause."
+        "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause.",
+        "Apex Devastator shares free casting and ordered library exile with discover; implement four separate cascade cast triggers."
       ]
     },
     "review_findings": [
-      "Source review caught two casting-history consequences that must not be copied: Necromancy's non-sorcery cleanup and Uro's escaped designation. Exclude both while retaining evoke/kicker/alternative cost decisions; add three cross-library regressions."
-    ]
+      "Source review caught two casting-history consequences that must not be copied: Necromancy's non-sorcery cleanup and Uro's escaped designation. Exclude both while retaining evoke/kicker/alternative cost decisions; add three cross-library regressions.",
+      "Promotion also retains already-public announced sources in copied hand abilities. A 65th actor-projection and continuation regression is included in required reviewed-loader validation; the passing draft evidence covers the preceding 64 methods."
+    ],
+    "draft_hosted_validation": {
+      "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+      "run_id": 34868673387,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
+      "conclusion": "success",
+      "tests_per_platform": 2159,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104058848709,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2159,
+          "seconds": 416.817,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104058848976,
+          "name": "verify (windows-latest)",
+          "tests": 2159,
+          "seconds": 414.866,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 302,
+      "totalCopies": 400,
+      "reviewedCopies": 368,
+      "remainingUnique": 32,
+      "remainingCopies": 32,
+      "byDeck": {
+        "Reaminatour \u2014 Aminatou, Veil Piercer": {
+          "total": 100,
+          "reviewed": 88
+        },
+        "Minsc & Boo, Timeless Heroes": {
+          "total": 100,
+          "reviewed": 93
+        },
+        "Omo, Queen of Vesuva": {
+          "total": 100,
+          "reviewed": 94
+        },
+        "Elenda, Saint of Dusk": {
+          "total": 100,
+          "reviewed": 93
+        }
+      }
+    },
+    "draft_test_methods": 64,
+    "reviewed_test_methods": 65
   },
   "hosted_validation_history": [
     {
@@ -4267,6 +4400,39 @@
           "name": "verify (ubuntu-latest)",
           "tests": 2095,
           "seconds": 370.819,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+      "run_id": 34868673387,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
+      "conclusion": "success",
+      "tests_per_platform": 2159,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104058848709,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2159,
+          "seconds": 416.817,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104058848976,
+          "name": "verify (windows-latest)",
+          "tests": 2159,
+          "seconds": 414.866,
           "conclusion": "success"
         }
       ]
@@ -6253,60 +6419,27 @@
     "candidate_families": [
       {
         "cards": [
-          "replication-technique",
-          "sunken-palace",
-          "changing-loyalty"
+          "rishkar-s-expertise",
+          "hidden-nursery",
+          "apex-devastator"
         ],
-        "focus": "Actual copied stack objects, independent target reselection, replicate payments and spent-mana lineage."
+        "focus": "Shared optional casting during resolution, discover and repeated cascade, with ordinary targets, cost legality and replay boundaries."
       },
       {
         "cards": [
-          "rishkar-s-expertise"
+          "chthonian-nightmare"
         ],
-        "focus": "Optional casting during resolution with no-mana-cost alternatives, ordinary targets and additional-cost legality."
+        "focus": "Energy payments plus ordered sacrifice/source-return costs."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
-  "hosted_validation": {
-    "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
-    "run_id": 34861920441,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
-    "conclusion": "success",
-    "tests_per_platform": 2095,
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "checks": [
-      "source syntax",
-      "full distribution installation",
-      "packaged assets",
-      "required reviewed-loader conformance"
-    ],
-    "jobs": [
-      {
-        "job_id": 104036054477,
-        "name": "verify (windows-latest)",
-        "tests": 2095,
-        "seconds": 435.159,
-        "conclusion": "success"
-      },
-      {
-        "job_id": 104036054678,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2095,
-        "seconds": 370.819,
-        "conclusion": "success"
-      }
-    ]
-  },
   "draft_hosted_validation": {
-    "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
-    "run_id": 34860964382,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382",
+    "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
+    "run_id": 34868673387,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
     "conclusion": "success",
-    "tests_per_platform": 2095,
+    "tests_per_platform": 2159,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -6319,17 +6452,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104032740594,
-        "name": "verify (windows-latest)",
-        "tests": 2095,
-        "seconds": 291.743,
+        "job_id": 104058848709,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2159,
+        "seconds": 416.817,
         "conclusion": "success"
       },
       {
-        "job_id": 104032741027,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2095,
-        "seconds": 381.077,
+        "job_id": 104058848976,
+        "name": "verify (windows-latest)",
+        "tests": 2159,
+        "seconds": 414.866,
         "conclusion": "success"
       }
     ]

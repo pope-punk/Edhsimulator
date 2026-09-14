@@ -1,6 +1,7 @@
 # Spell-copy and special-mana card review
 
-Status: complete drafts, pending hosted validation and source-bound promotion.
+Status: source-bound reviewed programs; draft validation passed. Required
+reviewed-loader validation is pending.
 Branch: `codex/remaining-card-programs`.
 Baseline: `8527eb661827e231b36f429c6efb9f981050df11`.
 Kernel/state checkpoint schemas: **127/17**.
@@ -55,16 +56,25 @@ that rider is spent. Mana abilities cannot be copied.
 
 ## Validation
 
-64 new hosted methods cover complete source faces and serialization, compiler
+65 new hosted methods cover complete source faces and serialization, compiler
 rejections, ordinary cast and activation payments, opponent target visibility,
 checkpoint continuation, countered originals, copied Aura entry/death/exile,
 exact seven-card payment, special-mana identity, doubled and separate riders,
 legendary-only payment, counter immunity, resolution payments, target swaps,
 X, modes, divided counters, Necromancy, escaped Uro and evoked Mulldrifter.
-Hosted results remain pending.
+Draft validation passed **2,159 tests per platform** plus syntax, installation
+and packaged assets on Ubuntu and Windows at `5f13db33ccca589d11e1d6c4feae1785ade8d13a`
+([run 34868673387](https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387)). Required reviewed-loader validation remains pending.
+
+The passing draft run covers 64 new methods. Promotion adds a visibility
+correction for copied hand abilities and a 65th regression: retain their
+already-public announced source in opponent packets and replay. The required
+reviewed-loader run will validate that final code and all 65 methods.
 
 ## Following work
 
 Rishkar's Expertise and Hidden Nursery need casting during resolution.
-Chthonian Nightmare and Entity Tracker remain candidates for their own reviewed
-mechanics. Review all remaining source texts before deciding the next batch.
+Apex Devastator shares ordered library exile and free casting through four
+separate cascade triggers. Chthonian Nightmare needs energy and ordered costs.
+Entity Tracker still needs Room-unlock events before its whole printed text can
+be claimed complete. Review current source texts before selecting the next batch.
