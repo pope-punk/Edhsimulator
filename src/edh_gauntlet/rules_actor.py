@@ -220,6 +220,9 @@ def project_actor(kernel,actor):
         try:inspection=kernel.inspect_library_search(actor)
         except RulesViolation:pass
         else:packet['library_search']=[option.to_json() for option in inspection]
+    packet['public_resolution_exiles']=[{'event_index':event['index'],'player':event['player'],
+        'refs':deepcopy(event['refs']),'names':list(event['names'])} for event in kernel.semantic_events
+        if event['kind']=='cards_revealed' and event.get('cause')=='resolution_exile']
     packet['revealed_library_tops']={owner:_card(kernel,top,views) for owner in state.live_players
         if kernel.player_permissions()[owner].get('reveal_library_top')
         and (top:=kernel._visible_library_top(owner,actor)) is not None}

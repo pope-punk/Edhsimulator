@@ -1319,7 +1319,7 @@ def activation_is_mana(ability):
     # disqualifies an activation. Merely looking, shuffling or rearranging
     # within that zone does not. Assess possible movement, not current contents.
     def moves_library_card(node):
-        if isinstance(node,ShuffleGraveyard):return True
+        if isinstance(node,(Discover,Cascade,Explore,RevealTopPermanent,ShuffleGraveyard)):return True
         if isinstance(node,(Draw,Mill,Surveil)):
             return constant_quantity(node.amount)!=0
         if isinstance(node,SearchLibrary):
@@ -2084,8 +2084,8 @@ def validate(program,_depth=0):
         effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values={'activated_context'}|({'special_mana_context'} if ability.zone==Zone.BATTLEFIELD and ability.mana_ability else set())|({'counter_division'} if division else set())|{'paid_subtype:'+c.cost_id for c in ability.cost.zone_costs
             if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD or c.selector is None and ability.zone==Zone.BATTLEFIELD})
         target_effects(ability.effects,ability.targets)
-        if ability.mana_ability and any(isinstance(node,PayMana) for node in immediate_effect_nodes(ability.effects)):
-            raise RulesViolation('Nested resolution payments inside mana abilities are unsupported')
+        if ability.mana_ability and any(isinstance(node,(PayMana,CastDuringResolution)) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Nested resolution payments or casts inside mana abilities are unsupported')
         if ability.mana_ability != activation_is_mana(ability):
             raise RulesViolation('Activation mana-ability classification does not match its targets and immediate effects')
         activation_ids.append(ability.ability_id)

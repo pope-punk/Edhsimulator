@@ -746,7 +746,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                                          copied_definition=copied_definition,counters=counters,copied_add_types=copied_add_types,
                                          life_payment=life_payment,reveal=reveal,note=note)
 
-    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=(),destruction_refs=()):
+    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=(),destruction_refs=(),defer_library_tops=False):
         before = self.state.objects(Zone.BATTLEFIELD)
         before_views = self.characteristics()
         before_life_totals = {p:self.state.life(p) for p in self.state.players}
@@ -883,7 +883,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                 self._emit_counters(event.after.ref,dict(event.after.counters),event.after.controller,event.after.ref)
         if payment is not None:self._collect_tapped(payment.taps,before)
         self._prune_attachment_rules()
-        self._sync_library_tops()
+        if not defer_library_tops:self._sync_library_tops()
         return events
 
     def _refs(self,frame,subject):
@@ -952,7 +952,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                     try:obj=self.state.get(ref)
                     except RulesViolation:continue
                     if obj.zone==Zone.LIBRARY and not obj.phased:retained[ref]=obj
-            events=self._move(refs,effect.destination,frame,key,entry_flags=frame['entry_flags'] if effect.subject=='source' else (),controller_mode=effect.controller,entry_tapped=effect.tapped,entry_counters=effect.counters)
+            events=self._move(refs,effect.destination,frame,key,entry_flags=frame['entry_flags'] if effect.subject=='source' else (),controller_mode=effect.controller,entry_tapped=effect.tapped,entry_counters=effect.counters,defer_library_tops=effect.library_position is not None)
             if effect.library_position is not None:
                 arrivals={e.before.ref:e.after for e in events if e.after.zone==Zone.LIBRARY}
                 groups={}
@@ -971,6 +971,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                     if player==controller:
                         self.library_observations[player]={'id':key+':placement','kind':'library_'+effect.library_position,'observed_revision':self.revision,
                             'cards':[{'ref':ref.to_json(),'name':self.definition(self.state.get(ref)).name} for ref in placed]}
+                self._sync_library_tops()
             return events
         elif isinstance(effect,Destroy):
             refs=[]

@@ -286,7 +286,7 @@ class LibraryRules:
             task['arrangement']={'top':[r.to_json() for r in top],'other':[r.to_json() for r in other]}
         plan=task['arrangement'];top=tuple(ObjectRef.from_json(r) for r in plan['top']);other=tuple(ObjectRef.from_json(r) for r in plan['other'])
         if kind=='surveil':
-            self._move(other,Zone.GRAVEYARD,frame,task['id']+':surveil-move',cause='surveil')
+            self._move(other,Zone.GRAVEYARD,frame,task['id']+':surveil-move',cause='surveil',defer_library_tops=True)
         library=self.state.zone(actor,Zone.LIBRARY);present={obj.ref for obj in library}
         top=tuple(ref for ref in top if ref in present)
         bottom=other if kind=='scry' else ()

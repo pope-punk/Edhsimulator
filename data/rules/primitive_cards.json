@@ -2034,6 +2034,218 @@
       }
     },
     {
+      "card_id": "apex-devastator",
+      "source_facts_sha256": "77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/RESOLUTION_CAST_CARD_REVIEW.md against official release notes and CR 608.2g, 701.57, 702.85 and 401.5\u20136. Reuses ordinary quotes, additional costs, event subscriptions, land budgets and source-bound identity. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:apex-devastator",
+        "name": "Apex Devastator",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "cascade-1",
+            "event": {
+              "node": "EventPattern",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Cascade"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "cascade-2",
+            "event": {
+              "node": "EventPattern",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Cascade"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "cascade-3",
+            "event": {
+              "node": "EventPattern",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Cascade"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          },
+          {
+            "node": "AbilityProgram",
+            "ability_id": "cascade-4",
+            "event": {
+              "node": "EventPattern",
+              "kind": "spell_cast",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "self",
+              "types": [],
+              "controller_only": false,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "Cascade"
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Chimera",
+          "Hydra"
+        ],
+        "mana_value": 10,
+        "power": 10,
+        "toughness": 10,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 8,
+              "symbols": [
+                "G",
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "arcane-denial",
       "source_facts_sha256": "50edb16e0afcd12531f002d411cddb9f8dbfb9d2ffacb33a16d5f4422b2838c3",
       "scope": "all_printed_faces",
@@ -20460,6 +20672,147 @@
       }
     },
     {
+      "card_id": "hidden-nursery",
+      "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/RESOLUTION_CAST_CARD_REVIEW.md against official release notes and CR 608.2g, 701.57, 702.85 and 401.5\u20136. Reuses ordinary quotes, additional costs, event subscriptions, land budgets and source-bound identity. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:hidden-nursery",
+        "name": "Hidden Nursery",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Cave"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "green",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "AddMana",
+                "symbols": [
+                  "G"
+                ]
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "discover-four",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 4,
+                "symbols": [
+                  "G"
+                ],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "sacrifice-nursery",
+                  "kind": "sacrifice",
+                  "selector": null,
+                  "count": 1
+                }
+              ],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Discover",
+                "amount": 4
+              }
+            ],
+            "targets": null,
+            "timing": "sorcery",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [
+          {
+            "node": "EntryModifier",
+            "modifier_id": "enters-tapped",
+            "tapped": true,
+            "condition": null,
+            "unless": false,
+            "selector": null
+          }
+        ],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "high-priest-of-penance",
       "source_facts_sha256": "546979e94edbad3c618b265fa63817719a48307efb7f9df7879fca21a6645f66",
       "scope": "all_printed_faces",
@@ -30234,6 +30587,94 @@
       }
     },
     {
+      "card_id": "oracle-of-mul-daya",
+      "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/RESOLUTION_CAST_CARD_REVIEW.md against official release notes and CR 608.2g, 701.57, 702.85 and 401.5\u20136. Reuses ordinary quotes, additional costs, event subscriptions, land budgets and source-bound identity. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:oracle-of-mul-daya",
+        "name": "Oracle of Mul Daya",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Elf",
+          "Shaman"
+        ],
+        "mana_value": 4,
+        "power": 2,
+        "toughness": 2,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 3,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "TopLibraryPermissions",
+          "additional_land_plays": 1,
+          "no_maximum_hand_size": false,
+          "land_zones": [],
+          "reveal_top": true,
+          "play_top_land": true
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "orzhov-signet",
       "source_facts_sha256": "a3dc4de5a5c63dbac8c602daa8d0b85cd62abfdbd0c907530b36c587165039f8",
       "scope": "all_printed_faces",
@@ -34552,6 +34993,128 @@
         "entry_counters": [],
         "colors": [
           "U"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "rishkar-s-expertise",
+      "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face review in docs/RESOLUTION_CAST_CARD_REVIEW.md against official release notes and CR 608.2g, 701.57, 702.85 and 401.5\u20136. Reuses ordinary quotes, additional costs, event subscriptions, land budgets and source-bound identity. Hosted draft and required reviewed-loader conformance are recorded separately; production admission remains closed.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:rishkar-s-expertise",
+        "name": "Rishkar's Expertise",
+        "types": [
+          "Sorcery"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "Draw",
+            "amount": {
+              "node": "BattlefieldStat",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "controlled",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "statistic": "power",
+              "operation": "maximum"
+            },
+            "players": "controller"
+          },
+          {
+            "node": "CastDuringResolution",
+            "maximum": 5
+          }
+        ],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 6,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 4,
+              "symbols": [
+                "G",
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
         ],
         "modal": null,
         "entry_copy_tapped": false,

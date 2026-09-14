@@ -90,6 +90,9 @@ class ResolutionCastingRules:
             ref=ObjectRef.from_json(plan['top'])
             events=self._move((ref,),Zone.EXILE,frame,key+':exile:'+str(plan['scanned']),controller_mode='owner')
             exiled=[e.after for e in events if e.after.zone==Zone.EXILE]
+            if exiled:
+                self._event('cards_revealed',player=actor,refs=[obj.ref.to_json() for obj in exiled],
+                    names=[self.definition(obj).name for obj in exiled],cause='resolution_exile')
             plan['exiled'].extend(obj.ref.to_json() for obj in exiled)
             plan['scanned']+=1;plan.pop('top')
             for obj in exiled:
@@ -107,9 +110,10 @@ class ResolutionCastingRules:
             plan['hand_done']=True
         if not plan.get('bottom_done'):
             refs=self._current_exiled_refs(plan['exiled'])
-            events=self._move(refs,Zone.LIBRARY,frame,key+':bottom',controller_mode='owner')
+            events=self._move(refs,Zone.LIBRARY,frame,key+':bottom',controller_mode='owner',defer_library_tops=True)
             arrivals=tuple(e.after.ref for e in events if e.after.zone==Zone.LIBRARY and e.after.owner==actor)
             self.state.random_bottom(actor,arrivals)
+            self._sync_library_tops()
             plan['bottom_done']=True
             self._event('discovered' if isinstance(effect,Discover) else 'cascade_finished',
                 player=actor,maximum=plan['maximum'],exiled_count=len(plan['exiled']),cast=bool(task.get('cast_result')))

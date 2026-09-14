@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 302,
-    "remaining_outside_reviewed_bundle": 32,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 306,
+    "remaining_outside_reviewed_bundle": 28,
+    "drafts_written": 0,
     "not_started_on_this_branch": 28,
-    "reviewed_bundle_copies": 368,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 372,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 75,
-    "remaining_outside_reviewed_bundle_copies": 32
+    "promoted_on_this_branch": 79,
+    "remaining_outside_reviewed_bundle_copies": 28
   },
   "cards": [
     {
@@ -182,7 +182,7 @@
     {
       "card_id": "apex-devastator",
       "name": "Apex Devastator",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -196,8 +196,19 @@
           "text": "Cascade, cascade, cascade, cascade"
         }
       ],
-      "draft_path": "data/rules/draft_cards.json",
-      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "resolution-casting-library-2026-09-14",
+      "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "source_facts_sha256": "77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d",
+      "previous_draft_definition": "draft:apex-devastator",
+      "reviewed_definition": "catalog:apex-devastator",
+      "draft_hosted_validation": {
+        "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+        "run_id": 34876806875
+      }
     },
     {
       "card_id": "arcane-denial",
@@ -1482,7 +1493,7 @@
     {
       "card_id": "hidden-nursery",
       "name": "Hidden Nursery",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1496,8 +1507,19 @@
           "text": "This land enters tapped.\n{T}: Add {G}.\n{4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery."
         }
       ],
-      "draft_path": "data/rules/draft_cards.json",
-      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "resolution-casting-library-2026-09-14",
+      "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a",
+      "previous_draft_definition": "draft:hidden-nursery",
+      "reviewed_definition": "catalog:hidden-nursery",
+      "draft_hosted_validation": {
+        "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+        "run_id": 34876806875
+      }
     },
     {
       "card_id": "horizon-of-progress",
@@ -2280,7 +2302,7 @@
     {
       "card_id": "oracle-of-mul-daya",
       "name": "Oracle of Mul Daya",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2294,8 +2316,19 @@
           "text": "You may play an additional land on each of your turns.\nPlay with the top card of your library revealed.\nYou may play lands from the top of your library."
         }
       ],
-      "draft_path": "data/rules/draft_cards.json",
-      "review_notes": "Complete three-clause program drafted; source-bound review and hosted validation pending."
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "resolution-casting-library-2026-09-14",
+      "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549",
+      "previous_draft_definition": "draft:oracle-of-mul-daya",
+      "reviewed_definition": "catalog:oracle-of-mul-daya",
+      "draft_hosted_validation": {
+        "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+        "run_id": 34876806875
+      }
     },
     {
       "card_id": "parallax-wave",
@@ -2720,7 +2753,7 @@
     {
       "card_id": "rishkar-s-expertise",
       "name": "Rishkar's Expertise",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2734,8 +2767,19 @@
           "text": "Draw cards equal to the greatest power among creatures you control.\nYou may cast a spell with mana value 5 or less from your hand without paying its mana cost."
         }
       ],
-      "draft_path": "data/rules/draft_cards.json",
-      "review_notes": "Complete printed program drafted; source-bound review and hosted validation pending."
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
+      "batch": "resolution-casting-library-2026-09-14",
+      "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7",
+      "previous_draft_definition": "draft:rishkar-s-expertise",
+      "reviewed_definition": "catalog:rishkar-s-expertise",
+      "draft_hosted_validation": {
+        "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+        "run_id": 34876806875
+      }
     },
     {
       "card_id": "scute-swarm",
@@ -3553,11 +3597,16 @@
       "apex-devastator",
       "oracle-of-mul-daya"
     ],
-    "cards_promoted": [],
-    "new_test_methods": 85,
+    "cards_promoted": [
+      "rishkar-s-expertise",
+      "hidden-nursery",
+      "apex-devastator",
+      "oracle-of-mul-daya"
+    ],
+    "new_test_methods": 94,
     "runtime_checkpoint_schema": 128,
     "state_checkpoint_schema": 17,
-    "validation_status": "draft_pending",
+    "validation_status": "reviewed_loader_pending",
     "shared_mechanics": [
       "Resolution-cast permissions with suspended parents and no priority",
       "Discover/cascade public sequential exile and random-bottom continuations",
@@ -3570,8 +3619,8 @@
     "next_batch": [
       "chthonian-nightmare",
       "maze-s-end",
-      "parasitic-impetus",
-      "rhythm-of-the-wild"
+      "rhythm-of-the-wild",
+      "parasitic-impetus"
     ],
     "hosted_attempts": [
       {
@@ -3587,8 +3636,90 @@
         ]
       }
     ],
-    "review_work_remaining": "Source and runtime review; draft hosted conformance; source-bound promotion; required reviewed-loader conformance.",
-    "unresolved_defects": []
+    "review_work_remaining": "Required reviewed-loader hosted validation for all 94 new methods.",
+    "unresolved_defects": [],
+    "next_batch_source_review": {
+      "status": "preparation_only",
+      "cards": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus"
+      ],
+      "requirements": [
+        "Chthonian Nightmare: player energy is already stored, but add an explicit gain effect and X energy payment plus two ordered zone-cost groups. Preserve target-before-cost ordering and allow X zero. Do not use object-counter costs for player energy.",
+        "Maze's End: reuse tapped entry, colorless mana, source-return cost and Gate search; add distinct current Gate-name counting and a real player-win transition after search/shuffle.",
+        "Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.",
+        "Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.",
+        "Entity Tracker still requires the fully-unlocked Room trigger; enchantment-entry support alone is incomplete."
+      ]
+    },
+    "draft_test_methods": 85,
+    "reviewed_test_methods": 94,
+    "draft_hosted_validation": {
+      "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+      "run_id": 34876806875,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875",
+      "conclusion": "success",
+      "tests_per_platform": 2245,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104085905904,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2245,
+          "seconds": 441.625,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104085906105,
+          "name": "verify (windows-latest)",
+          "tests": 2245,
+          "seconds": 439.011,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 306,
+      "totalCopies": 400,
+      "reviewedCopies": 372,
+      "remainingUnique": 28,
+      "remainingCopies": 28,
+      "byDeck": {
+        "Reaminatour \u2014 Aminatou, Veil Piercer": {
+          "total": 100,
+          "reviewed": 88
+        },
+        "Minsc & Boo, Timeless Heroes": {
+          "total": 100,
+          "reviewed": 94
+        },
+        "Omo, Queen of Vesuva": {
+          "total": 100,
+          "reviewed": 97
+        },
+        "Elenda, Saint of Dusk": {
+          "total": 100,
+          "reviewed": 93
+        }
+      }
+    },
+    "review_findings": [
+      "Promotion includes library-moving mana classification and rejects unsupported nested free casting inside immediate mana abilities.",
+      "Defer top-card disclosure until bottom/top placement is finalized, including discover/cascade and surveil; prevent transient top exposure or false reference retirement.",
+      "Preserve public face-up exile histories even when discover/cascade finishes without a hit."
+    ]
   },
   "hosted_validation_history": [
     {

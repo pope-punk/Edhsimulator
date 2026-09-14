@@ -1,6 +1,6 @@
 # Casting during resolution: source and implementation review
 
-Status: drafted; hosted validation and source-bound promotion pending.
+Status: source-bound reviewed programs; required reviewed-loader validation pending.
 Base: `8f2c947759f204e42014edfe1a654d0832d6ce46`. Kernel/state schemas: **128/17**.
 No local project execution. Production admission remains closed.
 
@@ -52,9 +52,29 @@ only the current authorized top and historical disclosures, never the rest of
 the library. [Double Masters 2022 release notes](https://magic.wizards.com/en/news/feature/double-masters-2022-release-notes-2022-06-24)
 confirm Oracle's three clauses, cumulative land plays and ordinary timing.
 
-Current tests: **85 new methods**; expanded draft results pending. The initial
+The **85-method draft** passed **2,245 tests on each of Ubuntu and Windows**,
+plus syntax, installation and assets, at
+`c168dae7c628cde1f37e0381a21a609fe720f088` ([run 34876806875](https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875)).
+The **94-method required reviewed-loader run** is pending. The initial
 three-card run executed 2,217 tests on Ubuntu with two failures and two errors:
 incorrect kicker and Gate fixtures, plus a missing canonical-reference update.
 These are corrected before the expanded run. Existing limitations
 for unreviewed split/Room/transform programs remain gated by the reviewed loader.
 Chthonian Nightmare remains queued for complete energy and ordered costs.
+
+## Promotion review corrections
+
+The required reviewed-loader run includes nine additional regressions and three
+focused corrections: library-moving effects follow CR 605.1a's mana-ability
+classification; bottom/top placement and surveil finish before top disclosure;
+and face-up resolution exiles remain available as historical public evidence even
+without a hit. Other regressions cover uninterrupted sequential offers, copied
+Oracle permissions and failed-draw state-based actions. These corrections are
+not attributed to the earlier 85-method draft proof.
+
+## Source bindings
+
+- `rishkar-s-expertise`: `3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7`
+- `hidden-nursery`: `eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a`
+- `apex-devastator`: `77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d`
+- `oracle-of-mul-daya`: `1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549`

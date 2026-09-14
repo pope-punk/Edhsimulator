@@ -23,11 +23,10 @@ class ResolutionCastTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={row['card_id']:row for row in drafts if row['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(row['program'] for row in reviewed.values())+tuple(cls.cards.values())
-        cls.prefix='draft:'
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(row['program'] for row in reviewed.values())
+        cls.prefix='catalog:'
 
     def game(self,extra=()):
         body=CardProgram('rc-body','Body',('Creature',),power=2,toughness=3,mana_value=2,
@@ -672,7 +671,81 @@ class ResolutionCastTests(unittest.TestCase):
         self.discover(0);self.free(self.hit())
         self.assertEqual(Zone.STACK,self.current(card).zone)
 
+    def test_library_movement_disqualifies_mana_ability(self):
+        for effect in (Discover(4),Explore('source'),RevealTopPermanent(),ShuffleGraveyard()):
+            ability=ActivatedProgram('mana',CostSpec(),(effect,AddMana(('G',))),mana_ability=True)
+            with self.subTest(effect=effect):
+                self.assertFalse(activation_is_mana(ability))
+                with self.assertRaises(RulesViolation):
+                    validate(CardProgram('bad','Bad',('Artifact',),activated=(ability,)))
+
+    def test_compiler_rejects_nested_free_cast_inside_mana_ability(self):
+        ability=ActivatedProgram('mana',CostSpec(),(CastDuringResolution(5),AddMana(('G',))),mana_ability=True)
+        with self.assertRaises(RulesViolation):validate(CardProgram('bad','Bad',('Artifact',),activated=(ability,)))
+
+    def test_two_resolution_offers_share_one_uninterrupted_parent(self):
+        self.game();first=self.add(zone=Zone.HAND);second=self.add(zone=Zone.HAND)
+        self.kernel.execute_for_scenario(self.anchor,'A',(CastDuringResolution(5),CastDuringResolution(5)))
+        old=self.kernel.resolution_cast['id'];self.free(first)
+        self.assertTrue(self.kernel._cast_waiting());self.assertNotEqual(old,self.kernel.resolution_cast['id'])
+        self.assertIsNone(self.kernel.priority);self.assertEqual(1,len(self.kernel.stack))
+        self.free(second);self.assertEqual(2,len(self.kernel.stack));self.assertIsNone(self.kernel.resolution_cast)
+
+    def test_copied_oracle_keeps_all_three_permissions(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        self.kernel.execute_for_scenario(oracle,'A',(CopyTokens('source'),))
+        permissions=self.kernel.player_permissions()['A']
+        self.assertEqual(3,permissions['land_play_limit'])
+        self.assertTrue(permissions['reveal_library_top']);self.assertTrue(permissions['play_library_top'])
+        self.restore();self.assertEqual(permissions,self.kernel.player_permissions()['A'])
+
+    def test_failed_draw_does_not_skip_expertise_free_cast_instruction(self):
+        self.game();self.add();only=self.add(zone=Zone.LIBRARY)
+        self.offer();self.assertTrue(self.events('draw_failed'));self.assertIn('A',self.state.live_players)
+        self.free(self.current(only).ref)
+        self.assertEqual(2,len(self.events('spell_cast')));self.assertNotIn('A',self.state.live_players)
+
+    def test_oracle_discover_bottoming_does_not_cover_untouched_top(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        untouched=self.add(zone=Zone.LIBRARY);self.add(zone=Zone.LIBRARY);land=self.add('catalog:forest',zone=Zone.LIBRARY)
+        self.discover();top=self.current(untouched).ref;start=len(self.events('cards_revealed'))
+        self.decline()
+        self.assertEqual(top,self.current(untouched).ref)
+        self.assertEqual(start,len(self.events('cards_revealed')))
+
+    def test_oracle_explicit_bottom_move_has_no_transient_reveal(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        top=self.add(zone=Zone.LIBRARY);bottom=self.add('catalog:forest',zone=Zone.GRAVEYARD);self.kernel.advance()
+        start=len(self.events('cards_revealed'))
+        self.kernel.execute_for_scenario(bottom,'A',(Move('source',Zone.LIBRARY,library_position='bottom'),))
+        self.assertEqual(top,self.current(top).ref)
+        self.assertEqual(start,len(self.events('cards_revealed')))
+
+    def test_oracle_surveil_reveals_only_final_reordered_top(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        bottom=self.add(zone=Zone.LIBRARY);middle=self.add('catalog:forest',zone=Zone.LIBRARY);top=self.add(zone=Zone.LIBRARY)
+        self.kernel.execute_for_scenario(self.anchor,'A',(Surveil(3),))
+        request=self.kernel.pending_choice
+        positions={o.ref.card_id:i for i,o in enumerate(request.options) if o.ref is not None}
+        divider=next(i for i,o in enumerate(request.options) if o.ref is None)
+        start=len(self.events('cards_revealed'))
+        self.answer([positions[bottom.card_id],positions[middle.card_id],divider,positions[top.card_id]])
+        reveals=self.events('cards_revealed')[start:]
+        self.assertEqual([bottom.card_id],[e['refs'][0]['card_id'] for e in reveals if e.get('cause')=='library_top'])
+
+    def test_discover_without_hit_preserves_public_exile_history(self):
+        self.game();refs=[self.add('catalog:forest',zone=Zone.LIBRARY) for _ in range(3)]
+        self.discover()
+        for actor in self.state.players:
+            rows=project_actor(self.kernel,actor)['public_resolution_exiles']
+            self.assertEqual([ref.card_id for ref in reversed(refs)],[row['refs'][0]['card_id'] for row in rows])
+            self.assertTrue(all(row['names']==['Forest'] for row in rows))
+            self.assertTrue(all(row['refs'][0]!=self.current(ref).ref.to_json() for row,ref in zip(rows,reversed(refs))))
+
 
 if __name__=='__main__':unittest.main()
+
+
+
 
 
