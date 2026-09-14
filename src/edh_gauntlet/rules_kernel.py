@@ -17,6 +17,7 @@ from .rules_choices import Option, ChoiceRequest, CounterAllocationRequest, Prio
 from .rules_attachments import AttachmentRules
 from .rules_phasing import PhasingRules
 from .rules_casting import CastingRules
+from .rules_mana import ManaRules
 from .rules_turns import TurnRules, TurnActionBoundary
 from .rules_combat import CombatRules
 from .rules_departure import DepartureRules,GameResult
@@ -25,7 +26,7 @@ from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
 from .rules_subtypes import expanded_subtypes
 from .rules_guard import GuardRules, protection_matches
-from .rules_program import (DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (LandMana,DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -40,8 +41,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=121
+class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=122
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -1228,8 +1229,9 @@ class RulesKernel(GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRul
                 symbol=self._choose(key,controller,'mana_choice','Choose the mana to produce.',options,1,1)[0].key
             symbols=(symbol,)*amount
             self._produce_mana(controller,symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
-        elif isinstance(effect,(ChooseMana,ChooseCommanderMana)):
-            alternatives=effect.options if isinstance(effect,ChooseMana) else tuple((c,) for c in self.state.commander_identity(controller))
+        elif isinstance(effect,(ChooseMana,ChooseCommanderMana,LandMana)):
+            alternatives=(tuple((c,) for c in self.land_mana_options(effect,controller)) if isinstance(effect,LandMana)
+                else effect.options if isinstance(effect,ChooseMana) else tuple((c,) for c in self.state.commander_identity(controller)))
             if not alternatives:return
             if len(alternatives)==1:symbols=alternatives[0]
             else:

@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -97,13 +97,24 @@ class Payment:
     mana: tuple[tuple[str, int], ...] = ()
     taps: tuple[ObjectRef, ...] = ()
     zone_costs: tuple = ()
+    convoke: tuple = ()
+
+    def to_json(self):
+        result={'mana':dict(self.mana),'taps':[ref.to_json() for ref in self.taps],
+            'zone_costs':{key:[ref.to_json() for ref in refs] for key,refs in self.zone_costs}}
+        if self.convoke:result['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in self.convoke]
+        return result
 
     @classmethod
     def from_json(cls, value):
-        if not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs'} or not isinstance(value['mana'], dict) or not isinstance(value.get('zone_costs',{}),dict):
+        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke'}
+                or not isinstance(value['mana'],dict) or not isinstance(value.get('zone_costs',{}),dict)
+                or not isinstance(value.get('convoke',[]),list)
+                or any(not isinstance(row,dict) or set(row)!={'ref','color'} for row in value.get('convoke',[]))):
             raise RulesViolation('Invalid payment packet')
         return cls(tuple(sorted(value['mana'].items())), tuple(ObjectRef.from_json(ref) for ref in value['taps']),
-            tuple((key,tuple(ObjectRef.from_json(ref) for ref in refs)) for key,refs in sorted(value.get('zone_costs',{}).items())))
+            tuple((key,tuple(ObjectRef.from_json(ref) for ref in refs)) for key,refs in sorted(value.get('zone_costs',{}).items())),
+            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])))
 
 
 class CastingRules:
@@ -126,7 +137,7 @@ class CastingRules:
             raise RulesViolation('Resolution payment requires a fresh bounded action identity')
         resources=None
         if payment is not None:
-            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=():
+            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=():
                 raise RulesViolation('Resolution payment accepts mana only')
             resources=ResourcePayment(actor,payment.mana)
             self.state.validate_payment(resources)
@@ -317,13 +328,16 @@ class CastingRules:
                 raise RulesViolation('Illegal tap-cost selection')
         if quote.cost.tap_source:
             taps = (quote.source,) + taps
+        convoked,colors=self._convoke_contributions(quote,payment,source)
+        taps+=convoked
         resources = ResourcePayment(quote.actor, payment.mana, quote.cost.life, taps,
             tuple((quote.source,c.kind,c.amount) for c in quote.cost.counter_costs))
         self.state.validate_payment(resources)
         paid = dict(payment.mana)
+        for color,amount in colors.items():paid[color]=paid.get(color,0)+amount
         if not _mana_symbols_satisfied(quote.cost.mana.symbols,paid):
             raise RulesViolation('Mana payment does not satisfy colored/colorless requirements')
-        if sum(paid.values()) != quote.cost.mana.generic + len(quote.cost.mana.symbols):
+        if sum(dict(payment.mana).values())+len(payment.convoke) != quote.cost.mana.generic + len(quote.cost.mana.symbols):
             raise RulesViolation('Mana payment must match the total cost exactly')
         return resources
 
@@ -356,8 +370,7 @@ class CastingRules:
             if announced_frame is not None:
                 self._bind_announced_values(announced_frame,quote)
                 self.stack.append(announced_frame)
-            self.announcement={'frame_id':announced_frame['id'] if announced_frame else None,'quote':quote.to_json(),'payment':{'mana':dict(payment.mana),'taps':[r.to_json() for r in payment.taps],
-                'zone_costs':{key:[r.to_json() for r in refs] for key,refs in payment.zone_costs}},
+            self.announcement={'frame_id':announced_frame['id'] if announced_frame else None,'quote':quote.to_json(),'payment':payment.to_json(),
                 'source':source.to_json(),'origin_source':origin_source.to_json(),
                 'source_types':sorted(self.effective(source.ref).types),'ability':encode(ability),
                 'refs':[ref.to_json() for ref in zone_refs]}
@@ -365,22 +378,13 @@ class CastingRules:
             boundary=self.advance()
             if boundary is None and ability is not None and ability.mana_ability and quote.actor in self.state.live_players:self.priority=quote.actor
             return boundary
-        mana_ability=self._commit_prepared(quote,resources)
+        mana_ability=self._commit_prepared(quote,resources,convoke=payment.convoke)
         boundary=self.advance()
         if boundary is None and mana_ability and quote.actor in self.state.live_players:self.priority=quote.actor
         return boundary
 
     def _produce_mana(self,player,symbols,*,tapped_for_mana=False):
-        # Supported multipliers commute. Each active replacement modifies the
-        # production event once; it does not create another mana ability/event.
-        factor=1
-        if symbols and tapped_for_mana:
-            for obj in self.state.objects(Zone.BATTLEFIELD):
-                if obj.phased:continue
-                for rule in self.definition(obj).tapped_mana_replacements:
-                    if (rule.players=='all' or rule.players=='controller' and obj.controller==player
-                            or rule.players=='opponents' and obj.controller!=player):factor*=rule.multiplier
-        symbols=tuple(symbols)*factor
+        symbols=self._mana_after_replacements(player,symbols,tapped_for_mana=tapped_for_mana)
         self.state.add_mana(player,symbols)
         self._event('mana_added',player=player,symbols=list(symbols))
 
@@ -440,7 +444,7 @@ class CastingRules:
                 frame['tasks'].extend({'id':self._id('effect'),'effect':encode(effect),'mode_id':mode.mode_id,'bindings':{},'values':{}} for effect in mode.effects)
         return frame
 
-    def _commit_prepared(self,quote,resources,*,paid=False,source=None,ability=None,zone_payment=None,previous_types=None,prepared_frame=None):
+    def _commit_prepared(self,quote,resources,*,paid=False,source=None,ability=None,zone_payment=None,previous_types=None,prepared_frame=None,convoke=()):
         source = source or self.state.get(quote.source)
         immediate_mana=();tapped_for_mana=False
         tap_observers=self._tap_observers(resources.taps) if not paid else ()
@@ -481,6 +485,7 @@ class CastingRules:
         receipt = {'action': quote.to_json(), 'payment': {'mana': dict(resources.mana), 'life': resources.life,
             'taps': [ref.to_json() for ref in resources.taps]}, 'frame': frame['id'] if frame else None,
             'mana_ability': mana_ability}
+        if convoke:receipt['payment']['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in convoke]
         if resources.counters:
             receipt['payment']['counters']=[{'source':ref.to_json(),'kind':kind,'amount':amount} for ref,kind,amount in resources.counters]
         if zone_payment is not None:receipt['payment']['zone_costs']=zone_payment
@@ -543,7 +548,7 @@ class CastingRules:
                 if 'values' in task:task['values'].update(observations)
         self.announcement=None
         self._commit_prepared(quote,resources,paid=True,source=source,ability=ability,
-            zone_payment={cost.cost_id:pending['refs']},previous_types=pending['source_types'],prepared_frame=prepared_frame)
+            zone_payment={cost.cost_id:pending['refs']},previous_types=pending['source_types'],prepared_frame=prepared_frame,convoke=payment.convoke)
 
     def _collect_announcement(self, kind, announced, actor,*,previous_types=None,values=None):
         observers = list(self.state.objects(Zone.BATTLEFIELD))

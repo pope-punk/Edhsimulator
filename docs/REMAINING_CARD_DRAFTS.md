@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **278 source-bound reviewed programs / 343 deck copies**. There are **56 cards / 57 deck
-copies outside the reviewed bundle**, all unstarted, and no outstanding drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, four authored drafts and 52 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,26 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: eight cards sharing guards and history
+## Current cycle: mana capabilities and convoke
+
+Exotic Orchard, Fellwar Stone, Horizon of Progress and Devouring Light have
+complete printed programs in the isolated draft bundle. This cycle implements
+two shared interpreters: current-land mana capabilities, including recursive
+dependencies, and authenticated convoke payment against the final spell cost.
+The prior 278 reviewed programs are unchanged.
+
+Kernel schema is **122**, state schema **14**. The **72 new methods** are ready
+for hosted draft and required reviewed-loader validation: **1,851 tests per
+platform** are expected. Source review covers CR 106.7 and 702.51, Horizon's
+complete three-ability face, replacement outcomes, payment atomicity and privacy.
+See [the review](MANA_CONVOKE_CARD_REVIEW.md).
+
+After finishing both validation stages, continue Scute Swarm, Helm of the Host,
+Lazotep Quarry and Aggressive Biomancy with durable copiable token snapshots.
+The work order below retains the implementation preparation. All four token
+cards remain unstarted. No local execution, game migration or production admission.
+
+## Previous cycle: eight cards sharing guards and history
 
 The user explicitly requested **eight more cards**. Karmic Guide, Alseid of Life's
 Bounty, Fanatical Devotion, Pongify, Dimir House Guard, Midnight Snack, Restart
@@ -53,7 +72,8 @@ See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 Refresh the branch and inventory, then choose complete compatible families from
 **Exotic Orchard, Fellwar Stone, Horizon of Progress, Devouring Light,
 Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**.
-All eight remain unstarted.
+The first four now have drafts in the current cycle; the four token-copy cards
+remain unstarted.
 
 - Orchard, Stone and Horizon need a shared query for mana that derived land
   abilities could produce, including intrinsic abilities and replacement effects.

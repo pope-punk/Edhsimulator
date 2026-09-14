@@ -6,7 +6,7 @@ face-down objects remain unsupported. Production admission stays closed.
 """
 import json
 from copy import deepcopy
-from .rules_program import encode
+from .rules_program import encode,ConvokeCast
 from .rules_creature_types import CREATURE_TYPES
 from .rules_state import Zone,RulesViolation,RulesObject,ObjectRef
 
@@ -21,6 +21,7 @@ def _card(kernel,obj,views):
             for ability in kernel.definition(obj).abilities if ability.trigger_limit is not None] if obj.zone==Zone.BATTLEFIELD else []
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
         'definition_id':obj.effective_definition,'owner':obj.owner,'controller':obj.controller,
+        **({'convoke':True} if isinstance(kernel.definition(obj).cast,ConvokeCast) else {}),
         'zone':obj.zone.value,'types':sorted(view.types),'subtypes':sorted(view.subtypes-CREATURE_TYPES if all_creature_types else view.subtypes),
         **({'all_creature_types':True} if all_creature_types else {}),
         'supertypes':sorted(view.supertypes),'keywords':sorted(view.keywords),'colors':sorted(view.colors),

@@ -92,6 +92,7 @@ class RulesActorAdapter:
             try:payment=Payment.from_json(command['payment'])
             except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid payment') from exc
             for ref in payment.taps:self._visible_ref(ref.to_json(),actor)
+            for ref,color in payment.convoke:self._visible_ref(ref.to_json(),actor)
             for _,refs in payment.zone_costs:
                 for ref in refs:self._visible_ref(ref.to_json(),actor)
             modes=command.get('modes',[])

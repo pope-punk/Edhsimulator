@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 278,
     "remaining_outside_reviewed_bundle": 56,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 56,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 52,
     "reviewed_bundle_copies": 343,
-    "draft_copies": 0,
+    "draft_copies": 5,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 51,
     "remaining_outside_reviewed_bundle_copies": 57
@@ -610,7 +610,7 @@
     {
       "card_id": "devouring-light",
       "name": "Devouring Light",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -623,7 +623,12 @@
           "face_id": "devouring-light",
           "text": "Convoke\nExile target attacking or blocking creature."
         }
-      ]
+      ],
+      "draft_definition": "draft:devouring-light",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e",
+      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
     },
     {
       "card_id": "dimir-house-guard",
@@ -770,7 +775,7 @@
     {
       "card_id": "exotic-orchard",
       "name": "Exotic Orchard",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -783,7 +788,12 @@
           "face_id": "exotic-orchard",
           "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
         }
-      ]
+      ],
+      "draft_definition": "draft:exotic-orchard",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c",
+      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
     },
     {
       "card_id": "fanatic-of-rhonas",
@@ -870,7 +880,7 @@
     {
       "card_id": "fellwar-stone",
       "name": "Fellwar Stone",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -888,7 +898,12 @@
           "face_id": "fellwar-stone",
           "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
         }
-      ]
+      ],
+      "draft_definition": "draft:fellwar-stone",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
+      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
     },
     {
       "card_id": "finale-of-revelation",
@@ -1276,7 +1291,7 @@
     {
       "card_id": "horizon-of-progress",
       "name": "Horizon of Progress",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1289,7 +1304,12 @@
           "face_id": "horizon-of-progress",
           "text": "{T}, Pay 1 life: Add one mana of any type that a land you control could produce.\n{3}, {T}: You may put a land card from your hand onto the battlefield tapped.\n{1}, {T}, Sacrifice this land: Draw a card."
         }
-      ]
+      ],
+      "draft_definition": "draft:horizon-of-progress",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16",
+      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
     },
     {
       "card_id": "hydra-broodmaster",
@@ -3106,175 +3126,45 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "cecda2894b3afb4f67aacd1656acdaff7096fe04",
-    "user_request": "Eight more cards, completed as one coherent batch.",
+    "base_commit": "107f2e9069d2631646cc0fbb4dbad2e0d9cf10f8",
     "cards_written": [
-      "karmic-guide",
-      "alseid-of-life-s-bounty",
-      "fanatical-devotion",
-      "pongify",
-      "dimir-house-guard",
-      "midnight-snack",
-      "restart-sequence",
-      "jyoti-moag-ancient"
-    ],
-    "cards_promoted": [
-      "karmic-guide",
-      "alseid-of-life-s-bounty",
-      "fanatical-devotion",
-      "pongify",
-      "dimir-house-guard",
-      "midnight-snack",
-      "restart-sequence",
-      "jyoti-moag-ancient"
-    ],
-    "shared_mechanics": [
-      "Shared derived-color protection for targeting, damage, blocking and attachment legality",
-      "Atomic regeneration shields integrated with destruction and simultaneous state actions",
-      "Echo occurrence based on existing control timestamps and explicit previous-upkeep observations",
-      "Public attack and qualifying combat-damage history; actual turn life gains including lifelink",
-      "Resolving player-statistic quantities and reusable bound library selectors",
-      "Fear blocker predicate; frozen nonnegative power snapshots; complete Food and Forest Dryad tokens",
-      "Guard and phasing files included in implementation identity"
-    ],
-    "runtime_checkpoint_schema": 121,
-    "state_checkpoint_schema": 14,
-    "new_test_methods": 107,
-    "validation_status": "reviewed_loader_passed",
-    "unresolved_defects": [],
-    "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
-    "next_batch": [
       "exotic-orchard",
       "fellwar-stone",
       "horizon-of-progress",
-      "devouring-light",
+      "devouring-light"
+    ],
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Pure current-land mana capability queries with least fixed-point recursion",
+      "Shared actual and hypothetical mana replacement transformation",
+      "Current derived, intrinsic and granted land abilities; conditional and quantity-dependent outputs",
+      "Convoke as authored mixed creature/mana payment against the final total cost",
+      "Payment serialization, public cast capability, tap receipts, actor visibility and replay"
+    ],
+    "runtime_checkpoint_schema": 122,
+    "state_checkpoint_schema": 14,
+    "new_test_methods": 72,
+    "validation_status": "draft_hosted_pending",
+    "unresolved_defects": [],
+    "review_work_remaining": "Run corrected hosted draft validation and then required source-bound reviewed-loader validation on Ubuntu and Windows.",
+    "selection_note": "Complete the three could-produce mana cards and Devouring Light together. Two shared interpreters require broad payment, recursion, source and replay coverage; the four token-copy cards remain a coherent next family.",
+    "next_batch": [
       "scute-swarm",
       "helm-of-the-host",
       "lazotep-quarry",
       "aggressive-biomancy"
     ],
     "next_batch_implementation_notes": {
-      "focus": "Choose the next complete family after refreshing source. Investigate could-produce mana queries for three mana sources, convoke payments, and copiable token snapshots shared by four token cards.",
-      "guard": "No partial printed clauses; no local execution, game migration or production admission."
-    },
-    "hosted_attempts": [
-      {
-        "stage": "draft",
-        "commit": "a819021073fa048c74899d64b19ad1844c2788a5",
-        "run_id": 34800692440,
-        "ubuntu": "failure",
-        "windows": "cancelled",
-        "tests_run": 1779,
-        "failures": 2,
-        "errors": 1,
-        "causes": [
-          "Two historical checkpoint tests still required state schema 13 exactly; retain their historical minimum and rejection checks while the new suite requires schema 14.",
-          "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
-        ],
-        "production_defects_found": []
-      },
-      {
-        "stage": "draft_fixture_correction",
-        "commit": "4c8e634887275bb68bde64186e858995281d16b3",
-        "run_id": 34801536529,
-        "ubuntu": "success",
-        "windows": "success",
-        "tests_per_platform": 1779,
-        "conclusion": "success_superseded",
-        "limitation": "Both full suites passed, but subsequent independent source review found Jyoti's negative +X/+X expectation incorrect under CR 107.1b. Fresh draft validation is required for the corrected program and test."
-      }
-    ],
-    "source_review_corrections": [
-      {
-        "rule": "107.1b",
-        "card_id": "jyoti-moag-ancient",
-        "issue": "The initial program and negative-power test incorrectly treated calculated +X/+X as signed.",
-        "correction": "Reuse SourceStat with allow_negative false; test current and last-known negative power producing a zero bonus; remove the unnecessary signed-modifier compiler permission."
-      }
-    ],
-    "draft_hosted_validation": {
-      "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
-      "run_id": 34801795555,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
+      "focus": "Persisted runtime copiable token snapshots, copied entry behavior and copy exceptions; keep later haste separate from Helm's nonlegendary copy values.",
+      "reuse": [
+        "CreateTokens / WithCreatedTokens atomic entry",
+        "Existing entry copies and characteristics",
+        "Fixed and X costs, sorcery activations, creature/Desert sacrifices",
+        "Existing target grouping, source statistics and fight/damage inspection"
       ],
-      "tests_per_platform": 1779,
-      "new_test_methods": 107,
-      "conclusion": "success",
-      "scope": "All 270 prior reviewed programs and eight isolated complete drafts, including corrected Jyoti negative-power semantics; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+      "guard": "Complete all printed clauses; preserve source bindings, privacy, checkpoint identity and hosted validation. No local project execution or game migration."
     },
-    "next_batch_source_review": {
-      "inspected_commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
-      "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
-      "rules": [
-        "106.7",
-        "702.51a-d",
-        "707.5",
-        "707.9a-d"
-      ],
-      "implementation_points": [
-        {
-          "cards": [
-            "exotic-orchard",
-            "fellwar-stone",
-            "horizon-of-progress"
-          ],
-          "paths": [
-            "rules_casting.py:activated_abilities",
-            "rules_casting.py:_produce_mana",
-            "rules_program.py:ChooseMana",
-            "rules_subtypes.py"
-          ],
-          "finding": "Add a pure could-produce query over current derived land abilities, including intrinsic basic-land mana and applicable mana replacement outcomes. Ignore costs and activation legality. Resolve recursive Orchard/Horizon dependencies to a finite set; an ungrounded cycle produces nothing. Orchard/Stone allow only colors, while Horizon also permits colorless. Reuse existing tap/life/sacrifice costs and optional hand-land movement for Horizon's other abilities."
-        },
-        {
-          "cards": [
-            "devouring-light"
-          ],
-          "paths": [
-            "rules_casting.py:_prepare_action",
-            "rules_casting.py:_resource_payment",
-            "rules_casting.py:commit_action",
-            "rules_adapter.py"
-          ],
-          "finding": "Implement convoke as authenticated payment against the final total cost, not as a fixed reduction or alternative cost. Each controlled untapped creature pays one generic or matching colored requirement once; summoning sickness does not prohibit this tap. Preserve prepayment validation and actor replay. Reuse existing attacking-or-blocking target filtering and exile."
-        },
-        {
-          "cards": [
-            "scute-swarm",
-            "helm-of-the-host",
-            "lazotep-quarry",
-            "aggressive-biomancy"
-          ],
-          "paths": [
-            "rules_program.py:CreateTokens",
-            "rules_kernel.py:_execute",
-            "rules_kernel.py:_compute_proposal_view",
-            "rules_state.py:RulesObject",
-            "rules_characteristics.py"
-          ],
-          "finding": "Existing CreateTokens takes a fixed CardProgram; add persisted runtime copiable token snapshots with proper entry replacements and triggers. Keep copy exceptions copiable and post-creation grants separate: Helm removes legendary in the copy but grants haste afterward; Quarry fixes 4/4, black and Zombie; Biomancy adds a copiable entry-fight trigger. Scute chooses its token form at resolution from the land count. Preserve source/target identity, last-known information, exact created tokens, source binding, checkpoint identity and actor replay."
-        }
-      ],
-      "boundary": "Preparation only; these eight candidates remain unstarted. Select complete compatible families after refreshing the latest branch."
-    },
-    "hosted_validation": {
-      "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
-      "run_id": 34802234395,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1779,
-      "new_test_methods": 107,
-      "conclusion": "success",
-      "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
-    },
-    "completed_utc": "2026-09-14T03:25:54Z",
-    "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, source references and tests remain at the validated commit."
+    "hosted_attempts": []
   },
   "hosted_validation_history": [
     {
@@ -4695,6 +4585,178 @@
         ],
         "boundary": "This is source review and implementation guidance for the next cycle, not authored cards or validation."
       }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "cecda2894b3afb4f67aacd1656acdaff7096fe04",
+      "user_request": "Eight more cards, completed as one coherent batch.",
+      "cards_written": [
+        "karmic-guide",
+        "alseid-of-life-s-bounty",
+        "fanatical-devotion",
+        "pongify",
+        "dimir-house-guard",
+        "midnight-snack",
+        "restart-sequence",
+        "jyoti-moag-ancient"
+      ],
+      "cards_promoted": [
+        "karmic-guide",
+        "alseid-of-life-s-bounty",
+        "fanatical-devotion",
+        "pongify",
+        "dimir-house-guard",
+        "midnight-snack",
+        "restart-sequence",
+        "jyoti-moag-ancient"
+      ],
+      "shared_mechanics": [
+        "Shared derived-color protection for targeting, damage, blocking and attachment legality",
+        "Atomic regeneration shields integrated with destruction and simultaneous state actions",
+        "Echo occurrence based on existing control timestamps and explicit previous-upkeep observations",
+        "Public attack and qualifying combat-damage history; actual turn life gains including lifelink",
+        "Resolving player-statistic quantities and reusable bound library selectors",
+        "Fear blocker predicate; frozen nonnegative power snapshots; complete Food and Forest Dryad tokens",
+        "Guard and phasing files included in implementation identity"
+      ],
+      "runtime_checkpoint_schema": 121,
+      "state_checkpoint_schema": 14,
+      "new_test_methods": 107,
+      "validation_status": "reviewed_loader_passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
+      "next_batch": [
+        "exotic-orchard",
+        "fellwar-stone",
+        "horizon-of-progress",
+        "devouring-light",
+        "scute-swarm",
+        "helm-of-the-host",
+        "lazotep-quarry",
+        "aggressive-biomancy"
+      ],
+      "next_batch_implementation_notes": {
+        "focus": "Choose the next complete family after refreshing source. Investigate could-produce mana queries for three mana sources, convoke payments, and copiable token snapshots shared by four token cards.",
+        "guard": "No partial printed clauses; no local execution, game migration or production admission."
+      },
+      "hosted_attempts": [
+        {
+          "stage": "draft",
+          "commit": "a819021073fa048c74899d64b19ad1844c2788a5",
+          "run_id": 34800692440,
+          "ubuntu": "failure",
+          "windows": "cancelled",
+          "tests_run": 1779,
+          "failures": 2,
+          "errors": 1,
+          "causes": [
+            "Two historical checkpoint tests still required state schema 13 exactly; retain their historical minimum and rejection checks while the new suite requires schema 14.",
+            "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
+          ],
+          "production_defects_found": []
+        },
+        {
+          "stage": "draft_fixture_correction",
+          "commit": "4c8e634887275bb68bde64186e858995281d16b3",
+          "run_id": 34801536529,
+          "ubuntu": "success",
+          "windows": "success",
+          "tests_per_platform": 1779,
+          "conclusion": "success_superseded",
+          "limitation": "Both full suites passed, but subsequent independent source review found Jyoti's negative +X/+X expectation incorrect under CR 107.1b. Fresh draft validation is required for the corrected program and test."
+        }
+      ],
+      "source_review_corrections": [
+        {
+          "rule": "107.1b",
+          "card_id": "jyoti-moag-ancient",
+          "issue": "The initial program and negative-power test incorrectly treated calculated +X/+X as signed.",
+          "correction": "Reuse SourceStat with allow_negative false; test current and last-known negative power producing a zero bonus; remove the unnecessary signed-modifier compiler permission."
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "run_id": 34801795555,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1779,
+        "new_test_methods": 107,
+        "conclusion": "success",
+        "scope": "All 270 prior reviewed programs and eight isolated complete drafts, including corrected Jyoti negative-power semantics; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+      },
+      "next_batch_source_review": {
+        "inspected_commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
+        "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+        "rules": [
+          "106.7",
+          "702.51a-d",
+          "707.5",
+          "707.9a-d"
+        ],
+        "implementation_points": [
+          {
+            "cards": [
+              "exotic-orchard",
+              "fellwar-stone",
+              "horizon-of-progress"
+            ],
+            "paths": [
+              "rules_casting.py:activated_abilities",
+              "rules_casting.py:_produce_mana",
+              "rules_program.py:ChooseMana",
+              "rules_subtypes.py"
+            ],
+            "finding": "Add a pure could-produce query over current derived land abilities, including intrinsic basic-land mana and applicable mana replacement outcomes. Ignore costs and activation legality. Resolve recursive Orchard/Horizon dependencies to a finite set; an ungrounded cycle produces nothing. Orchard/Stone allow only colors, while Horizon also permits colorless. Reuse existing tap/life/sacrifice costs and optional hand-land movement for Horizon's other abilities."
+          },
+          {
+            "cards": [
+              "devouring-light"
+            ],
+            "paths": [
+              "rules_casting.py:_prepare_action",
+              "rules_casting.py:_resource_payment",
+              "rules_casting.py:commit_action",
+              "rules_adapter.py"
+            ],
+            "finding": "Implement convoke as authenticated payment against the final total cost, not as a fixed reduction or alternative cost. Each controlled untapped creature pays one generic or matching colored requirement once; summoning sickness does not prohibit this tap. Preserve prepayment validation and actor replay. Reuse existing attacking-or-blocking target filtering and exile."
+          },
+          {
+            "cards": [
+              "scute-swarm",
+              "helm-of-the-host",
+              "lazotep-quarry",
+              "aggressive-biomancy"
+            ],
+            "paths": [
+              "rules_program.py:CreateTokens",
+              "rules_kernel.py:_execute",
+              "rules_kernel.py:_compute_proposal_view",
+              "rules_state.py:RulesObject",
+              "rules_characteristics.py"
+            ],
+            "finding": "Existing CreateTokens takes a fixed CardProgram; add persisted runtime copiable token snapshots with proper entry replacements and triggers. Keep copy exceptions copiable and post-creation grants separate: Helm removes legendary in the copy but grants haste afterward; Quarry fixes 4/4, black and Zombie; Biomancy adds a copiable entry-fight trigger. Scute chooses its token form at resolution from the land count. Preserve source/target identity, last-known information, exact created tokens, source binding, checkpoint identity and actor replay."
+          }
+        ],
+        "boundary": "Preparation only; these eight candidates remain unstarted. Select complete compatible families after refreshing the latest branch."
+      },
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1779,
+        "new_test_methods": 107,
+        "conclusion": "success",
+        "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+      },
+      "completed_utc": "2026-09-14T03:25:54Z",
+      "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, source references and tests remain at the validated commit."
     }
   ],
   "execution_policy": {
