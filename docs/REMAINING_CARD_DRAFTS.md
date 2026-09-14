@@ -54,7 +54,7 @@ heartbeat remains active every 40 minutes.
 
 ## Current pass: payments, combat and continuous effects
 
-The seven Pass 1 programs are authored in the separate draft bundle with 88 new
+The seven Pass 1 programs are authored in the separate draft bundle with 91 new
 conformance methods. Hosted draft validation and complete source review are
 pending. Coverage remains 306 reviewed unique cards / 372 copies; the 28
 remaining cards comprise seven drafts and 21 unstarted cards. Pass 1 remains

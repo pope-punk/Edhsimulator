@@ -3656,26 +3656,31 @@
     "validation_status": "pending",
     "runtime_checkpoint_schema": 129,
     "state_checkpoint_schema": 17,
-    "new_test_methods": 88,
+    "new_test_methods": 91,
     "unresolved_defects": [],
     "review_work_remaining": "Run hosted draft conformance, finish shared-rule review, then promote and require reviewed-loader conformance.",
     "review_findings": [
       "Basic-land intrinsic mana is removed along with other abilities; later explicitly granted activations remain available.",
       "Tap-trigger discovery evaluates ability presence on the actual tap-event battlefield, including sources that subsequently pay zone costs.",
-      "Riot haste participates in entry lookahead and its material-proposal cache key."
+      "Riot haste participates in entry lookahead and its material-proposal cache key.",
+      "Parasitic Impetus reads the original attacking creature's current controller on resolution, falling back to exact-incarnation last known information after departure (CR 608.2h/k)."
     ],
     "validation_attempts": [
       {
         "commit": "02c8d0c20953b2f5ea6eb377985f4d4cb1c2f8b8",
         "run_id": 34884257593,
         "stage": "draft",
-        "status": "failed_on_ubuntu_windows_pending",
+        "status": "failed",
         "tests_per_platform": 2335,
         "failures": [
           "ScanningRulesKernel override lacked optional historical views parameter.",
           "Repeated-goad fixture omitted the trigger-order response before stack assertion."
         ],
-        "corrections": "Both repaired; eight additional source-review cases included in the corrected draft."
+        "corrections": "Both repaired; eight additional source-review cases included in the corrected draft.",
+        "platform_results": {
+          "ubuntu": "failed: one fixture assertion and one reference override error",
+          "windows": "same two failures in logs; job cancelled"
+        }
       }
     ]
   },

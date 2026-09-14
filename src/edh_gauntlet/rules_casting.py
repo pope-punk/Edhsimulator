@@ -684,4 +684,5 @@ class CastingRules:
                     if not set(pattern.types) <= types or set(excluded)&types:continue
                 captured={"event_x":announced.cast_x} if kind=="spell_cast" else dict(values or {})
                 if kind in ACTOR_EVENTS or kind=="creature_attacks":captured["event_controllers"]=[actor]
-                self._trigger(source, ability, values=captured)
+                bindings={'event_subject':[announced.ref.to_json()]} if kind=='creature_attacks' else None
+                self._trigger(source, ability, bindings=bindings, values=captured)

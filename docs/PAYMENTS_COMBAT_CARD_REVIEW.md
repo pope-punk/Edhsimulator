@@ -7,7 +7,7 @@ Cards: Chthonian Nightmare, Maze's End, Rhythm of the Wild, Parasitic Impetus,
 Propaganda, Defiler of Vigor, and Darksteel Mutation.
 
 This is pass 1 of the user's four-pass completion target, beginning with
-306 reviewed unique cards and 28 remaining. It includes 88 new conformance
+306 reviewed unique cards and 28 remaining. It includes 91 new conformance
 methods. Kernel/state schemas are 129/17. No local project code was executed.
 
 ## Shared implementation
@@ -35,7 +35,11 @@ methods. Kernel/state schemas are 129/17. No local project code was executed.
 Review corrections include basic-land mana suppression, historical tap-trigger
 ability presence, and riot haste in entry lookahead. The first hosted attempt
 found a scanning-reference signature mismatch and an unanswered trigger-order
-fixture; both are repaired for the corrected draft.
+fixture; both are repaired for the corrected draft. Further source review
+corrected Impetus's life-loss recipient: read the original creature's controller
+on resolution, using last known information after departure. Control change,
+departure/checkpoint, blink identity and Aura reassignment are covered; the
+earlier event-time controller fixture was corrected. See CR 608.2h and 608.2k.
 
 The remaining gate is review plus hosted draft and reviewed-loader validation.
 These programs do not change production admission or any existing game.

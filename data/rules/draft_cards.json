@@ -713,9 +713,15 @@
             },
             "effects": [
               {
-                "node": "LoseLife",
-                "players": "event_controllers",
-                "amount": 2
+                "node": "WithLastKnownControllers",
+                "subject": "event_subject",
+                "effects": [
+                  {
+                    "node": "LoseLife",
+                    "players": "captured_controllers",
+                    "amount": 2
+                  }
+                ]
               },
               {
                 "node": "GainLife",

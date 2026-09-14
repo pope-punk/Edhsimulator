@@ -31,7 +31,7 @@ from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
 from .rules_subtypes import expanded_subtypes
 from .rules_guard import GuardRules, protection_matches
-from .rules_program import (SelectBound,WithOwners,ShuffleGraveyard,LandMana,DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (WithLastKnownControllers,SelectBound,WithOwners,ShuffleGraveyard,LandMana,DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -1183,9 +1183,14 @@ class RulesKernel(RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,Ma
             for ref in self._refs(frame,effect.subject):
                 try:obj=self.state.get(ref)
                 except RulesViolation:
-                    if ref!=source.ref:continue
-                    obj=source
-                if obj.zone not in {Zone.BATTLEFIELD,Zone.STACK} or obj.phased:continue
+                    if isinstance(effect,WithLastKnownControllers):
+                        known=self.last_known.get(ref)
+                        obj=known[0] if known else next((event.before for event in reversed(self.state.events) if event.before.ref==ref),None)
+                        if obj is None and ref==source.ref:obj=source
+                        if obj is None:raise UnsupportedRule('Missing last known controller for exact object')
+                    elif ref==source.ref:obj=source
+                    else:continue
+                if obj.zone not in {Zone.BATTLEFIELD,Zone.STACK} or obj.phased and not isinstance(effect,WithLastKnownControllers):continue
                 captured.append(obj.owner if isinstance(effect,WithOwners) else obj.controller)
             frame['values']['captured_owners' if isinstance(effect,WithOwners) else 'captured_controllers']=captured
             self._insert(frame,effect.effects)

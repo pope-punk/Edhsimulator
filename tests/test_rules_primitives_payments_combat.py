@@ -437,12 +437,34 @@ class PaymentsCombatTests(unittest.TestCase):
         self.combat();self.state.set_tapped_batch((ref,),True);self.attack({other:'C'})
         self.assertEqual([],self.kernel.stack)
 
-    def test_impetus_captures_attacking_controller(self):
+    def test_impetus_uses_controller_when_trigger_resolves(self):
         self.game();ref=self.add();self.aura('parasitic-impetus',ref,'B');self.combat();self.attack({ref:'C'})
         self.kernel.turn_schedule=None
         self.state.change_control(ref,'D')
-        self.drain();self.assertEqual(38,self.state.life('A'));self.assertEqual(40,self.state.life('D'))
+        self.drain();self.assertEqual(40,self.state.life('A'));self.assertEqual(38,self.state.life('D'))
         self.assertEqual(42,self.state.life('B'))
+
+    def test_impetus_uses_last_controller_after_creature_leaves(self):
+        self.game();ref=self.add();self.aura('parasitic-impetus',ref,'B');self.combat();self.attack({ref:'C'})
+        self.kernel.turn_schedule=None;self.state.change_control(ref,'D')
+        self.kernel._move((ref,),Zone.GRAVEYARD,{'source':self.state.get(self.anchor).to_json(),'controller':'A','bindings':{}},'impetus-depart')
+        self.restore();self.drain()
+        self.assertEqual(40,self.state.life('A'));self.assertEqual(38,self.state.life('D'));self.assertEqual(42,self.state.life('B'))
+
+    def test_impetus_does_not_follow_blinked_creature_new_incarnation(self):
+        self.game();ref=self.add();self.aura('parasitic-impetus',ref,'B');self.combat();self.attack({ref:'C'})
+        self.kernel.turn_schedule=None;self.state.change_control(ref,'D')
+        frame={'source':self.state.get(self.anchor).to_json(),'controller':'A','bindings':{}}
+        events=self.kernel._move((ref,),Zone.EXILE,frame,'impetus-blink-out')
+        self.kernel._move((events[0].after.ref,),Zone.BATTLEFIELD,frame,'impetus-blink-in')
+        self.drain();self.assertEqual('A',self.current(ref).controller)
+        self.assertEqual(40,self.state.life('A'));self.assertEqual(38,self.state.life('D'));self.assertEqual(42,self.state.life('B'))
+
+    def test_impetus_trigger_keeps_original_creature_after_aura_moves(self):
+        self.game();ref=self.add();other=self.add(actor='D');aura=self.aura('parasitic-impetus',ref,'B')
+        self.combat();self.attack({ref:'C'});self.kernel.turn_schedule=None
+        self.state.attach(aura,other);self.drain()
+        self.assertEqual(38,self.state.life('A'));self.assertEqual(40,self.state.life('D'));self.assertEqual(42,self.state.life('B'))
 
     def test_impetus_same_controller_loses_then_gains_without_sba(self):
         self.game();ref=self.add();self.aura('parasitic-impetus',ref);self.state.lose_life_batch(('A',),38)
