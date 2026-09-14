@@ -2963,7 +2963,23 @@
       "focus": "Choose the next complete family after refreshing source. Investigate could-produce mana queries for three mana sources, convoke payments, and copiable token snapshots shared by four token cards.",
       "guard": "No partial printed clauses; no local execution, game migration or production admission."
     },
-    "hosted_attempts": []
+    "hosted_attempts": [
+      {
+        "stage": "draft",
+        "commit": "a819021073fa048c74899d64b19ad1844c2788a5",
+        "run_id": 34800692440,
+        "ubuntu": "failure",
+        "windows": "cancelled",
+        "tests_run": 1779,
+        "failures": 2,
+        "errors": 1,
+        "causes": [
+          "Two historical checkpoint tests still required state schema 13 exactly; retain their historical minimum and rejection checks while the new suite requires schema 14.",
+          "The freerunning actor replay fixture omitted required x_value: 0; supply the complete authenticated cast command."
+        ],
+        "production_defects_found": []
+      }
+    ]
   },
   "hosted_validation_history": [
     {

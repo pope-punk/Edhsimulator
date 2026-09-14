@@ -93,6 +93,11 @@ replacement ordering, privacy, checkpoint rejection/restoration and actor replay
 Existing historical schema tests keep their minimum-layout assertions; the new
 tests require schema 121/14 and reject the immediately prior versions.
 
-Draft and required reviewed-loader checks are pending. Expected full suite:
+Initial draft run [34800692440](https://github.com/pope-punk/Edhsimulator/actions/runs/34800692440)
+completed 1779 tests on Ubuntu with two historical state-schema assertion failures
+and one incomplete replay-command fixture. These are corrected while preserving
+legacy checkpoint rejection and the actor command's strict field validation.
+Windows was cancelled by matrix fail-fast. No runtime defect was reported by this run.
+Corrected draft and required reviewed-loader checks are pending. Expected full suite:
 **1779 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged-asset verification.

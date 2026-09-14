@@ -682,7 +682,7 @@ class GuardHistoryTests(unittest.TestCase):
         self.state.add_mana('A',tuple('CB'));adapter=RulesActorAdapter(self.kernel)
         self.assertEqual(['A'],adapter.packet('B')['turn_history']['freerunning'])
         adapter.submit('A',{'kind':'cast','action_id':'restart-replay','revision':self.kernel.revision,
-            'source':self.source.to_json(),'targets':[self.own_dead.to_json()],'alternative_id':'freerunning',
+            'source':self.source.to_json(),'targets':[self.own_dead.to_json()],'x_value':0,'alternative_id':'freerunning',
             'payment':{'mana':{'C':1,'B':1},'taps':[]}})
         self.assertEqual(self.kernel.snapshot(),RulesActorAdapter.replay(adapter.archive(),self.programs).kernel.snapshot());self.restore()
 
