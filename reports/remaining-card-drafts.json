@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "static_authoring_inventory",
-  "base_commit": "e9c94a41b722a15621a1ab6352e96e97ccc5f8a7",
+  "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
   "branch": "codex/remaining-card-programs",
   "production_ready": false,
   "local_python_executed": false,
@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 294,
     "remaining_outside_reviewed_bundle": 40,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 40,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 36,
     "reviewed_bundle_copies": 360,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 67,
     "remaining_outside_reviewed_bundle_copies": 40
@@ -336,7 +336,7 @@
     {
       "card_id": "chaos-warp",
       "name": "Chaos Warp",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1326,7 +1326,7 @@
     {
       "card_id": "hakbal-of-the-surging-soul",
       "name": "Hakbal of the Surging Soul",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1704,7 +1704,7 @@
     {
       "card_id": "kodama-of-the-west-tree",
       "name": "Kodama of the West Tree",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2420,7 +2420,7 @@
     {
       "card_id": "rampant-frogantua",
       "name": "Rampant Frogantua",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",

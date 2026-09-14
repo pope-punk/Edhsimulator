@@ -7,11 +7,99 @@ must keep search choices, shuffle seeds and physical library order private.
 """
 from .rules_state import ObjectRef,Zone,RulesViolation
 from .rules_choices import Option
-from .rules_program import SearchByPlayer,SupertypeSelector,decode
+from .rules_program import Explore,MayMill,ShuffleLibrary,RevealTopPermanent,SearchByPlayer,SupertypeSelector,decode
 from .rules_characteristics import matches
 
 
 class LibraryRules:
+    def _library_cards(self,actor):
+        # Tokens are not cards (111.6); a departed token can await SBAs here,
+        # but it cannot replace a card in a reveal or mill instruction.
+        return tuple(obj for obj in self.state.zone(actor,Zone.LIBRARY) if not obj.token)
+
+    def _reveal_current_top(self,actor,key):
+        from copy import deepcopy
+        library=self._library_cards(actor)
+        cards=[{'ref':library[-1].ref.to_json(),'name':self.definition(library[-1]).name}] if library else []
+        observation={'id':key,'kind':'reveal_top','library_owner':actor,'observed_revision':self.revision,'cards':cards}
+        for viewer in self.state.live_players:self.library_observations[viewer]=deepcopy(observation)
+        if cards:self._event('cards_revealed',player=actor,refs=[cards[0]['ref']],names=[cards[0]['name']])
+        return cards[0]['ref'] if cards else None
+
+    def _execute_library(self,effect,frame,task):
+        key=task['id'];actor=frame['controller']
+        if isinstance(effect,ShuffleLibrary):
+            for player in self._players(frame,effect.players):
+                self.state.shuffle_library(player);self._player_event('library_shuffled',player)
+        elif isinstance(effect,RevealTopPermanent):
+            if 'reveal_plan' not in task:task['reveal_plan']={'players':list(self._players(frame,effect.players)),'index':0}
+            plan=task['reveal_plan']
+            while plan['index']<len(plan['players']):
+                player=plan['players'][plan['index']]
+                if 'top' not in plan:plan['top']=self._reveal_current_top(player,key+':'+str(plan['index']))
+                if plan['top'] is not None:
+                    ref=ObjectRef.from_json(plan['top'])
+                    if self.effective(ref).types & {'Artifact','Battle','Creature','Enchantment','Land','Planeswalker'}:
+                        self._move((ref,),Zone.BATTLEFIELD,{**frame,'controller':player},key+':entry:'+str(plan['index']),controller_mode='owner')
+                plan['index']+=1;plan.pop('top',None)
+        elif isinstance(effect,MayMill):
+            if actor not in self.state.live_players:return True
+            if 'mill_offer' not in task:
+                amount=self._quantity(effect.amount,frame);library=self._library_cards(actor)
+                if len(library)<amount:return True
+                chosen=self._choose(key+':offer',actor,'optional_mill',
+                    'Mill '+str(amount)+' cards?',(Option('yes','Mill'),Option('no','Do not mill')),1,1)
+                task['mill_offer']=chosen[0].key=='yes'
+                task['mill_refs']=[obj.ref.to_json() for obj in library[-amount:]] if amount and task['mill_offer'] else []
+            if not task['mill_offer']:return True
+            events=self._move(tuple(ObjectRef.from_json(ref) for ref in task['mill_refs']),
+                Zone.GRAVEYARD,frame,key+':mill',cause='mill',controller_mode='owner')
+            self._insert_zone_result(events,Zone.GRAVEYARD,frame,effect.effects)
+        elif isinstance(effect,Explore):
+            self._explore(effect,frame,task)
+        else:return False
+        return True
+
+    def _explore(self,effect,frame,task):
+        key=task['id']
+        if 'explore_plan' not in task:
+            remaining=[]
+            for ref in self._refs(frame,effect.subject):
+                try:obj=self.state.get(ref)
+                except RulesViolation:obj=self.last_known.get(ref,(None,None))[0]
+                if obj is None or obj.zone!=Zone.BATTLEFIELD or obj.phased:continue
+                remaining.append({'ref':ref.to_json(),'actor':obj.controller,'name':self.definition(obj).name})
+            task['explore_plan']={'remaining':remaining,'index':0}
+        plan=task['explore_plan']
+        while plan['remaining']:
+            if 'current' not in plan:
+                actor=next((p for p in self.turn_order() if any(row['actor']==p for row in plan['remaining'])),None)
+                if actor is None:return
+                rows=[row for row in plan['remaining'] if row['actor']==actor]
+                options=tuple(Option(str(i),row['name'],ref=ObjectRef.from_json(row['ref'])) for i,row in enumerate(rows))
+                selected=options if len(options)==1 else self._choose(key+':order:'+str(plan['index']),actor,
+                    'explore_order','Choose the next permanent to explore before revealing the top card.',options,1,1)
+                plan['current']=dict(rows[int(selected[0].key)])
+            row=plan['current'];actor=row['actor'];ref=ObjectRef.from_json(row['ref']);step=key+':explore:'+str(plan['index'])
+            if 'top' not in row:
+                row['top']=self._reveal_current_top(actor,step)
+                row['land']=row['top'] is not None and 'Land' in self.effective(ObjectRef.from_json(row['top'])).types
+            if row['land']:
+                self._move((ObjectRef.from_json(row['top']),),Zone.HAND,{**frame,'controller':actor},step+':land',controller_mode='owner')
+            else:
+                if not row.get('counter_done'):
+                    if self._counter_counts(ref) is not None:self._put_counters(((ref,'+1/+1',1),),{**frame,'controller':actor},step+':counter')
+                    row['counter_done']=True
+                if row['top'] is not None:
+                    if 'bury' not in row:
+                        chosen=self._choose(step+':bury',actor,'explore_card','Leave the revealed card on top or put it into your graveyard?',
+                            (Option('top','Leave on top'),Option('graveyard','Put into graveyard')),1,1)
+                        row['bury']=chosen[0].key=='graveyard'
+                    if row['bury']:self._move((ObjectRef.from_json(row['top']),),Zone.GRAVEYARD,{**frame,'controller':actor},step+':graveyard',controller_mode='owner')
+            self._event('explored',player=actor,source=ref.to_json(),revealed=row['top'])
+            plan['remaining']=[r for r in plan['remaining'] if r['ref']!=row['ref']]
+            plan['index']+=1;plan.pop('current')
+
     def inspect_library_search(self,actor):
         """The searching player may look at the whole library, not only matches."""
         frame=self.resolving

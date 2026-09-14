@@ -10,7 +10,7 @@ import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import ModifiedSelector, LostPlayerPT, SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -28,6 +28,7 @@ class Characteristics:
     granted_abilities: tuple = ()
     mana_symbols: tuple[str,...] = ()
     untap_blocked: bool = False
+    modified: bool = False
 
 
 def base(obj, definitions):
@@ -60,6 +61,7 @@ def counters_match(ranges, obj):
 
 
 def matches(selector, obj, view, source):
+    if isinstance(selector,ModifiedSelector) and not view.modified:return False
     if selector.characteristics and obj.zone==Zone.BATTLEFIELD and 'Creature' not in view.types and any(bound.statistic in {'power','toughness'} for bound in selector.characteristics):return False
     return (not obj.phased and obj.zone == selector.zone
         and (not isinstance(selector,SupertypeSelector) or not set(selector.excluded_supertypes)&view.supertypes)
@@ -83,7 +85,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, SwitchPT: 74}[type(change)]
+    return {SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
@@ -148,7 +150,22 @@ def _recipients(source, effect, objects, views, entering_ref=None, life_totals=N
         and (effect.subject != 'attached' or obj.ref == source.attached_to))
 
 
-def _apply(views, refs, changes, key, grant_key=None):
+def _refresh_modified(views, objects):
+    attached={}
+    for obj in objects:
+        if obj.zone==Zone.BATTLEFIELD and not obj.phased and obj.attached_to is not None:
+            attached.setdefault(obj.attached_to,[]).append(obj)
+    for obj in objects:
+        view=views[obj.ref]
+        modified=(obj.zone==Zone.BATTLEFIELD and not obj.phased and 'Creature' in view.types
+            and (any(n>0 for _,n in obj.counters) or any(
+                'Equipment' in views[a.ref].subtypes
+                or 'Aura' in views[a.ref].subtypes and a.controller==obj.controller
+                for a in attached.get(obj.ref,()))))
+        views[obj.ref]=replace(view,modified=bool(modified))
+
+
+def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0):
     for ref in refs:
         view = views[ref]
         for change_index,change in enumerate(changes):
@@ -177,10 +194,12 @@ def _apply(views, refs, changes, key, grant_key=None):
                     value = lambda v: view.mana_value if v == 'mana_value' else v
                     view = replace(view, power=value(change.power), toughness=value(change.toughness))
                 elif isinstance(change, ModifyPT):
-                    view = replace(view, power=power + change.power, toughness=toughness + change.toughness)
+                    factor=lost_players if isinstance(change,LostPlayerPT) else 1
+                    view = replace(view, power=power + change.power*factor, toughness=toughness + change.toughness*factor)
                 else:
                     view = replace(view, power=toughness, toughness=power)
         views[ref] = replace(view, applied=view.applied + (key,))
+    if any(isinstance(c,(ChangeTypes,AddSubtypes)) for c in changes):_refresh_modified(views,objects)
 
 
 def _without_cycle_edges(dependencies):
@@ -219,6 +238,7 @@ def _may_change_recipients(changes, effect):
     statistics={bound.statistic for selector in selectors for bound in selector.characteristics}
     subtype_reads={subtype for selector in selectors for subtype in selector.subtypes+selector.any_subtypes+selector.excluded_subtypes}
     for change in changes:
+        if isinstance(change,(ChangeTypes,AddSubtypes)) and any(isinstance(s,ModifiedSelector) for s in selectors):return True
         if isinstance(change, ChangeTypes):
             if (reads.intersection(change.add + change.remove) or 'Creature' in change.add+change.remove and statistics & {'power','toughness'}
                     or {'Creature','Kindred'}&set(change.remove) and subtype_reads & CREATURE_TYPES
@@ -247,6 +267,8 @@ def evaluate_exhaustive(objects, definitions, *, entering_ref=None, temporary=()
 def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruning, life_totals, starting_life_totals, live_players, life_lost_totals):
     objects = tuple(objects)
     views = {obj.ref: base(obj, definitions) for obj in objects}
+    _refresh_modified(views,objects)
+    lost_players=len(set(life_totals)-set(live_players)) if life_totals is not None and live_players is not None else 0
     effects = []
     characteristic_setters=[]
     for source in objects:
@@ -256,6 +278,8 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             continue
         for effect in definition.continuous:
             key = (source.ref, effect.effect_id)
+            if any(isinstance(c,LostPlayerPT) for c in effect.changes) and (life_totals is None or live_players is None):
+                raise RulesViolation('Lost-player modifiers require explicit player history')
             effects.append((key, source, effect))
     locked = {}
     current={obj.ref:obj for obj in objects}
@@ -281,7 +305,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             for key, source, effect in pending:
                 refs = locked[key] if key in locked else _recipients(source, effect, objects, views, entering_ref, life_totals, starting_life_totals, live_players, life_lost_totals)
                 locked.setdefault(key, refs)
-                _apply(views, refs, changes[key], effect.effect_id, key)
+                _apply(views, refs, changes[key], effect.effect_id, key, objects, lost_players)
             pending = []
         while pending:
             def recipients(row, state):
@@ -297,7 +321,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
                 if not affected:
                     continue
                 hypothetical = dict(views)
-                _apply(hypothetical, current[other[0]], changes[other[0]], other[2].effect_id, other[0])
+                _apply(hypothetical, current[other[0]], changes[other[0]], other[2].effect_id, other[0], objects, lost_players)
                 for row in affected:
                     if current[row[0]] != recipients(row, hypothetical):
                         dependencies[row[0]].add(other[0])
@@ -306,7 +330,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             row = ready[0]
             refs = current[row[0]]
             locked.setdefault(row[0], refs)
-            _apply(views, refs, changes[row[0]], row[2].effect_id, row[0])
+            _apply(views, refs, changes[row[0]], row[2].effect_id, row[0], objects, lost_players)
             pending.remove(row)
         if layer == 73:
             for obj in objects:

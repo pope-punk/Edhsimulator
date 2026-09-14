@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **294 source-bound reviewed programs / 360 deck copies**. There are **40 cards / 40 deck
-copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, including four authored drafts awaiting hosted validation and 36 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,16 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: counter transitions, eternalize and Finale
+## Current cycle: modified creatures, exploration and library movement
+
+Kodama of the West Tree, Rampant Frogantua, Hakbal of the Surging Soul and Chaos
+Warp have complete draft programs. Shared instructions cover current modified
+creatures, combat damage to players, actual mill results, ordered exploration,
+owner capture, library shuffling and top-card permanent entry. Fifty new hosted
+conformance methods are authored; validation and source-bound promotion are pending.
+Kernel/state schemas are **126/16**. No local project execution occurred.
+
+## Previous cycle: counter transitions, eternalize and Finale
 
 Fangs of Kalonia, Hydra Broodmaster, Fanatic of Rhonas and Finale of Revelation
 have complete source-bound reviewed programs. Shared support covers actual counter recipients,

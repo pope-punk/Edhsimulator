@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import CombatDamageToPlayer, OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -587,10 +587,14 @@ class CastingRules:
                     continue
                 if not event_player_matches(pattern,source.controller,actor):
                     continue
+                if isinstance(pattern,CombatDamageToPlayer):
+                    if not values or not values.get('combat') or not values.get('damaged_player'):continue
+                    if pattern.modified and not values.get('source_modified'):continue
+                    if not set(pattern.types)<=set(values['source_types']):continue
                 excluded=pattern.excluded_types if isinstance(pattern,SpellEventPattern) else ()
                 colors=pattern.colors if isinstance(pattern,ColoredSpellEvent) else ()
                 if colors and not set(colors)<=self.effective(announced.ref).colors:continue
-                if pattern.types or excluded:
+                if (pattern.types or excluded) and not isinstance(pattern,CombatDamageToPlayer):
                     if types is None:
                         try:types=self.effective(announced.ref).types
                         except RulesViolation:types=set(previous_types) if previous_types is not None else self._damage_source(announced)[1].types

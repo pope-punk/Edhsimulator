@@ -234,6 +234,7 @@ class CombatRules:
                 if obj.zone!=Zone.BATTLEFIELD or obj.phased or not recipient_types:continue
                 if protection_matches(self.effective(target),view):amount=0
             payments.append({'source':source,'target':target,'amount':amount,'combat':combat,
+                             'source_modified':view.modified,'source_types':tuple(sorted(view.types)),
                              'lifelink':'lifelink' in view.keywords,'deathtouch':'deathtouch' in view.keywords,'recipient_types':recipient_types,
                              'freerunning':combat and 'Creature' in view.types and (source.commander or 'Assassin' in view.subtypes)})
         lifelink_sources={}
@@ -254,7 +255,9 @@ class CombatRules:
             if not row['amount']:continue
             target=row['target']
             self._event('damage_dealt',source=row['source'].ref.to_json(),target=target if isinstance(target,str) else target.to_json(),amount=row['amount'],combat=combat)
-            self._collect_announcement('damage_dealt',row['source'],row['source'].controller)
+            self._collect_announcement('damage_dealt',row['source'],row['source'].controller,values={
+                'event_amount':row['amount'],'combat':combat,'damaged_player':target if isinstance(target,str) else None,
+                'source_modified':row['source_modified'],'source_types':list(row['source_types'])})
         received={}
         for row in payments:
             target=row['target']

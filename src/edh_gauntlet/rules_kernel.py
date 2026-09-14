@@ -43,7 +43,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=125
+    CHECKPOINT_SCHEMA=126
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -233,7 +233,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         elif which=='all':selected=set(self.state.live_players)
         elif which=='target':selected=targets
         elif which=='controller_and_target':selected=targets|{controller}
-        elif which in {'event_controllers','captured_controllers'}:selected=set(frame['values'][which])
+        elif which in {'event_controllers','captured_controllers','captured_owners'}:selected=set(frame['values'][which])
         elif which=='defending_player':selected={frame['values']['defending_player']}
         else:raise UnsupportedRule('Unsupported player recipients')
         order=self.state.players;start=order.index(self.active);order=order[start:]+order[:start]
@@ -1035,6 +1035,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
+        if self._execute_library(effect,frame,task):return
         if self._execute_copy(effect,frame,key):return
         if self._execute_guard(effect,frame,key):return
         if self._execute_attachment(effect,frame,key):return
@@ -1141,8 +1142,8 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
                     if ref!=source.ref:continue
                     obj=source
                 if obj.zone not in {Zone.BATTLEFIELD,Zone.STACK} or obj.phased:continue
-                captured.append(obj.controller)
-            frame['values']['captured_controllers']=captured
+                captured.append(obj.owner if isinstance(effect,WithOwners) else obj.controller)
+            frame['values']['captured_owners' if isinstance(effect,WithOwners) else 'captured_controllers']=captured
             self._insert(frame,effect.effects)
         elif isinstance(effect,ExileUntilSourceLeaves):
             try:current_source=self.state.get(source.ref)
@@ -1330,9 +1331,12 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
             frame['values']['selected_count']=len(frame['bindings']['selected'])
             self._insert(frame,effect.effects)
         elif isinstance(effect,Select):
-            options=self._options(self._query(effect.selector,frame))
+            candidates=self._query(effect.selector,frame)
+            if isinstance(effect,SelectBound):
+                bound=set(self._refs(frame,effect.subject));candidates=tuple(obj for obj in candidates if obj.ref in bound)
+            options=self._options(candidates)
             capacity=choice_capacity(options,effect.group_by_controller)
-            minimum=min(effect.minimum,capacity);maximum=min(effect.maximum,capacity)
+            minimum=min(effect.minimum,capacity);maximum=capacity if isinstance(effect,SelectBound) and effect.maximum is None else min(effect.maximum,capacity)
             # Resolving instructions do as much as possible (609.3). Costs and
             # announcement targets retain their separate strict requirements.
             if maximum==0:selected=()
