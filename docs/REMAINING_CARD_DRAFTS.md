@@ -36,7 +36,11 @@ simultaneous fight instruction. The prior 282 reviewed programs are unchanged.
 Kernel schema is **123**, state schema **14**. **64 new methods** bring the
 hosted suite to **1,917 tests per platform**. [Draft validation 34838551887](https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887)
 passed on both platforms at `081eed81e1e1bf9e67d170269a1b52b051115711`, including syntax, installation and assets.
-Required reviewed-loader checks are pending. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
+[Required reviewed-loader validation 34839294402](https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402) passed
+**1917 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `f4d29b49ca71f04e11b21bf46384a355d7705062`. The following result-recording
+commit changes only documentation and inventory; runtime, programs, references
+and tests are unchanged after validation. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
 
 Next, reuse this foundation for Mirage Mirror, Thespian's Stage, March from
 Velis Vel and Replication Technique. Existing-permanent copies need proper
@@ -67,7 +71,7 @@ the existing entry transaction, explicit created-token bindings, X costs, target
 and creature/Desert sacrifices. Biomancy also needs simultaneous fight damage
 with both creatures still present (CR 701.14). The immutable base definition and
 trigger registries require deterministic, checkpointed derived copy programs.
-All four now have drafts in the current cycle.
+All four are complete in the current cycle.
 
 No local execution, game migration or production admission.
 
@@ -108,10 +112,12 @@ Replication Technique**, reusing the copiable-value registry.
   causing entry events.
 - Stage retains its copy activation as a copiable exception. March adds a chosen
   nonbasic land-type filter, exact recipient set, temporary haste and flashback.
-- Demonstrate requires actual stack copies, an authored opponent offer and target
-  reselection. It cannot be replaced with extra token creation.
+- Demonstrate requires actual stack copies: an optional caster copy, then a
+  caster-chosen opponent's copy with its own target-reselection decision. It cannot be replaced with extra token creation.
 
-The JSON work order retains concrete requirements. All four remain unstarted.
+The JSON work order retains concrete requirements and the inspected Wizards
+release-note sources. Copy effects must feed characteristics, ability lookup,
+trigger indexing and subsequent copy queries consistently. All four remain unstarted.
 
 ## Previous cycle: casting, entry and paid-cost facts
 

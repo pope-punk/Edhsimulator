@@ -70,7 +70,12 @@ atomicity, token disappearance, public projection and checkpoint recovery.
 Expected full suite: **1,917 tests on each of Ubuntu and Windows**.
 [Draft validation 34838551887](https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887) passed **1917 tests on each platform**,
 plus source syntax, full installation and packaged assets, at `081eed81e1e1bf9e67d170269a1b52b051115711`.
-All new methods now use the reviewed loader; required reviewed-loader checks are pending.
+All new methods use the reviewed loader.
+[Required reviewed-loader validation 34839294402](https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402) passed
+**1917 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `f4d29b49ca71f04e11b21bf46384a355d7705062`. The following result-recording
+commit changes only documentation and inventory; runtime, programs, references
+and tests are unchanged after validation.
 
 Initial [draft run 34837070723](https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723)
 ran 1,853 existing methods on Windows and found one inventory failure and one

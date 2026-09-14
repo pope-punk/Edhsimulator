@@ -37,16 +37,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:aggressive-biomancy",
       "reviewed_definition": "catalog:aggressive-biomancy",
       "draft_hosted_validation": {
         "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
         "run_id": 34838551887
+      },
+      "hosted_validation": {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402
       }
     },
     {
@@ -1338,16 +1342,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "9d52634afc7db9e90e7e9ed64e565c83c6e06701bcabcad2f094979f43b009e4",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:helm-of-the-host",
       "reviewed_definition": "catalog:helm-of-the-host",
       "draft_hosted_validation": {
         "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
         "run_id": 34838551887
+      },
+      "hosted_validation": {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402
       }
     },
     {
@@ -1662,16 +1670,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:lazotep-quarry",
       "reviewed_definition": "catalog:lazotep-quarry",
       "draft_hosted_validation": {
         "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
         "run_id": 34838551887
+      },
+      "hosted_validation": {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402
       }
     },
     {
@@ -2498,16 +2510,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "89ae041eccf2ba6740a6f1fddfd306b9bd1d2e4c4dcba92b0501265a7708d28b",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program with exact source binding; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:scute-swarm",
       "reviewed_definition": "catalog:scute-swarm",
       "draft_hosted_validation": {
         "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
         "run_id": 34838551887
+      },
+      "hosted_validation": {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402
       }
     },
     {
@@ -3266,9 +3282,9 @@
     "new_test_methods": 64,
     "runtime_checkpoint_schema": 123,
     "state_checkpoint_schema": 14,
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "passed",
     "unresolved_defects": [],
-    "review_work_remaining": "Required reviewed-loader checks on Ubuntu and Windows.",
+    "review_work_remaining": "",
     "shared_mechanics": [
       "Deterministic immutable copiable token definitions and checked lineage manifests",
       "Normal token entry transactions, source last known information and copied entry abilities",
@@ -3287,7 +3303,7 @@
         "Add timestamped layer-one copy effects on existing permanents; retain original identity, counters, attachment and damage, and support end-of-turn expiration.",
         "Thespian's Stage must retain its own copy activation as a copiable exception; an entry copy must not re-enter.",
         "March needs the authored nonbasic subtype choice, exact current land set, target copy snapshot and separate temporary haste; include flashback.",
-        "Replication Technique requires demonstrate, authenticated offer/acceptance, stack spell copy state and target reselection. Do not approximate it with extra CreateTokens."
+        "Replication Technique requires demonstrate, an optional caster copy and caster-chosen opponent, stack spell copy state and target reselection. Do not approximate it with extra CreateTokens."
       ]
     },
     "hosted_attempts": [
@@ -3337,6 +3353,57 @@
         "full distribution installation",
         "packaged assets",
         "draft conformance"
+      ]
+    },
+    "hosted_validation": {
+      "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+      "run_id": 34839294402,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
+      "conclusion": "success",
+      "tests_per_platform": 1917,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ]
+    },
+    "next_batch_source_review": {
+      "date": "2026-09-14",
+      "inspected_commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+      "status": "preparation_only",
+      "cards": [
+        "mirage-mirror",
+        "thespian-s-stage",
+        "march-from-velis-vel",
+        "replication-technique"
+      ],
+      "sources": [
+        {
+          "url": "https://magic.wizards.com/en/news/feature/hour-devastation-release-notes-2017-06-30",
+          "card": "mirage-mirror",
+          "requirements": "A later-resolving activation supersedes earlier copies; all expire together at cleanup. Preserve independent effects already applied, and re-evaluate gained abilities and attachment legality."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/edge-of-eternities-release-notes",
+          "card": "thespian-s-stage",
+          "requirements": "Retain only the copy activation as an exception; preserve tapped state and create no entry event or entry counters. The copy persists until overwritten or the object leaves."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+          "card": "replication-technique",
+          "requirements": "The caster may copy when the demonstrate trigger resolves, then chooses an opponent who also copies. The opponent has a target-reselection decision, not a separate permission to decline the copy. Their copy sits above the caster's copy, above the original."
+        }
+      ],
+      "implementation_note": "Current RulesObject copy fields are entry attributes. Existing-permanent copy effects require a coordinated layer-one representation used by characteristics, ability lookup, trigger indexing and later copiable-value queries; replacing only a display view would be incomplete.",
+      "rules": [
+        "707.2",
+        "707.9",
+        "702.144a"
       ]
     }
   },
@@ -3818,6 +3885,23 @@
         "full distribution installation",
         "packaged assets",
         "draft conformance"
+      ]
+    },
+    {
+      "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+      "run_id": 34839294402,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
+      "conclusion": "success",
+      "tests_per_platform": 1917,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
       ]
     }
   ],
@@ -5174,17 +5258,21 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
-    "run_id": 34802234395,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395",
+    "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+    "run_id": 34839294402,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
+    "conclusion": "success",
+    "tests_per_platform": 1917,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1779,
-    "new_test_methods": 107,
-    "conclusion": "success",
-    "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    "checks": [
+      "source syntax",
+      "full distribution installation",
+      "packaged assets",
+      "required reviewed-loader conformance"
+    ]
   },
   "draft_hosted_validation": {
     "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
@@ -5202,5 +5290,65 @@
       "packaged assets",
       "draft conformance"
     ]
+  },
+  "completed_request_batch": {
+    "date": "2026-09-14",
+    "base_commit": "107f2e9069d2631646cc0fbb4dbad2e0d9cf10f8",
+    "cards": [
+      "exotic-orchard",
+      "fellwar-stone",
+      "horizon-of-progress",
+      "devouring-light",
+      "scute-swarm",
+      "helm-of-the-host",
+      "lazotep-quarry",
+      "aggressive-biomancy"
+    ],
+    "unique_cards_completed": 8,
+    "deck_copies_completed": 9,
+    "new_test_methods": 138,
+    "reviewed_before": 278,
+    "reviewed_after": 286,
+    "remaining_after": 48,
+    "existing_card_corrections": [
+      "baldur-s-gate"
+    ],
+    "validation": [
+      {
+        "commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+        "run_id": 34836442046,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34836442046",
+        "conclusion": "success",
+        "tests_per_platform": 1853,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "reviewed-loader conformance"
+        ]
+      },
+      {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
+        "conclusion": "success",
+        "tests_per_platform": 1917,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ]
+      }
+    ],
+    "local_project_code_executed": false
   }
 }
