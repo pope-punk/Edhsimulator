@@ -406,15 +406,17 @@ class FacesSagasExtortTests(unittest.TestCase):
         self.assertEqual('B',self.current(ref).controller);self.assertTrue(self.current(ref).back_face)
 
     def test_mdfc_copy_of_sorin_cannot_return_transformed(self):
-        self.game();sorin=self.card('sorin-of-house-markov',zone=Zone.BATTLEFIELD)
+        self.game();sorin=self.card('sorin-of-house-markov','B',Zone.BATTLEFIELD)
         ref=self.enter(self.card('kazuul-s-fury-kazuul-s-cliffs'),True)
         self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(sorin,))
+        self.assertIsNone(self.kernel.pending_choice)
         self.run_effect((ReturnTransformed(),),source=ref)
         self.assertEqual(Zone.EXILE,self.current(ref).zone)
 
     def test_single_face_copy_of_sorin_stays_exiled(self):
-        self.game();sorin=self.card('sorin-of-house-markov',zone=Zone.BATTLEFIELD);ref=self.add()
+        self.game();sorin=self.card('sorin-of-house-markov','B',Zone.BATTLEFIELD);ref=self.add()
         self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(sorin,))
+        self.assertIsNone(self.kernel.pending_choice)
         self.run_effect((ReturnTransformed(),),source=ref)
         self.assertEqual(Zone.EXILE,self.current(ref).zone)
 
@@ -510,7 +512,7 @@ class FacesSagasExtortTests(unittest.TestCase):
             self.state.set_tapped_batch((ref,),False);self.kernel.open_window_for_scenario('A')
             quote=self.kernel.quote_activation('mana','A',ref,'mana')
             self.kernel.commit_action(quote,Payment())
-            self.choose(color)
+            self.answer([('W','B').index(color)])
             self.assertEqual({color:1},dict(self.state.mana_pool('A')))
 
     def test_cliffs_produces_red(self):
