@@ -189,6 +189,11 @@ def project_actor(kernel,actor):
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],
             'mana':deepcopy(window['mana']),'parent_frame':window['parent']['id']}
     packet['life_lost_this_turn']={p:state.life_lost_this_turn(p) for p in state.live_players}
+    packet['life_gained_this_turn']={p:state.life_gained_this_turn(p) for p in state.live_players}
+    packet['turn_history']={kind:sorted(kernel._history_players(kind)) for kind in ('attacked','freerunning')}
+    packet['upkeep_history']=dict(kernel.upkeep_history)
+    packet['regeneration_shields']=[{'id':key,'ref':deepcopy(ref)} for key,ref in kernel.regeneration_shields.items()
+        if any(obj.ref.to_json()==ref and obj.zone==Zone.BATTLEFIELD for obj in state.objects())]
     packet['draw_counts']={player:kernel.draw_counts.get(player,0) if kernel.draw_count_turn==state.turn_number else 0
         for player in state.live_players}
     if actor in kernel.library_observations:

@@ -43,7 +43,7 @@ class LibraryRules:
             if effect.optional_search and not task['search_accepted']:return
             frame={**frame,'controller':actor}
         if 'search_plan' not in task:
-            selector=effect.selector;source=self._source(frame)
+            selector=self._bound_selector(effect.selector,frame);source=self._source(frame)
             # The source's controller may have changed since the ability began;
             # the searching player remains the captured ability controller.
             from dataclasses import replace

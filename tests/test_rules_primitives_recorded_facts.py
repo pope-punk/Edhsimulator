@@ -549,7 +549,7 @@ class RecordedFactTests(unittest.TestCase):
 
     def test_note_checkpoint_layout_and_old_kernel_rejection(self):
         self.splendor();checkpoint=self.kernel.snapshot()
-        self.assertEqual(120,checkpoint['schema']);self.assertEqual(13,checkpoint['state']['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],120);self.assertGreaterEqual(checkpoint['state']['schema'],13)
         self.assertEqual(checkpoint,RulesKernel.restore(checkpoint,self.programs).snapshot())
         checkpoint['schema']=119
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)

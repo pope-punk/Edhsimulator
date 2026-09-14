@@ -1,12 +1,13 @@
 """Shared combat declarations, batched assignments and nonprevented damage.
 
 Player-target combat is supported. Planeswalker/battle defense, attack/block
-requirements, prevention and regeneration remain gated. Ordinary player losses
+requirements and general prevention remain gated. Color protection and\nregeneration share the kernel's replacement and guard interpreter. Ordinary player losses
 reach the shared departure interpreter.
 """
 from dataclasses import dataclass
 from copy import deepcopy
 from .rules_characteristics import matches
+from .rules_guard import protection_matches
 from types import SimpleNamespace
 from . import block_declaration, combat_damage
 from .rules_state import ObjectRef, Zone, RulesViolation, ResourcePayment
@@ -39,6 +40,9 @@ class CombatView:
     def effective_power(self,card):return card.power
     def effective_toughness(self,card):return card.toughness
     def can_block(self,blocker,attacker):
+        attacker_view=self.kernel.effective(attacker.ref);blocker_view=self.kernel.effective(blocker.ref)
+        if protection_matches(attacker_view,blocker_view):return False
+        if 'fear' in attacker_view.keywords and 'Artifact' not in blocker_view.types and 'B' not in blocker_view.colors:return False
         if 'flying' in attacker.keywords and not {'flying','reach'} & blocker.keywords:return False
         if self.block_rules is None:
             self.block_rules=[]
@@ -112,6 +116,7 @@ class CombatRules:
         self.state.move((),'attack_taps',payment=ResourcePayment(actor,taps=tuple(taps)))
         self.combat={'attackers':rows,'blocks':{},'blocked':[],'declared_any':bool(rows),
             'defender_index':0,'first_strikers':[],'had_first_step':False,'damage_pending':None,'damage_done':False}
+        if attackers:self._record_turn_fact('attacked',actor)
         self._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row['defender']} for row in rows])
         self._collect_tapped(taps,tap_observers)
         for row in rows:self._collect_announcement('creature_attacks',self.state.get(ObjectRef.from_json(row['ref'])),actor,values={'defending_player':row['defender']})
@@ -227,8 +232,10 @@ class CombatRules:
                 except RulesViolation:continue
                 recipient_types=tuple(sorted(self.effective(target).types & {'Creature','Planeswalker','Battle'}))
                 if obj.zone!=Zone.BATTLEFIELD or obj.phased or not recipient_types:continue
+                if protection_matches(self.effective(target),view):amount=0
             payments.append({'source':source,'target':target,'amount':amount,'combat':combat,
-                             'lifelink':'lifelink' in view.keywords,'deathtouch':'deathtouch' in view.keywords,'recipient_types':recipient_types})
+                             'lifelink':'lifelink' in view.keywords,'deathtouch':'deathtouch' in view.keywords,'recipient_types':recipient_types,
+                             'freerunning':combat and 'Creature' in view.types and (source.commander or 'Assassin' in view.subtypes)})
         lifelink_sources={}
         for row in payments:
             if row['lifelink'] and row['amount'] and row['source'].controller in self.state.live_players:
@@ -240,6 +247,9 @@ class CombatRules:
                 key=(row['source'].controller,row['source'].ref)
                 row['lifelink_gain']=row['amount']+bonuses.pop(key,0)
         self.state.damage_batch(payments)
+        for row in payments:
+            if row['freerunning'] and row['amount'] and isinstance(row['target'],str):
+                self._record_turn_fact('freerunning',row['source'].controller)
         for row in payments:
             if not row['amount']:continue
             target=row['target']

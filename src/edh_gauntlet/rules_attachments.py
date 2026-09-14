@@ -8,6 +8,7 @@ names, independent scheduler or alternate state store.
 import json
 from .rules_state import Zone, ObjectRef, RulesObject, RulesViolation
 from .rules_characteristics import matches
+from .rules_guard import protection_matches
 from .rules_program import (AbilityProgram, WithAttached, SetAttachmentRule,
                             Attach, DelayedTrigger, DelayedNextStep, Selector, encode, decode)
 
@@ -38,7 +39,7 @@ class AttachmentRules:
         if selector.zone==Zone.LIBRARY:raise RulesViolation('Library attachment restrictions are not supported')
         try:attached=self.state.get(target)
         except RulesViolation:return False
-        return matches(selector,attached,self.effective(target),source)
+        return matches(selector,attached,self.effective(target),source) and not protection_matches(self.effective(target),view)
 
     def _aura_entry(self, proposal, frame, key):
         definition = self.definitions[proposal.copied_definition or proposal.before.effective_definition]
@@ -46,7 +47,8 @@ class AttachmentRules:
             return True, None
         context = {**frame, 'source': proposal.before.to_json(), 'controller': proposal.controller}
         legal = tuple(obj for obj in self._query(definition.enchant, context)
-                      if obj.ref.card_id != proposal.before.ref.card_id)
+                      if obj.ref.card_id != proposal.before.ref.card_id
+                      and not protection_matches(self.effective(obj.ref),self._proposal_view(proposal)[1]))
         if (frame.get('spell') and self._source(frame).ref == proposal.before.ref
                 and self.definition(self._source(frame)).enchant is not None):
             targets = tuple(ObjectRef.from_json(ref) for ref in frame['targets'])

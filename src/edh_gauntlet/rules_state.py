@@ -131,7 +131,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=13
+    CHECKPOINT_SCHEMA=14
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -155,6 +155,7 @@ class RulesState:
             raise RulesViolation('Invalid starting life totals')
         self._starting_life=dict(totals)
         self._life_lost={p:0 for p in self.players}
+        self._life_gained={p:0 for p in self.players}
         self._life=dict(totals);self._player_counters={p:{} for p in self.players}
         self._command_casts={p:0 for p in self.players}
         self._commander_casts={};self._mana={p:{} for p in self.players}
@@ -215,6 +216,7 @@ class RulesState:
 
     def life(self,player):return self._life[player]
     def life_lost_this_turn(self,player):return self._life_lost[player]
+    def life_gained_this_turn(self,player):return self._life_gained[player]
     def starting_life(self,player):return self._starting_life[player]
 
     def player_counters(self,player):return tuple(sorted(self._player_counters[player].items()))
@@ -253,7 +255,7 @@ class RulesState:
     def zone(self,owner,zone):
         return tuple(self._objects[card_id] for card_id in self._order[(owner,Zone(zone))])
 
-    def move(self,moves:Iterable[ZoneMove],cause:str,*,detaches=(),counter_pairs=(),payment=None,creates=(),entry_life=()):
+    def move(self,moves:Iterable[ZoneMove],cause:str,*,detaches=(),counter_pairs=(),payment=None,creates=(),entry_life=(),regenerations=()):
         """Commit a validated simultaneous move, or leave all state unchanged.
 
         Replacement choices must already be resolved by the rules interpreter.
@@ -283,7 +285,9 @@ class RulesState:
             if amount+ordinary>self._life[actor]:
                 raise RulesViolation('Insufficient life for simultaneous entry payments')
         if payment is not None and payment.counters and (moves or detaches or counter_pairs):raise RulesViolation('Counter payment cannot be combined with zone or state-action groups')
-        for refs in (detaches,counter_pairs):
+        regenerations=tuple(regenerations)
+        if set(regenerations)&{m.source for m in moves}:raise RulesViolation('Regeneration cannot also move the same permanent')
+        for refs in (detaches,counter_pairs,regenerations):
             if len(set(refs))!=len(refs):raise RulesViolation('Duplicate non-zone state action')
             for ref in refs:
                 obj=self.get(ref)
@@ -313,7 +317,7 @@ class RulesState:
                 controller,destination,before.token,before.commander,move.copied_definition,
                 copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
-        if not pending and not detaches and not counter_pairs and payment is None and not entry_life:return ()
+        if not pending and not detaches and not counter_pairs and not regenerations and payment is None and not entry_life:return ()
         self._batch+=1;events=[]
         for move,before,after in pending:
             self._control_bases.pop(before.ref.card_id,None)
@@ -327,6 +331,10 @@ class RulesState:
             self._sequence+=1;events.append(ZoneEvent(self._sequence,self._batch,cause,before,after))
         # Non-zone state actions share this commit. Departed objects already
         # lost their attachments/counters; before-event snapshots remain intact.
+        for ref in regenerations:
+            obj=self.get(ref)
+            self._objects[ref.card_id]=replace(obj,tapped=True,damage_marked=0,deathtouch_hit=False)
+            self._sequence+=1
         for ref in detaches:
             current=self._objects.get(ref.card_id)
             if current is not None and current.ref==ref and current.attached_to is not None:
@@ -477,6 +485,7 @@ class RulesState:
         self._sequence+=1;self._turn_starts[active]=self._sequence
         self._turn_number+=1;self._turn_active=active
         self._life_lost={p:0 for p in self.players}
+        self._life_gained={p:0 for p in self.players}
         for key,obj in self._objects.items():
             if obj.zone==Zone.BATTLEFIELD and obj.controller==active and not obj.phased and obj.tapped and obj.ref not in skip_untap:
                 self._objects[key]=replace(obj,tapped=False)
@@ -536,6 +545,7 @@ class RulesState:
         if not changed:return {}
         self._life=life;self._commander_damage=commander_damage
         for player,amount in losses.items():self._life_lost[player]+=amount
+        for player,amount in gains.items():self._life_gained[player]+=amount
         for ref,amount in marked.items():
             obj=self.get(ref);self._objects[ref.card_id]=replace(obj,damage_marked=amount,deathtouch_hit=obj.deathtouch_hit or ref in touch)
         for ref,counts in counter_updates.items():
@@ -634,7 +644,7 @@ class RulesState:
     def gain_life(self,player,amount):
         if type(amount) is not int or amount<0:raise RulesViolation('Invalid life gain')
         if player not in self.live_players:return
-        self._life[player]+=amount;self._sequence+=1
+        self._life[player]+=amount;self._life_gained[player]+=amount;self._sequence+=1
 
     def add_mana(self, player, symbols):
         symbols=tuple(symbols)
@@ -700,6 +710,7 @@ class RulesState:
             latest=max((row for row in self._control_effects.values() if row['ref'].card_id==card),key=lambda row:row['timestamp'])
             if self._objects[card].controller!=latest['controller']:raise RulesViolation('Control ledger disagrees with object')
         if set(self._mana)!=set(self.players) or set(self._life)!=set(self.players):raise RulesViolation('Invalid player resource ledger')
+        if set(self._life_gained)!=set(self.players) or any(type(n) is not int or n<0 for n in self._life_gained.values()):raise RulesViolation('Invalid turn life-gain ledger')
         if set(self._life_lost)!=set(self.players) or any(type(n) is not int or n<0 for n in self._life_lost.values()):raise RulesViolation('Invalid turn life-loss ledger')
         if any(type(n) is not int for n in self._life.values()):raise RulesViolation('Invalid life ledger')
         if set(self._player_counters)!=set(self.players):raise RulesViolation('Invalid player counter ledger')
@@ -734,7 +745,7 @@ class RulesState:
         return {'schema':self.CHECKPOINT_SCHEMA,'starting_life':dict(self._starting_life),'commander_identities':None if self._commander_identities is None else {p:list(c) for p,c in self._commander_identities.items()},'players':list(self.players),'objects':[o.to_json() for o in self._objects.values()],
             'order':[{'owner':p,'zone':z.value,'ids':list(ids)} for (p,z),ids in self._order.items()],
             'physical':sorted(self._physical),'issued':sorted(self._issued),'sequence':self._sequence,'batch':self._batch,
-            'events':[e.to_json() for e in self._events],'life':dict(self._life),'life_lost_this_turn':dict(self._life_lost),
+            'events':[e.to_json() for e in self._events],'life':dict(self._life),'life_lost_this_turn':dict(self._life_lost),'life_gained_this_turn':dict(self._life_gained),
             'player_counters':{p:dict(c) for p,c in self._player_counters.items()},'command_casts':dict(self._command_casts),'commander_casts':dict(self._commander_casts),
             'mana':{player:dict(pool) for player,pool in self._mana.items()},
             'turn_starts':dict(self._turn_starts),'turn_number':self._turn_number,'turn_active':self._turn_active,
@@ -755,6 +766,7 @@ class RulesState:
         state._issued=set(value['issued'])
         state._physical=set(value['physical']);state._sequence=value['sequence'];state._batch=value['batch']
         state._life_lost=dict(value['life_lost_this_turn'])
+        state._life_gained=dict(value['life_gained_this_turn'])
         state._life=dict(value['life']);state._player_counters={p:dict(c) for p,c in value['player_counters'].items()};state._command_casts=dict(value['command_casts'])
         state._commander_casts=dict(value['commander_casts']);state._mana={player:dict(pool) for player,pool in value['mana'].items()}
         state._turn_starts=dict(value['turn_starts']);state._turn_number=value['turn_number'];state._turn_active=value['turn_active']

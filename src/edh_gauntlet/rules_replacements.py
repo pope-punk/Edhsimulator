@@ -25,6 +25,8 @@ class ZoneProposal:
     life_payments: tuple = ()  # (player, amount), reserved until the batch commits.
     reveals: tuple = ()  # (player, exact hand ref, printed name), never an option list.
     notes: tuple = ()  # (note identity, public value) captured during replacement.
+    destruction: bool = False
+    regenerated: str | None = None
 
 
 @dataclass(frozen=True)
@@ -96,7 +98,10 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
     copy_types = proposal.copied_add_types
     used = proposal.used | {candidate.key}
     commander_considered = proposal.commander_considered
-    if candidate.kind == 'commander':
+    regenerated=proposal.regenerated
+    if candidate.kind == 'regenerate':
+        destination=Zone.BATTLEFIELD;regenerated=candidate.key
+    elif candidate.kind == 'commander':
         commander_considered = True
         if accepted:
             destination = Zone.COMMAND
@@ -125,6 +130,7 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
     if copy_types:trace['copied_add_types']=list(copy_types)
     if counters is not None:trace['counters']=list(counters)
     return replace(proposal, destination=destination, copied_definition=copy,copied_add_types=copy_types,
+                   destruction=proposal.destruction and destination==proposal.destination,regenerated=regenerated,
                    used=frozenset(used), commander_considered=commander_considered,
                    tapped=tapped,counters=proposal.counters if counters is None else counters,
                    trace=proposal.trace + (trace,),

@@ -24,7 +24,8 @@ from .rules_library import LibraryRules
 from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
 from .rules_subtypes import expanded_subtypes
-from .rules_program import (IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_guard import GuardRules, protection_matches
+from .rules_program import (DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -39,8 +40,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=120
+class RulesKernel(GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=121
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -79,6 +80,8 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         self.pending_choice=None;self.answers={};self.accepted=[];self.semantic_events=[]
         self.priority=None;self.passes=[];self._serial=0;self._revision=0
         self.linked_exile={};self.exile_durations={};self.phase_links={};self.object_notes={}
+        self.regeneration_shields={};self.upkeep_history={p:0 for p in state.players}
+        self.turn_history={'turn':state.turn_number,'attacked':[],'freerunning':[]}
         self.mana_payment=None;self.draw_counts={};self.draw_count_turn=state.turn_number
         self.temporary_effects=[];self.counter_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
         self.phase=None;self.action_receipts={};self.turn_schedule=None;self.combat=None;self.departure=None;self.outcome=None;self.announcement=None
@@ -195,8 +198,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         self.state.get(ref)
         return self.characteristics()[ref]
 
-    def _query(self,selector,frame):
-        if selector.zone==Zone.LIBRARY:raise UnsupportedRule('Library search needs its own visibility and failure-to-find protocol')
+    def _bound_selector(self,selector,frame):
         if selector.characteristics and any(bound is not None and type(bound) is not int
                 for item in selector.characteristics for bound in (item.minimum,item.maximum)):
             ranges=[]
@@ -206,6 +208,11 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                          if bound.maximum is None or type(bound.maximum) is int else self._quantity(bound.maximum,frame))
                 ranges.append(replace(bound,minimum=minimum,maximum=maximum))
             selector=replace(selector,characteristics=tuple(ranges))
+        return selector
+
+    def _query(self,selector,frame):
+        if selector.zone==Zone.LIBRARY:raise UnsupportedRule('Library search needs its own visibility and failure-to-find protocol')
+        selector=self._bound_selector(selector,frame)
         source=replace(self._source(frame),controller=frame['controller'])
         successor=frame.get('values',{}).get('source_successor') if selector.exclude_source else None
         excluded=ObjectRef.from_json(successor) if successor is not None else None
@@ -242,13 +249,16 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
 
     def _target_query(self,selector,frame):
         # These permissions constrain targeting, not nontargeted selection.
-        permitted=[];source_types=None
+        permitted=[];source_types=None;source_view=None
         for obj in self._query(selector,frame):
             view=self.effective(obj.ref)
             # Printed keywords remain inspectable in every zone, but these
             # static targeting restrictions protect battlefield permanents only.
             if obj.zone==Zone.BATTLEFIELD and (
                     'shroud' in view.keywords or 'hexproof' in view.keywords and obj.controller!=frame['controller']):continue
+            if obj.zone==Zone.BATTLEFIELD and any(keyword.startswith('protection_') for keyword in view.keywords):
+                if source_view is None:source_view=self._object_information(self._source(frame))[1]
+                if protection_matches(view,source_view):continue
             restricted=False
             for rule in view.target_restrictions:
                 if rule.opponents_only and obj.controller==frame['controller']:continue
@@ -477,6 +487,11 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
 
     def _condition_holds(self,condition,source,objects=None,views=None,life_totals=None,live_players=None,life_lost_totals=None):
         if condition is None:return True
+        if isinstance(condition,TurnHistoryCondition):return source.controller in self._history_players(condition.kind)
+        if isinstance(condition,(AllConditions,AnyConditions)):
+            answers=(self._condition_holds(child,source,objects,views,life_totals,live_players,life_lost_totals) for child in condition.conditions)
+            return all(answers) if isinstance(condition,AllConditions) else any(answers)
+        if isinstance(condition,NotCondition):return not self._condition_holds(condition.condition,source,objects,views,life_totals,live_players,life_lost_totals)
         return condition_holds(condition,source,
             self.state.objects(Zone.BATTLEFIELD) if objects is None else objects,
             self.characteristics() if views is None else views,life_totals=life_totals if life_totals is not None else {p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=live_players if live_players is not None else self.state.live_players,life_lost_totals=life_lost_totals if life_lost_totals is not None else {p:self.state.life_lost_this_turn(p) for p in self.state.players})
@@ -542,11 +557,13 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
             if source.phased:continue
             for ability in self._trigger_abilities(source,'step_began'):
                 if self._matches(ability.event,source,step=step):
+                    if isinstance(ability,EchoAbility) and source.controlled_since<=self.upkeep_history[source.controller]:continue
                     if ability.event.subject=='attached':
                         self._trigger(source,ability,{'attached':[source.attached_to.to_json()]},
                             values={'event_controllers':[self.active]})
                     else:self._trigger(source,ability)
         self._collect_delayed((),step=step)
+        if step=='upkeep':self.upkeep_history[self.active]=self.state.sequence
 
     ENTRY_VIEW_CACHE_LIMIT=64
 
@@ -612,6 +629,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
     def _resolve_zone_proposal(self, proposal, frame, key, *, reserved_life=None):
         reserved_life = reserved_life or {}
         while True:
+            if proposal.regenerated is not None:return proposal
             definition=self.definitions[proposal.copied_definition or proposal.before.effective_definition]
             source=replace(proposal.before,controller=proposal.controller)
             applicable={modifier.modifier_id for modifier in definition.entry_modifiers
@@ -630,7 +648,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                     and (not available or available[0].priority>=3)):
                 available+=(ReplacementCandidate(flashback_key,'Exile this flashback spell','flashback',3,proposal.before.owner),)
             if not available or available[0].priority>=3:
-                available=available+self._entry_effect_candidates(proposal,entry_view)
+                available=available+self._entry_effect_candidates(proposal,entry_view)+self._regeneration_candidates(proposal)
             if not available:
                 return proposal
             step_key = key + ':replacement:' + str(len(proposal.trace))
@@ -714,13 +732,13 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                                          copied_definition=copied_definition,counters=counters,copied_add_types=copied_add_types,
                                          life_payment=life_payment,reveal=reveal,note=note)
 
-    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=()):
+    def _move(self, refs, destination, frame, key, *, cause='effect', entry_flags=(), controller_mode='effect', detaches=(), counter_pairs=(),payment=None,entry_tapped=False,creates=(),placements=None,entry_counters=(),destruction_refs=()):
         before = self.state.objects(Zone.BATTLEFIELD)
         before_views = self.characteristics()
         before_life_totals = {p:self.state.life(p) for p in self.state.players}
         before_live_players = self.state.live_players
         before_life_lost = {p:self.state.life_lost_this_turn(p) for p in self.state.players}
-        proposals = [];blocked=[]
+        proposals = [];blocked=[];destruction_refs=frozenset(destruction_refs)
         entry_restrictions=tuple((source,restriction) for source in before if not source.phased
             for restriction in self.definition(source).entry_restrictions)
         default_destination=destination;default_tapped=entry_tapped
@@ -750,7 +768,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                 if blocker is not None:
                     blocked.append((obj.ref,blocker.ref));continue
             proposals.append((index, ZoneProposal(obj, destination,
-                frame['controller'] if destination == Zone.BATTLEFIELD and controller_mode == 'effect' else obj.owner,tapped=entry_tapped,counters=entry_counters)))
+                frame['controller'] if destination == Zone.BATTLEFIELD and controller_mode == 'effect' else obj.owner,tapped=entry_tapped,counters=entry_counters,destruction=ref in destruction_refs)))
         # Choices for different affected players follow APNAP. Commit order
         # stays bound to the input batch, independently of choice scheduling.
         start = self.state.players.index(self.active)
@@ -769,7 +787,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
             entry_reveals.extend(result.reveals)
         attachments = {}
         for index, proposal in sorted(resolved.items(), key=lambda row: players.index(row[1].controller)):
-            if proposal.destination != Zone.BATTLEFIELD:
+            if proposal.destination != Zone.BATTLEFIELD or proposal.regenerated is not None:
                 continue
             allowed, attached_to = self._aura_entry(proposal, frame, key + ':' + str(index))
             if allowed:
@@ -814,8 +832,14 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                 replacement = iter(relevant[int(option.key)] for option in chosen)
                 own = [next(replacement) if move in relevant else move for move in own]
             ordered_moves.extend(own)
-        events = self.state.move(ordered_moves, cause, detaches=detaches, counter_pairs=counter_pairs,payment=payment,creates=tuple(created[m.source] for m in ordered_moves if m.source in created),
+        regenerated={p.regenerated:p.before.ref for p in resolved.values() if p is not None and p.regenerated is not None}
+        events = self.state.move(ordered_moves, cause, regenerations=tuple(regenerated.values()),detaches=detaches, counter_pairs=counter_pairs,payment=payment,creates=tuple(created[m.source] for m in ordered_moves if m.source in created),
                                  entry_life=tuple((actor,entry_life[actor]) for actor in players if entry_life.get(actor)))
+        for shield,ref in regenerated.items():
+            del self.regeneration_shields[shield]
+            self._event('permanent_regenerated',shield=shield,source=ref.to_json())
+        self._remove_regenerated_from_combat(regenerated.values())
+        if regenerated:self._collect_tapped(tuple(regenerated.values()),before)
         entered={e.before.ref:e.after for e in events if e.after.zone==Zone.BATTLEFIELD}
         for proposal in resolved.values():
             if proposal is None or not proposal.notes or proposal.before.ref not in entered:continue
@@ -859,6 +883,8 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
 
     def _quantity(self,value,frame):
         if type(value) is int:return value
+        if isinstance(value,PlayerStatistic):
+            return self.state.life_gained_this_turn(frame['controller']) if value.statistic=='life_gained' else self.state.command_casts(frame['controller'])
         if isinstance(value,PaidCostStat):
             try:amount=frame['values']['paid_cost_stats'][value.cost_id][value.statistic]
             except KeyError as exc:raise UnsupportedRule('Missing paid-cost statistic') from exc
@@ -937,7 +963,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                 try:obj=self.state.get(ref)
                 except RulesViolation:continue
                 if obj.zone==Zone.BATTLEFIELD and not obj.phased and 'indestructible' not in self.effective(ref).keywords:refs.append(ref)
-            return self._move(refs,Zone.GRAVEYARD,frame,key,cause='destroy')
+            return self._move(refs,Zone.GRAVEYARD,frame,key,cause='destroy',destruction_refs=() if isinstance(effect,DestroyWithoutRegeneration) else refs)
         elif isinstance(effect,Sacrifice):
             refs=[]
             for ref in self._refs(frame,effect.subject):
@@ -1004,6 +1030,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
+        if self._execute_guard(effect,frame,key):return
         if self._execute_attachment(effect,frame,key):return
         if self._execute_counter_instruction(effect,frame,key):return
         if isinstance(effect,PayMana):
@@ -1377,7 +1404,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         losses=self.state.losing_players()
         self._combat_prune()
         views=self.characteristics()
-        doomed=[];cancellations=[];detaches=[];counter_amounts={}
+        doomed=[];cancellations=[];detaches=[];counter_amounts={};destruction=set();other_deaths=set()
         for obj in self.state.objects(Zone.BATTLEFIELD):
             if obj.phased:continue
             view=views[obj.ref]
@@ -1394,6 +1421,8 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
                 and ('Equipment' not in view.subtypes or not self._attachment_legal(obj,obj.attached_to)))
             if creature_attachment or invalid_non_aura_attachment:detaches.append(obj.ref)
             illegal_aura=not creature_attachment and self._enchant_rule(obj)[0] is not None and not self._attachment_legal(obj,obj.attached_to)
+            if zero_loyalty or zero_toughness or illegal_aura:other_deaths.add(obj.ref)
+            if lethal_damage:destruction.add(obj.ref)
             if zero_loyalty or zero_toughness or lethal_damage or illegal_aura:doomed.append(obj)
         legends={}
         for obj in self.state.objects(Zone.BATTLEFIELD):
@@ -1405,13 +1434,14 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
             if len(objects)<2:continue
             selected=self._choose('legend:'+str(self.state.sequence)+':'+actor+':'+name,actor,
                 'legend_rule','Choose one legendary permanent named '+name+' to keep.',self._options(objects),1,1)
+            other_deaths.update(obj.ref for obj in objects if obj.ref!=selected[0].ref)
             doomed.extend(obj for obj in objects if obj.ref!=selected[0].ref and obj not in doomed)
         if doomed or cancellations or detaches:
             source=(doomed[0] if doomed else self.state.get((cancellations or detaches)[0]))
             self._move(tuple(obj.ref for obj in doomed),Zone.GRAVEYARD,
                 {'source':source.to_json(),'controller':self.active},
                 'permanent-sba:'+str(self.state.sequence),cause='permanent_sba',
-                detaches=detaches,counter_pairs=cancellations)
+                detaches=detaches,counter_pairs=cancellations,destruction_refs=destruction-other_deaths)
             self.state.clear_deathtouch_history()
             for ref in detaches:self._event('detached',source=ref.to_json())
             for ref in cancellations:self._event('opposing_counters_removed',source=ref.to_json(),pairs=counter_amounts[ref])
@@ -1581,6 +1611,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
             'serial':self._serial,'revision':self._revision,'phase':self.phase,'action_receipts':self.action_receipts,'turn_schedule':self.turn_schedule,'combat':self.combat,'departure':self.departure,'outcome':self.outcome,'announcement':self.announcement,
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'phase_links':self.phase_links,'object_notes':self.object_notes,
+            'regeneration_shields':self.regeneration_shields,'upkeep_history':self.upkeep_history,'turn_history':self.turn_history,
             'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
@@ -1592,7 +1623,7 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','mana_payment','draw_counts','draw_count_turn'):
+        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
         if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
             kernel.resolving=kernel.mana_payment['parent']
@@ -1603,4 +1634,5 @@ class RulesKernel(PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRu
         kernel.pending_choice=(CounterAllocationRequest if request['kind']=='counter_allocation' else ChoiceRequest).from_json(request) if request else None
         kernel._serial=value['serial'];kernel._revision=value['revision']
         kernel._commander_sba_handled={ObjectRef.from_json(r) for r in value['commander_sba_handled']}
+        kernel._validate_guard_state()
         return kernel

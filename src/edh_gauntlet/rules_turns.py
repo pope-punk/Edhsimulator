@@ -105,6 +105,9 @@ class TurnRules:
         else:self._finish_cleanup_actions()
 
     def _finish_cleanup_actions(self):
+        if self.regeneration_shields:
+            self.regeneration_shields={}
+            self._event('regeneration_shields_expired')
         retained=[]
         for row in self.temporary_effects:
             if row.get('duration')!='indefinite':continue

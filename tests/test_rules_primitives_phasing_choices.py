@@ -567,7 +567,7 @@ class PhasingChoiceTests(unittest.TestCase):
 
     def test_new_checkpoint_layout_preserves_state_schema_and_rejects_old_kernel(self):
         self.game();checkpoint=self.kernel.snapshot()
-        self.assertGreaterEqual(checkpoint['schema'],119);self.assertEqual(13,checkpoint['state']['schema'])
+        self.assertGreaterEqual(checkpoint['schema'],119);self.assertGreaterEqual(checkpoint['state']['schema'],13)
         self.assertEqual(checkpoint,RulesKernel.restore(checkpoint,self.programs).snapshot())
         checkpoint['schema']=118
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)

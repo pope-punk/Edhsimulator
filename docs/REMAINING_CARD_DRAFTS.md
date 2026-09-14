@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **270 source-bound reviewed programs / 335 deck copies**. There are **64 cards outside the
-reviewed bundle**, all unstarted. No drafts remain. Reviewed coverage is not production certification.
+reviewed bundle**, eight authored drafts and 56 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,29 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: casting, entry and paid-cost facts
+## Current cycle: eight cards sharing guards and history
+
+The user explicitly requested **eight more cards**. Karmic Guide, Alseid of Life's
+Bounty, Fanatical Devotion, Pongify, Dimir House Guard, Midnight Snack, Restart
+Sequence and Jyoti, Moag Ancient have complete printed programs in the isolated
+draft bundle. They remain pending hosted validation and source-bound promotion.
+
+Shared work covers color protection, fear, regeneration, echo upkeep history,
+attack and qualifying combat-damage observations, actual turn life gains,
+resolving player statistics, bound library selectors and signed power snapshots.
+The implementation identity now includes both guard and phasing interpreters.
+
+Kernel schema is **121**, state schema **14**. The **107 new methods** are
+ready for GitHub-hosted draft and reviewed-loader checks. Existing games remain
+bound to their own implementation; no local execution or production admission.
+See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
+
+Finish both required hosted stages for all eight cards. Then inspect Exotic
+Orchard, Fellwar Stone, Horizon of Progress, Devouring Light, Scute Swarm,
+Helm of the Host, Lazotep Quarry and Aggressive Biomancy for the next coherent
+family. The inventory records the missing shared requirements.
+
+## Previous cycle: casting, entry and paid-cost facts
 
 Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage
 have complete printed-face review and exact source bindings. Shared support

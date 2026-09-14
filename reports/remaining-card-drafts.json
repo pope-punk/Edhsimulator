@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 270,
     "remaining_outside_reviewed_bundle": 64,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 64,
+    "drafts_written": 8,
+    "not_started_on_this_branch": 56,
     "reviewed_bundle_copies": 335,
-    "draft_copies": 0,
+    "draft_copies": 8,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 43
   },
@@ -38,7 +38,7 @@
     {
       "card_id": "alseid-of-life-s-bounty",
       "name": "Alseid of Life's Bounty",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -51,7 +51,12 @@
           "face_id": "alseid-of-life-s-bounty",
           "text": "Lifelink\n{1}, Sacrifice this creature: Target creature or enchantment you control gains protection from the color of your choice until end of turn."
         }
-      ]
+      ],
+      "draft_definition": "draft:alseid-of-life-s-bounty",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "72aafe6173c47fe7afdb2abee41877c7e4efa16850be102e2ad0c4cf797eceea",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "aminatou-the-fateshifter",
@@ -599,7 +604,7 @@
     {
       "card_id": "dimir-house-guard",
       "name": "Dimir House Guard",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -612,7 +617,12 @@
           "face_id": "dimir-house-guard",
           "text": "Fear\nSacrifice a creature: Regenerate this creature.\nTransmute {1}{B}{B}"
         }
-      ]
+      ],
+      "draft_definition": "draft:dimir-house-guard",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "domri-anarch-of-bolas",
@@ -749,7 +759,7 @@
     {
       "card_id": "fanatical-devotion",
       "name": "Fanatical Devotion",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -762,7 +772,12 @@
           "face_id": "fanatical-devotion",
           "text": "Sacrifice a creature: Regenerate target creature."
         }
-      ]
+      ],
+      "draft_definition": "draft:fanatical-devotion",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "fangs-of-kalonia",
@@ -1311,7 +1326,7 @@
     {
       "card_id": "jyoti-moag-ancient",
       "name": "Jyoti, Moag Ancient",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1324,12 +1339,17 @@
           "face_id": "jyoti-moag-ancient",
           "text": "When Jyoti enters, create a 1/1 green Forest Dryad land creature token for each time you've cast your commander from the command zone this game.\nAt the beginning of each combat, land creatures you control get +X/+X until end of turn, where X is Jyoti's power."
         }
-      ]
+      ],
+      "draft_definition": "draft:jyoti-moag-ancient",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "karmic-guide",
       "name": "Karmic Guide",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1342,7 +1362,12 @@
           "face_id": "karmic-guide",
           "text": "Flying, protection from black\nEcho {3}{W}{W}\nWhen this creature enters, return target creature card from your graveyard to the battlefield."
         }
-      ]
+      ],
+      "draft_definition": "draft:karmic-guide",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "d81e7f6361414795c44c79d16030b188b1e401c21230cc20929a650c03923a1a",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "kazuul-s-fury-kazuul-s-cliffs",
@@ -1497,7 +1522,7 @@
     {
       "card_id": "midnight-snack",
       "name": "Midnight Snack",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1510,7 +1535,12 @@
           "face_id": "midnight-snack",
           "text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn."
         }
-      ]
+      ],
+      "draft_definition": "draft:midnight-snack",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "minsc-boo-timeless-heroes",
@@ -1855,7 +1885,7 @@
     {
       "card_id": "pongify",
       "name": "Pongify",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1868,7 +1898,12 @@
           "face_id": "pongify",
           "text": "Destroy target creature. It can't be regenerated. Its controller creates a 3/3 green Ape creature token."
         }
-      ]
+      ],
+      "draft_definition": "draft:pongify",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "59a5d0c1e859a1c3ed9aa299e6fe9786660dddd0e679631871283f73f923c979",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "pontiff-of-blight",
@@ -1997,7 +2032,7 @@
     {
       "card_id": "restart-sequence",
       "name": "Restart Sequence",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2010,7 +2045,12 @@
           "face_id": "restart-sequence",
           "text": "Freerunning {1}{B}\nReturn target creature card from your graveyard to the battlefield."
         }
-      ]
+      ],
+      "draft_definition": "draft:restart-sequence",
+      "rules_review_status": "printed_behavior_mapped",
+      "hosted_validation_status": "pending",
+      "source_facts_sha256": "4fa4d35aedf7420ba12a2f72b63bf96344e3d8d74a8ca3e8f9f7d0bc8966e5d5",
+      "implementation_notes": "Complete printed program authored; see docs/GUARD_HISTORY_CARD_REVIEW.md for shared implementation and required hosted checks."
     },
     {
       "card_id": "reveillark",
@@ -2881,207 +2921,49 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "ce0631cfcf0171463dfc58d7f11718b5230a0001",
+    "base_commit": "cecda2894b3afb4f67aacd1656acdaff7096fe04",
+    "user_request": "Eight more cards, completed as one coherent batch.",
     "cards_written": [
-      "necromancy",
-      "nullpriest-of-oblivion",
-      "sigarda-s-splendor",
-      "wonderscape-sage"
-    ],
-    "cards_promoted": [
-      "necromancy",
-      "nullpriest-of-oblivion",
-      "sigarda-s-splendor",
-      "wonderscape-sage"
-    ],
-    "shared_mechanics": [
-      "Optional additional kicker before reductions, with authenticated declaration and entry facts",
-      "Cast-time sorcery eligibility and exact next-cleanup sacrifice",
-      "Quantity-conditioned result continuations",
-      "Ordered entry-life notes and independent comparison/update",
-      "Actual cast-color observation",
-      "Prepayment derived subtype capture for activation and spell zone costs"
-    ],
-    "runtime_checkpoint_schema": 120,
-    "state_checkpoint_schema": 13,
-    "new_test_methods": 63,
-    "validation_status": "reviewed_loader_passed",
-    "unresolved_defects": [],
-    "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
-    "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
-    "next_batch": [
       "karmic-guide",
       "alseid-of-life-s-bounty",
       "fanatical-devotion",
-      "pongify"
+      "pongify",
+      "dimir-house-guard",
+      "midnight-snack",
+      "restart-sequence",
+      "jyoti-moag-ancient"
+    ],
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Shared derived-color protection for targeting, damage, blocking and attachment legality",
+      "Atomic regeneration shields integrated with destruction and simultaneous state actions",
+      "Echo occurrence based on existing control timestamps and explicit previous-upkeep observations",
+      "Public attack and qualifying combat-damage history; actual turn life gains including lifelink",
+      "Resolving player-statistic quantities and reusable bound library selectors",
+      "Fear blocker predicate; signed power snapshots; complete Food and Forest Dryad tokens",
+      "Guard and phasing files included in implementation identity"
+    ],
+    "runtime_checkpoint_schema": 121,
+    "state_checkpoint_schema": 14,
+    "new_test_methods": 107,
+    "validation_status": "draft_hosted_pending",
+    "unresolved_defects": [],
+    "review_work_remaining": "Run hosted Ubuntu/Windows draft checks, correct any failures, source-bind all eight programs, then run required reviewed-loader checks.",
+    "next_batch": [
+      "exotic-orchard",
+      "fellwar-stone",
+      "horizon-of-progress",
+      "devouring-light",
+      "scute-swarm",
+      "helm-of-the-host",
+      "lazotep-quarry",
+      "aggressive-biomancy"
     ],
     "next_batch_implementation_notes": {
-      "cards": [
-        "karmic-guide",
-        "alseid-of-life-s-bounty",
-        "fanatical-devotion",
-        "pongify"
-      ],
-      "requirements": [
-        "Karmic Guide: full protection from black across targeting, damage, blocking and attachment legality; echo keyed to acquired control since the prior own upkeep, including phasing and control changes.",
-        "Alseid: authenticated resolution-time color choice and protection until end of turn; reuse the complete protection engine.",
-        "Fanatical Devotion: complete regeneration shields through destruction replacement, tapping, damage removal and combat removal; costs and targets already exist.",
-        "Pongify: explicit cannot-regenerate destruction and resolution-time captured target controller creating a 3/3 green Ape, including when indestructible prevents destruction."
-      ],
-      "reuse": [
-        "Current ongoing and until-end-of-turn effects",
-        "Existing PayMana, sacrifice costs, WithControllers and CreateTokens",
-        "Current phasing and exact attachments"
-      ],
-      "guard": "Refresh source and select a practical complete subset. No local execution, game migration or production admission."
+      "focus": "Choose the next complete family after refreshing source. Investigate could-produce mana queries for three mana sources, convoke payments, and copiable token snapshots shared by four token cards.",
+      "guard": "No partial printed clauses; no local execution, game migration or production admission."
     },
-    "hosted_attempts": [
-      {
-        "run_id": 34796156600,
-        "commit": "eeebe64395610c0b6ea9ec5857fefbf3d3076db2",
-        "windows_tests": 1609,
-        "failures": 1,
-        "errors": 2,
-        "new_test_class_executed": false,
-        "ubuntu": "cancelled_after_matrix_failure",
-        "issues": [
-          "Sigarda's GainLife JSON incorrectly included a players field; the strict decoder rejected the draft and prevented new test-class loading.",
-          "Adding paid-cost values to activations unintentionally enabled an existing fenced paid-statistic path."
-        ],
-        "corrections": [
-          "Remove the extra GainLife field.",
-          "Bind new subtype comparisons only to public battlefield costs, preserve existing activation-statistic rejection, and omit new paid summaries for hidden hand costs. Add regression coverage."
-        ]
-      },
-      {
-        "run_id": 34796570052,
-        "commit": "58f7eca27f817bd4d693d5016273173db5800014",
-        "windows_tests": 1672,
-        "failures": 0,
-        "errors": 61,
-        "ubuntu": "cancelled_after_matrix_failure",
-        "issues": [
-          "A shared test helper constructed LoseLife without its required player domain; 61 new methods stopped during setup."
-        ],
-        "corrections": [
-          "Pass the explicit controller domain in the test life-loss fixtures; preserve the runtime API.",
-          "Include exact source life notes on waiting ability packets after their source leaves, with regression coverage."
-        ]
-      },
-      {
-        "run_id": 34796928484,
-        "commit": "08e438c0e302e74bd1cc0279698eb923ab64e24c",
-        "ubuntu_tests": 1672,
-        "failures": 0,
-        "errors": 7,
-        "windows": "cancelled_after_matrix_failure",
-        "issues": [
-          "Seven Necromancy cases requested an end-step scenario priority window outside the fixture API's supported phases."
-        ],
-        "corrections": [
-          "Use an opponent's supported precombat-main window for nonsorcery-cast fixtures. The actual turn/cleanup integration remains unchanged and passed. Preserve the runtime fixture gate."
-        ]
-      },
-      {
-        "run_id": 34797724871,
-        "commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
-        "windows_tests": 1672,
-        "failures": 1,
-        "errors": 0,
-        "ubuntu": "cancelled_after_matrix_failure",
-        "issues": [
-          "The promotion review retained a hard-coded 39-card count after expanding PROMOTED_CARDS to 43. Its following generic timing assertion also assumed every non-Instant must use sorcery timing."
-        ],
-        "corrections": [
-          "Update the exact promoted count to 43 and account explicitly for CleanupCast's printed instant permission in the shared full-face audit. Keep all per-card source, type, cost and codec assertions."
-        ]
-      }
-    ],
-    "draft_hosted_validation": {
-      "commit": "825827f67c5d3f4fc8397b6cede516d1d1b0862c",
-      "run_id": 34797317071,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1672,
-      "new_test_methods": 63,
-      "conclusion": "success",
-      "scope": "All 266 prior reviewed programs and four isolated complete drafts: Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
-    },
-    "hosted_validation": {
-      "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
-      "run_id": 34798075383,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1672,
-      "new_test_methods": 63,
-      "conclusion": "success",
-      "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
-    },
-    "completed_utc": "2026-09-14T02:12:35Z",
-    "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, sources and tests remain at the validated commit.",
-    "next_batch_source_review": {
-      "inspected_commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
-      "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
-      "rules": [
-        "702.16b-f",
-        "702.30a",
-        "701.19a-c",
-        "614.8"
-      ],
-      "implementation_points": [
-        {
-          "area": "Protection",
-          "paths": [
-            "rules_kernel.py:_target_query",
-            "rules_combat.py:CombatView.can_block",
-            "rules_combat.py:_deal_damage",
-            "rules_attachments.py:_attachment_legal",
-            "rules_attachments.py:_aura_entry"
-          ],
-          "finding": "Use one derived-color predicate for targeting, blocking, prevention and attachment legality, including nontargeting Aura entry. Resolve source characteristics with the existing last-known information helper. Prevent damage before lifelink and damage-trigger aggregation. Preserve already-legal blocks when protection is gained later."
-        },
-        {
-          "area": "Echo",
-          "paths": [
-            "rules_state.py:RulesObject.controlled_since",
-            "rules_state.py:change_control_batch",
-            "rules_state.py:end_control_effects",
-            "rules_turns.py:_begin_phase",
-            "rules_kernel.py:_collect_step"
-          ],
-          "finding": "Reuse exact-incarnation continuous-control timestamps, but add explicit previous-own-upkeep observations; the turn-start ledger measures a different boundary. Capture the prior marker for an intervening-if trigger and retain it through resolution, control changes, extra upkeeps and phasing. Reuse PayMana and normal controller-limited Sacrifice."
-        },
-        {
-          "area": "Regeneration",
-          "paths": [
-            "rules_kernel.py:_zone_operation",
-            "rules_kernel.py:_state_based_actions",
-            "rules_replacements.py:ZoneProposal",
-            "rules_combat.py:_combat_prune",
-            "rules_state.py:damage_batch",
-            "rules_turns.py:_finish_cleanup_actions"
-          ],
-          "finding": "Separate destruction from other graveyard moves. Current permanent_sba batches lethal damage together with zero toughness, legend and illegal Aura actions. Preserve simultaneous processing and replacement-choice atomicity while permitting shields only for destruction. A shield must survive creation without immediate tapping, then be consumed once with damage removal, tapping and explicit combat removal; expire unused shields at cleanup and never follow a new incarnation. The present combat prune only detects unavailable objects and control changes, so it cannot itself remove a regenerated creature that stays on the battlefield."
-        },
-        {
-          "area": "Pongify",
-          "paths": [
-            "rules_program.py:Destroy",
-            "rules_kernel.py:_zone_operation",
-            "rules_program.py:WithControllers",
-            "rules_program.py:CreateTokens"
-          ],
-          "finding": "Destroy currently only accepts subject; introduce an explicit nonregenerable destruction operation. Capture the legal target's controller before the operation and create the Ape independently of successful destruction. Preserve existing invalid-target handling."
-        }
-      ],
-      "boundary": "This is source review and implementation guidance for the next cycle, not authored cards or validation."
-    }
+    "hosted_attempts": []
   },
   "hosted_validation_history": [
     {
@@ -4268,11 +4150,215 @@
       },
       "completed_utc": "2026-09-14 00:23:18 UTC",
       "final_recording_scope": "The following result-recording commit changes only the work order, review record and JSON inventory. Runtime, programs, sources and tests remain at the validated commit."
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "ce0631cfcf0171463dfc58d7f11718b5230a0001",
+      "cards_written": [
+        "necromancy",
+        "nullpriest-of-oblivion",
+        "sigarda-s-splendor",
+        "wonderscape-sage"
+      ],
+      "cards_promoted": [
+        "necromancy",
+        "nullpriest-of-oblivion",
+        "sigarda-s-splendor",
+        "wonderscape-sage"
+      ],
+      "shared_mechanics": [
+        "Optional additional kicker before reductions, with authenticated declaration and entry facts",
+        "Cast-time sorcery eligibility and exact next-cleanup sacrifice",
+        "Quantity-conditioned result continuations",
+        "Ordered entry-life notes and independent comparison/update",
+        "Actual cast-color observation",
+        "Prepayment derived subtype capture for activation and spell zone costs"
+      ],
+      "runtime_checkpoint_schema": 120,
+      "state_checkpoint_schema": 13,
+      "new_test_methods": 63,
+      "validation_status": "reviewed_loader_passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
+      "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
+      "next_batch": [
+        "karmic-guide",
+        "alseid-of-life-s-bounty",
+        "fanatical-devotion",
+        "pongify"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "karmic-guide",
+          "alseid-of-life-s-bounty",
+          "fanatical-devotion",
+          "pongify"
+        ],
+        "requirements": [
+          "Karmic Guide: full protection from black across targeting, damage, blocking and attachment legality; echo keyed to acquired control since the prior own upkeep, including phasing and control changes.",
+          "Alseid: authenticated resolution-time color choice and protection until end of turn; reuse the complete protection engine.",
+          "Fanatical Devotion: complete regeneration shields through destruction replacement, tapping, damage removal and combat removal; costs and targets already exist.",
+          "Pongify: explicit cannot-regenerate destruction and resolution-time captured target controller creating a 3/3 green Ape, including when indestructible prevents destruction."
+        ],
+        "reuse": [
+          "Current ongoing and until-end-of-turn effects",
+          "Existing PayMana, sacrifice costs, WithControllers and CreateTokens",
+          "Current phasing and exact attachments"
+        ],
+        "guard": "Refresh source and select a practical complete subset. No local execution, game migration or production admission."
+      },
+      "hosted_attempts": [
+        {
+          "run_id": 34796156600,
+          "commit": "eeebe64395610c0b6ea9ec5857fefbf3d3076db2",
+          "windows_tests": 1609,
+          "failures": 1,
+          "errors": 2,
+          "new_test_class_executed": false,
+          "ubuntu": "cancelled_after_matrix_failure",
+          "issues": [
+            "Sigarda's GainLife JSON incorrectly included a players field; the strict decoder rejected the draft and prevented new test-class loading.",
+            "Adding paid-cost values to activations unintentionally enabled an existing fenced paid-statistic path."
+          ],
+          "corrections": [
+            "Remove the extra GainLife field.",
+            "Bind new subtype comparisons only to public battlefield costs, preserve existing activation-statistic rejection, and omit new paid summaries for hidden hand costs. Add regression coverage."
+          ]
+        },
+        {
+          "run_id": 34796570052,
+          "commit": "58f7eca27f817bd4d693d5016273173db5800014",
+          "windows_tests": 1672,
+          "failures": 0,
+          "errors": 61,
+          "ubuntu": "cancelled_after_matrix_failure",
+          "issues": [
+            "A shared test helper constructed LoseLife without its required player domain; 61 new methods stopped during setup."
+          ],
+          "corrections": [
+            "Pass the explicit controller domain in the test life-loss fixtures; preserve the runtime API.",
+            "Include exact source life notes on waiting ability packets after their source leaves, with regression coverage."
+          ]
+        },
+        {
+          "run_id": 34796928484,
+          "commit": "08e438c0e302e74bd1cc0279698eb923ab64e24c",
+          "ubuntu_tests": 1672,
+          "failures": 0,
+          "errors": 7,
+          "windows": "cancelled_after_matrix_failure",
+          "issues": [
+            "Seven Necromancy cases requested an end-step scenario priority window outside the fixture API's supported phases."
+          ],
+          "corrections": [
+            "Use an opponent's supported precombat-main window for nonsorcery-cast fixtures. The actual turn/cleanup integration remains unchanged and passed. Preserve the runtime fixture gate."
+          ]
+        },
+        {
+          "run_id": 34797724871,
+          "commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
+          "windows_tests": 1672,
+          "failures": 1,
+          "errors": 0,
+          "ubuntu": "cancelled_after_matrix_failure",
+          "issues": [
+            "The promotion review retained a hard-coded 39-card count after expanding PROMOTED_CARDS to 43. Its following generic timing assertion also assumed every non-Instant must use sorcery timing."
+          ],
+          "corrections": [
+            "Update the exact promoted count to 43 and account explicitly for CleanupCast's printed instant permission in the shared full-face audit. Keep all per-card source, type, cost and codec assertions."
+          ]
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "825827f67c5d3f4fc8397b6cede516d1d1b0862c",
+        "run_id": 34797317071,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1672,
+        "new_test_methods": 63,
+        "conclusion": "success",
+        "scope": "All 266 prior reviewed programs and four isolated complete drafts: Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+      },
+      "hosted_validation": {
+        "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
+        "run_id": 34798075383,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1672,
+        "new_test_methods": 63,
+        "conclusion": "success",
+        "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+      },
+      "completed_utc": "2026-09-14T02:12:35Z",
+      "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, sources and tests remain at the validated commit.",
+      "next_batch_source_review": {
+        "inspected_commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
+        "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+        "rules": [
+          "702.16b-f",
+          "702.30a",
+          "701.19a-c",
+          "614.8"
+        ],
+        "implementation_points": [
+          {
+            "area": "Protection",
+            "paths": [
+              "rules_kernel.py:_target_query",
+              "rules_combat.py:CombatView.can_block",
+              "rules_combat.py:_deal_damage",
+              "rules_attachments.py:_attachment_legal",
+              "rules_attachments.py:_aura_entry"
+            ],
+            "finding": "Use one derived-color predicate for targeting, blocking, prevention and attachment legality, including nontargeting Aura entry. Resolve source characteristics with the existing last-known information helper. Prevent damage before lifelink and damage-trigger aggregation. Preserve already-legal blocks when protection is gained later."
+          },
+          {
+            "area": "Echo",
+            "paths": [
+              "rules_state.py:RulesObject.controlled_since",
+              "rules_state.py:change_control_batch",
+              "rules_state.py:end_control_effects",
+              "rules_turns.py:_begin_phase",
+              "rules_kernel.py:_collect_step"
+            ],
+            "finding": "Reuse exact-incarnation continuous-control timestamps, but add explicit previous-own-upkeep observations; the turn-start ledger measures a different boundary. Capture the prior marker for an intervening-if trigger and retain it through resolution, control changes, extra upkeeps and phasing. Reuse PayMana and normal controller-limited Sacrifice."
+          },
+          {
+            "area": "Regeneration",
+            "paths": [
+              "rules_kernel.py:_zone_operation",
+              "rules_kernel.py:_state_based_actions",
+              "rules_replacements.py:ZoneProposal",
+              "rules_combat.py:_combat_prune",
+              "rules_state.py:damage_batch",
+              "rules_turns.py:_finish_cleanup_actions"
+            ],
+            "finding": "Separate destruction from other graveyard moves. Current permanent_sba batches lethal damage together with zero toughness, legend and illegal Aura actions. Preserve simultaneous processing and replacement-choice atomicity while permitting shields only for destruction. A shield must survive creation without immediate tapping, then be consumed once with damage removal, tapping and explicit combat removal; expire unused shields at cleanup and never follow a new incarnation. The present combat prune only detects unavailable objects and control changes, so it cannot itself remove a regenerated creature that stays on the battlefield."
+          },
+          {
+            "area": "Pongify",
+            "paths": [
+              "rules_program.py:Destroy",
+              "rules_kernel.py:_zone_operation",
+              "rules_program.py:WithControllers",
+              "rules_program.py:CreateTokens"
+            ],
+            "finding": "Destroy currently only accepts subject; introduce an explicit nonregenerable destruction operation. Capture the legal target's controller before the operation and create the Ape independently of successful destruction. Preserve existing invalid-target handling."
+          }
+        ],
+        "boundary": "This is source review and implementation guidance for the next cycle, not authored cards or validation."
+      }
     }
   ],
   "execution_policy": {
-    "updated_date": "2026-09-13",
-    "user_direction": "Use the available context slightly more ambitiously to complete more cards.",
+    "updated_date": "2026-09-14",
+    "user_direction": "Complete eight additional cards in the current batch.",
     "target_cards_per_cycle": {
       "minimum": 4,
       "maximum": 8,

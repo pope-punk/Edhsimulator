@@ -257,7 +257,22 @@
       "601.2g",
       "702.33a",
       "702.33d",
-      "702.33e"
+      "702.33e",
+      "702.16b",
+      "702.16c",
+      "702.16d",
+      "702.16e",
+      "702.16f",
+      "702.30a",
+      "702.36b",
+      "702.53a",
+      "702.173a",
+      "701.19a",
+      "701.19b",
+      "701.19c",
+      "614.8",
+      "506.4",
+      "506.4a"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -316,7 +331,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules. Talon Gates of Madara's optional creature phasing, both mana abilities and revealed hand activation; Desert Warfare's sacrifice/hand/library observations, exact delayed returns, combat threshold and noncopiable haste. Wonderscape Sage uses the returned land's last battlefield subtypes, including copies and Omo's everything counters, rather than its Basic supertype."
+      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules. Talon Gates of Madara's optional creature phasing, both mana abilities and revealed hand activation; Desert Warfare's sacrifice/hand/library observations, exact delayed returns, combat threshold and noncopiable haste. Wonderscape Sage uses the returned land's last battlefield subtypes, including copies and Omo's everything counters, rather than its Basic supertype. Jyoti counts commander casts including countered spells and multiple commanders; combat power is captured once at resolution."
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-01-22",
@@ -395,6 +410,10 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/innistrad-midnight-hunt-release-notes",
       "scope": "Sigarda's Splendor's entry life note, resolution-time comparison and unconditional update after its upkeep ability."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/foundations-release-notes",
+      "scope": "Midnight Snack checks the entire turn's declared attacks even if its source entered later; its life-gain amount is evaluated when the activated ability resolves."
     }
   ]
 }
