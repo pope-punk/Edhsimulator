@@ -41,7 +41,7 @@ Relevant rules include 601.2, 602.5, 605.1, 608.2c, 611.2a, 701.37,
   share tap/readiness checks. Ferocious evaluates current derived controlled
   creature power at activation, without deleting an unavailable ability from its
   copiable definition. Eternalize exiles the graveyard source as a sorcery-timed
-  cost. Its copy is black, 4/4, Zombie Snake Druid and has no mana cost or mana value;
+  cost. Its copy is black, 4/4, Zombie Snake Druid and has no mana cost and has mana value 0;
   those exceptions remain copiable. The token retains all three abilities and
   its own power can enable ferocious once it can pay a tap-symbol cost.
 - **Finale:** X below ten draws normally. The large branch first moves the entire
@@ -66,5 +66,15 @@ captured X, frozen token values, conditional mana, exile-as-cost, token copying,
 Finale thresholds, opponent lands, invalid and replayed choices, shuffle identity,
 trigger ordering, cleanup duration and malformed/unbound instruction rejection.
 
-Validation is pending. No local Python, installation, compilation, tests or games
-have been run. Draft authoring is not recorded as completed card coverage.
+[Initial draft validation](https://github.com/pope-punk/Edhsimulator/actions/runs/34850413847)
+passed 2,029 tests on each platform at `9680ca5adb8e0728a5f1ffbbec59e9f40bbaf933`.
+[Expanded draft validation](https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921) passed **2,037 tests on each of
+Ubuntu and Windows**, plus syntax, installation and packaged assets, at
+`7e7106bf0fa5c8c83e21ce1affac48d5f530c196`. All 64 focused methods passed.
+
+The four source-bound programs have now been promoted into the reviewed bundle;
+the conformance module requires the reviewed loader. This promotion's required
+hosted validation is pending. Coverage is 294 unique cards / 360 deck copies,
+with 40 unique cards / 40 copies unstarted and zero drafts.
+
+No local Python, installation, compilation, tests or games have been run.

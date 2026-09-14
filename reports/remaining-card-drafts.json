@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 290,
-    "remaining_outside_reviewed_bundle": 44,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 294,
+    "remaining_outside_reviewed_bundle": 40,
+    "drafts_written": 0,
     "not_started_on_this_branch": 40,
-    "reviewed_bundle_copies": 356,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 360,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 63,
-    "remaining_outside_reviewed_bundle_copies": 44
+    "promoted_on_this_branch": 67,
+    "remaining_outside_reviewed_bundle_copies": 40
   },
   "cards": [
     {
@@ -851,7 +851,7 @@
     {
       "card_id": "fanatic-of-rhonas",
       "name": "Fanatic of Rhonas",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -866,12 +866,23 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "review_pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "f9972af4f92c8e113d0c7d190f99b01bc2f4524242b715c74914b6e8e6867aa0",
-      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
+      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "previous_draft_definition": "draft:fanatic-of-rhonas",
+      "reviewed_definition": "catalog:fanatic-of-rhonas",
+      "draft_hosted_validation": {
+        "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+        "run_id": 34851080921
+      },
+      "hosted_validation": {
+        "conclusion": "pending",
+        "stage": "required_reviewed_loader",
+        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+      }
     },
     {
       "card_id": "fanatical-devotion",
@@ -922,7 +933,7 @@
     {
       "card_id": "fangs-of-kalonia",
       "name": "Fangs of Kalonia",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -937,12 +948,23 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "review_pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "0435b0fba9ece9ca7d19c741f24c08d8fd1b1a305b0ed39e302a3408dadafeae",
-      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
+      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "previous_draft_definition": "draft:fangs-of-kalonia",
+      "reviewed_definition": "catalog:fangs-of-kalonia",
+      "draft_hosted_validation": {
+        "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+        "run_id": 34851080921
+      },
+      "hosted_validation": {
+        "conclusion": "pending",
+        "stage": "required_reviewed_loader",
+        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+      }
     },
     {
       "card_id": "fellwar-stone",
@@ -993,7 +1015,7 @@
     {
       "card_id": "finale-of-revelation",
       "name": "Finale of Revelation",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1008,12 +1030,23 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "review_pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "c2f04ec9ecdcba06db5bdf4248f6ef95c3e61c024340fa9ce477e07f58fa1d72",
-      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
+      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "previous_draft_definition": "draft:finale-of-revelation",
+      "reviewed_definition": "catalog:finale-of-revelation",
+      "draft_hosted_validation": {
+        "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+        "run_id": 34851080921
+      },
+      "hosted_validation": {
+        "conclusion": "pending",
+        "stage": "required_reviewed_loader",
+        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+      }
     },
     {
       "card_id": "fling",
@@ -1441,7 +1474,7 @@
     {
       "card_id": "hydra-broodmaster",
       "name": "Hydra Broodmaster",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1456,12 +1489,23 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "review_pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "counter-transition-eternalize-2026-09-14",
       "review_record": "docs/TRANSITION_CARD_REVIEW.md",
       "source_facts_sha256": "b3541bdc62118fbd6bb4d8f42ad9ef59e690a4cf9c0c7de79f5ca2f2982e1168",
-      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
+      "implementation_notes": "Complete source-bound program; expanded draft CI passed on both hosted platforms. Required reviewed-loader CI is pending.",
+      "previous_draft_definition": "draft:hydra-broodmaster",
+      "reviewed_definition": "catalog:hydra-broodmaster",
+      "draft_hosted_validation": {
+        "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+        "run_id": 34851080921
+      },
+      "hosted_validation": {
+        "conclusion": "pending",
+        "stage": "required_reviewed_loader",
+        "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+      }
     },
     {
       "card_id": "indulgent-tormentor",
@@ -3369,13 +3413,18 @@
       "fanatic-of-rhonas",
       "finale-of-revelation"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "fangs-of-kalonia",
+      "hydra-broodmaster",
+      "fanatic-of-rhonas",
+      "finale-of-revelation"
+    ],
     "new_test_methods": 64,
     "runtime_checkpoint_schema": 125,
     "state_checkpoint_schema": 16,
-    "validation_status": "pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Draft and required reviewed-loader hosted validation remain.",
+    "review_work_remaining": "Required reviewed-loader conformance on both hosted platforms remains.",
     "shared_mechanics": [
       "Nontargeted overload alternatives and actual counter placement recipients",
       "Monstrous designation and immutable variable-size token characteristics",
@@ -3396,7 +3445,97 @@
         "after": "{4}{G}{G}",
         "source": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23"
       }
-    ]
+    ],
+    "hosted_attempts": [
+      {
+        "stage": "initial_draft",
+        "commit": "9680ca5adb8e0728a5f1ffbbec59e9f40bbaf933",
+        "run_id": 34850413847,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34850413847",
+        "conclusion": "success",
+        "tests_per_platform": 2029,
+        "new_test_methods": 56,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ]
+      }
+    ],
+    "draft_hosted_validation": {
+      "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+      "run_id": 34851080921,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921",
+      "conclusion": "success",
+      "tests_per_platform": 2037,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 103998899425,
+          "name": "verify (windows-latest)",
+          "tests": 2037,
+          "seconds": 367.883,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 103998899835,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2037,
+          "seconds": 380.324,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "next_batch_source_review": {
+      "date": "2026-09-14",
+      "status": "preparation_only",
+      "cards": [
+        "replication-technique",
+        "sunken-palace",
+        "kodama-of-the-west-tree",
+        "rampant-frogantua"
+      ],
+      "requirements": [
+        "Replication Technique needs true copied stack frames, a demonstrate cast trigger, optional caster copy, caster-chosen opponent copy and independently authored target reselection. Retain X, modes, divisions and other copied announcement choices; do not emit spell-cast events.",
+        "Sunken Palace needs identity for the particular blue mana unit and a delayed copy trigger when that mana is spent. Preserve the copiable announcement record after the original disappears. Reuse tapped entry and exact seven-card graveyard exile payment.",
+        "Kodama needs a current modified-creature predicate in static and combat-damage filters: any kind of counter, attached Equipment controlled by anyone, or an attached Aura controlled by the creature's controller. Noncreatures are never modified. Then use ordinary basic-land search with tapped entry and shuffle.",
+        "Rampant Frogantua counts every player who has lost, including losses before entry. Capture actual combat damage dealt to a player. Its optional mill cannot be chosen when fewer than that many cards remain in the library (official MH3 notes). Capture the actual milled graveyard cards; allow any number of their lands to enter tapped with ordinary replacements."
+      ],
+      "sources": [
+        {
+          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+          "scope": "Retained previous demonstrate review."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "scope": "Sunken Palace mana rider and Rampant Frogantua's optional-mill prerequisite and departed-player count."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+          "scope": "Modified definition, counter kinds, equipment control and Aura control."
+        }
+      ],
+      "inspected_commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196"
+    },
+    "hosted_validation": {
+      "conclusion": "pending",
+      "stage": "required_reviewed_loader",
+      "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
+    }
   },
   "hosted_validation_history": [
     {
@@ -3927,6 +4066,58 @@
         "full distribution installation",
         "packaged assets",
         "required reviewed-loader conformance"
+      ]
+    },
+    {
+      "stage": "initial_draft",
+      "commit": "9680ca5adb8e0728a5f1ffbbec59e9f40bbaf933",
+      "run_id": 34850413847,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34850413847",
+      "conclusion": "success",
+      "tests_per_platform": 2029,
+      "new_test_methods": 56,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ]
+    },
+    {
+      "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+      "run_id": 34851080921,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921",
+      "conclusion": "success",
+      "tests_per_platform": 2037,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 103998899425,
+          "name": "verify (windows-latest)",
+          "tests": 2037,
+          "seconds": 367.883,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 103998899835,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2037,
+          "seconds": 380.324,
+          "conclusion": "success"
+        }
       ]
     }
   ],
@@ -5553,28 +5744,16 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "e8bb4f97f82573565eafbae3ec4910068e377057",
-    "run_id": 34846671618,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618",
-    "conclusion": "success",
-    "tests_per_platform": 1973,
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "checks": [
-      "source syntax",
-      "full distribution installation",
-      "packaged assets",
-      "required reviewed-loader conformance"
-    ]
+    "conclusion": "pending",
+    "stage": "required_reviewed_loader",
+    "reason": "Programs promoted after successful full draft CI; new reviewed-loader validation requested."
   },
   "draft_hosted_validation": {
-    "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
-    "run_id": 34845683355,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355",
+    "commit": "7e7106bf0fa5c8c83e21ce1affac48d5f530c196",
+    "run_id": 34851080921,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921",
     "conclusion": "success",
-    "tests_per_platform": 1973,
+    "tests_per_platform": 2037,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -5584,6 +5763,22 @@
       "full distribution installation",
       "packaged assets",
       "draft conformance"
+    ],
+    "jobs": [
+      {
+        "job_id": 103998899425,
+        "name": "verify (windows-latest)",
+        "tests": 2037,
+        "seconds": 367.883,
+        "conclusion": "success"
+      },
+      {
+        "job_id": 103998899835,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2037,
+        "seconds": 380.324,
+        "conclusion": "success"
+      }
     ]
   },
   "completed_request_batch": {

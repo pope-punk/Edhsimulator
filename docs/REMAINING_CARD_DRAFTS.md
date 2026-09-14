@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**290 source-bound reviewed programs / 356 deck copies**. There are **44 cards / 44 deck
-copies outside the reviewed bundle**, four drafted and 40 unstarted. Reviewed coverage is not production certification.
+**294 source-bound reviewed programs / 360 deck copies**. There are **40 cards / 40 deck
+copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,14 +25,16 @@ successful hosted validation.
 ## Current cycle: counter transitions, eternalize and Finale
 
 Fangs of Kalonia, Hydra Broodmaster, Fanatic of Rhonas and Finale of Revelation
-have complete draft programs. Shared support covers actual counter recipients,
+have complete source-bound reviewed programs. Shared support covers actual counter recipients,
 nontargeted overload, the monstrous designation, variable token base values,
 conditional activations, costless copies, graveyard shuffling and indefinite
 player permissions. Hydra's source mana cost is corrected to {4}{G}{G} from the
 official release notes. Kernel/state schemas are **125/16**.
 
-The **64 new methods** await hosted draft validation, followed by source-bound
-promotion and required reviewed-loader validation. No local project execution
+The **64 new methods** passed expanded hosted draft validation: **2,037 tests on
+each of Ubuntu and Windows**, plus syntax, installation and assets, at
+`7e7106bf0fa5c8c83e21ce1affac48d5f530c196` ([run 34851080921](https://github.com/pope-punk/Edhsimulator/actions/runs/34851080921)).
+The programs are promoted and required reviewed-loader validation is pending. No local project execution
 is authorized. See [the current review](TRANSITION_CARD_REVIEW.md).
 
 ## Previous cycle: copies of existing permanents and power damage
@@ -134,7 +136,7 @@ See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
 ## Next work order: stack copies and damage/library results
 
-Finish the four current drafts' hosted validation and promotion first. Then aim
+Finish the four current programs' required reviewed-loader validation first. Then aim
 for a coherent **4-card cycle**, selecting **Replication Technique, Sunken Palace,
 Kodama of the West Tree and Rampant Frogantua**. All four next candidates remain
 unstarted. Reassess shared dependencies before writing their programs.

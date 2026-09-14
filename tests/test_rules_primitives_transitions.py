@@ -19,10 +19,9 @@ class TransitionCardTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={r['card_id']:r for r in drafts if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in CARDS}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,card='fangs-of-kalonia',zone=Zone.HAND,extra=()):
         body=CardProgram('tr-body','Body',('Creature',),subtypes=('Elf',),colors=('G',),power=2,toughness=3)
@@ -104,7 +103,7 @@ class TransitionCardTests(unittest.TestCase):
     def test_source_faces_and_corrected_hydra_cost_are_bound(self):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         for key,p in self.cards.items():
-            self.assertEqual('draft:'+key,p.definition_id)
+            self.assertEqual('catalog:'+key,p.definition_id)
             self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
             self.assertEqual(p,validate(decode(encode(p))))
         self.assertEqual(ManaCost(4,('G','G')),self.cards['hydra-broodmaster'].cast.cost.mana)
