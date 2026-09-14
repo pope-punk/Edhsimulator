@@ -8,19 +8,49 @@ local Python, installation, tests or games are authorized. The library contains
 **306 source-bound reviewed programs / 372 deck copies**. There are **28 cards / 28 deck
 copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
 
-## Cycle ambition and context use
+## Four-pass completion plan
 
-The user requests slightly more ambitious cycles. Aim for **4–8 complete cards**
-where shared mechanics make that practical. This is a planning target: a difficult
-primitive may justify fewer, with the concrete reason recorded. Continue into
-another coherent family when useful context remains.
+The user requests completing the remaining **28 unique cards in four or fewer
+substantive implementation passes**, replacing the former 4–8-card cycle target.
+The baseline plan is **four groups of seven**, with a usual working target of
+**7–10 complete cards per pass** so that earlier progress can absorb later complexity.
+Treat this as an ambitious planning target; do not omit printed clauses or relax
+review to meet a count.
 
-Prefer primitives that unlock several cards, accompanied by cards that already
-fit existing vocabulary. During hosted CI waits, author or review independent
-work. Use focused reads, concise retained findings and meaningful commit
-boundaries; group related validation and avoid redundant full-suite runs.
-Completion still requires every printed clause, source-bound review and relevant
-successful hosted validation.
+| Pass | Shared work | Planned cards |
+| --- | --- | --- |
+| 1 | Payments, combat and continuous effects | Chthonian Nightmare; Maze's End; Rhythm of the Wild; Parasitic Impetus; Propaganda; Defiler of Vigor; Darksteel Mutation |
+| 2 | Planeswalkers, counters and opening choices | Aminatou, the Fateshifter; Domri, Anarch of Bolas; Minsc & Boo, Timeless Heroes; Nissa, Steward of Elements; Sorin, Vengeful Bloodlord; Innkeeper's Talent; Leyline of Hope |
+| 3 | Multiface cards, transformation and Saga foundations | Glasswing Grace // Age-Graced Chapel; Kazuul's Fury // Kazuul's Cliffs; Sorin of House Markov; Pontiff of Blight; Invasion of Theros; The Restoration of Eiganjo; Elspeth Conquers Death |
+| 4 | Rooms, miracle and remaining Sagas | Aminatou, Veil Piercer; Entity Tracker; Funeral Room // Awakening Hall; Ghostly Dancers; Victor, Valgavoth's Seneschal; The Cruelty of Gix; Urza's Saga |
+
+**Pass 1:** Reuse payment, entry, Aura and characteristic primitives; complete energy and authored cost ordering, Gate-name wins, riot, goad and attack payments, optional life-based green reduction, and ability/type replacement.
+
+**Pass 2:** Share loyalty activation support, X loyalty and entry, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.
+
+**Pass 3:** Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives.
+
+**Pass 4:** Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit.
+
+The groups cover every remaining card exactly once. They are a dependency-based
+authoring plan, not a claim that the required primitives already exist. Refresh
+current source and programs before each pass; move cards between groups when
+that improves reuse, and combine passes when practical. Start with all seven
+Pass 1 cards in scope, rather than stopping at the former four-card shortlist.
+
+A pass includes authoring, source-bound review, successful hosted draft checks,
+the required reviewed-loader run and result recording. Continuation turns and
+validation repairs remain part of the same pass. Save durable partial progress
+when needed, then resume it; do not count an unfinished draft as a completed pass
+or restart the four-pass budget at every heartbeat. Track actual completions,
+unresolved work and remaining passes in the JSON report's `completion_plan`.
+If a concrete dependency or defect makes the target infeasible, record why and
+revise the grouping explicitly.
+
+Reuse existing primitives. During hosted CI waits, review or prepare the next
+family where useful. Group related validation and avoid redundant full-suite
+runs. All existing GitHub-only execution constraints remain in force, and the
+heartbeat remains active every 40 minutes.
 
 ## Current cycle: resolution casting and top-library permissions
 
@@ -43,11 +73,10 @@ The final result-recording commit changes only documentation and inventory.
 See [the review](RESOLUTION_CAST_CARD_REVIEW.md).
 No local project execution occurred.
 
-Next candidates are Chthonian Nightmare, Maze's End, Rhythm of the Wild and
-Parasitic Impetus. Reuse player counters and payment machinery, Gate search and
-source-return costs, stack counter prevention, entry replacement and Aura layers.
-Complete energy/ordered costs, distinct-name wins, all riot choices and goad
-requirements. Entity Tracker still needs Room-unlock events.
+The next implementation pass is the seven-card Pass 1 group above. It expands
+the earlier four-card shortlist with Propaganda, Defiler of Vigor and Darksteel
+Mutation. Later groups explicitly retain Room unlocking, both card faces, Siege
+defeat and Saga lifecycle requirements.
 
 ## Previous cycle: spell copies and special mana
 

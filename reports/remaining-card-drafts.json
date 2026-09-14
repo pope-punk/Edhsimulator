@@ -3636,7 +3636,10 @@
       "chthonian-nightmare",
       "maze-s-end",
       "rhythm-of-the-wild",
-      "parasitic-impetus"
+      "parasitic-impetus",
+      "propaganda",
+      "defiler-of-vigor",
+      "darksteel-mutation"
     ],
     "hosted_attempts": [
       {
@@ -3705,7 +3708,8 @@
         "Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.",
         "Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.",
         "Entity Tracker still requires the fully-unlocked Room trigger; enchantment-entry support alone is incomplete."
-      ]
+      ],
+      "planning_update": "The user's four-pass request expands the next batch to seven cards. Existing source review covers the original four; review all printed clauses of Propaganda, Defiler of Vigor and Darksteel Mutation before authoring."
     },
     "draft_test_methods": 85,
     "reviewed_test_methods": 95,
@@ -7003,5 +7007,83 @@
         "conclusion": "success"
       }
     ]
+  },
+  "completion_plan": {
+    "requested_on": "2026-09-14",
+    "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
+    "baseline_remaining_unique": 28,
+    "target_maximum_passes": 4,
+    "completed_passes": 0,
+    "baseline_cards_per_pass": 7,
+    "usual_target_range": [
+      7,
+      10
+    ],
+    "status": "planned",
+    "passes": [
+      {
+        "pass": 1,
+        "title": "Payments, combat and continuous effects",
+        "card_ids": [
+          "chthonian-nightmare",
+          "maze-s-end",
+          "rhythm-of-the-wild",
+          "parasitic-impetus",
+          "propaganda",
+          "defiler-of-vigor",
+          "darksteel-mutation"
+        ],
+        "focus": "Reuse payment, entry, Aura and characteristic primitives; complete energy and authored cost ordering, Gate-name wins, riot, goad and attack payments, optional life-based green reduction, and ability/type replacement.",
+        "status": "planned"
+      },
+      {
+        "pass": 2,
+        "title": "Planeswalkers, counters and opening choices",
+        "card_ids": [
+          "aminatou-the-fateshifter",
+          "domri-anarch-of-bolas",
+          "minsc-boo-timeless-heroes",
+          "nissa-steward-of-elements",
+          "sorin-vengeful-bloodlord",
+          "innkeeper-s-talent",
+          "leyline-of-hope"
+        ],
+        "focus": "Share loyalty activation support, X loyalty and entry, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
+        "status": "planned"
+      },
+      {
+        "pass": 3,
+        "title": "Multiface cards, transformation and Saga foundations",
+        "card_ids": [
+          "glasswing-grace-age-graced-chapel",
+          "kazuul-s-fury-kazuul-s-cliffs",
+          "sorin-of-house-markov",
+          "pontiff-of-blight",
+          "invasion-of-theros",
+          "the-restoration-of-eiganjo",
+          "elspeth-conquers-death"
+        ],
+        "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives.",
+        "status": "planned"
+      },
+      {
+        "pass": 4,
+        "title": "Rooms, miracle and remaining Sagas",
+        "card_ids": [
+          "aminatou-veil-piercer",
+          "entity-tracker",
+          "funeral-room-awakening-hall",
+          "ghostly-dancers",
+          "victor-valgavoth-s-seneschal",
+          "the-cruelty-of-gix",
+          "urza-s-saga"
+        ],
+        "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit.",
+        "status": "planned"
+      }
+    ],
+    "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",
+    "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
+    "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible."
   }
 }
