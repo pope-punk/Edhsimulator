@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 286,
-    "remaining_outside_reviewed_bundle": 48,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 290,
+    "remaining_outside_reviewed_bundle": 44,
+    "drafts_written": 0,
     "not_started_on_this_branch": 44,
-    "reviewed_bundle_copies": 352,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 356,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 59,
-    "remaining_outside_reviewed_bundle_copies": 48
+    "promoted_on_this_branch": 63,
+    "remaining_outside_reviewed_bundle_copies": 44
   },
   "cards": [
     {
@@ -1745,7 +1745,7 @@
     {
       "card_id": "march-from-velis-vel",
       "name": "March from Velis Vel",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1760,11 +1760,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "permanent-copy-damage-2026-09-14",
       "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
+      "implementation_notes": "Complete source-bound reviewed program; draft validation passed on both platforms. Required reviewed-loader validation is pending.",
+      "source_facts_sha256": "8a0f2cde30721197f82d9b517ba6b67986316db74583f4daf031dcaec667dbaa",
+      "previous_draft_definition": "draft:march-from-velis-vel",
+      "reviewed_definition": "catalog:march-from-velis-vel",
+      "draft_hosted_validation": {
+        "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "run_id": 34845683355
+      }
     },
     {
       "card_id": "maze-s-end",
@@ -1851,7 +1858,7 @@
     {
       "card_id": "mirage-mirror",
       "name": "Mirage Mirror",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1866,11 +1873,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "permanent-copy-damage-2026-09-14",
       "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
+      "implementation_notes": "Complete source-bound reviewed program; draft validation passed on both platforms. Required reviewed-loader validation is pending.",
+      "source_facts_sha256": "85f592fad38801b3b000816b07b1386d77025877178923e16b9bcdcdba9fc3b8",
+      "previous_draft_definition": "draft:mirage-mirror",
+      "reviewed_definition": "catalog:mirage-mirror",
+      "draft_hosted_validation": {
+        "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "run_id": 34845683355
+      }
     },
     {
       "card_id": "mulldrifter",
@@ -2295,7 +2309,7 @@
     {
       "card_id": "ram-through",
       "name": "Ram Through",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2310,11 +2324,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "permanent-copy-damage-2026-09-14",
       "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
+      "implementation_notes": "Complete source-bound reviewed program; draft validation passed on both platforms. Required reviewed-loader validation is pending.",
+      "source_facts_sha256": "f52260881b1ade69624f7f166b643eb2a7091cc410886a0448ad784e23fc2dfd",
+      "previous_draft_definition": "draft:ram-through",
+      "reviewed_definition": "catalog:ram-through",
+      "draft_hosted_validation": {
+        "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "run_id": 34845683355
+      }
     },
     {
       "card_id": "rampant-frogantua",
@@ -2917,7 +2938,7 @@
     {
       "card_id": "thespian-s-stage",
       "name": "Thespian's Stage",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2932,11 +2953,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending_hosted_validation",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "batch": "permanent-copy-damage-2026-09-14",
       "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
-      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
+      "implementation_notes": "Complete source-bound reviewed program; draft validation passed on both platforms. Required reviewed-loader validation is pending.",
+      "source_facts_sha256": "2c4f3160d20b93d8869a76f9391f5207c25c60b0bee895e1812c675339e69969",
+      "previous_draft_definition": "draft:thespian-s-stage",
+      "reviewed_definition": "catalog:thespian-s-stage",
+      "draft_hosted_validation": {
+        "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "run_id": 34845683355
+      }
     },
     {
       "card_id": "touch-the-spirit-realm",
@@ -3297,13 +3325,18 @@
       "march-from-velis-vel",
       "ram-through"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "mirage-mirror",
+      "thespian-s-stage",
+      "march-from-velis-vel",
+      "ram-through"
+    ],
     "new_test_methods": 56,
     "runtime_checkpoint_schema": 124,
     "state_checkpoint_schema": 15,
-    "validation_status": "pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Hosted draft validation, source-bound promotion, required reviewed-loader validation.",
+    "review_work_remaining": "Required reviewed-loader validation.",
     "shared_mechanics": [
       "Timestamped layer-one snapshots on exact existing permanents, durable underlying copies and cleanup expiration",
       "Copiable retained activations, current definitions across characteristics, triggers, attachments, mana and later copies",
@@ -3313,7 +3346,8 @@
     "next_batch": [
       "replication-technique",
       "sunken-palace",
-      "fangs-of-kalonia"
+      "fangs-of-kalonia",
+      "hydra-broodmaster"
     ],
     "hosted_attempts": [
       {
@@ -3331,7 +3365,59 @@
           "Explicitly keep spell target groups fixed-arity and flat spell target domains finitely bounded; test duplicate references across independent clauses."
         ]
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+      "run_id": 34845683355,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355",
+      "conclusion": "success",
+      "tests_per_platform": 1973,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ]
+    },
+    "hosted_validation": {
+      "conclusion": "pending",
+      "stage": "required_reviewed_loader"
+    },
+    "next_batch_source_review": {
+      "date": "2026-09-14",
+      "status": "preparation_only",
+      "cards": [
+        "replication-technique",
+        "sunken-palace",
+        "fangs-of-kalonia",
+        "hydra-broodmaster"
+      ],
+      "requirements": [
+        "Replication Technique: actual spell copy objects, demonstrate cast trigger, optional caster copy, caster-chosen opponent copy and independently authored target reselection. Preserve copied announcement choices; copies are not cast.",
+        "Sunken Palace: printed tapped entry and blue mana; exact seven-card exile cost; track the distinct blue mana unit, spending it on a cast or activation, and its delayed copy trigger. Ordinary color totals alone cannot support this rider. Copy remains possible after the original is countered.",
+        "Fangs of Kalonia: ordinary targeting versus nontargeted overload as a true alternative cast mode; actual recipients of the first counter placement determine whose counters are doubled. Reuse replacement-aware counter transactions.",
+        "Hydra Broodmaster: permanent monstrous designation independent of counters, a once-only transition, X captured from the resolving activation, and an independent trigger creating X green X/X Hydra tokens. X=0 can still make the permanent monstrous."
+      ],
+      "sources": [
+        {
+          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+          "scope": "Demonstrate choices and stack order; prior source review retained."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "scope": "Fangs overload and counter doubling; Sunken Palace's mana rider, copied targets and persistence after the original is countered."
+        },
+        {
+          "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23",
+          "scope": "Hydra Broodmaster's monstrosity and captured X."
+        }
+      ],
+      "inspected_commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb"
+    }
   },
   "hosted_validation_history": [
     {
@@ -5300,7 +5386,7 @@
   ],
   "execution_policy": {
     "updated_date": "2026-09-14",
-    "user_direction": "Complete eight additional cards in the current batch.",
+    "user_direction": "Continue recurring implementation after the completed eight-card request; target 4\u20138 complete cards per cycle when shared mechanics permit.",
     "target_cards_per_cycle": {
       "minimum": 4,
       "maximum": 8,
@@ -5316,39 +5402,31 @@
     "candidate_families": [
       {
         "cards": [
-          "karmic-guide",
-          "alseid-of-life-s-bounty",
-          "fanatical-devotion",
-          "pongify"
+          "replication-technique",
+          "sunken-palace"
         ],
-        "focus": "Full protection, echo and regeneration lifecycles; reuse current costs, effects and captured controllers."
+        "focus": "Actual stack copies and authored target reselection; demonstrate and spent-mana lineage."
+      },
+      {
+        "cards": [
+          "fangs-of-kalonia",
+          "hydra-broodmaster"
+        ],
+        "focus": "Overload, actual counter-placement recipients, monstrous transition history and captured-X tokens."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
-    "run_id": 34839294402,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
-    "conclusion": "success",
-    "tests_per_platform": 1917,
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "checks": [
-      "source syntax",
-      "full distribution installation",
-      "packaged assets",
-      "required reviewed-loader conformance"
-    ]
+    "conclusion": "pending",
+    "stage": "required_reviewed_loader"
   },
   "draft_hosted_validation": {
-    "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
-    "run_id": 34838551887,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
+    "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+    "run_id": 34845683355,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355",
     "conclusion": "success",
-    "tests_per_platform": 1917,
+    "tests_per_platform": 1973,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"

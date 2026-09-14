@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**286 source-bound reviewed programs / 352 deck copies**. There are **48 cards / 48 deck
-copies outside the reviewed bundle**, 44 unstarted, with four drafts awaiting hosted validation. Reviewed coverage is not production certification.
+**290 source-bound reviewed programs / 356 deck copies**. There are **44 cards / 44 deck
+copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,15 +25,16 @@ successful hosted validation.
 ## Current cycle: copies of existing permanents and power damage
 
 Mirage Mirror, Thespian's Stage, March from Velis Vel and Ram Through have complete
-printed drafts. Shared work adds durable, timestamped layer-one copies,
-copiable retained activations, nonbasic subtype selection, fixed-arity spell
-target groups and simultaneous excess damage. **56 new conformance methods** are
-awaiting hosted draft validation. Kernel schema 124, state schema 15.
+printed programs and exact source bindings in the reviewed library. Shared work
+adds durable, timestamped layer-one copies, copiable retained activations,
+nonbasic subtype selection, fixed-arity spell target groups and simultaneous
+excess damage. The prior 286 reviewed programs are unchanged.
 
-The 286 reviewed programs remain unchanged. Promotion and the required
-reviewed-loader validation are still pending. See
-[the current review](PERMANENT_COPY_CARD_REVIEW.md). Replication Technique remains
-queued for a separate stack-copy primitive.
+Kernel schema is **124**, state schema **15**. The **56 new methods** now use the
+reviewed loader. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355)
+passed **1,973 tests per platform**, plus syntax, installation and assets, at
+`2936bde63ebdcef71a9d1e928e55b640698d89eb`. Required reviewed-loader validation is pending.
+See [the current review](PERMANENT_COPY_CARD_REVIEW.md).
 
 ## Previous cycle: token copies and fight
 
@@ -55,9 +56,9 @@ and packaged assets, at `f4d29b49ca71f04e11b21bf46384a355d7705062`. The followin
 commit changes only documentation and inventory; runtime, programs, references
 and tests are unchanged after validation. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
 
-Next, reuse this foundation for Mirage Mirror, Thespian's Stage, March from
-Velis Vel and Replication Technique. Existing-permanent copies need proper
-layer-one durations; demonstrate needs real stack copies and authored decisions.
+The current cycle reuses this foundation for Mirage Mirror, Thespian's Stage
+and March from Velis Vel. Replication Technique remains queued for real stack
+copies and authored demonstrate decisions.
 
 ## Previous group: mana capabilities and convoke
 
@@ -114,23 +115,26 @@ Existing games remain bound to their implementation; no local execution or
 production admission.
 See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
-## Next work order: copies of existing permanents and spells
+## Next work order: stack copies and counter transitions
 
-Refresh the remote branch and finish any pending token-copy validation first.
-Then consider **Mirage Mirror, Thespian's Stage, March from Velis Vel and
-Replication Technique**, reusing the copiable-value registry.
+Finish any pending reviewed-loader validation first. Then select from
+**Replication Technique, Sunken Palace, Fangs of Kalonia and Hydra Broodmaster**.
+All four remain unstarted; the inventory contains primary-source preparation.
 
-- Existing-permanent copies require timestamped layer-one effects that preserve
-  object identity, counters, damage and attachments. Support expiration without
-  causing entry events.
-- Stage retains its copy activation as a copiable exception. March adds a chosen
-  nonbasic land-type filter, exact recipient set, temporary haste and flashback.
-- Demonstrate requires actual stack copies: an optional caster copy, then a
-  caster-chosen opponent's copy with its own target-reselection decision. It cannot be replaced with extra token creation.
+- Replication Technique needs real stack spell copies, the demonstrate cast
+  trigger, optional caster copy, caster-chosen opponent and independent target
+  reselection. Copies are not cast.
+- Sunken Palace needs distinct mana-unit lineage and a delayed trigger when that
+  unit pays for a cast or activation; preserve a copyable record after the
+  original is countered. Reuse tapped entry and seven-card graveyard exile costs.
+- Fangs needs a true nontargeted overload alternative and the actual recipients
+  of its first counter placement before replacement-aware doubling.
+- Hydra needs a monstrous designation independent of counters, once-only
+  transition, captured X and an independent token-creation trigger.
 
-The JSON work order retains concrete requirements and the inspected Wizards
-release-note sources. Copy effects must feed characteristics, ability lookup,
-trigger indexing and subsequent copy queries consistently. All four remain unstarted.
+Reuse the durable copy registry, existing-permanent layer-one snapshots and
+named spell target clauses. Do not substitute extra token creation for a spell
+copy or ordinary color totals for Sunken Palace's spent-mana identity.
 
 ## Previous cycle: casting, entry and paid-cost facts
 

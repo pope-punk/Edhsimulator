@@ -3,9 +3,8 @@
 Date: 2026-09-14. Base: `4ced453d79a9df87d0e63823c9c3e7d469267939`.
 Branch: `codex/remaining-card-programs`.
 
-Four complete printed drafts: Mirage Mirror, Thespian's Stage, March from Velis
-Vel and Ram Through. The reviewed library remains at 286 cards until hosted
-validation and source-bound promotion. All prior reviewed programs are unchanged.
+Four complete printed reviewed programs: Mirage Mirror, Thespian's Stage, March from Velis
+Vel and Ram Through. The reviewed library contains 290 cards / 356 deck copies; 44 remain unstarted. All prior reviewed programs are unchanged.
 
 ## Shared implementation
 
@@ -60,8 +59,16 @@ SHA-256: 4381ad1b39ab2c05f7d03633a20f711ed37277074d3266dcba5f38cbb527423f.
 identity and noncopiable state, current and copied abilities, static timestamps,
 Dark Depths, entry copies, later token copies, registry restoration and tamper
 rejection, actor replay, subtype decisions, flashback, target groups and excess
-damage. Hosted draft validation is pending. No local Python, installation,
+damage. [Draft validation 34845683355](https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355) passed 1,973 tests on
+each of Ubuntu and Windows, plus syntax, installation and packaged assets, at
+`2936bde63ebdcef71a9d1e928e55b640698d89eb`. Required reviewed-loader validation is pending. No local Python, installation,
 compilation, tests or games were run.
 
 Replication Technique remains unstarted. Demonstrate needs genuine stack copies
 and authored target reselection. No production admission or started-game migration.
+
+The first draft run (34845198553) identified two historical schema assertions and
+an unattached Aura fixture. The schema tests now retain feature minimums; the
+original Aura is attached before activation so the copy itself exercises the
+unattached-Aura rule. Fixed-arity spell clause tests also confirm that the same
+object may be targeted by two independent clauses.
