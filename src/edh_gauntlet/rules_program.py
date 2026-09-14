@@ -830,6 +830,28 @@ class CopyTokens:
 
 
 @dataclass(frozen=True)
+class CopyPermanent:
+    subject:str
+    original:str='target'
+    until_end_of_turn:bool=False
+    retain_activation:bool=False
+
+
+@dataclass(frozen=True)
+class SelectBySubtype:
+    selector:Selector
+    subtype_set:str
+    effects:tuple
+
+
+@dataclass(frozen=True)
+class PowerDamage:
+    source:str
+    target:str
+    trample_excess:bool=False
+
+
+@dataclass(frozen=True)
 class Fight:
     first: str = 'source'
     second: str = 'target'
@@ -1067,8 +1089,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('fear','protection_white','protection_blue','protection_black','protection_red','protection_green','phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -1098,7 +1120,7 @@ def immediate_effect_nodes(nodes):
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,CopyTokens,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+        if isinstance(node,(SelectBySubtype,IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,CopyTokens,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
             yield from immediate_effect_nodes(node.effects)
         if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,PayLifeOrSacrifice,PayMana,IfCondition,May)):
             yield from immediate_effect_nodes(node.otherwise)
@@ -1495,6 +1517,21 @@ def validate(program,_depth=0):
                     elif not isinstance(change,SwitchPT):raise RulesViolation('Unsupported temporary continuous change')
             if isinstance(node,WithCreatedTokens):
                 effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_count','moved_controllers'})
+            if isinstance(node,CopyPermanent):
+                if any(type(s) is not str or s not in bindings for s in (node.subject,node.original)):
+                    raise RulesViolation('Unbound permanent copy participant')
+                if type(node.until_end_of_turn) is not bool or type(node.retain_activation) is not bool:
+                    raise RulesViolation('Invalid permanent copy duration or exception')
+                if node.retain_activation and (node.subject!='source' or 'activated_context' not in available_values):
+                    raise RulesViolation('Retained activation requires the activating source')
+            if isinstance(node,SelectBySubtype):
+                selector(node.selector)
+                if node.selector.zone!=Zone.BATTLEFIELD or node.subtype_set!='nonbasic_land' or node.selector.types!=('Land',):
+                    raise RulesViolation('Subtype selection requires battlefield lands and the nonbasic land set')
+                effects(node.effects,bindings|{'selected'},allow_x,available_values)
+            if isinstance(node,PowerDamage):
+                if any(type(s) is not str or s not in bindings for s in (node.source,node.target)) or type(node.trample_excess) is not bool:
+                    raise RulesViolation('Invalid power damage participants or excess rule')
             if isinstance(node,CopyTokens):
                 if type(node.subject) is not str or node.subject not in bindings|{'equipped'}:
                     raise RulesViolation('Unbound copy source')
@@ -1676,6 +1713,9 @@ def validate(program,_depth=0):
                 if spec is None or spec.players is None or spec.selector is not None:
                     raise RulesViolation('Player instructions require player-only targets')
             if spec is not None and spec.players is not None:
+                if (isinstance(node,CopyPermanent) and 'target' in (node.subject,node.original)
+                        or isinstance(node,PowerDamage) and 'target' in (node.source,node.target)):
+                    raise RulesViolation('Permanent copy and power damage require object targets')
                 if isinstance(node,PlaceDividedCounters) or isinstance(node,(RemoveCounters,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind)) and (node.subject=='target' or isinstance(node,MoveCounters) and node.to=='target'):
                     raise RulesViolation('Counter transfer instructions require object targets')
                 if (isinstance(node,(Regenerate,ChooseProtection,PhaseOut,Move,ExileUntilSourceLeaves,ExileLinked,Sacrifice,Destroy,Discard,Counter,GainControl,WithMoved,WithControllers,SetTapped,UntilEndOfTurn,Attach,May)) and node.subject=='target'
@@ -1843,7 +1883,7 @@ def validate(program,_depth=0):
         if ability.zone!=Zone.BATTLEFIELD and any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Exile-until-leaves requires a battlefield activation source')
         division=division_spec(ability.effects,ability.targets)
-        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values=({'counter_division'} if division else set())|{'paid_subtype:'+c.cost_id for c in ability.cost.zone_costs
+        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values={'activated_context'}|({'counter_division'} if division else set())|{'paid_subtype:'+c.cost_id for c in ability.cost.zone_costs
             if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD or c.selector is None and ability.zone==Zone.BATTLEFIELD})
         target_effects(ability.effects,ability.targets)
         if ability.mana_ability and any(isinstance(node,PayMana) for node in immediate_effect_nodes(ability.effects)):
@@ -2073,7 +2113,9 @@ def validate(program,_depth=0):
     if program.entry_copy is not None:
         selector(program.entry_copy)
     if program.spell_targets is not None:
-        target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols))
+        target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols),allow_groups=True)
+        if program.spell_targets.groups and any(g.targets.minimum!=g.targets.maximum for g in program.spell_targets.groups):
+            raise RulesViolation('Announced spell target groups require fixed clause sizes')
     if any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(program.spell_effects)):
         raise RulesViolation('Exile-until-leaves requires a permanent ability source')
     spell_values=({'paid_cost:'+c.cost_id for c in program.cast.cost.zone_costs}
@@ -2081,7 +2123,7 @@ def validate(program,_depth=0):
     if division_spec(program.spell_effects,program.spell_targets):
         if program.cast is None:raise RulesViolation('Divided counters require a casting specification')
         spell_values=spell_values|{'counter_division'}
-    effects(program.spell_effects, {'source', 'target'} if program.spell_targets is not None else {'source'},
+    effects(program.spell_effects, ({'source','target'}|{'target:'+g.group_id for g in program.spell_targets.groups}) if program.spell_targets is not None else {'source'},
             bool(program.cast and program.cast.cost.mana.x_symbols),available_values=spell_values)
     target_effects(program.spell_effects,program.spell_targets)
     if program.modal is not None:

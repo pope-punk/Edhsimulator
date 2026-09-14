@@ -34,7 +34,7 @@ def base(obj, definitions):
     definition = definitions[obj.effective_definition]
     subtypes = frozenset(definition.subtypes) | ({'Aura'} if definition.enchant else set())
     subtypes=expanded_subtypes(tuple(sorted(subtypes)),definition.all_subtype_sets) if definition.all_subtype_sets else subtypes
-    return Characteristics(frozenset(definition.types) | frozenset(obj.copied_add_types), frozenset(subtypes),
+    return Characteristics(frozenset(definition.types) | frozenset(obj.effective_add_types), frozenset(subtypes),
                            definition.mana_value + (definition.cast.cost.mana.x_symbols * obj.cast_x
                                if obj.zone == Zone.STACK and definition.cast else 0), definition.power, definition.toughness,
                            target_restrictions=definition.target_restrictions if obj.zone == Zone.BATTLEFIELD else (),
@@ -271,7 +271,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
                 views[source.ref]=replace(view,power=amount,toughness=amount,applied=view.applied+('characteristic_pt',))
             continue
         pending = [row for row in effects if any(_layer(c) == layer for c in row[2].changes)]
-        pending.sort(key=lambda row: (row[1].timestamp, row[1].ref, row[2].effect_id))
+        pending.sort(key=lambda row: (row[1].characteristic_timestamp, row[1].ref, row[2].effect_id))
         changes = {row[0]: tuple(c for c in row[2].changes if _layer(c) == layer) for row in pending}
         if dependency_pruning and not any(
                 row[0] not in locked and _may_change_recipients(changes[other[0]], row[2])

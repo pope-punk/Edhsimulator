@@ -43,7 +43,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=123
+    CHECKPOINT_SCHEMA=124
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -78,7 +78,9 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
         self._init_copy_registry(copy_programs)
         self.active=active_player or state.players[0]
         if self.active not in state.players:raise RulesViolation('Unknown active player')
-        for obj in state.objects():self.definition(obj)
+        for obj in state.objects():
+            self.definition(obj)
+            if any(row[0] not in self.definitions for row in obj.copy_effects):raise RulesViolation('Unknown permanent copy definition')
         self.stack=[];self.resolving=None;self.pending_triggers=[];self.placement=None
         self.pending_choice=None;self.answers={};self.accepted=[];self.semantic_events=[]
         self.priority=None;self.passes=[];self._serial=0;self._revision=0
@@ -589,7 +591,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
     def _compute_proposal_view(self, proposal):
         entering=replace(proposal.before,ref=ObjectRef(proposal.before.ref.card_id,proposal.before.ref.incarnation+1),
             zone=Zone.BATTLEFIELD,controller=proposal.controller,copied_definition=proposal.copied_definition,copied_add_types=proposal.copied_add_types,
-            counters=proposal.counters,tapped=proposal.tapped,attached_to=None,phased=False,timestamp=self.state.sequence+1)
+            counters=proposal.counters,tapped=proposal.tapped,attached_to=None,phased=False,timestamp=self.state.sequence+1,copy_effects=())
         objects=tuple(obj for obj in self.state.objects() if obj.ref.card_id!=entering.ref.card_id)+(entering,)
         return entering,evaluate_characteristics(objects,self.definitions,entering_ref=entering.ref,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players})[entering.ref]
 
@@ -683,7 +685,7 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
                 if chosen:
                     copied = self.state.get(chosen[0].ref)
                     copied_definition = copied.effective_definition
-                    copied_add_types = copied.copied_add_types
+                    copied_add_types = copied.effective_add_types
             elif candidate.kind == 'entry_note':
                 actor=proposal.controller
                 reserved=reserved_life.get(actor,0)+sum(amount for player,amount in proposal.life_payments if player==actor)

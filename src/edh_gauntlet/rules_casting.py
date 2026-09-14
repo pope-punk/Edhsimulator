@@ -191,6 +191,14 @@ class CastingRules:
             if targets:
                 raise RulesViolation('Action has no target specification')
             return
+        if spec.groups:
+            if len(targets)!=sum(g.targets.minimum for g in spec.groups):raise RulesViolation('Illegal announced target group sizes')
+            offset=0
+            for group in spec.groups:
+                count=group.targets.minimum
+                self._announcement_targets(source,actor,group.targets,targets[offset:offset+count],x_value)
+                offset+=count
+            return
         minimum=x_value if isinstance(spec.minimum,ChosenX) else spec.minimum
         maximum=x_value if isinstance(spec.maximum,ChosenX) else len(self.state.live_players) if spec.maximum is None else spec.maximum
         if not minimum <= len(targets) <= maximum or len(set(targets)) != len(targets):raise RulesViolation('Illegal announced targets')
@@ -367,6 +375,7 @@ class CastingRules:
                 if not ability.mana_ability:
                     announced_frame=self._frame(source,quote.actor,ability.effects,targets=quote.targets,target_spec=ability.targets,chosen_x=quote.x_value)
                     announced_frame['ability_id']=ability.ability_id
+                    announced_frame['activated_program']=encode(ability)
             if announced_frame is not None:
                 self._bind_announced_values(announced_frame,quote)
                 self.stack.append(announced_frame)
@@ -421,6 +430,13 @@ class CastingRules:
                         (Sacrifice('moved',by_subject_controller=True),)),)),)),)
         frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                             target_spec=program.spell_targets,chosen_x=quote.x_value)
+        if program.spell_targets is not None and program.spell_targets.groups:
+            frame['target_groups']=[];offset=0
+            for group in program.spell_targets.groups:
+                count=group.targets.minimum
+                frame['target_groups'].append({'group_id':group.group_id,'target_spec':encode(group.targets),
+                    'targets':[ref.to_json() for ref in quote.targets[offset:offset+count]]})
+                offset+=count
         self._bind_announced_values(frame,quote)
         if quote.alternative_id is not None:
             frame['alternative_id']=quote.alternative_id
@@ -479,6 +495,7 @@ class CastingRules:
             else:
                 frame = prepared_frame or self._frame(source, quote.actor, ability.effects, targets=quote.targets, target_spec=ability.targets,chosen_x=quote.x_value)
                 frame['source']=source.to_json();frame['ability_id'] = ability.ability_id
+                frame['activated_program']=encode(ability)
                 if prepared_frame is None:self.stack.append(frame)
             event_kind = 'ability_activated'
         if frame is not None:self._bind_announced_values(frame,quote)

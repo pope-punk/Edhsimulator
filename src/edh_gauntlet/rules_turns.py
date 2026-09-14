@@ -124,6 +124,8 @@ class TurnRules:
         if self.player_effects:
             self.player_effects=[]
             self._event('player_permissions_expired')
+        copies=self.state.expire_turn_copies()
+        if copies:self._event('copy_effects_expired',refs=[ref.to_json() for ref in copies])
         changed=self.state.expire_turn_control()
         self.state.clear_damage()
         if changed:self._event('control_effects_expired',refs=[ref.to_json() for ref in changed])

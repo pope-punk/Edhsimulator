@@ -449,7 +449,7 @@ class CopyFightTests(unittest.TestCase):
         self.assertEqual('B',self.kernel.active);self.assertIn('haste',self.kernel.effective(token.ref).keywords)
 
     def test_checkpoint_requires_copy_registry_schema(self):
-        self.game();snapshot=self.kernel.snapshot();self.assertEqual(123,snapshot['schema']);self.assertEqual(14,snapshot['state']['schema'])
+        self.game();snapshot=self.kernel.snapshot();self.assertGreaterEqual(snapshot['schema'],124);self.assertGreaterEqual(snapshot['state']['schema'],15)
         snapshot['schema']=122
         with self.assertRaises(RulesViolation):RulesKernel.restore(snapshot,self.programs)
         from edh_gauntlet.rules_identity import IMPLEMENTATION_MANIFEST

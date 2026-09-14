@@ -77,9 +77,17 @@ class RulesObject:
     deathtouch_hit:bool=False
     combat_departure:int=0
     copied_add_types:tuple[str,...]=()
+    # Frozen layer-one snapshots: (definition, duration, creation timestamp).
+    copy_effects:tuple[tuple[str,str,int],...]=()
 
     @property
-    def effective_definition(self):return self.copied_definition or self.definition
+    def effective_definition(self):return self.copy_effects[-1][0] if self.copy_effects else self.copied_definition or self.definition
+
+    @property
+    def effective_add_types(self):return () if self.copy_effects else self.copied_add_types
+
+    @property
+    def characteristic_timestamp(self):return max(self.timestamp,self.copy_effects[-1][2]) if self.copy_effects else self.timestamp
 
     def to_json(self):
         return {**asdict(self),'ref':self.ref.to_json(),'zone':self.zone.value,'entry_flags':sorted(self.entry_flags),'copied_add_types':list(self.copied_add_types)}
@@ -90,6 +98,7 @@ class RulesObject:
         value['attached_to']=ObjectRef.from_json(value['attached_to']) if value['attached_to'] else None
         value['entry_flags']=frozenset(value['entry_flags']);value['counters']=tuple(tuple(row) for row in value['counters'])
         value['copied_add_types']=tuple(value['copied_add_types'])
+        value['copy_effects']=tuple(tuple(row) for row in value['copy_effects'])
         return cls(**value)
 
 
@@ -131,7 +140,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=14
+    CHECKPOINT_SCHEMA=15
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -563,6 +572,28 @@ class RulesState:
         self._sequence+=1
         return self._sequence
 
+    def apply_copy(self,refs,definition,*,until_end_of_turn=False):
+        refs=tuple(refs)
+        objects=tuple(self.get(ref) for ref in refs)
+        if (len(set(refs))!=len(refs) or type(definition) is not str or not definition
+                or type(until_end_of_turn) is not bool
+                or any(obj.zone!=Zone.BATTLEFIELD or obj.phased for obj in objects)):
+            raise RulesViolation('Invalid permanent copy transaction')
+        if not objects:return ()
+        timestamp=self.allocate_effect_timestamp()
+        row=(definition,'until_end_of_turn' if until_end_of_turn else 'indefinite',timestamp)
+        for obj in objects:self._objects[obj.ref.card_id]=replace(obj,copy_effects=obj.copy_effects+(row,))
+        return refs
+
+    def expire_turn_copies(self):
+        changed=[]
+        for obj in tuple(self._objects.values()):
+            retained=tuple(row for row in obj.copy_effects if row[1]=='indefinite')
+            if retained!=obj.copy_effects:
+                self._objects[obj.ref.card_id]=replace(obj,copy_effects=retained);changed.append(obj.ref)
+        if changed:self.allocate_effect_timestamp()
+        return tuple(changed)
+
     def clear_damage(self):
         changed=False
         for key,obj in self._objects.items():
@@ -736,6 +767,12 @@ class RulesState:
                 if type(obj.damage_marked) is not int or obj.damage_marked<0 or type(obj.deathtouch_hit) is not bool or type(obj.combat_departure) is not int or not 0<=obj.combat_departure<=self._sequence:raise RulesViolation('Invalid damage/combat history')
                 if (not isinstance(obj.counters,tuple) or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0] or type(row[1]) is not int or row[1]<=0 for row in obj.counters)
                         or len({row[0] for row in obj.counters})!=len(obj.counters)):raise RulesViolation('Invalid object counter ledger')
+                if (not isinstance(obj.copy_effects,tuple) or obj.copy_effects and obj.zone!=Zone.BATTLEFIELD
+                        or any(not isinstance(row,tuple) or len(row)!=3 or type(row[0]) is not str or not row[0]
+                            or row[1] not in {'indefinite','until_end_of_turn'} or type(row[2]) is not int
+                            or not 0<row[2]<=self._sequence for row in obj.copy_effects)
+                        or any(a[2]>=b[2] for a,b in zip(obj.copy_effects,obj.copy_effects[1:]))):
+                    raise RulesViolation('Invalid permanent copy ledger')
                 seen.append(card_id)
         if len(seen)!=len(set(seen)) or set(seen)!=set(self._objects):raise RulesViolation('Physical card location is not unique')
         if not set(self._objects)<=self._issued:raise RulesViolation('Unissued object identity')

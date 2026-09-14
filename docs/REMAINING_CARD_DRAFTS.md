@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **286 source-bound reviewed programs / 352 deck copies**. There are **48 cards / 48 deck
-copies outside the reviewed bundle**, all unstarted, and no outstanding drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, 44 unstarted, with four drafts awaiting hosted validation. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,20 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: token copies and fight
+## Current cycle: copies of existing permanents and power damage
+
+Mirage Mirror, Thespian's Stage, March from Velis Vel and Ram Through have complete
+printed drafts. Shared work adds durable, timestamped layer-one copies,
+copiable retained activations, nonbasic subtype selection, fixed-arity spell
+target groups and simultaneous excess damage. **54 new conformance methods** are
+awaiting hosted draft validation. Kernel schema 124, state schema 15.
+
+The 286 reviewed programs remain unchanged. Promotion and the required
+reviewed-loader validation are still pending. See
+[the current review](PERMANENT_COPY_CARD_REVIEW.md). Replication Technique remains
+queued for a separate stack-copy primitive.
+
+## Previous cycle: token copies and fight
 
 Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy now have
 complete printed programs and exact source bindings in the reviewed library. Together with the four

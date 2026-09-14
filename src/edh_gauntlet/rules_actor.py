@@ -114,6 +114,7 @@ def project_actor(kernel,actor):
             **({'paid_cost_subtypes':deepcopy(frame['values']['paid_cost_subtypes'])} if 'paid_cost_subtypes' in frame.get('values',{}) else {}),
             **({'counter_division':[{'target':target_summary(row['ref']),'amount':row['amount']} for row in frame['values']['counter_division']]} if 'counter_division' in frame.get('values',{}) else {}),
             'targets':[target_summary(value) for value in frame['targets']],
+            **({'target_groups':[{'group_id':g['group_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['target_groups']]} if 'target_groups' in frame else {}),
             **({'modes':[{'mode_id':g['mode_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['mode_groups']]} if 'mode_groups' in frame else {})}
     stack=[frame_summary(frame) for frame in reversed(kernel.stack)]
     resolving=frame_summary(kernel.resolving) if kernel.resolving else None

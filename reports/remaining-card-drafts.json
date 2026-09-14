@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 286,
     "remaining_outside_reviewed_bundle": 48,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 48,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 44,
     "reviewed_bundle_copies": 352,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 59,
     "remaining_outside_reviewed_bundle_copies": 48
@@ -1745,7 +1745,7 @@
     {
       "card_id": "march-from-velis-vel",
       "name": "March from Velis Vel",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1758,7 +1758,13 @@
           "face_id": "march-from-velis-vel",
           "text": "Choose a nonbasic land type. Each land you control of that type becomes a copy of target creature you control until end of turn and gains haste until end of turn.\nFlashback {4}{U}"
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "permanent-copy-damage-2026-09-14",
+      "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
     },
     {
       "card_id": "maze-s-end",
@@ -1845,7 +1851,7 @@
     {
       "card_id": "mirage-mirror",
       "name": "Mirage Mirror",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1858,7 +1864,13 @@
           "face_id": "mirage-mirror",
           "text": "{2}: This artifact becomes a copy of target artifact, creature, enchantment, or land until end of turn."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "permanent-copy-damage-2026-09-14",
+      "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
     },
     {
       "card_id": "mulldrifter",
@@ -2283,7 +2295,7 @@
     {
       "card_id": "ram-through",
       "name": "Ram Through",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2296,7 +2308,13 @@
           "face_id": "ram-through",
           "text": "Target creature you control deals damage equal to its power to target creature you don't control. If the creature you control has trample, excess damage is dealt to that creature's controller instead."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "permanent-copy-damage-2026-09-14",
+      "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
     },
     {
       "card_id": "rampant-frogantua",
@@ -2899,7 +2917,7 @@
     {
       "card_id": "thespian-s-stage",
       "name": "Thespian's Stage",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2912,7 +2930,13 @@
           "face_id": "thespian-s-stage",
           "text": "{T}: Add {C}.\n{2}, {T}: This land becomes a copy of target land, except it has this ability."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "permanent-copy-damage-2026-09-14",
+      "review_record": "docs/PERMANENT_COPY_CARD_REVIEW.md",
+      "implementation_notes": "Complete draft; awaiting GitHub-hosted validation and source-bound promotion."
     },
     {
       "card_id": "touch-the-spirit-realm",
@@ -3266,146 +3290,32 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+    "base_commit": "4ced453d79a9df87d0e63823c9c3e7d469267939",
     "cards_written": [
-      "scute-swarm",
-      "helm-of-the-host",
-      "lazotep-quarry",
-      "aggressive-biomancy"
-    ],
-    "cards_promoted": [
-      "scute-swarm",
-      "helm-of-the-host",
-      "lazotep-quarry",
-      "aggressive-biomancy"
-    ],
-    "new_test_methods": 64,
-    "runtime_checkpoint_schema": 123,
-    "state_checkpoint_schema": 14,
-    "validation_status": "passed",
-    "unresolved_defects": [],
-    "review_work_remaining": "",
-    "shared_mechanics": [
-      "Deterministic immutable copiable token definitions and checked lineage manifests",
-      "Normal token entry transactions, source last known information and copied entry abilities",
-      "Copiable legendary, color, creature-type, base power/toughness and added-ability exceptions",
-      "Separate indefinite haste and simultaneous noncombat fight"
-    ],
-    "next_batch": [
       "mirage-mirror",
       "thespian-s-stage",
       "march-from-velis-vel",
-      "replication-technique"
+      "ram-through"
     ],
-    "next_batch_implementation_notes": {
-      "focus": "Reuse frozen copiable values for effects on existing permanents and for spell copies.",
-      "requirements": [
-        "Add timestamped layer-one copy effects on existing permanents; retain original identity, counters, attachment and damage, and support end-of-turn expiration.",
-        "Thespian's Stage must retain its own copy activation as a copiable exception; an entry copy must not re-enter.",
-        "March needs the authored nonbasic subtype choice, exact current land set, target copy snapshot and separate temporary haste; include flashback.",
-        "Replication Technique requires demonstrate, an optional caster copy and caster-chosen opponent, stack spell copy state and target reselection. Do not approximate it with extra CreateTokens."
-      ]
-    },
-    "hosted_attempts": [
-      {
-        "stage": "draft",
-        "commit": "755b487545a26a9bb615a60b873f4bfd32828576",
-        "run_id": 34837070723,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723",
-        "conclusion": "failure",
-        "tests_run_windows": 1853,
-        "failures": 1,
-        "errors": 1,
-        "findings": [
-          "Target compiler failed to pass action X permission into characteristic filters, preventing the token test class from loading. Propagate allow_x and verify that non-X costs still reject those bounds.",
-          "Draft inventory rows used an incorrect status label. Retain the established draft_written_review_pending status.",
-          "Static fixture review also replaced an unsupported add_card setup argument with the existing ZoneMove entry attributes."
-        ]
-      },
-      {
-        "stage": "draft",
-        "commit": "ddc30dc51e2cf4e308af0d2c415ac8dbb5e5aa35",
-        "run_id": 34837749840,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837749840",
-        "conclusion": "failure",
-        "tests_run_windows": 1916,
-        "failures": 1,
-        "errors": 14,
-        "findings": [
-          "Carry chosen_x into the target-announcement context; resolution already uses the captured X. Add actor replay coverage.",
-          "Update the prior compiler test that documented X-target bounds as unsupported; keep unbound result quantities rejected and explicit non-X rejection coverage.",
-          "Fix fixture assumptions: use Llanowar Elves' produce-mana ability ID, automatic singleton selection and explicit zero base P/T for characteristic-defined fixtures."
-        ]
-      }
+    "cards_promoted": [],
+    "new_test_methods": 54,
+    "runtime_checkpoint_schema": 124,
+    "state_checkpoint_schema": 15,
+    "validation_status": "pending",
+    "unresolved_defects": [],
+    "review_work_remaining": "Hosted draft validation, source-bound promotion, required reviewed-loader validation.",
+    "shared_mechanics": [
+      "Timestamped layer-one snapshots on exact existing permanents, durable underlying copies and cleanup expiration",
+      "Copiable retained activations, current definitions across characteristics, triggers, attachments, mana and later copies",
+      "Authored nonbasic land-type selection and fixed recipient sets; separate temporary haste and flashback",
+      "Fixed-arity spell target groups, current source power and simultaneous noncombat excess damage"
     ],
-    "draft_hosted_validation": {
-      "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
-      "run_id": 34838551887,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
-      "conclusion": "success",
-      "tests_per_platform": 1917,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ]
-    },
-    "hosted_validation": {
-      "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
-      "run_id": 34839294402,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
-      "conclusion": "success",
-      "tests_per_platform": 1917,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ]
-    },
-    "next_batch_source_review": {
-      "date": "2026-09-14",
-      "inspected_commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
-      "status": "preparation_only",
-      "cards": [
-        "mirage-mirror",
-        "thespian-s-stage",
-        "march-from-velis-vel",
-        "replication-technique"
-      ],
-      "sources": [
-        {
-          "url": "https://magic.wizards.com/en/news/feature/hour-devastation-release-notes-2017-06-30",
-          "card": "mirage-mirror",
-          "requirements": "A later-resolving activation supersedes earlier copies; all expire together at cleanup. Preserve independent effects already applied, and re-evaluate gained abilities and attachment legality."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/edge-of-eternities-release-notes",
-          "card": "thespian-s-stage",
-          "requirements": "Retain only the copy activation as an exception; preserve tapped state and create no entry event or entry counters. The copy persists until overwritten or the object leaves."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
-          "card": "replication-technique",
-          "requirements": "The caster may copy when the demonstrate trigger resolves, then chooses an opponent who also copies. The opponent has a target-reselection decision, not a separate permission to decline the copy. Their copy sits above the caster's copy, above the original."
-        }
-      ],
-      "implementation_note": "Current RulesObject copy fields are entry attributes. Existing-permanent copy effects require a coordinated layer-one representation used by characteristics, ability lookup, trigger indexing and later copiable-value queries; replacing only a display view would be incomplete.",
-      "rules": [
-        "707.2",
-        "707.9",
-        "702.144a"
-      ]
-    }
+    "next_batch": [
+      "replication-technique",
+      "sunken-palace",
+      "fangs-of-kalonia"
+    ],
+    "hosted_attempts": []
   },
   "hosted_validation_history": [
     {
@@ -5225,6 +5135,149 @@
           "full distribution installation",
           "packaged assets",
           "reviewed-loader conformance"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "3c6b2b548c677bc0a0f4326b878f7f390885e63d",
+      "cards_written": [
+        "scute-swarm",
+        "helm-of-the-host",
+        "lazotep-quarry",
+        "aggressive-biomancy"
+      ],
+      "cards_promoted": [
+        "scute-swarm",
+        "helm-of-the-host",
+        "lazotep-quarry",
+        "aggressive-biomancy"
+      ],
+      "new_test_methods": 64,
+      "runtime_checkpoint_schema": 123,
+      "state_checkpoint_schema": 14,
+      "validation_status": "passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "",
+      "shared_mechanics": [
+        "Deterministic immutable copiable token definitions and checked lineage manifests",
+        "Normal token entry transactions, source last known information and copied entry abilities",
+        "Copiable legendary, color, creature-type, base power/toughness and added-ability exceptions",
+        "Separate indefinite haste and simultaneous noncombat fight"
+      ],
+      "next_batch": [
+        "mirage-mirror",
+        "thespian-s-stage",
+        "march-from-velis-vel",
+        "replication-technique"
+      ],
+      "next_batch_implementation_notes": {
+        "focus": "Reuse frozen copiable values for effects on existing permanents and for spell copies.",
+        "requirements": [
+          "Add timestamped layer-one copy effects on existing permanents; retain original identity, counters, attachment and damage, and support end-of-turn expiration.",
+          "Thespian's Stage must retain its own copy activation as a copiable exception; an entry copy must not re-enter.",
+          "March needs the authored nonbasic subtype choice, exact current land set, target copy snapshot and separate temporary haste; include flashback.",
+          "Replication Technique requires demonstrate, an optional caster copy and caster-chosen opponent, stack spell copy state and target reselection. Do not approximate it with extra CreateTokens."
+        ]
+      },
+      "hosted_attempts": [
+        {
+          "stage": "draft",
+          "commit": "755b487545a26a9bb615a60b873f4bfd32828576",
+          "run_id": 34837070723,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723",
+          "conclusion": "failure",
+          "tests_run_windows": 1853,
+          "failures": 1,
+          "errors": 1,
+          "findings": [
+            "Target compiler failed to pass action X permission into characteristic filters, preventing the token test class from loading. Propagate allow_x and verify that non-X costs still reject those bounds.",
+            "Draft inventory rows used an incorrect status label. Retain the established draft_written_review_pending status.",
+            "Static fixture review also replaced an unsupported add_card setup argument with the existing ZoneMove entry attributes."
+          ]
+        },
+        {
+          "stage": "draft",
+          "commit": "ddc30dc51e2cf4e308af0d2c415ac8dbb5e5aa35",
+          "run_id": 34837749840,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837749840",
+          "conclusion": "failure",
+          "tests_run_windows": 1916,
+          "failures": 1,
+          "errors": 14,
+          "findings": [
+            "Carry chosen_x into the target-announcement context; resolution already uses the captured X. Add actor replay coverage.",
+            "Update the prior compiler test that documented X-target bounds as unsupported; keep unbound result quantities rejected and explicit non-X rejection coverage.",
+            "Fix fixture assumptions: use Llanowar Elves' produce-mana ability ID, automatic singleton selection and explicit zero base P/T for characteristic-defined fixtures."
+          ]
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+        "run_id": 34838551887,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
+        "conclusion": "success",
+        "tests_per_platform": 1917,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ]
+      },
+      "hosted_validation": {
+        "commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "run_id": 34839294402,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402",
+        "conclusion": "success",
+        "tests_per_platform": 1917,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ]
+      },
+      "next_batch_source_review": {
+        "date": "2026-09-14",
+        "inspected_commit": "f4d29b49ca71f04e11b21bf46384a355d7705062",
+        "status": "preparation_only",
+        "cards": [
+          "mirage-mirror",
+          "thespian-s-stage",
+          "march-from-velis-vel",
+          "replication-technique"
+        ],
+        "sources": [
+          {
+            "url": "https://magic.wizards.com/en/news/feature/hour-devastation-release-notes-2017-06-30",
+            "card": "mirage-mirror",
+            "requirements": "A later-resolving activation supersedes earlier copies; all expire together at cleanup. Preserve independent effects already applied, and re-evaluate gained abilities and attachment legality."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/edge-of-eternities-release-notes",
+            "card": "thespian-s-stage",
+            "requirements": "Retain only the copy activation as an exception; preserve tapped state and create no entry event or entry counters. The copy persists until overwritten or the object leaves."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+            "card": "replication-technique",
+            "requirements": "The caster may copy when the demonstrate trigger resolves, then chooses an opponent who also copies. The opponent has a target-reselection decision, not a separate permission to decline the copy. Their copy sits above the caster's copy, above the original."
+          }
+        ],
+        "implementation_note": "Current RulesObject copy fields are entry attributes. Existing-permanent copy effects require a coordinated layer-one representation used by characteristics, ability lookup, trigger indexing and later copiable-value queries; replacing only a display view would be incomplete.",
+        "rules": [
+          "707.2",
+          "707.9",
+          "702.144a"
         ]
       }
     }
