@@ -507,7 +507,7 @@ class FacesSagasExtortTests(unittest.TestCase):
     def test_chapel_can_produce_white_or_black(self):
         for color in ('W','B'):
             self.game();ref=self.enter(self.card('glasswing-grace-age-graced-chapel'),True)
-            self.state.set_tapped_batch((ref,),False)
+            self.state.set_tapped_batch((ref,),False);self.kernel.open_window_for_scenario('A')
             quote=self.kernel.quote_activation('mana','A',ref,'mana')
             self.kernel.commit_action(quote,Payment())
             self.choose(color)
@@ -515,6 +515,7 @@ class FacesSagasExtortTests(unittest.TestCase):
 
     def test_cliffs_produces_red(self):
         self.game();ref=self.enter(self.card('kazuul-s-fury-kazuul-s-cliffs'),True);self.state.set_tapped_batch((ref,),False)
+        self.kernel.open_window_for_scenario('A')
         self.kernel.commit_action(self.kernel.quote_activation('mana','A',ref,'mana'),Payment())
         self.assertEqual({'R':1},dict(self.state.mana_pool('A')))
 
