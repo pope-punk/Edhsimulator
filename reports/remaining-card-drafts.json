@@ -3519,6 +3519,18 @@
     ],
     "hosted_attempts": [
       {
+        "stage": "initial_draft_fixture",
+        "commit": "28321cdd5e9d99b398b87233151a2fc02b1b1556",
+        "run_id": 34866641618,
+        "conclusion": "failure",
+        "tests_run_ubuntu": 2148,
+        "failures": 0,
+        "errors": 2,
+        "findings": [
+          "The initial two fixture errors were missing revision/turn scheduling on land play and missing reopened scenario priority for a second cast. Subsequent revisions corrected the fixtures."
+        ]
+      },
+      {
         "stage": "initial_draft",
         "commit": "e71206e2f609dbaf4e8ae85892db7024db552844",
         "run_id": 34866722108,
@@ -3528,6 +3540,18 @@
         "errors": 2,
         "findings": [
           "Both failures were fixture lifecycle errors: a second scenario cast lacked reopened priority, and the land-play fixture lacked an active turn schedule. Production behavior and all other conformance checks passed on Ubuntu; Windows was cancelled by matrix fail-fast."
+        ]
+      },
+      {
+        "stage": "expanded_draft",
+        "commit": "551759d45d0c6049aadefe6bbfb245c3751a7053",
+        "run_id": 34867369551,
+        "conclusion": "failure",
+        "tests_run_ubuntu": 2156,
+        "failures": 0,
+        "errors": 2,
+        "findings": [
+          "The expanded run still contained the already-corrected missing scenario priority fixture. The new controller-group fixture also used an unsupported unbounded spell target specification. Use its finite bound and retain explicit rejection of the unsupported form; no compiler gate was weakened."
         ]
       }
     ],

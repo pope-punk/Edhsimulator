@@ -486,8 +486,9 @@ class SpellCopyTests(unittest.TestCase):
     def test_copy_retains_opponent_controller_target_groups(self):
         spell=CardProgram('cp-groups','Groups',('Instant',),cast=CastSpec(CostSpec(ManaCost(1)),timing='instant'),
             spell_targets=TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),
-                minimum=1,maximum=None,group_by_controller=True),
+                minimum=1,maximum=2,group_by_controller=True),
             spell_effects=(AddCounters('target','+1/+1',1),))
+        with self.assertRaises(RulesViolation):validate(replace(spell,spell_targets=replace(spell.spell_targets,maximum=None)))
         self.game((spell,));third=self.add(actor='C');fourth=self.add(actor='D');tags=self.tagged()
         self.cast(self.add('cp-groups',zone=Zone.HAND),targets=(self.enemy,third),tags=tags)
         self.until_choice();self.copy_targets(self.enemy,fourth);self.restore();self.drain()
