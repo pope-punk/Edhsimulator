@@ -2889,9 +2889,9 @@
     "runtime_checkpoint_schema": 120,
     "state_checkpoint_schema": 13,
     "new_test_methods": 63,
-    "validation_status": "draft_passed_reviewed_loader_pending",
+    "validation_status": "draft_passed_reviewed_loader_correction_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Validate all 270 source-bound programs and 63 new methods through the reviewed loader on hosted Ubuntu and Windows; then record final evidence.",
+    "review_work_remaining": "Rerun reviewed-loader hosted checks after updating the exact promotion count and recognizing CleanupCast instant permission in the generic full-face audit.",
     "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
     "next_batch": [
       "karmic-guide",
@@ -2964,6 +2964,20 @@
         ],
         "corrections": [
           "Use an opponent's supported precombat-main window for nonsorcery-cast fixtures. The actual turn/cleanup integration remains unchanged and passed. Preserve the runtime fixture gate."
+        ]
+      },
+      {
+        "run_id": 34797724871,
+        "commit": "15e04b2c6d5549bd8c76940bbd9d4a0d6dd89e98",
+        "windows_tests": 1672,
+        "failures": 1,
+        "errors": 0,
+        "ubuntu": "cancelled_after_matrix_failure",
+        "issues": [
+          "The promotion review retained a hard-coded 39-card count after expanding PROMOTED_CARDS to 43. Its following generic timing assertion also assumed every non-Instant must use sorcery timing."
+        ],
+        "corrections": [
+          "Update the exact promoted count to 43 and account explicitly for CleanupCast's printed instant permission in the shared full-face audit. Keep all per-card source, type, cost and codec assertions."
         ]
       }
     ],

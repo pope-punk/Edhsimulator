@@ -7,7 +7,7 @@ from edh_gauntlet.catalog import load_catalog
 from edh_gauntlet.rules_bundle import digest, load_reviewed, source_facts
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_kernel import RulesKernel
-from edh_gauntlet.rules_program import EntryPayment, decode, encode, validate
+from edh_gauntlet.rules_program import CleanupCast, EntryPayment, decode, encode, validate
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
@@ -63,7 +63,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(39, len(self.cards))
+        self.assertEqual(43, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):
@@ -84,7 +84,8 @@ class CardProgramReviewTests(unittest.TestCase):
                     self.assertIsNone(program.cast)
                 else:
                     self.assertIsNotNone(program.cast)
-                    self.assertEqual('instant' if 'Instant' in face.types else 'sorcery', program.cast.timing)
+                    expected_timing = 'instant' if 'Instant' in face.types or isinstance(program.cast, CleanupCast) else 'sorcery'
+                    self.assertEqual(expected_timing, program.cast.timing)
 
     def test_shock_lands_keep_both_intrinsic_mana_abilities(self):
         symbols = {'Plains': 'W', 'Island': 'U', 'Swamp': 'B', 'Mountain': 'R', 'Forest': 'G'}

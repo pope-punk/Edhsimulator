@@ -111,3 +111,12 @@ All four programs now load through source-bound reviewed metadata. Coverage is
 **270 unique cards / 335 deck copies**, with **64 unstarted / 65 copies**.
 All 266 prior reviewed rows are unchanged. The required reviewed-loader run
 is pending; production and gameplay admission remain separate.
+
+## Reviewed-loader correction
+
+Run `34797724871` ran 1,672 tests on Windows with one inventory-count
+assertion failure; Ubuntu was cancelled by matrix fail-fast. The shared
+promotion audit still expected 39 cards after its explicit set grew to 43.
+The correction updates that count and also recognizes `CleanupCast`'s printed
+instant permission in the following generic timing assertion. Source, printed
+face and codec checks remain intact. The corrected reviewed-loader run is pending.
