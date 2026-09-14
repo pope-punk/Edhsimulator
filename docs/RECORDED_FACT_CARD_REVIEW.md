@@ -94,3 +94,10 @@ LoseLife's required player domain. The corrected helper supplies that domain.
 Waiting ability packets also retain their exact source life note after source
 departure, so public decision context remains self-contained. Both changes
 are covered by the next required hosted run.
+
+Run `34796928484` ran 1,672 tests on Ubuntu with seven fixture errors
+and no assertion failures. Those Necromancy cases requested an unsupported
+end-step scenario window. They now use an opponent's supported main-phase
+window, which still cannot satisfy the caster's sorcery timing. The actual
+turn/cleanup integration passed and is unchanged; the runtime fixture gate
+remains intact. Hosted validation of the correction is pending.

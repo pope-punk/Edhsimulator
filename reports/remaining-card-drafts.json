@@ -2882,6 +2882,20 @@
           "Pass the explicit controller domain in the test life-loss fixtures; preserve the runtime API.",
           "Include exact source life notes on waiting ability packets after their source leaves, with regression coverage."
         ]
+      },
+      {
+        "run_id": 34796928484,
+        "commit": "08e438c0e302e74bd1cc0279698eb923ab64e24c",
+        "ubuntu_tests": 1672,
+        "failures": 0,
+        "errors": 7,
+        "windows": "cancelled_after_matrix_failure",
+        "issues": [
+          "Seven Necromancy cases requested an end-step scenario priority window outside the fixture API's supported phases."
+        ],
+        "corrections": [
+          "Use an opponent's supported precombat-main window for nonsorcery-cast fixtures. The actual turn/cleanup integration remains unchanged and passed. Preserve the runtime fixture gate."
+        ]
       }
     ]
   },

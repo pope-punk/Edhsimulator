@@ -111,7 +111,7 @@ class RecordedFactTests(unittest.TestCase):
 
     def reanimate(self,*,other_turn=False):
         self.game()
-        if other_turn:self.kernel.open_window_for_scenario('B',phase='end_step',priority_actor='A')
+        if other_turn:self.kernel.open_window_for_scenario('B',phase='precombat_main',priority_actor='A')
         self.cast(mana='CCB');self.top();self.targets((self.body,));self.top()
         self.source=self.current();self.body=self.current('body')
 
@@ -170,8 +170,8 @@ class RecordedFactTests(unittest.TestCase):
         self.top();self.targets((self.body,));self.top();self.top()
         self.assertTrue(any(d.get('step')=='cleanup' for d in self.kernel.delayed_triggers))
 
-    def test_necromancy_cast_fact_does_not_change_when_stack_empties(self):
-        self.game();self.kernel.open_window_for_scenario('B',phase='end_step',priority_actor='A')
+    def test_necromancy_cast_fact_does_not_change_with_later_timing_context(self):
+        self.game();self.kernel.open_window_for_scenario('B',phase='precombat_main',priority_actor='A')
         self.cast(mana='CCB');self.kernel.active='A';self.kernel.phase='precombat_main'
         self.top();self.targets((self.body,));self.top()
         self.assertTrue(any(d.get('step')=='cleanup' for d in self.kernel.delayed_triggers))
@@ -181,7 +181,7 @@ class RecordedFactTests(unittest.TestCase):
         self.assertFalse(any(d.get('step')=='cleanup' for d in self.kernel.delayed_triggers))
 
     def test_necromancy_countered_spell_never_schedules_cleanup(self):
-        self.game();self.kernel.open_window_for_scenario('B',phase='end_step',priority_actor='A')
+        self.game();self.kernel.open_window_for_scenario('B',phase='precombat_main',priority_actor='A')
         self.cast(mana='CCB');self.response((self.current(),),definition='n-counter');self.top()
         self.assertFalse(self.kernel.delayed_triggers);self.assertEqual(Zone.GRAVEYARD,self.zone())
 
@@ -189,7 +189,7 @@ class RecordedFactTests(unittest.TestCase):
         redirect=CardProgram('redirect','Redirect',('Artifact',),replacements=(
             ZoneReplacement('redirect',Zone.BATTLEFIELD,Zone.EXILE,from_zone=Zone.STACK,types=('Enchantment',)),))
         self.game(extra=(redirect,));self.state.add_card('redirect','redirect','A',Zone.BATTLEFIELD)
-        self.kernel.open_window_for_scenario('B',phase='end_step',priority_actor='A');self.cast(mana='CCB');self.top()
+        self.kernel.open_window_for_scenario('B',phase='precombat_main',priority_actor='A');self.cast(mana='CCB');self.top()
         self.assertEqual(Zone.EXILE,self.zone());self.assertFalse(self.kernel.delayed_triggers)
 
     def test_necromancy_entry_trigger_countered_leaves_plain_enchantment(self):
