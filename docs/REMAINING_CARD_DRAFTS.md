@@ -52,19 +52,39 @@ family where useful. Group related validation and avoid redundant full-suite
 runs. All existing GitHub-only execution constraints remain in force, and the
 heartbeat remains active every 40 minutes.
 
-## Current pass: planeswalkers, Class and opening choices
+## Next pass: multiple faces, transformation and Sagas
 
-The seven Pass 2 cards have complete printed-face review and are promoted to
-the source-bound bundle. Hosted draft validation passed **2446 tests per platform**,
-including **100 new methods**, at `b25201fc13286bb409df45bc1fb9cea7748b80a3`
-([run 34892851623](https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623)), plus source syntax, installation and packaged assets.
-The required reviewed-loader run is pending. Coverage is **320/334 unique cards
-and 386/400 copies**, with fourteen cards remaining. Omo now has **100/100 authored
-copies**; this does not change production admission.
+**Two passes are complete; fourteen cards remain in two planned groups of seven.**
+Begin Pass 3 with Glasswing Grace // Age-Graced Chapel, Kazuul's Fury // Kazuul's
+Cliffs, Sorin of House Markov, Pontiff of Blight, Invasion of Theros, The Restoration
+of Eiganjo and Elspeth Conquers Death. Implement both faces, extort and granted
+instances, Siege protection/defeat and complete Saga chapters/lifecycle. Reuse the
+shared loyalty, targeting, cost and entry machinery. The JSON report retains the
+catalog requirements and existing-primitive preparation.
 
-Pass 2 remains in progress until required validation is recorded. One pass is
-complete within the original four-pass baseline. No local project execution occurred.
+## Completed pass 2: planeswalkers, Class and opening choices
+
+Aminatou, the Fateshifter; Domri, Anarch of Bolas; Minsc & Boo, Timeless Heroes;
+Nissa, Steward of Elements; Sorin, Vengeful Bloodlord; Innkeeper's Talent; and
+Leyline of Hope have complete printed-face review and are promoted.
+
+Hosted draft [run 34892851623](https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623) passed **2446 tests per platform**
+at `b25201fc13286bb409df45bc1fb9cea7748b80a3`. Required reviewed-loader
+[run 34893959319](https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319) passed **2446 tests per platform**
+at `53c599a051854053733586f2eb94ddf0dfec5224`, including **all 100 new methods**. Both Ubuntu and Windows
+also passed source syntax, complete distribution installation and packaged assets.
+
+Coverage is **320/334 unique cards and 386/400 copies**. Omo is **100/100**,
+Minsc & Boo **99/100**, Elenda **97/100**, and Reaminatour **90/100** authored copies.
+Fourteen cards remain, all unstarted; the draft bundle is empty. The prior 313
+reviewed records are unchanged. Authored coverage does not change production admission.
+Kernel/state schemas are **130/18**. No local project execution occurred.
 See [the review record](PLANESWALKER_CLASS_OPENING_REVIEW.md).
+
+Pass 2 is complete within the original four-pass, 28-card baseline. Validation
+repairs remained part of this pass. The following result-recording commit changes
+only documentation and inventory; runtime, programs and tests match the required
+validation commit.
 
 ## Completed pass 1: payments, combat and continuous effects
 
@@ -76,13 +96,12 @@ each platform**, including 91 new methods, at `ddea5e3f16c56224f920181a7642ab72a
 at `ba1335011e65bf7039924cd99c0c3f2993cc4525`, including all 91 new methods. Both runs
 also passed source syntax, full distribution installation and packaged assets.
 
-Coverage is 313 reviewed unique cards / 379 copies, with 21 cards remaining.
-**Pass 1 is complete. Three passes remain within the original four-pass target.** No local
+At completion of Pass 1, coverage was 313 reviewed unique cards / 379 copies,
+with 21 cards and three planned passes remaining. No local
 project execution occurred. See [the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md).
 
-The next pass includes loyalty entry/costs, loyalty damage, attacking and defending
-planeswalkers, Class levels and opening-hand choices. Its seven-card group remains
-unchanged; see [the source-review preparation](PLANESWALKER_CLASS_OPENING_REVIEW.md) for each complete printed behavior.
+Pass 2 subsequently completed loyalty entry/costs, planeswalker combat, Class
+levels and opening-hand choices; see [its review](PLANESWALKER_CLASS_OPENING_REVIEW.md).
 
 ## Previous cycle: resolution casting and top-library permissions
 

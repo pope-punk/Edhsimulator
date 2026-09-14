@@ -118,16 +118,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:aminatou-the-fateshifter",
       "reviewed_definition": "catalog:aminatou-the-fateshifter",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -862,16 +866,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:domri-anarch-of-bolas",
       "reviewed_definition": "catalog:domri-anarch-of-bolas",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -1745,16 +1753,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:innkeeper-s-talent",
       "reviewed_definition": "catalog:innkeeper-s-talent",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -2020,16 +2032,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:leyline-of-hope",
       "reviewed_definition": "catalog:leyline-of-hope",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -2167,16 +2183,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:minsc-boo-timeless-heroes",
       "reviewed_definition": "catalog:minsc-boo-timeless-heroes",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -2359,16 +2379,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:nissa-steward-of-elements",
       "reviewed_definition": "catalog:nissa-steward-of-elements",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -3181,16 +3205,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program. All 100 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "previous_draft_definition": "draft:sorin-vengeful-bloodlord",
       "reviewed_definition": "catalog:sorin-vengeful-bloodlord",
       "draft_hosted_validation": {
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623
+      },
+      "hosted_validation": {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319
       }
     },
     {
@@ -3836,14 +3864,12 @@
       "innkeeper-s-talent",
       "leyline-of-hope"
     ],
-    "validation_status": "pending_required_reviewed_loader",
+    "validation_status": "passed",
     "runtime_checkpoint_schema": 130,
     "state_checkpoint_schema": 18,
     "new_test_methods": 100,
     "unresolved_defects": [],
-    "review_work_remaining": [
-      "Required reviewed-loader validation and final result recording."
-    ],
+    "review_work_remaining": [],
     "review_findings": [
       "Reused existing zero-loyalty state actions and damage counter removal.",
       "Any-target reflexive damage includes creatures, players, planeswalkers and battles.",
@@ -3895,6 +3921,17 @@
         "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
         "run_id": 34892851623,
         "status": "success",
+        "tests_per_platform": 2446,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ]
+      },
+      {
+        "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+        "run_id": 34893959319,
+        "status": "success",
+        "stage": "required_reviewed_loader",
         "tests_per_platform": 2446,
         "platforms": [
           "ubuntu-latest",
@@ -3952,6 +3989,137 @@
           "conclusion": "success"
         }
       ]
+    },
+    "hosted_validation": {
+      "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+      "run_id": 34893959319,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
+      "conclusion": "success",
+      "tests_per_platform": 2446,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104143175589,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2446,
+          "seconds": 524.737,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104143175873,
+          "name": "verify (windows-latest)",
+          "tests": 2446,
+          "seconds": 529.81,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "draft_test_methods": 100,
+    "reviewed_test_methods": 100,
+    "coverage_audit": {
+      "totalUnique": 334,
+      "reviewedUnique": 320,
+      "totalCopies": 400,
+      "reviewedCopies": 386,
+      "remainingUnique": 14,
+      "remainingCopies": 14,
+      "byDeck": {
+        "Reaminatour \u2014 Aminatou, Veil Piercer": {
+          "total": 100,
+          "reviewed": 90
+        },
+        "Minsc & Boo, Timeless Heroes": {
+          "total": 100,
+          "reviewed": 99
+        },
+        "Omo, Queen of Vesuva": {
+          "total": 100,
+          "reviewed": 100
+        },
+        "Elenda, Saint of Dusk": {
+          "total": 100,
+          "reviewed": 97
+        }
+      }
+    },
+    "next_batch_source_review": {
+      "status": "catalog_and_primary_source_preparation_only",
+      "card_ids": [
+        "glasswing-grace-age-graced-chapel",
+        "kazuul-s-fury-kazuul-s-cliffs",
+        "sorin-of-house-markov",
+        "pontiff-of-blight",
+        "invasion-of-theros",
+        "the-restoration-of-eiganjo",
+        "elspeth-conquers-death"
+      ],
+      "requirements": [
+        "Replace the reviewed loader's single-face restriction coherently with face-aware source validation, cast/land choice, mana value, copy values and exact physical-card identity. A modal back-face land is not a transformed permanent.",
+        "Glasswing Grace / Age-Graced Chapel needs the complete +2/+2 flying/lifelink Aura and tapped W/B land. Kazuul's Fury / Kazuul's Cliffs reuses Fling's additional sacrifice, captured power and any-target domain plus a tapped R land.",
+        "Pontiff of Blight needs its own extort and dynamically granted independent extort instances on other controlled creatures. Preserve optional hybrid payment, opponent-by-opponent life loss and actual life gained.",
+        "Sorin of House Markov needs life gained this turn, a postcombat-main intervening-if trigger, exact exile/owner-controlled transformed return, and both faces' extort. The walker adds Food, life-gained damage, indefinite control/Vampire changes and a conditional lifelink counter excluding Sorin and the stolen creature from the white-permanent condition.",
+        "Invasion of Theros needs full Siege protection/attack/defeat lifecycle and transformed casting, alongside Aura/God/Demigod search. Ephara retains other-enchantment entry draw and the three-other-enchantments lifelink/indestructible condition.",
+        "The Restoration of Eiganjo needs all chapters, an optional discard followed by a separately targeted reflexive return, exact exile/transformed return and Architect's attack/block Spirit triggers.",
+        "Elspeth Conquers Death needs full Saga timing/lifecycle, opposing mana-value-three-plus exile, a noncreature spell tax lasting until the controller's next turn, and creature/planeswalker return followed by a +1/+1-or-loyalty counter choice."
+      ],
+      "reuse_audit": [
+        "Pass 2 already supplies loyalty costs/timing/entry, planeswalker combat, exact bound triggers, Class/turn predicates and noncopiable entry subtypes.",
+        "Reuse source-bound cost, Aura, conditional keyword, library search, hybrid payment, token, counter, move-result and current/LKI machinery.",
+        "The existing SacrificeThenTrigger is specific to mandatory sacrifice; do not silently treat optional discard as that event. Generalize captured reflexive-event handling deliberately.",
+        "Keep private inspections and actor commands face-aware, and include both printed faces in source review and hosted conformance."
+      ],
+      "sources": [
+        "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+        "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
+        "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+        "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
+        "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10"
+      ],
+      "source_notes": [
+        {
+          "source": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+          "notes": "Sorin counts life gained rather than net life change, including gains before entering. Extort is untargeted, paid once per trigger, and gains the total actual opponent life loss. His control effect is indefinite."
+        },
+        {
+          "source": "https://magic.wizards.com/en/news/feature/march-of-the-machine-release-notes",
+          "notes": "Siege protection is separate from control: its controller may attack it, while only its protector blocks for it. Defeat creates a triggered exile-and-optional-transformed-cast sequence. Ephara can die to previously marked lethal damage if its indestructible condition stops holding."
+        },
+        {
+          "source": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
+          "notes": "Restoration's discard happens before its reflexive return target is chosen, so the discarded card itself can be an eligible target."
+        },
+        {
+          "source": "https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10",
+          "notes": "Elspeth's counter type is chosen after return and need not match the permanent's type. Its tax survives the Saga leaving; if the controller departs, it expires when that player's next turn would have begun."
+        },
+        {
+          "source": "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10",
+          "notes": "Kazuul's additional sacrifice is paid before responses and uses the creature's last battlefield power."
+        }
+      ],
+      "notes": [
+        "These are implementation preparation, not completed source-bound programs or validation. Recheck current Comprehensive Rules for both-face characteristics, Siege/Saga state actions and timing when implementing."
+      ],
+      "projected_coverage_after_complete_pass3": {
+        "reviewed_unique": 327,
+        "reviewed_copies": 393,
+        "remaining_unique": 7,
+        "by_deck": {
+          "Reaminatour": 93,
+          "Minsc & Boo": 100,
+          "Omo": 100,
+          "Elenda": 100
+        }
+      }
     }
   },
   "hosted_validation_history": [
@@ -4861,6 +5029,49 @@
         }
       ],
       "stage": "draft",
+      "cards": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
+      ]
+    },
+    {
+      "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+      "run_id": 34893959319,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
+      "conclusion": "success",
+      "tests_per_platform": 2446,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104143175589,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2446,
+          "seconds": 524.737,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104143175873,
+          "name": "verify (windows-latest)",
+          "tests": 2446,
+          "seconds": 529.81,
+          "conclusion": "success"
+        }
+      ],
+      "stage": "required_reviewed_loader",
       "cards": [
         "aminatou-the-fateshifter",
         "domri-anarch-of-bolas",
@@ -7665,29 +7876,29 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
-    "pass": 1,
+    "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
+    "pass": 2,
     "cards": [
-      "chthonian-nightmare",
-      "maze-s-end",
-      "rhythm-of-the-wild",
-      "parasitic-impetus",
-      "propaganda",
-      "defiler-of-vigor",
-      "darksteel-mutation"
+      "aminatou-the-fateshifter",
+      "domri-anarch-of-bolas",
+      "minsc-boo-timeless-heroes",
+      "nissa-steward-of-elements",
+      "sorin-vengeful-bloodlord",
+      "innkeeper-s-talent",
+      "leyline-of-hope"
     ],
     "unique_cards_completed": 7,
     "deck_copies_completed": 7,
-    "new_test_methods": 91,
-    "reviewed_before": 306,
-    "reviewed_after": 313,
-    "remaining_after": 21,
+    "new_test_methods": 100,
+    "reviewed_before": 313,
+    "reviewed_after": 320,
+    "remaining_after": 14,
     "validation": {
-      "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
-      "run_id": 34887525636,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
+      "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+      "run_id": 34893959319,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
       "conclusion": "success",
-      "tests_per_platform": 2346,
+      "tests_per_platform": 2446,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -7700,17 +7911,17 @@
       ],
       "jobs": [
         {
-          "job_id": 104121745743,
-          "name": "verify (windows-latest)",
-          "tests": 2346,
-          "seconds": 396.445,
+          "job_id": 104143175589,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2446,
+          "seconds": 524.737,
           "conclusion": "success"
         },
         {
-          "job_id": 104121746149,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2346,
-          "seconds": 474.326,
+          "job_id": 104143175873,
+          "name": "verify (windows-latest)",
+          "tests": 2446,
+          "seconds": 529.81,
           "conclusion": "success"
         }
       ]
@@ -7718,11 +7929,11 @@
     "local_project_code_executed": false
   },
   "hosted_validation": {
-    "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
-    "run_id": 34887525636,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
+    "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+    "run_id": 34893959319,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319",
     "conclusion": "success",
-    "tests_per_platform": 2346,
+    "tests_per_platform": 2446,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -7735,17 +7946,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104121745743,
-        "name": "verify (windows-latest)",
-        "tests": 2346,
-        "seconds": 396.445,
+        "job_id": 104143175589,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2446,
+        "seconds": 524.737,
         "conclusion": "success"
       },
       {
-        "job_id": 104121746149,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2346,
-        "seconds": 474.326,
+        "job_id": 104143175873,
+        "name": "verify (windows-latest)",
+        "tests": 2446,
+        "seconds": 529.81,
         "conclusion": "success"
       }
     ]
@@ -7755,7 +7966,7 @@
     "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
     "baseline_remaining_unique": 28,
     "target_maximum_passes": 4,
-    "completed_passes": 1,
+    "completed_passes": 2,
     "baseline_cards_per_pass": 7,
     "usual_target_range": [
       7,
@@ -7809,13 +8020,25 @@
           "leyline-of-hope"
         ],
         "focus": "Share loyalty activation support, X loyalty and entry, loyalty damage and attacking/defending planeswalkers, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
-        "status": "pending_required_reviewed_loader",
+        "status": "complete",
         "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
         "draft_hosted_validation": {
           "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
           "run_id": 34892851623
         },
-        "cards_completed": []
+        "cards_completed": [
+          "aminatou-the-fateshifter",
+          "domri-anarch-of-bolas",
+          "minsc-boo-timeless-heroes",
+          "nissa-steward-of-elements",
+          "sorin-vengeful-bloodlord",
+          "innkeeper-s-talent",
+          "leyline-of-hope"
+        ],
+        "hosted_validation": {
+          "commit": "53c599a051854053733586f2eb94ddf0dfec5224",
+          "run_id": 34893959319
+        }
       },
       {
         "pass": 3,
@@ -7851,7 +8074,7 @@
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
     "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
-    "remaining_passes_in_target": 3,
+    "remaining_passes_in_target": 2,
     "remaining_unique": 14
   }
 }

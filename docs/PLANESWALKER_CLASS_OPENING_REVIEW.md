@@ -1,8 +1,8 @@
 # Pass 2 review: planeswalkers, Class and opening choices
 
 Status: all seven programs have complete source-bound printed-face review and
-are promoted after successful hosted draft conformance. Required reviewed-loader
-validation is pending. The original four-pass, 28-card baseline is unchanged.
+are promoted after successful hosted draft and required reviewed-loader conformance.
+Pass 2 is complete. The original four-pass, 28-card baseline is unchanged.
 
 The runtime adds signed loyalty costs, Class designations, ward, planeswalker
 combat destinations, explicit post-mulligan opening actions, reflexive sacrifice
@@ -82,18 +82,17 @@ simultaneously yields one life-gain event. Reuse the starting-life-relative anth
 including state actions when falling below its threshold.
 [Duskmourn notes](https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes).
 
-## Implementation and validation work
+## Implementation scope
 
-Extend the primitive compiler, runtime, actor commands and checkpoint identity
-coherently, then author all seven complete programs in the draft bundle. Reuse
-the recent current/last-known object information and counter machinery. Do not
-add name-based interpreter dispatch or count isolated loyalty effects as complete
-planeswalker support.
+The primitive compiler, runtime, actor commands and checkpoint identity share
+the new mechanics. All seven printed programs reuse current/last-known object
+information and counter machinery. Interpreter dispatch follows primitive types;
+planeswalker support includes combat, entry and timing alongside loyalty effects.
 
-Include checkpoints during choices, stale/forged input rejection, control changes,
-ability removal, source departure, copies, counter replacements, response timing
-and interactions with pass 1 goad/Propaganda/Rhythm/Mutation. Apply the ordinary
-draft and required reviewed-loader gates. No local project execution is authorized.
+Conformance covers checkpoints during choices, stale/forged input rejection,
+control changes, ability removal, source departure, copies, counter replacements,
+response timing and interactions with pass 1 goad/Propaganda/Rhythm/Mutation.
+Both hosted gates passed. No local project execution occurred.
 
 ## Existing primitive audit
 
@@ -137,7 +136,11 @@ validation on both platforms.
 Draft [run 34892851623](https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623) passed **2446 tests on each of Ubuntu and
 Windows**, including all **100 new methods**, at `b25201fc13286bb409df45bc1fb9cea7748b80a3`.
 Source syntax, complete distribution installation and packaged assets also passed.
-The required reviewed-loader validation remains pending.
+Required reviewed-loader [run 34893959319](https://github.com/pope-punk/Edhsimulator/actions/runs/34893959319) passed the same
+**2446 tests on each platform**, including all 100 new methods, at
+`53c599a051854053733586f2eb94ddf0dfec5224`, plus syntax, installation and packaged assets.
+The promotion changes only source-bound bundle placement, loader selection and
+explicit coverage expectations; shared runtime matches the successful draft.
 
 Initial hosted runs found a turn-dependent characteristic cache and a missing
 selector-free predicate classification. The fixes bind the active player in both
@@ -152,3 +155,11 @@ last-known loyalty, Vampire entry/copy timestamps, multiple independent ward
 instances and removed planeswalker damage destinations. All 313 prior reviewed
 records are preserved unchanged. Full authored coverage for Omo does not bypass
 the separate production gate. No local project code was executed.
+
+## Completed coverage
+
+The reviewed bundle now contains **320/334 unique cards and 386/400 deck copies**.
+Omo is 100/100, Minsc & Boo 99/100, Elenda 97/100 and Reaminatour 90/100.
+Fourteen cards remain for the two remaining planned passes. Pass 2 is complete;
+its fixes and validation continuations did not reset the original four-pass budget.
+The final result-recording commit changes documentation and inventory only.
