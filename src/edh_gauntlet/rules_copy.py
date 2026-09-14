@@ -4,7 +4,7 @@ import json
 from collections import ChainMap
 from dataclasses import replace,fields
 from types import MappingProxyType
-from .rules_program import DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
+from .rules_program import printed_trigger_programs,DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
 from .rules_state import RulesViolation,Zone,ObjectRef
 from .rules_choices import Option
 from .rules_subtypes import SUBTYPE_SETS
@@ -83,9 +83,9 @@ class CopyRules:
         for ability in program.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
         self._derived_definitions[program.definition_id]=program
         self._derived_trigger_index[program.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
-        self._has_attachment_observers|=any(a.event.subject=='attached' for a in program.abilities)
-        self._has_tap_triggers|=any(a.event.kind=='becomes_tapped' for a in program.abilities)
-        self._has_state_triggers|=any(a.event.kind=='counter_state' for a in program.abilities)
+        self._has_attachment_observers|=any(a.event.subject=='attached' for a in printed_trigger_programs(program))
+        self._has_tap_triggers|=any(a.event.kind=='becomes_tapped' for a in printed_trigger_programs(program))
+        self._has_state_triggers|=any(a.event.kind=='counter_state' for a in printed_trigger_programs(program))
         self.copy_programs.append({'parent':parent,'added_types':list(added_types),
             'changes':{k:encode(v) for k,v in changes.items()},'definition_id':program.definition_id,
             'retained_activation':encode(retained_activation),'remove_mana_cost':remove_mana_cost})

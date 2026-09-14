@@ -14,7 +14,7 @@ class DeathGraspTests(unittest.TestCase):
         self.state=RulesState(('A','B'));self.spell=self.state.add_card('spell','catalog:death-grasp','A',Zone.HAND)
         self.body=self.state.add_card('body','body','B',Zone.BATTLEFIELD)
         if 'Planeswalker' in types:self.state.add_counters(self.body,'loyalty',5)
-        if 'Battle' in types:self.state.add_counters(self.body,'defense',5)
+        if 'Battle' in types:self.state.add_counters(self.body,'defense',5);self.state.set_protector(self.body,'B')
         self.kernel=RulesKernel(self.state,self.programs);self.kernel.open_window_for_scenario('A')
         self.state.add_mana('A',('W','B')+('C',)*x);self.x=x
         self.payment=Payment((('W',1),('B',1))+((('C',x),) if x else ()))

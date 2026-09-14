@@ -15,7 +15,7 @@ from .rules_characteristics import Characteristics, evaluate as evaluate_charact
 from .rules_faces import FaceRules
 from .rules_walkers import WalkerRules
 from .rules_rule_effects import RuleEffects
-from .rules_program import MoveFace,LifeGainedCondition,ChapterAbility,DoubleFacedProgram,MoveWithSubtypes,CountDistinctNames,WinGame,PlayerPermissions
+from .rules_program import printed_trigger_programs,MoveFace,LifeGainedCondition,ChapterAbility,DoubleFacedProgram,MoveWithSubtypes,CountDistinctNames,WinGame,PlayerPermissions
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_choices import Option, ChoiceRequest, CounterAllocationRequest, PriorityBoundary, choice_capacity
 from .rules_attachments import AttachmentRules
@@ -76,9 +76,9 @@ class RulesKernel(FaceRules,WalkerRules,RuleEffects,ResolutionCastingRules,Spell
             for ability in program.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
             index[program.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
         self._trigger_index=MappingProxyType(index)
-        self._has_attachment_observers=any(a.event.subject=='attached' for p in programs for a in p.abilities)
-        self._has_tap_triggers=any(a.event.kind=='becomes_tapped' for p in programs for a in p.abilities)
-        self._has_state_triggers=any(a.event.kind=='counter_state' for p in programs for a in p.abilities)
+        self._has_attachment_observers=any(a.event.subject=='attached' for p in programs for a in printed_trigger_programs(p))
+        self._has_tap_triggers=any(a.event.kind=='becomes_tapped' for p in programs for a in printed_trigger_programs(p))
+        self._has_state_triggers=any(a.event.kind=='counter_state' for p in programs for a in printed_trigger_programs(p))
         self.definitions=MappingProxyType(self.definitions)
         self.bundle=fingerprint([encode(p) for p in sorted(programs,key=lambda p:p.definition_id)])
         self._init_copy_registry(copy_programs)
@@ -125,7 +125,7 @@ class RulesKernel(FaceRules,WalkerRules,RuleEffects,ResolutionCastingRules,Spell
 
     def _trigger_abilities(self,source,kind,views=None):
         view=views.get(source.ref) if views is not None else (
-            self.effective(source.ref) if source.zone==Zone.BATTLEFIELD and not source.phased else None)
+            self.characteristics().get(source.ref) if source.zone==Zone.BATTLEFIELD and not source.phased else None)
         printed=() if view is not None and view.abilities_removed else self._trigger_index[source.effective_definition].get(kind,())
         return printed+tuple(a for a in (view.granted_triggers if view is not None else ()) if a.event.kind==kind)
 
@@ -1751,4 +1751,5 @@ class RulesKernel(FaceRules,WalkerRules,RuleEffects,ResolutionCastingRules,Spell
         kernel._serial=value['serial'];kernel._revision=value['revision']
         kernel._commander_sba_handled={ObjectRef.from_json(r) for r in value['commander_sba_handled']}
         kernel._validate_guard_state()
+        kernel._validate_face_state()
         return kernel

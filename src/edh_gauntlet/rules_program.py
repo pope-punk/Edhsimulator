@@ -1861,7 +1861,7 @@ def validate(program,_depth=0):
                 if node.selector.zone!=Zone.STACK or type(node.generic) is not int or node.generic<1:raise RulesViolation('Invalid temporary spell tax')
             if isinstance(node,IfOtherPermanent):
                 selector(node.selector)
-                if node.selector.zone!=Zone.BATTLEFIELD or node.excluded not in bindings:raise RulesViolation('Invalid excluded permanent binding')
+                if node.selector.zone!=Zone.BATTLEFIELD or type(node.excluded) is not str or node.excluded not in bindings:raise RulesViolation('Invalid excluded permanent binding')
                 effects(node.effects,bindings,allow_x,available_values)
             if isinstance(node,SacrificeThenTrigger):
                 selector(node.selector);target(node.targets)
@@ -2679,6 +2679,14 @@ def validate(program,_depth=0):
         raise RulesViolation('Player-enchanting Auras are not supported')
     encode(program)
     return program
+
+
+def printed_trigger_programs(program):
+    """Printed and embedded granted triggers, for conservative observer indexes."""
+    yield from program.abilities
+    for effect in program.continuous:
+        for change in effect.changes:
+            if isinstance(change,AddTriggered):yield change.ability
 
 
 def token_programs(program):

@@ -12,7 +12,8 @@ class BattleCombatTests(unittest.TestCase):
         self.programs=(CardProgram('body','Body',('Creature',),power=2,toughness=2),CardProgram('land','Land',('Land',)))
         self.attacker=self.state.add_card('a','body','A',Zone.BATTLEFIELD)
         self.blocker=self.state.add_card('b','body','B',Zone.BATTLEFIELD)
-        for ref in (self.attacker,self.blocker):self.state.add_counters(ref,'defense',4)
+        for ref in (self.attacker,self.blocker):
+            self.state.add_counters(ref,'defense',4);self.state.set_protector(ref,self.state.get(ref).controller)
         for p in self.state.players:self.state.add_card('draw'+p,'land',p,Zone.LIBRARY)
         self.kernel=RulesKernel(self.state,self.programs);self.kernel.begin_turn_for_scenario('A')
         if battle_owner:self.battle(self.attacker if battle_owner=='A' else self.blocker)

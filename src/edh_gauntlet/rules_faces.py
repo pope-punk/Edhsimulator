@@ -15,9 +15,31 @@ from .rules_program import (DoubleFacedProgram,BattleProgram,ChapterAbility,Entr
 
 
 class FaceRules:
+    def _validate_face_state(self):
+        for obj in self.state.objects():
+            if obj.back_face and not isinstance(self.definitions[obj.definition],DoubleFacedProgram):raise RulesViolation('Back face lacks a physical paired definition')
+        window=self.phase_action
+        if window is not None:
+            if (not isinstance(window,dict) or set(window) not in ({'id','actor'},{'id','actor','sources'})
+                    or type(window['id']) is not str or not window['id'] or window['actor']!=self.active or self.phase!='precombat_main'):
+                raise RulesViolation('Invalid lore turn action')
+            if 'sources' in window:
+                refs=[ObjectRef.from_json(r) for r in window['sources']]
+                if len(set(refs))!=len(refs) or any(self.state.get(r).zone!=Zone.BATTLEFIELD for r in refs):raise RulesViolation('Invalid lore recipients')
+        if not isinstance(self.timed_spell_taxes,list):raise RulesViolation('Invalid timed spell taxes')
+        ids=set()
+        for row in self.timed_spell_taxes:
+            if (not isinstance(row,dict) or set(row)!={'id','source','controller','selector','generic'} or type(row['id']) is not str or not row['id'] or row['id'] in ids or row['controller'] not in self.state.players):raise RulesViolation('Invalid timed spell tax')
+            source=RulesObject.from_json(row['source'])
+            if source.controller!=row['controller']:raise RulesViolation('Invalid timed tax controller')
+            from .rules_program import CardProgram,validate
+            validate(CardProgram('tax-validation','Tax validation',('Instant',),spell_effects=(SpellTaxUntilNextTurn(decode(row['selector']),row['generic']),)))
+            ids.add(row['id'])
+
     def _announced_face(self,obj,face,*,resolution_cast=False,land=False):
         if type(face) is not str or face not in {'front','back'}:raise RulesViolation('Choose front or back')
         physical=self.definitions[obj.definition]
+        if obj.token or obj.spell_copy:raise RulesViolation('A token or spell copy cannot be played as a card')
         if face=='back':
             if not isinstance(physical,DoubleFacedProgram):raise RulesViolation('This card has no back face')
             if physical.layout!='modal' and not (resolution_cast and self.resolution_cast.get('transformed')):
@@ -55,7 +77,7 @@ class FaceRules:
         window=self.phase_action;actor=window['actor']
         if 'sources' not in window:
             window['sources']=[obj.ref.to_json() for obj in self.state.objects(Zone.BATTLEFIELD,controller=actor)
-                if not obj.phased and 'Saga' in self.effective(obj.ref).subtypes and self._chapters(obj)]
+                if not obj.phased and 'Saga' in self.effective(obj.ref).subtypes and 'Enchantment' in self.effective(obj.ref).types]
         refs=tuple(ObjectRef.from_json(r) for r in window['sources'])
         if refs:
             source=self.state.get(refs[0])

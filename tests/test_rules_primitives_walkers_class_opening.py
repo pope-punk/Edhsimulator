@@ -585,7 +585,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
     def test_minsc_any_target_includes_battles(self):
         battle=CardProgram('wc-battle','Battle',('Battle',))
         self.game((battle,));ref=self.card('minsc-boo-timeless-heroes');self.add('wc-hamster');target=self.add('wc-battle','B')
-        self.state.add_counters(target,'defense',7);self.act(ref,'sacrifice-and-fling');self.top()
+        self.state.add_counters(target,'defense',7);self.state.set_protector(target,'B');self.act(ref,'sacrifice-and-fling');self.top()
         q=self.kernel.pending_choice;self.answer([next(i for i,o in enumerate(q.options) if o.ref==target)]);self.drain()
         self.assertEqual(3,dict(self.state.get(target).counters)['defense']);self.assertEqual(4,len(self.state.zone('A',Zone.HAND)))
 

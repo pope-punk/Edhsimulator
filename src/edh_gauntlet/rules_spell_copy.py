@@ -3,6 +3,7 @@ from copy import deepcopy
 from dataclasses import replace
 import json
 from .rules_state import RulesObject,RulesViolation,ObjectRef,PlayerRef,Zone,target_from_json
+from .rules_characteristics import base
 from .rules_program import CopyCast,CopyCaptured,SpecialMana,CleanupCast,GraveyardAlternativeCost,Move,AbilityProgram,EventPattern,decode,encode
 from .rules_choices import Option
 
@@ -13,7 +14,7 @@ class SpellCopyRules:
         for _,raw in records:
             row=json.loads(raw)
             if row['rider']=='legendary':
-                if quote is None or quote.kind!='cast' or 'Legendary' not in self._object_information(source)[1].supertypes:
+                if quote is None or quote.kind!='cast' or 'Legendary' not in base(source,self.definitions).supertypes:
                     raise RulesViolation('This mana can only cast a legendary spell')
         return records
 

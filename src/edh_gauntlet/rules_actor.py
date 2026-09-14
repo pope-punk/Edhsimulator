@@ -6,7 +6,7 @@ face-down objects remain unsupported. Production admission stays closed.
 """
 import json
 from copy import deepcopy
-from .rules_program import encode,ConvokeCast,CopyCast
+from .rules_program import DoubleFacedProgram,encode,ConvokeCast,CopyCast
 from .rules_creature_types import CREATURE_TYPES
 from .rules_state import Zone,RulesViolation,RulesObject,ObjectRef
 
@@ -17,10 +17,13 @@ PUBLIC_ZONES=(Zone.BATTLEFIELD,Zone.GRAVEYARD,Zone.EXILE,Zone.COMMAND)
 def _card(kernel,obj,views):
     view=views[obj.ref]
     all_creature_types=CREATURE_TYPES<=view.subtypes
+    physical=kernel.definitions[obj.definition]
     limits=[{'ability_id':ability.ability_id,'remaining':kernel.remaining_trigger_uses(obj,ability)}
             for ability in kernel.definition(obj).abilities if ability.trigger_limit is not None] if obj.zone==Zone.BATTLEFIELD else []
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
         'definition_id':obj.effective_definition,'face':'back' if obj.back_face else 'front',
+        **({'layout':physical.layout,'faces':[{'face':face,'name':p.name,'types':list(p.types),'colors':list(p.colors),'mana_cost':encode(p.cast.cost.mana) if p.cast else None}
+            for face,p in (('front',physical),('back',physical.back))]} if isinstance(physical,DoubleFacedProgram) else {}),
         **({'protector':obj.protector} if 'Battle' in view.types else {}),'owner':obj.owner,'controller':obj.controller,
         **({'convoke':True} if isinstance(kernel.definition(obj).cast,ConvokeCast) else {}),
         **({'copy_cast':encode(kernel.definition(obj).cast)} if isinstance(kernel.definition(obj).cast,CopyCast) else {}),

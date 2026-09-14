@@ -14,7 +14,9 @@ All seven planned cards are drafted. Reviewed coverage remains **320/334 unique
 cards and 386/400 copies** until hosted conformance and printed-face review finish.
 The shared implementation adds face choices, transformation, Saga chapters,
 extort grants, Siege defense/protection/defeat, temporary spell taxes, and paired
-token copies. The first 49 conformance methods are written but not yet validated.
+token copies. The 90 conformance methods include the follow-up edge audit. The first hosted
+run completed 2,495 tests and exposed a trigger-query regression and scenario
+fixture gaps, now corrected for the next hosted run.
 
 Catalog annotations now retain the five double-face layouts, three back-face
 color indicators, and Invasion of Theros's defense. Runtime mana value derives

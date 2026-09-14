@@ -13,6 +13,7 @@ class DamageResolutionTests(unittest.TestCase):
             CardProgram('body','Body',types,power=4 if 'Creature' in types else None,toughness=4 if 'Creature' in types else None),*extra)
         self.state=RulesState(('A','B'));self.spell=self.state.add_card('spell','spell','A',Zone.HAND)
         self.body=self.state.add_card('body','body','B',Zone.BATTLEFIELD)
+        if 'Battle' in types:self.state.set_protector(self.body,'B')
         self.kernel=RulesKernel(self.state,self.programs);self.kernel.open_window_for_scenario('A')
 
     def cast_and_drain(self):

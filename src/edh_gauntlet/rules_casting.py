@@ -557,6 +557,7 @@ class CastingRules:
         source = source or self.state.get(quote.source)
         immediate_mana=();tapped_for_mana=False
         tap_observers=self._tap_observers(resources.taps) if not paid else ()
+        counter_sources=tuple(self.state.get(ref) for ref in dict.fromkeys(ref for ref,_,_ in resources.counters)) if not paid else ()
         if quote.kind == 'cast':
             if paid:
                 if prepared_frame is None:raise RulesViolation('Missing announced spell frame')
@@ -592,6 +593,7 @@ class CastingRules:
                 if prepared_frame is None:self.stack.append(frame)
             event_kind = 'ability_activated'
         if frame is not None:self._bind_announced_values(frame,quote)
+        self._collect_defeated_battles(counter_sources)
         receipt = {'action': quote.to_json(), 'payment': {'mana': dict(resources.mana), 'life': resources.life,
             'taps': [ref.to_json() for ref in resources.taps]}, 'frame': frame['id'] if frame else None,
             'mana_ability': mana_ability}

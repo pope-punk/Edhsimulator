@@ -3873,8 +3873,22 @@
     "validation_status": "pending",
     "runtime_checkpoint_schema": 131,
     "state_checkpoint_schema": 19,
-    "new_test_methods": 49,
-    "validation_attempts": [],
+    "new_test_methods": 90,
+    "validation_attempts": [
+      {
+        "commit": "e5c849a7cf638a693cc6e0719673ea18e38c8a98",
+        "run_id": 34899755299,
+        "status": "failed",
+        "test_count": 2495,
+        "failures": 4,
+        "errors": 10,
+        "corrections": [
+          "Reuse cached characteristic views for trigger grants without repeating effective queries.",
+          "Give existing Battle fixtures explicit protector designations.",
+          "Restore scenario action windows before independent Sorin and tax actions."
+        ]
+      }
+    ],
     "review_work_remaining": [
       "Hosted draft conformance and source review",
       "Complete edge-case audit, then source-bound promotion and required reviewed-loader validation"

@@ -96,7 +96,7 @@ class FacesSagasExtortTests(unittest.TestCase):
         self.kernel.active=actor;self.kernel._begin_phase('precombat_main');self.kernel.advance()
     def transform_sorin(self,actor='A'):
         ref=self.card('sorin-of-house-markov',actor)
-        return self.enter(ref,True,actor)
+        ref=self.enter(ref,True,actor);self.kernel.open_window_for_scenario(actor);return ref
     def battle(self):
         ref=self.card('invasion-of-theros')
         self.kernel.resolving=self.kernel._frame(self.state.get(ref),'A',(Move('source',Zone.BATTLEFIELD),))
@@ -339,6 +339,7 @@ class FacesSagasExtortTests(unittest.TestCase):
 
     def test_elspeth_tax_excludes_creatures_and_own_spells(self):
         self.game();self.run_effect(self.cards['elspeth-conquers-death'].abilities[1].effects)
+        self.kernel.open_window_for_scenario('A')
         self.assertEqual(0,self.kernel.quote_cast('own','A',self.add('fs-spell',zone=Zone.HAND)).cost.mana.generic)
         self.kernel.active='B';self.kernel.priority='B'
         self.assertEqual(2,self.kernel.quote_cast('creature','B',self.add('fs-body','B',Zone.HAND)).cost.mana.generic)
@@ -376,6 +377,266 @@ class FacesSagasExtortTests(unittest.TestCase):
 
     def test_original_reviewed_rows_are_unchanged(self):
         self.assertGreaterEqual(len(load_reviewed(self.root)),320)
+
+    def test_sorin_ultimate_excludes_sorin_and_target(self):
+        white=CardProgram('fs-white','White',('Creature',),power=2,toughness=3,colors=('W',))
+        self.game((white,));ref=self.transform_sorin();self.state.add_counters(ref,'loyalty',3)
+        target=self.add('fs-white','B');self.act(ref,'steal-vampire',(target,));self.drain()
+        self.assertEqual('A',self.state.get(target).controller)
+        self.assertIn('Vampire',self.kernel.effective(target).subtypes)
+        self.assertNotIn('lifelink',dict(self.state.get(target).counters))
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+
+    def test_sorin_ultimate_other_white_gives_lifelink_counter(self):
+        self.game();ref=self.transform_sorin();self.state.add_counters(ref,'loyalty',3)
+        target=self.add(actor='B');self.add('catalog:leyline-of-hope')
+        self.act(ref,'steal-vampire',(target,));self.drain()
+        self.assertEqual(1,dict(self.state.get(target).counters)['lifelink'])
+        self.assertIn('lifelink',self.kernel.effective(target).keywords);self.restore()
+
+    def test_sorin_ultimate_control_survives_cleanup(self):
+        self.game();ref=self.transform_sorin();self.state.add_counters(ref,'loyalty',3)
+        target=self.add(actor='B');self.act(ref,'steal-vampire',(target,));self.drain()
+        self.kernel._finish_cleanup_actions()
+        self.assertEqual('A',self.state.get(target).controller);self.assertIn('Vampire',self.kernel.effective(target).subtypes)
+
+    def test_sorin_returns_under_owner_control(self):
+        self.game();ref=self.card('sorin-of-house-markov','B',Zone.BATTLEFIELD,controller='A')
+        self.state.gain_life('A',3);self.kernel._begin_phase('postcombat_main');self.kernel.advance();self.drain()
+        self.assertEqual('B',self.current(ref).controller);self.assertTrue(self.current(ref).back_face)
+
+    def test_mdfc_copy_of_sorin_cannot_return_transformed(self):
+        self.game();sorin=self.card('sorin-of-house-markov',zone=Zone.BATTLEFIELD)
+        ref=self.enter(self.card('kazuul-s-fury-kazuul-s-cliffs'),True)
+        self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(sorin,))
+        self.run_effect((ReturnTransformed(),),source=ref)
+        self.assertEqual(Zone.EXILE,self.current(ref).zone)
+
+    def test_single_face_copy_of_sorin_stays_exiled(self):
+        self.game();sorin=self.card('sorin-of-house-markov',zone=Zone.BATTLEFIELD);ref=self.add()
+        self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(sorin,))
+        self.run_effect((ReturnTransformed(),),source=ref)
+        self.assertEqual(Zone.EXILE,self.current(ref).zone)
+
+    def test_in_place_transform_preserves_copy_effect(self):
+        self.game();ref=self.card('sorin-of-house-markov',zone=Zone.BATTLEFIELD);body=self.add()
+        self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(body,))
+        self.run_effect((Transform(),),source=ref)
+        self.assertTrue(self.state.get(ref).back_face);self.assertEqual('Body',self.kernel.definition(self.state.get(ref)).name)
+
+    def test_extort_accepts_white_mana(self):
+        self.game();self.card('pontiff-of-blight',zone=Zone.BATTLEFIELD)
+        self.cast(self.add('fs-spell',zone=Zone.HAND));self.top()
+        paid=self.payment('W');w=self.kernel.mana_payment
+        self.kernel.pay_resolution_mana('white-extort','A',w['id'],paid,revision=self.kernel.revision)
+        self.assertEqual(43,self.state.life('A'));self.assertEqual(39,self.state.life('D'))
+
+    def test_extort_counts_remaining_opponents(self):
+        self.game(players=('A','B'));self.card('pontiff-of-blight',zone=Zone.BATTLEFIELD)
+        self.cast(self.add('fs-spell',zone=Zone.HAND));self.top()
+        paid=self.payment('B');w=self.kernel.mana_payment
+        self.kernel.pay_resolution_mana('one-opponent','A',w['id'],paid,revision=self.kernel.revision)
+        self.assertEqual(41,self.state.life('A'));self.assertEqual(39,self.state.life('B'))
+
+    def test_later_counter_grant_survives_earlier_ability_removal(self):
+        blue=CardProgram('fs-blue','Blue',('Creature',),power=2,toughness=3,colors=('U',))
+        suppressor=CardProgram('fs-suppress','Suppress',('Enchantment',),continuous=(
+            ContinuousProgram('blank-blue',Selector(Zone.BATTLEFIELD,types=('Creature',),colors=('U',)),(LoseAbilities(),)),))
+        self.game((blue,suppressor));body=self.add('fs-blue')
+        self.state.add_counters(body,'lifelink',1);self.add('fs-suppress')
+        self.assertNotIn('lifelink',self.kernel.effective(body).keywords)
+        self.state.add_counters(body,'lifelink',1)
+        self.assertIn('lifelink',self.kernel.effective(body).keywords);self.restore()
+
+    def test_removing_last_keyword_counter_ends_grant(self):
+        self.game();body=self.add();self.state.add_counters(body,'lifelink',1)
+        self.run_effect((RemoveCounters('target','lifelink',1),),targets=(body,))
+        self.assertNotIn('lifelink',self.kernel.effective(body).keywords)
+
+    def test_grant_survives_prior_ability_removal_on_recipient(self):
+        blue=CardProgram('fs-blue','Blue',('Creature',),power=2,toughness=3,colors=('U',))
+        suppressor=CardProgram('fs-suppress','Suppress',('Enchantment',),continuous=(
+            ContinuousProgram('blank-blue',Selector(Zone.BATTLEFIELD,types=('Creature',),colors=('U',)),(LoseAbilities(),)),))
+        self.game((blue,suppressor));body=self.add('fs-blue');self.add('fs-suppress')
+        self.card('pontiff-of-blight',zone=Zone.BATTLEFIELD)
+        self.assertTrue(self.kernel.effective(body).abilities_removed)
+        self.assertEqual(1,len(self.kernel._trigger_abilities(self.state.get(body),'spell_cast')))
+
+    def test_later_ability_removal_clears_granted_extort(self):
+        blue=CardProgram('fs-blue','Blue',('Creature',),power=2,toughness=3,colors=('U',))
+        suppressor=CardProgram('fs-suppress','Suppress',('Enchantment',),continuous=(
+            ContinuousProgram('blank-blue',Selector(Zone.BATTLEFIELD,types=('Creature',),colors=('U',)),(LoseAbilities(),)),))
+        self.game((blue,suppressor));body=self.add('fs-blue');self.card('pontiff-of-blight',zone=Zone.BATTLEFIELD)
+        self.add('fs-suppress');self.assertEqual((),self.kernel._trigger_abilities(self.state.get(body),'spell_cast'))
+
+    def test_granted_tap_trigger_is_discovered(self):
+        trigger=AbilityProgram('tap',EventPattern('becomes_tapped',subject='self'),(GainLife(2),))
+        grant=CardProgram('fs-tap-grant','Grant',('Enchantment',),continuous=(
+            ContinuousProgram('tap-trigger',Selector(Zone.BATTLEFIELD,types=('Land',)),(AddTriggered(trigger),)),))
+        self.game((grant,));self.add('fs-tap-grant')
+        self.run_effect((SetTapped('target',True),),targets=(self.anchor,));self.drain()
+        self.assertEqual(42,self.state.life('A'))
+
+    def test_ordinary_single_face_cannot_play_back_land(self):
+        self.game();ref=self.add('catalog:forest',zone=Zone.HAND)
+        self.kernel.turn_schedule={'land_plays':0,'advance':False,'cleanup_priority':False}
+        snapshot=self.kernel.snapshot()
+        with self.assertRaises(RulesViolation):self.kernel.play_land('invalid','A',ref,revision=self.kernel.revision,face='back')
+        self.assertEqual(snapshot,self.kernel.snapshot())
+
+    def test_second_land_play_is_rejected_without_mutation(self):
+        self.game();ref=self.card('kazuul-s-fury-kazuul-s-cliffs')
+        self.kernel.turn_schedule={'land_plays':1,'advance':False,'cleanup_priority':False}
+        snapshot=self.kernel.snapshot()
+        with self.assertRaises(RulesViolation):self.kernel.play_land('invalid','A',ref,revision=self.kernel.revision,face='back')
+        self.assertEqual(snapshot,self.kernel.snapshot())
+
+    def test_actor_can_see_both_own_card_faces(self):
+        self.game();ref=self.card('kazuul-s-fury-kazuul-s-cliffs')
+        packet=project_actor(self.kernel,'A')
+        card=next(c for c in packet['hand'] if c['ref']==ref.to_json())
+        self.assertEqual('modal',card['layout']);self.assertEqual(['front','back'],[f['face'] for f in card['faces']])
+        self.assertEqual("Kazuul's Cliffs",card['faces'][1]['name'])
+
+    def test_actor_command_plays_back_land(self):
+        self.game();ref=self.card('kazuul-s-fury-kazuul-s-cliffs')
+        self.kernel.turn_schedule={'land_plays':0,'advance':False,'cleanup_priority':False}
+        RulesActorAdapter(self.kernel)._execute('A',{'kind':'play_land','revision':self.kernel.revision,'action_id':'back-land','source':ref.to_json(),'face':'back'})
+        self.assertTrue(self.current(ref).back_face);self.assertTrue(self.current(ref).tapped)
+
+    def test_chapel_can_produce_white_or_black(self):
+        for color in ('W','B'):
+            self.game();ref=self.enter(self.card('glasswing-grace-age-graced-chapel'),True)
+            self.state.set_tapped_batch((ref,),False)
+            quote=self.kernel.quote_activation('mana','A',ref,'mana')
+            self.kernel.commit_action(quote,Payment())
+            self.choose(color)
+            self.assertEqual({color:1},dict(self.state.mana_pool('A')))
+
+    def test_cliffs_produces_red(self):
+        self.game();ref=self.enter(self.card('kazuul-s-fury-kazuul-s-cliffs'),True);self.state.set_tapped_batch((ref,),False)
+        self.kernel.commit_action(self.kernel.quote_activation('mana','A',ref,'mana'),Payment())
+        self.assertEqual({'R':1},dict(self.state.mana_pool('A')))
+
+    def test_empty_face_string_is_rejected(self):
+        self.game();ref=self.card('kazuul-s-fury-kazuul-s-cliffs')
+        with self.assertRaises(RulesViolation):self.kernel.quote_cast('bad-face','A',ref,face='')
+
+    def test_elspeth_exiles_only_opposing_mv_three_plus(self):
+        self.game();low=self.add(actor='B');own=self.add('catalog:leyline-of-hope');high=self.add('catalog:leyline-of-hope','B')
+        ref=self.card('elspeth-conquers-death')
+        self.kernel.resolving=self.kernel._frame(self.state.get(ref),'A',(Move('source',Zone.BATTLEFIELD),));self.kernel.advance()
+        self.assertEqual([high],[o.ref for o in self.kernel.pending_choice.options])
+        self.answer([0]);self.drain();self.assertEqual(Zone.EXILE,self.current(high).zone)
+        self.assertEqual(Zone.BATTLEFIELD,self.current(low).zone);self.assertEqual(Zone.BATTLEFIELD,self.current(own).zone)
+
+    def test_final_saga_chapter_countered_sacrifices_source(self):
+        self.game();ref=self.enter(self.card('the-restoration-of-eiganjo'));self.chapters(ref,2)
+        if self.kernel.pending_choice:self.answer(list(range(len(self.kernel.pending_choice.options))))
+        self.run_effect((CounterAbilities('controller'),))
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+        self.assertTrue(any(e.cause=='sacrifice' and e.before.ref==ref for e in self.state.events))
+
+    def test_saga_without_chapter_abilities_is_not_sacrificed(self):
+        self.game();ref=self.card('elspeth-conquers-death',zone=Zone.BATTLEFIELD);self.state.add_counters(ref,'lore',3)
+        self.run_effect((OngoingEffect('target',(LoseAbilities(),)),),targets=(ref,))
+        self.assertEqual(Zone.BATTLEFIELD,self.current(ref).zone)
+
+    def test_removing_then_adding_lore_retriggers_chapter(self):
+        self.game();ref=self.enter(self.card('the-restoration-of-eiganjo'))
+        self.run_effect((RemoveCounters('target','lore',1),AddCounters('target','lore',1)),targets=(ref,))
+        self.assertEqual('chapter-1',self.kernel.stack[-1]['ability_id'])
+
+    def test_saga_intrinsic_lore_is_doubled_on_entry(self):
+        self.game();talent=self.add('catalog:innkeeper-s-talent');self.state.set_class_level(talent,3)
+        ref=self.card('the-restoration-of-eiganjo')
+        self.kernel.resolving=self.kernel._frame(self.state.get(ref),'A',(Move('source',Zone.BATTLEFIELD),));self.kernel.advance()
+        while self.kernel.pending_choice and self.kernel.pending_choice.kind!='trigger_order':self.answer([0])
+        self.assertEqual(2,dict(self.current(ref).counters)['lore'])
+        self.assertEqual({'chapter-1','chapter-2'},{decode(t['ability']).ability_id for t in self.kernel.pending_triggers})
+
+    def test_saga_precombat_only_active_controller(self):
+        self.game();ref=self.enter(self.card('the-restoration-of-eiganjo','B'),actor='B')
+        self.main_phase('A');self.assertEqual(1,dict(self.state.get(ref).counters)['lore'])
+
+    def test_battle_counter_removal_defeats_it(self):
+        self.game();ref=self.battle()
+        self.run_effect((RemoveCounters('target','defense',4),),targets=(ref,))
+        self.assertEqual('intrinsic-siege-defeat',self.kernel.stack[-1]['ability_id'])
+
+    def test_countered_defeat_puts_battle_in_graveyard(self):
+        self.game();ref=self.battle();self.run_effect((Damage('target',4),),targets=(ref,))
+        self.run_effect((CounterAbilities('controller'),))
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+
+    def test_battle_zero_defense_does_not_invent_defeat(self):
+        self.game();ref=self.card('invasion-of-theros',zone=Zone.BATTLEFIELD)
+        self.state.set_protector(ref,'B');self.kernel.advance()
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+        self.assertFalse(any(e.get('ability')=='intrinsic-siege-defeat' for e in self.kernel.semantic_events))
+
+    def test_battle_protector_change_after_control_change(self):
+        self.game();ref=self.battle();self.state.change_control_batch((ref,),'B');self.kernel.advance()
+        self.assertEqual('B',self.kernel.pending_choice.actor);self.choose('C')
+        self.assertEqual('C',self.state.get(ref).protector)
+
+    def test_stolen_battle_casts_owners_card_for_controller(self):
+        self.game();ref=self.card('invasion-of-theros','B',Zone.BATTLEFIELD,controller='A')
+        self.state.add_counters(ref,'defense',4);self.state.set_protector(ref,'C')
+        self.run_effect((Damage('target',4),),targets=(ref,));self.top()
+        self.assertEqual('A',self.kernel.resolution_cast['actor'])
+        self.cast(self.current(ref).ref);self.drain()
+        self.assertEqual('A',self.current(ref).controller);self.assertEqual('B',self.current(ref).owner)
+
+    def test_battle_defeat_free_cast_still_pays_tax(self):
+        self.game();ref=self.battle()
+        tax=SpellTaxUntilNextTurn(Selector(Zone.STACK,types=('Creature',)),2)
+        self.run_effect((tax,));self.run_effect((Damage('target',4),),targets=(ref,));self.top()
+        quote=self.kernel.quote_cast('back-tax','A',self.current(ref).ref)
+        self.assertEqual('back',quote.face);self.assertEqual(2,quote.cost.mana.generic)
+
+    def test_battle_defeat_cannot_cast_front_face(self):
+        self.game();ref=self.battle();self.run_effect((Damage('target',4),),targets=(ref,));self.top()
+        with self.assertRaises(RulesViolation):self.kernel.quote_cast('front','A',self.current(ref).ref,face='front')
+
+    def test_saga_transform_resets_counters_and_incarnation(self):
+        self.game();ref=self.enter(self.card('the-restoration-of-eiganjo'))
+        self.run_effect((ReturnTransformed(),),source=ref)
+        obj=self.current(ref);self.assertGreater(obj.ref.incarnation,ref.incarnation)
+        self.assertEqual((),obj.counters);self.assertTrue(obj.back_face)
+
+    def test_copy_of_modal_back_is_plain_land(self):
+        self.game();ref=self.enter(self.card('kazuul-s-fury-kazuul-s-cliffs'),True);clone=self.add('catalog:forest')
+        self.run_effect((CopyPermanent('source','target'),),source=clone,targets=(ref,))
+        self.assertEqual(frozenset({'Land'}),self.kernel.effective(clone).types)
+        self.assertFalse(self.state.get(clone).back_face);self.restore()
+
+    def test_paired_copy_under_copy_effect_uses_effect_on_both_faces(self):
+        self.game();ref=self.enter(self.card('the-restoration-of-eiganjo'),True);body=self.add()
+        self.run_effect((CopyPermanent('source','target'),),source=ref,targets=(body,))
+        self.run_effect((CopyTokens('source'),),source=ref)
+        token=next(o for o in self.state.objects(Zone.BATTLEFIELD) if o.token)
+        pair=self.kernel.definitions[token.definition]
+        self.assertEqual(('Body','Body'),(pair.name,pair.back.name));self.assertTrue(token.back_face);self.restore()
+
+    def test_checkpoint_rejects_back_face_without_pair(self):
+        self.game();ref=self.add();snapshot=self.kernel.snapshot()
+        next(o for o in snapshot['state']['objects'] if o['ref']==ref.to_json())['back_face']=True
+        with self.assertRaises(RulesViolation):RulesKernel.restore(snapshot,self.programs)
+
+    def test_checkpoint_rejects_malformed_timed_tax(self):
+        self.game();snapshot=self.kernel.snapshot();snapshot['timed_spell_taxes']=[{'generic':2}]
+        with self.assertRaises(RulesViolation):RulesKernel.restore(snapshot,self.programs)
+
+    def test_keyword_counter_layers_match_exhaustive_evaluator(self):
+        self.game();body=self.add();self.state.add_counters(body,'lifelink',1)
+        objects=self.state.objects();defs=self.kernel.definitions
+        self.assertEqual(evaluate(objects,defs),evaluate_exhaustive(objects,defs))
+
+    def test_saga_without_chapters_still_receives_turn_lore(self):
+        saga=CardProgram('fs-blank-saga','Blank Saga',('Enchantment',),subtypes=('Saga',))
+        self.game((saga,));ref=self.add('fs-blank-saga');self.main_phase()
+        self.assertEqual(1,dict(self.state.get(ref).counters)['lore'])
 
 
 if __name__=='__main__':unittest.main()

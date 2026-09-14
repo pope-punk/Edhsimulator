@@ -157,6 +157,7 @@ class CastingSacrificeTests(unittest.TestCase):
                 else:
                     target=self.state.add_card('recipient','recipient','B',Zone.BATTLEFIELD)
                     if kind in ('Planeswalker','Battle'):self.state.add_counters(target,'loyalty' if kind=='Planeswalker' else 'defense',9)
+                    if kind=='Battle':self.state.set_protector(target,'B')
                 self.cast((target,));self.drain()
                 if isinstance(target,PlayerRef):self.assertEqual(36,self.state.life(target.player))
                 elif kind=='Creature':self.assertEqual(4,self.state.get(target).damage_marked)
