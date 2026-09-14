@@ -19,10 +19,9 @@ class PhasingChoiceTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={row['card_id']:row for row in drafts if row['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(row['program'] for row in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(row['program'] for row in reviewed.values())
 
     def game(self,key='talon-gates-of-madara',*,zone=Zone.BATTLEFIELD,extra=()):
         body=CardProgram('p-body','Body',('Creature',),power=2,toughness=4)
@@ -124,7 +123,7 @@ class PhasingChoiceTests(unittest.TestCase):
         self.assertEqual(set(CARDS),set(self.cards))
         for key,program in self.cards.items():
             with self.subTest(card=key):
-                self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+                self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
                 self.assertEqual(self.rows[key]['program'],encode(program))
                 face=catalog[key].faces[0]
                 for field in ('types','subtypes','supertypes','colors'):
@@ -241,6 +240,9 @@ class PhasingChoiceTests(unittest.TestCase):
         equipment=CardProgram('equipment','Equipment',('Artifact',),subtypes=('Equipment',))
         self.game(extra=(equipment,));ref=self.state.add_card('equipment','equipment','A',Zone.BATTLEFIELD);self.state.attach(ref,self.body)
         self.effect(self.body,PhaseOut('source'));self.kernel._depart_players(('B',));self.kernel.advance()
+        packet=RulesActorAdapter(self.kernel).packet('A')
+        self.assertEqual(ref.to_json(),packet['phasing'][0]['ref'])
+        self.assertIsNone(packet['phasing'][0]['return_controller'])
         self.kernel.begin_turn_for_scenario('A');self.assertTrue(self.state.get(ref).phased)
 
     def test_phase_counter_duration_expires_but_counter_survives(self):
@@ -539,6 +541,11 @@ class PhasingChoiceTests(unittest.TestCase):
             spell_effects=(WithCreatedTokens(parent,effects=(CreateTokens(child),)),))
         self.game(extra=(maker,));self.effect(self.other,*maker.spell_effects)
         self.assertEqual({'parent-token','child-token'},{o.definition for o in self.state.objects(Zone.BATTLEFIELD) if o.token})
+        self.effect(self.other,SearchLibrary(SupertypeSelector(Zone.LIBRARY,relation='owned',
+            excluded_supertypes=('Basic',)),Zone.HAND))
+        q=self.kernel.pending_choice;self.assertEqual('library_search',q.kind);self.assertTrue(q.options)
+        self.kernel.answer(q.request_id,q.actor,[])
+        self.assertEqual(0,self.hand('A'))
         bad=(
             CardProgram('bad','Bad',('Instant',),spell_effects=(PhaseOut('missing'),)),
             CardProgram('bad','Bad',('Instant',),spell_effects=(PayLifeOrSacrifice(3,Selector(Zone.BATTLEFIELD,relation='controlled')),)),

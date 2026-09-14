@@ -1,7 +1,8 @@
 # Phasing and player-choice card review
 
 Cycle base: `9c63ed66dbd07c6fc20deab92314e367c29203c5` on `codex/remaining-card-programs`.
-Four complete printed programs remain isolated drafts pending hosted validation.
+Four complete printed programs are source-bound and promoted after hosted draft validation.
+The required reviewed-loader validation is pending.
 No project code, Python, imports, compilation, installation or tests ran locally.
 
 ## Printed-face mapping
@@ -55,7 +56,7 @@ or library contents become public.
 
 ## Bound sources
 
-Catalog printed facts are retained with the drafts. The pinned
+Exact catalog printed facts are bound to each reviewed program by the hashes below. The pinned
 [Comprehensive Rules](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt)
 retain SHA-256 `4381ad1b39ab2c05f7d03633a20f711ed37277074d3266dcba5f38cbb527423f`.
 Review covers CR 118 (payments), 400.7e (public successor identity), 502.1
@@ -85,8 +86,7 @@ shuffling and control; checkpoint restore and actor replay; and compiler gates.
 Kernel checkpoint schema is **119** and state schema remains **13**. The
 historical schema-118 test accepts its layout or newer and still rejects 117.
 No started game or legacy checkpoint is migrated. Production admission remains
-closed. Draft and required reviewed-loader hosted runs are pending; no new test
-is counted as passed yet.
+closed. The required reviewed-loader hosted run remains pending.
 
 The initial draft run `34791142601` passed syntax, installation and packaged
 assets. Windows ran 1,609 tests with 17 fixture errors and no assertion failures;
@@ -94,4 +94,19 @@ Ubuntu was cancelled by matrix fail-fast. Corrections preserve the upkeep-only
 scenario gate, action priority and permanent-source compiler validation. Focused
 non-upkeep trigger fixtures now call the internal phase collector explicitly;
 Desert recovery and haste/phasing integration traverse real turns. A corrective
-hosted run remains required before promotion.
+hosted run passed before promotion.
+
+
+[Corrected draft validation 34791775813](https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813) passed
+**1,609 tests on each of Ubuntu and Windows**, plus syntax, installation and
+packaged assets, at commit `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
+All four programs now use the source-bound reviewed loader, bringing coverage
+to **266 unique cards / 331 deck copies**, with **68 unstarted / 69 copies**.
+All 262 prior reviewed rows are unchanged. The required reviewed-loader run
+is pending; no production or gameplay admission is granted.
+
+The promotion also tightens public phasing projection: an orphan has no return
+controller immediately after its exact root leaves, even before the next untap
+prunes metadata. The existing orphan test covers this timing. The compiler/search
+test also explicitly permits failure to find with eligible cards when the only
+filter excludes a supertype. Both follow-ups require the reviewed-loader run.

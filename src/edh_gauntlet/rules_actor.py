@@ -164,7 +164,11 @@ def project_actor(kernel,actor):
         try:obj=kernel.state.get(ObjectRef.from_json(row['ref']))
         except RulesViolation:continue
         if obj.zone!=Zone.BATTLEFIELD or not obj.phased:continue
-        root=kernel.phase_links.get(kernel._phase_key(ObjectRef.from_json(row['root'])))
+        root_ref=ObjectRef.from_json(row['root'])
+        root=kernel.phase_links.get(kernel._phase_key(root_ref))
+        try:root_object=state.get(root_ref)
+        except RulesViolation:root_object=None
+        if root_object is None or root_object.zone!=Zone.BATTLEFIELD or not root_object.phased:root=None
         phased.append({'ref':deepcopy(row['ref']),'root':deepcopy(row['root']),
             'indirect':row['ref']!=row['root'],'controller_at_phase_out':row['controller'],
             'return_controller':root['controller'] if root is not None else None})

@@ -7,14 +7,14 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 262,
-    "remaining_outside_reviewed_bundle": 72,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 266,
+    "remaining_outside_reviewed_bundle": 68,
+    "drafts_written": 0,
     "not_started_on_this_branch": 68,
-    "reviewed_bundle_copies": 327,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 331,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 35
+    "promoted_on_this_branch": 39
   },
   "cards": [
     {
@@ -537,7 +537,7 @@
     {
       "card_id": "desert-warfare",
       "name": "Desert Warfare",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -552,11 +552,27 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "phasing-choices-2026-09-13",
-      "draft_definition": "draft:desert-warfare",
-      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:desert-warfare",
+      "reviewed_definition": "catalog:desert-warfare",
+      "source_facts_sha256": "5379fe3951854242e50fb24fb03bb900f339d646a91dccefa7d5e497a5cb74f5",
+      "draft_hosted_validation": {
+        "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+        "run_id": 34791775813
+      },
+      "shared_mechanics": [
+        "PhaseOut",
+        "ZoneEventPattern",
+        "DelayedNextStep",
+        "OngoingEffect",
+        "WithCreatedTokens",
+        "PayLifeOrSacrifice",
+        "SearchByPlayer",
+        "SupertypeSelector"
+      ]
     },
     {
       "card_id": "devouring-light",
@@ -1207,7 +1223,7 @@
     {
       "card_id": "indulgent-tormentor",
       "name": "Indulgent Tormentor",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1222,11 +1238,27 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "phasing-choices-2026-09-13",
-      "draft_definition": "draft:indulgent-tormentor",
-      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:indulgent-tormentor",
+      "reviewed_definition": "catalog:indulgent-tormentor",
+      "source_facts_sha256": "6c3b28a33ce320bc871b8a611e26fa05b7c5b85481513798ed259608c2297c55",
+      "draft_hosted_validation": {
+        "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+        "run_id": 34791775813
+      },
+      "shared_mechanics": [
+        "PhaseOut",
+        "ZoneEventPattern",
+        "DelayedNextStep",
+        "OngoingEffect",
+        "WithCreatedTokens",
+        "PayLifeOrSacrifice",
+        "SearchByPlayer",
+        "SupertypeSelector"
+      ]
     },
     {
       "card_id": "innkeeper-s-talent",
@@ -2228,7 +2260,7 @@
     {
       "card_id": "talon-gates-of-madara",
       "name": "Talon Gates of Madara",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2243,11 +2275,27 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "phasing-choices-2026-09-13",
-      "draft_definition": "draft:talon-gates-of-madara",
-      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:talon-gates-of-madara",
+      "reviewed_definition": "catalog:talon-gates-of-madara",
+      "source_facts_sha256": "c1fd0a20ba37f7cdb5d77ea536e9d71c5e89dfaf903605e8ea9d074988148ffc",
+      "draft_hosted_validation": {
+        "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+        "run_id": 34791775813
+      },
+      "shared_mechanics": [
+        "PhaseOut",
+        "ZoneEventPattern",
+        "DelayedNextStep",
+        "OngoingEffect",
+        "WithCreatedTokens",
+        "PayLifeOrSacrifice",
+        "SearchByPlayer",
+        "SupertypeSelector"
+      ]
     },
     {
       "card_id": "the-cruelty-of-gix",
@@ -2580,7 +2628,7 @@
     {
       "card_id": "volatile-fault",
       "name": "Volatile Fault",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2595,11 +2643,27 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "printed_face_review_complete_source_binding_pending",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "draft_passed_reviewed_loader_pending",
       "batch": "phasing-choices-2026-09-13",
-      "draft_definition": "draft:volatile-fault",
-      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md"
+      "review_record": "docs/PHASING_CHOICE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:volatile-fault",
+      "reviewed_definition": "catalog:volatile-fault",
+      "source_facts_sha256": "7be3aaf3d64e39686c3af45c0985e6ce23011c5d3a6122875f892d502939d5fa",
+      "draft_hosted_validation": {
+        "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+        "run_id": 34791775813
+      },
+      "shared_mechanics": [
+        "PhaseOut",
+        "ZoneEventPattern",
+        "DelayedNextStep",
+        "OngoingEffect",
+        "WithCreatedTokens",
+        "PayLifeOrSacrifice",
+        "SearchByPlayer",
+        "SupertypeSelector"
+      ]
     },
     {
       "card_id": "watery-grave",
@@ -2704,7 +2768,12 @@
       "indulgent-tormentor",
       "volatile-fault"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "talon-gates-of-madara",
+      "desert-warfare",
+      "indulgent-tormentor",
+      "volatile-fault"
+    ],
     "shared_mechanics": [
       "Direct/indirect phasing and departed-controller untap timing",
       "Qualified zone observations and public successor bindings",
@@ -2717,9 +2786,9 @@
     "runtime_checkpoint_schema": 119,
     "state_checkpoint_schema": 13,
     "new_test_methods": 63,
-    "validation_status": "draft_corrections_pending_github_hosted_ci",
+    "validation_status": "draft_passed_reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Validate all four isolated drafts and 63 new conformance methods on GitHub-hosted Ubuntu/Windows; fix failures, bind exact source facts and promote, then validate the reviewed loader.",
+    "review_work_remaining": "All four printed programs are source-bound and promoted. Validate all 266 programs and 63 new methods through the reviewed loader on GitHub-hosted Ubuntu and Windows, then record exact evidence.",
     "selection_note": "Talon Gates is implemented with its complete phasing lifecycle. Volatile Fault joins Desert Warfare and Indulgent Tormentor through captured-player choice support. Necromancy remains unstarted because cast-time sorcery eligibility and permanent-to-Aura conversion need separate support.",
     "next_batch": [
       "necromancy",
@@ -2760,6 +2829,23 @@
           "Discover nested token definitions, treat excluded supertypes as a search filter, and expose public phasing return bindings in actor packets."
         ]
       }
+    ],
+    "draft_hosted_validation": {
+      "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+      "run_id": 34791775813,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1609,
+      "new_test_methods": 63,
+      "conclusion": "success",
+      "scope": "Four isolated phasing/choice drafts; 63 new methods, actual turn integration, actor replay, checkpoint restore, source syntax, installation and packaged assets"
+    },
+    "promotion_followups": [
+      "Public phasing packets report no return controller for an orphan immediately after its exact root leaves, before the next untap prune.",
+      "A negative-supertype-only search has explicit failure-to-find coverage with eligible cards present."
     ]
   },
   "hosted_validation_history": [
@@ -2993,6 +3079,48 @@
       "new_test_methods": 47,
       "conclusion": "success",
       "scope": "Four isolated upkeep/delayed-step drafts; exact cumulative payments, attached untap restrictions, delayed returns and draws, public hand activations, actor replay, checkpoint restore, syntax, installation and packaged assets"
+    },
+    {
+      "commit": "0a9259b8142247880f7493d7ee02d8e415d996b2",
+      "run_id": 34787728272,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1546,
+      "new_test_methods": 47,
+      "conclusion": "success",
+      "scope": "All 262 source-bound reviewed programs, including Dance of the Dead, Mystic Remora, Touch the Spirit Realm and Arcane Denial; all 47 new methods through the reviewed loader; actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    },
+    {
+      "commit": "13d0a3060e17773462a8f79be9c41f8742964f81",
+      "run_id": 34791142601,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34791142601",
+      "conclusion": "failure",
+      "windows_tests": 1609,
+      "errors": 17,
+      "failures": 0,
+      "ubuntu": "cancelled_after_matrix_failure",
+      "issues": [
+        "Use bounded trigger-discovery fixtures for focused non-upkeep cases and real turn progression for recovery/haste integration.",
+        "Restore A's actual priority before spending Treasure; use a real permanent ability for source-duration exile.",
+        "Discover nested token definitions, treat excluded supertypes as a search filter, and expose public phasing return bindings in actor packets."
+      ],
+      "resolution_commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6"
+    },
+    {
+      "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+      "run_id": 34791775813,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1609,
+      "new_test_methods": 63,
+      "conclusion": "success",
+      "scope": "Four isolated phasing/choice drafts; 63 new methods, actual turn integration, actor replay, checkpoint restore, source syntax, installation and packaged assets"
     }
   ],
   "cycle_history": [
@@ -3723,12 +3851,12 @@
     "candidate_families": [
       {
         "cards": [
-          "dance-of-the-dead",
-          "mystic-remora",
-          "touch-the-spirit-realm",
-          "talon-gates-of-madara"
+          "necromancy",
+          "nullpriest-of-oblivion",
+          "karmic-guide",
+          "sigarda-s-splendor"
         ],
-        "focus": "Complete remaining upkeep, exact delayed-return and hand-activation lifecycles; Talon Gates also requires full phasing."
+        "focus": "Complete cast-announcement, echo/protection and per-incarnation life-note lifecycles using current shared primitives."
       }
     ],
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."

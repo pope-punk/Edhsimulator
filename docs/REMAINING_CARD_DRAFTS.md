@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**262 source-bound reviewed programs / 327 deck copies**. There are **72 cards outside the
-reviewed bundle**: four authored drafts and 68 unstarted. Reviewed coverage is not production certification.
+**266 source-bound reviewed programs / 331 deck copies**. There are **68 cards outside the
+reviewed bundle**, all unstarted. No drafts remain. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,21 +25,29 @@ successful hosted validation.
 ## Current cycle: phasing and player-authored choices
 
 Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault
-are complete printed programs in the isolated draft bundle. Shared work supplies
+have complete printed-face review and exact source bindings. Shared work supplies
 direct/indirect phasing with departed-controller timing, qualified Desert zone
 observations, next-own-end-step returns, permanent noncopiable token grants,
 opponent-authored life/sacrifice payments and optional own-library searches by
-captured players. Volatile Fault uses that search work; Necromancy remains queued
-for cast-time sorcery eligibility, cleanup delay and full Aura conversion.
+captured players. Actor packets preserve public phase groups and their return
+controllers. Volatile Fault shares the search work.
 
-Kernel schema is **119**, state schema **13**. The **63 new conformance methods**
-are ready for GitHub-hosted validation. Draft validation and reviewed-bundle
-promotion remain pending; reviewed coverage stays at 262 until completion.
+Kernel schema is **119**, state schema **13**. The **63 new methods**
+now use the reviewed loader. [Draft validation 34791775813](https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813)
+passed **1,609 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
+The required reviewed-loader check is pending.
 See [the cycle review](PHASING_CHOICE_CARD_REVIEW.md).
 
-Finish hosted draft validation, bind the exact source facts, promote complete
-programs and run the required reviewed-loader checks. Keep all project execution
-on GitHub-hosted runners, with no game migration or production admission.
+Continue **Necromancy, Nullpriest of Oblivion, Karmic Guide and Sigarda's
+Splendor**, refreshing source and selecting a practical complete subset. The
+JSON inventory retains the concrete requirements: actual cast-time sorcery
+eligibility, next-cleanup delays and Aura conversion; true additional kicker
+costs and entry flags; complete black protection and echo control history; and
+per-incarnation entry life notes, upkeep comparisons and actual white-spell
+observations. Reuse current ongoing effects, delays, payments and attachment
+lifecycles. Keep all project execution on GitHub-hosted runners, with no game
+migration or production admission.
 
 ## Previous cycle: upkeep payments and delayed steps
 
