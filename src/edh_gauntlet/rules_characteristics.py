@@ -159,8 +159,8 @@ def _refresh_modified(views, objects):
         view=views[obj.ref]
         modified=(obj.zone==Zone.BATTLEFIELD and not obj.phased and 'Creature' in view.types
             and (any(n>0 for _,n in obj.counters) or any(
-                'Equipment' in views[a.ref].subtypes
-                or 'Aura' in views[a.ref].subtypes and a.controller==obj.controller
+                'Artifact' in views[a.ref].types and 'Equipment' in views[a.ref].subtypes
+                or 'Enchantment' in views[a.ref].types and 'Aura' in views[a.ref].subtypes and a.controller==obj.controller
                 for a in attached.get(obj.ref,()))))
         if view.modified!=bool(modified):views[obj.ref]=replace(view,modified=bool(modified))
 

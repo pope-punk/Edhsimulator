@@ -45,6 +45,7 @@ cards remain than the captured damage amount.
 `ModifiedSelector` reads a derived, noncopiable predicate. Any positive counter,
 attached Equipment controlled by anyone, or an attached Aura controlled by the
 creature's controller qualifies; noncreatures and phased objects do not.
+Equipment and Aura qualification also requires the corresponding current card type.
 Type-layer changes refresh the predicate during ordinary and hypothetical
 dependency evaluation. `LostPlayerPT` requires explicit player history, remains
 a static modifier, and never becomes a counter or a copied printed value.
@@ -74,8 +75,8 @@ bound into implementation identity. Existing games are not migrated.
 ## Hosted validation
 
 Draft and reviewed-loader evidence will be recorded here after successful runs.
-The new test file contains **57 methods**, bringing the expected suite to
-**2,094 tests per platform**. Checks cover printed costs, static filters,
+The new test file contains **58 methods**, bringing the expected suite to
+**2,095 tests per platform**. Checks cover printed costs, static filters,
 event qualification, source departure, exact mill arrivals, replacement behavior,
 exploration order and empty libraries, owner-bound Warp, commander replacement,
 Aura entry, actor privacy, strict compilation, and checkpoint/replay.

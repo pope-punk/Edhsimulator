@@ -147,6 +147,15 @@ class LibraryCreatureTests(unittest.TestCase):
         self.state.phase(equipment,True);self.assertFalse(self.trample(self.body))
         self.state.phase(equipment,False);self.assertTrue(self.trample(self.body))
 
+    def test_attachment_type_loss_stops_modifying_before_attachment_cleanup(self):
+        self.game();equipment=self.add('lc-equipment');self.state.attach(equipment,self.body)
+        effect=ContinuousProgram('remove-artifact',Selector(Zone.BATTLEFIELD),(ChangeTypes(remove=('Artifact',)),))
+        kwargs={'temporary':((self.state.get(self.source),effect,(equipment,)),),
+                'life_totals':{p:self.state.life(p) for p in self.state.players},'live_players':self.state.live_players}
+        views=evaluate(self.state.objects(),self.kernel.definitions,**kwargs)
+        self.assertFalse(views[self.body].modified);self.assertNotIn('trample',views[self.body].keywords)
+        self.assertEqual(views,evaluate_exhaustive(self.state.objects(),self.kernel.definitions,**kwargs))
+
     def test_phased_kodama_stops_granting_trample(self):
         self.game();self.state.add_counters(self.body,'charge',1);self.state.phase(self.source,True)
         self.assertFalse(self.trample(self.body))
@@ -333,7 +342,8 @@ class LibraryCreatureTests(unittest.TestCase):
     def test_warp_token_never_replaces_top_card(self):
         self.game('chaos-warp',Zone.HAND,library=0);target=self.add(actor='B',token=True);top=self.add('catalog:forest','B',Zone.LIBRARY)
         self.cast((target,));self.drain()
-        self.assertEqual(Zone.BATTLEFIELD,self.current(top).zone);self.assertEqual(Zone.OUTSIDE,self.current(target).zone)
+        self.assertEqual(Zone.BATTLEFIELD,self.current(top).zone)
+        self.assertNotIn(target.card_id,{o.ref.card_id for o in self.state.objects()})
         self.assertEqual(top.card_id,self.events('cards_revealed')[-1]['refs'][0]['card_id'])
 
     def test_warp_can_reveal_the_shuffled_target_again(self):

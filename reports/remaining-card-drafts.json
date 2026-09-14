@@ -3410,7 +3410,7 @@
       "chaos-warp"
     ],
     "cards_promoted": [],
-    "new_test_methods": 57,
+    "new_test_methods": 58,
     "runtime_checkpoint_schema": 126,
     "state_checkpoint_schema": 16,
     "validation_status": "pending",
@@ -3441,6 +3441,20 @@
         "findings": [
           "Two missing kernel imports caused selection and owner-capture failures; both are corrected without changing existing test expectations.",
           "Added seven focused exploration, replay, privacy, source-departure and Aura cases."
+        ]
+      },
+      {
+        "stage": "expanded_draft",
+        "commit": "b8314ca8ee91a619fa78a1380955da6c03c910f2",
+        "run_id": 34860189545,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34860189545",
+        "conclusion": "failure",
+        "tests_run_windows": 2094,
+        "failures": 0,
+        "errors": 1,
+        "findings": [
+          "The token test expected an OUTSIDE object, but tokens correctly cease to exist and are removed. Assert absence while retaining the top-card entry check.",
+          "Review added an attachment-type-loss regression: Equipment/Aura labels alone cannot modify after the corresponding card type is lost."
         ]
       }
     ]
