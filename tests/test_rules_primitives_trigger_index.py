@@ -16,7 +16,7 @@ class TriggerIndexTests(unittest.TestCase):
         programs=(CardProgram('observer','Observer',('Creature',),power=2,toughness=2,abilities=abilities),CardProgram('blank','Blank',('Creature',),power=2,toughness=2))
         state=RulesState(('A','B'));state.add_card('a','observer','A',Zone.BATTLEFIELD);state.add_card('b','observer','B',Zone.BATTLEFIELD);state.add_card('c','blank','A',Zone.HAND)
         if grants:
-            trigger=AbilityProgram('granted-cast',EventPattern('spell_cast'),(GainLife(2),))
+            trigger=AbilityProgram('granted-activation',EventPattern('ability_activated'),(GainLife(2),))
             programs+=(CardProgram('granter','Granter',('Enchantment',),continuous=(
                 ContinuousProgram('grant',Selector(Zone.BATTLEFIELD,types=('Creature',)),(AddTriggered(trigger),)),)),)
             state.add_card('grant','granter','A',Zone.BATTLEFIELD)
