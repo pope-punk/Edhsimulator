@@ -1,6 +1,6 @@
 # Casting during resolution: source and implementation review
 
-Status: source-bound reviewed programs; required reviewed-loader validation pending.
+Status: complete source-bound reviewed programs; required hosted validation passed.
 Base: `8f2c947759f204e42014edfe1a654d0832d6ce46`. Kernel/state schemas: **128/17**.
 No local project execution. Production admission remains closed.
 
@@ -55,7 +55,12 @@ confirm Oracle's three clauses, cumulative land plays and ordinary timing.
 The **85-method draft** passed **2,245 tests on each of Ubuntu and Windows**,
 plus syntax, installation and assets, at
 `c168dae7c628cde1f37e0381a21a609fe720f088` ([run 34876806875](https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875)).
-The **95-method required reviewed-loader run** is pending. The initial
+The **95-method required reviewed-loader run** passed **2,255 tests on each
+platform**, plus syntax, full installation and assets, at
+`bfaef8c37152768444ffca8afe5357aaab94a64d` ([run 34878332029](https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029)).
+All prior 302 reviewed programs remain unchanged. Coverage is **306/334 unique
+cards and 372/400 deck copies**, with **28 unique cards/copies remaining**.
+The final result-recording commit changes only documentation and inventory. The initial
 three-card run executed 2,217 tests on Ubuntu with two failures and two errors:
 incorrect kicker and Gate fixtures, plus a missing canonical-reference update.
 These are corrected before the expanded run. Existing limitations
@@ -67,8 +72,9 @@ Chthonian Nightmare remains queued for complete energy and ordered costs.
 The required reviewed-loader run includes ten additional regressions and four
 focused corrections: library-moving effects follow CR 605.1a's mana-ability
 classification; bottom/top placement and surveil finish before top disclosure;
-and face-up resolution exiles remain available as historical public evidence even
-without a hit. Other regressions cover uninterrupted sequential offers, copied
+face-up resolution exiles remain available as historical public evidence even
+without a hit; and library scans exclude noncard spell copies awaiting removal.
+Other regressions cover uninterrupted sequential offers, copied
 Oracle permissions and failed-draw state-based actions. These corrections are
 not attributed to the earlier 85-method draft proof.
 
@@ -82,3 +88,14 @@ not attributed to the earlier 85-method draft proof.
 A final library regression excludes noncard spell copies waiting for state-based
 removal from discover/cascade scans and Oracle's current top disclosure. This
 extends the same card-only rule already applied to tokens.
+
+## Next work order
+
+- Chthonian Nightmare: player energy already exists in state, but add an explicit gain effect, X energy payment and multiple zone-cost groups. Preserve target-before-cost ordering and allow X zero. Costs need an authored legal payment order under CR 601.2h, not an assumed printed order; do not use object-counter costs for player energy.
+- Maze's End: reuse tapped entry, colorless mana, source-return cost and Gate search; add distinct current Gate-name counting and a real player-win transition after search/shuffle.
+- Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.
+- Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.
+- Entity Tracker still requires the fully-unlocked Room trigger; enchantment-entry support alone is incomplete.
+
+Existing games retain their implementation. No local project execution, game
+migration or production admission occurred. Continue the existing 40-minute heartbeat.

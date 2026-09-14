@@ -198,16 +198,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete source-bound reviewed program. Both hosted platforms passed the 85-method draft and all 95 required reviewed-loader methods, including top-disclosure, public-exile and mana-classification corrections.",
       "source_facts_sha256": "77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d",
       "previous_draft_definition": "draft:apex-devastator",
       "reviewed_definition": "catalog:apex-devastator",
       "draft_hosted_validation": {
         "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
         "run_id": 34876806875
+      },
+      "hosted_validation": {
+        "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+        "run_id": 34878332029
       }
     },
     {
@@ -1509,16 +1513,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete source-bound reviewed program. Both hosted platforms passed the 85-method draft and all 95 required reviewed-loader methods, including top-disclosure, public-exile and mana-classification corrections.",
       "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a",
       "previous_draft_definition": "draft:hidden-nursery",
       "reviewed_definition": "catalog:hidden-nursery",
       "draft_hosted_validation": {
         "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
         "run_id": 34876806875
+      },
+      "hosted_validation": {
+        "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+        "run_id": 34878332029
       }
     },
     {
@@ -2318,16 +2326,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete source-bound reviewed program. Both hosted platforms passed the 85-method draft and all 95 required reviewed-loader methods, including top-disclosure, public-exile and mana-classification corrections.",
       "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549",
       "previous_draft_definition": "draft:oracle-of-mul-daya",
       "reviewed_definition": "catalog:oracle-of-mul-daya",
       "draft_hosted_validation": {
         "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
         "run_id": 34876806875
+      },
+      "hosted_validation": {
+        "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+        "run_id": 34878332029
       }
     },
     {
@@ -2769,16 +2781,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete source-bound reviewed program. Both hosted platforms passed the 85-method draft and all 95 required reviewed-loader methods, including top-disclosure, public-exile and mana-classification corrections.",
       "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7",
       "previous_draft_definition": "draft:rishkar-s-expertise",
       "reviewed_definition": "catalog:rishkar-s-expertise",
       "draft_hosted_validation": {
         "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
         "run_id": 34876806875
+      },
+      "hosted_validation": {
+        "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+        "run_id": 34878332029
       }
     },
     {
@@ -3606,7 +3622,7 @@
     "new_test_methods": 95,
     "runtime_checkpoint_schema": 128,
     "state_checkpoint_schema": 17,
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "passed",
     "shared_mechanics": [
       "Resolution-cast permissions with suspended parents and no priority",
       "Discover/cascade public sequential exile and random-bottom continuations",
@@ -3634,9 +3650,46 @@
         "findings": [
           "Two fixtures used the wrong Nullpriest kicker amount and an unavailable Gate definition. The catalog generation check also required applying Apex's Hydra correction to the canonical reference text. These are corrected in the expanded four-card revision."
         ]
+      },
+      {
+        "commit": "aed7f8e8de4eb5d03058abd63fc8bb378cc01cd1",
+        "run_id": 34877830986,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34877830986",
+        "conclusion": "success",
+        "tests_per_platform": 2254,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104089327079,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2254,
+            "seconds": 441.65,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104089327360,
+            "name": "verify (windows-latest)",
+            "tests": 2254,
+            "seconds": 456.94,
+            "conclusion": "success"
+          }
+        ],
+        "stage": "superseded_reviewed_loader",
+        "findings": [
+          "All 94 methods passed; the final library regression additionally excludes noncard spell copies before state-based removal."
+        ]
       }
     ],
-    "review_work_remaining": "Required reviewed-loader hosted validation for all 95 new methods.",
+    "review_work_remaining": "",
     "unresolved_defects": [],
     "next_batch_source_review": {
       "status": "preparation_only",
@@ -3720,7 +3773,40 @@
       "Defer top-card disclosure until bottom/top placement is finalized, including discover/cascade and surveil; prevent transient top exposure or false reference retirement.",
       "Preserve public face-up exile histories even when discover/cascade finishes without a hit.",
       "Library scans and top disclosures ignore noncard spell copies waiting for state-based removal, just as they ignore tokens."
-    ]
+    ],
+    "hosted_validation": {
+      "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+      "run_id": 34878332029,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
+      "conclusion": "success",
+      "tests_per_platform": 2255,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104091015220,
+          "name": "verify (windows-latest)",
+          "tests": 2255,
+          "seconds": 454.942,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104091015298,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2255,
+          "seconds": 429.101,
+          "conclusion": "success"
+        }
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -4468,6 +4554,46 @@
           "seconds": 431.365,
           "conclusion": "success"
         }
+      ]
+    },
+    {
+      "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+      "run_id": 34878332029,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
+      "conclusion": "success",
+      "tests_per_platform": 2255,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104091015220,
+          "name": "verify (windows-latest)",
+          "tests": 2255,
+          "seconds": 454.942,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104091015298,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2255,
+          "seconds": 429.101,
+          "conclusion": "success"
+        }
+      ],
+      "stage": "required_reviewed_loader",
+      "cards": [
+        "rishkar-s-expertise",
+        "hidden-nursery",
+        "apex-devastator",
+        "oracle-of-mul-daya"
       ]
     }
   ],
@@ -6703,11 +6829,11 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "draft_hosted_validation": {
-    "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
-    "run_id": 34868673387,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387",
+    "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+    "run_id": 34876806875,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875",
     "conclusion": "success",
-    "tests_per_platform": 2159,
+    "tests_per_platform": 2245,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -6720,17 +6846,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104058848709,
+        "job_id": 104085905904,
         "name": "verify (ubuntu-latest)",
-        "tests": 2159,
-        "seconds": 416.817,
+        "tests": 2245,
+        "seconds": 441.625,
         "conclusion": "success"
       },
       {
-        "job_id": 104058848976,
+        "job_id": 104085906105,
         "name": "verify (windows-latest)",
-        "tests": 2159,
-        "seconds": 414.866,
+        "tests": 2245,
+        "seconds": 439.011,
         "conclusion": "success"
       }
     ]
@@ -6797,25 +6923,25 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
+    "base_commit": "8f2c947759f204e42014edfe1a654d0832d6ce46",
     "cards": [
-      "replication-technique",
-      "changing-loyalty",
-      "sunken-palace",
-      "delighted-halfling"
+      "rishkar-s-expertise",
+      "hidden-nursery",
+      "apex-devastator",
+      "oracle-of-mul-daya"
     ],
     "unique_cards_completed": 4,
     "deck_copies_completed": 4,
-    "new_test_methods": 65,
-    "reviewed_before": 298,
-    "reviewed_after": 302,
-    "remaining_after": 32,
+    "new_test_methods": 95,
+    "reviewed_before": 302,
+    "reviewed_after": 306,
+    "remaining_after": 28,
     "validation": {
-      "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
-      "run_id": 34869674458,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+      "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+      "run_id": 34878332029,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
       "conclusion": "success",
-      "tests_per_platform": 2160,
+      "tests_per_platform": 2255,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -6824,21 +6950,21 @@
         "source syntax",
         "full distribution installation",
         "packaged assets",
-        "required reviewed-loader conformance"
+        "draft conformance"
       ],
       "jobs": [
         {
-          "job_id": 104062164282,
+          "job_id": 104091015220,
           "name": "verify (windows-latest)",
-          "tests": 2160,
-          "seconds": 417.057,
+          "tests": 2255,
+          "seconds": 454.942,
           "conclusion": "success"
         },
         {
-          "job_id": 104062164495,
+          "job_id": 104091015298,
           "name": "verify (ubuntu-latest)",
-          "tests": 2160,
-          "seconds": 431.365,
+          "tests": 2255,
+          "seconds": 429.101,
           "conclusion": "success"
         }
       ]
@@ -6846,11 +6972,11 @@
     "local_project_code_executed": false
   },
   "hosted_validation": {
-    "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
-    "run_id": 34869674458,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+    "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+    "run_id": 34878332029,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
     "conclusion": "success",
-    "tests_per_platform": 2160,
+    "tests_per_platform": 2255,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -6859,21 +6985,21 @@
       "source syntax",
       "full distribution installation",
       "packaged assets",
-      "required reviewed-loader conformance"
+      "draft conformance"
     ],
     "jobs": [
       {
-        "job_id": 104062164282,
+        "job_id": 104091015220,
         "name": "verify (windows-latest)",
-        "tests": 2160,
-        "seconds": 417.057,
+        "tests": 2255,
+        "seconds": 454.942,
         "conclusion": "success"
       },
       {
-        "job_id": 104062164495,
+        "job_id": 104091015298,
         "name": "verify (ubuntu-latest)",
-        "tests": 2160,
-        "seconds": 431.365,
+        "tests": 2255,
+        "seconds": 429.101,
         "conclusion": "success"
       }
     ]

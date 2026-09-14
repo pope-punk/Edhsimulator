@@ -36,7 +36,11 @@ Ubuntu and Windows**, plus syntax, installation and assets, at
 `c168dae7c628cde1f37e0381a21a609fe720f088` ([run 34876806875](https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875)).
 The required reviewed-loader run covers **95 new methods**, including the
 promotion review's mana classification, top-placement disclosure and public-exile
-history corrections. Results are pending; see [the review](RESOLUTION_CAST_CARD_REVIEW.md).
+history corrections. All **2,255 tests passed on each platform**, plus syntax,
+installation and packaged assets, at
+`bfaef8c37152768444ffca8afe5357aaab94a64d` ([run 34878332029](https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029)).
+The final result-recording commit changes only documentation and inventory.
+See [the review](RESOLUTION_CAST_CARD_REVIEW.md).
 No local project execution occurred.
 
 Next candidates are Chthonian Nightmare, Maze's End, Rhythm of the Wild and
