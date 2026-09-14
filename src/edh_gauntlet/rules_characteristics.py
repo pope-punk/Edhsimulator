@@ -156,7 +156,7 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
 
 def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
     if source.ref in views and views[source.ref].abilities_removed:return ()
-    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals, active_player):
+    if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals, active_player=active_player):
         return ()
     return tuple(obj.ref for obj in objects if matches(effect.selector, obj, views[obj.ref], source)
         and (source.ref != entering_ref or obj.ref == entering_ref)
