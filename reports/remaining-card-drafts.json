@@ -2820,7 +2820,7 @@
     "runtime_checkpoint_schema": 120,
     "state_checkpoint_schema": 13,
     "new_test_methods": 63,
-    "validation_status": "pending_github_hosted_ci",
+    "validation_status": "draft_corrections_pending_github_hosted_ci",
     "unresolved_defects": [],
     "review_work_remaining": "Validate four isolated drafts and 63 new methods on GitHub-hosted Ubuntu/Windows, fix failures, bind source facts, promote and pass the required reviewed loader.",
     "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
@@ -2849,7 +2849,26 @@
         "Current phasing and exact attachments"
       ],
       "guard": "Refresh source and select a practical complete subset. No local execution, game migration or production admission."
-    }
+    },
+    "hosted_attempts": [
+      {
+        "run_id": 34796156600,
+        "commit": "eeebe64395610c0b6ea9ec5857fefbf3d3076db2",
+        "windows_tests": 1609,
+        "failures": 1,
+        "errors": 2,
+        "new_test_class_executed": false,
+        "ubuntu": "cancelled_after_matrix_failure",
+        "issues": [
+          "Sigarda's GainLife JSON incorrectly included a players field; the strict decoder rejected the draft and prevented new test-class loading.",
+          "Adding paid-cost values to activations unintentionally enabled an existing fenced paid-statistic path."
+        ],
+        "corrections": [
+          "Remove the extra GainLife field.",
+          "Bind new subtype comparisons only to public battlefield costs, preserve existing activation-statistic rejection, and omit new paid summaries for hidden hand costs. Add regression coverage."
+        ]
+      }
+    ]
   },
   "hosted_validation_history": [
     {

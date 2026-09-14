@@ -1347,7 +1347,7 @@ def validate(program,_depth=0):
                     effects(node.effects,bindings,allow_x,available_values)
                     effects(node.otherwise,bindings,allow_x,available_values)
             if isinstance(node,IfPaidCostSubtype):
-                if (type(node.cost_id) is not str or 'paid_cost:'+node.cost_id not in available_values
+                if (type(node.cost_id) is not str or 'paid_subtype:'+node.cost_id not in available_values
                         or not strings(node.subtypes) or not strings(node.sets)
                         or not node.subtypes and not node.sets or any(s not in SUBTYPE_SETS for s in node.sets)):
                     raise RulesViolation('Invalid or unbound paid-cost subtype comparison')
@@ -1747,7 +1747,8 @@ def validate(program,_depth=0):
         if ability.zone!=Zone.BATTLEFIELD and any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Exile-until-leaves requires a battlefield activation source')
         division=division_spec(ability.effects,ability.targets)
-        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values=({'counter_division'} if division else set())|{'paid_cost:'+c.cost_id for c in ability.cost.zone_costs})
+        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values=({'counter_division'} if division else set())|{'paid_subtype:'+c.cost_id for c in ability.cost.zone_costs
+            if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD or c.selector is None and ability.zone==Zone.BATTLEFIELD})
         target_effects(ability.effects,ability.targets)
         if ability.mana_ability and any(isinstance(node,PayMana) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Nested resolution payments inside mana abilities are unsupported')
@@ -1971,7 +1972,8 @@ def validate(program,_depth=0):
         target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols))
     if any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(program.spell_effects)):
         raise RulesViolation('Exile-until-leaves requires a permanent ability source')
-    spell_values={'paid_cost:'+c.cost_id for c in program.cast.cost.zone_costs} if program.cast else frozenset()
+    spell_values=({'paid_cost:'+c.cost_id for c in program.cast.cost.zone_costs}
+        | {'paid_subtype:'+c.cost_id for c in program.cast.cost.zone_costs if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD}) if program.cast else frozenset()
     if division_spec(program.spell_effects,program.spell_targets):
         if program.cast is None:raise RulesViolation('Divided counters require a casting specification')
         spell_values=spell_values|{'counter_division'}

@@ -39,8 +39,8 @@ ability. Replacement proposals capture life after earlier reserved payments and
 commit notes only for accepted battlefield entries. Public packets show current
 battlefield notes without following later hidden incarnations.
 
-Paid-subtype observations use derived characteristics before cards move or lose
-copy/counter effects. Suspended replacement choices rebuild pure observations;
+Paid-subtype observations are restricted to public battlefield payments and use
+derived characteristics before cards move or lose copy/counter effects. Suspended replacement choices rebuild pure observations;
 no payment is repeated. Public summaries do not disclose unrelated hands.
 
 ## Bound sources
@@ -76,3 +76,14 @@ Kernel schema is **120**; state schema remains **13**. The historical
 schema-119 test accepts its layout or newer and still rejects 118.
 No started game or checkpoint is migrated. Production admission remains closed.
 Draft and required reviewed-loader hosted checks are pending.
+
+## Initial hosted attempt
+
+Run `34796156600` passed syntax, installation and packaged assets.
+Windows ran 1,609 existing tests with one failure and two errors; Ubuntu was
+cancelled by matrix fail-fast. An extra GainLife JSON field rejected Sigarda's
+draft and prevented the 63 new methods from loading. The compiler also exposed
+an existing intentionally fenced activation-statistic path. The correction
+removes that field and restricts new subtype bindings to public battlefield
+payments, preserving the old statistic gate and hidden-cost privacy. A corrected
+hosted run remains required before promotion.

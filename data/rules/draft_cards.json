@@ -617,8 +617,7 @@
             "effects": [
               {
                 "node": "GainLife",
-                "amount": 1,
-                "players": "controller"
+                "amount": 1
               }
             ],
             "targets": null,

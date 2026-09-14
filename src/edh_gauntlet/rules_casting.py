@@ -523,9 +523,13 @@ class CastingRules:
         # Capture derived battlefield information immediately before payment.
         # A suspended replacement choice reruns this pure read; it cannot pay twice.
         views=self.characteristics()
-        paid_stats={cost.cost_id:{stat:sum(getattr(views[ref],stat) or 0 for ref in refs)
-            for stat in ('power','toughness','mana_value')}}
-        paid_subtypes={cost.cost_id:sorted({subtype for ref in refs for subtype in views[ref].subtypes})}
+        observations={}
+        if quote.kind=='cast':
+            observations['paid_cost_stats']={cost.cost_id:{stat:sum(getattr(views[ref],stat) or 0 for ref in refs)
+                for stat in ('power','toughness','mana_value')}}
+        # New subtype facts are restricted to public battlefield payments.
+        if all(self.state.get(ref).zone==Zone.BATTLEFIELD for ref in refs):
+            observations['paid_cost_subtypes']={cost.cost_id:sorted({subtype for ref in refs for subtype in views[ref].subtypes})}
         frame={'source':pending['source'],'controller':quote.actor,'bindings':{}}
         destination={'sacrifice':Zone.GRAVEYARD,'discard':Zone.GRAVEYARD,'exile':Zone.EXILE,'return':Zone.HAND}[cost.kind]
         events=self._move(refs,destination,frame,quote.action_id+':cost',cause=cost.kind,controller_mode='owner',payment=resources)
@@ -534,9 +538,9 @@ class CastingRules:
         else:
             source=next((event.before for event in events if event.before.ref==quote.source),source)
         if prepared_frame is not None:
-            prepared_frame['values'].update(paid_cost_stats=paid_stats,paid_cost_subtypes=paid_subtypes)
+            prepared_frame['values'].update(observations)
             for task in prepared_frame['tasks']:
-                if 'values' in task:task['values'].update(paid_cost_stats=paid_stats,paid_cost_subtypes=paid_subtypes)
+                if 'values' in task:task['values'].update(observations)
         self.announcement=None
         self._commit_prepared(quote,resources,paid=True,source=source,ability=ability,
             zone_payment={cost.cost_id:pending['refs']},previous_types=pending['source_types'],prepared_frame=prepared_frame)

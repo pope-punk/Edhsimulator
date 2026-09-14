@@ -361,7 +361,7 @@ class RecordedFactTests(unittest.TestCase):
         self.splendor();self.kernel.begin_step('A','upkeep');self.effect(self.source,LoseLife(1))
         self.top();self.assertEqual(0,self.hand());self.assertEqual(39,self.note())
 
-    def test_sigarda_noting_follows_draw_and_replacement_life_changes(self):
+    def test_sigarda_notes_before_separate_draw_trigger_resolves(self):
         observer=CardProgram('draw-loss','Draw loss',('Enchantment',),abilities=(
             AbilityProgram('draw-loss',EventPattern('card_drawn',controller_only=True),(LoseLife(1),)),))
         self.game('sigarda-s-splendor',extra=(observer,));self.state.add_card('observer','draw-loss','A',Zone.BATTLEFIELD)
@@ -512,6 +512,16 @@ class RecordedFactTests(unittest.TestCase):
         packet=RulesActorAdapter(self.kernel).packet('B')
         self.assertEqual({'land-return':['Cave']},packet['stack'][0]['paid_cost_subtypes'])
         self.assertNotIn('sentinel-secret',json.dumps(packet))
+        discard=CardProgram('discarder','Discarder',('Artifact',),activated=(
+            ActivatedProgram('discard',CostSpec(zone_costs=(ZoneCost('discard','discard',
+                selector=Selector(Zone.HAND,relation='owned')),)),(Draw(),)),))
+        self.game('wonderscape-sage',zone=Zone.BATTLEFIELD,extra=(discard,))
+        device=self.state.add_card('device','discarder','A',Zone.BATTLEFIELD)
+        secret=self.state.add_card('private-cost','n-body','A',Zone.HAND);self.window()
+        self.kernel.commit_action(self.kernel.quote_activation('private-cost','A',device,'discard'),
+            Payment(zone_costs=(('discard',(secret,)),)))
+        public=RulesActorAdapter(self.kernel).packet('B')['stack'][0]
+        self.assertNotIn('paid_cost_subtypes',public);self.assertNotIn('paid_cost_stats',public)
 
     def test_sage_actor_replay_restores_paid_subtypes_and_discard_choice(self):
         self.sage();self.use_sage();adapter=RulesActorAdapter(self.kernel)
@@ -525,6 +535,9 @@ class RecordedFactTests(unittest.TestCase):
             CardProgram('bad','Bad',('Sorcery',),spell_effects=(NoteLife(),)),
             CardProgram('bad','Bad',('Sorcery',),spell_effects=(CompareLifeNote(),)),
             CardProgram('bad','Bad',('Sorcery',),spell_effects=(IfPaidCostSubtype('missing',sets=('nonbasic_land',)),)),
+            CardProgram('bad','Bad',('Artifact',),activated=(ActivatedProgram('bad',
+                CostSpec(zone_costs=(ZoneCost('hidden','discard',selector=Selector(Zone.HAND,relation='owned')),)),
+                (IfPaidCostSubtype('hidden',sets=('nonbasic_land',)),)),)),
             CardProgram('bad','Bad',('Sorcery',),spell_effects=(IfQuantityAtLeast(MovedCount(),1,()),)),
             CardProgram('bad','Bad',('Enchantment',),entry_modifiers=(EntryLifeNote('bad',note_id=''),)),
             CardProgram('bad','Bad',('Instant',),cast=CleanupCast(CostSpec(),timing='instant')),
