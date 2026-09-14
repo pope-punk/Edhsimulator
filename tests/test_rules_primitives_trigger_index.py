@@ -7,7 +7,7 @@ from edh_gauntlet.rules_program import *
 from edh_gauntlet.rules_bundle import load_reviewed
 
 class TriggerIndexTests(unittest.TestCase):
-    def pair(self):
+    def pair(self,grants=False):
         kinds=('spell_cast','ability_activated','creature_attacks','creature_blocks','becomes_blocked','damage_dealt','damage_received','life_gained','card_drawn','library_searched','library_shuffled','scried','surveilled','counters_added','becomes_tapped')
         abilities=tuple(AbilityProgram(kind,EventPattern(kind),(GainLife(1),)) for kind in kinds)+(
             AbilityProgram('entry',EventPattern('zone_changed',to_zone=Zone.BATTLEFIELD),(GainLife(1),)),
@@ -15,6 +15,11 @@ class TriggerIndexTests(unittest.TestCase):
             AbilityProgram('upkeep',EventPattern('step_began',step='upkeep',controller_only=True),(GainLife(1),)))
         programs=(CardProgram('observer','Observer',('Creature',),power=2,toughness=2,abilities=abilities),CardProgram('blank','Blank',('Creature',),power=2,toughness=2))
         state=RulesState(('A','B'));state.add_card('a','observer','A',Zone.BATTLEFIELD);state.add_card('b','observer','B',Zone.BATTLEFIELD);state.add_card('c','blank','A',Zone.HAND)
+        if grants:
+            trigger=AbilityProgram('granted-cast',EventPattern('spell_cast'),(GainLife(2),))
+            programs+=(CardProgram('granter','Granter',('Enchantment',),continuous=(
+                ContinuousProgram('grant',Selector(Zone.BATTLEFIELD,types=('Creature',)),(AddTriggered(trigger),)),)),)
+            state.add_card('grant','granter','A',Zone.BATTLEFIELD)
         return RulesKernel(state,programs),ScanningRulesKernel(RulesState.restore(state.snapshot()),programs)
     def same(self,pair):self.assertEqual(pair[0].snapshot(),pair[1].snapshot())
 
@@ -23,17 +28,24 @@ class TriggerIndexTests(unittest.TestCase):
         for i,program in enumerate(programs):
             ref=state.add_card(str(i),program.definition_id,'A',Zone.BATTLEFIELD);source=state.get(ref)
             for kind in {a.event.kind for a in program.abilities}|{'absent'}:
-                self.assertEqual(tuple(a for a in program.abilities if a.event.kind==kind),kernel._trigger_abilities(source,kind))
+                printed=tuple(a for a in program.abilities if a.event.kind==kind)
+                self.assertEqual(printed,kernel._trigger_index[program.definition_id].get(kind,()))
+                view=kernel.effective(source.ref)
+                active=(() if view.abilities_removed else printed)+tuple(a for a in view.granted_triggers if a.event.kind==kind)
+                self.assertEqual(active,kernel._trigger_abilities(source,kind))
         with self.assertRaises(TypeError):kernel._trigger_index['bad']={}
         with self.assertRaises(TypeError):kernel._trigger_index[programs[0].definition_id]['bad']=()
 
     def test_player_and_announcement_discovery_parity(self):
-        pair=self.pair()
-        for kernel in pair:
-            source=kernel.state.get(kernel.state.current('a'))
-            for kind in ('life_gained','card_drawn','library_searched','library_shuffled','scried','surveilled'):kernel._player_event(kind,'A',amount=2)
-            for kind in ('spell_cast','ability_activated','creature_attacks','creature_blocks','becomes_blocked','damage_dealt','damage_received'):kernel._collect_announcement(kind,source,'A',values={'event_amount':2,'defending_player':'B'})
-        self.same(pair)
+        for grants in (False,True):
+            with self.subTest(grants=grants):
+                pair=self.pair(grants)
+                for kernel in pair:
+                    source=kernel.state.get(kernel.state.current('a'))
+                    for kind in ('life_gained','card_drawn','library_searched','library_shuffled','scried','surveilled'):kernel._player_event(kind,'A',amount=2)
+                    for kind in ('spell_cast','ability_activated','creature_attacks','creature_blocks','becomes_blocked','damage_dealt','damage_received'):kernel._collect_announcement(kind,source,'A',values={'event_amount':2,'defending_player':'B'})
+                self.same(pair)
+                if grants:self.assertEqual(2,sum(t['ability']['ability_id'].startswith('granted-trigger:') for t in pair[0].pending_triggers))
 
     def test_entry_death_and_tap_discovery_parity(self):
         pair=self.pair()

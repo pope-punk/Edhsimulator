@@ -4002,6 +4002,19 @@
         "run_id": 34902156812,
         "status": "passed",
         "test_count": 2536
+      },
+      {
+        "commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
+        "run_id": 34903230871,
+        "status": "failed",
+        "stage": "required_reviewed_loader",
+        "test_count": 2536,
+        "failures": 1,
+        "errors": 0,
+        "corrections": [
+          "Keep the printed trigger index invariant separate from current granted triggers.",
+          "Extend the scanning reference and announcement parity fixture to cover granted abilities."
+        ]
       }
     ],
     "review_work_remaining": [
@@ -4031,6 +4044,11 @@
         "change": "Turn-based lore requires at least one chapter ability. Corrected the lore guard and the no-chapters regression expectation; no card program changed.",
         "supersedes_required_commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
         "supersedes_required_run": 34903230871
+      },
+      {
+        "change": "Reviewed-loader trigger-index conformance includes dynamic grants while retaining immutable printed indexes. The scanning reference and existing parity test now cover granted triggers.",
+        "supersedes_required_commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
+        "supersedes_required_run": 34903599852
       }
     ]
   },

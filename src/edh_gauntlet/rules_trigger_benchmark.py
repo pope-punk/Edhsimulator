@@ -15,11 +15,10 @@ from .rules_identity import IMPLEMENTATION_ID
 class ScanningRulesKernel(RulesKernel):
     """Reference bypasses only indexing; collectors retain all original filters."""
     def _trigger_abilities(self,source,kind,views=None):
-        if views is not None:
-            view=views.get(source.ref)
-            if view is not None and view.abilities_removed:return ()
-            return self.definitions[source.effective_definition].abilities
-        return self.definition(source).abilities
+        view=views.get(source.ref) if views is not None else (
+            self.characteristics().get(source.ref) if source.zone==Zone.BATTLEFIELD and not source.phased else None)
+        printed=() if view is not None and view.abilities_removed else self.definitions[source.effective_definition].abilities
+        return printed+tuple(view.granted_triggers if view is not None else ())
 
 
 def fixture(kernel_type):
