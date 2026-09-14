@@ -3681,7 +3681,61 @@
           "ubuntu": "failed: one fixture assertion and one reference override error",
           "windows": "same two failures in logs; job cancelled"
         }
+      },
+      {
+        "commit": "437ffc8353ea986a8431dc8ae387ac97d6a0c72a",
+        "run_id": 34885207854,
+        "stage": "expanded_draft",
+        "status": "failed",
+        "tests_per_platform": 2343,
+        "failures": [
+          "Synthetic land-subtype fixture lacked the compiler's required Land selector."
+        ],
+        "corrections": "Separate land-type restoration from the typed Forest-subtype grant; keep the compiler gate intact.",
+        "platform_results": {
+          "ubuntu": "failed: one invalid synthetic fixture",
+          "windows": "cancelled by matrix fail-fast"
+        }
+      },
+      {
+        "commit": "ed0cc1875f604e666553df7fc0a4ff3270c0b42b",
+        "run_id": 34885623950,
+        "stage": "impetus_review_draft",
+        "status": "in_progress_with_known_fixture_error",
+        "tests_expected": 2346,
+        "known_issue": "Inherited malformed Forest subtype fixture corrected in the next revision; Impetus review cases also run here."
       }
+    ],
+    "next_batch_source_review": {
+      "status": "source_review_preparation_only",
+      "card_ids": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
+      ],
+      "requirements": [
+        "Five planeswalkers share printed/X loyalty entry, once-per-turn sorcery activations, immediate loyalty costs, zero-loyalty state actions, loyalty damage and attacking/defending planeswalkers. A mana-producing loyalty ability still uses the stack.",
+        "Aminatou's +1 reuses draw then authored hand-to-library-top placement; -1 returns another owned permanent under her controller; -6 needs one left/right choice and simultaneous nonland control rotation excluding its source.",
+        "Domri reuses the controlled +1/+0 layer and opposing/controlled fight target groups; +1 needs a turn-duration rule applying to creature spells cast that turn.",
+        "Minsc & Boo needs optional legendary Boo entry/upkeep creation, trample-or-haste targeting, and a separate reflexive trigger after resolution sacrifice with captured power/Hamster subtype and later damage target choice.",
+        "Nissa needs X loyalty entry, private top inspection with a land-or-bounded-creature predicate using resolution-time loyalty, and targeted untap plus temporary land animation/flying/haste.",
+        "Sorin needs active-turn lifelink for creatures and planeswalkers, player-or-planeswalker damage, and exact-X graveyard return with permanent additive Vampire subtype.",
+        "Innkeeper's Talent needs Class levels and sorcery activation timing, counter-bearing permanent ward triggers, and player/permanent counter doubling determined by the putting player.",
+        "Leyline of Hope needs an explicit optional opening-hand placement before turn one; its life replacement and starting-life-relative anthem reuse existing primitives."
+      ]
+    },
+    "next_batch": [
+      "aminatou-the-fateshifter",
+      "domri-anarch-of-bolas",
+      "minsc-boo-timeless-heroes",
+      "nissa-steward-of-elements",
+      "sorin-vengeful-bloodlord",
+      "innkeeper-s-talent",
+      "leyline-of-hope"
     ]
   },
   "hosted_validation_history": [
@@ -6669,15 +6723,223 @@
           }
         ]
       }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "8f2c947759f204e42014edfe1a654d0832d6ce46",
+      "cards_written": [
+        "rishkar-s-expertise",
+        "hidden-nursery",
+        "apex-devastator",
+        "oracle-of-mul-daya"
+      ],
+      "cards_promoted": [
+        "rishkar-s-expertise",
+        "hidden-nursery",
+        "apex-devastator",
+        "oracle-of-mul-daya"
+      ],
+      "new_test_methods": 95,
+      "runtime_checkpoint_schema": 128,
+      "state_checkpoint_schema": 17,
+      "validation_status": "passed",
+      "shared_mechanics": [
+        "Resolution-cast permissions with suspended parents and no priority",
+        "Discover/cascade public sequential exile and random-bottom continuations",
+        "Additional-cost payment and bounded authored announcement mana plans",
+        "Current top-library disclosure, reference retirement and exact top-land permissions"
+      ],
+      "source_corrections": [
+        "Apex Devastator has both Chimera and Hydra subtypes, as printed in official Commander Legends notes."
+      ],
+      "next_batch": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus",
+        "propaganda",
+        "defiler-of-vigor",
+        "darksteel-mutation"
+      ],
+      "hosted_attempts": [
+        {
+          "stage": "initial_three_card_draft",
+          "commit": "72ec8fe8238bb5db8eecdd4bfa51cce467a2579c",
+          "run_id": 34875843944,
+          "conclusion": "failure",
+          "tests_run_ubuntu": 2217,
+          "failures": 2,
+          "errors": 2,
+          "findings": [
+            "Two fixtures used the wrong Nullpriest kicker amount and an unavailable Gate definition. The catalog generation check also required applying Apex's Hydra correction to the canonical reference text. These are corrected in the expanded four-card revision."
+          ]
+        },
+        {
+          "commit": "aed7f8e8de4eb5d03058abd63fc8bb378cc01cd1",
+          "run_id": 34877830986,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34877830986",
+          "conclusion": "success",
+          "tests_per_platform": 2254,
+          "platforms": [
+            "ubuntu-latest",
+            "windows-latest"
+          ],
+          "checks": [
+            "source syntax",
+            "full distribution installation",
+            "packaged assets",
+            "required reviewed-loader conformance"
+          ],
+          "jobs": [
+            {
+              "job_id": 104089327079,
+              "name": "verify (ubuntu-latest)",
+              "tests": 2254,
+              "seconds": 441.65,
+              "conclusion": "success"
+            },
+            {
+              "job_id": 104089327360,
+              "name": "verify (windows-latest)",
+              "tests": 2254,
+              "seconds": 456.94,
+              "conclusion": "success"
+            }
+          ],
+          "stage": "superseded_reviewed_loader",
+          "findings": [
+            "All 94 methods passed; the final library regression additionally excludes noncard spell copies before state-based removal."
+          ]
+        }
+      ],
+      "review_work_remaining": "",
+      "unresolved_defects": [],
+      "next_batch_source_review": {
+        "status": "preparation_only",
+        "cards": [
+          "chthonian-nightmare",
+          "maze-s-end",
+          "rhythm-of-the-wild",
+          "parasitic-impetus"
+        ],
+        "requirements": [
+          "Chthonian Nightmare: player energy already exists in state, but add an explicit gain effect, X energy payment and multiple zone-cost groups. Preserve target-before-cost ordering and allow X zero. Costs need an authored legal payment order under CR 601.2h, not an assumed printed order; do not use object-counter costs for player energy.",
+          "Maze's End: reuse tapped entry, colorless mana, source-return cost and Gate search; add distinct current Gate-name counting and a real player-win transition after search/shuffle.",
+          "Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.",
+          "Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.",
+          "Entity Tracker still requires the fully-unlocked Room trigger; enchantment-entry support alone is incomplete."
+        ],
+        "planning_update": "The user's four-pass request expands the next batch to seven cards. Existing source review covers the original four; review all printed clauses of Propaganda, Defiler of Vigor and Darksteel Mutation before authoring."
+      },
+      "draft_test_methods": 85,
+      "reviewed_test_methods": 95,
+      "draft_hosted_validation": {
+        "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
+        "run_id": 34876806875,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875",
+        "conclusion": "success",
+        "tests_per_platform": 2245,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104085905904,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2245,
+            "seconds": 441.625,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104085906105,
+            "name": "verify (windows-latest)",
+            "tests": 2245,
+            "seconds": 439.011,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "coverage_audit": {
+        "totalUnique": 334,
+        "reviewedUnique": 306,
+        "totalCopies": 400,
+        "reviewedCopies": 372,
+        "remainingUnique": 28,
+        "remainingCopies": 28,
+        "byDeck": {
+          "Reaminatour \u2014 Aminatou, Veil Piercer": {
+            "total": 100,
+            "reviewed": 88
+          },
+          "Minsc & Boo, Timeless Heroes": {
+            "total": 100,
+            "reviewed": 94
+          },
+          "Omo, Queen of Vesuva": {
+            "total": 100,
+            "reviewed": 97
+          },
+          "Elenda, Saint of Dusk": {
+            "total": 100,
+            "reviewed": 93
+          }
+        }
+      },
+      "review_findings": [
+        "Promotion includes library-moving mana classification and rejects unsupported nested free casting inside immediate mana abilities.",
+        "Defer top-card disclosure until bottom/top placement is finalized, including discover/cascade and surveil; prevent transient top exposure or false reference retirement.",
+        "Preserve public face-up exile histories even when discover/cascade finishes without a hit.",
+        "Library scans and top disclosures ignore noncard spell copies waiting for state-based removal, just as they ignore tokens."
+      ],
+      "hosted_validation": {
+        "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
+        "run_id": 34878332029,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
+        "conclusion": "success",
+        "tests_per_platform": 2255,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104091015220,
+            "name": "verify (windows-latest)",
+            "tests": 2255,
+            "seconds": 454.942,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104091015298,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2255,
+            "seconds": 429.101,
+            "conclusion": "success"
+          }
+        ]
+      }
     }
   ],
   "execution_policy": {
     "updated_date": "2026-09-14",
-    "user_direction": "Continue recurring implementation after the completed eight-card request; target 4\u20138 complete cards per cycle when shared mechanics permit.",
+    "user_direction": "Complete the 28-card baseline in four or fewer substantive passes; continuations and validation repairs remain part of their original pass.",
     "target_cards_per_cycle": {
-      "minimum": 4,
-      "maximum": 8,
-      "kind": "soft planning target; complexity may justify fewer"
+      "minimum": 7,
+      "maximum": 10,
+      "kind": "usual planning range; preserve every printed clause and required validation"
     },
     "priorities": [
       "Reuse and extend shared primitives that unlock several cards.",
@@ -6689,20 +6951,42 @@
     "candidate_families": [
       {
         "cards": [
-          "rishkar-s-expertise",
-          "hidden-nursery",
-          "apex-devastator"
+          "aminatou-the-fateshifter",
+          "domri-anarch-of-bolas",
+          "minsc-boo-timeless-heroes",
+          "nissa-steward-of-elements",
+          "sorin-vengeful-bloodlord",
+          "innkeeper-s-talent",
+          "leyline-of-hope"
         ],
-        "focus": "Shared optional casting during resolution, discover and repeated cascade, with ordinary targets, cost legality and replay boundaries."
+        "focus": "Share loyalty activation support, X loyalty and entry, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses."
       },
       {
         "cards": [
-          "chthonian-nightmare"
+          "glasswing-grace-age-graced-chapel",
+          "kazuul-s-fury-kazuul-s-cliffs",
+          "sorin-of-house-markov",
+          "pontiff-of-blight",
+          "invasion-of-theros",
+          "the-restoration-of-eiganjo",
+          "elspeth-conquers-death"
         ],
-        "focus": "Energy payments plus ordered sacrifice/source-return costs."
+        "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives."
+      },
+      {
+        "cards": [
+          "aminatou-veil-piercer",
+          "entity-tracker",
+          "funeral-room-awakening-hall",
+          "ghostly-dancers",
+          "victor-valgavoth-s-seneschal",
+          "the-cruelty-of-gix",
+          "urza-s-saga"
+        ],
+        "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit."
       }
     ],
-    "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
+    "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
   },
   "draft_hosted_validation": {
     "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
@@ -6921,7 +7205,7 @@
           "innkeeper-s-talent",
           "leyline-of-hope"
         ],
-        "focus": "Share loyalty activation support, X loyalty and entry, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
+        "focus": "Share loyalty activation support, X loyalty and entry, loyalty damage and attacking/defending planeswalkers, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
         "status": "planned"
       },
       {

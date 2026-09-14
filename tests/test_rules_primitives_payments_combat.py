@@ -659,8 +659,9 @@ class PaymentsCombatTests(unittest.TestCase):
 
     def test_intrinsic_basic_land_mana_is_removed_in_ability_layer(self):
         land=CardProgram('pc-land-creature','Land creature',('Land','Creature'),subtypes=('Forest',),power=2,toughness=2)
-        restore_land=CardProgram('pc-land-grant','Land grant',('Enchantment',),continuous=(ContinuousProgram('land',
-            Selector(Zone.BATTLEFIELD,types=('Creature',)),(ChangeTypes(add=('Land',)),AddSubtypes('Land',('Forest',)))),))
+        restore_land=CardProgram('pc-land-grant','Land grant',('Enchantment',),continuous=(
+            ContinuousProgram('land',Selector(Zone.BATTLEFIELD,types=('Creature',)),(ChangeTypes(add=('Land',)),)),
+            ContinuousProgram('forest',Selector(Zone.BATTLEFIELD,types=('Land','Creature')),(AddSubtypes('Land',('Forest',)),)),))
         self.game((land,restore_land));ref=self.add('pc-land-creature');self.aura('darksteel-mutation',ref);self.add('pc-land-grant')
         self.assertIn('Forest',self.kernel.effective(ref).subtypes)
         self.assertEqual((),self.kernel.activated_abilities(self.current(ref)))

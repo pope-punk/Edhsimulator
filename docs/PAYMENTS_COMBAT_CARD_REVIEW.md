@@ -40,6 +40,9 @@ corrected Impetus's life-loss recipient: read the original creature's controller
 on resolution, using last known information after departure. Control change,
 departure/checkpoint, blink identity and Aura reassignment are covered; the
 earlier event-time controller fixture was corrected. See CR 608.2h and 608.2k.
+The expanded run also correctly rejected a synthetic Forest grant without a
+Land-typed selector. Its fixture now separates the type and subtype grants;
+the compiler restriction is unchanged.
 
 The remaining gate is review plus hosted draft and reviewed-loader validation.
 These programs do not change production admission or any existing game.
