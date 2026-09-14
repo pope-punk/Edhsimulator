@@ -39,8 +39,13 @@ Kernel schema is **121**, state schema **14**. The **107 new methods** now
 use the reviewed loader. [Corrected draft validation 34801795555](https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555)
 passed **1,779 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `f7aa71651971da75381805bbbb30a04b59226bd5`.
-Required reviewed-loader validation is pending. Existing games remain bound to
-their implementation; no local execution or production admission.
+[Required reviewed-loader validation 34802234395](https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395)
+passed **1,779 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `6ee170ae43d99944734655967f107c87dd8f9cc9`.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs, source references and tests are unchanged after validation.
+Existing games remain bound to their implementation; no local execution or
+production admission.
 See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 
 ## Next work order: mana, convoke and token copies

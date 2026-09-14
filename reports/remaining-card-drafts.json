@@ -14,7 +14,8 @@
     "reviewed_bundle_copies": 343,
     "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 51
+    "promoted_on_this_branch": 51,
+    "remaining_outside_reviewed_bundle_copies": 57
   },
   "cards": [
     {
@@ -53,9 +54,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "72aafe6173c47fe7afdb2abee41877c7e4efa16850be102e2ad0c4cf797eceea",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -75,7 +76,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "aminatou-the-fateshifter",
@@ -638,9 +643,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -660,7 +665,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "domri-anarch-of-bolas",
@@ -812,9 +821,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -834,7 +843,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "fangs-of-kalonia",
@@ -1398,9 +1411,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -1420,7 +1433,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "karmic-guide",
@@ -1440,9 +1457,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "d81e7f6361414795c44c79d16030b188b1e401c21230cc20929a650c03923a1a",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -1462,7 +1479,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "kazuul-s-fury-kazuul-s-cliffs",
@@ -1632,9 +1653,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -1654,7 +1675,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "minsc-boo-timeless-heroes",
@@ -2014,9 +2039,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "59a5d0c1e859a1c3ed9aa299e6fe9786660dddd0e679631871283f73f923c979",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -2036,7 +2061,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "pontiff-of-blight",
@@ -2180,9 +2209,9 @@
         }
       ],
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "source_facts_sha256": "4fa4d35aedf7420ba12a2f72b63bf96344e3d8d74a8ca3e8f9f7d0bc8966e5d5",
-      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft validation passed, required reviewed-loader checks pending.",
+      "implementation_notes": "Complete printed program, exact source binding and shared-rule review; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "authoring_status": "complete_printed_program",
       "batch": "guard-history-2026-09-14",
       "review_record": "docs/GUARD_HISTORY_CARD_REVIEW.md",
@@ -2202,7 +2231,11 @@
         "PlayerStatistic",
         "Bound library selectors",
         "Frozen source power"
-      ]
+      ],
+      "hosted_validation": {
+        "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+        "run_id": 34802234395
+      }
     },
     {
       "card_id": "reveillark",
@@ -3107,9 +3140,9 @@
     "runtime_checkpoint_schema": 121,
     "state_checkpoint_schema": 14,
     "new_test_methods": 107,
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "reviewed_loader_passed",
     "unresolved_defects": [],
-    "review_work_remaining": "Complete required Ubuntu/Windows validation through the reviewed loader.",
+    "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
     "next_batch": [
       "exotic-orchard",
       "fellwar-stone",
@@ -3226,7 +3259,22 @@
         }
       ],
       "boundary": "Preparation only; these eight candidates remain unstarted. Select complete compatible families after refreshing the latest branch."
-    }
+    },
+    "hosted_validation": {
+      "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+      "run_id": 34802234395,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395",
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "tests_per_platform": 1779,
+      "new_test_methods": 107,
+      "conclusion": "success",
+      "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    },
+    "completed_utc": "2026-09-14T03:25:54Z",
+    "final_recording_scope": "The following result-recording commit changes only the work order, review record and inventory. Runtime, programs, source references and tests remain at the validated commit."
   },
   "hosted_validation_history": [
     {
@@ -4678,17 +4726,17 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "1927f33f436a76e920d261b02c87ba9cc6e8a846",
-    "run_id": 34798075383,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34798075383",
+    "commit": "6ee170ae43d99944734655967f107c87dd8f9cc9",
+    "run_id": 34802234395,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395",
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1672,
-    "new_test_methods": 63,
+    "tests_per_platform": 1779,
+    "new_test_methods": 107,
     "conclusion": "success",
-    "scope": "All 270 source-bound reviewed programs including Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage; all 63 new methods through the reviewed loader; complete promotion/source audit, casting and replacement facts, cleanup, attachments, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+    "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
   },
   "draft_hosted_validation": {
     "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",

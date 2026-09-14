@@ -2,7 +2,7 @@
 
 Cycle base: `cecda2894b3afb4f67aacd1656acdaff7096fe04`, branch `codex/remaining-card-programs`.
 All eight complete printed programs are source-bound in the reviewed bundle.
-Corrected draft checks passed; required reviewed-loader validation is pending. No project code, Python, imports, installation,
+Corrected draft and required reviewed-loader checks passed on Ubuntu and Windows. No project code, Python, imports, installation,
 compilation, tests or games ran on the user's computer.
 
 ## Complete printed-face mapping
@@ -110,5 +110,13 @@ Passing that run did not validate the incorrect negative-power expectation.
 passed **1779 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged-asset verification, at `f7aa71651971da75381805bbbb30a04b59226bd5`.
 All eight source bindings are promoted; the 107 new methods now use the reviewed
-loader. Required reviewed-loader validation is pending.
+loader. [Required reviewed-loader validation 34802234395](https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395)
+passed **1779 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged-asset verification, at `6ee170ae43d99944734655967f107c87dd8f9cc9`.
+
+The reviewed bundle contains **278 unique cards / 343 deck copies**; **56 cards /
+57 copies** remain unstarted, with no outstanding drafts. The prior 270 programs
+are unchanged. The following result-recording commit changes only this review,
+the work order and the inventory; runtime, programs, source references and tests
+remain exactly at the validated commit. No project code ran locally.
 
