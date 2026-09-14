@@ -1,7 +1,7 @@
 # Pass 1: payments, combat and continuous effects
 
-Status: seven complete printed programs reviewed and promoted. Hosted draft
-validation passed; required reviewed-loader validation is pending.
+Status: pass 1 complete. All seven printed programs are source-bound reviewed;
+hosted draft and required reviewed-loader validation passed on both platforms.
 
 Cards: Chthonian Nightmare, Maze's End, Rhythm of the Wild, Parasitic Impetus,
 Propaganda, Defiler of Vigor, and Darksteel Mutation.
@@ -44,7 +44,7 @@ The expanded run also correctly rejected a synthetic Forest grant without a
 Land-typed selector. Its fixture now separates the type and subtype grants;
 the compiler restriction is unchanged.
 
-The remaining gate is successful required reviewed-loader validation.
+Card-level review and both required hosted validation stages are complete.
 These programs do not change production admission or any existing game.
 
 ## Rules evidence
@@ -67,3 +67,13 @@ Source facts are bound on all seven reviewed rows. The prior 306 reviewed rows
 are unchanged. Draft proof: [run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504) at
 `ddea5e3f16c56224f920181a7642ab72a0041f30`, 2346 tests per platform. Promotion changes
 the loader and inventory; the same 91 conformance methods now require reviewed programs.
+
+## Required reviewed-loader result
+
+[Run 34887525636](https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636) passed at
+`ba1335011e65bf7039924cd99c0c3f2993cc4525`: 2346 tests per platform on Ubuntu and Windows,
+including all 91 new methods, plus source syntax, full distribution installation
+and packaged assets. The prior 306 reviewed rows remain unchanged. No local
+project code was run. Coverage is 313/334 unique cards and 379/400 copies, leaving
+21 unique cards for the next three passes. The pass budget retains its original
+28-card baseline. Next: the seven planeswalker, Class and Leyline programs.

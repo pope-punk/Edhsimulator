@@ -421,7 +421,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473",
@@ -431,7 +431,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "crop-rotation",
@@ -575,7 +579,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "33a082ee71ee29e786c8036d3f99483be786d4de38eb317b306a5ad5928bf824",
@@ -585,7 +589,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "dawn-of-hope",
@@ -640,7 +648,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd",
@@ -650,7 +658,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "delighted-halfling",
@@ -2022,7 +2034,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2",
@@ -2032,7 +2044,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "midnight-snack",
@@ -2455,7 +2471,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "cd1941d0ae8c0774226ac83ae4b672395ae6224134573fcdf29ada50fdf75591",
@@ -2465,7 +2481,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "pongify",
@@ -2584,7 +2604,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "843cf0e31cd630835298c0d4c13b69b8714032b07b3a9827f1a20da1b6c03c07",
@@ -2594,7 +2614,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "ram-through",
@@ -2841,7 +2865,7 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "four-pass-1-2026-09-14",
       "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md",
       "source_facts_sha256": "126a6d8e385f9efaa54dc8229f42b33651b2d2829e07ad40b2cbd80c1f6ccd6d",
@@ -2851,7 +2875,11 @@
         "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
         "run_id": 34886471504
       },
-      "implementation_notes": "Complete source-bound reviewed program; hosted draft passed. Required reviewed-loader validation remains pending."
+      "implementation_notes": "Complete source-bound reviewed program. All 91 new methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
+      "hosted_validation": {
+        "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+        "run_id": 34887525636
+      }
     },
     {
       "card_id": "rishkar-s-expertise",
@@ -3717,12 +3745,12 @@
       "defiler-of-vigor",
       "darksteel-mutation"
     ],
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "passed",
     "runtime_checkpoint_schema": 129,
     "state_checkpoint_schema": 17,
     "new_test_methods": 91,
     "unresolved_defects": [],
-    "review_work_remaining": "Require successful hosted reviewed-loader conformance, then record the result and close pass 1.",
+    "review_work_remaining": "",
     "review_findings": [
       "Basic-land intrinsic mana is removed along with other abilities; later explicitly granted activations remain available.",
       "Tap-trigger discovery evaluates ability presence on the actual tap-event battlefield, including sources that subsequently pay zone costs.",
@@ -3809,6 +3837,14 @@
       "notes": [
         "Read the preparation document alongside the current catalog and CR; older release notes use historical terminology.",
         "Omo is projected to reach 100/100 after Nissa in pass 2. Update the old every-deck-has-unmapped assertion to retain explicit totals without incorrectly requiring omissions."
+      ],
+      "reuse_audit": [
+        "RulesKernel._state_based_actions already handles zero loyalty; retain and exercise it through new entry and activation paths.",
+        "RulesState.damage_batch already removes loyalty/defense counters according to recipient types. Route planeswalker combat through that pipeline.",
+        "SourceCounter already uses _object_information for exact last known counters; reuse it for Nissa's zero ability.",
+        "CounterReplacement already has actor_relation and both permanent/player recipient support; Innkeeper's counter doubling needs level gating around this existing primitive.",
+        "GrantPermissions/player_effects already retain turn-duration permissions; extend their rule interpretation for Domri instead of creating a parallel lifetime mechanism.",
+        "OngoingEffect/AddSubtypes already express indefinite additive types; Sorin's return additionally requires the type to be present in entry lookahead."
       ]
     },
     "next_batch": [
@@ -3878,7 +3914,51 @@
           "reviewed": 95
         }
       }
-    }
+    },
+    "hosted_validation": {
+      "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+      "run_id": 34887525636,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
+      "conclusion": "success",
+      "tests_per_platform": 2346,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104121745743,
+          "name": "verify (windows-latest)",
+          "tests": 2346,
+          "seconds": 396.445,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104121746149,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2346,
+          "seconds": 474.326,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "draft_test_methods": 91,
+    "reviewed_test_methods": 91,
+    "shared_mechanics": [
+      "Player energy and authored ordered public activation costs",
+      "Distinct Gate names and immediate win",
+      "Current creature-spell counter immunity and independent riot replacements",
+      "Goad requirements, attack taxes and declaration mana payment",
+      "Per-source optional life cost and colored/hybrid cost reduction",
+      "Type and ability layers with historical trigger information",
+      "Current/last known controller capture for the original attacking creature"
+    ]
   },
   "hosted_validation_history": [
     {
@@ -4701,6 +4781,49 @@
         }
       ],
       "stage": "draft",
+      "cards": [
+        "chthonian-nightmare",
+        "maze-s-end",
+        "rhythm-of-the-wild",
+        "parasitic-impetus",
+        "propaganda",
+        "defiler-of-vigor",
+        "darksteel-mutation"
+      ]
+    },
+    {
+      "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+      "run_id": 34887525636,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
+      "conclusion": "success",
+      "tests_per_platform": 2346,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104121745743,
+          "name": "verify (windows-latest)",
+          "tests": 2346,
+          "seconds": 396.445,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104121746149,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2346,
+          "seconds": 474.326,
+          "conclusion": "success"
+        }
+      ],
+      "stage": "required_reviewed_loader",
       "cards": [
         "chthonian-nightmare",
         "maze-s-end",
@@ -7268,25 +7391,29 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "8f2c947759f204e42014edfe1a654d0832d6ce46",
+    "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
+    "pass": 1,
     "cards": [
-      "rishkar-s-expertise",
-      "hidden-nursery",
-      "apex-devastator",
-      "oracle-of-mul-daya"
+      "chthonian-nightmare",
+      "maze-s-end",
+      "rhythm-of-the-wild",
+      "parasitic-impetus",
+      "propaganda",
+      "defiler-of-vigor",
+      "darksteel-mutation"
     ],
-    "unique_cards_completed": 4,
-    "deck_copies_completed": 4,
-    "new_test_methods": 95,
-    "reviewed_before": 302,
-    "reviewed_after": 306,
-    "remaining_after": 28,
+    "unique_cards_completed": 7,
+    "deck_copies_completed": 7,
+    "new_test_methods": 91,
+    "reviewed_before": 306,
+    "reviewed_after": 313,
+    "remaining_after": 21,
     "validation": {
-      "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
-      "run_id": 34878332029,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
+      "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+      "run_id": 34887525636,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
       "conclusion": "success",
-      "tests_per_platform": 2255,
+      "tests_per_platform": 2346,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -7295,21 +7422,21 @@
         "source syntax",
         "full distribution installation",
         "packaged assets",
-        "draft conformance"
+        "required reviewed-loader conformance"
       ],
       "jobs": [
         {
-          "job_id": 104091015220,
+          "job_id": 104121745743,
           "name": "verify (windows-latest)",
-          "tests": 2255,
-          "seconds": 454.942,
+          "tests": 2346,
+          "seconds": 396.445,
           "conclusion": "success"
         },
         {
-          "job_id": 104091015298,
+          "job_id": 104121746149,
           "name": "verify (ubuntu-latest)",
-          "tests": 2255,
-          "seconds": 429.101,
+          "tests": 2346,
+          "seconds": 474.326,
           "conclusion": "success"
         }
       ]
@@ -7317,11 +7444,11 @@
     "local_project_code_executed": false
   },
   "hosted_validation": {
-    "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
-    "run_id": 34878332029,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
+    "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+    "run_id": 34887525636,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636",
     "conclusion": "success",
-    "tests_per_platform": 2255,
+    "tests_per_platform": 2346,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -7330,21 +7457,21 @@
       "source syntax",
       "full distribution installation",
       "packaged assets",
-      "draft conformance"
+      "required reviewed-loader conformance"
     ],
     "jobs": [
       {
-        "job_id": 104091015220,
+        "job_id": 104121745743,
         "name": "verify (windows-latest)",
-        "tests": 2255,
-        "seconds": 454.942,
+        "tests": 2346,
+        "seconds": 396.445,
         "conclusion": "success"
       },
       {
-        "job_id": 104091015298,
+        "job_id": 104121746149,
         "name": "verify (ubuntu-latest)",
-        "tests": 2255,
-        "seconds": 429.101,
+        "tests": 2346,
+        "seconds": 474.326,
         "conclusion": "success"
       }
     ]
@@ -7354,7 +7481,7 @@
     "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
     "baseline_remaining_unique": 28,
     "target_maximum_passes": 4,
-    "completed_passes": 0,
+    "completed_passes": 1,
     "baseline_cards_per_pass": 7,
     "usual_target_range": [
       7,
@@ -7375,11 +7502,24 @@
           "darksteel-mutation"
         ],
         "focus": "Reuse payment, entry, Aura and characteristic primitives; complete energy and authored cost ordering, Gate-name wins, riot, goad and attack payments, optional life-based green reduction, and ability/type replacement.",
-        "status": "reviewed_loader_pending",
+        "status": "complete",
         "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
         "draft_hosted_validation": {
           "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
           "run_id": 34886471504
+        },
+        "cards_completed": [
+          "chthonian-nightmare",
+          "maze-s-end",
+          "rhythm-of-the-wild",
+          "parasitic-impetus",
+          "propaganda",
+          "defiler-of-vigor",
+          "darksteel-mutation"
+        ],
+        "hosted_validation": {
+          "commit": "ba1335011e65bf7039924cd99c0c3f2993cc4525",
+          "run_id": 34887525636
         }
       },
       {
@@ -7430,6 +7570,8 @@
     ],
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
-    "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible."
+    "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
+    "remaining_passes_in_target": 3,
+    "remaining_unique": 21
   }
 }

@@ -89,3 +89,19 @@ Include checkpoints during choices, stale/forged input rejection, control change
 ability removal, source departure, copies, counter replacements, response timing
 and interactions with pass 1 goad/Propaganda/Rhythm/Mutation. Apply the ordinary
 draft and required reviewed-loader gates. No local project execution is authorized.
+
+## Existing primitive audit
+
+- `RulesKernel._state_based_actions` already handles zero loyalty. Retain it.
+- `RulesState.damage_batch` already removes loyalty/defense counters by recipient
+  type. Wire planeswalker combat through the existing damage pipeline.
+- `SourceCounter` already uses exact current/last-known object information for
+  counters, including a departed Nissa's loyalty.
+- `CounterReplacement` already distinguishes the putting player with
+  `actor_relation` and supports permanent/player recipients. Add Class gating.
+- `GrantPermissions` and `player_effects` already support turn-duration storage;
+  extend rule interpretation for Domri.
+- `OngoingEffect` and `AddSubtypes` already express indefinite additive types;
+  Sorin's return must also expose the Vampire change during entry lookahead.
+
+This is a source inspection, not runtime validation of the future programs.

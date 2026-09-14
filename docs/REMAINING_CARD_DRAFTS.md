@@ -57,10 +57,13 @@ heartbeat remains active every 40 minutes.
 The seven Pass 1 cards have complete printed-face review and are promoted to
 the source-bound bundle. Hosted draft validation passed **2346 tests on
 each platform**, including 91 new methods, at `ddea5e3f16c56224f920181a7642ab72a0041f30`
-([run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504)). The required reviewed-loader run remains pending.
+([run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504)). The required reviewed-loader
+[run 34887525636](https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636) passed **2346 tests per platform**
+at `ba1335011e65bf7039924cd99c0c3f2993cc4525`, including all 91 new methods. Both runs
+also passed source syntax, full distribution installation and packaged assets.
 
 Coverage is 313 reviewed unique cards / 379 copies, with 21 cards remaining.
-Pass 1 remains open until the required reviewed-loader run succeeds. No local
+**Pass 1 is complete. Three passes remain within the original four-pass target.** No local
 project execution occurred. See [the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md).
 
 The next pass includes loyalty entry/costs, loyalty damage, attacking and defending
