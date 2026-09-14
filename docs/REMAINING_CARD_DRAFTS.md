@@ -34,8 +34,11 @@ counter immunity. Kernel/state schemas are **127/17**.
 The **64 new methods** passed hosted draft validation: **2,159 tests on each of
 Ubuntu and Windows**, plus syntax, installation and assets, at
 `5f13db33ccca589d11e1d6c4feae1785ade8d13a` ([run 34868673387](https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387)).
-Required reviewed-loader validation is pending, including a 65th check and a
-visibility correction preserving public sources of copied hand abilities. See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
+Required reviewed-loader validation passed **2,160 tests on each platform**,
+including **all 65 new methods**, plus syntax, installation and assets, at
+`8d29e0e7cf916860c0004605b052b8d3ebd03903` ([run 34869674458](https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458)).
+That run includes the copied hand-ability visibility correction. The final
+result-recording commit changes only documentation and inventory. See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
 No local project execution occurred.
 
 The next candidates are Rishkar's Expertise, Hidden Nursery, Apex Devastator and

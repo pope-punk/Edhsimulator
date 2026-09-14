@@ -1,7 +1,7 @@
 # Spell-copy and special-mana card review
 
-Status: source-bound reviewed programs; draft validation passed. Required
-reviewed-loader validation is pending.
+Status: complete source-bound reviewed programs; draft and required reviewed-loader
+validation passed on both hosted platforms.
 Branch: `codex/remaining-card-programs`.
 Baseline: `8527eb661827e231b36f429c6efb9f981050df11`.
 Kernel/state checkpoint schemas: **127/17**.
@@ -64,12 +64,14 @@ legendary-only payment, counter immunity, resolution payments, target swaps,
 X, modes, divided counters, Necromancy, escaped Uro and evoked Mulldrifter.
 Draft validation passed **2,159 tests per platform** plus syntax, installation
 and packaged assets on Ubuntu and Windows at `5f13db33ccca589d11e1d6c4feae1785ade8d13a`
-([run 34868673387](https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387)). Required reviewed-loader validation remains pending.
+([run 34868673387](https://github.com/pope-punk/Edhsimulator/actions/runs/34868673387)). Required reviewed-loader validation passed **2,160 tests per platform**,
+including **all 65 new methods**, plus syntax, installation and packaged assets,
+at `8d29e0e7cf916860c0004605b052b8d3ebd03903` ([run 34869674458](https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458)).
 
 The passing draft run covers 64 new methods. Promotion adds a visibility
 correction for copied hand abilities and a 65th regression: retain their
-already-public announced source in opponent packets and replay. The required
-reviewed-loader run will validate that final code and all 65 methods.
+already-public announced source in opponent packets and replay. The successful
+reviewed-loader run validates that final code and all 65 methods.
 
 ## Following work
 
@@ -78,3 +80,8 @@ Apex Devastator shares ordered library exile and free casting through four
 separate cascade triggers. Chthonian Nightmare needs energy and ordered costs.
 Entity Tracker still needs Room-unlock events before its whole printed text can
 be claimed complete. Review current source texts before selecting the next batch.
+
+The final result-recording commit changes only this review, the work order and
+the inventory. Runtime, card programs, source facts and tests are unchanged
+after required reviewed-loader validation. Coverage is **302/334 unique cards
+and 368/400 deck copies**, with **32 unique cards / 32 copies remaining**.

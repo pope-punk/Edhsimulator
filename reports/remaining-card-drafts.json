@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "static_authoring_inventory",
-  "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
+  "base_commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
   "branch": "codex/remaining-card-programs",
   "production_ready": false,
   "local_python_executed": false,
@@ -334,16 +334,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete source-bound reviewed program; full draft checks and required reviewed-loader conformance passed on Ubuntu and Windows. Casting-history and copied hand-source visibility corrections are included.",
       "source_facts_sha256": "44674452cfbab449325f86c6e75485a61cb199b961d9f778a11b62274b00fb34",
       "previous_draft_definition": "draft:changing-loyalty",
       "reviewed_definition": "catalog:changing-loyalty",
       "draft_hosted_validation": {
         "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
         "run_id": 34868673387
+      },
+      "hosted_validation": {
+        "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+        "run_id": 34869674458
       }
     },
     {
@@ -611,16 +615,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete source-bound reviewed program; full draft checks and required reviewed-loader conformance passed on Ubuntu and Windows. Casting-history and copied hand-source visibility corrections are included.",
       "source_facts_sha256": "2d0e6ba4c2924cca986b52bba1b261dd6f82cede41d4dffcd448cf5bad95e9b1",
       "previous_draft_definition": "draft:delighted-halfling",
       "reviewed_definition": "catalog:delighted-halfling",
       "draft_hosted_validation": {
         "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
         "run_id": 34868673387
+      },
+      "hosted_validation": {
+        "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+        "run_id": 34869674458
       }
     },
     {
@@ -2548,16 +2556,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete source-bound reviewed program; full draft checks and required reviewed-loader conformance passed on Ubuntu and Windows. Casting-history and copied hand-source visibility corrections are included.",
       "source_facts_sha256": "567938c6529bfc7261d06df950f64fcff12a29047eaa9ad68b9150d9b9e3bedc",
       "previous_draft_definition": "draft:replication-technique",
       "reviewed_definition": "catalog:replication-technique",
       "draft_hosted_validation": {
         "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
         "run_id": 34868673387
+      },
+      "hosted_validation": {
+        "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+        "run_id": 34869674458
       }
     },
     {
@@ -2955,16 +2967,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "pending_required_reviewed_loader",
+      "hosted_validation_status": "passed",
       "batch": "spell-copy-mana-2026-09-14",
       "review_record": "docs/SPELL_COPY_MANA_CARD_REVIEW.md",
-      "implementation_notes": "Complete source-bound reviewed program; full draft conformance passed both hosted platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete source-bound reviewed program; full draft checks and required reviewed-loader conformance passed on Ubuntu and Windows. Casting-history and copied hand-source visibility corrections are included.",
       "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca",
       "previous_draft_definition": "draft:sunken-palace",
       "reviewed_definition": "catalog:sunken-palace",
       "draft_hosted_validation": {
         "commit": "5f13db33ccca589d11e1d6c4feae1785ade8d13a",
         "run_id": 34868673387
+      },
+      "hosted_validation": {
+        "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+        "run_id": 34869674458
       }
     },
     {
@@ -3538,7 +3554,7 @@
     "new_test_methods": 65,
     "runtime_checkpoint_schema": 127,
     "state_checkpoint_schema": 17,
-    "validation_status": "pending_required_reviewed_loader",
+    "validation_status": "passed",
     "shared_mechanics": [
       "Noncard spell copies and permanent-copy token entry",
       "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
@@ -3638,7 +3654,7 @@
         ]
       }
     ],
-    "review_work_remaining": "Required reviewed-loader conformance on both hosted platforms.",
+    "review_work_remaining": "",
     "unresolved_defects": [],
     "next_batch_source_review": {
       "status": "preparation_only",
@@ -3720,7 +3736,40 @@
       }
     },
     "draft_test_methods": 64,
-    "reviewed_test_methods": 65
+    "reviewed_test_methods": 65,
+    "hosted_validation": {
+      "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+      "run_id": 34869674458,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+      "conclusion": "success",
+      "tests_per_platform": 2160,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104062164282,
+          "name": "verify (windows-latest)",
+          "tests": 2160,
+          "seconds": 417.057,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104062164495,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2160,
+          "seconds": 431.365,
+          "conclusion": "success"
+        }
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -4433,6 +4482,39 @@
           "name": "verify (windows-latest)",
           "tests": 2159,
           "seconds": 414.866,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+      "run_id": 34869674458,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+      "conclusion": "success",
+      "tests_per_platform": 2160,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104062164282,
+          "name": "verify (windows-latest)",
+          "tests": 2160,
+          "seconds": 417.057,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104062164495,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2160,
+          "seconds": 431.365,
           "conclusion": "success"
         }
       ]
@@ -6529,25 +6611,25 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
+    "base_commit": "8527eb661827e231b36f429c6efb9f981050df11",
     "cards": [
-      "kodama-of-the-west-tree",
-      "rampant-frogantua",
-      "hakbal-of-the-surging-soul",
-      "chaos-warp"
+      "replication-technique",
+      "changing-loyalty",
+      "sunken-palace",
+      "delighted-halfling"
     ],
     "unique_cards_completed": 4,
     "deck_copies_completed": 4,
-    "new_test_methods": 58,
-    "reviewed_before": 294,
-    "reviewed_after": 298,
-    "remaining_after": 36,
+    "new_test_methods": 65,
+    "reviewed_before": 298,
+    "reviewed_after": 302,
+    "remaining_after": 32,
     "validation": {
-      "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
-      "run_id": 34861920441,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
+      "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+      "run_id": 34869674458,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
       "conclusion": "success",
-      "tests_per_platform": 2095,
+      "tests_per_platform": 2160,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -6560,21 +6642,54 @@
       ],
       "jobs": [
         {
-          "job_id": 104036054477,
+          "job_id": 104062164282,
           "name": "verify (windows-latest)",
-          "tests": 2095,
-          "seconds": 435.159,
+          "tests": 2160,
+          "seconds": 417.057,
           "conclusion": "success"
         },
         {
-          "job_id": 104036054678,
+          "job_id": 104062164495,
           "name": "verify (ubuntu-latest)",
-          "tests": 2095,
-          "seconds": 370.819,
+          "tests": 2160,
+          "seconds": 431.365,
           "conclusion": "success"
         }
       ]
     },
     "local_project_code_executed": false
+  },
+  "hosted_validation": {
+    "commit": "8d29e0e7cf916860c0004605b052b8d3ebd03903",
+    "run_id": 34869674458,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34869674458",
+    "conclusion": "success",
+    "tests_per_platform": 2160,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "checks": [
+      "source syntax",
+      "full distribution installation",
+      "packaged assets",
+      "required reviewed-loader conformance"
+    ],
+    "jobs": [
+      {
+        "job_id": 104062164282,
+        "name": "verify (windows-latest)",
+        "tests": 2160,
+        "seconds": 417.057,
+        "conclusion": "success"
+      },
+      {
+        "job_id": 104062164495,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2160,
+        "seconds": 431.365,
+        "conclusion": "success"
+      }
+    ]
   }
 }
