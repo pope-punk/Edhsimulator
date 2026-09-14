@@ -394,6 +394,13 @@ class RulesState:
         self._order[(obj.owner,obj.zone)].remove(ref.card_id);del self._objects[ref.card_id]
         self._sequence+=1;self.assert_invariants()
 
+    def retire_revealed_library_ref(self,ref):
+        """CR 401.6: retire a formerly revealed card that remains in a library."""
+        obj=self.get(ref)
+        if obj.zone!=Zone.LIBRARY:raise RulesViolation('Only a library disclosure can be retired')
+        self._objects[ref.card_id]=replace(obj,ref=ObjectRef(ref.card_id,ref.incarnation+1))
+        self._sequence+=1;self.assert_invariants()
+
     def reorder(self,owner,zone,refs):
         refs=tuple(refs);zone=Zone(zone);existing=self.zone(owner,zone)
         if len(refs)!=len(existing) or set(refs)!={obj.ref for obj in existing}:raise RulesViolation('Reorder must be a complete exact permutation')

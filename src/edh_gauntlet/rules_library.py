@@ -12,6 +12,40 @@ from .rules_characteristics import matches
 
 
 class LibraryRules:
+
+    def _visible_library_top(self,owner,viewer):
+        permissions=self.player_permissions()[owner]
+        if owner not in self.state.live_players or not (permissions.get('reveal_library_top')
+                or viewer==owner and permissions.get('play_library_top')):return None
+        library=self._library_cards(owner)
+        if not library:return None
+        top=library[-1]
+        # CR 401.5: keep an unchanged disclosure during announcement; do not
+        # reveal a new top until casting/activation/the special action finishes.
+        delayed=(self.announcement is not None or self.resolution_cast is not None and self.resolution_cast.get('announcing')
+            or self.resolving is not None and self.resolving.get('special_action'))
+        if delayed and self.library_tops.get(owner)!=top.ref.to_json():return None
+        return top
+
+    def _sync_library_tops(self):
+        permissions=self.player_permissions()
+        current={}
+        for owner in self.state.live_players:
+            if not permissions[owner].get('reveal_library_top'):continue
+            obj=self._visible_library_top(owner,owner)
+            if obj is not None:current[owner]=obj.ref.to_json()
+        for owner,value in self.library_tops.items():
+            if current.get(owner)==value:continue
+            try:obj=self.state.get(ObjectRef.from_json(value))
+            except RulesViolation:continue
+            if obj.zone==Zone.LIBRARY:self.state.retire_revealed_library_ref(obj.ref)
+        for owner,value in current.items():
+            if self.library_tops.get(owner)==value:continue
+            obj=self.state.get(ObjectRef.from_json(value))
+            self._event('cards_revealed',player=owner,refs=[value],
+                names=[self.definition(obj).name],cause='library_top')
+        self.library_tops=current
+
     def _library_cards(self,actor):
         # Tokens are not cards (111.6); a departed token can await SBAs here,
         # but it cannot replace a card in a reveal or mill instruction.

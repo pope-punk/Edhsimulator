@@ -1501,7 +1501,7 @@ Rules text:
 [004] 1x Apex Devastator
 ------------------------
 Mana cost: {8}{G}{G}
-Type line: Creature — Chimera
+Type line: Creature — Chimera Hydra
 Rules text:
   Cascade, cascade, cascade, cascade
 

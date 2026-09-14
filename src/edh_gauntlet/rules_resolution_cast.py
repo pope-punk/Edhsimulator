@@ -122,6 +122,7 @@ class ResolutionCastingRules:
         There is no priority, automatic target selection or hidden-library read.
         The spell and its total cost are fixed before any mana ability executes.
         """
+        import hashlib
         from .rules_casting import Payment
         from .rules_adapter import RulesActorAdapter
         if not self._cast_waiting() or quote.kind!='cast':
@@ -144,7 +145,7 @@ class ResolutionCastingRules:
             command=deepcopy(command)
             if 'revision' in command:raise RulesViolation('Mana-plan revisions are bound by their enclosing action')
             command['revision']=trial.revision
-            if command['kind']=='activate':command['action_id']=quote.action_id+':mana:'+str(index)
+            if command['kind']=='activate':command['action_id']='cast-mana:'+hashlib.sha256(quote.action_id.encode()).hexdigest()+':'+str(index)
             if command['kind'] in {'answer','allocate_counters'}:
                 request=trial.pending_choice
                 if request is None or request.actor!=quote.actor:raise RulesViolation('Mana plan has no owned choice')
@@ -162,8 +163,10 @@ class ResolutionCastingRules:
                 'source_types':sorted(trial.effective(stack_source.ref).types),'ability':None,
                 'refs':[ref.to_json() for ref in refs]}
         else:
+            observers=trial._tap_observers(resources.taps)
             trial.state.move((),'cast_payment',payment=resources)
             trial._commit_prepared(quote,resources,paid=True,source=source,prepared_frame=frame,convoke=payment.convoke)
+            trial._collect_tapped(resources.taps,observers)
         # Commit the prepared prefix while preserving callers' state identity.
         state=self.state;state.__dict__.update(trial.state.__dict__)
         self.__dict__.update(trial.__dict__);self.state=state

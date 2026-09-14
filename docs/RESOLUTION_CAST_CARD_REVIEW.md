@@ -13,6 +13,9 @@ No local project execution. Production admission remains closed.
 - Apex Devastator: ten-mana 10/10 Chimera Hydra with four independent cascade
   cast triggers. Correct the catalog's omitted Hydra subtype.
 
+- Oracle of Mul Daya: cumulative additional land play, current top-card reveal,
+  and exact top-land permission under normal land-play timing and budgets.
+
 ## Primary rules reviewed
 
 [Aether Revolt release notes](https://magic.wizards.com/en/news/feature/aether-revolt-release-notes-2017-01-06)
@@ -41,6 +44,17 @@ incarnations belong to the result. Discover moves an uncast hit to hand; cascade
 includes it in the random-bottom subset. The untouched library stays ordered.
 The random generator and suspended choices survive checkpoints and actor replay.
 
-Current tests: **57 new methods**; draft results pending. Existing limitations
+Oracle composes the existing land-play budget with top-only permissions. Its
+reveals track current source control, phasing, each individual draw and CR 401.5
+announcement/special-action deferral. CR 401.6 retires old revealed references
+when disclosure ends while the card remains in a library. Actor packets carry
+only the current authorized top and historical disclosures, never the rest of
+the library. [Double Masters 2022 release notes](https://magic.wizards.com/en/news/feature/double-masters-2022-release-notes-2022-06-24)
+confirm Oracle's three clauses, cumulative land plays and ordinary timing.
+
+Current tests: **85 new methods**; expanded draft results pending. The initial
+three-card run executed 2,217 tests on Ubuntu with two failures and two errors:
+incorrect kicker and Gate fixtures, plus a missing canonical-reference update.
+These are corrected before the expanded run. Existing limitations
 for unreviewed split/Room/transform programs remain gated by the reviewed loader.
 Chthonian Nightmare remains queued for complete energy and ordered costs.

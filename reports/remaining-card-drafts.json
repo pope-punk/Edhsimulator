@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 302,
     "remaining_outside_reviewed_bundle": 32,
-    "drafts_written": 3,
-    "not_started_on_this_branch": 29,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 28,
     "reviewed_bundle_copies": 368,
-    "draft_copies": 3,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 75,
     "remaining_outside_reviewed_bundle_copies": 32
@@ -2280,7 +2280,7 @@
     {
       "card_id": "oracle-of-mul-daya",
       "name": "Oracle of Mul Daya",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2293,7 +2293,9 @@
           "face_id": "oracle-of-mul-daya",
           "text": "You may play an additional land on each of your turns.\nPlay with the top card of your library revealed.\nYou may play lands from the top of your library."
         }
-      ]
+      ],
+      "draft_path": "data/rules/draft_cards.json",
+      "review_notes": "Complete three-clause program drafted; source-bound review and hosted validation pending."
     },
     {
       "card_id": "parallax-wave",
@@ -3548,28 +3550,43 @@
     "cards_written": [
       "rishkar-s-expertise",
       "hidden-nursery",
-      "apex-devastator"
+      "apex-devastator",
+      "oracle-of-mul-daya"
     ],
     "cards_promoted": [],
-    "new_test_methods": 57,
+    "new_test_methods": 85,
     "runtime_checkpoint_schema": 128,
     "state_checkpoint_schema": 17,
     "validation_status": "draft_pending",
     "shared_mechanics": [
       "Resolution-cast permissions with suspended parents and no priority",
       "Discover/cascade public sequential exile and random-bottom continuations",
-      "Additional-cost payment and bounded authored announcement mana plans"
+      "Additional-cost payment and bounded authored announcement mana plans",
+      "Current top-library disclosure, reference retirement and exact top-land permissions"
     ],
     "source_corrections": [
       "Apex Devastator has both Chimera and Hydra subtypes, as printed in official Commander Legends notes."
     ],
     "next_batch": [
       "chthonian-nightmare",
-      "oracle-of-mul-daya",
       "maze-s-end",
-      "parasitic-impetus"
+      "parasitic-impetus",
+      "rhythm-of-the-wild"
     ],
-    "hosted_attempts": [],
+    "hosted_attempts": [
+      {
+        "stage": "initial_three_card_draft",
+        "commit": "72ec8fe8238bb5db8eecdd4bfa51cce467a2579c",
+        "run_id": 34875843944,
+        "conclusion": "failure",
+        "tests_run_ubuntu": 2217,
+        "failures": 2,
+        "errors": 2,
+        "findings": [
+          "Two fixtures used the wrong Nullpriest kicker amount and an unavailable Gate definition. The catalog generation check also required applying Apex's Hydra correction to the canonical reference text. These are corrected in the expanded four-card revision."
+        ]
+      }
+    ],
     "review_work_remaining": "Source and runtime review; draft hosted conformance; source-bound promotion; required reviewed-loader conformance.",
     "unresolved_defects": []
   },

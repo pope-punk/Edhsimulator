@@ -5,7 +5,7 @@ mulligans and unsupported turn actions remain gated.
 """
 from dataclasses import dataclass
 from .rules_state import ObjectRef, Zone, RulesViolation
-from .rules_program import decode, Draw, Move, Select, Selector, Discard
+from .rules_program import TopLibraryPermissions,decode, Draw, Move, Select, Selector, Discard
 from .rules_choices import PriorityBoundary
 
 
@@ -22,6 +22,9 @@ class TurnRules:
         result={player:{'land_play_limit':1,'maximum_hand_size':7,'land_zones':[Zone.HAND.value]} for player in self.state.players}
         def apply(player,permissions):
             row=result[player]
+            if isinstance(permissions,TopLibraryPermissions):
+                if permissions.reveal_top:row['reveal_library_top']=True
+                if permissions.play_top_land:row['play_library_top']=True
             row['land_play_limit']+=permissions.additional_land_plays
             if permissions.no_maximum_hand_size:row['maximum_hand_size']=None
             row['land_zones']=sorted(set(row['land_zones'])|{zone.value for zone in permissions.land_zones})
@@ -157,7 +160,9 @@ class TurnRules:
             raise RulesViolation('Land play requires current main-phase priority and an empty stack')
         source = self.state.get(ref)
         permissions=self.player_permissions()[actor]
-        if source.zone.value not in permissions['land_zones'] or source.owner != actor or 'Land' not in self.effective(ref).types:
+        top=self._visible_library_top(actor,actor)
+        permitted_top=(source.zone==Zone.LIBRARY and permissions.get('play_library_top') and top is not None and top.ref==ref)
+        if (source.zone.value not in permissions['land_zones'] and not permitted_top) or source.owner != actor or 'Land' not in self.effective(ref).types:
             raise RulesViolation('No permission to play this land')
         if self.turn_schedule['land_plays'] >= permissions['land_play_limit']:
             raise RulesViolation('No land plays remaining this turn')

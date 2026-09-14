@@ -4,7 +4,8 @@ This experimental slice uses already-produced mana, including explicitly selecte
 units with reviewed spending riders, and one atomic activation zone-cost group
 or fixed source-counter costs. Spells may pay one selected sacrifice group or a
 graveyard alternative with one exile group. Separately ordered cost groups and
-mana production during announcement remain unsupported.
+unrestricted mana production during announcement remain unsupported. Resolution
+casts additionally accept bounded, fully authored immediate mana plans.
 Fixed alternative costs may carry entry facts; their consequences compose ordinary triggers. Life payments reach the shared loss boundary. Creature readiness and basic land
 mana use shared turn-history and characteristic rules.
 """

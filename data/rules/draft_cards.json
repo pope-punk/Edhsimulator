@@ -539,6 +539,115 @@
         "casting_restrictions": [],
         "entry_copy_add_types": []
       }
+    },
+    {
+      "card_id": "oracle-of-mul-daya",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "oracle-of-mul-daya",
+        "name": "Oracle of Mul Daya",
+        "color_identity": [
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "oracle-of-mul-daya",
+            "oracle_text": "You may play an additional land on each of your turns.\nPlay with the top card of your library revealed.\nYou may play lands from the top of your library.",
+            "type_line": "Creature \u2014 Elf Shaman",
+            "mana_cost": "{3}{G}",
+            "power": 2,
+            "toughness": 2,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "G"
+            ]
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:oracle-of-mul-daya",
+        "name": "Oracle of Mul Daya",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Elf",
+          "Shaman"
+        ],
+        "mana_value": 4,
+        "power": 2,
+        "toughness": 2,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 3,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "TopLibraryPermissions",
+          "additional_land_plays": 1,
+          "no_maximum_hand_size": false,
+          "land_zones": [],
+          "reveal_top": true,
+          "play_top_land": true
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
     }
   ]
 }

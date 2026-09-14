@@ -15,7 +15,7 @@ from edh_gauntlet.rules_adapter import RulesActorAdapter
 from edh_gauntlet.rules_bundle import load_reviewed,digest,source_facts
 from edh_gauntlet.catalog import load_catalog
 
-CARDS=('rishkar-s-expertise','hidden-nursery','apex-devastator')
+CARDS=('rishkar-s-expertise','hidden-nursery','apex-devastator','oracle-of-mul-daya')
 
 
 class ResolutionCastTests(unittest.TestCase):
@@ -193,8 +193,8 @@ class ResolutionCastTests(unittest.TestCase):
     def test_free_cast_can_pay_kicker(self):
         self.game();card=self.add('catalog:nullpriest-of-oblivion',zone=Zone.HAND);self.offer()
         quote=self.kernel.quote_cast('kicked','A',card,kicker=True)
-        self.assertEqual(4,quote.cost.mana.generic);self.assertEqual(('B',),quote.cost.mana.symbols)
-        payment=self.payment('CCCCB');quote=self.kernel.quote_cast('kicked','A',card,kicker=True)
+        self.assertEqual(3,quote.cost.mana.generic);self.assertEqual(('B',),quote.cost.mana.symbols)
+        payment=self.payment('CCCB');quote=self.kernel.quote_cast('kicked','A',card,kicker=True)
         self.kernel.commit_action(quote,payment)
         self.assertTrue(self.kernel.stack[-1]['kicker'])
 
@@ -303,7 +303,7 @@ class ResolutionCastTests(unittest.TestCase):
         self.discover();self.decline();self.assertEqual(Zone.EXILE,self.current(old).zone)
 
     def test_nursery_enters_tapped_even_with_two_gates(self):
-        self.game();self.add('catalog:simic-guildgate');self.add('catalog:gruul-guildgate')
+        self.game();self.add('catalog:simic-guildgate');self.add('catalog:simic-guildgate')
         ref=self.add(self.cards['hidden-nursery'].definition_id,zone=Zone.HAND)
         self.kernel.enter(ref);self.drain();self.assertTrue(self.current(ref).tapped)
 
@@ -435,8 +435,8 @@ class ResolutionCastTests(unittest.TestCase):
             (ChooseMana((('B',),('G',))),),mana_ability=True),))
         # Definition sets are immutable; construct this case independently.
         self.game((choice,));card=self.add('catalog:nullpriest-of-oblivion',zone=Zone.HAND);source=self.add('choice');self.offer()
-        self.state.add_mana('A','CCCC')
-        plan=Payment((('B',1),('C',4)),mana_actions=(self.mana_command(source,'mana'),{'kind':'answer','indexes':[0]}))
+        self.state.add_mana('A','CCC')
+        plan=Payment((('B',1),('C',3)),mana_actions=(self.mana_command(source,'mana'),{'kind':'answer','indexes':[0]}))
         self.free(card,payment=plan,kicker=True)
         self.assertTrue(self.kernel.stack[-1]['kicker']);self.assertTrue(self.state.get(source).tapped)
 
@@ -456,5 +456,223 @@ class ResolutionCastTests(unittest.TestCase):
         replay=RulesActorAdapter.replay(adapter.archive(),self.programs)
         self.assertEqual(adapter.kernel.snapshot(),replay.kernel.snapshot())
 
+    def main(self):
+        self.add('catalog:forest',zone=Zone.LIBRARY)
+        self.kernel.begin_turn_for_scenario('A')
+        for _ in range(30):
+            if self.kernel.phase=='precombat_main':return
+            self.kernel.pass_priority(self.kernel.priority)
+        self.fail('No main phase')
+
+    def land(self,ref):
+        return self.kernel.play_land('land-'+str(len(self.kernel.action_receipts)),'A',ref,revision=self.kernel.revision)
+
+    def test_oracle_additional_land_play_is_cumulative(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        self.assertEqual(2,self.kernel.player_permissions()['A']['land_play_limit'])
+        self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        self.assertEqual(3,self.kernel.player_permissions()['A']['land_play_limit'])
+
+    def test_oracle_reveals_only_current_top_to_all_players(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        hidden=self.add(zone=Zone.LIBRARY);top=self.add('catalog:forest',zone=Zone.LIBRARY);self.kernel.advance()
+        for player in self.state.players:
+            packet=project_actor(self.kernel,player)
+            self.assertEqual(top.to_json(),packet['revealed_library_tops']['A']['ref'])
+            self.assertNotIn(hidden.card_id,json.dumps(packet))
+        self.assertEqual(1,len([e for e in self.events('cards_revealed') if e.get('cause')=='library_top']))
+
+    def test_oracle_empty_library_has_no_disclosure(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id);self.kernel.advance()
+        self.assertEqual({},project_actor(self.kernel,'B')['revealed_library_tops'])
+
+    def test_oracle_top_land_uses_normal_land_budget(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        first=self.add('catalog:forest',zone=Zone.LIBRARY);second=self.add('catalog:forest',zone=Zone.LIBRARY)
+        third=self.add('catalog:forest',zone=Zone.HAND);self.main()
+        self.land(self.current(second).ref);self.land(self.current(first).ref)
+        self.assertEqual(2,self.kernel.turn_schedule['land_plays'])
+        with self.assertRaises(RulesViolation):self.land(third)
+
+    def test_oracle_land_permission_excludes_buried_land(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        buried=self.add('catalog:forest',zone=Zone.LIBRARY);self.add(zone=Zone.LIBRARY);self.main()
+        with self.assertRaises(RulesViolation):self.land(self.current(buried).ref)
+        self.assertEqual(0,self.kernel.turn_schedule['land_plays'])
+
+    def test_oracle_does_not_allow_top_nonland_cast(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id);top=self.add(zone=Zone.LIBRARY);self.main()
+        with self.assertRaises(RulesViolation):self.kernel.quote_cast('bad','A',self.current(top).ref)
+
+    def test_oracle_does_not_allow_top_nonland_land_play(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id);top=self.add(zone=Zone.LIBRARY);self.main()
+        with self.assertRaises(RulesViolation):self.land(self.current(top).ref)
+
+    def test_oracle_land_play_keeps_main_phase_restriction(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id);top=self.add('catalog:forest',zone=Zone.LIBRARY)
+        self.kernel.begin_turn_for_scenario('A')
+        with self.assertRaises(RulesViolation):self.land(self.current(top).ref)
+
+    def test_oracle_uses_controller_library_and_permissions(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        self.add(zone=Zone.LIBRARY);b=self.add(actor='B',zone=Zone.LIBRARY);self.kernel.advance()
+        self.state.change_control(oracle,'B');self.kernel.advance()
+        self.assertEqual(1,self.kernel.player_permissions()['A']['land_play_limit'])
+        self.assertEqual(2,self.kernel.player_permissions()['B']['land_play_limit'])
+        packet=project_actor(self.kernel,'C')
+        self.assertEqual({'B'},set(packet['revealed_library_tops']))
+        self.assertEqual(b.card_id,packet['revealed_library_tops']['B']['ref']['card_id'])
+
+    def test_oracle_departure_revokes_top_land_permission(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        top=self.add('catalog:forest',zone=Zone.LIBRARY);self.main()
+        self.kernel.execute_for_scenario(oracle,'A',(Move('source',Zone.HAND),))
+        with self.assertRaises(RulesViolation):self.land(self.current(top).ref)
+        self.assertEqual({},project_actor(self.kernel,'B')['revealed_library_tops'])
+
+    def test_oracle_departure_does_not_reset_used_land_budget(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        self.add('catalog:forest',zone=Zone.LIBRARY);self.main()
+        first=self.add('catalog:forest',zone=Zone.HAND);second=self.add('catalog:forest',zone=Zone.HAND)
+        self.land(first);self.kernel.execute_for_scenario(oracle,'A',(Move('source',Zone.HAND),))
+        with self.assertRaises(RulesViolation):self.land(second)
+        self.kernel.enter(self.current(oracle).ref);self.land(second)
+        self.assertEqual(2,self.kernel.turn_schedule['land_plays'])
+
+    def test_oracle_phasing_disables_disclosure_and_land_bonus(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id);self.add(zone=Zone.LIBRARY);self.kernel.advance()
+        self.state.phase(oracle,True);self.kernel.advance()
+        self.assertEqual({},project_actor(self.kernel,'B')['revealed_library_tops'])
+        self.assertEqual(1,self.kernel.player_permissions()['A']['land_play_limit'])
+
+    def test_oracle_hidden_then_revealed_top_retires_old_identity(self):
+        self.game();oracle=self.add(self.cards['oracle-of-mul-daya'].definition_id);top=self.add(zone=Zone.LIBRARY)
+        self.kernel.advance();old=self.current(top).ref
+        self.state.phase(oracle,True);self.kernel.advance()
+        with self.assertRaises(RulesViolation):self.state.get(old)
+        self.state.phase(oracle,False);self.kernel.advance()
+        self.assertNotEqual(old,self.current(top).ref)
+        self.assertEqual(self.current(top).ref.to_json(),project_actor(self.kernel,'B')['revealed_library_tops']['A']['ref'])
+
+    def test_oracle_covering_revealed_top_retires_its_reference(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id);old=self.add(zone=Zone.LIBRARY)
+        cover=self.add('catalog:forest',zone=Zone.GRAVEYARD);self.kernel.advance()
+        self.kernel.execute_for_scenario(cover,'A',(Move('source',Zone.LIBRARY),))
+        with self.assertRaises(RulesViolation):self.state.get(old)
+        self.assertEqual(cover.card_id,project_actor(self.kernel,'B')['revealed_library_tops']['A']['ref']['card_id'])
+
+    def test_oracle_records_each_top_during_multiple_draws(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        refs=[self.add(zone=Zone.LIBRARY) for _ in range(3)];self.kernel.advance()
+        self.kernel.execute_for_scenario(self.anchor,'A',(Draw(2),))
+        revealed=[e['refs'][0]['card_id'] for e in self.events('cards_revealed') if e.get('cause')=='library_top']
+        self.assertEqual([r.card_id for r in reversed(refs)],revealed)
+
+    def test_oracle_reveal_checkpoint_and_actor_land_replay(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        land=self.add('catalog:forest',zone=Zone.LIBRARY);self.main();self.restore()
+        adapter=RulesActorAdapter(self.kernel);ref=self.current(land).ref
+        adapter.submit('A',{'kind':'play_land','action_id':'top-land','source':ref.to_json(),'revision':self.kernel.revision})
+        replay=RulesActorAdapter.replay(adapter.archive(),self.programs)
+        self.assertEqual(adapter.kernel.snapshot(),replay.kernel.snapshot())
+        self.assertEqual(Zone.BATTLEFIELD,self.current(land).zone)
+
+    def test_oracle_visible_ref_cannot_address_buried_library_card(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        hidden=self.add('catalog:forest',zone=Zone.LIBRARY);self.add('catalog:forest',zone=Zone.LIBRARY);self.main()
+        adapter=RulesActorAdapter(self.kernel)
+        with self.assertRaises(RulesViolation):adapter._visible_ref(self.current(hidden).ref.to_json(),'A')
+
+    def test_oracle_new_top_waits_until_special_action_finishes(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        below=self.add(zone=Zone.LIBRARY);land=self.add('catalog:forest',zone=Zone.LIBRARY);self.main()
+        start=len(self.kernel.semantic_events);self.land(self.current(land).ref)
+        events=self.kernel.semantic_events[start:]
+        finish=next(i for i,e in enumerate(events) if e['kind']=='resolution_finished')
+        reveal=next(i for i,e in enumerate(events) if e['kind']=='cards_revealed' and e.get('cause')=='library_top')
+        self.assertLess(finish,reveal)
+        self.assertEqual(below.card_id,events[reveal]['refs'][0]['card_id'])
+
+    def test_oracle_new_top_waits_until_announcement_finishes(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        first=self.add(zone=Zone.LIBRARY);second=self.add(zone=Zone.LIBRARY);self.kernel.advance()
+        # Bind an announcement checkpoint and change the top as a cost would.
+        self.kernel.announcement={'test':True}
+        self.state.move((ZoneMove(second,Zone.GRAVEYARD),),'fixture-cost')
+        self.kernel._sync_library_tops()
+        self.assertIsNone(self.kernel._visible_library_top('A','B'))
+        self.kernel.announcement=None;self.kernel._sync_library_tops()
+        self.assertEqual(first.card_id,self.kernel._visible_library_top('A','B').ref.card_id)
+
+    def test_oracle_permissions_compiler_rejects_nonboolean_flags(self):
+        for permission in (TopLibraryPermissions(reveal_top=1),TopLibraryPermissions(play_top_land='yes')):
+            with self.subTest(permission=permission),self.assertRaises(RulesViolation):
+                validate(CardProgram('bad','Bad',('Creature',),power=2,toughness=2,player_permissions=permission))
+
+    def test_mana_plan_total_stays_locked_when_tax_source_is_sacrificed(self):
+        tax=CardProgram('tax-mana','Tax mana',('Artifact',),cost_modifiers=(CostModifier('tax',Selector(Zone.STACK),1),),
+            activated=(ActivatedProgram('mana',CostSpec(zone_costs=(ZoneCost('sacrifice','sacrifice'),)),
+                (AddMana(('G',)),),mana_ability=True),))
+        self.game((tax,));card=self.add(zone=Zone.HAND);self.offer();source=self.add('tax-mana')
+        self.free(card,payment=Payment((('G',1),),mana_actions=(self.mana_command(source,'mana'),)))
+        self.assertEqual(Zone.GRAVEYARD,self.current(source).zone)
+        receipt=list(self.kernel.action_receipts.values())[-1]
+        self.assertEqual(1,receipt['action']['cost']['mana']['generic'])
+
+    def test_mana_plan_accepts_bounded_outer_action_identity(self):
+        tax=CardProgram('tax','Tax',('Artifact',),cost_modifiers=(CostModifier('tax',Selector(Zone.STACK),1),))
+        self.game((tax,));card=self.add(zone=Zone.HAND);self.offer();self.add('tax')
+        quote=self.kernel.quote_cast('x'*128,'A',card)
+        self.kernel.commit_action(quote,Payment((('G',1),),mana_actions=(self.mana_command(self.anchor),)))
+        self.assertIn('x'*128,self.kernel.action_receipts)
+
+    def test_mana_plan_and_sacrifice_additional_cost_share_parent(self):
+        self.game();body=self.add();card=self.add('catalog:fling',zone=Zone.HAND)
+        self.add('catalog:forest',zone=Zone.LIBRARY);self.add('catalog:forest',zone=Zone.LIBRARY);self.offer()
+        cost=self.kernel.definition(self.state.get(card)).cast.cost.zone_costs[0]
+        plan=Payment(zone_costs=((cost.cost_id,(body,)),),mana_actions=(self.mana_command(self.anchor),))
+        self.free(card,(PlayerRef('B'),),payment=plan)
+        self.assertEqual(Zone.GRAVEYARD,self.current(body).zone)
+        self.assertEqual(1,dict(self.state.mana_pool('A')).get('G',0))
+        self.drain();self.assertEqual(38,self.state.life('B'))
+
+    def test_free_replicate_keeps_paid_repeat_costs_and_triggers(self):
+        self.game();self.add();self.add();card=self.add('catalog:changing-loyalty',zone=Zone.HAND)
+        for _ in range(2):self.add('catalog:forest',zone=Zone.LIBRARY)
+        self.offer();targets=tuple(obj.ref for obj in self.state.objects(Zone.BATTLEFIELD) if obj.definition=='rc-body')[:1]
+        quote=self.kernel.quote_cast('replicate','A',card,targets,replicate=1)
+        self.assertEqual(2,quote.cost.mana.generic);self.assertEqual((),quote.cost.mana.symbols)
+        payment=self.payment('CC');quote=self.kernel.quote_cast('replicate','A',card,targets,replicate=1)
+        self.kernel.commit_action(quote,payment)
+        self.assertEqual(2,len(self.kernel.stack));self.assertEqual(1,self.kernel.stack[0]['replicate'])
+
+    def test_copied_apex_spell_does_not_add_cascade_triggers(self):
+        self.game();card=self.hand('apex-devastator');self.cast(card,'CCCCCCCCGG');self.answer([0,1,2,3])
+        original=self.kernel.stack[0]
+        self.kernel._queue_captured_copy(self.state.get(self.current(card).ref),self.kernel._copy_blueprint(original))
+        self.kernel.advance();self.top()
+        self.assertEqual(2,len([f for f in self.kernel.stack if f['spell']]))
+        self.assertEqual(4,len([f for f in self.kernel.stack if not f['spell']]))
+
+    def test_free_necromancy_records_non_sorcery_cast_timing(self):
+        self.game();card=self.add('catalog:necromancy',zone=Zone.HAND);self.offer();self.free(card)
+        self.assertEqual('other',self.kernel.stack[-1]['cast_timing'])
+        self.assertEqual('WithZoneResult',self.kernel.stack[-1]['tasks'][0]['effect']['node'])
+
+    def test_mana_plan_preserves_derived_copy_registry(self):
+        self.game();card=self.add(zone=Zone.HAND)
+        self.kernel.execute_for_scenario(self.anchor,'A',(CopyTokens('source'),))
+        self.offer()
+        self.free(card,payment=Payment(mana_actions=(self.mana_command(self.anchor),)))
+        self.assertTrue(self.kernel.copy_programs);self.restore()
+
+    def test_discover_zero_hits_zero_value_nonland(self):
+        zero=CardProgram('free-zero','Free zero',('Artifact',),mana_value=0,cast=CastSpec(CostSpec()))
+        self.game((zero,));card=self.add('free-zero',zone=Zone.LIBRARY)
+        self.discover(0);self.free(self.hit())
+        self.assertEqual(Zone.STACK,self.current(card).zone)
+
 
 if __name__=='__main__':unittest.main()
+
+

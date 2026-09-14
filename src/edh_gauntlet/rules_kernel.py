@@ -89,6 +89,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         self.linked_exile={};self.exile_durations={};self.phase_links={};self.object_notes={}
         self.regeneration_shields={};self.upkeep_history={p:0 for p in state.players}
         self.turn_history={'turn':state.turn_number,'attacked':[],'freerunning':[]}
+        self.library_tops={}
         self.resolution_cast=None
         self.mana_payment=None;self.draw_counts={};self.draw_count_turn=state.turn_number
         self.temporary_effects=[];self.counter_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
@@ -882,6 +883,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                 self._emit_counters(event.after.ref,dict(event.after.counters),event.after.controller,event.after.ref)
         if payment is not None:self._collect_tapped(payment.taps,before)
         self._prune_attachment_rules()
+        self._sync_library_tops()
         return events
 
     def _refs(self,frame,subject):
@@ -1564,6 +1566,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         try:
             while True:
                 if self.outcome:return GameResult(self.outcome['kind'],tuple(self.outcome['winners']),tuple(self.outcome['departed']))
+                self._sync_library_tops()
                 self._expire_counter_effects()
                 self._collect_state_triggers()
                 if self._return_expired_exiles():continue
@@ -1643,7 +1646,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'phase_links':self.phase_links,'object_notes':self.object_notes,
             'regeneration_shields':self.regeneration_shields,'upkeep_history':self.upkeep_history,'turn_history':self.turn_history,
-            'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
+            'library_tops':self.library_tops,'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1654,7 +1657,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'],copy_programs=value['copy_programs'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
+        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','library_tops','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
         if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
             kernel.resolving=kernel.mana_payment['parent']
