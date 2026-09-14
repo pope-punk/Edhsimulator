@@ -462,7 +462,9 @@ class RulesState:
         return keys[0] if keys else None
 
     def change_control_batch(self,refs,controller,*,duration='indefinite'):
-        if controller not in self.players:raise RulesViolation('Invalid control effect')
+        refs=tuple(refs)
+        if controller not in self.players or duration not in {'indefinite','until_end_of_turn'}:raise RulesViolation('Invalid control effect')
+        if len(set(refs))!=len(refs):raise RulesViolation('Duplicate control recipient')
         if controller not in self.live_players:return ()
         return self.change_control_map(tuple((ref,controller) for ref in refs),duration=duration)
 
@@ -601,9 +603,9 @@ class RulesState:
         self._sequence+=1
         return self._sequence
 
-    def advance_class(self,ref,level):
+    def set_class_level(self,ref,level):
         obj=self.get(ref)
-        if obj.zone!=Zone.BATTLEFIELD or obj.phased or type(level) is not int or level!=obj.class_level+1:
+        if obj.zone!=Zone.BATTLEFIELD or obj.phased or type(level) is not int or level<1:
             raise RulesViolation('Unavailable Class level transition')
         self._objects[ref.card_id]=replace(obj,class_level=level)
         self._sequence+=1

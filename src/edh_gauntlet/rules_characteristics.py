@@ -276,6 +276,8 @@ def _may_change_recipients(changes, effect):
                     or {'Creature','Kindred'}&set(change.remove) and subtype_reads & CREATURE_TYPES
                     or 'Land' in change.remove and subtype_reads & LAND_TYPES):
                 return True
+        elif isinstance(change,AddKeywords):
+            if any(isinstance(s,KeywordSelector) and set(s.any_keywords)&set(change.keywords) for s in selectors):return True
         elif isinstance(change,SetColors):
             if any(s.colors or s.any_colors or s.excluded_colors for s in selectors):return True
         elif isinstance(change,AddSubtypes):
@@ -315,7 +317,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
             effects.append((key, source, effect))
     locked = {}
     current={obj.ref:obj for obj in objects}
-    entry_rows=tuple((obj,ContinuousProgram('entry-subtypes',Selector(Zone.BATTLEFIELD),
+    entry_rows=tuple((replace(obj,copy_effects=()),ContinuousProgram('entry-subtypes',Selector(Zone.BATTLEFIELD),
         (AddSubtypes('Creature',obj.entry_subtypes),)),(obj.ref,))
         for obj in objects if obj.zone==Zone.BATTLEFIELD and obj.entry_subtypes)
     for source,effect,refs in tuple(temporary)+entry_rows:

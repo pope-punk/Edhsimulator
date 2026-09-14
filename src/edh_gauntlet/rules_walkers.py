@@ -8,7 +8,7 @@ from dataclasses import replace
 from .rules_state import ObjectRef,PlayerRef,RulesObject,ResourcePayment,Zone,RulesViolation,target_from_json
 from .rules_choices import Option
 from .rules_casting import Payment,PreparedAction
-from .rules_program import (LoyaltyCost,AdvanceClass,RotateControl,PutEligibleTop,
+from .rules_program import (LoyaltyCost,SetClassLevel,RotateControl,PutEligibleTop,
     SacrificeThenTrigger,WardPayment,CounterBoundStack,OpeningHandPermissions,
     AbilityProgram,EventPattern,PayMana,Counter,encode,decode)
 
@@ -27,7 +27,7 @@ class WalkerRules:
         frame.update(ability_id=ability.ability_id,activated_program=encode(ability))
         self._bind_announced_values(frame,quote);self.stack.append(frame)
         self.announcement={'loyalty':True,'frame_id':frame['id'],'quote':quote.to_json(),
-            'payment':payment.to_json(),'source':source.to_json(),'ability':encode(ability)}
+            'payment':payment.to_json(),'source':source.to_json(),'ability':encode(ability),'refs':[]}
         self._event('activation_announced',action_id=quote.action_id,actor=quote.actor)
         return self.advance()
 
@@ -59,16 +59,15 @@ class WalkerRules:
             for index,(_,_,mana) in enumerate(self.effective(ref).wards):
                 ability=AbilityProgram('ward:'+str(index),EventPattern('step_began',step='upkeep'),
                     (WardPayment(mana),))
-                self._trigger(obj,ability,values={'ward_frame':frame['id'],'captured_controllers':[frame['controller']]})
+                self._trigger(obj,ability,values={'ward_frame':frame['id'],'event_controllers':[frame['controller']]})
 
     def _execute_walker_instruction(self,effect,frame,task):
         key=task['id'];actor=frame['controller'];source=self._source(frame)
-        if isinstance(effect,AdvanceClass):
+        if isinstance(effect,SetClassLevel):
             try:current=self.state.get(source.ref)
             except RulesViolation:return True
-            if (current.zone==Zone.BATTLEFIELD and not current.phased
-                    and current.class_level==effect.level-1):
-                self.state.advance_class(current.ref,effect.level)
+            if current.zone==Zone.BATTLEFIELD and not current.phased:
+                self.state.set_class_level(current.ref,effect.level)
                 self._event('class_level_changed',source=current.ref.to_json(),level=effect.level)
         elif isinstance(effect,RotateControl):
             direction=self._choose(key+':direction',actor,'control_direction','Choose left or right.',
@@ -102,8 +101,8 @@ class WalkerRules:
         elif isinstance(effect,SacrificeThenTrigger):
             if 'sacrifice_offer' not in task:
                 options=self._options(self._query(effect.selector,frame))
-                selected=self._choose(key+':sacrifice',actor,'reflexive_sacrifice',
-                    'Choose a permanent to sacrifice.',options,min(1,len(options)),min(1,len(options))) if options else ()
+                selected=options if len(options)<=1 else self._choose(key+':sacrifice',actor,'reflexive_sacrifice',
+                    'Choose a permanent to sacrifice.',options,1,1)
                 if not selected:return True
                 obj=self.state.get(selected[0].ref);view=self.effective(obj.ref)
                 task['sacrifice_offer']={'ref':obj.ref.to_json(),
@@ -118,7 +117,7 @@ class WalkerRules:
                     'paid_cost_subtypes':{'sacrifice':chosen['subtypes']}})
         elif isinstance(effect,WardPayment):
             # The targeted spell/ability's controller pays, regardless of later control.
-            self._insert(frame,(PayMana(effect.mana,(),otherwise=(CounterBoundStack(),),players='captured_controllers'),))
+            self._insert(frame,(PayMana(effect.mana,(),otherwise=(CounterBoundStack(),),players='event_controllers'),))
         elif isinstance(effect,CounterBoundStack):
             bound=next((f for f in self.stack if f['id']==frame['values']['ward_frame']),None)
             if bound is not None:

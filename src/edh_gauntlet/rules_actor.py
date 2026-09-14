@@ -130,6 +130,7 @@ def project_actor(kernel,actor):
             **({'exile_on_stack_exit':True} if frame.get('exile_on_stack_exit') else {}),
             **({'target_controller_groups':[{'target':target_summary(row['ref']),'controller':row['controller']}
                 for row in frame['target_controller_groups']]} if 'target_controller_groups' in frame else {}),
+            **({'ward_frame':frame['values']['ward_frame']} if 'ward_frame' in frame.get('values',{}) else {}),
             **({'event_x':frame['values']['event_x']} if 'event_x' in frame.get('values',{}) else {}),
             **({'event_amount':frame['values']['event_amount']} if 'event_amount' in frame.get('values',{}) else {}),
             **({'defending_player':frame['values']['defending_player']} if 'defending_player' in frame.get('values',{}) else {}),
@@ -154,7 +155,8 @@ def project_actor(kernel,actor):
         if actor==pending['quote']['actor']:announcement['payment']=deepcopy(pending['payment'])
     combat=None
     if kernel.combat:
-        combat={'attackers':[{'ref':deepcopy(row['ref']),'defender':row['defender']} for row in kernel.combat['attackers']],
+        combat={'attackers':[{'ref':deepcopy(row['ref']),'defender':deepcopy(row.get('defender_object',{}).get('ref',row['defender'])),
+                    **({'defending_player':row['defender']} if row.get('defender_object') is not None else {})} for row in kernel.combat['attackers']],
                 'blocks':{key:[deepcopy(row['ref']) for row in rows] for key,rows in kernel.combat['blocks'].items()},
                 'blocked':list(kernel.combat['blocked'])}
     hand=sorted(state.zone(actor,Zone.HAND),key=lambda obj:(kernel.definition(obj).name,obj.ref))

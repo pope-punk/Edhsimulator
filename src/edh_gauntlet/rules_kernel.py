@@ -114,10 +114,11 @@ class RulesKernel(WalkerRules,RuleEffects,ResolutionCastingRules,SpellCopyRules,
                     replacements=(),cost_modifiers=(),target_restrictions=(),keywords=(),player_permissions=PlayerPermissions(),
                     counter_replacements=(),life_gain_replacements=(),block_restrictions=(),tapped_mana_replacements=(),
                     all_subtype_sets=(),entry_restrictions=(),casting_restrictions=(),characteristic_pt=None,entry_copy=None,enchant=None)
-        if obj.zone==Zone.BATTLEFIELD:
+        if obj.zone==Zone.BATTLEFIELD and program.counter_replacements:
             from .rules_program import ClassCounterReplacement
-            program=replace(program,counter_replacements=tuple(r for r in program.counter_replacements
-                if not isinstance(r,ClassCounterReplacement) or obj.class_level>=r.minimum_level))
+            rules=tuple(r for r in program.counter_replacements
+                if not isinstance(r,ClassCounterReplacement) or obj.class_level>=r.minimum_level)
+            if rules!=program.counter_replacements:program=replace(program,counter_replacements=rules)
         return program
 
     def _trigger_abilities(self,source,kind,views=None):

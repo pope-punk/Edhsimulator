@@ -1097,7 +1097,8 @@
                     "supertypes": [],
                     "any_types": [
                       "Creature",
-                      "Planeswalker"
+                      "Planeswalker",
+                      "Battle"
                     ],
                     "excluded_types": [],
                     "any_subtypes": [],
@@ -2042,7 +2043,7 @@
             },
             "effects": [
               {
-                "node": "AdvanceClass",
+                "node": "SetClassLevel",
                 "level": 2
               }
             ],
@@ -2082,7 +2083,7 @@
             },
             "effects": [
               {
-                "node": "AdvanceClass",
+                "node": "SetClassLevel",
                 "level": 3
               }
             ],

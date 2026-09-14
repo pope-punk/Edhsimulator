@@ -123,7 +123,7 @@
       "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "aminatou-veil-piercer",
@@ -862,7 +862,7 @@
       "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "elspeth-conquers-death",
@@ -1740,7 +1740,7 @@
       "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "invasion-of-theros",
@@ -2010,7 +2010,7 @@
       "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "march-from-velis-vel",
@@ -2152,7 +2152,7 @@
       "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "mirage-mirror",
@@ -2339,7 +2339,7 @@
       "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "nullpriest-of-oblivion",
@@ -3156,7 +3156,7 @@
       "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 81 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
     },
     {
       "card_id": "stomping-ground",
@@ -3796,13 +3796,37 @@
     "validation_status": "draft_validation_pending",
     "runtime_checkpoint_schema": 130,
     "state_checkpoint_schema": 18,
-    "new_test_methods": 81,
+    "new_test_methods": 100,
     "unresolved_defects": [],
     "review_work_remaining": [
       "Complete hosted draft conformance, source review, promotion and required reviewed-loader validation."
     ],
-    "review_findings": [],
-    "validation_attempts": [],
+    "review_findings": [
+      "Reused existing zero-loyalty state actions and damage counter removal.",
+      "Any-target reflexive damage includes creatures, players, planeswalkers and battles.",
+      "Class activation conditions apply at announcement; resolution sets the printed level without repeating that restriction.",
+      "Entry subtype effects retain their original timestamp through later copies and are not copiable.",
+      "Every current ward instance captures the exact targeted stack object and payer.",
+      "Static keyword-selector dependencies include later keyword grants.",
+      "Avoid rebuilding unchanged CardProgram records while checking Class counter replacement gates."
+    ],
+    "validation_attempts": [
+      {
+        "commit": "983aaae5cd60fba08d9cd2668bcb27343ffe1ce2",
+        "status": "source_review_correction",
+        "findings": [
+          "Fixed a positional argument after keyword arguments in active-player context forwarding before waiting for CI."
+        ]
+      },
+      {
+        "commit": "b67857c78bace19569fc2ff9874ce6025c52b77f",
+        "run_id": 34891304108,
+        "status": "in_progress_at_followup",
+        "findings": [
+          "Syntax, installation and packaged assets passed on both platforms; conformance was still running while source review expanded the suite and corrected edge cases."
+        ]
+      }
+    ],
     "next_batch": [
       "glasswing-grace-age-graced-chapel",
       "kazuul-s-fury-kazuul-s-cliffs",

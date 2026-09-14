@@ -101,7 +101,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
         result=self.kernel._move((ref,),destination,frame,'fixture-move-'+str(self.state.sequence))
         self.kernel.advance();return result
     def level(self,ref,level):
-        for n in range(2,level+1):self.state.advance_class(ref,n)
+        for n in range(2,level+1):self.state.set_class_level(ref,n)
     def combat(self,attackers):
         self.state.start_turn('A');self.kernel.active='A';self.kernel.phase='declare_attackers';self.kernel.priority=None
         self.kernel.turn_schedule={'land_plays':0,'advance':False,'cleanup_priority':False}
@@ -572,3 +572,126 @@ class WalkersClassOpeningTests(unittest.TestCase):
         RulesActorAdapter(self.kernel).submit('A',{'kind':'attack','revision':self.kernel.revision,
             'attackers':[{'source':attacker.to_json(),'defender':walker.to_json()}]})
         self.restore();self.assertEqual(walker.to_json(),self.kernel.combat['attackers'][0]['defender_object']['ref'])
+
+    def test_positive_loyalty_replacement_choice_replays_without_double_payment(self):
+        plus=CardProgram('loyalty-plus','Extra loyalty',('Enchantment',),
+            counter_replacements=(CounterReplacement('plus',Selector(Zone.BATTLEFIELD),kind='loyalty',additional=1),))
+        self.game((plus,));talent=self.card('innkeeper-s-talent');self.level(talent,3);self.add('loyalty-plus')
+        ref=self.card('nissa-steward-of-elements');self.act(ref,'scry-two')
+        self.assertEqual('counter_replacement',self.kernel.pending_choice.kind);self.assertEqual(3,self.loyalty(ref));self.restore()
+        q=self.kernel.pending_choice;self.answer([next(i for i,o in enumerate(q.options) if 'double-counters-you-put' in o.label)])
+        self.assertEqual(8,self.loyalty(ref));self.drain();self.assertEqual(1,len(self.events('loyalty_cost_paid')))
+
+    def test_minsc_any_target_includes_battles(self):
+        battle=CardProgram('wc-battle','Battle',('Battle',))
+        self.game((battle,));ref=self.card('minsc-boo-timeless-heroes');self.add('wc-hamster');target=self.add('wc-battle','B')
+        self.state.add_counters(target,'defense',7);self.act(ref,'sacrifice-and-fling');self.top()
+        q=self.kernel.pending_choice;self.answer([next(i for i,o in enumerate(q.options) if o.ref==target)]);self.drain()
+        self.assertEqual(3,dict(self.state.get(target).counters)['defense']);self.assertEqual(4,len(self.state.zone('A',Zone.HAND)))
+
+    def test_minsc_multiple_sacrifices_require_an_authored_selection(self):
+        self.game();ref=self.card('minsc-boo-timeless-heroes');one=self.add();two=self.add('wc-hamster')
+        self.act(ref,'sacrifice-and-fling');self.top();self.assertEqual('reflexive_sacrifice',self.kernel.pending_choice.kind)
+        self.restore();q=self.kernel.pending_choice;self.answer([next(i for i,o in enumerate(q.options) if o.ref==two)])
+        self.choose('player:B');self.drain();self.assertEqual(Zone.BATTLEFIELD,self.state.get(one).zone);self.assertEqual(36,self.state.life('B'))
+
+    def test_minsc_reflexive_trigger_retains_lki_after_source_leaves(self):
+        self.game();ref=self.card('minsc-boo-timeless-heroes',loyalty=2);self.add('wc-hamster')
+        self.act(ref,'sacrifice-and-fling');self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+        self.top();self.choose('player:B');self.drain();self.assertEqual(36,self.state.life('B'))
+
+    def test_minsc_reflexive_damage_can_be_responded_to(self):
+        self.game();ref=self.card('minsc-boo-timeless-heroes');self.add('wc-hamster')
+        self.act(ref,'sacrifice-and-fling');self.top();self.choose('player:B')
+        self.assertEqual(40,self.state.life('B'));self.assertIsNone(self.kernel.resolving);self.assertIsNotNone(self.kernel.priority)
+
+    def test_minsc_second_boo_uses_legend_state_action(self):
+        self.game();ref=self.card('minsc-boo-timeless-heroes',zone=Zone.HAND);self.kernel.enter(ref);self.drain()
+        self.kernel.begin_step('A','upkeep');self.drain()
+        self.assertEqual(1,len([o for o in self.state.objects(Zone.BATTLEFIELD) if o.effective_definition=='token:boo']))
+
+    def test_nissa_loyalty_zero_lki_does_not_put_a_two_mana_creature(self):
+        self.game();ref=self.card('nissa-steward-of-elements',loyalty=2);self.act(ref,'look-and-put')
+        self.kernel._deal_damage(((self.state.get(self.add()),ref,2),));self.kernel.advance()
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone);self.top()
+        self.assertEqual(['leave'],[o.key for o in self.kernel.pending_choice.options])
+
+    def test_nissa_animation_expires_on_cleanup(self):
+        self.game();ref=self.card('nissa-steward-of-elements',loyalty=7);land=self.add('catalog:forest')
+        self.act(ref,'animate-lands',(land,));self.drain()
+        self.kernel.turn_schedule={'land_plays':0,'advance':False,'cleanup_priority':False};self.kernel._begin_cleanup();self.drain()
+        self.assertNotIn('Creature',self.kernel.effective(land).types)
+
+    def test_sorin_entry_type_continuous_layers_match_exhaustive(self):
+        self.game();ref=self.card('sorin-vengeful-bloodlord');target=self.add(zone=Zone.GRAVEYARD)
+        self.act(ref,'return-vampire',(target,),x=2);self.drain()
+        args={'active_player':'A','life_totals':{p:self.state.life(p) for p in self.state.players},
+              'starting_life_totals':{p:40 for p in self.state.players},'live_players':self.state.live_players}
+        self.assertEqual(evaluate(self.state.objects(),self.kernel.definitions,**args),evaluate_exhaustive(self.state.objects(),self.kernel.definitions,**args))
+
+    def test_sorin_copied_entry_retains_added_vampire(self):
+        copier=CardProgram('wc-copy','Copy',('Creature',),power=0,toughness=0,
+            entry_copy=Selector(Zone.BATTLEFIELD,types=('Creature',)))
+        self.game((copier,));ref=self.card('sorin-vengeful-bloodlord');body=self.add();target=self.add('wc-copy',zone=Zone.GRAVEYARD)
+        self.act(ref,'return-vampire',(target,),x=0);self.top()
+        q=self.kernel.pending_choice;self.answer([next(i for i,o in enumerate(q.options) if o.ref==body)]);self.drain()
+        self.assertIn('Vampire',self.kernel.effective(self.current(target).ref).subtypes)
+
+    def test_ward_multiple_instances_trigger_independently(self):
+        talent,body,bolt=self.ward_spell()
+        # A second source present before a fresh targeting event adds a second ward.
+        self.drain();second=self.card('innkeeper-s-talent');self.level(second,2)
+        bolt2=self.add('wc-bolt','B',Zone.HAND);self.kernel.open_window_for_scenario('A',priority_actor='B');self.cast(bolt2,(body,),actor='B')
+        created=[e for e in self.events('trigger_created') if e['ability'].startswith('ward:')]
+        self.assertEqual(3,len(created));self.drain();self.assertEqual(0,self.state.get(body).damage_marked)
+
+    def test_ward_counters_activated_ability_not_its_source(self):
+        ability=ActivatedProgram('ping',CostSpec(),(Damage('target',1),),TargetSpec(Selector(Zone.BATTLEFIELD,types=('Creature',))))
+        p=CardProgram('wc-pinger','Pinger',('Artifact',),activated=(ability,))
+        self.game((p,));talent=self.card('innkeeper-s-talent');self.level(talent,2);body=self.add();self.state.add_counters(body,'charge',1)
+        source=self.add('wc-pinger','B');self.kernel.open_window_for_scenario('A',priority_actor='B');self.act(source,'ping',(body,),actor='B');self.drain()
+        self.assertEqual(Zone.BATTLEFIELD,self.state.get(source).zone);self.assertEqual(0,self.state.get(body).damage_marked)
+
+    def test_ward_trigger_survives_last_counter_removal(self):
+        _,body,_=self.ward_spell();self.state.put_counters_batch((),removals=((body,(('charge',1),)),))
+        self.drain();self.assertEqual(0,self.state.get(body).damage_marked)
+
+    def test_class_granted_ward_is_removed_with_source_abilities(self):
+        self.game();talent=self.card('innkeeper-s-talent');self.level(talent,2);body=self.add();self.state.add_counters(body,'charge',1)
+        self.state.apply_copy((talent,),'wc-body')
+        self.assertEqual((),self.kernel.effective(body).wards)
+
+    def test_leyline_anthem_loss_runs_state_based_actions(self):
+        self.game();ref=self.card('leyline-of-hope');body=self.add();self.state.gain_life('A',7)
+        self.kernel._deal_damage(((self.state.get(self.add(actor='B')),body,4),));self.kernel.advance()
+        self.assertEqual(Zone.BATTLEFIELD,self.state.get(body).zone)
+        self.state.lose_life_batch(('A',),1);self.kernel.advance();self.assertEqual(Zone.GRAVEYARD,self.current(body).zone)
+
+    def test_multiple_opening_leylines_can_be_ordered_and_all_enter(self):
+        self.game(started=False);a=self.card('leyline-of-hope',zone=Zone.HAND);b=self.card('leyline-of-hope',zone=Zone.HAND)
+        self.kernel.begin_opening_hand_actions('A');self.answer([1,0])
+        self.assertEqual(Zone.BATTLEFIELD,self.current(a).zone);self.assertEqual(Zone.BATTLEFIELD,self.current(b).zone)
+        entries=[e['event']['before']['ref']['card_id'] for e in self.events('zone_changed')]
+        self.assertEqual([b.card_id,a.card_id],entries[:2])
+
+    def test_trample_excess_goes_to_walker_not_controller(self):
+        trampler=CardProgram('wc-trampler','Trampler',('Creature',),power=8,toughness=8,keywords=('trample',))
+        self.game((trampler,),players=('A','B'));a=self.add('wc-trampler');walker=self.card('nissa-steward-of-elements','B',loyalty=10);blocker=self.add('wc-zero','B')
+        self.combat({a:walker})
+        while self.kernel.priority:self.kernel.pass_priority(self.kernel.priority)
+        self.kernel.declare_blockers('B',{uid(a):[uid(blocker)]},revision=self.kernel.revision)
+        for _ in range(30):
+            if self.kernel.combat['damage_pending'] and self.kernel.priority is None:break
+            self.kernel.pass_priority(self.kernel.priority)
+        self.kernel.assign_combat_damage('A',{uid(a):{'blockers':{uid(blocker):1},'defender':7}},revision=self.kernel.revision)
+        self.assertEqual(3,self.loyalty(walker));self.assertEqual(40,self.state.life('B'))
+
+    def test_defending_walker_control_change_removes_damage_destination(self):
+        self.game();attacker=self.add();walker=self.card('nissa-steward-of-elements','B')
+        self.combat({attacker:walker});self.state.change_control(walker,'C');self.kernel.advance();self.finish_combat()
+        self.assertEqual(3,self.loyalty(walker));self.assertEqual(40,self.state.life('B'));self.assertEqual(40,self.state.life('C'))
+
+    def test_class_resolution_sets_its_level_without_rechecking_activation_condition(self):
+        self.game();talent=self.card('innkeeper-s-talent');self.level(talent,3)
+        self.kernel.execute_for_scenario(talent,'A',(SetClassLevel(2),))
+        self.assertEqual(2,self.state.get(talent).class_level)

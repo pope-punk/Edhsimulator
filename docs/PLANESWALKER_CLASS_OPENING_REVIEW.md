@@ -7,7 +7,7 @@ promoted in this pass. The original four-pass, 28-card baseline is unchanged.
 The runtime adds signed loyalty costs, Class designations, ward, planeswalker
 combat destinations, explicit post-mulligan opening actions, reflexive sacrifice
 triggers, directional control rotation and entry subtype effects. Kernel/state
-checkpoint schemas are 130/18. The new suite has 81 conformance methods.
+checkpoint schemas are 130/18. The new suite has 100 conformance methods.
 All project execution remains on GitHub-hosted runners.
 
 ## Shared scope
@@ -110,3 +110,24 @@ draft and required reviewed-loader gates. No local project execution is authoriz
   Sorin's return must also expose the Vampire change during entry lookahead.
 
 This is a source inspection, not runtime validation of the future programs.
+
+## Implementation review additions
+
+The printed commander permission is explicit on Aminatou and Minsc & Boo.
+Loyalty payments retain a replayable announcement until replacement choices are
+complete; once-per-turn usage belongs to the exact permanent, across controllers.
+Class levels are designations, survive copying, reset on reentry, and are assigned
+on resolution without repeating the activation restriction.
+
+Ward captures its payer and exact stack object. It triggers independently for each
+instance, survives grant loss, and also observes copied spells and abilities.
+Planeswalker combat preserves the defending player for blockers and triggers;
+ordinary trample cannot redirect damage to that player after the planeswalker
+leaves combat. Minsc's reflexive damage includes battles in its any-target domain.
+Nissa's top-card choice is private. Sorin's additive Vampire effect participates
+in entry lookahead and retains its original timestamp through later copies.
+
+These decisions use CR 103.6, 115.4, 306, 606, 611.2e, 702.19, 702.21 and 716 in
+the [Comprehensive Rules effective August 7, 2026](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
+alongside the release notes linked above. The 100-method suite is authored;
+successful hosted validation is still required before promotion.

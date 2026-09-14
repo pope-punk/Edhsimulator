@@ -54,7 +54,7 @@ heartbeat remains active every 40 minutes.
 
 ## Current pass: planeswalkers, Class and opening choices
 
-All seven Pass 2 programs are drafted with shared runtime support and 81 new
+All seven Pass 2 programs are drafted with shared runtime support and 100 new
 hosted conformance methods. Validation and full source review are pending;
 reviewed coverage remains **313/334**, with seven drafts and fourteen unstarted
 cards. Pass 2 remains in progress within the original four-pass baseline.
@@ -64,7 +64,7 @@ No local project execution occurred. See [the review record](PLANESWALKER_CLASS_
 
 The seven Pass 1 cards have complete printed-face review and are promoted to
 the source-bound bundle. Hosted draft validation passed **2346 tests on
-each platform**, including 91 new methods, at `ddea5e3f16c56224f920181a7642ab72a0041f30`
+each platform**, including 91 new methods, at `ddea5e3f16c56224f9201100a7642ab72a0041f30`
 ([run 34886471504](https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504)). The required reviewed-loader
 [run 34887525636](https://github.com/pope-punk/Edhsimulator/actions/runs/34887525636) passed **2346 tests per platform**
 at `ba1335011e65bf7039924cd99c0c3f2993cc4525`, including all 91 new methods. Both runs
@@ -89,7 +89,7 @@ Kernel/state schemas are **128/17**.
 
 The **85 new draft methods** passed hosted validation: **2,245 tests on each of
 Ubuntu and Windows**, plus syntax, installation and assets, at
-`c168dae7c628cde1f37e0381a21a609fe720f088` ([run 34876806875](https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875)).
+`c168dae7c628cde1f37e03100a21a609fe720f088` ([run 34876806875](https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875)).
 The required reviewed-loader run covers **95 new methods**, including the
 promotion review's mana classification, top-placement disclosure and public-exile
 history corrections. All **2,255 tests passed on each platform**, plus syntax,
@@ -201,7 +201,7 @@ simultaneous fight instruction. The prior 282 reviewed programs are unchanged.
 
 Kernel schema is **123**, state schema **14**. **64 new methods** bring the
 hosted suite to **1,917 tests per platform**. [Draft validation 34838551887](https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887)
-passed on both platforms at `081eed81e1e1bf9e67d170269a1b52b051115711`, including syntax, installation and assets.
+passed on both platforms at `0100eed100e1e1bf9e67d170269a1b52b051115711`, including syntax, installation and assets.
 [Required reviewed-loader validation 34839294402](https://github.com/pope-punk/Edhsimulator/actions/runs/34839294402) passed
 **1917 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `f4d29b49ca71f04e11b21bf46384a355d7705062`. The following result-recording
@@ -257,7 +257,7 @@ The implementation identity includes guard and phasing interpreters.
 Kernel schema is **121**, state schema **14**. The **107 new methods** now
 use the reviewed loader. [Corrected draft validation 34801795555](https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555)
 passed **1,779 tests on each of Ubuntu and Windows**, plus syntax, installation
-and packaged assets, at `f7aa71651971da75381805bbbb30a04b59226bd5`.
+and packaged assets, at `f7aa71651971da753100805bbbb30a04b59226bd5`.
 [Required reviewed-loader validation 34802234395](https://github.com/pope-punk/Edhsimulator/actions/runs/34802234395)
 passed **1,779 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `6ee170ae43d99944734655967f107c87dd8f9cc9`.
@@ -330,7 +330,7 @@ captured players. Actor packets preserve public phase groups and their return
 controllers. Volatile Fault shares the search work.
 
 Kernel schema is **119**, state schema **13**. The **64 new methods**
-now use the reviewed loader. [Draft validation 34791775813](https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813)
+now use the reviewed loader. [Draft validation 347917751003](https://github.com/pope-punk/Edhsimulator/actions/runs/347917751003)
 passed **1,609 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
 [Reviewed-loader validation 34792219355](https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355)
@@ -366,7 +366,7 @@ passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `d032e3c60caf22b585e641c050bc78372c15c611`.
 [Reviewed-loader validation 34787728272](https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272)
 passed **1,546 tests on each of Ubuntu and Windows**, plus syntax, installation
-and packaged assets, at `0a9259b8142247880f7493d7ee02d8e415d996b2`.
+and packaged assets, at `0a9259b10042247880f7493d7ee02d8e415d996b2`.
 The following result-recording commit changes only documentation and inventory;
 runtime, programs and tests are unchanged after this validation.
 See [the cycle review](UPKEEP_DELAY_CARD_REVIEW.md).
@@ -498,9 +498,9 @@ reviewed loader. See [the cycle record](CASTING_SACRIFICE_CARD_DRAFTS.md).
 plus syntax, installation and packaged-asset checks, at
 `679a0e5971fdb21deb36d39a484a2b3c2fffdafa`. This validated all 24 new methods and the existing conformance suite.
 
-[Reviewed-loader validation run 34771234815](https://github.com/pope-punk/Edhsimulator/actions/runs/34771234815) passed **1,293 tests on each of Ubuntu and Windows**,
+[Reviewed-loader validation run 347712341005](https://github.com/pope-punk/Edhsimulator/actions/runs/347712341005) passed **1,293 tests on each of Ubuntu and Windows**,
 plus source syntax, installation and packaged-asset checks, at
-`06dddf4b88366f0bd9e2a0a75ba6afe31a81a7e0`. Both cards now run through the reviewed loader.
+`06dddf4b88366f0bd9e2a0a75ba6afe31a100a7e0`. Both cards now run through the reviewed loader.
 The following result-recording commit changes only documentation and inventory
 validation metadata; no runtime, card-program or test changes follow this result.
 
@@ -557,7 +557,7 @@ See [the promotion review](DRAFT_PROMOTION_REVIEW.md).
 
 [Promotion validation run 34767022703](https://github.com/pope-punk/Edhsimulator/actions/runs/34767022703)
 passed **1,232 tests on each of Ubuntu and Windows**, plus source syntax,
-installation and packaged-asset checks, at `0788981d6851606eced204e7fe39b805a0a053e7`.
+installation and packaged-asset checks, at `07889100d6851606eced204e7fe39b805a0a053e7`.
 
 ## Earlier batch evidence
 
