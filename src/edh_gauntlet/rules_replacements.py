@@ -7,7 +7,7 @@ Entry-control changes, transforming entries and prevention remain outside this v
 """
 from dataclasses import dataclass, replace
 from .rules_state import RulesObject, Zone
-from .rules_program import EntryPayment
+from .rules_program import EntryLifeNote,EntryPayment
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,7 @@ class ZoneProposal:
     copied_add_types: tuple = ()
     life_payments: tuple = ()  # (player, amount), reserved until the batch commits.
     reveals: tuple = ()  # (player, exact hand ref, printed name), never an option list.
+    notes: tuple = ()  # (note identity, public value) captured during replacement.
 
 
 @dataclass(frozen=True)
@@ -61,7 +62,7 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
             key=f'entry:{obj.ref.card_id}@{obj.ref.incarnation}:{definition.definition_id}:{modifier.modifier_id}'
             if key not in proposal.used and (applicable_entry_ids is None and modifier.condition is None or applicable_entry_ids is not None and modifier.modifier_id in applicable_entry_ids):
                 result.append(ReplacementCandidate(key,definition.name+': '+modifier.modifier_id,
-                                                   'entry_payment' if isinstance(modifier,EntryPayment) else 'entry',
+                                                   'entry_note' if isinstance(modifier,EntryLifeNote) else 'entry_payment' if isinstance(modifier,EntryPayment) else 'entry',
                                                    3,proposal.controller,modifier))
     for source in state.objects(Zone.BATTLEFIELD):
         if source.phased:
@@ -88,7 +89,7 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
     return tuple(candidate for candidate in result if candidate.priority == priority)
 
 
-def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=None,counters=None,copied_add_types=(),life_payment=None,reveal=None):
+def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=None,counters=None,copied_add_types=(),life_payment=None,reveal=None,note=None):
     destination = proposal.destination
     copy = proposal.copied_definition
     tapped = proposal.tapped
@@ -110,7 +111,7 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
         if not accepted:tapped = True
     elif candidate.kind == 'entry':
         if accepted:tapped = candidate.program.tapped
-    elif candidate.kind in {'entry_counters','counter'}:
+    elif candidate.kind in {'entry_note','entry_counters','counter'}:
         pass  # The kernel evaluates quantities and supplies the new counter proposal.
     elif accepted:
         destination = candidate.program.redirect
@@ -128,4 +129,5 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
                    tapped=tapped,counters=proposal.counters if counters is None else counters,
                    trace=proposal.trace + (trace,),
                    life_payments=proposal.life_payments + ((life_payment,) if life_payment is not None else ()),
-                   reveals=proposal.reveals + ((reveal,) if reveal is not None else ()))
+                   reveals=proposal.reveals + ((reveal,) if reveal is not None else ()),
+                   notes=proposal.notes + ((note,) if note is not None else ()))

@@ -97,6 +97,8 @@ def project_actor(kernel,actor):
             'name':kernel.definition(source).name,'source':source.ref.to_json(),
             'controller':frame['controller'],'ability_id':frame.get('ability_id'),'chosen_x':frame['chosen_x'],
             **({'alternative_id':frame['alternative_id']} if 'alternative_id' in frame else {}),
+            **({'kicker':frame['kicker']} if 'kicker' in frame else {}),
+            **({'cast_timing':frame['cast_timing']} if 'cast_timing' in frame else {}),
             **({'exile_on_stack_exit':True} if frame.get('exile_on_stack_exit') else {}),
             **({'target_controller_groups':[{'target':target_summary(row['ref']),'controller':row['controller']}
                 for row in frame['target_controller_groups']]} if 'target_controller_groups' in frame else {}),
@@ -106,6 +108,7 @@ def project_actor(kernel,actor):
             **({'event_controllers':list(frame['values']['event_controllers'])} if 'event_controllers' in frame.get('values',{}) else {}),
             **({'event_subjects':[target_summary(value) for value in frame['bindings']['event_subject']]} if 'event_subject' in frame.get('bindings',{}) else {}),
             **({'paid_cost_stats':deepcopy(frame['values']['paid_cost_stats'])} if 'paid_cost_stats' in frame.get('values',{}) else {}),
+            **({'paid_cost_subtypes':deepcopy(frame['values']['paid_cost_subtypes'])} if 'paid_cost_subtypes' in frame.get('values',{}) else {}),
             **({'counter_division':[{'target':target_summary(row['ref']),'amount':row['amount']} for row in frame['values']['counter_division']]} if 'counter_division' in frame.get('values',{}) else {}),
             'targets':[target_summary(value) for value in frame['targets']],
             **({'modes':[{'mode_id':g['mode_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['mode_groups']]} if 'mode_groups' in frame else {})}
@@ -173,6 +176,12 @@ def project_actor(kernel,actor):
             'indirect':row['ref']!=row['root'],'controller_at_phase_out':row['controller'],
             'return_controller':root['controller'] if root is not None else None})
     if phased:packet['phasing']=phased
+    notes=[]
+    for row in kernel.object_notes.values():
+        try:obj=state.get(ObjectRef.from_json(row['ref']))
+        except RulesViolation:continue
+        if obj.zone==Zone.BATTLEFIELD:notes.append(deepcopy(row))
+    if notes:packet['object_notes']=notes
     if kernel.mana_payment:
         window=kernel.mana_payment
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],

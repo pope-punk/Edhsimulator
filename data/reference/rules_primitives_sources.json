@@ -252,7 +252,12 @@
       "702.26k",
       "702.26m",
       "702.26n",
-      "707.2"
+      "707.2",
+      "307.5a",
+      "601.2g",
+      "702.33a",
+      "702.33d",
+      "702.33e"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -311,7 +316,7 @@
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules. Talon Gates of Madara's optional creature phasing, both mana abilities and revealed hand activation; Desert Warfare's sacrifice/hand/library observations, exact delayed returns, combat threshold and noncopiable haste."
+      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules. Talon Gates of Madara's optional creature phasing, both mana abilities and revealed hand activation; Desert Warfare's sacrifice/hand/library observations, exact delayed returns, combat threshold and noncopiable haste. Wonderscape Sage uses the returned land's last battlefield subtypes, including copies and Omo's everything counters, rather than its Basic supertype."
     },
     {
       "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-01-22",
@@ -386,6 +391,10 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/kamigawa-neon-dynasty-release-notes-2022-02-09",
       "scope": "Touch the Spirit Realm's optional entry exile, Channel discard cost, exact delayed owner return, token disappearance and early source departure."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/innistrad-midnight-hunt-release-notes",
+      "scope": "Sigarda's Splendor's entry life note, resolution-time comparison and unconditional update after its upkeep ability."
     }
   ]
 }

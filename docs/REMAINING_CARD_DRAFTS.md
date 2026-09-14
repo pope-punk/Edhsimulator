@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **266 source-bound reviewed programs / 331 deck copies**. There are **68 cards outside the
-reviewed bundle**, all unstarted. No drafts remain. Reviewed coverage is not production certification.
+reviewed bundle**, four authored drafts and 64 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,28 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: phasing and player-authored choices
+## Current cycle: casting, entry and paid-cost facts
+
+Necromancy, Nullpriest of Oblivion, Sigarda's Splendor and Wonderscape Sage
+are complete printed programs in the isolated draft bundle. Shared support
+records real kicker declarations and additional costs, cast-time sorcery
+eligibility, exact next-cleanup sacrifice, entry-life notes, spell colors and
+paid lands' derived subtypes. Necromancy composes existing ongoing effects and
+attachment rules to become an Aura. Karmic Guide remains queued for complete
+protection and echo; Sage shares the existing payment and subtype machinery.
+
+Kernel schema is **120**, state schema **13**. The **63 new methods** are ready
+for GitHub-hosted validation. Draft and required reviewed-loader checks remain
+pending. Reviewed coverage stays at 266 until promotion.
+See [the cycle review](RECORDED_FACT_CARD_REVIEW.md).
+
+Finish hosted checks and source-bound promotion, then continue **Karmic Guide,
+Alseid of Life's Bounty, Fanatical Devotion and Pongify**. The inventory retains
+protection's targeting/damage/blocking/attachment requirements, echo control
+history, regeneration shields and cannot-regenerate destruction. No local
+execution, game migration or production admission.
+
+## Previous cycle: phasing and player-authored choices
 
 Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault
 have complete printed-face review and exact source bindings. Shared work supplies

@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -71,6 +71,7 @@ class PreparedAction:
     mode_choices: tuple = ()
     alternative_id: str | None = None
     counter_division: tuple = ()
+    kicker: bool = False
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
@@ -78,7 +79,7 @@ class PreparedAction:
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
             'counter_division':[{'ref':ref.to_json(),'amount':amount} for ref,amount in self.counter_division],
-            'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
+            'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
     def from_json(cls, value):
@@ -188,7 +189,7 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=()):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False):
         resolution_mana=kind=='activate' and self._payment_waiting()
         if not resolution_mana:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
@@ -227,6 +228,8 @@ class CastingRules:
             raise RulesViolation('Unsupported action kind')
         if specification.timing == 'sorcery' and not (kind=='cast' and 'flash' in self.effective(ref).keywords) and (self.active != actor or self.phase not in {'precombat_main', 'postcombat_main'} or self.stack):
             raise RulesViolation('Action requires sorcery timing')
+        if type(kicker) is not bool or kicker and (kind!='cast' or not isinstance(specification,KickerCast)):
+            raise RulesViolation('Invalid kicker declaration')
         cost = specification.cost
         if alternative_id is not None:
             if kind!='cast' or type(alternative_id) is not str:raise RulesViolation('Invalid alternative casting declaration')
@@ -234,6 +237,10 @@ class CastingRules:
             if alternative is None or not self._condition_holds(alternative.condition,replace(source,controller=actor)):
                 raise RulesViolation('Alternative casting cost is unavailable')
             cost=alternative.cost
+        if kicker:
+            extra=specification.kicker.mana
+            cost=replace(cost,mana=ManaCost(cost.mana.generic+extra.generic,
+                cost.mana.symbols+extra.symbols,cost.mana.x_symbols))
         if type(x_value) is not int or x_value < 0 or x_value and not cost.mana.x_symbols:
             raise RulesViolation('Invalid announced X')
         if kind=='activate' and x_value<specification.minimum_x:raise RulesViolation('Announced X is below the activation minimum')
@@ -288,10 +295,10 @@ class CastingRules:
                         generic += modifier.generic_delta
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=()):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker)
 
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0,counter_division=()):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value,counter_division=counter_division)
@@ -328,7 +335,7 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         resources = self._resource_payment(quote, payment)
@@ -402,6 +409,12 @@ class CastingRules:
         effects = program.spell_effects
         if not effects and not {'Instant', 'Sorcery'} & set(program.types):
             effects = (Move('source', Zone.BATTLEFIELD),)
+        sorcery_timing=self.active==quote.actor and self.phase in {'precombat_main','postcombat_main'} and not self.stack
+        if isinstance(program.cast,CleanupCast) and not sorcery_timing:
+            effects=(WithZoneResult(Move('source',Zone.BATTLEFIELD),Zone.BATTLEFIELD,(
+                IfQuantityAtLeast(MovedCount(),1,(
+                    DelayedNextStep(EventPattern('step_began',step='cleanup'),
+                        (Sacrifice('moved',by_subject_controller=True),)),)),)),)
         frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
                             target_spec=program.spell_targets,chosen_x=quote.x_value)
         self._bind_announced_values(frame,quote)
@@ -412,6 +425,10 @@ class CastingRules:
                 frame['entry_flags']=list(alternative.entry_flags)
             if isinstance(alternative,GraveyardAlternativeCost) and alternative.exile_on_stack_exit:
                 frame['exile_on_stack_exit']=True
+        if isinstance(program.cast,CleanupCast):frame['cast_timing']='sorcery' if sorcery_timing else 'other'
+        if isinstance(program.cast,KickerCast):
+            frame['kicker']=quote.kicker
+            if quote.kicker:frame['entry_flags']=list(dict.fromkeys(frame['entry_flags']+list(program.cast.entry_flags)))
         if program.modal is not None:
             selected=dict(quote.mode_choices)
             frame['mode_groups']=[];frame['tasks']=[];frame['targets']=[]
@@ -505,21 +522,21 @@ class CastingRules:
         refs=tuple(ObjectRef.from_json(ref) for ref in pending['refs'])
         # Capture derived battlefield information immediately before payment.
         # A suspended replacement choice reruns this pure read; it cannot pay twice.
-        paid_stats=None
-        if quote.kind=='cast':
-            views=self.characteristics()
-            paid_stats={cost.cost_id:{stat:sum(getattr(views[ref],stat) or 0 for ref in refs)
-                for stat in ('power','toughness','mana_value')}}
+        views=self.characteristics()
+        paid_stats={cost.cost_id:{stat:sum(getattr(views[ref],stat) or 0 for ref in refs)
+            for stat in ('power','toughness','mana_value')}}
+        paid_subtypes={cost.cost_id:sorted({subtype for ref in refs for subtype in views[ref].subtypes})}
         frame={'source':pending['source'],'controller':quote.actor,'bindings':{}}
         destination={'sacrifice':Zone.GRAVEYARD,'discard':Zone.GRAVEYARD,'exile':Zone.EXILE,'return':Zone.HAND}[cost.kind]
         events=self._move(refs,destination,frame,quote.action_id+':cost',cause=cost.kind,controller_mode='owner',payment=resources)
         if quote.kind=='cast':
             source=RulesObject.from_json(pending['origin_source'])
-            prepared_frame['values']['paid_cost_stats']=paid_stats
-            for task in prepared_frame['tasks']:
-                if 'values' in task:task['values']['paid_cost_stats']=paid_stats
         else:
             source=next((event.before for event in events if event.before.ref==quote.source),source)
+        if prepared_frame is not None:
+            prepared_frame['values'].update(paid_cost_stats=paid_stats,paid_cost_subtypes=paid_subtypes)
+            for task in prepared_frame['tasks']:
+                if 'values' in task:task['values'].update(paid_cost_stats=paid_stats,paid_cost_subtypes=paid_subtypes)
         self.announcement=None
         self._commit_prepared(quote,resources,paid=True,source=source,ability=ability,
             zone_payment={cost.cost_id:pending['refs']},previous_types=pending['source_types'],prepared_frame=prepared_frame)
@@ -541,6 +558,8 @@ class CastingRules:
                 if not event_player_matches(pattern,source.controller,actor):
                     continue
                 excluded=pattern.excluded_types if isinstance(pattern,SpellEventPattern) else ()
+                colors=pattern.colors if isinstance(pattern,ColoredSpellEvent) else ()
+                if colors and not set(colors)<=self.effective(announced.ref).colors:continue
                 if pattern.types or excluded:
                     if types is None:
                         try:types=self.effective(announced.ref).types

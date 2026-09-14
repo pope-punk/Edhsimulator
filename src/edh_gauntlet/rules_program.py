@@ -195,6 +195,11 @@ class SpellEventPattern(EventPattern):
 
 
 @dataclass(frozen=True)
+class ColoredSpellEvent(SpellEventPattern):
+    colors: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
 class DrawEventPattern(EventPattern):
     """The player's ordinal actual draw in the current turn."""
     occurrence: int = 2
@@ -623,6 +628,33 @@ class EntryModifier:
 
 
 @dataclass(frozen=True)
+class EntryLifeNote(EntryModifier):
+    """Capture a public life total while this entry replacement is applied."""
+    tapped: bool = False
+    note_id: str = 'life'
+
+
+@dataclass(frozen=True)
+class NoteLife:
+    note_id: str = 'life'
+
+
+@dataclass(frozen=True)
+class CompareLifeNote(NoteLife):
+    effects: tuple = ()
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class IfPaidCostSubtype:
+    cost_id: str
+    subtypes: tuple[str,...] = ()
+    sets: tuple[str,...] = ()
+    effects: tuple = ()
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
 class EntryPayment(EntryModifier):
     """Optional fixed life payment or one own-hand reveal; otherwise enter tapped.
 
@@ -636,6 +668,14 @@ class EntryPayment(EntryModifier):
 @dataclass(frozen=True)
 class IfCondition:
     condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition
+    effects: tuple
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class IfQuantityAtLeast:
+    value: object
+    minimum: int
     effects: tuple
     otherwise: tuple = ()
 
@@ -787,6 +827,18 @@ class CastSpec:
     generic_reduction: int | CountObjects | BattlefieldStat | ScaledValue | DividedValue = 0
     origin_zones:tuple[Zone,...]=(Zone.HAND,Zone.COMMAND)
     alternatives:tuple[AlternativeCost,...]=()
+
+
+@dataclass(frozen=True)
+class KickerCast(CastSpec):
+    """One optional fixed mana additional cost; compatible with alternatives."""
+    kicker: CostSpec = CostSpec()
+    entry_flags: tuple[str,...] = ('kicked',)
+
+
+@dataclass(frozen=True)
+class CleanupCast(CastSpec):
+    """Instant permission with cast-time-dependent next-cleanup sacrifice."""
 
 
 @dataclass(frozen=True)
@@ -951,8 +1003,8 @@ class CardProgram:
 
 KEYWORDS=frozenset(('phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -982,9 +1034,9 @@ def immediate_effect_nodes(nodes):
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+        if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
             yield from immediate_effect_nodes(node.effects)
-        if isinstance(node,(PayLifeOrSacrifice,PayMana,IfCondition,May)):
+        if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,PayLifeOrSacrifice,PayMana,IfCondition,May)):
             yield from immediate_effect_nodes(node.otherwise)
 
 
@@ -1282,6 +1334,25 @@ def validate(program,_depth=0):
         for node in nodes:
             if type(node) not in EFFECTS:
                 raise RulesViolation('Unregistered effect node')
+            if isinstance(node,IfQuantityAtLeast):
+                quantity(node.value,allow_x,available_values=available_values)
+                if type(node.minimum) is not int or node.minimum<0:raise RulesViolation('Invalid quantity comparison bound')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,NoteLife):
+                if (type(node.note_id) is not str or not node.note_id
+                        or node.note_id not in {m.note_id for m in program.entry_modifiers if isinstance(m,EntryLifeNote)}):
+                    raise RulesViolation('Unbound source life note')
+                if isinstance(node,CompareLifeNote):
+                    effects(node.effects,bindings,allow_x,available_values)
+                    effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,IfPaidCostSubtype):
+                if (type(node.cost_id) is not str or 'paid_cost:'+node.cost_id not in available_values
+                        or not strings(node.subtypes) or not strings(node.sets)
+                        or not node.subtypes and not node.sets or any(s not in SUBTYPE_SETS for s in node.sets)):
+                    raise RulesViolation('Invalid or unbound paid-cost subtype comparison')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
             if isinstance(node,PhaseOut) and (type(node.subject) is not str or node.subject not in bindings):
                 raise RulesViolation('Unbound phased subject')
             if isinstance(node,RemoveCounters):
@@ -1449,7 +1520,8 @@ def validate(program,_depth=0):
                 if isinstance(node,DelayedNextStep):
                     if (type(node.next_turn) is not bool or node.event not in (
                             EventPattern('step_began',step='end_step'),EventPattern('step_began',step='upkeep'),
-                            EventPattern('step_began',step='end_step',controller_only=True))):
+                            EventPattern('step_began',step='end_step',controller_only=True),
+                            EventPattern('step_began',step='cleanup'))):
                         raise RulesViolation('Unsupported delayed step')
                     retained=bindings-{'target'}-{name for name in bindings if name.startswith('target:')}
                     effects(node.effects,retained,available_values=available_values-{'counter_division','target_statistics'})
@@ -1584,6 +1656,21 @@ def validate(program,_depth=0):
                 or any(not isinstance(zone,Zone) or zone not in {Zone.HAND,Zone.COMMAND,Zone.GRAVEYARD,Zone.EXILE} for zone in program.cast.origin_zones)
                 or len(program.cast.origin_zones)!=len(set(program.cast.origin_zones))):raise RulesViolation("Invalid casting origin permission")
         cost(program.cast.cost)
+        if isinstance(program.cast,KickerCast):
+            extra=program.cast.kicker;cost(extra)
+            if (extra.tap_source or extra.tap_selector is not None or extra.life or extra.zone_costs or extra.counter_costs
+                    or extra.mana.x_symbols or not (extra.mana.generic or extra.mana.symbols)
+                    or not strings(program.cast.entry_flags) or not program.cast.entry_flags
+                    or any(not flag for flag in program.cast.entry_flags)
+                    or len(set(program.cast.entry_flags))!=len(program.cast.entry_flags)
+                    or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                    or set(program.types)&{'Instant','Sorcery'}):
+                raise RulesViolation('Kicker requires fixed additional mana and unique permanent-entry facts')
+        if isinstance(program.cast,CleanupCast):
+            if (program.cast.timing!='instant' or program.spell_effects
+                    or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                    or set(program.types)&{'Instant','Sorcery'}):
+                raise RulesViolation('Cleanup casting requires ordinary permanent resolution and instant permission')
         if not isinstance(program.cast.alternatives,tuple):raise RulesViolation('Alternative costs must be immutable')
         alternative_ids=set()
         for alternative in program.cast.alternatives:
@@ -1660,7 +1747,7 @@ def validate(program,_depth=0):
         if ability.zone!=Zone.BATTLEFIELD and any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Exile-until-leaves requires a battlefield activation source')
         division=division_spec(ability.effects,ability.targets)
-        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values={'counter_division'} if division else frozenset())
+        effects(ability.effects, {'source', 'target'} if ability.targets is not None else {'source'},bool(ability.cost.mana.x_symbols),available_values=({'counter_division'} if division else set())|{'paid_cost:'+c.cost_id for c in ability.cost.zone_costs})
         target_effects(ability.effects,ability.targets)
         if ability.mana_ability and any(isinstance(node,PayMana) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Nested resolution payments inside mana abilities are unsupported')
@@ -1748,6 +1835,10 @@ def validate(program,_depth=0):
         if modifier.selector is not None:
             selector(modifier.selector)
             if modifier.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Entry orientation selector requires battlefield')
+        if isinstance(modifier,EntryLifeNote):
+            if (modifier.tapped or modifier.condition is not None or modifier.unless or modifier.selector is not None
+                    or type(modifier.note_id) is not str or not modifier.note_id):
+                raise RulesViolation('Life notes require an unconditional own-entry replacement')
         if isinstance(modifier,EntryPayment):
             if (modifier.tapped is not True or modifier.condition is not None or modifier.unless
                     or modifier.selector is not None or type(modifier.life) is not int or modifier.life<0
@@ -1759,6 +1850,8 @@ def validate(program,_depth=0):
                     raise RulesViolation('Entry reveal requires the entering controller\'s hand')
         entry_ids.append(modifier.modifier_id)
     if len(entry_ids)!=len(set(entry_ids)):raise RulesViolation('Duplicate entry modifier ID')
+    note_ids=[m.note_id for m in program.entry_modifiers if isinstance(m,EntryLifeNote)]
+    if len(note_ids)!=len(set(note_ids)):raise RulesViolation('Duplicate entry life note')
     if not isinstance(program.replacements, tuple):
         raise RulesViolation('Replacements must be an immutable tuple')
     replacement_ids = []
@@ -1796,6 +1889,8 @@ def validate(program,_depth=0):
                     or event.cause not in {None,'sacrifice'} or type(event.destination_owned) is not bool
                     or event.cause=='sacrifice' and event.from_zone!=Zone.BATTLEFIELD):
                 raise RulesViolation('Invalid qualified zone-event pattern')
+        if isinstance(event,ColoredSpellEvent) and (not strings(event.colors) or not event.colors or set(event.colors)-set('WUBRG')):
+            raise RulesViolation('Invalid spell-color observation')
         if isinstance(event,SpellEventPattern) and (event.kind!='spell_cast' or not strings(event.excluded_types)):
             raise RulesViolation('Spell exclusions require a spell-cast event')
         characteristic_ranges(event.characteristics)

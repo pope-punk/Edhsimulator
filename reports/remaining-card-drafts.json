@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 266,
     "remaining_outside_reviewed_bundle": 68,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 68,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 64,
     "reviewed_bundle_copies": 331,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 39
   },
@@ -1633,7 +1633,7 @@
     {
       "card_id": "necromancy",
       "name": "Necromancy",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1646,7 +1646,13 @@
           "face_id": "necromancy",
           "text": "You may cast this spell as though it had flash. If you cast it any time a sorcery couldn't have been cast, the controller of the permanent it becomes sacrifices it at the beginning of the next cleanup step.\nWhen this enchantment enters, if it's on the battlefield, it becomes an Aura with \"enchant creature put onto the battlefield with Necromancy.\" Put target creature card from a graveyard onto the battlefield under your control and attach this enchantment to it. When this enchantment leaves the battlefield, that creature's controller sacrifices it."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "recorded-facts-2026-09-14",
+      "draft_definition": "draft:necromancy",
+      "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md"
     },
     {
       "card_id": "nissa-steward-of-elements",
@@ -1669,7 +1675,7 @@
     {
       "card_id": "nullpriest-of-oblivion",
       "name": "Nullpriest of Oblivion",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -1682,7 +1688,13 @@
           "face_id": "nullpriest-of-oblivion",
           "text": "Kicker {3}{B}\nMenace, lifelink\nWhen this creature enters, if it was kicked, return target creature card from your graveyard to the battlefield."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "recorded-facts-2026-09-14",
+      "draft_definition": "draft:nullpriest-of-oblivion",
+      "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md"
     },
     {
       "card_id": "oblivion-ring",
@@ -2125,7 +2137,7 @@
     {
       "card_id": "sigarda-s-splendor",
       "name": "Sigarda's Splendor",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2138,7 +2150,13 @@
           "face_id": "sigarda-s-splendor",
           "text": "As this enchantment enters, note your life total.\nAt the beginning of your upkeep, draw a card if your life total is greater than or equal to the last noted life total. Then note your life total.\nWhenever you cast a white spell, you gain 1 life."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "recorded-facts-2026-09-14",
+      "draft_definition": "draft:sigarda-s-splendor",
+      "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md"
     },
     {
       "card_id": "smothering-tithe",
@@ -2717,7 +2735,7 @@
     {
       "card_id": "wonderscape-sage",
       "name": "Wonderscape Sage",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2730,7 +2748,13 @@
           "face_id": "wonderscape-sage",
           "text": "Flying\n{T}, Return a land you control to its owner's hand: Draw a card. Then discard a card unless that land had a nonbasic land type."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "printed_face_review_complete_source_binding_pending",
+      "hosted_validation_status": "pending",
+      "batch": "recorded-facts-2026-09-14",
+      "draft_definition": "draft:wonderscape-sage",
+      "review_record": "docs/RECORDED_FACT_CARD_REVIEW.md"
     },
     {
       "card_id": "xolatoyac-the-smiling-flood",
@@ -2776,108 +2800,56 @@
     }
   ],
   "latest_cycle": {
-    "date": "2026-09-13",
-    "base_commit": "9c63ed66dbd07c6fc20deab92314e367c29203c5",
+    "date": "2026-09-14",
+    "base_commit": "ce0631cfcf0171463dfc58d7f11718b5230a0001",
     "cards_written": [
-      "talon-gates-of-madara",
-      "desert-warfare",
-      "indulgent-tormentor",
-      "volatile-fault"
-    ],
-    "cards_promoted": [
-      "talon-gates-of-madara",
-      "desert-warfare",
-      "indulgent-tormentor",
-      "volatile-fault"
-    ],
-    "shared_mechanics": [
-      "Direct/indirect phasing and departed-controller untap timing",
-      "Qualified zone observations and public successor bindings",
-      "Next-own-end-step delayed returns",
-      "Ongoing noncopiable token keyword grants",
-      "Opponent-authored life or sacrifice payment",
-      "Captured players optionally search their own libraries",
-      "Excluded-supertype selectors"
-    ],
-    "runtime_checkpoint_schema": 119,
-    "state_checkpoint_schema": 13,
-    "new_test_methods": 63,
-    "validation_status": "reviewed_loader_passed",
-    "unresolved_defects": [],
-    "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
-    "selection_note": "Talon Gates is implemented with its complete phasing lifecycle. Volatile Fault joins Desert Warfare and Indulgent Tormentor through captured-player choice support. Necromancy remains unstarted because cast-time sorcery eligibility and permanent-to-Aura conversion need separate support.",
-    "next_batch": [
       "necromancy",
       "nullpriest-of-oblivion",
+      "sigarda-s-splendor",
+      "wonderscape-sage"
+    ],
+    "cards_promoted": [],
+    "shared_mechanics": [
+      "Optional additional kicker before reductions, with authenticated declaration and entry facts",
+      "Cast-time sorcery eligibility and exact next-cleanup sacrifice",
+      "Quantity-conditioned result continuations",
+      "Ordered entry-life notes and independent comparison/update",
+      "Actual cast-color observation",
+      "Prepayment derived subtype capture for activation and spell zone costs"
+    ],
+    "runtime_checkpoint_schema": 120,
+    "state_checkpoint_schema": 13,
+    "new_test_methods": 63,
+    "validation_status": "pending_github_hosted_ci",
+    "unresolved_defects": [],
+    "review_work_remaining": "Validate four isolated drafts and 63 new methods on GitHub-hosted Ubuntu/Windows, fix failures, bind source facts, promote and pass the required reviewed loader.",
+    "selection_note": "Necromancy reuses ongoing effects and exact attachment rules. Nullpriest and Sigarda supply cast/entry facts. Wonderscape Sage shares prior cost transactions and pinned nonbasic-land subtypes. Karmic Guide remains unstarted for full protection and echo.",
+    "next_batch": [
       "karmic-guide",
-      "sigarda-s-splendor"
+      "alseid-of-life-s-bounty",
+      "fanatical-devotion",
+      "pongify"
     ],
     "next_batch_implementation_notes": {
       "cards": [
-        "necromancy",
-        "nullpriest-of-oblivion",
         "karmic-guide",
-        "sigarda-s-splendor"
+        "alseid-of-life-s-bounty",
+        "fanatical-devotion",
+        "pongify"
       ],
       "requirements": [
-        "Necromancy: record actual sorcery eligibility before cast announcement; support next-cleanup delay and noncopiable Aura conversion/attachment. Reuse new ongoing effects and exact attachment/departure handling.",
-        "Nullpriest of Oblivion: implement an actual optional additional kicker cost, not a disguised alternative total. Preserve announcement identity, reductions, kicked flags and cast-to-entry binding; reuse EntryFlagCondition and normal graveyard return.",
-        "Karmic Guide: add complete protection from black across damage, blocking, targeting and attachments, plus an echo condition keyed to control acquired since the previous upkeep. PayMana and reanimation already exist.",
-        "Sigarda's Splendor: capture life total as an entry replacement without using the stack, preserve per-incarnation noted totals and update after each upkeep comparison. Its white spell trigger needs actual spell-color filtering."
+        "Karmic Guide: full protection from black across targeting, damage, blocking and attachment legality; echo keyed to acquired control since the prior own upkeep, including phasing and control changes.",
+        "Alseid: authenticated resolution-time color choice and protection until end of turn; reuse the complete protection engine.",
+        "Fanatical Devotion: complete regeneration shields through destruction replacement, tapping, damage removal and combat removal; costs and targets already exist.",
+        "Pongify: explicit cannot-regenerate destruction and resolution-time captured target controller creating a 3/3 green Ape, including when indestructible prevents destruction."
       ],
       "reuse": [
-        "OngoingEffect and WithCreatedTokens separate effects from copiable characteristics",
-        "PhasingRules exact physical identities and suspended attachment lifecycle",
-        "Existing PayMana and new PayLifeOrSacrifice transactions",
-        "Captured values and DelayedNextStep source-independent scheduling"
+        "Current ongoing and until-end-of-turn effects",
+        "Existing PayMana, sacrifice costs, WithControllers and CreateTokens",
+        "Current phasing and exact attachments"
       ],
-      "guard": "Refresh source and choose a practical complete subset. No local execution, no migration of games and no production admission."
-    },
-    "hosted_attempts": [
-      {
-        "run_id": 34791142601,
-        "commit": "13d0a3060e17773462a8f79be9c41f8742964f81",
-        "windows": "1609 tests; 17 fixture errors, zero assertion failures",
-        "ubuntu": "cancelled by matrix fail-fast",
-        "corrections": [
-          "Use bounded trigger-discovery fixtures for focused non-upkeep cases and real turn progression for recovery/haste integration.",
-          "Restore A's actual priority before spending Treasure; use a real permanent ability for source-duration exile.",
-          "Discover nested token definitions, treat excluded supertypes as a search filter, and expose public phasing return bindings in actor packets."
-        ]
-      }
-    ],
-    "draft_hosted_validation": {
-      "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
-      "run_id": 34791775813,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1609,
-      "new_test_methods": 63,
-      "conclusion": "success",
-      "scope": "Four isolated phasing/choice drafts; 63 new methods, actual turn integration, actor replay, checkpoint restore, source syntax, installation and packaged assets"
-    },
-    "promotion_followups": [
-      "Public phasing packets report no return controller for an orphan immediately after its exact root leaves, before the next untap prune.",
-      "A negative-supertype-only search has explicit failure-to-find coverage with eligible cards present."
-    ],
-    "hosted_validation": {
-      "commit": "91496fa01239b6261bd27e0582278f695029dcbc",
-      "run_id": 34792219355,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355",
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "tests_per_platform": 1609,
-      "new_test_methods": 63,
-      "conclusion": "success",
-      "scope": "All 266 source-bound reviewed programs including Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault; all 63 new methods through the reviewed loader; phasing projection, search filtering, actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
-    },
-    "completed_utc": "2026-09-14 00:23:18 UTC",
-    "final_recording_scope": "The following result-recording commit changes only the work order, review record and JSON inventory. Runtime, programs, sources and tests remain at the validated commit."
+      "guard": "Refresh source and select a practical complete subset. No local execution, game migration or production admission."
+    }
   },
   "hosted_validation_history": [
     {
@@ -3862,6 +3834,110 @@
       "ci_run_id": 34787728272,
       "ci_url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34787728272",
       "tests_per_platform": 1546
+    },
+    {
+      "date": "2026-09-13",
+      "base_commit": "9c63ed66dbd07c6fc20deab92314e367c29203c5",
+      "cards_written": [
+        "talon-gates-of-madara",
+        "desert-warfare",
+        "indulgent-tormentor",
+        "volatile-fault"
+      ],
+      "cards_promoted": [
+        "talon-gates-of-madara",
+        "desert-warfare",
+        "indulgent-tormentor",
+        "volatile-fault"
+      ],
+      "shared_mechanics": [
+        "Direct/indirect phasing and departed-controller untap timing",
+        "Qualified zone observations and public successor bindings",
+        "Next-own-end-step delayed returns",
+        "Ongoing noncopiable token keyword grants",
+        "Opponent-authored life or sacrifice payment",
+        "Captured players optionally search their own libraries",
+        "Excluded-supertype selectors"
+      ],
+      "runtime_checkpoint_schema": 119,
+      "state_checkpoint_schema": 13,
+      "new_test_methods": 63,
+      "validation_status": "reviewed_loader_passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "None for this cycle; continue the recorded next batch after refreshing remote state.",
+      "selection_note": "Talon Gates is implemented with its complete phasing lifecycle. Volatile Fault joins Desert Warfare and Indulgent Tormentor through captured-player choice support. Necromancy remains unstarted because cast-time sorcery eligibility and permanent-to-Aura conversion need separate support.",
+      "next_batch": [
+        "necromancy",
+        "nullpriest-of-oblivion",
+        "karmic-guide",
+        "sigarda-s-splendor"
+      ],
+      "next_batch_implementation_notes": {
+        "cards": [
+          "necromancy",
+          "nullpriest-of-oblivion",
+          "karmic-guide",
+          "sigarda-s-splendor"
+        ],
+        "requirements": [
+          "Necromancy: record actual sorcery eligibility before cast announcement; support next-cleanup delay and noncopiable Aura conversion/attachment. Reuse new ongoing effects and exact attachment/departure handling.",
+          "Nullpriest of Oblivion: implement an actual optional additional kicker cost, not a disguised alternative total. Preserve announcement identity, reductions, kicked flags and cast-to-entry binding; reuse EntryFlagCondition and normal graveyard return.",
+          "Karmic Guide: add complete protection from black across damage, blocking, targeting and attachments, plus an echo condition keyed to control acquired since the previous upkeep. PayMana and reanimation already exist.",
+          "Sigarda's Splendor: capture life total as an entry replacement without using the stack, preserve per-incarnation noted totals and update after each upkeep comparison. Its white spell trigger needs actual spell-color filtering."
+        ],
+        "reuse": [
+          "OngoingEffect and WithCreatedTokens separate effects from copiable characteristics",
+          "PhasingRules exact physical identities and suspended attachment lifecycle",
+          "Existing PayMana and new PayLifeOrSacrifice transactions",
+          "Captured values and DelayedNextStep source-independent scheduling"
+        ],
+        "guard": "Refresh source and choose a practical complete subset. No local execution, no migration of games and no production admission."
+      },
+      "hosted_attempts": [
+        {
+          "run_id": 34791142601,
+          "commit": "13d0a3060e17773462a8f79be9c41f8742964f81",
+          "windows": "1609 tests; 17 fixture errors, zero assertion failures",
+          "ubuntu": "cancelled by matrix fail-fast",
+          "corrections": [
+            "Use bounded trigger-discovery fixtures for focused non-upkeep cases and real turn progression for recovery/haste integration.",
+            "Restore A's actual priority before spending Treasure; use a real permanent ability for source-duration exile.",
+            "Discover nested token definitions, treat excluded supertypes as a search filter, and expose public phasing return bindings in actor packets."
+          ]
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6",
+        "run_id": 34791775813,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1609,
+        "new_test_methods": 63,
+        "conclusion": "success",
+        "scope": "Four isolated phasing/choice drafts; 63 new methods, actual turn integration, actor replay, checkpoint restore, source syntax, installation and packaged assets"
+      },
+      "promotion_followups": [
+        "Public phasing packets report no return controller for an orphan immediately after its exact root leaves, before the next untap prune.",
+        "A negative-supertype-only search has explicit failure-to-find coverage with eligible cards present."
+      ],
+      "hosted_validation": {
+        "commit": "91496fa01239b6261bd27e0582278f695029dcbc",
+        "run_id": 34792219355,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34792219355",
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "tests_per_platform": 1609,
+        "new_test_methods": 63,
+        "conclusion": "success",
+        "scope": "All 266 source-bound reviewed programs including Talon Gates of Madara, Desert Warfare, Indulgent Tormentor and Volatile Fault; all 63 new methods through the reviewed loader; phasing projection, search filtering, actor privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
+      },
+      "completed_utc": "2026-09-14 00:23:18 UTC",
+      "final_recording_scope": "The following result-recording commit changes only the work order, review record and JSON inventory. Runtime, programs, sources and tests remain at the validated commit."
     }
   ],
   "execution_policy": {

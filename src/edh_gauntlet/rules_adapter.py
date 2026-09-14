@@ -68,7 +68,7 @@ class RulesActorAdapter:
             'activate':{'action_id','source','targets','x_value','payment','ability_id'},
             'play_land':{'action_id','source'},'attack':{'attackers'},
             'block':{'assignments'},'damage':{'assignments'}}
-        optional={'modes','alternative_id','counter_division'} if kind=='cast' else {'counter_division'} if kind=='activate' else set()
+        optional={'modes','alternative_id','counter_division','kicker'} if kind=='cast' else {'counter_division'} if kind=='activate' else set()
         if kind not in required or set(command)-optional!={'kind','revision',*required[kind]}:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
@@ -102,7 +102,7 @@ class RulesActorAdapter:
             if type(division) is not list or any(type(row) is not dict or set(row)!={'ref','amount'} for row in division):
                 raise RulesViolation('Invalid counter division')
             division=tuple((self._visible_ref(row['ref'],actor),row['amount']) for row in division)
-            if kind=='cast':quote=k.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],mode_choices=choices,alternative_id=command.get('alternative_id'),counter_division=division)
+            if kind=='cast':quote=k.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],mode_choices=choices,alternative_id=command.get('alternative_id'),counter_division=division,kicker=command.get('kicker',False))
             else:quote=k.quote_activation(command['action_id'],actor,source,command['ability_id'],targets,x_value=command['x_value'],counter_division=division)
             return k.commit_action(quote,payment)
         if kind=='play_land':return k.play_land(command['action_id'],actor,self._visible_ref(command['source'],actor),revision=command['revision'])
