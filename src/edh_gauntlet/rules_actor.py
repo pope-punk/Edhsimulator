@@ -30,6 +30,9 @@ def _card(kernel,obj,views):
         'tapped':obj.tapped,'phased':obj.phased,'counters':dict(obj.counters),
         **({'monstrous':True} if obj.monstrous else {}),
         **({'untap_blocked':True} if view.untap_blocked else {}),
+        **({'goaded_by':sorted(view.goaded_by)} if view.goaded_by else {}),
+        **({'riot_instances':len(view.riot)} if view.riot else {}),
+        **({'abilities_removed':True} if view.abilities_removed else {}),
         'damage':obj.damage_marked,'commander':obj.commander,'token':obj.token,
         'attached_to':obj.attached_to.to_json() if obj.attached_to else None,
         **({'limited_triggers':limits} if limits else {}),
@@ -43,6 +46,9 @@ def decision_for_actor(kernel,actor):
         if request.revision!=kernel.revision:raise RulesViolation('Choice no longer matches current state')
         if request.actor==actor:return {'kind':'choice','choice':request.to_json()}
         return {'kind':'waiting','actor':request.actor}
+    if kernel._announcement_mana_waiting():
+        owner=kernel.declaration_mana['actor']
+        return {'kind':'casting_mana' if actor==owner else 'waiting','actor':owner}
     if kernel._casting_mana_waiting():
         owner=kernel.resolution_cast['actor']
         return {'kind':'casting_mana' if actor==owner else 'waiting','actor':owner}
@@ -133,6 +139,8 @@ def project_actor(kernel,actor):
             **({'target_groups':[{'group_id':g['group_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['target_groups']]} if 'target_groups' in frame else {}),
             **({'modes':[{'mode_id':g['mode_id'],'targets':[target_summary(value) for value in g['targets']]} for g in frame['mode_groups']]} if 'mode_groups' in frame else {})}
     stack=[frame_summary(frame) for frame in reversed(kernel.stack)]
+    for summary,frame in zip(stack,reversed(kernel.stack)):
+        if frame['spell'] and kernel._spell_uncounterable(kernel._source(frame).ref):summary['cannot_be_countered']=True
     resolving=frame_summary(kernel.resolving) if kernel.resolving else None
     announcement=None
     if kernel.announcement:
@@ -206,6 +214,11 @@ def project_actor(kernel,actor):
         window=kernel.mana_payment
         packet['resolution_payment']={'actor':window['actor'],'request_id':window['id'],
             'mana':deepcopy(window['mana']),'parent_frame':window['parent']['id']}
+    packet['attack_taxes']={p:kernel._attack_tax(p) for p in state.live_players}
+    if actor in state.live_players:
+        packet['optional_life_costs']=[{'card':obj.ref.to_json(),'options':[{'key':key,'life':rule.life,'color':rule.color}
+            for key,(_,rule) in kernel._life_cost_options(obj,actor).items()]} for obj in state.objects()
+            if obj.owner==actor and obj.zone in {Zone.HAND,Zone.COMMAND,Zone.GRAVEYARD,Zone.EXILE} and kernel.definition(obj).cast is not None]
     packet['life_lost_this_turn']={p:state.life_lost_this_turn(p) for p in state.live_players}
     packet['life_gained_this_turn']={p:state.life_gained_this_turn(p) for p in state.live_players}
     packet['turn_history']={kind:sorted(kernel._history_players(kind)) for kind in ('attacked','freerunning')}

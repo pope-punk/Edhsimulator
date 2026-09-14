@@ -14,6 +14,7 @@ from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
 from .rules_program import CopyCast, CombatDamageToPlayer, OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import OrderedCostSpec,PlayerCounterCost,LifeCostModifier,cost_has_x
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -74,6 +75,8 @@ class PreparedAction:
     counter_division: tuple = ()
     kicker: bool = False
     replicate: int = 0
+    life_costs: tuple[str,...] = ()
+    hybrid_choices: tuple[str,...] = ()
 
     def to_json(self):
         return {'action_id': self.action_id, 'kind': self.kind, 'actor': self.actor,
@@ -81,7 +84,7 @@ class PreparedAction:
             'ability_id': self.ability_id, 'x_value': self.x_value, 'revision': self.revision,
             'bundle': self.bundle, 'implementation': self.implementation, 'cost': encode(self.cost),
             'counter_division':[{'ref':ref.to_json(),'amount':amount} for ref,amount in self.counter_division],
-            'replicate':self.replicate,'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
+            'hybrid_choices':list(self.hybrid_choices),'life_costs':list(self.life_costs),'replicate':self.replicate,'kicker':self.kicker,'alternative_id':self.alternative_id,'mode_choices':[{'mode_id':key,'targets':[ref.to_json() for ref in targets]} for key,targets in self.mode_choices]}
 
     @classmethod
     def from_json(cls, value):
@@ -89,6 +92,8 @@ class PreparedAction:
         value['source'] = ObjectRef.from_json(value['source'])
         value['targets'] = tuple(target_from_json(ref) for ref in value['targets'])
         value['cost'] = decode(value['cost'])
+        value['life_costs']=tuple(value.get('life_costs',()))
+        value['hybrid_choices']=tuple(value.get('hybrid_choices',()))
         value['counter_division']=tuple((ObjectRef.from_json(row['ref']),row['amount']) for row in value.get('counter_division',[]))
         value['mode_choices']=tuple((row['mode_id'],tuple(target_from_json(ref) for ref in row['targets'])) for row in value.get('mode_choices',[]))
         return cls(**value)
@@ -102,10 +107,12 @@ class Payment:
     convoke: tuple = ()
     tagged_mana: tuple[str,...] = ()
     mana_actions: tuple = ()
+    cost_order: tuple[str,...] = ()
 
     def to_json(self):
         result={'mana':dict(self.mana),'taps':[ref.to_json() for ref in self.taps],
             'zone_costs':{key:[ref.to_json() for ref in refs] for key,refs in self.zone_costs}}
+        if self.cost_order:result['cost_order']=list(self.cost_order)
         if self.mana_actions:result['mana_actions']=list(self.mana_actions)
         if self.tagged_mana:result['tagged_mana']=list(self.tagged_mana)
         if self.convoke:result['convoke']=[{'ref':ref.to_json(),'color':color} for ref,color in self.convoke]
@@ -113,7 +120,9 @@ class Payment:
 
     @classmethod
     def from_json(cls, value):
-        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke','tagged_mana','mana_actions'}
+        if (not isinstance(value,dict) or not {'mana','taps'}<=set(value) or set(value)-{'mana','taps','zone_costs','convoke','tagged_mana','mana_actions','cost_order'}
+                or not isinstance(value.get('cost_order',[]),list)
+                or any(type(key) is not str for key in value.get('cost_order',[]))
                 or not isinstance(value['mana'],dict) or not isinstance(value.get('zone_costs',{}),dict)
                 or not isinstance(value.get('mana_actions',[]),list)
                 or len(value.get('mana_actions',[]))>128
@@ -125,10 +134,22 @@ class Payment:
             raise RulesViolation('Invalid payment packet')
         return cls(tuple(sorted(value['mana'].items())), tuple(ObjectRef.from_json(ref) for ref in value['taps']),
             tuple((key,tuple(ObjectRef.from_json(ref) for ref in refs)) for key,refs in sorted(value.get('zone_costs',{}).items())),
-            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])),tuple(value.get('tagged_mana',[])),tuple(value.get('mana_actions',[])))
+            tuple((ObjectRef.from_json(row['ref']),row['color']) for row in value.get('convoke',[])),tuple(value.get('tagged_mana',[])),tuple(value.get('mana_actions',[])),tuple(value.get('cost_order',[])))
 
 
 class CastingRules:
+    def _life_cost_options(self,source,actor):
+        proposed=replace(source,zone=Zone.STACK,controller=actor)
+        view=base(proposed,self.definitions);result={}
+        for permanent in self.state.objects(Zone.BATTLEFIELD):
+            if permanent.phased:continue
+            for modifier in self.definition(permanent).cost_modifiers:
+                if (isinstance(modifier,LifeCostModifier) and (not modifier.origin_zones or source.zone in modifier.origin_zones)
+                        and matches(modifier.selector,proposed,view,permanent)):
+                    key=permanent.ref.card_id+'@'+str(permanent.ref.incarnation)+':'+modifier.modifier_id
+                    result[key]=(permanent,modifier)
+        return result
+
     def _payment_waiting(self):
         window=self.mana_payment
         return bool(window and not window['completed'] and not self.pending_choice and not self.announcement
@@ -148,7 +169,7 @@ class CastingRules:
             raise RulesViolation('Resolution payment requires a fresh bounded action identity')
         resources=None
         if payment is not None:
-            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=() or payment.mana_actions!=():
+            if not isinstance(payment,Payment) or payment.taps!=() or payment.zone_costs!=() or payment.convoke!=() or payment.mana_actions!=() or payment.cost_order!=():
                 raise RulesViolation('Resolution payment accepts mana only')
             resources=ResourcePayment(actor,payment.mana,tagged_mana=self._tagged_resources(actor,payment.tagged_mana))
             self.state.validate_payment(resources)
@@ -219,16 +240,17 @@ class CastingRules:
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')
 
-    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0):
+    def _prepare_action(self, action_id, kind, actor, ref, targets, ability_id, x_value, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=()):
         resolution_cast=kind=='cast' and self._cast_waiting()
         casting_mana=kind=='activate' and self._casting_mana_waiting()
-        resolution_mana=kind=='activate' and (self._payment_waiting() or casting_mana)
+        declaration_mana=kind=='activate' and self._announcement_mana_waiting()
+        resolution_mana=kind=='activate' and (self._payment_waiting() or casting_mana or declaration_mana)
         if not resolution_mana and not resolution_cast:self._idle()
         if not isinstance(action_id, str) or not action_id or len(action_id) > 128:
             raise RulesViolation('Action requires a bounded nonempty identity')
         if action_id in self.action_receipts:
             raise RulesViolation('Action was already accepted')
-        owner=self.resolution_cast['actor'] if resolution_cast or casting_mana else self.mana_payment['actor'] if resolution_mana else self.priority
+        owner=self.declaration_mana['actor'] if declaration_mana else self.resolution_cast['actor'] if resolution_cast or casting_mana else self.mana_payment['actor'] if resolution_mana else self.priority
         if actor not in self.state.live_players or owner != actor:
             raise RulesViolation('Actor does not own the action window')
         source = self.state.get(ref)
@@ -288,7 +310,7 @@ class CastingRules:
             extra=specification.kicker.mana
             cost=replace(cost,mana=ManaCost(cost.mana.generic+extra.generic,
                 cost.mana.symbols+extra.symbols,cost.mana.x_symbols))
-        if type(x_value) is not int or x_value < 0 or x_value and not cost.mana.x_symbols:
+        if type(x_value) is not int or x_value < 0 or x_value and not cost_has_x(cost):
             raise RulesViolation('Invalid announced X')
         if kind=='activate' and x_value<specification.minimum_x:raise RulesViolation('Announced X is below the activation minimum')
         if not isinstance(mode_choices,tuple):raise RulesViolation('Mode choices must be immutable')
@@ -314,6 +336,29 @@ class CastingRules:
                 raise RulesViolation('Counter division must assign the fixed total positively across every target')
             amounts=dict(counter_division)
             counter_division=tuple((target,amounts[target]) for target in targets)
+        if not isinstance(life_costs,tuple) or any(type(key) is not str for key in life_costs) or len(set(life_costs))!=len(life_costs):
+            raise RulesViolation('Invalid optional life-cost declarations')
+        modifiers=self._life_cost_options(source,actor) if kind=='cast' else {}
+        if not set(life_costs)<=set(modifiers):raise RulesViolation('Unavailable optional life cost')
+        symbols=list(cost.mana.symbols)
+        hybrids=[i for i,symbol in enumerate(symbols) if '/' in symbol]
+        if (not isinstance(hybrid_choices,tuple) or any(type(c) is not str for c in hybrid_choices)
+                or hybrid_choices and len(hybrid_choices)!=len(hybrids)
+                or life_costs and hybrids and len(hybrid_choices)!=len(hybrids)):
+            raise RulesViolation('Choose hybrid colors before applying an optional colored reduction')
+        for i,color in zip(hybrids,hybrid_choices):
+            if color not in symbols[i].split('/'):raise RulesViolation('Unavailable hybrid choice')
+            symbols[i]=color
+        for key in life_costs:
+            modifier=modifiers[key][1]
+            cost=replace(cost,life=cost.life+modifier.life)
+            if modifier.color in symbols:symbols.remove(modifier.color)
+        cost=replace(cost,mana=replace(cost.mana,symbols=tuple(symbols)))
+        if isinstance(cost,OrderedCostSpec):
+            costs=tuple(replace(c,amount=x_value if isinstance(c.amount,ChosenX) else c.amount) for c in cost.player_counter_costs)
+            if any(dict(self.state.player_counters(actor)).get(c.kind,0)<c.amount for c in costs):
+                raise RulesViolation('Insufficient player counters for payment')
+            cost=replace(cost,player_counter_costs=costs)
         if cost.life > self.state.life(actor):
             raise RulesViolation('Insufficient life for payment')
         if any(dict(source.counters).get(c.kind,0)<c.amount for c in cost.counter_costs):
@@ -342,10 +387,10 @@ class CastingRules:
                         generic += modifier.generic_delta
         cost = replace(cost, mana=ManaCost(max(0, generic), cost.mana.symbols))
         return PreparedAction(action_id, kind, actor, ref, targets, ability_id, x_value,
-                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker,replicate)
+                              self.revision, self.bundle, IMPLEMENTATION_ID, cost,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices)
 
-    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0):
-        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker,replicate)
+    def quote_cast(self, action_id, actor, source, targets=(), *, x_value=0, mode_choices=(),alternative_id=None,counter_division=(),kicker=False,replicate=0,life_costs=(),hybrid_choices=()):
+        return self._prepare_action(action_id, 'cast', actor, source, targets, None, x_value,mode_choices,alternative_id,counter_division,kicker,replicate,life_costs,hybrid_choices)
 
     def quote_activation(self, action_id, actor, source, ability_id, targets=(), *, x_value=0,counter_division=()):
         return self._prepare_action(action_id, 'activate', actor, source, targets, ability_id, x_value,counter_division=counter_division)
@@ -386,10 +431,12 @@ class CastingRules:
         if quote.implementation != IMPLEMENTATION_ID or quote.bundle != self.bundle or quote.revision != self.revision:
             raise RulesViolation('Stale action quote or changed rules bundle')
         fresh = self._prepare_action(quote.action_id, quote.kind, quote.actor, quote.source,
-                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate)
+                                     quote.targets, quote.ability_id, quote.x_value,quote.mode_choices,quote.alternative_id,quote.counter_division,quote.kicker,quote.replicate,quote.life_costs,quote.hybrid_choices)
         if fresh != quote:
             raise RulesViolation('Quote does not match the current declaration and cost')
         if not isinstance(payment,Payment):raise RulesViolation('Payment must be an authored payment packet')
+        if isinstance(quote.cost,OrderedCostSpec):return self._commit_ordered_action(quote,payment)
+        if payment.cost_order:raise RulesViolation('This cost does not accept an ordered payment')
         if payment.mana_actions:return self._commit_cast_mana_plan(quote,payment)
         resources = self._resource_payment(quote, payment)
         zone_refs=self._zone_cost_refs(quote,payment)
@@ -546,7 +593,7 @@ class CastingRules:
         if quote.kind=='cast' and self.resolution_cast and not self.resolution_cast['completed']:
             self.resolution_cast['completed']=True;self.resolution_cast['cast']=True
             frame['without_mana_cost']=True
-        self.priority = None if self.mana_payment or self.resolution_cast else quote.actor
+        self.priority = None if self.mana_payment or self.resolution_cast or self.declaration_mana else quote.actor
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
         self._collect_tapped(resources.taps,tap_observers)
@@ -573,6 +620,7 @@ class CastingRules:
         return tuple(refs)
 
     def _continue_announcement(self):
+        if self.announcement.get('ordered'):return self._continue_ordered_announcement()
         pending=self.announcement;quote=PreparedAction.from_json(pending['quote']);payment=Payment.from_json(pending['payment'])
         source=RulesObject.from_json(pending['source']);ability=decode(pending['ability'])
         resources=self._resource_payment(quote,payment,source=source);cost=quote.cost.zone_costs[0]
@@ -617,6 +665,7 @@ class CastingRules:
                 pattern = ability.event
                 if source.zone == Zone.STACK and pattern.subject != 'self':
                     continue
+                if pattern.subject=='attached' and source.attached_to!=announced.ref:continue
                 if pattern.kind != kind or pattern.subject == 'self' and source.ref != announced.ref:
                     continue
                 if not event_player_matches(pattern,source.controller,actor):
@@ -634,5 +683,5 @@ class CastingRules:
                         except RulesViolation:types=set(previous_types) if previous_types is not None else self._damage_source(announced)[1].types
                     if not set(pattern.types) <= types or set(excluded)&types:continue
                 captured={"event_x":announced.cast_x} if kind=="spell_cast" else dict(values or {})
-                if kind in ACTOR_EVENTS:captured["event_controllers"]=[actor]
+                if kind in ACTOR_EVENTS or kind=="creature_attacks":captured["event_controllers"]=[actor]
                 self._trigger(source, ability, values=captured)

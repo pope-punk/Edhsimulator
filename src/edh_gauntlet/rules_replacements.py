@@ -27,6 +27,7 @@ class ZoneProposal:
     notes: tuple = ()  # (note identity, public value) captured during replacement.
     destruction: bool = False
     regenerated: str | None = None
+    riot_haste: bool = False
 
 
 @dataclass(frozen=True)
@@ -47,7 +48,7 @@ def affected_player(proposal):
     return obj.controller if obj.zone in {Zone.BATTLEFIELD, Zone.STACK} else obj.owner
 
 
-def candidates(state, definitions, proposal, affected_types=None, applicable_entry_ids=None):
+def candidates(state, definitions, proposal, affected_types=None, applicable_entry_ids=None, inactive_sources=frozenset()):
     obj = proposal.before
     definition = definitions[proposal.copied_definition or obj.effective_definition]
     result = []
@@ -67,7 +68,7 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
                                                    'entry_note' if isinstance(modifier,EntryLifeNote) else 'entry_payment' if isinstance(modifier,EntryPayment) else 'entry',
                                                    3,proposal.controller,modifier))
     for source in state.objects(Zone.BATTLEFIELD):
-        if source.phased:
+        if source.phased or source.ref in inactive_sources:
             continue
         for program in definitions[source.effective_definition].replacements:
             key = f'{source.ref.card_id}@{source.ref.incarnation}:{program.replacement_id}'
@@ -116,7 +117,7 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
         if not accepted:tapped = True
     elif candidate.kind == 'entry':
         if accepted:tapped = candidate.program.tapped
-    elif candidate.kind in {'entry_note','entry_counters','counter'}:
+    elif candidate.kind in {'entry_note','entry_counters','counter','riot'}:
         pass  # The kernel evaluates quantities and supplies the new counter proposal.
     elif accepted:
         destination = candidate.program.redirect

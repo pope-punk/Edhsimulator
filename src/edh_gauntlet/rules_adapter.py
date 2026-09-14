@@ -70,7 +70,7 @@ class RulesActorAdapter:
             'activate':{'action_id','source','targets','x_value','payment','ability_id'},
             'play_land':{'action_id','source'},'attack':{'attackers'},
             'block':{'assignments'},'damage':{'assignments'}}
-        optional={'modes','alternative_id','counter_division','kicker','replicate'} if kind=='cast' else {'counter_division'} if kind=='activate' else set()
+        optional={'modes','alternative_id','counter_division','kicker','replicate','life_costs','hybrid_choices'} if kind=='cast' else {'counter_division'} if kind=='activate' else {'payment'} if kind=='attack' else set()
         if kind not in required or set(command)-optional!={'kind','revision',*required[kind]}:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
@@ -106,7 +106,7 @@ class RulesActorAdapter:
             if type(division) is not list or any(type(row) is not dict or set(row)!={'ref','amount'} for row in division):
                 raise RulesViolation('Invalid counter division')
             division=tuple((self._visible_ref(row['ref'],actor),row['amount']) for row in division)
-            if kind=='cast':quote=k.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],mode_choices=choices,alternative_id=command.get('alternative_id'),counter_division=division,kicker=command.get('kicker',False),replicate=command.get('replicate',0))
+            if kind=='cast':quote=k.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],mode_choices=choices,alternative_id=command.get('alternative_id'),counter_division=division,kicker=command.get('kicker',False),replicate=command.get('replicate',0),life_costs=tuple(command.get('life_costs',())),hybrid_choices=tuple(command.get('hybrid_choices',())))
             else:quote=k.quote_activation(command['action_id'],actor,source,command['ability_id'],targets,x_value=command['x_value'],counter_division=division)
             return k.commit_action(quote,payment)
         if kind=='play_land':return k.play_land(command['action_id'],actor,self._visible_ref(command['source'],actor),revision=command['revision'])
@@ -119,7 +119,7 @@ class RulesActorAdapter:
                 ref=self._visible_ref(row['source'],actor)
                 if ref in attackers:raise RulesViolation('Duplicate attacker')
                 attackers[ref]=row['defender']
-            return k.declare_attackers(actor,attackers,revision=command['revision'])
+            return k.declare_attackers(actor,attackers,revision=command['revision'],payment=Payment.from_json(command['payment']) if 'payment' in command else None)
         if kind=='block':return k.declare_blockers(actor,command['assignments'],revision=command['revision'])
         return k.assign_combat_damage(actor,command['assignments'],revision=command['revision'])
 

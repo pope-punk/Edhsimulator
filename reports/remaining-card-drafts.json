@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 306,
     "remaining_outside_reviewed_bundle": 28,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 28,
+    "drafts_written": 7,
+    "not_started_on_this_branch": 21,
     "reviewed_bundle_copies": 372,
-    "draft_copies": 0,
+    "draft_copies": 7,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 79,
     "remaining_outside_reviewed_bundle_copies": 28
@@ -405,7 +405,7 @@
     {
       "card_id": "chthonian-nightmare",
       "name": "Chthonian Nightmare",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -418,7 +418,12 @@
           "face_id": "chthonian-nightmare",
           "text": "When this enchantment enters, you get {E}{E}{E} (three energy counters).\nPay X {E}, Sacrifice a creature, Return this enchantment to its owner's hand: Return target creature card with mana value X from your graveyard to the battlefield. Activate only as a sorcery."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "crop-rotation",
@@ -546,7 +551,7 @@
     {
       "card_id": "darksteel-mutation",
       "name": "Darksteel Mutation",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -559,7 +564,12 @@
           "face_id": "darksteel-mutation",
           "text": "Enchant creature\nEnchanted creature is an Insect artifact creature with base power and toughness 0/1 and has indestructible, and it loses all other abilities, card types, and creature types."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "dawn-of-hope",
@@ -598,7 +608,7 @@
     {
       "card_id": "defiler-of-vigor",
       "name": "Defiler of Vigor",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -611,7 +621,12 @@
           "face_id": "defiler-of-vigor",
           "text": "Trample\nAs an additional cost to cast green permanent spells, you may pay 2 life. Those spells cost {G} less to cast if you paid life this way. This effect reduces only the amount of green mana you pay.\nWhenever you cast a green permanent spell, put a +1/+1 counter on each creature you control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "delighted-halfling",
@@ -1967,7 +1982,7 @@
     {
       "card_id": "maze-s-end",
       "name": "Maze's End",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1980,7 +1995,12 @@
           "face_id": "maze-s-end",
           "text": "This land enters tapped.\n{T}: Add {C}.\n{3}, {T}, Return this land to its owner's hand: Search your library for a Gate card, put it onto the battlefield, then shuffle. If you control ten or more Gates with different names, you win the game."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "midnight-snack",
@@ -2387,7 +2407,7 @@
     {
       "card_id": "parasitic-impetus",
       "name": "Parasitic Impetus",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2400,7 +2420,12 @@
           "face_id": "parasitic-impetus",
           "text": "Enchant creature\nEnchanted creature gets +2/+2 and is goaded.\nWhenever enchanted creature attacks, its controller loses 2 life and you gain 2 life."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "pongify",
@@ -2503,7 +2528,7 @@
     {
       "card_id": "propaganda",
       "name": "Propaganda",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2516,7 +2541,12 @@
           "face_id": "propaganda",
           "text": "Creatures can't attack you unless their controller pays {2} for each creature they control that's attacking you."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "ram-through",
@@ -2747,7 +2777,7 @@
     {
       "card_id": "rhythm-of-the-wild",
       "name": "Rhythm of the Wild",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2760,7 +2790,12 @@
           "face_id": "rhythm-of-the-wild",
           "text": "Creature spells you control can't be countered.\nNontoken creatures you control have riot."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "batch": "four-pass-1-2026-09-14",
+      "review_record": "docs/PAYMENTS_COMBAT_CARD_REVIEW.md"
     },
     {
       "card_id": "rishkar-s-expertise",
@@ -3606,33 +3641,9 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "8f2c947759f204e42014edfe1a654d0832d6ce46",
+    "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761",
+    "pass": 1,
     "cards_written": [
-      "rishkar-s-expertise",
-      "hidden-nursery",
-      "apex-devastator",
-      "oracle-of-mul-daya"
-    ],
-    "cards_promoted": [
-      "rishkar-s-expertise",
-      "hidden-nursery",
-      "apex-devastator",
-      "oracle-of-mul-daya"
-    ],
-    "new_test_methods": 95,
-    "runtime_checkpoint_schema": 128,
-    "state_checkpoint_schema": 17,
-    "validation_status": "passed",
-    "shared_mechanics": [
-      "Resolution-cast permissions with suspended parents and no priority",
-      "Discover/cascade public sequential exile and random-bottom continuations",
-      "Additional-cost payment and bounded authored announcement mana plans",
-      "Current top-library disclosure, reference retirement and exact top-land permissions"
-    ],
-    "source_corrections": [
-      "Apex Devastator has both Chimera and Hydra subtypes, as printed in official Commander Legends notes."
-    ],
-    "next_batch": [
       "chthonian-nightmare",
       "maze-s-end",
       "rhythm-of-the-wild",
@@ -3641,176 +3652,13 @@
       "defiler-of-vigor",
       "darksteel-mutation"
     ],
-    "hosted_attempts": [
-      {
-        "stage": "initial_three_card_draft",
-        "commit": "72ec8fe8238bb5db8eecdd4bfa51cce467a2579c",
-        "run_id": 34875843944,
-        "conclusion": "failure",
-        "tests_run_ubuntu": 2217,
-        "failures": 2,
-        "errors": 2,
-        "findings": [
-          "Two fixtures used the wrong Nullpriest kicker amount and an unavailable Gate definition. The catalog generation check also required applying Apex's Hydra correction to the canonical reference text. These are corrected in the expanded four-card revision."
-        ]
-      },
-      {
-        "commit": "aed7f8e8de4eb5d03058abd63fc8bb378cc01cd1",
-        "run_id": 34877830986,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34877830986",
-        "conclusion": "success",
-        "tests_per_platform": 2254,
-        "platforms": [
-          "ubuntu-latest",
-          "windows-latest"
-        ],
-        "checks": [
-          "source syntax",
-          "full distribution installation",
-          "packaged assets",
-          "required reviewed-loader conformance"
-        ],
-        "jobs": [
-          {
-            "job_id": 104089327079,
-            "name": "verify (ubuntu-latest)",
-            "tests": 2254,
-            "seconds": 441.65,
-            "conclusion": "success"
-          },
-          {
-            "job_id": 104089327360,
-            "name": "verify (windows-latest)",
-            "tests": 2254,
-            "seconds": 456.94,
-            "conclusion": "success"
-          }
-        ],
-        "stage": "superseded_reviewed_loader",
-        "findings": [
-          "All 94 methods passed; the final library regression additionally excludes noncard spell copies before state-based removal."
-        ]
-      }
-    ],
-    "review_work_remaining": "",
+    "cards_promoted": [],
+    "validation_status": "pending",
+    "runtime_checkpoint_schema": 129,
+    "state_checkpoint_schema": 17,
+    "new_test_methods": 80,
     "unresolved_defects": [],
-    "next_batch_source_review": {
-      "status": "preparation_only",
-      "cards": [
-        "chthonian-nightmare",
-        "maze-s-end",
-        "rhythm-of-the-wild",
-        "parasitic-impetus"
-      ],
-      "requirements": [
-        "Chthonian Nightmare: player energy already exists in state, but add an explicit gain effect, X energy payment and multiple zone-cost groups. Preserve target-before-cost ordering and allow X zero. Costs need an authored legal payment order under CR 601.2h, not an assumed printed order; do not use object-counter costs for player energy.",
-        "Maze's End: reuse tapped entry, colorless mana, source-return cost and Gate search; add distinct current Gate-name counting and a real player-win transition after search/shuffle.",
-        "Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.",
-        "Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.",
-        "Entity Tracker still requires the fully-unlocked Room trigger; enchantment-entry support alone is incomplete."
-      ],
-      "planning_update": "The user's four-pass request expands the next batch to seven cards. Existing source review covers the original four; review all printed clauses of Propaganda, Defiler of Vigor and Darksteel Mutation before authoring."
-    },
-    "draft_test_methods": 85,
-    "reviewed_test_methods": 95,
-    "draft_hosted_validation": {
-      "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
-      "run_id": 34876806875,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34876806875",
-      "conclusion": "success",
-      "tests_per_platform": 2245,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104085905904,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2245,
-          "seconds": 441.625,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104085906105,
-          "name": "verify (windows-latest)",
-          "tests": 2245,
-          "seconds": 439.011,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "coverage_audit": {
-      "totalUnique": 334,
-      "reviewedUnique": 306,
-      "totalCopies": 400,
-      "reviewedCopies": 372,
-      "remainingUnique": 28,
-      "remainingCopies": 28,
-      "byDeck": {
-        "Reaminatour \u2014 Aminatou, Veil Piercer": {
-          "total": 100,
-          "reviewed": 88
-        },
-        "Minsc & Boo, Timeless Heroes": {
-          "total": 100,
-          "reviewed": 94
-        },
-        "Omo, Queen of Vesuva": {
-          "total": 100,
-          "reviewed": 97
-        },
-        "Elenda, Saint of Dusk": {
-          "total": 100,
-          "reviewed": 93
-        }
-      }
-    },
-    "review_findings": [
-      "Promotion includes library-moving mana classification and rejects unsupported nested free casting inside immediate mana abilities.",
-      "Defer top-card disclosure until bottom/top placement is finalized, including discover/cascade and surveil; prevent transient top exposure or false reference retirement.",
-      "Preserve public face-up exile histories even when discover/cascade finishes without a hit.",
-      "Library scans and top disclosures ignore noncard spell copies waiting for state-based removal, just as they ignore tokens."
-    ],
-    "hosted_validation": {
-      "commit": "bfaef8c37152768444ffca8afe5357aaab94a64d",
-      "run_id": 34878332029,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34878332029",
-      "conclusion": "success",
-      "tests_per_platform": 2255,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104091015220,
-          "name": "verify (windows-latest)",
-          "tests": 2255,
-          "seconds": 454.942,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104091015298,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2255,
-          "seconds": 429.101,
-          "conclusion": "success"
-        }
-      ]
-    }
+    "review_work_remaining": "Run hosted draft conformance, finish shared-rule review, then promote and require reviewed-loader conformance."
   },
   "hosted_validation_history": [
     {
@@ -7019,7 +6867,7 @@
       7,
       10
     ],
-    "status": "planned",
+    "status": "in_progress",
     "passes": [
       {
         "pass": 1,
@@ -7034,7 +6882,8 @@
           "darksteel-mutation"
         ],
         "focus": "Reuse payment, entry, Aura and characteristic primitives; complete energy and authored cost ordering, Gate-name wins, riot, goad and attack payments, optional life-based green reduction, and ability/type replacement.",
-        "status": "planned"
+        "status": "draft_written_validation_pending",
+        "base_commit": "964d834b2e0e8c7dcbd0f0e028e55e00db2f7761"
       },
       {
         "pass": 2,

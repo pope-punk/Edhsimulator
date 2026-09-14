@@ -9,6 +9,9 @@ from dataclasses import dataclass, replace
 import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
+from .rules_program import SetCardTypes,LoseAbilities,Goaded,AddRiot
+
+ARTIFACT_TYPES=frozenset('Attraction Blood Bobblehead Book Clue Contraption Equipment Food Fortification Gold Incubator Infinity Junk Lander Map Mutagen Powerstone Spacecraft Stone Treasure Vehicle Vibranium'.split())
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
 from .rules_program import ModifiedSelector, LostPlayerPT, SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
@@ -29,6 +32,9 @@ class Characteristics:
     mana_symbols: tuple[str,...] = ()
     untap_blocked: bool = False
     modified: bool = False
+    abilities_removed: bool = False
+    riot: tuple = ()
+    goaded_by: frozenset[str] = frozenset()
 
 
 def base(obj, definitions):
@@ -39,7 +45,7 @@ def base(obj, definitions):
                            definition.mana_value + (definition.cast.cost.mana.x_symbols * obj.cast_x
                                if obj.zone == Zone.STACK and definition.cast else 0), definition.power, definition.toughness,
                            target_restrictions=definition.target_restrictions if obj.zone == Zone.BATTLEFIELD else (),
-                           keywords=frozenset(definition.keywords),
+                           keywords=frozenset(definition.keywords)|({'haste'} if obj.zone==Zone.BATTLEFIELD and 'riot_haste' in obj.entry_flags else set()),
                            supertypes=frozenset(definition.supertypes),colors=frozenset(definition.colors),
                            mana_symbols=definition.cast.cost.mana.symbols if definition.cast else ())
 
@@ -85,7 +91,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
+    return {SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
@@ -142,6 +148,7 @@ def condition_holds(condition, source, objects, views, *, excluding_ref=None, li
 
 
 def _recipients(source, effect, objects, views, entering_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None):
+    if source.ref in views and views[source.ref].abilities_removed:return ()
     if not condition_holds(effect.condition, source, objects, views, excluding_ref=entering_ref,life_totals=life_totals,starting_life_totals=starting_life_totals,live_players=live_players,life_lost_totals=life_lost_totals):
         return ()
     return tuple(obj.ref for obj in objects if matches(effect.selector, obj, views[obj.ref], source)
@@ -169,7 +176,22 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
     for ref in refs:
         view = views[ref]
         for change_index,change in enumerate(changes):
-            if isinstance(change, ChangeTypes):
+            if isinstance(change,SetCardTypes):
+                types=frozenset(change.types)
+                subtypes=set()
+                if 'Artifact' in types:subtypes.update(view.subtypes&ARTIFACT_TYPES)
+                if 'Land' in types:subtypes.update(view.subtypes&LAND_TYPES)
+                if {'Creature','Kindred'}&types:subtypes.update(change.creature_subtypes)
+                view=replace(view,types=types,subtypes=frozenset(subtypes))
+            elif isinstance(change,LoseAbilities):
+                view=replace(view,abilities_removed=True,keywords=frozenset(),granted_abilities=(),target_restrictions=(),riot=())
+            elif isinstance(change,AddRiot):
+                if not next(obj for obj in objects if obj.ref==ref).token:
+                    view=replace(view,riot=view.riot+((grant_key[0],grant_key[1]+':'+str(change_index)),))
+            elif isinstance(change,Goaded):
+                source=next(obj for obj in objects if grant_key and obj.ref==grant_key[0])
+                view=replace(view,goaded_by=view.goaded_by|{source.controller})
+            elif isinstance(change, ChangeTypes):
                 types=(view.types-set(change.remove))|set(change.add)
                 subtypes=view.subtypes
                 if {'Creature','Kindred'}&view.types and not {'Creature','Kindred'}&types:subtypes=subtypes-CREATURE_TYPES
@@ -199,7 +221,7 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
                 else:
                     view = replace(view, power=toughness, toughness=power)
         views[ref] = replace(view, applied=view.applied + (key,))
-    if any(isinstance(c,(ChangeTypes,AddSubtypes)) for c in changes):_refresh_modified(views,objects)
+    if any(isinstance(c,(SetCardTypes,ChangeTypes,AddSubtypes)) for c in changes):_refresh_modified(views,objects)
 
 
 def _without_cycle_edges(dependencies):
@@ -238,6 +260,7 @@ def _may_change_recipients(changes, effect):
     statistics={bound.statistic for selector in selectors for bound in selector.characteristics}
     subtype_reads={subtype for selector in selectors for subtype in selector.subtypes+selector.any_subtypes+selector.excluded_subtypes}
     for change in changes:
+        if isinstance(change,(LoseAbilities,SetCardTypes)):return True
         if isinstance(change,(ChangeTypes,AddSubtypes)) and any(isinstance(s,ModifiedSelector) for s in selectors):return True
         if isinstance(change, ChangeTypes):
             if (reads.intersection(change.add + change.remove) or 'Creature' in change.add+change.remove and statistics & {'power','toughness'}
@@ -290,6 +313,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
     for layer in (4, 5, 6, 71, 72, 73, 74, 8):
         if layer==71:
             for source,selector in characteristic_setters:
+                if views[source.ref].abilities_removed:continue
                 amount=sum(1 for obj in objects if matches(selector,obj,views[obj.ref],source))
                 view=views[source.ref]
                 views[source.ref]=replace(view,power=amount,toughness=amount,applied=view.applied+('characteristic_pt',))

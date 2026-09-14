@@ -12,6 +12,8 @@ from dataclasses import replace
 from types import MappingProxyType
 from .rules_state import ResourcePayment,RulesState,RulesObject,ObjectRef,Zone,ZoneMove,RulesViolation
 from .rules_characteristics import Characteristics, evaluate as evaluate_characteristics, base as base_characteristics, matches as matches_selector, condition_holds, characteristics_match, counters_match
+from .rules_rule_effects import RuleEffects
+from .rules_program import CountDistinctNames,WinGame,PlayerPermissions
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_choices import Option, ChoiceRequest, CounterAllocationRequest, PriorityBoundary, choice_capacity
 from .rules_attachments import AttachmentRules
@@ -44,8 +46,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=128
+class RulesKernel(RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=129
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -90,6 +92,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         self.regeneration_shields={};self.upkeep_history={p:0 for p in state.players}
         self.turn_history={'turn':state.turn_number,'attacked':[],'freerunning':[]}
         self.library_tops={}
+        self.declaration_mana=None
         self.resolution_cast=None
         self.mana_payment=None;self.draw_counts={};self.draw_count_turn=state.turn_number
         self.temporary_effects=[];self.counter_effects=[];self.library_observations={};self.last_known={};self.attachment_rules={};self.delayed_triggers=[];self.player_effects=[];self.trigger_limits={};self.trigger_limit_turn=state.turn_number
@@ -99,11 +102,25 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
     def revision(self):return f'{self.state.sequence}:{self._revision}'
 
     def definition(self,obj):
-        try:return self.definitions[obj.effective_definition]
+        try:program=self.definitions[obj.effective_definition]
         except KeyError as exc:raise UnsupportedRule('No supported program for '+obj.effective_definition) from exc
+        if obj.zone==Zone.BATTLEFIELD and hasattr(self,'temporary_effects'):
+            view=self.characteristics().get(obj.ref)
+            if view is None and obj.ref in self.last_known:view=self.last_known[obj.ref][1]
+            if view is not None and view.abilities_removed:
+                return replace(program,abilities=(),activated=(),continuous=(),entry_modifiers=(),entry_counters=(),
+                    replacements=(),cost_modifiers=(),target_restrictions=(),keywords=(),player_permissions=PlayerPermissions(),
+                    counter_replacements=(),life_gain_replacements=(),block_restrictions=(),tapped_mana_replacements=(),
+                    all_subtype_sets=(),entry_restrictions=(),casting_restrictions=(),characteristic_pt=None,entry_copy=None,enchant=None)
+        return program
 
-    def _trigger_abilities(self,source,kind):
-        return self._trigger_index[self.definition(source).definition_id].get(kind,())
+    def _trigger_abilities(self,source,kind,views=None):
+        if views is not None:
+            view=views.get(source.ref)
+            if view is not None and view.abilities_removed:return ()
+            return self._trigger_index[source.effective_definition].get(kind,())
+        program=self.definition(source)
+        return self._trigger_index[program.definition_id].get(kind,()) if program.abilities else ()
 
     def _id(self,prefix):self._serial+=1;return f'{prefix}-{self._serial}'
 
@@ -466,7 +483,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             for sources,lookback in ((before,True),(after,False)):
                 for source in sources:
                     if source.phased:continue
-                    for ability in self._trigger_abilities(source,'zone_changed'):
+                    for ability in self._trigger_abilities(source,'zone_changed',before_views if lookback else after_views):
                         if (ability.event.from_zone==Zone.BATTLEFIELD)!=lookback:continue
                         if self._matches(ability.event,source,event=event,views=before_views if lookback else after_views):
                             subject=event.before if lookback else event.after
@@ -611,6 +628,10 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         if proposal.destination!=Zone.BATTLEFIELD:return ()
         entering,view=entry_view
         result=[]
+        for source_ref,effect_id in view.riot:
+            key='riot:'+source_ref.card_id+'@'+str(source_ref.incarnation)+':'+effect_id
+            if key not in proposal.used:
+                result.append(ReplacementCandidate(key,'Riot: counter or haste','riot',3,entering.controller))
         sources=tuple(o for o in self.state.objects(Zone.BATTLEFIELD) if not o.phased)+(entering,)
         for source in sources:
             own=source.ref==entering.ref
@@ -649,7 +670,8 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                 if modifier.selector is None and (modifier.condition is None or self._condition_holds(modifier.condition,source)!=modifier.unless)}
             entry_view=self._proposal_view(proposal) if proposal.destination==Zone.BATTLEFIELD else None
             types=entry_view[1].types if entry_view is not None else self._proposal_types(proposal)
-            available = candidates(self.state, self.definitions, proposal, types,applicable)
+            available = candidates(self.state, self.definitions, proposal, types,applicable,
+                frozenset(ref for ref,view in self.characteristics().items() if view.abilities_removed))
             # Flashback follows this exact spell incarnation through every stack
             # departure, including counters, illegal targets and returns to hand.
             flashback_key=f'flashback:{proposal.before.ref.card_id}@{proposal.before.ref.incarnation}'
@@ -728,6 +750,14 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                     if accepted:
                         obj = self.state.get(chosen[0].ref)
                         reveal = (actor, obj.ref, self.definition(obj).name)
+            elif candidate.kind=='riot':
+                chosen=self._choose(step_key+':riot',proposal.controller,'riot',
+                    'Have this permanent enter with a +1/+1 counter, or gain haste.',
+                    (Option('counter','A +1/+1 counter'),Option('haste','Haste')),1,1)
+                if chosen[0].key=='counter':
+                    counts=dict(proposal.counters);counts['+1/+1']=counts.get('+1/+1',0)+1
+                    counters=tuple(sorted(counts.items()))
+                else:proposal=replace(proposal,riot_haste=True)
             elif candidate.kind=='entry_counters':
                 context={**frame,'source':candidate.source.to_json(),'controller':candidate.controller,
                     'chosen_x':proposal.before.cast_x if proposal.before.zone==Zone.STACK else 0}
@@ -822,7 +852,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             moves.append(ZoneMove(proposal.before.ref, proposal.destination,
                 proposal.controller if entering else proposal.before.owner,
                 proposal.copied_definition if entering else None,
-                frozenset(entry_flags) if entering else frozenset(), attached_to=attachments.get(index),
+                (frozenset(entry_flags)|({'riot_haste'} if proposal.riot_haste else set())) if entering else frozenset(), attached_to=attachments.get(index),
                 tapped=proposal.tapped if entering else False,counters=proposal.counters if entering else (),
                 copied_add_types=proposal.copied_add_types if entering else ()))
         # Timestamp choices matter when simultaneous entrants carry competing
@@ -898,6 +928,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
 
     def _quantity(self,value,frame):
         if type(value) is int:return value
+        if isinstance(value,CountDistinctNames):return len({self.definition(obj).name for obj in self._query(value.selector,frame)})
         if isinstance(value,PlayerStatistic):
             return self.state.life_gained_this_turn(frame['controller']) if value.statistic=='life_gained' else self.state.command_casts(frame['controller'])
         if isinstance(value,PaidCostStat):
@@ -1001,7 +1032,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             for ref in self._refs(frame,effect.subject):
                 try:obj=self.state.get(ref)
                 except RulesViolation:continue
-                if obj.zone==Zone.STACK and not any(f['spell'] and self._source(f).ref==ref and f.get('cannot_be_countered') for f in self.stack):refs.append(ref)
+                if obj.zone==Zone.STACK and not self._spell_uncounterable(ref):refs.append(ref)
             events=self._move(refs,effect.destination,frame,key,cause='counter')
             removed={e.before.ref for e in events}
             self.stack=[f for f in self.stack if not (f['spell'] and self._source(f).ref in removed)]
@@ -1260,6 +1291,11 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             self._produce_mana(controller,symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
         elif isinstance(effect,AddMana):
             self._produce_mana(controller,effect.symbols,tapped_for_mana=frame.get('tapped_for_mana',False))
+        elif isinstance(effect,WinGame):
+            if controller in self.state.live_players:
+                self.outcome={'kind':'win','winners':[controller],
+                    'departed':[p for p in self.state.players if p not in self.state.live_players]}
+                self.priority=None;self._event('game_finished',result=self.outcome)
         elif isinstance(effect,GainLife):
             amount=self._quantity(effect.amount,frame)
             amount=self._life_gain_amount(controller,amount)
@@ -1572,6 +1608,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                 self._collect_state_triggers()
                 if self._return_expired_exiles():continue
                 if self.announcement:self._continue_announcement();continue
+                if self._announcement_mana_waiting():return TurnActionBoundary(self.declaration_mana['actor'],'casting_mana',self.revision)
                 if self._payment_waiting():return self._payment_boundary()
                 if self._cast_waiting() or self._casting_mana_waiting():return self._cast_boundary()
                 if self.departure:self._continue_departure();continue
@@ -1608,6 +1645,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
                     elif self.resolution_cast:
                         self.resolving=self.resolution_cast['parent'];self.priority=None
                     continue
+                if self._announcement_mana_waiting():return TurnActionBoundary(self.declaration_mana['actor'],'casting_mana',self.revision)
                 if self.turn_schedule is not None and self.priority is None:
                     if self.phase=='declare_attackers' and self.active not in self.state.live_players:
                         self.combat=None;self._begin_phase('end_combat');continue
@@ -1639,7 +1677,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
     def snapshot(self):
         # Round-trip through JSON also detaches caller-visible dictionaries.
         value={'schema':self.CHECKPOINT_SCHEMA,'implementation':IMPLEMENTATION_ID,'bundle':self.bundle,'copy_programs':self.copy_programs,'state':self.state.snapshot(),'active':self.active,
-            'last_known':[{'object':obj.to_json(),'view':{**view.__dict__,**{name:sorted(getattr(view,name)) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':list(view.applied),'target_restrictions':encode(view.target_restrictions),'granted_abilities':encode(view.granted_abilities)}} for ref,(obj,view) in sorted(self.last_known.items(),key=lambda row:(row[0].card_id,row[0].incarnation))],
+            'last_known':[{'object':obj.to_json(),'view':{**view.__dict__,**{name:sorted(getattr(view,name)) for name in ('types','subtypes','keywords','supertypes','colors','goaded_by')},'riot':[[ref.to_json(),key] for ref,key in view.riot],'applied':list(view.applied),'target_restrictions':encode(view.target_restrictions),'granted_abilities':encode(view.granted_abilities)}} for ref,(obj,view) in sorted(self.last_known.items(),key=lambda row:(row[0].card_id,row[0].incarnation))],
             'temporary_effects':self.temporary_effects,'counter_effects':self.counter_effects,'library_observations':self.library_observations,'stack':self.stack,'resolving':self.resolving,'pending_triggers':self.pending_triggers,'placement':self.placement,
             'pending_choice':self.pending_choice.to_json() if self.pending_choice else None,'answers':self.answers,
             'accepted':self.accepted,'semantic_events':self.semantic_events,'priority':self.priority,'passes':self.passes,
@@ -1647,7 +1685,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'phase_links':self.phase_links,'object_notes':self.object_notes,
             'regeneration_shields':self.regeneration_shields,'upkeep_history':self.upkeep_history,'turn_history':self.turn_history,
-            'library_tops':self.library_tops,'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
+            'declaration_mana':self.declaration_mana,'library_tops':self.library_tops,'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1658,7 +1696,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'],copy_programs=value['copy_programs'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','library_tops','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
+        for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','declaration_mana','library_tops','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
         if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
             kernel.resolving=kernel.mana_payment['parent']
@@ -1666,7 +1704,7 @@ class RulesKernel(ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,Guar
             kernel.resolving=kernel.resolution_cast['parent']
         for row in value['last_known']:
             obj=RulesObject.from_json(row['object']);view=row['view']
-            kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))
+            kernel.last_known[obj.ref]=(obj,Characteristics(**{**view,**{name:frozenset(view[name]) for name in ('types','subtypes','keywords','supertypes','colors','goaded_by')},'riot':tuple((ObjectRef.from_json(ref),key) for ref,key in view['riot']),'applied':tuple(view['applied']),'mana_symbols':tuple(view['mana_symbols']),'target_restrictions':decode(view['target_restrictions']),'granted_abilities':decode(view['granted_abilities'])}))
         request=value['pending_choice']
         kernel.pending_choice=(CounterAllocationRequest if request['kind']=='counter_allocation' else ChoiceRequest).from_json(request) if request else None
         kernel._serial=value['serial'];kernel._revision=value['revision']

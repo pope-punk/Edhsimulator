@@ -113,6 +113,7 @@ class ResourcePayment:
     taps: tuple[ObjectRef, ...] = ()
     counters: tuple[tuple[ObjectRef,str,int], ...] = ()
     tagged_mana: tuple[tuple[str,str], ...] = ()
+    player_counters: tuple[tuple[str,int], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -371,6 +372,10 @@ class RulesState:
             for ref,kind,amount in payment.counters:
                 obj=self.get(ref);counts=dict(obj.counters);counts[kind]-=amount
                 self._objects[ref.card_id]=replace(obj,counters=tuple(sorted((k,n) for k,n in counts.items() if n)))
+            for kind,amount in payment.player_counters:
+                left=self._player_counters[payment.actor].get(kind,0)-amount
+                if left:self._player_counters[payment.actor][kind]=left
+                else:self._player_counters[payment.actor].pop(kind,None)
             self._sequence+=1
         if entry_life:
             for actor,amount in entry_life:
@@ -755,6 +760,13 @@ class RulesState:
             raise RulesViolation('Invalid resource payment')
         if type(payment.life) is not int or not 0<=payment.life<=self._life[payment.actor]:
             raise RulesViolation('Insufficient life for payment')
+        if (not isinstance(payment.player_counters,tuple)
+                or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0]
+                    or type(row[1]) is not int or row[1]<0 for row in payment.player_counters)
+                or len({kind for kind,_ in payment.player_counters})!=len(payment.player_counters)):
+            raise RulesViolation('Invalid player-counter payment')
+        if any(self._player_counters[payment.actor].get(kind,0)<amount for kind,amount in payment.player_counters):
+            raise RulesViolation('Insufficient player counters')
         if not isinstance(payment.mana,tuple) or any(not isinstance(row,tuple) or len(row)!=2 for row in payment.mana):
             raise RulesViolation('Invalid mana payment')
         symbols=[symbol for symbol,_ in payment.mana]

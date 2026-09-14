@@ -11,6 +11,7 @@ from .rules_guard import protection_matches
 from types import SimpleNamespace
 from . import block_declaration, combat_damage
 from .rules_state import ObjectRef, Zone, RulesViolation, ResourcePayment
+from .rules_casting import Payment,_mana_symbols_satisfied
 
 
 def uid(ref):return ref.card_id+'@'+str(ref.incarnation)
@@ -97,30 +98,70 @@ class CombatRules:
             rows.extend(row for group in self.combat['blocks'].values() for row in group)
         return frozenset(ObjectRef.from_json(row['ref']) for row in rows if self._combat_present(row))
 
-    def declare_attackers(self,actor,attackers,*,revision):
+    def _attack_rows(self,actor,attackers):
         if self.pending_choice or self.resolving:raise RulesViolation('Resolve the current choice first')
         if (self.turn_schedule is None or self.phase!='declare_attackers' or self.priority is not None
-                or actor!=self.active or revision!=self.revision):raise RulesViolation('Not the current attacker declaration')
+                or actor!=self.active):raise RulesViolation('Not the current attacker declaration')
         if not isinstance(attackers,dict):raise RulesViolation('Attackers require an explicit mapping')
-        rows=[];taps=[]
+        eligible={}
+        for obj in self.state.objects(Zone.BATTLEFIELD,controller=actor):
+            view=self.effective(obj.ref)
+            if (not obj.phased and not obj.tapped and combat_creature(view.types) and 'defender' not in view.keywords
+                    and ('haste' in view.keywords or self.state.ready_since_turn_start(obj.ref))):
+                eligible[obj.ref]=(obj,view)
+        rows=[];taps=[];total=0
         for ref,defender in attackers.items():
-            obj=self.state.get(ref);view=self.effective(ref)
-            if (obj.zone!=Zone.BATTLEFIELD or obj.phased or obj.tapped or obj.controller!=actor
-                    or not combat_creature(view.types) or 'defender' in view.keywords
-                    or defender not in self.state.live_players or defender==actor):raise RulesViolation('Illegal attacker or defender')
-            if 'haste' not in view.keywords and not self.state.ready_since_turn_start(ref):
-                raise RulesViolation('Attacker has not been continuously controlled since turn start')
+            if ref not in eligible or defender not in self.state.live_players or defender==actor:
+                raise RulesViolation('Illegal attacker or defender')
+            obj,view=eligible[ref]
             rows.append(self._combat_record(ref,defender=defender))
             if 'vigilance' not in view.keywords:taps.append(ref)
-        tap_observers=self._tap_observers(taps)
-        self.state.move((),'attack_taps',payment=ResourcePayment(actor,taps=tuple(taps)))
-        self.combat={'attackers':rows,'blocks':{},'blocked':[],'declared_any':bool(rows),
+            total+=self._attack_tax(defender)
+        # With this closed vocabulary each creature's requirements are independent.
+        # Paying an attack cost is optional. Among free destinations and the chosen
+        # paid destination, obey the maximum number of distinct goad requirements.
+        free=tuple(p for p in self.state.live_players if p!=actor and self._attack_tax(p)==0)
+        for ref,(_,view) in eligible.items():
+            goaders=view.goaded_by
+            if not goaders:continue
+            selected=attackers.get(ref)
+            choices=free+((selected,) if selected is not None else ())
+            score=lambda p:len(goaders)+sum(p!=g for g in goaders) if p is not None else 0
+            if score(selected)<max((score(p) for p in choices),default=0):
+                raise RulesViolation('Attack declaration does not satisfy the available goad requirements')
+        return rows,tuple(taps),total
+
+    def declare_attackers(self,actor,attackers,*,revision,payment=None):
+        if revision!=self.revision:raise RulesViolation('Stale attacker declaration')
+        rows,taps,total=self._attack_rows(actor,attackers)
+        payment=Payment() if payment is None else payment
+        if (not isinstance(payment,Payment) or payment.taps or payment.zone_costs or payment.convoke or payment.cost_order):
+            raise RulesViolation('Attack costs accept mana and authored mana abilities only')
+        trial=type(self).restore(self.snapshot(),self._base_definitions.values())
+        observers=trial._tap_observers(taps)
+        # CR 508.1f: attackers tap before mana abilities and payment. All of this
+        # happens on the trial; an incomplete plan or wrong payment commits nothing.
+        trial.state.move((),'attack_taps',payment=ResourcePayment(actor,taps=taps))
+        total=sum(trial._attack_tax(row['defender']) for row in rows)
+        trial._collect_tapped(taps,observers)
+        if payment.mana_actions:
+            if not total:raise RulesViolation('There is no attack mana payment to produce mana for')
+            trial._run_declaration_mana(actor,payment.mana_actions,'attack:'+revision)
+        resources=ResourcePayment(actor,payment.mana,tagged_mana=trial._tagged_resources(actor,payment.tagged_mana))
+        trial.state.validate_payment(resources)
+        if sum(dict(payment.mana).values())!=total:raise RulesViolation('Attack payment must match the locked total exactly')
+        trial.state.move((),'attack_payment',payment=resources)
+        trial.combat={'attackers':rows,'blocks':{},'blocked':[],'declared_any':bool(rows),
             'defender_index':0,'first_strikers':[],'had_first_step':False,'damage_pending':None,'damage_done':False}
-        if attackers:self._record_turn_fact('attacked',actor)
-        self._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row['defender']} for row in rows])
-        self._collect_tapped(taps,tap_observers)
-        for row in rows:self._collect_announcement('creature_attacks',self.state.get(ObjectRef.from_json(row['ref'])),actor,values={'defending_player':row['defender']})
-        self.priority=actor;self.passes=[]
+        trial._combat_prune()
+        if attackers:trial._record_turn_fact('attacked',actor)
+        trial._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row['defender']} for row in trial.combat['attackers']],
+            mana_paid=dict(payment.mana),attack_cost=total)
+        for row in trial.combat['attackers']:
+            trial._collect_announcement('creature_attacks',trial.state.get(ObjectRef.from_json(row['ref'])),actor,
+                values={'defending_player':row['defender']})
+        trial.priority=actor;trial.passes=[]
+        self._adopt_trial(trial)
         return self.advance()
 
     def _defenders(self):

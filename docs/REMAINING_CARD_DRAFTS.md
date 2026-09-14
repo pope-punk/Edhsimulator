@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **306 source-bound reviewed programs / 372 deck copies**. There are **28 cards / 28 deck
-copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**: seven drafts and 21 unstarted cards. Reviewed coverage is not production certification.
 
 ## Four-pass completion plan
 
@@ -52,7 +52,16 @@ family where useful. Group related validation and avoid redundant full-suite
 runs. All existing GitHub-only execution constraints remain in force, and the
 heartbeat remains active every 40 minutes.
 
-## Current cycle: resolution casting and top-library permissions
+## Current pass: payments, combat and continuous effects
+
+The seven Pass 1 programs are authored in the separate draft bundle with 80 new
+conformance methods. Hosted draft validation and complete source review are
+pending. Coverage remains 306 reviewed unique cards / 372 copies; the 28
+remaining cards comprise seven drafts and 21 unstarted cards. Pass 1 remains
+open through required reviewed-loader validation. See
+[the pass review](PAYMENTS_COMBAT_CARD_REVIEW.md). No local execution occurred.
+
+## Previous cycle: resolution casting and top-library permissions
 
 Rishkar's Expertise, Hidden Nursery, Apex Devastator and Oracle of Mul Daya
 have complete source-bound reviewed programs. Shared support covers suspended
