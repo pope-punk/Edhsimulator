@@ -77,7 +77,11 @@ bound into implementation identity. Existing games are not migrated.
 Draft validation passed **2,095 tests on each of Ubuntu and Windows**, plus
 syntax, complete installation and packaged assets, at
 `c723b4518af3555124ea1720778e5292d53fb17c` ([run 34860964382](https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382)).
-Required reviewed-loader validation is pending on the promotion commit.
+Required reviewed-loader validation passed **2,095 tests on each platform**, plus
+syntax, installation and packaged assets, at
+`28e3a603461793aea7acff0b9776a79488ba7352` ([run 34861920441](https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441)).
+The final result-recording commit changes only this review, the work order and
+inventory; tested code, programs and source references are unchanged.
 The new test file contains **58 methods**, bringing the suite to
 **2,095 tests per platform**. Checks cover printed costs, static filters,
 event qualification, source departure, exact mill arrivals, replacement behavior,
@@ -92,6 +96,13 @@ Initial hosted attempts exposed two missing kernel imports, then an incorrect
 test assumption that a ceased token remains archived. Both were corrected.
 The final draft also includes the attachment-type-loss regression. No failing
 check was disabled and no expected card behavior was weakened.
+
+## Coverage after this cycle
+
+**298 reviewed unique cards / 364 deck copies**, with **36 remaining unique cards
+/ 36 copies**, all unstarted and no drafts. **71 of the original 107** outstanding
+cards are now promoted. Coverage by deck is Omo 92/100, Reaminatour 87/100,
+Elenda 93/100 and Minsc & Boo 92/100. All prior 294 reviewed rows are unchanged.
 
 ## Next concrete work order
 

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "static_authoring_inventory",
-  "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
+  "base_commit": "28e3a603461793aea7acff0b9776a79488ba7352",
   "branch": "codex/remaining-card-programs",
   "production_ready": false,
   "local_python_executed": false,
@@ -352,16 +352,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "library-creatures-2026-09-14",
       "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
       "source_facts_sha256": "d71a7cccea38a8d4f21318069f24870713f24c88af9191882cd996da055d7ffd",
-      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:chaos-warp",
       "reviewed_definition": "catalog:chaos-warp",
       "draft_hosted_validation": {
         "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
         "run_id": 34860964382
+      },
+      "hosted_validation": {
+        "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+        "run_id": 34861920441
       }
     },
     {
@@ -1355,16 +1359,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "library-creatures-2026-09-14",
       "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
       "source_facts_sha256": "9ccdcf5c34639456d004add864425dee5d121ca5e8967481e616cc7752417fdd",
-      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:hakbal-of-the-surging-soul",
       "reviewed_definition": "catalog:hakbal-of-the-surging-soul",
       "draft_hosted_validation": {
         "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
         "run_id": 34860964382
+      },
+      "hosted_validation": {
+        "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+        "run_id": 34861920441
       }
     },
     {
@@ -1746,16 +1754,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "library-creatures-2026-09-14",
       "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
       "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566",
-      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:kodama-of-the-west-tree",
       "reviewed_definition": "catalog:kodama-of-the-west-tree",
       "draft_hosted_validation": {
         "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
         "run_id": 34860964382
+      },
+      "hosted_validation": {
+        "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+        "run_id": 34861920441
       }
     },
     {
@@ -2475,16 +2487,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "library-creatures-2026-09-14",
       "review_record": "docs/LIBRARY_CREATURE_CARD_REVIEW.md",
       "source_facts_sha256": "a0317571b9a621c9278439fc329ccabb1b68eb490c9411d1ee4b8e99597ce0dc",
-      "implementation_notes": "Complete source-bound program; draft conformance passed. Required reviewed-loader validation pending.",
+      "implementation_notes": "Complete source-bound reviewed program; corrected draft and required reviewed-loader checks passed on Ubuntu and Windows.",
       "previous_draft_definition": "draft:rampant-frogantua",
       "reviewed_definition": "catalog:rampant-frogantua",
       "draft_hosted_validation": {
         "commit": "c723b4518af3555124ea1720778e5292d53fb17c",
         "run_id": 34860964382
+      },
+      "hosted_validation": {
+        "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+        "run_id": 34861920441
       }
     },
     {
@@ -3470,9 +3486,9 @@
     "new_test_methods": 58,
     "runtime_checkpoint_schema": 126,
     "state_checkpoint_schema": 16,
-    "validation_status": "reviewed_loader_pending",
+    "validation_status": "passed",
     "unresolved_defects": [],
-    "review_work_remaining": "Required reviewed-loader hosted validation.",
+    "review_work_remaining": "",
     "shared_mechanics": [
       "Modified creature predicate and combat damage event snapshots",
       "Live lost-player modifiers and actual optional-mill results",
@@ -3604,6 +3620,39 @@
         }
       ],
       "inspected_commit": "c723b4518af3555124ea1720778e5292d53fb17c"
+    },
+    "hosted_validation": {
+      "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+      "run_id": 34861920441,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
+      "conclusion": "success",
+      "tests_per_platform": 2095,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104036054477,
+          "name": "verify (windows-latest)",
+          "tests": 2095,
+          "seconds": 435.159,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104036054678,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2095,
+          "seconds": 370.819,
+          "conclusion": "success"
+        }
+      ]
     }
   },
   "hosted_validation_history": [
@@ -4251,6 +4300,39 @@
           "name": "verify (ubuntu-latest)",
           "tests": 2095,
           "seconds": 381.077,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+      "run_id": 34861920441,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
+      "conclusion": "success",
+      "tests_per_platform": 2095,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104036054477,
+          "name": "verify (windows-latest)",
+          "tests": 2095,
+          "seconds": 435.159,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104036054678,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2095,
+          "seconds": 370.819,
           "conclusion": "success"
         }
       ]
@@ -6066,11 +6148,11 @@
     "selection_note": "Inspect current primitives before committing to the whole queue. These are candidates, not newly authored or completed cards. Reprioritize from actual difficulty and finish each selected card's printed behavior."
   },
   "hosted_validation": {
-    "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
-    "run_id": 34852043326,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
+    "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+    "run_id": 34861920441,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
     "conclusion": "success",
-    "tests_per_platform": 2037,
+    "tests_per_platform": 2095,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -6083,17 +6165,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104002142695,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2037,
-        "seconds": 280.551,
+        "job_id": 104036054477,
+        "name": "verify (windows-latest)",
+        "tests": 2095,
+        "seconds": 435.159,
         "conclusion": "success"
       },
       {
-        "job_id": 104002143012,
-        "name": "verify (windows-latest)",
-        "tests": 2037,
-        "seconds": 350.568,
+        "job_id": 104036054678,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2095,
+        "seconds": 370.819,
         "conclusion": "success"
       }
     ]
@@ -6193,25 +6275,25 @@
   },
   "completed_heartbeat_cycle": {
     "date": "2026-09-14",
-    "base_commit": "5fd2f0071f9bcb2d52996cd1b1537976d449ab5a",
+    "base_commit": "2b4264189953c1fb4453c2318e12d0e3dbecc29a",
     "cards": [
-      "fangs-of-kalonia",
-      "hydra-broodmaster",
-      "fanatic-of-rhonas",
-      "finale-of-revelation"
+      "kodama-of-the-west-tree",
+      "rampant-frogantua",
+      "hakbal-of-the-surging-soul",
+      "chaos-warp"
     ],
     "unique_cards_completed": 4,
     "deck_copies_completed": 4,
-    "new_test_methods": 64,
-    "reviewed_before": 290,
-    "reviewed_after": 294,
-    "remaining_after": 40,
+    "new_test_methods": 58,
+    "reviewed_before": 294,
+    "reviewed_after": 298,
+    "remaining_after": 36,
     "validation": {
-      "commit": "217fc9397506c8b5157c19a856b34c399f2ca447",
-      "run_id": 34852043326,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34852043326",
+      "commit": "28e3a603461793aea7acff0b9776a79488ba7352",
+      "run_id": 34861920441,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441",
       "conclusion": "success",
-      "tests_per_platform": 2037,
+      "tests_per_platform": 2095,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -6224,17 +6306,17 @@
       ],
       "jobs": [
         {
-          "job_id": 104002142695,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2037,
-          "seconds": 280.551,
+          "job_id": 104036054477,
+          "name": "verify (windows-latest)",
+          "tests": 2095,
+          "seconds": 435.159,
           "conclusion": "success"
         },
         {
-          "job_id": 104002143012,
-          "name": "verify (windows-latest)",
-          "tests": 2037,
-          "seconds": 350.568,
+          "job_id": 104036054678,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2095,
+          "seconds": 370.819,
           "conclusion": "success"
         }
       ]

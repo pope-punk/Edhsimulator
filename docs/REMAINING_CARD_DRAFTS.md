@@ -33,7 +33,11 @@ top-card permanent entry. Kernel/state schemas are **126/16**.
 The **58 new methods** passed hosted draft validation: **2,095 tests on each of
 Ubuntu and Windows**, plus syntax, installation and assets, at
 `c723b4518af3555124ea1720778e5292d53fb17c` ([run 34860964382](https://github.com/pope-punk/Edhsimulator/actions/runs/34860964382)).
-Required reviewed-loader validation is pending on this promotion commit.
+Required reviewed-loader validation passed **2,095 tests on each platform**, plus
+syntax, installation and assets, at
+`28e3a603461793aea7acff0b9776a79488ba7352` ([run 34861920441](https://github.com/pope-punk/Edhsimulator/actions/runs/34861920441)).
+The result-recording commit changes only documentation and inventory; runtime,
+programs, source references and tests are unchanged after validation.
 See [the current review](LIBRARY_CREATURE_CARD_REVIEW.md).
 No local project execution occurred.
 
