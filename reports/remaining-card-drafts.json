@@ -3238,7 +3238,7 @@
       "aggressive-biomancy"
     ],
     "cards_promoted": [],
-    "new_test_methods": 63,
+    "new_test_methods": 64,
     "runtime_checkpoint_schema": 123,
     "state_checkpoint_schema": 14,
     "validation_status": "draft_hosted_pending",
@@ -3279,6 +3279,21 @@
           "Target compiler failed to pass action X permission into characteristic filters, preventing the token test class from loading. Propagate allow_x and verify that non-X costs still reject those bounds.",
           "Draft inventory rows used an incorrect status label. Retain the established draft_written_review_pending status.",
           "Static fixture review also replaced an unsupported add_card setup argument with the existing ZoneMove entry attributes."
+        ]
+      },
+      {
+        "stage": "draft",
+        "commit": "ddc30dc51e2cf4e308af0d2c415ac8dbb5e5aa35",
+        "run_id": 34837749840,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837749840",
+        "conclusion": "failure",
+        "tests_run_windows": 1916,
+        "failures": 1,
+        "errors": 14,
+        "findings": [
+          "Carry chosen_x into the target-announcement context; resolution already uses the captured X. Add actor replay coverage.",
+          "Update the prior compiler test that documented X-target bounds as unsupported; keep unbound result quantities rejected and explicit non-X rejection coverage.",
+          "Fix fixture assumptions: use Llanowar Elves' produce-mana ability ID, automatic singleton selection and explicit zero base P/T for characteristic-defined fixtures."
         ]
       }
     ]

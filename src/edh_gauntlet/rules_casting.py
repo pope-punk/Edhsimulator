@@ -195,7 +195,7 @@ class CastingRules:
         maximum=x_value if isinstance(spec.maximum,ChosenX) else len(self.state.live_players) if spec.maximum is None else spec.maximum
         if not minimum <= len(targets) <= maximum or len(set(targets)) != len(targets):raise RulesViolation('Illegal announced targets')
         if not targets:return
-        legal = {o.ref if o.ref is not None else PlayerRef(o.player) for o in self._target_options(spec, {'source': source.to_json(), 'controller': actor})}
+        legal = {o.ref if o.ref is not None else PlayerRef(o.player) for o in self._target_options(spec, {'source': source.to_json(), 'controller': actor, 'chosen_x': x_value})}
         if not set(targets)<=legal:raise RulesViolation('Illegal announced targets')
         if spec.group_by_controller and len({ref.player if isinstance(ref,PlayerRef) else self.state.get(ref).controller for ref in targets}) != len(targets):
             raise RulesViolation('More than one target in a controller group')

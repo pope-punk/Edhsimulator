@@ -57,8 +57,8 @@ class DynamicTargetTests(unittest.TestCase):
         with self.assertRaises(RulesViolation):self.activate(self.targets[0])
         self.assertEqual(before,self.kernel.snapshot())
 
-    def test_target_bound_rejects_unbound_x_and_result_quantities(self):
-        for value in (ChosenX(),SelectedCount(),TargetStat(),EventAmount()):
+    def test_target_bound_rejects_unbound_result_quantities(self):
+        for value in (SelectedCount(),TargetStat(),EventAmount()):
             spec=TargetSpec(Selector(Zone.BATTLEFIELD,characteristics=(CharacteristicRange('mana_value',maximum=value),)))
             with self.assertRaises(RulesViolation):validate(CardProgram('bad','Bad',('Instant',),cast=CastSpec(CostSpec(ManaCost(x_symbols=1))),spell_targets=spec))
 

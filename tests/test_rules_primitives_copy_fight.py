@@ -8,6 +8,7 @@ from edh_gauntlet.rules_state import RulesState,RulesViolation,ObjectRef,Zone,Zo
 from edh_gauntlet.rules_kernel import RulesKernel
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_actor import project_actor
+from edh_gauntlet.rules_adapter import RulesActorAdapter
 from edh_gauntlet.rules_bundle import load_reviewed,digest,source_facts
 from edh_gauntlet.catalog import load_catalog
 
@@ -168,7 +169,7 @@ class CopyFightTests(unittest.TestCase):
     def test_copy_preserves_mana_cost_and_activated_abilities(self):
         self.game();elf=self.add('catalog:llanowar-elves');self.clone(elf);token=self.tokens()[0]
         self.assertEqual(1,self.kernel.effective(token.ref).mana_value)
-        self.state.start_turn('A');self.activate('mana',source=token.ref)
+        self.state.start_turn('A');self.activate('produce-mana',source=token.ref)
         self.assertEqual((('G',1),),self.state.mana_pool('A'))
 
     def test_copy_of_an_entry_copy_uses_its_copiable_values(self):
@@ -260,7 +261,7 @@ class CopyFightTests(unittest.TestCase):
         self.assertEqual({'Creature','Land'},view.types);self.assertEqual({'Forest','Zombie'},view.subtypes)
 
     def test_quarry_removes_characteristic_defining_power(self):
-        p=CardProgram('cp-star','Star',('Creature',),characteristic_pt=CountObjects(Selector(Zone.BATTLEFIELD,types=('Land',))))
+        p=CardProgram('cp-star','Star',('Creature',),power=0,toughness=0,characteristic_pt=CountObjects(Selector(Zone.BATTLEFIELD,types=('Land',))))
         self.game('lazotep-quarry',extra=(p,));self.quarry(p.definition_id,x=0)
         self.assertIsNone(self.kernel.definition(self.tokens()[0]).characteristic_pt)
         self.assertEqual((4,4),(self.kernel.effective(self.tokens()[0].ref).power,self.kernel.effective(self.tokens()[0].ref).toughness))
@@ -316,7 +317,7 @@ class CopyFightTests(unittest.TestCase):
 
     def test_fight_simultaneously_deals_both_powers(self):
         self.game();self.fx(self.body,Select(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),1,1,(Fight('source','selected'),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0])
+        self.assertIsNone(self.kernel.pending_choice)
         self.assertEqual(2,self.state.get(self.body).damage_marked);self.assertEqual(2,self.state.get(self.enemy).damage_marked)
 
     def test_fight_missing_first_creature_deals_no_damage(self):
@@ -327,7 +328,7 @@ class CopyFightTests(unittest.TestCase):
     def test_fight_noncreature_participant_prevents_both_halves(self):
         self.game();land=self.add('catalog:forest')
         self.fx(land,Select(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),1,1,(Fight('source','selected'),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0]);self.assertEqual(0,self.state.get(self.enemy).damage_marked)
+        self.assertIsNone(self.kernel.pending_choice);self.assertEqual(0,self.state.get(self.enemy).damage_marked)
 
     def test_fight_itself_deals_twice_power(self):
         p=CardProgram('cp-big','Big',('Creature',),power=2,toughness=8)
@@ -337,7 +338,7 @@ class CopyFightTests(unittest.TestCase):
         p=CardProgram('cp-negative','Negative',('Creature',),power=-2,toughness=5)
         self.game(extra=(p,));ref=self.add(p.definition_id)
         self.fx(ref,Select(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),1,1,(Fight('source','selected'),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0])
+        self.assertIsNone(self.kernel.pending_choice)
         self.assertEqual(0,self.state.get(self.enemy).damage_marked);self.assertEqual(2,self.state.get(ref).damage_marked)
 
     def test_copy_registry_preserves_base_bundle_and_read_only_maps(self):
@@ -382,6 +383,19 @@ class CopyFightTests(unittest.TestCase):
             with self.subTest(change=change),self.assertRaises(RulesViolation):
                 validate(CardProgram('bad','Bad',('Artifact',),spell_effects=(CopyTokens('source',**change),)))
 
+    def test_quarry_actor_replay_preserves_x_payment_and_copy(self):
+        self.game('lazotep-quarry');target=self.add('cp-body','A',Zone.GRAVEYARD);self.state.add_mana('A',tuple('CCCC'))
+        adapter=RulesActorAdapter(self.kernel);replay=RulesActorAdapter.replay(adapter.archive(),self.programs)
+        command={'kind':'activate','revision':self.kernel.revision,'action_id':'quarry-actor',
+            'source':self.source.to_json(),'ability_id':'copy','targets':[target.to_json()],'x_value':2,
+            'payment':Payment((('C',4),),zone_costs=(('desert',(self.source,)),)).to_json()}
+        for item in (adapter,replay):
+            item.submit('A',command)
+            while item.kernel.stack:item.kernel.pass_priority(item.kernel.priority)
+        self.assertEqual(self.kernel.snapshot(),replay.kernel.snapshot())
+        token=self.tokens()[0];self.assertEqual((4,4),(self.kernel.effective(token.ref).power,self.kernel.effective(token.ref).toughness))
+        self.assertEqual(2,self.kernel.action_receipts['quarry-actor']['action']['x_value'])
+
     def test_target_compiler_requires_x_cost_for_x_characteristic_bounds(self):
         selector=Selector(Zone.GRAVEYARD,types=('Creature',),relation='owned',
             characteristics=(CharacteristicRange('mana_value',ChosenX(),ChosenX()),))
@@ -407,7 +421,7 @@ class CopyFightTests(unittest.TestCase):
         p=CardProgram('cp-deadly','Deadly',('Creature',),power=1,toughness=5,keywords=('lifelink','deathtouch'))
         self.game(extra=(p,));ref=self.add(p.definition_id)
         self.fx(ref,Select(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),1,1,(Fight('source','selected'),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0])
+        self.assertIsNone(self.kernel.pending_choice)
         self.assertEqual(41,self.state.life('A'));self.assertEqual(2,self.state.get(ref).damage_marked)
         self.assertEqual(Zone.GRAVEYARD,self.state.get(self.state.current(self.enemy.card_id)).zone)
 
@@ -415,7 +429,7 @@ class CopyFightTests(unittest.TestCase):
         p=CardProgram('cp-lethal','Lethal',('Creature',),power=4,toughness=1)
         self.game(extra=(p,));ref=self.add(p.definition_id)
         self.fx(ref,Select(Selector(Zone.BATTLEFIELD,types=('Creature',),relation='opponent_controlled'),1,1,(Fight('source','selected'),)))
-        q=self.kernel.pending_choice;self.kernel.answer(q.request_id,q.actor,[0])
+        self.assertIsNone(self.kernel.pending_choice)
         self.assertEqual(Zone.GRAVEYARD,self.state.get(self.state.current(ref.card_id)).zone)
         self.assertEqual(Zone.GRAVEYARD,self.state.get(self.state.current(self.enemy.card_id)).zone)
 

@@ -63,11 +63,11 @@ cover Quarry's creature-type/color exceptions and both cards' retained entry beh
 
 ## Hosted validation
 
-The **63 new methods** cover source bindings, printed costs and targets, copies
+The **64 new methods** cover source bindings, printed costs and targets, copies
 of copies, changing land thresholds, source departure, phasing, copy exceptions,
 entry replacements and triggers, target legality, simultaneous fight, payment
 atomicity, token disappearance, public projection and checkpoint recovery.
-Expected full suite: **1,916 tests on each of Ubuntu and Windows**.
+Expected full suite: **1,917 tests on each of Ubuntu and Windows**.
 Draft and required reviewed-loader checks are pending.
 
 Initial [draft run 34837070723](https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723)
@@ -76,3 +76,10 @@ class-setup error. The compiler now carries the action's X permission into its
 target-characteristic filter, with a regression rejecting X bounds on non-X
 actions. The inventory uses the established pending-review label. A fixture also
 uses the existing zone-entry attributes rather than unsupported setup keywords.
+
+[Second draft run 34837749840](https://github.com/pope-punk/Edhsimulator/actions/runs/34837749840)
+ran 1,916 methods on Windows with one failure and fourteen errors. X is now
+also bound during target announcement. An actor replay checks Quarry's exact
+X, payment and copied result. The earlier unsupported-X expectation now permits
+bound X while preserving rejection of unbound results. Remaining errors came
+from fixture ability names, automatic singleton choices and explicit base P/T.

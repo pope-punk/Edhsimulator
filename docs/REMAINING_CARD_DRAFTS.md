@@ -33,8 +33,8 @@ entry behavior and restores from checked lineage. Copy exceptions remain
 copiable, while Helm's later haste remains separate. Biomancy reuses a shared
 simultaneous fight instruction. The prior 282 reviewed programs are unchanged.
 
-Kernel schema is **123**, state schema **14**. **63 new methods** bring the
-expected hosted suite to **1,916 tests per platform**. Draft and required
+Kernel schema is **123**, state schema **14**. **64 new methods** bring the
+expected hosted suite to **1,917 tests per platform**. Draft and required
 reviewed-loader checks are pending. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
 
 Next, reuse this foundation for Mirage Mirror, Thespian's Stage, March from
@@ -122,7 +122,7 @@ paid lands' derived subtypes. Necromancy composes existing ongoing effects and
 attachment rules to become an Aura. Karmic Guide's subsequent implementation is recorded above;
 Sage shares the existing payment and subtype machinery.
 
-Kernel schema is **120**, state schema **13**. The **63 new methods** now
+Kernel schema is **120**, state schema **13**. The **64 new methods** now
 use the reviewed loader. [Draft validation 34797317071](https://github.com/pope-punk/Edhsimulator/actions/runs/34797317071)
 passed **1,672 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `825827f67c5d3f4fc8397b6cede516d1d1b0862c`.
@@ -146,7 +146,7 @@ opponent-authored life/sacrifice payments and optional own-library searches by
 captured players. Actor packets preserve public phase groups and their return
 controllers. Volatile Fault shares the search work.
 
-Kernel schema is **119**, state schema **13**. The **63 new methods**
+Kernel schema is **119**, state schema **13**. The **64 new methods**
 now use the reviewed loader. [Draft validation 34791775813](https://github.com/pope-punk/Edhsimulator/actions/runs/34791775813)
 passed **1,609 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `df9c4f6e99310bc7fc5f42de12a1e2fc44e582e6`.
@@ -207,7 +207,7 @@ Existing continuous layers, replacement planning, counter costs and linked exile
 provide the remaining behavior.
 
 Kernel checkpoint schema is **117**; state schema remains **13**.
-The **63 new conformance methods** now use the reviewed loader.
+The **64 new conformance methods** now use the reviewed loader.
 [Draft validation 34782390422](https://github.com/pope-punk/Edhsimulator/actions/runs/34782390422)
 passed **1,499 tests on each of Ubuntu and Windows**, plus syntax, installation
 and packaged assets, at `bc189ee62527bf3655e16b7b54b7b361cc9ab145`.
