@@ -3,7 +3,7 @@
 Base: `3c6b2b548c677bc0a0f4326b878f7f390885e63d`, branch `codex/remaining-card-programs`.
 This is the second group of four in the continued eight-card batch. The four
 mana/convoke cards are in the reviewed library with successful hosted draft and reviewed-loader checks.
-These four token programs remain isolated drafts. No local project execution.
+These four token programs are source-bound in the reviewed library. No local project execution.
 
 ## Printed programs
 
@@ -68,7 +68,9 @@ of copies, changing land thresholds, source departure, phasing, copy exceptions,
 entry replacements and triggers, target legality, simultaneous fight, payment
 atomicity, token disappearance, public projection and checkpoint recovery.
 Expected full suite: **1,917 tests on each of Ubuntu and Windows**.
-Draft and required reviewed-loader checks are pending.
+[Draft validation 34838551887](https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887) passed **1917 tests on each platform**,
+plus source syntax, full installation and packaged assets, at `081eed81e1e1bf9e67d170269a1b52b051115711`.
+All new methods now use the reviewed loader; required reviewed-loader checks are pending.
 
 Initial [draft run 34837070723](https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723)
 ran 1,853 existing methods on Windows and found one inventory failure and one

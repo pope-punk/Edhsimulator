@@ -20,10 +20,9 @@ class CopyFightTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))['drafts']
-        cls.rows={r['card_id']:r for r in drafts if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(row['program'])) for key,row in cls.rows.items()}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,card='scute-swarm',zone=Zone.BATTLEFIELD,extra=()):
         body=CardProgram('cp-body','Body',('Creature',),subtypes=('Elf',),colors=('G',),power=2,toughness=3,
@@ -123,8 +122,8 @@ class CopyFightTests(unittest.TestCase):
         catalog={c.card_id:c for c in load_catalog(self.root/'data/catalog/cards.json')}
         self.assertEqual(set(CARDS),set(self.cards))
         for key,p in self.cards.items():
-            self.assertEqual('draft:'+key,p.definition_id)
-            self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+            self.assertEqual('catalog:'+key,p.definition_id)
+            self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
             self.assertEqual(p,validate(decode(encode(p))))
             for attr in ('types','subtypes','supertypes','colors'):
                 self.assertEqual(set(getattr(catalog[key].faces[0],attr)),set(getattr(p,attr)))

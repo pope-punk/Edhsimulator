@@ -7,21 +7,21 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 282,
-    "remaining_outside_reviewed_bundle": 52,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 286,
+    "remaining_outside_reviewed_bundle": 48,
+    "drafts_written": 0,
     "not_started_on_this_branch": 48,
-    "reviewed_bundle_copies": 348,
-    "draft_copies": 4,
+    "reviewed_bundle_copies": 352,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 55,
-    "remaining_outside_reviewed_bundle_copies": 52
+    "promoted_on_this_branch": 59,
+    "remaining_outside_reviewed_bundle_copies": 48
   },
   "cards": [
     {
       "card_id": "aggressive-biomancy",
       "name": "Aggressive Biomancy",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -36,13 +36,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "draft_reviewed",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:aggressive-biomancy",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed draft using durable copiable token values, copy exceptions, existing entry transactions and shared simultaneous fight; hosted draft and reviewed-loader checks pending."
+      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "previous_draft_definition": "draft:aggressive-biomancy",
+      "reviewed_definition": "catalog:aggressive-biomancy",
+      "draft_hosted_validation": {
+        "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+        "run_id": 34838551887
+      }
     },
     {
       "card_id": "alseid-of-life-s-bounty",
@@ -1317,7 +1322,7 @@
     {
       "card_id": "helm-of-the-host",
       "name": "Helm of the Host",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1332,13 +1337,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "draft_reviewed",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:helm-of-the-host",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "9d52634afc7db9e90e7e9ed64e565c83c6e06701bcabcad2f094979f43b009e4",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed draft using durable copiable token values, copy exceptions, existing entry transactions and shared simultaneous fight; hosted draft and reviewed-loader checks pending."
+      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "previous_draft_definition": "draft:helm-of-the-host",
+      "reviewed_definition": "catalog:helm-of-the-host",
+      "draft_hosted_validation": {
+        "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+        "run_id": 34838551887
+      }
     },
     {
       "card_id": "hidden-nursery",
@@ -1636,7 +1646,7 @@
     {
       "card_id": "lazotep-quarry",
       "name": "Lazotep Quarry",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1651,13 +1661,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "draft_reviewed",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:lazotep-quarry",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed draft using durable copiable token values, copy exceptions, existing entry transactions and shared simultaneous fight; hosted draft and reviewed-loader checks pending."
+      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "previous_draft_definition": "draft:lazotep-quarry",
+      "reviewed_definition": "catalog:lazotep-quarry",
+      "draft_hosted_validation": {
+        "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+        "run_id": 34838551887
+      }
     },
     {
       "card_id": "leonin-relic-warder",
@@ -2467,7 +2482,7 @@
     {
       "card_id": "scute-swarm",
       "name": "Scute Swarm",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2482,13 +2497,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "draft_reviewed",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:scute-swarm",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "89ae041eccf2ba6740a6f1fddfd306b9bd1d2e4c4dcba92b0501265a7708d28b",
       "batch": "token-copy-fight-2026-09-14",
       "review_record": "docs/TOKEN_COPY_FIGHT_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed draft using durable copiable token values, copy exceptions, existing entry transactions and shared simultaneous fight; hosted draft and reviewed-loader checks pending."
+      "implementation_notes": "Complete printed program, exact source binding and successful draft validation; required reviewed-loader checks pending.",
+      "previous_draft_definition": "draft:scute-swarm",
+      "reviewed_definition": "catalog:scute-swarm",
+      "draft_hosted_validation": {
+        "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+        "run_id": 34838551887
+      }
     },
     {
       "card_id": "shineshadow-snarl",
@@ -3237,13 +3257,18 @@
       "lazotep-quarry",
       "aggressive-biomancy"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "scute-swarm",
+      "helm-of-the-host",
+      "lazotep-quarry",
+      "aggressive-biomancy"
+    ],
     "new_test_methods": 64,
     "runtime_checkpoint_schema": 123,
     "state_checkpoint_schema": 14,
-    "validation_status": "draft_hosted_pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Hosted draft validation, promotion and required reviewed-loader validation on Ubuntu and Windows.",
+    "review_work_remaining": "Required reviewed-loader checks on Ubuntu and Windows.",
     "shared_mechanics": [
       "Deterministic immutable copiable token definitions and checked lineage manifests",
       "Normal token entry transactions, source last known information and copied entry abilities",
@@ -3296,7 +3321,24 @@
           "Fix fixture assumptions: use Llanowar Elves' produce-mana ability ID, automatic singleton selection and explicit zero base P/T for characteristic-defined fixtures."
         ]
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+      "run_id": 34838551887,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
+      "conclusion": "success",
+      "tests_per_platform": 1917,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -3729,6 +3771,53 @@
         "full distribution installation",
         "packaged assets",
         "reviewed-loader conformance"
+      ]
+    },
+    {
+      "stage": "draft",
+      "commit": "755b487545a26a9bb615a60b873f4bfd32828576",
+      "run_id": 34837070723,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837070723",
+      "conclusion": "failure",
+      "tests_run_windows": 1853,
+      "failures": 1,
+      "errors": 1,
+      "findings": [
+        "Target compiler failed to pass action X permission into characteristic filters, preventing the token test class from loading. Propagate allow_x and verify that non-X costs still reject those bounds.",
+        "Draft inventory rows used an incorrect status label. Retain the established draft_written_review_pending status.",
+        "Static fixture review also replaced an unsupported add_card setup argument with the existing ZoneMove entry attributes."
+      ]
+    },
+    {
+      "stage": "draft",
+      "commit": "ddc30dc51e2cf4e308af0d2c415ac8dbb5e5aa35",
+      "run_id": 34837749840,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34837749840",
+      "conclusion": "failure",
+      "tests_run_windows": 1916,
+      "failures": 1,
+      "errors": 14,
+      "findings": [
+        "Carry chosen_x into the target-announcement context; resolution already uses the captured X. Add actor replay coverage.",
+        "Update the prior compiler test that documented X-target bounds as unsupported; keep unbound result quantities rejected and explicit non-X rejection coverage.",
+        "Fix fixture assumptions: use Llanowar Elves' produce-mana ability ID, automatic singleton selection and explicit zero base P/T for characteristic-defined fixtures."
+      ]
+    },
+    {
+      "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+      "run_id": 34838551887,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
+      "conclusion": "success",
+      "tests_per_platform": 1917,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
       ]
     }
   ],
@@ -5098,11 +5187,11 @@
     "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
   },
   "draft_hosted_validation": {
-    "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
-    "run_id": 34835807492,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492",
+    "commit": "081eed81e1e1bf9e67d170269a1b52b051115711",
+    "run_id": 34838551887,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34838551887",
     "conclusion": "success",
-    "tests_per_platform": 1853,
+    "tests_per_platform": 1917,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -5111,7 +5200,7 @@
       "source syntax",
       "full distribution installation",
       "packaged assets",
-      "rules primitive conformance"
+      "draft conformance"
     ]
   }
 }
