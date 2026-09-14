@@ -9412,6 +9412,134 @@
       }
     },
     {
+      "card_id": "devouring-light",
+      "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping, shared-rule review and source references are recorded in docs/MANA_CONVOKE_CARD_REVIEW.md. Hosted coverage includes current land mana capabilities, recursive queries, exact mixed convoke payment, complete Horizon abilities, actor privacy and replay. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:devouring-light",
+        "name": "Devouring Light",
+        "types": [
+          "Instant"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "Move",
+            "subject": "target",
+            "destination": {
+              "zone": "exile"
+            },
+            "controller": "owner",
+            "tapped": false,
+            "library_position": null,
+            "counters": []
+          }
+        ],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [
+              "Creature"
+            ],
+            "relation": "any",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": null,
+          "combat": "attacking_or_blocking",
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 3,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "ConvokeCast",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 1,
+              "symbols": [
+                "W",
+                "W"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "instant",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "W"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "diabolic-tutor",
       "source_facts_sha256": "0077b8bd48a0009dab3d4b691203ffa345ca77f24df94a82f63365dc6252a5ec",
       "scope": "all_printed_faces",
@@ -12363,6 +12491,92 @@
       }
     },
     {
+      "card_id": "exotic-orchard",
+      "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping, shared-rule review and source references are recorded in docs/MANA_CONVOKE_CARD_REVIEW.md. Hosted coverage includes current land mana capabilities, recursive queries, exact mixed convoke payment, complete Horizon abilities, actor privacy and replay. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:exotic-orchard",
+        "name": "Exotic Orchard",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "LandMana",
+                "relation": "opponent_controlled",
+                "colors_only": true
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
       "card_id": "expedition-map",
       "source_facts_sha256": "eb849326911e115e7d831e2b07b4ad36a5a35bb460066f7de8d2a45291f3a531",
       "scope": "all_printed_faces",
@@ -13387,6 +13601,120 @@
         "colors": [
           "W"
         ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "fellwar-stone",
+      "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping, shared-rule review and source references are recorded in docs/MANA_CONVOKE_CARD_REVIEW.md. Hosted coverage includes current land mana capabilities, recursive queries, exact mixed convoke payment, complete Horizon abilities, actor privacy and replay. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:fellwar-stone",
+        "name": "Fellwar Stone",
+        "types": [
+          "Artifact"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "LandMana",
+                "relation": "opponent_controlled",
+                "colors_only": true
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,
@@ -18513,6 +18841,207 @@
           "W",
           "B"
         ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "horizon-of-progress",
+      "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16",
+      "scope": "all_printed_faces",
+      "review_basis": "Complete printed-face mapping, shared-rule review and source references are recorded in docs/MANA_CONVOKE_CARD_REVIEW.md. Hosted coverage includes current land mana capabilities, recursive queries, exact mixed convoke payment, complete Horizon abilities, actor privacy and replay. Production admission remains separate.",
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "catalog:horizon-of-progress",
+        "name": "Horizon of Progress",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 1,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "LandMana",
+                "relation": "controlled",
+                "colors_only": false
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "place-land",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 3,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Select",
+                "selector": {
+                  "node": "Selector",
+                  "zone": {
+                    "zone": "hand"
+                  },
+                  "types": [
+                    "Land"
+                  ],
+                  "relation": "owned",
+                  "exclude_source": false,
+                  "subtypes": [],
+                  "excluded_subtypes": [],
+                  "supertypes": [],
+                  "any_types": [],
+                  "excluded_types": [],
+                  "any_subtypes": [],
+                  "characteristics": [],
+                  "commander": null,
+                  "tapped": null,
+                  "counters": [],
+                  "colors": [],
+                  "any_colors": [],
+                  "excluded_colors": []
+                },
+                "minimum": 0,
+                "maximum": 1,
+                "effects": [
+                  {
+                    "node": "Move",
+                    "subject": "selected",
+                    "destination": {
+                      "zone": "battlefield"
+                    },
+                    "controller": "effect",
+                    "tapped": true,
+                    "library_position": null,
+                    "counters": []
+                  }
+                ],
+                "ordered": false,
+                "group_by_controller": false
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "draw",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 1,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "sacrifice-source",
+                  "kind": "sacrifice",
+                  "selector": null,
+                  "count": 1
+                }
+              ],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Draw",
+                "amount": 1,
+                "players": "controller"
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
         "modal": null,
         "entry_copy_tapped": false,
         "characteristic_pt": null,

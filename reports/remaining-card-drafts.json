@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 278,
-    "remaining_outside_reviewed_bundle": 56,
-    "drafts_written": 4,
+    "reviewed_bundle_unique": 282,
+    "remaining_outside_reviewed_bundle": 52,
+    "drafts_written": 0,
     "not_started_on_this_branch": 52,
-    "reviewed_bundle_copies": 343,
-    "draft_copies": 5,
+    "reviewed_bundle_copies": 348,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 51,
-    "remaining_outside_reviewed_bundle_copies": 57
+    "promoted_on_this_branch": 55,
+    "remaining_outside_reviewed_bundle_copies": 52
   },
   "cards": [
     {
@@ -610,7 +610,7 @@
     {
       "card_id": "devouring-light",
       "name": "Devouring Light",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -624,11 +624,25 @@
           "text": "Convoke\nExile target attacking or blocking creature."
         }
       ],
-      "draft_definition": "draft:devouring-light",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e",
-      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
+      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "mana-convoke-2026-09-14",
+      "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:devouring-light",
+      "reviewed_definition": "catalog:devouring-light",
+      "draft_hosted_validation": {
+        "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+        "run_id": 34835807492
+      },
+      "shared_mechanics": [
+        "LandMana",
+        "ConvokeCast",
+        "Shared mana replacement transform",
+        "Authored convoke contributions"
+      ]
     },
     {
       "card_id": "dimir-house-guard",
@@ -775,7 +789,7 @@
     {
       "card_id": "exotic-orchard",
       "name": "Exotic Orchard",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -789,11 +803,25 @@
           "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
         }
       ],
-      "draft_definition": "draft:exotic-orchard",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c",
-      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
+      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "mana-convoke-2026-09-14",
+      "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:exotic-orchard",
+      "reviewed_definition": "catalog:exotic-orchard",
+      "draft_hosted_validation": {
+        "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+        "run_id": 34835807492
+      },
+      "shared_mechanics": [
+        "LandMana",
+        "ConvokeCast",
+        "Shared mana replacement transform",
+        "Authored convoke contributions"
+      ]
     },
     {
       "card_id": "fanatic-of-rhonas",
@@ -880,7 +908,7 @@
     {
       "card_id": "fellwar-stone",
       "name": "Fellwar Stone",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -899,11 +927,25 @@
           "text": "{T}: Add one mana of any color that a land an opponent controls could produce."
         }
       ],
-      "draft_definition": "draft:fellwar-stone",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
-      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
+      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "mana-convoke-2026-09-14",
+      "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:fellwar-stone",
+      "reviewed_definition": "catalog:fellwar-stone",
+      "draft_hosted_validation": {
+        "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+        "run_id": 34835807492
+      },
+      "shared_mechanics": [
+        "LandMana",
+        "ConvokeCast",
+        "Shared mana replacement transform",
+        "Authored convoke contributions"
+      ]
     },
     {
       "card_id": "finale-of-revelation",
@@ -1291,7 +1333,7 @@
     {
       "card_id": "horizon-of-progress",
       "name": "Horizon of Progress",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1305,11 +1347,25 @@
           "text": "{T}, Pay 1 life: Add one mana of any type that a land you control could produce.\n{3}, {T}: You may put a land card from your hand onto the battlefield tapped.\n{1}, {T}, Sacrifice this land: Draw a card."
         }
       ],
-      "draft_definition": "draft:horizon-of-progress",
-      "rules_review_status": "printed_behavior_mapped",
-      "hosted_validation_status": "pending",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "reviewed_loader_pending",
       "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16",
-      "implementation_notes": "Complete printed program authored; see docs/MANA_CONVOKE_CARD_REVIEW.md for shared implementation and hosted requirements."
+      "implementation_notes": "Complete printed program with exact source binding; draft checks passed, required reviewed-loader validation pending.",
+      "authoring_status": "complete_printed_program",
+      "batch": "mana-convoke-2026-09-14",
+      "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md",
+      "previous_draft_definition": "draft:horizon-of-progress",
+      "reviewed_definition": "catalog:horizon-of-progress",
+      "draft_hosted_validation": {
+        "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+        "run_id": 34835807492
+      },
+      "shared_mechanics": [
+        "LandMana",
+        "ConvokeCast",
+        "Shared mana replacement transform",
+        "Authored convoke contributions"
+      ]
     },
     {
       "card_id": "hydra-broodmaster",
@@ -3133,7 +3189,12 @@
       "horizon-of-progress",
       "devouring-light"
     ],
-    "cards_promoted": [],
+    "cards_promoted": [
+      "exotic-orchard",
+      "fellwar-stone",
+      "horizon-of-progress",
+      "devouring-light"
+    ],
     "shared_mechanics": [
       "Pure current-land mana capability queries with least fixed-point recursion",
       "Shared actual and hypothetical mana replacement transformation",
@@ -3144,9 +3205,9 @@
     "runtime_checkpoint_schema": 122,
     "state_checkpoint_schema": 14,
     "new_test_methods": 74,
-    "validation_status": "draft_hosted_pending",
+    "validation_status": "reviewed_loader_pending",
     "unresolved_defects": [],
-    "review_work_remaining": "Run corrected hosted draft validation and then required source-bound reviewed-loader validation on Ubuntu and Windows.",
+    "review_work_remaining": "Complete required Ubuntu/Windows reviewed-loader checks.",
     "selection_note": "Complete the three could-produce mana cards and Devouring Light together. Two shared interpreters require broad payment, recursion, source and replay coverage; the four token-copy cards remain a coherent next family.",
     "next_batch": [
       "scute-swarm",
@@ -3217,7 +3278,24 @@
         "change": "No tapped-entry restriction; {T}: Add {C}; empty color identity.",
         "review_record": "docs/MANA_CONVOKE_CARD_REVIEW.md"
       }
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+      "run_id": 34835807492,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492",
+      "conclusion": "success",
+      "tests_per_platform": 1853,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "rules primitive conformance"
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -3620,6 +3698,20 @@
       "limitation": "Both full suites passed, but subsequent independent source review found Jyoti's negative +X/+X expectation incorrect under CR 107.1b. Fresh draft validation is required for the corrected program and test.",
       "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801536529",
       "resolution_commit": "f7aa71651971da75381805bbbb30a04b59226bd5"
+    },
+    {
+      "stage": "draft",
+      "commit": "e5c95dd839f6cc2d363ebaff14e500ea2a3c98d6",
+      "run_id": 34805862822,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34805862822",
+      "conclusion": "failure",
+      "tests_run_ubuntu": 1851,
+      "failures": 1,
+      "errors": 2,
+      "findings": [
+        "Two scenario helper errors: reopen the unbound priority window after an empty stack before continuing.",
+        "Baldur's Gate source-data defect: official Wizards face has no tapped-entry clause and produces colorless mana. Correct reference, annotations, regenerated catalog, source-bound program and regression expectations together."
+      ]
     }
   ],
   "cycle_history": [
@@ -4854,16 +4946,20 @@
     "scope": "All 278 source-bound reviewed programs, including all eight new cards; all 107 new methods through the reviewed loader; complete promotion/source audit, protection, regeneration, echo, fear, transmute, raid, freerunning, life-gain and commander history, payments, attachments, combat, privacy, checkpoint/replay, syntax, installation and packaged assets; no production certification"
   },
   "draft_hosted_validation": {
-    "commit": "f7aa71651971da75381805bbbb30a04b59226bd5",
-    "run_id": 34801795555,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34801795555",
+    "commit": "b5a59145faa7bee3dba851c53af173ddcbd35004",
+    "run_id": 34835807492,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492",
+    "conclusion": "success",
+    "tests_per_platform": 1853,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
     ],
-    "tests_per_platform": 1779,
-    "new_test_methods": 107,
-    "conclusion": "success",
-    "scope": "All 270 prior reviewed programs and eight isolated complete drafts, including corrected Jyoti negative-power semantics; full rules primitive conformance, syntax, installation and packaged assets; no production certification"
+    "checks": [
+      "source syntax",
+      "full distribution installation",
+      "packaged assets",
+      "rules primitive conformance"
+    ]
   }
 }

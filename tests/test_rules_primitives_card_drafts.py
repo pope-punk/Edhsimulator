@@ -12,6 +12,7 @@ from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'exotic-orchard', 'fellwar-stone', 'horizon-of-progress', 'devouring-light',
     'karmic-guide', 'alseid-of-life-s-bounty', 'fanatical-devotion', 'pongify', 'dimir-house-guard', 'midnight-snack', 'restart-sequence', 'jyoti-moag-ancient',
     'necromancy', 'nullpriest-of-oblivion', 'sigarda-s-splendor', 'wonderscape-sage',
     'talon-gates-of-madara', 'desert-warfare', 'indulgent-tormentor', 'volatile-fault',
@@ -64,7 +65,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(51, len(self.cards))
+        self.assertEqual(55, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):

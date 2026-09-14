@@ -5,8 +5,8 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**278 source-bound reviewed programs / 343 deck copies**. There are **56 cards / 57 deck
-copies outside the reviewed bundle**, four authored drafts and 52 unstarted. Reviewed coverage is not production certification.
+**282 source-bound reviewed programs / 348 deck copies**. There are **52 cards / 52 deck
+copies outside the reviewed bundle**, all unstarted, and no outstanding drafts. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -25,23 +25,29 @@ successful hosted validation.
 ## Current cycle: mana capabilities and convoke
 
 Exotic Orchard, Fellwar Stone, Horizon of Progress and Devouring Light have
-complete printed programs in the isolated draft bundle. This cycle implements
+complete printed review and exact source bindings in the reviewed library. This cycle implements
 two shared interpreters: current-land mana capabilities, including recursive
 dependencies, and authenticated convoke payment against the final spell cost.
 Of the prior 278 reviewed programs, 277 are unchanged. Baldur's Gate has a
 source-verified correction to untapped entry and colorless base mana; it does
 not count toward the new cards.
 
-Kernel schema is **122**, state schema **14**. The **74 new methods** are ready
-for hosted draft and required reviewed-loader validation: **1,853 tests per
-platform** are expected. Source review covers CR 106.7 and 702.51, Horizon's
-complete three-ability face, replacement outcomes, payment atomicity and privacy.
-See [the review](MANA_CONVOKE_CARD_REVIEW.md).
+Kernel schema is **122**, state schema **14**. The **74 new methods** now use
+the reviewed loader. [Draft validation 34835807492](https://github.com/pope-punk/Edhsimulator/actions/runs/34835807492)
+passed **1853 tests on each of Ubuntu and Windows**, plus syntax, installation
+and packaged assets, at `b5a59145faa7bee3dba851c53af173ddcbd35004`.
+Required reviewed-loader checks are pending. See [the review](MANA_CONVOKE_CARD_REVIEW.md).
 
-After finishing both validation stages, continue Scute Swarm, Helm of the Host,
-Lazotep Quarry and Aggressive Biomancy with durable copiable token snapshots.
-The work order below retains the implementation preparation. All four token
-cards remain unstarted. No local execution, game migration or production admission.
+Continue **Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**
+with durable copiable token snapshots, copied entry behavior and copy exceptions.
+Keep Helm's later haste grant separate from its nonlegendary copy values. Reuse
+the existing entry transaction, explicit created-token bindings, X costs, targets
+and creature/Desert sacrifices. Biomancy also needs simultaneous fight damage
+with both creatures still present (CR 701.14). The immutable base definition and
+trigger registries require deterministic, checkpointed derived copy programs.
+All four remain unstarted.
+
+No local execution, game migration or production admission.
 
 ## Previous cycle: eight cards sharing guards and history
 
@@ -74,7 +80,7 @@ See [the cycle review](GUARD_HISTORY_CARD_REVIEW.md).
 Refresh the branch and inventory, then choose complete compatible families from
 **Exotic Orchard, Fellwar Stone, Horizon of Progress, Devouring Light,
 Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy**.
-The first four now have drafts in the current cycle; the four token-copy cards
+The first four are complete in the current cycle; the four token-copy cards
 remain unstarted.
 
 - Orchard, Stone and Horizon need a shared query for mana that derived land
