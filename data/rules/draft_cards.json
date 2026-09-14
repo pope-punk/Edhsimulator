@@ -3,5 +3,1006 @@
   "status": "unvalidated_draft",
   "base_commit": "5285058b45badafddf7fa740ef6ef377deb5e75a",
   "production_ready": false,
-  "drafts": []
+  "drafts": [
+    {
+      "card_id": "scute-swarm",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "scute-swarm",
+        "name": "Scute Swarm",
+        "color_identity": [
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "scute-swarm",
+            "oracle_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
+            "type_line": "Creature \u2014 Insect",
+            "mana_cost": "{2}{G}",
+            "power": 1,
+            "toughness": 1,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "G"
+            ]
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:scute-swarm",
+        "name": "Scute Swarm",
+        "types": [
+          "Creature"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "landfall",
+            "event": {
+              "node": "EventPattern",
+              "kind": "zone_changed",
+              "from_zone": null,
+              "to_zone": {
+                "zone": "battlefield"
+              },
+              "subject": "any",
+              "types": [
+                "Land"
+              ],
+              "controller_only": true,
+              "step": null,
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "IfCondition",
+                "condition": {
+                  "node": "CountCondition",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [
+                      "Land"
+                    ],
+                    "relation": "controlled",
+                    "exclude_source": false,
+                    "subtypes": [],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  },
+                  "minimum": 6
+                },
+                "effects": [
+                  {
+                    "node": "CopyTokens",
+                    "subject": "source",
+                    "amount": 1,
+                    "nonlegendary": false,
+                    "power": null,
+                    "toughness": null,
+                    "colors": null,
+                    "creature_types": null,
+                    "abilities": [],
+                    "effects": []
+                  }
+                ],
+                "otherwise": [
+                  {
+                    "node": "CreateTokens",
+                    "token": {
+                      "node": "CardProgram",
+                      "definition_id": "token:insect-1-1-green",
+                      "name": "Insect Token",
+                      "types": [
+                        "Creature"
+                      ],
+                      "abilities": [],
+                      "spell_effects": [],
+                      "spell_targets": null,
+                      "entry_copy": null,
+                      "replacements": [],
+                      "enchant": null,
+                      "subtypes": [
+                        "Insect"
+                      ],
+                      "mana_value": 0,
+                      "power": 1,
+                      "toughness": 1,
+                      "continuous": [],
+                      "cast": null,
+                      "activated": [],
+                      "cost_modifiers": [],
+                      "target_restrictions": [],
+                      "keywords": [],
+                      "supertypes": [],
+                      "entry_modifiers": [],
+                      "player_permissions": {
+                        "node": "PlayerPermissions",
+                        "additional_land_plays": 0,
+                        "no_maximum_hand_size": false,
+                        "land_zones": []
+                      },
+                      "counter_replacements": [],
+                      "entry_counters": [],
+                      "colors": [
+                        "G"
+                      ],
+                      "modal": null,
+                      "entry_copy_tapped": false,
+                      "characteristic_pt": null,
+                      "life_gain_replacements": [],
+                      "block_restrictions": [],
+                      "tapped_mana_replacements": [],
+                      "all_subtype_sets": [],
+                      "entry_restrictions": [],
+                      "casting_restrictions": [],
+                      "entry_copy_add_types": []
+                    },
+                    "amount": 1,
+                    "players": "controller"
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Insect"
+        ],
+        "mana_value": 3,
+        "power": 1,
+        "toughness": 1,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 2,
+              "symbols": [
+                "G"
+              ],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "helm-of-the-host",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "helm-of-the-host",
+        "name": "Helm of the Host",
+        "color_identity": [],
+        "faces": [
+          {
+            "face_id": "helm-of-the-host",
+            "oracle_text": "At the beginning of combat on your turn, create a token that's a copy of equipped creature, except the token isn't legendary if equipped creature is legendary. That token gains haste.\nEquip {5}",
+            "type_line": "Legendary Artifact \u2014 Equipment",
+            "mana_cost": "{4}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": []
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:helm-of-the-host",
+        "name": "Helm of the Host",
+        "types": [
+          "Artifact"
+        ],
+        "abilities": [
+          {
+            "node": "AbilityProgram",
+            "ability_id": "combat-copy",
+            "event": {
+              "node": "EventPattern",
+              "kind": "step_began",
+              "from_zone": null,
+              "to_zone": null,
+              "subject": "any",
+              "types": [],
+              "controller_only": true,
+              "step": "begin_combat",
+              "counter_kind": null,
+              "recipient_relation": "any",
+              "characteristics": [],
+              "any_types": [],
+              "exclude_source": false,
+              "counters": []
+            },
+            "effects": [
+              {
+                "node": "CopyTokens",
+                "subject": "equipped",
+                "amount": 1,
+                "nonlegendary": true,
+                "power": null,
+                "toughness": null,
+                "colors": null,
+                "creature_types": null,
+                "abilities": [],
+                "effects": [
+                  {
+                    "node": "OngoingEffect",
+                    "subject": "moved",
+                    "changes": [
+                      {
+                        "node": "AddKeywords",
+                        "keywords": [
+                          "haste"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "targets": null,
+            "source_must_remain": null,
+            "intervening_if": null,
+            "trigger_limit": null,
+            "occurrence_condition": null,
+            "optional_once_per_turn": false
+          }
+        ],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Equipment"
+        ],
+        "mana_value": 4,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 4,
+              "symbols": [],
+              "x_symbols": 0
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "equip",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 5,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": false,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Attach",
+                "subject": "source",
+                "to": "target"
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "battlefield"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "controlled",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "timing": "sorcery",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [
+          "Legendary"
+        ],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "lazotep-quarry",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "lazotep-quarry",
+        "name": "Lazotep Quarry",
+        "color_identity": [],
+        "faces": [
+          {
+            "face_id": "lazotep-quarry",
+            "oracle_text": "{T}: Add {C}.\n{T}, Sacrifice a creature: Add one mana of any color.\n{X}{2}, {T}, Sacrifice a Desert: Exile target creature card with mana value X from your graveyard. Create a token that's a copy of it, except it's a 4/4 black Zombie. Activate only as a sorcery.",
+            "type_line": "Land \u2014 Desert",
+            "mana_cost": "\u2014",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": []
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:lazotep-quarry",
+        "name": "Lazotep Quarry",
+        "types": [
+          "Land"
+        ],
+        "abilities": [],
+        "spell_effects": [],
+        "spell_targets": null,
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [
+          "Desert"
+        ],
+        "mana_value": 0,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": null,
+        "activated": [
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "AddMana",
+                "symbols": [
+                  "C"
+                ]
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "creature-mana",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 0,
+                "symbols": [],
+                "x_symbols": 0
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "creature",
+                  "kind": "sacrifice",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [
+                      "Creature"
+                    ],
+                    "relation": "controlled",
+                    "exclude_source": false,
+                    "subtypes": [],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  },
+                  "count": 1
+                }
+              ],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "ChooseMana",
+                "options": [
+                  [
+                    "W"
+                  ],
+                  [
+                    "U"
+                  ],
+                  [
+                    "B"
+                  ],
+                  [
+                    "R"
+                  ],
+                  [
+                    "G"
+                  ]
+                ]
+              }
+            ],
+            "targets": null,
+            "timing": "instant",
+            "mana_ability": true,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          },
+          {
+            "node": "ActivatedProgram",
+            "ability_id": "copy",
+            "cost": {
+              "node": "CostSpec",
+              "mana": {
+                "node": "ManaCost",
+                "generic": 2,
+                "symbols": [],
+                "x_symbols": 1
+              },
+              "life": 0,
+              "tap_source": true,
+              "tap_selector": null,
+              "tap_count": 0,
+              "zone_costs": [
+                {
+                  "node": "ZoneCost",
+                  "cost_id": "desert",
+                  "kind": "sacrifice",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [],
+                    "relation": "controlled",
+                    "exclude_source": false,
+                    "subtypes": [
+                      "Desert"
+                    ],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  },
+                  "count": 1
+                }
+              ],
+              "counter_costs": []
+            },
+            "effects": [
+              {
+                "node": "Move",
+                "subject": "target",
+                "destination": {
+                  "zone": "exile"
+                },
+                "controller": "effect",
+                "tapped": false,
+                "library_position": null,
+                "counters": []
+              },
+              {
+                "node": "CopyTokens",
+                "subject": "target",
+                "amount": 1,
+                "nonlegendary": false,
+                "power": 4,
+                "toughness": 4,
+                "colors": [
+                  "B"
+                ],
+                "creature_types": [
+                  "Zombie"
+                ],
+                "abilities": [],
+                "effects": []
+              }
+            ],
+            "targets": {
+              "node": "TargetSpec",
+              "selector": {
+                "node": "Selector",
+                "zone": {
+                  "zone": "graveyard"
+                },
+                "types": [
+                  "Creature"
+                ],
+                "relation": "owned",
+                "exclude_source": false,
+                "subtypes": [],
+                "excluded_subtypes": [],
+                "supertypes": [],
+                "any_types": [],
+                "excluded_types": [],
+                "any_subtypes": [],
+                "characteristics": [
+                  {
+                    "node": "CharacteristicRange",
+                    "statistic": "mana_value",
+                    "minimum": {
+                      "node": "ChosenX"
+                    },
+                    "maximum": {
+                      "node": "ChosenX"
+                    }
+                  }
+                ],
+                "commander": null,
+                "tapped": null,
+                "counters": [],
+                "colors": [],
+                "any_colors": [],
+                "excluded_colors": []
+              },
+              "minimum": 1,
+              "maximum": 1,
+              "group_by_controller": false,
+              "players": null,
+              "combat": null,
+              "groups": []
+            },
+            "timing": "sorcery",
+            "mana_ability": false,
+            "zone": {
+              "zone": "battlefield"
+            },
+            "minimum_x": 0,
+            "generic_reduction": 0
+          }
+        ],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    },
+    {
+      "card_id": "aggressive-biomancy",
+      "status": "unvalidated_draft",
+      "scope": "all_printed_faces",
+      "source_facts": {
+        "card_id": "aggressive-biomancy",
+        "name": "Aggressive Biomancy",
+        "color_identity": [
+          "U",
+          "G"
+        ],
+        "faces": [
+          {
+            "face_id": "aggressive-biomancy",
+            "oracle_text": "Create X tokens that are copies of target creature you control, except they have \"When this token enters, it fights up to one target creature you don't control.\"",
+            "type_line": "Sorcery",
+            "mana_cost": "{X}{X}{G}{U}",
+            "power": null,
+            "toughness": null,
+            "loyalty": null,
+            "loyalty_variable": null,
+            "colors": [
+              "U",
+              "G"
+            ]
+          }
+        ]
+      },
+      "program": {
+        "node": "CardProgram",
+        "definition_id": "draft:aggressive-biomancy",
+        "name": "Aggressive Biomancy",
+        "types": [
+          "Sorcery"
+        ],
+        "abilities": [],
+        "spell_effects": [
+          {
+            "node": "CopyTokens",
+            "subject": "target",
+            "amount": {
+              "node": "ChosenX"
+            },
+            "nonlegendary": false,
+            "power": null,
+            "toughness": null,
+            "colors": null,
+            "creature_types": null,
+            "abilities": [
+              {
+                "node": "AbilityProgram",
+                "ability_id": "copy-fight",
+                "event": {
+                  "node": "EventPattern",
+                  "kind": "zone_changed",
+                  "from_zone": null,
+                  "to_zone": {
+                    "zone": "battlefield"
+                  },
+                  "subject": "self",
+                  "types": [],
+                  "controller_only": false,
+                  "step": null,
+                  "counter_kind": null,
+                  "recipient_relation": "any",
+                  "characteristics": [],
+                  "any_types": [],
+                  "exclude_source": false,
+                  "counters": []
+                },
+                "effects": [
+                  {
+                    "node": "Fight",
+                    "first": "source",
+                    "second": "target"
+                  }
+                ],
+                "targets": {
+                  "node": "TargetSpec",
+                  "selector": {
+                    "node": "Selector",
+                    "zone": {
+                      "zone": "battlefield"
+                    },
+                    "types": [
+                      "Creature"
+                    ],
+                    "relation": "opponent_controlled",
+                    "exclude_source": false,
+                    "subtypes": [],
+                    "excluded_subtypes": [],
+                    "supertypes": [],
+                    "any_types": [],
+                    "excluded_types": [],
+                    "any_subtypes": [],
+                    "characteristics": [],
+                    "commander": null,
+                    "tapped": null,
+                    "counters": [],
+                    "colors": [],
+                    "any_colors": [],
+                    "excluded_colors": []
+                  },
+                  "minimum": 0,
+                  "maximum": 1,
+                  "group_by_controller": false,
+                  "players": null,
+                  "combat": null,
+                  "groups": []
+                },
+                "source_must_remain": null,
+                "intervening_if": null,
+                "trigger_limit": null,
+                "occurrence_condition": null,
+                "optional_once_per_turn": false
+              }
+            ],
+            "effects": []
+          }
+        ],
+        "spell_targets": {
+          "node": "TargetSpec",
+          "selector": {
+            "node": "Selector",
+            "zone": {
+              "zone": "battlefield"
+            },
+            "types": [
+              "Creature"
+            ],
+            "relation": "controlled",
+            "exclude_source": false,
+            "subtypes": [],
+            "excluded_subtypes": [],
+            "supertypes": [],
+            "any_types": [],
+            "excluded_types": [],
+            "any_subtypes": [],
+            "characteristics": [],
+            "commander": null,
+            "tapped": null,
+            "counters": [],
+            "colors": [],
+            "any_colors": [],
+            "excluded_colors": []
+          },
+          "minimum": 1,
+          "maximum": 1,
+          "group_by_controller": false,
+          "players": null,
+          "combat": null,
+          "groups": []
+        },
+        "entry_copy": null,
+        "replacements": [],
+        "enchant": null,
+        "subtypes": [],
+        "mana_value": 2,
+        "power": null,
+        "toughness": null,
+        "continuous": [],
+        "cast": {
+          "node": "CastSpec",
+          "cost": {
+            "node": "CostSpec",
+            "mana": {
+              "node": "ManaCost",
+              "generic": 0,
+              "symbols": [
+                "G",
+                "U"
+              ],
+              "x_symbols": 2
+            },
+            "life": 0,
+            "tap_source": false,
+            "tap_selector": null,
+            "tap_count": 0,
+            "zone_costs": [],
+            "counter_costs": []
+          },
+          "timing": "sorcery",
+          "generic_reduction": 0,
+          "origin_zones": [
+            {
+              "zone": "hand"
+            },
+            {
+              "zone": "command"
+            }
+          ],
+          "alternatives": []
+        },
+        "activated": [],
+        "cost_modifiers": [],
+        "target_restrictions": [],
+        "keywords": [],
+        "supertypes": [],
+        "entry_modifiers": [],
+        "player_permissions": {
+          "node": "PlayerPermissions",
+          "additional_land_plays": 0,
+          "no_maximum_hand_size": false,
+          "land_zones": []
+        },
+        "counter_replacements": [],
+        "entry_counters": [],
+        "colors": [
+          "U",
+          "G"
+        ],
+        "modal": null,
+        "entry_copy_tapped": false,
+        "characteristic_pt": null,
+        "life_gain_replacements": [],
+        "block_restrictions": [],
+        "tapped_mana_replacements": [],
+        "all_subtype_sets": [],
+        "entry_restrictions": [],
+        "casting_restrictions": [],
+        "entry_copy_add_types": []
+      }
+    }
+  ]
 }

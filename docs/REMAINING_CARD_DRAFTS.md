@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **282 source-bound reviewed programs / 348 deck copies**. There are **52 cards / 52 deck
-copies outside the reviewed bundle**, all unstarted, and no outstanding drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, four authored token-copy drafts and 48 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,26 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: mana capabilities and convoke
+## Current cycle: token copies and fight
+
+Scute Swarm, Helm of the Host, Lazotep Quarry and Aggressive Biomancy now have
+complete printed programs in the isolated draft bundle. Together with the four
+mana/convoke cards below, this continues the requested eight-card batch.
+
+The shared copy registry freezes and deduplicates copiable values, preserves
+entry behavior and restores from checked lineage. Copy exceptions remain
+copiable, while Helm's later haste remains separate. Biomancy reuses a shared
+simultaneous fight instruction. The prior 282 reviewed programs are unchanged.
+
+Kernel schema is **123**, state schema **14**. **62 new methods** bring the
+expected hosted suite to **1,915 tests per platform**. Draft and required
+reviewed-loader checks are pending. See [the review](TOKEN_COPY_FIGHT_CARD_REVIEW.md).
+
+Next, reuse this foundation for Mirage Mirror, Thespian's Stage, March from
+Velis Vel and Replication Technique. Existing-permanent copies need proper
+layer-one durations; demonstrate needs real stack copies and authored decisions.
+
+## Previous group: mana capabilities and convoke
 
 Exotic Orchard, Fellwar Stone, Horizon of Progress and Devouring Light have
 complete printed review and exact source bindings in the reviewed library. This cycle implements
@@ -45,7 +64,7 @@ the existing entry transaction, explicit created-token bindings, X costs, target
 and creature/Desert sacrifices. Biomancy also needs simultaneous fight damage
 with both creatures still present (CR 701.14). The immutable base definition and
 trigger registries require deterministic, checkpointed derived copy programs.
-All four remain unstarted.
+All four now have drafts in the current cycle.
 
 No local execution, game migration or production admission.
 

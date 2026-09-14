@@ -277,7 +277,16 @@
       "702.51a",
       "702.51b",
       "702.51c",
-      "702.51d"
+      "702.51d",
+      "707.5",
+      "707.9a",
+      "707.9b",
+      "707.9c",
+      "707.9d",
+      "701.14a",
+      "701.14b",
+      "701.14c",
+      "701.14d"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -423,6 +432,14 @@
     {
       "url": "https://media.wizards.com/2022/clb/en_Vp5dLGW0fI.png",
       "scope": "Official Baldur's Gate face inspected 2026-09-14: no tapped-entry clause, colorless base mana, unchanged other-Gates variable ability. Corrects the stored source, catalog and reviewed program; see MANA_CONVOKE_CARD_REVIEW.md."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/zendikar-rising-release-notes-2020-09-10",
+      "scope": "Scute Swarm token-copy values, retained landfall and last known source after departure."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/dominaria-release-notes",
+      "scope": "Helm of the Host's copiable nonlegendary exception, separate haste and different results when the equipped creature or Helm leaves."
     }
   ]
 }

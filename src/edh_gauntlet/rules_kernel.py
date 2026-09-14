@@ -18,6 +18,7 @@ from .rules_attachments import AttachmentRules
 from .rules_phasing import PhasingRules
 from .rules_casting import CastingRules
 from .rules_mana import ManaRules
+from .rules_copy import CopyRules
 from .rules_turns import TurnRules, TurnActionBoundary
 from .rules_combat import CombatRules
 from .rules_departure import DepartureRules,GameResult
@@ -41,8 +42,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=122
+class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=123
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -51,7 +52,7 @@ class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,De
         from .rules_admission import require_production_ready
         require_production_ready()
 
-    def __init__(self,state:RulesState,definitions,active_player=None):
+    def __init__(self,state:RulesState,definitions,active_player=None,*,copy_programs=()):
         self.state=state;programs=tuple(definitions)
         self.definitions={p.definition_id:validate(p) for p in programs}
         if len(self.definitions)!=len(programs):raise RulesViolation('Duplicate program definition')
@@ -74,6 +75,7 @@ class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,De
         self._has_state_triggers=any(a.event.kind=='counter_state' for p in programs for a in p.abilities)
         self.definitions=MappingProxyType(self.definitions)
         self.bundle=fingerprint([encode(p) for p in sorted(programs,key=lambda p:p.definition_id)])
+        self._init_copy_registry(copy_programs)
         self.active=active_player or state.players[0]
         if self.active not in state.players:raise RulesViolation('Unknown active player')
         for obj in state.objects():self.definition(obj)
@@ -1031,6 +1033,7 @@ class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,De
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
+        if self._execute_copy(effect,frame,key):return
         if self._execute_guard(effect,frame,key):return
         if self._execute_attachment(effect,frame,key):return
         if self._execute_counter_instruction(effect,frame,key):return
@@ -1605,7 +1608,7 @@ class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,De
 
     def snapshot(self):
         # Round-trip through JSON also detaches caller-visible dictionaries.
-        value={'schema':self.CHECKPOINT_SCHEMA,'implementation':IMPLEMENTATION_ID,'bundle':self.bundle,'state':self.state.snapshot(),'active':self.active,
+        value={'schema':self.CHECKPOINT_SCHEMA,'implementation':IMPLEMENTATION_ID,'bundle':self.bundle,'copy_programs':self.copy_programs,'state':self.state.snapshot(),'active':self.active,
             'last_known':[{'object':obj.to_json(),'view':{**view.__dict__,**{name:sorted(getattr(view,name)) for name in ('types','subtypes','keywords','supertypes','colors')},'applied':list(view.applied),'target_restrictions':encode(view.target_restrictions),'granted_abilities':encode(view.granted_abilities)}} for ref,(obj,view) in sorted(self.last_known.items(),key=lambda row:(row[0].card_id,row[0].incarnation))],
             'temporary_effects':self.temporary_effects,'counter_effects':self.counter_effects,'library_observations':self.library_observations,'stack':self.stack,'resolving':self.resolving,'pending_triggers':self.pending_triggers,'placement':self.placement,
             'pending_choice':self.pending_choice.to_json() if self.pending_choice else None,'answers':self.answers,
@@ -1622,7 +1625,7 @@ class RulesKernel(ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,De
     def restore(cls,value,definitions):
         if value.get('schema')!=cls.CHECKPOINT_SCHEMA:raise RulesViolation('Unsupported kernel checkpoint')
         if value.get('implementation')!=IMPLEMENTATION_ID:raise RulesViolation('Rules implementation or Python runtime changed across checkpoint')
-        kernel=cls(RulesState.restore(value['state']),definitions,value['active'])
+        kernel=cls(RulesState.restore(value['state']),definitions,value['active'],copy_programs=value['copy_programs'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
         for name in ('regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','mana_payment','draw_counts','draw_count_turn'):
