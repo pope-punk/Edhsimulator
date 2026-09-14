@@ -23,12 +23,18 @@ a token-created event. Copies outside the stack cease at the next state-action
 boundary. Copies do not cast spells or activate abilities.
 
 Copy triggers retain announcement instructions, X, selected modes, targets,
-counter divisions and paid additional/alternative-cost facts even after the
+counter divisions and paid additional/alternative-cost decisions even after the
 original leaves the stack. Each target clause chooses one retained or legal
 new target per original slot simultaneously, preserving arity and permitting
 swaps. New targets must obey uniqueness and controller constraints. Demonstrate
 finishes the caster's target choices before choosing an opponent, who sees
 that copy and copies the original announcement.
+
+Actual casting history is separate from copied cost decisions. Copies did not
+escape from a graveyard (CR 702.138b), were not cast outside sorcery timing for
+Necromancy, and do not inherit flashback's stack-exit replacement. Evoke and
+kicker paid-cost consequences do carry over. Three cross-library regressions
+exercise these distinctions without changing the existing reviewed programs.
 
 Mana pools retain total color counts plus individual tagged units. Payments
 explicitly identify tagged units; ordinary same-color mana cannot silently
@@ -49,12 +55,13 @@ that rider is spent. Mana abilities cannot be copied.
 
 ## Validation
 
-61 new hosted methods cover complete source faces and serialization, compiler
+64 new hosted methods cover complete source faces and serialization, compiler
 rejections, ordinary cast and activation payments, opponent target visibility,
 checkpoint continuation, countered originals, copied Aura entry/death/exile,
 exact seven-card payment, special-mana identity, doubled and separate riders,
 legendary-only payment, counter immunity, resolution payments, target swaps,
-X, modes and divided counters. Hosted results remain pending.
+X, modes, divided counters, Necromancy, escaped Uro and evoked Mulldrifter.
+Hosted results remain pending.
 
 ## Following work
 

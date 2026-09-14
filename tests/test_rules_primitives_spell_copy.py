@@ -568,3 +568,36 @@ class SpellCopyTests(unittest.TestCase):
             'source':ref.to_json(),'targets':[],'x_value':0,'payment':Payment((('G',1),),tagged_mana=tags).to_json()})
         self.assertTrue(self.kernel.stack[-1]['cannot_be_countered'])
         archive=adapter.archive();self.assertEqual(archive,RulesActorAdapter.replay(archive,self.programs).archive())
+
+    def test_necromancy_copy_does_not_inherit_cast_timing_cleanup(self):
+        self.game();tags=self.tagged();ref=self.add('catalog:necromancy',zone=Zone.HAND)
+        self.add(zone=Zone.GRAVEYARD);self.add(zone=Zone.GRAVEYARD)
+        self.kernel.phase='end_step'
+        original=self.cast(ref,'CB',tags=tags);self.assertEqual('other',original['cast_timing'])
+        self.top();copy=self.kernel.stack[-1]
+        self.assertTrue(copy['copied']);self.assertNotIn('cast_timing',copy)
+        self.drain();copies=[o for o in self.state.objects(Zone.BATTLEFIELD) if o.token and self.kernel.definition(o).name=='Necromancy']
+        self.assertEqual(1,len(copies));copy_ref=copies[0].ref
+        self.kernel._collect_step('cleanup');self.kernel.advance();self.drain()
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+        self.assertEqual(copy_ref,self.current(copy_ref).ref)
+
+    def test_copy_of_escaped_uro_has_not_escaped(self):
+        self.game();tags=self.tagged();ref=self.add('catalog:uro-titan-of-nature-s-wrath',zone=Zone.GRAVEYARD)
+        exiles=tuple(self.add(zone=Zone.GRAVEYARD) for _ in range(5))
+        payment=self.payment('GGU',tags,zone_costs=(('escape',exiles),))
+        quote=self.kernel.quote_cast('escaped-uro','A',ref,alternative_id='escape')
+        self.kernel.commit_action(quote,payment);original=self.kernel.stack[0]
+        self.assertIn('escaped',original['entry_flags']);self.top();copy=self.kernel.stack[-1]
+        self.assertNotIn('escaped',copy['entry_flags']);self.assertEqual('escape',copy['alternative_id'])
+        self.restore();self.drain()
+        self.assertEqual(Zone.BATTLEFIELD,self.current(ref).zone)
+        self.assertEqual([], [o for o in self.state.objects(Zone.BATTLEFIELD) if o.token and self.kernel.definition(o).name==self.kernel.definition(self.current(ref)).name])
+
+    def test_copy_of_evoked_spell_retains_paid_cost_consequence(self):
+        self.game();tags=self.tagged();ref=self.add('catalog:mulldrifter',zone=Zone.HAND)
+        original=self.cast(ref,'CC',tags=tags,alternative_id='evoke')
+        self.top();copy=self.kernel.stack[-1]
+        self.assertEqual(original['entry_flags'],copy['entry_flags']);self.assertIn('evoked',copy['entry_flags'])
+        self.drain();self.assertEqual(4,len(self.state.zone('A',Zone.HAND)))
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)

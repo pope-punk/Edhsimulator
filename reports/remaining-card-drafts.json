@@ -3502,14 +3502,15 @@
       "delighted-halfling"
     ],
     "cards_promoted": [],
-    "new_test_methods": 61,
+    "new_test_methods": 64,
     "runtime_checkpoint_schema": 127,
     "state_checkpoint_schema": 17,
     "validation_status": "pending_hosted_draft",
     "shared_mechanics": [
       "Noncard spell copies and permanent-copy token entry",
       "Announcement-bound demonstrate and replicate with simultaneous target reassignment",
-      "Explicit mana-unit spending, one-shot copy riders and legendary-only counter immunity"
+      "Explicit mana-unit spending, one-shot copy riders and legendary-only counter immunity",
+      "Separate copied cost decisions from actual casting history: escaped status, flashback exit and Necromancy cleanup are not inherited"
     ],
     "next_batch": [
       "rishkar-s-expertise",
@@ -3553,6 +3554,18 @@
         "findings": [
           "The expanded run still contained the already-corrected missing scenario priority fixture. The new controller-group fixture also used an unsupported unbounded spell target specification. Use its finite bound and retain explicit rejection of the unsupported form; no compiler gate was weakened."
         ]
+      },
+      {
+        "stage": "priority_corrected_draft",
+        "commit": "9c5745a2d783cfde8cb23e0f159071960c0a9d1d",
+        "run_id": 34867570583,
+        "conclusion": "failure",
+        "tests_run_ubuntu": 2156,
+        "failures": 0,
+        "errors": 1,
+        "findings": [
+          "Only the unsupported unbounded-target test fixture remained; the second-cast priority repair passed. The subsequent fixture uses a finite bound and explicitly verifies the compiler rejection."
+        ]
       }
     ],
     "review_work_remaining": "Hosted draft conformance, source-bound promotion, required reviewed-loader conformance.",
@@ -3571,7 +3584,10 @@
         "Chthonian Nightmare requires player energy counters and ordered payment of energy, sacrifice and source return.",
         "Entity Tracker requires both enchantment-entry and fully-unlocked Room events; do not omit the Room clause."
       ]
-    }
+    },
+    "review_findings": [
+      "Source review caught two casting-history consequences that must not be copied: Necromancy's non-sorcery cleanup and Uro's escaped designation. Exclude both while retaining evoke/kicker/alternative cost decisions; add three cross-library regressions."
+    ]
   },
   "hosted_validation_history": [
     {

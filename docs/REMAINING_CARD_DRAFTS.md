@@ -28,7 +28,7 @@ Replication Technique, Changing Loyalty, Sunken Palace and Delighted Halfling
 have complete drafts. Shared work covers noncard stack objects, demonstrate,
 replicate additional payments, retained announcements, simultaneous target
 reassignment, copied permanent entry and explicitly spent mana units.
-Kernel/state schemas are **127/17**. The **61 new methods** await hosted draft
+Kernel/state schemas are **127/17**. The **64 new methods** await hosted draft
 validation; no promotion or passing result is claimed yet.
 See [the current review](SPELL_COPY_MANA_CARD_REVIEW.md).
 
@@ -325,7 +325,7 @@ Wizards' release notes.
 
 Kernel checkpoint schema is **116** and state schema is **13**. Existing games
 and checkpoints are not migrated; production admission remains closed.
-The **61 new conformance methods** now use the reviewed loader.
+The **64 new conformance methods** now use the reviewed loader.
 [Draft validation 34779216050](https://github.com/pope-punk/Edhsimulator/actions/runs/34779216050)
 passed **1,437 tests on each of Ubuntu and Windows**, plus source syntax,
 installation and packaged assets, at `3f2b93e1988df3dc45ca7f0e08d61c7c36c1c910`.

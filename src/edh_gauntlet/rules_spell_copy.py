@@ -3,7 +3,7 @@ from copy import deepcopy
 from dataclasses import replace
 import json
 from .rules_state import RulesObject,RulesViolation,ObjectRef,PlayerRef,Zone,target_from_json
-from .rules_program import CopyCast,CopyCaptured,SpecialMana,AbilityProgram,EventPattern,decode,encode
+from .rules_program import CopyCast,CopyCaptured,SpecialMana,CleanupCast,GraveyardAlternativeCost,Move,AbilityProgram,EventPattern,decode,encode
 from .rules_choices import Option
 
 
@@ -23,9 +23,19 @@ class SpellCopyRules:
         fields=('source','controller','spell','targets','target_spec','bindings','values',
             'entry_flags','chosen_x','mode_groups','target_groups','target_controller_groups',
             'kicker','replicate','alternative_id','activated_program','ability_id',
-            'source_must_remain','intervening_if','cast_timing')
+            'source_must_remain','intervening_if')
         result={key:deepcopy(frame[key]) for key in fields if key in frame}
         result['tasks']=[{k:deepcopy(v) for k,v in task.items() if k!='id'} for task in frame['tasks']]
+        if result['spell']:
+            specification=self.definition(RulesObject.from_json(result['source'])).cast
+            # Actual casting history is not a copied cost decision. Necromancy
+            # copies were never cast outside sorcery timing; copies of escaped
+            # spells were never cast from a graveyard (CR 702.138b, 707.10).
+            if isinstance(specification,CleanupCast):
+                result['tasks']=[{'effect':encode(Move('source',Zone.BATTLEFIELD))}]
+            alternative=next((a for a in specification.alternatives if a.alternative_id==result.get('alternative_id')),None)
+            if isinstance(alternative,GraveyardAlternativeCost):
+                result['entry_flags']=[flag for flag in result['entry_flags'] if flag not in alternative.entry_flags]
         return result
 
     def _queue_captured_copy(self,source,blueprint,kind='single',amount=1):
