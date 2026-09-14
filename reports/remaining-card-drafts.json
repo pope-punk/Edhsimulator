@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 313,
-    "remaining_outside_reviewed_bundle": 21,
-    "drafts_written": 7,
+    "reviewed_bundle_unique": 320,
+    "remaining_outside_reviewed_bundle": 14,
+    "drafts_written": 0,
     "not_started_on_this_branch": 14,
-    "reviewed_bundle_copies": 379,
-    "draft_copies": 7,
+    "reviewed_bundle_copies": 386,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 86,
-    "remaining_outside_reviewed_bundle_copies": 21
+    "promoted_on_this_branch": 93,
+    "remaining_outside_reviewed_bundle_copies": 14
   },
   "cards": [
     {
@@ -102,7 +102,7 @@
     {
       "card_id": "aminatou-the-fateshifter",
       "name": "Aminatou, the Fateshifter",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -117,13 +117,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:aminatou-the-fateshifter",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:aminatou-the-fateshifter",
+      "reviewed_definition": "catalog:aminatou-the-fateshifter",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "aminatou-veil-piercer",
@@ -841,7 +846,7 @@
     {
       "card_id": "domri-anarch-of-bolas",
       "name": "Domri, Anarch of Bolas",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -856,13 +861,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:domri-anarch-of-bolas",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:domri-anarch-of-bolas",
+      "reviewed_definition": "catalog:domri-anarch-of-bolas",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "elspeth-conquers-death",
@@ -1719,7 +1729,7 @@
     {
       "card_id": "innkeeper-s-talent",
       "name": "Innkeeper's Talent",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -1734,13 +1744,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:innkeeper-s-talent",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:innkeeper-s-talent",
+      "reviewed_definition": "catalog:innkeeper-s-talent",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "invasion-of-theros",
@@ -1989,7 +2004,7 @@
     {
       "card_id": "leyline-of-hope",
       "name": "Leyline of Hope",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -2004,13 +2019,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:leyline-of-hope",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:leyline-of-hope",
+      "reviewed_definition": "catalog:leyline-of-hope",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "march-from-velis-vel",
@@ -2131,7 +2151,7 @@
     {
       "card_id": "minsc-boo-timeless-heroes",
       "name": "Minsc & Boo, Timeless Heroes",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -2146,13 +2166,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:minsc-boo-timeless-heroes",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:minsc-boo-timeless-heroes",
+      "reviewed_definition": "catalog:minsc-boo-timeless-heroes",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "mirage-mirror",
@@ -2318,7 +2343,7 @@
     {
       "card_id": "nissa-steward-of-elements",
       "name": "Nissa, Steward of Elements",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Omo",
@@ -2333,13 +2358,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:nissa-steward-of-elements",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:nissa-steward-of-elements",
+      "reviewed_definition": "catalog:nissa-steward-of-elements",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "nullpriest-of-oblivion",
@@ -3135,7 +3165,7 @@
     {
       "card_id": "sorin-vengeful-bloodlord",
       "name": "Sorin, Vengeful Bloodlord",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -3150,13 +3180,18 @@
         }
       ],
       "authoring_status": "complete_printed_program",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:sorin-vengeful-bloodlord",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "pending_required_reviewed_loader",
       "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8",
       "batch": "planeswalkers-class-opening-2026-09-14",
       "review_record": "docs/PLANESWALKER_CLASS_OPENING_REVIEW.md",
-      "implementation_notes": "Seven-card pass 2 drafted with shared runtime and 100 hosted conformance methods. Validation and full review pending."
+      "implementation_notes": "Complete source-bound printed program. All 100 new methods and the full draft conformance suite passed on Ubuntu and Windows; required reviewed-loader validation pending.",
+      "previous_draft_definition": "draft:sorin-vengeful-bloodlord",
+      "reviewed_definition": "catalog:sorin-vengeful-bloodlord",
+      "draft_hosted_validation": {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623
+      }
     },
     {
       "card_id": "stomping-ground",
@@ -3792,14 +3827,22 @@
       "innkeeper-s-talent",
       "leyline-of-hope"
     ],
-    "cards_promoted": [],
-    "validation_status": "draft_validation_pending",
+    "cards_promoted": [
+      "aminatou-the-fateshifter",
+      "domri-anarch-of-bolas",
+      "minsc-boo-timeless-heroes",
+      "nissa-steward-of-elements",
+      "sorin-vengeful-bloodlord",
+      "innkeeper-s-talent",
+      "leyline-of-hope"
+    ],
+    "validation_status": "pending_required_reviewed_loader",
     "runtime_checkpoint_schema": 130,
     "state_checkpoint_schema": 18,
     "new_test_methods": 100,
     "unresolved_defects": [],
     "review_work_remaining": [
-      "Complete hosted draft conformance, source review, promotion and required reviewed-loader validation."
+      "Required reviewed-loader validation and final result recording."
     ],
     "review_findings": [
       "Reused existing zero-loyalty state actions and damage counter removal.",
@@ -3847,6 +3890,16 @@
           "The expanded ward regression exposed Class/turn conditions missing from selector-free dependency predicates.",
           "Minsc and the additional rules edge cases passed; remaining earlier findings are corrected in the follow-up."
         ]
+      },
+      {
+        "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+        "run_id": 34892851623,
+        "status": "success",
+        "tests_per_platform": 2446,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ]
       }
     ],
     "next_batch": [
@@ -3866,7 +3919,40 @@
       "Reflexive sacrifice triggers",
       "Simultaneous directional control rotation",
       "Entry subtype effects"
-    ]
+    ],
+    "draft_hosted_validation": {
+      "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+      "run_id": 34892851623,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
+      "conclusion": "success",
+      "tests_per_platform": 2446,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104139518890,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2446,
+          "seconds": 521.52,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104139519023,
+          "name": "verify (windows-latest)",
+          "tests": 2446,
+          "seconds": 515.09,
+          "conclusion": "success"
+        }
+      ]
+    }
   },
   "hosted_validation_history": [
     {
@@ -4740,6 +4826,49 @@
         "propaganda",
         "defiler-of-vigor",
         "darksteel-mutation"
+      ]
+    },
+    {
+      "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+      "run_id": 34892851623,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
+      "conclusion": "success",
+      "tests_per_platform": 2446,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104139518890,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2446,
+          "seconds": 521.52,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104139519023,
+          "name": "verify (windows-latest)",
+          "tests": 2446,
+          "seconds": 515.09,
+          "conclusion": "success"
+        }
+      ],
+      "stage": "draft",
+      "cards": [
+        "aminatou-the-fateshifter",
+        "domri-anarch-of-bolas",
+        "minsc-boo-timeless-heroes",
+        "nissa-steward-of-elements",
+        "sorin-vengeful-bloodlord",
+        "innkeeper-s-talent",
+        "leyline-of-hope"
       ]
     }
   ],
@@ -7442,11 +7571,11 @@
     "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
   },
   "draft_hosted_validation": {
-    "commit": "ddea5e3f16c56224f920181a7642ab72a0041f30",
-    "run_id": 34886471504,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34886471504",
+    "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+    "run_id": 34892851623,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623",
     "conclusion": "success",
-    "tests_per_platform": 2346,
+    "tests_per_platform": 2446,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -7459,17 +7588,17 @@
     ],
     "jobs": [
       {
-        "job_id": 104118262290,
+        "job_id": 104139518890,
         "name": "verify (ubuntu-latest)",
-        "tests": 2346,
-        "seconds": 510.655,
+        "tests": 2446,
+        "seconds": 521.52,
         "conclusion": "success"
       },
       {
-        "job_id": 104118262497,
+        "job_id": 104139519023,
         "name": "verify (windows-latest)",
-        "tests": 2346,
-        "seconds": 464.524,
+        "tests": 2446,
+        "seconds": 515.09,
         "conclusion": "success"
       }
     ]
@@ -7680,8 +7809,13 @@
           "leyline-of-hope"
         ],
         "focus": "Share loyalty activation support, X loyalty and entry, loyalty damage and attacking/defending planeswalkers, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses.",
-        "status": "in_progress",
-        "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c"
+        "status": "pending_required_reviewed_loader",
+        "base_commit": "19a8302ca9539dd7cfe8868deb44922b5c40999c",
+        "draft_hosted_validation": {
+          "commit": "b25201fc13286bb409df45bc1fb9cea7748b80a3",
+          "run_id": 34892851623
+        },
+        "cards_completed": []
       },
       {
         "pass": 3,
@@ -7718,6 +7852,6 @@
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
     "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
     "remaining_passes_in_target": 3,
-    "remaining_unique": 21
+    "remaining_unique": 14
   }
 }

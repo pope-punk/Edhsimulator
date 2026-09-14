@@ -1,8 +1,8 @@
 # Pass 2 review: planeswalkers, Class and opening choices
 
-Status: all seven complete printed programs are authored as isolated drafts.
-Hosted draft conformance and final source review are pending. No cards have been
-promoted in this pass. The original four-pass, 28-card baseline is unchanged.
+Status: all seven programs have complete source-bound printed-face review and
+are promoted after successful hosted draft conformance. Required reviewed-loader
+validation is pending. The original four-pass, 28-card baseline is unchanged.
 
 The runtime adds signed loyalty costs, Class designations, ward, planeswalker
 combat destinations, explicit post-mulligan opening actions, reflexive sacrifice
@@ -109,7 +109,7 @@ draft and required reviewed-loader gates. No local project execution is authoriz
 - `OngoingEffect` and `AddSubtypes` already express indefinite additive types;
   Sorin's return must also expose the Vampire change during entry lookahead.
 
-This is a source inspection, not runtime validation of the future programs.
+The source audit is supplemented by the hosted conformance evidence below.
 
 ## Implementation review additions
 
@@ -129,5 +129,26 @@ in entry lookahead and retains its original timestamp through later copies.
 
 These decisions use CR 103.6, 115.4, 306, 606, 611.2e, 702.19, 702.21 and 716 in
 the [Comprehensive Rules effective August 7, 2026](https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt),
-alongside the release notes linked above. The 100-method suite is authored;
-successful hosted validation is still required before promotion.
+alongside the release notes linked above. The 100-method suite passed hosted draft
+validation on both platforms.
+
+## Hosted validation and corrections
+
+Draft [run 34892851623](https://github.com/pope-punk/Edhsimulator/actions/runs/34892851623) passed **2446 tests on each of Ubuntu and
+Windows**, including all **100 new methods**, at `b25201fc13286bb409df45bc1fb9cea7748b80a3`.
+Source syntax, complete distribution installation and packaged assets also passed.
+The required reviewed-loader validation remains pending.
+
+Initial hosted runs found a turn-dependent characteristic cache and a missing
+selector-free predicate classification. The fixes bind the active player in both
+characteristic/proposal caches and cover Class/turn conditions in dependency
+analysis. A sole mandatory sacrifice now proceeds without a redundant choice.
+Activation target groups require fixed clause sizes; unsupported variable clauses
+remain rejected. Other failures were scenario fixtures using the wrong phase,
+priority, token-cessation or combat-blocker interfaces.
+
+The review also covered Class resolution after copied activations, current and
+last-known loyalty, Vampire entry/copy timestamps, multiple independent ward
+instances and removed planeswalker damage destinations. All 313 prior reviewed
+records are preserved unchanged. Full authored coverage for Omo does not bypass
+the separate production gate. No local project code was executed.

@@ -25,11 +25,10 @@ class WalkersClassOpeningTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        draft=json.loads((cls.root/'data/rules/draft_cards.json').read_text(encoding='utf-8'))
-        cls.rows={r['card_id']:r for r in draft['drafts'] if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in CARDS}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
-        cls.prefix='draft:'
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
+        cls.prefix='catalog:'
 
     def game(self,extra=(),players=('A','B','C','D'),started=True):
         body=CardProgram('wc-body','Body',('Creature',),power=2,toughness=3,mana_value=2,
