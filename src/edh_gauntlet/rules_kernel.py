@@ -27,7 +27,7 @@ from .rules_counters import CounterRules, transformed, actor_matches
 from .rules_replacements import ZoneProposal, ReplacementCandidate, affected_player, candidates, apply_replacement
 from .rules_subtypes import expanded_subtypes
 from .rules_guard import GuardRules, protection_matches
-from .rules_program import (LandMana,DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
+from .rules_program import (ShuffleGraveyard,LandMana,DestroyWithoutRegeneration,EchoAbility,TurnHistoryCondition,PlayerStatistic,AllConditions,AnyConditions,NotCondition,IfQuantityAtLeast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,ZoneEventPattern,PhaseOut,DrawUpTo,PayRepeatedMana,division_spec,WhileCounter,PayMana,DrawEventPattern,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,event_player_matches,SourceCounter,TargetStat,PaidCostStat,SelectedCount,RecipientStat,UntilEndOfTurn,AddKeywords,ModifyPT,SetPT,ContinuousProgram,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,token_programs,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,CardProgram,AbilityProgram,Selector,TargetSpec,IfCondition,AddMana,ChooseMana,ChooseCommanderMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,validate,encode,decode)
 
 
 class UnsupportedRule(RulesViolation):pass
@@ -43,7 +43,7 @@ from .rules_state import PlayerRef,target_from_json
 
 
 class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=124
+    CHECKPOINT_SCHEMA=125
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -1340,6 +1340,12 @@ class RulesKernel(CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,Libra
             else:selected=self._choose(key,controller,'selection','Choose the requested objects.',options,minimum,maximum,effect.ordered,effect.group_by_controller)
             frame['bindings']['selected']=[option.ref.to_json() for option in selected]
             frame['values']['selected_count']=len(selected);self._insert(frame,effect.effects)
+        elif isinstance(effect,ShuffleGraveyard):
+            actor=frame['controller']
+            refs=tuple(obj.ref for obj in self.state.objects(Zone.GRAVEYARD) if obj.owner==actor)
+            self._move(refs,Zone.LIBRARY,frame,key+':graveyard',controller_mode='owner')
+            self.state.shuffle_library(actor)
+            self._player_event('library_shuffled',actor)
         elif isinstance(effect,CreateTokens):
             amount=self._quantity(effect.amount,frame)
             if not amount:return

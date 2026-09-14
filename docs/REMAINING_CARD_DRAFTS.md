@@ -6,7 +6,7 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
 **290 source-bound reviewed programs / 356 deck copies**. There are **44 cards / 44 deck
-copies outside the reviewed bundle**, all unstarted, with no drafts. Reviewed coverage is not production certification.
+copies outside the reviewed bundle**, four drafted and 40 unstarted. Reviewed coverage is not production certification.
 
 ## Cycle ambition and context use
 
@@ -22,7 +22,20 @@ boundaries; group related validation and avoid redundant full-suite runs.
 Completion still requires every printed clause, source-bound review and relevant
 successful hosted validation.
 
-## Current cycle: copies of existing permanents and power damage
+## Current cycle: counter transitions, eternalize and Finale
+
+Fangs of Kalonia, Hydra Broodmaster, Fanatic of Rhonas and Finale of Revelation
+have complete draft programs. Shared support covers actual counter recipients,
+nontargeted overload, the monstrous designation, variable token base values,
+conditional activations, costless copies, graveyard shuffling and indefinite
+player permissions. Hydra's source mana cost is corrected to {4}{G}{G} from the
+official release notes. Kernel/state schemas are **125/16**.
+
+The **56 new methods** await hosted draft validation, followed by source-bound
+promotion and required reviewed-loader validation. No local project execution
+is authorized. See [the current review](TRANSITION_CARD_REVIEW.md).
+
+## Previous cycle: copies of existing permanents and power damage
 
 Mirage Mirror, Thespian's Stage, March from Velis Vel and Ram Through have complete
 printed programs and exact source bindings in the reviewed library. Shared work

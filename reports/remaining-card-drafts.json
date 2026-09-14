@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 290,
     "remaining_outside_reviewed_bundle": 44,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 44,
+    "drafts_written": 4,
+    "not_started_on_this_branch": 40,
     "reviewed_bundle_copies": 356,
-    "draft_copies": 0,
+    "draft_copies": 4,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 63,
     "remaining_outside_reviewed_bundle_copies": 44
@@ -851,7 +851,7 @@
     {
       "card_id": "fanatic-of-rhonas",
       "name": "Fanatic of Rhonas",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -864,7 +864,14 @@
           "face_id": "fanatic-of-rhonas",
           "text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}"
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "review_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transition-eternalize-2026-09-14",
+      "review_record": "docs/TRANSITION_CARD_REVIEW.md",
+      "source_facts_sha256": "f9972af4f92c8e113d0c7d190f99b01bc2f4524242b715c74914b6e8e6867aa0",
+      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
     },
     {
       "card_id": "fanatical-devotion",
@@ -915,7 +922,7 @@
     {
       "card_id": "fangs-of-kalonia",
       "name": "Fangs of Kalonia",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -928,7 +935,14 @@
           "face_id": "fangs-of-kalonia",
           "text": "Put a +1/+1 counter on target creature you control, then double the number of +1/+1 counters on each creature that had a +1/+1 counter put on it this way.\nOverload {4}{G}{G}"
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "review_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transition-eternalize-2026-09-14",
+      "review_record": "docs/TRANSITION_CARD_REVIEW.md",
+      "source_facts_sha256": "0435b0fba9ece9ca7d19c741f24c08d8fd1b1a305b0ed39e302a3408dadafeae",
+      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
     },
     {
       "card_id": "fellwar-stone",
@@ -979,7 +993,7 @@
     {
       "card_id": "finale-of-revelation",
       "name": "Finale of Revelation",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -992,7 +1006,14 @@
           "face_id": "finale-of-revelation",
           "text": "Draw X cards. If X is 10 or more, instead shuffle your graveyard into your library, draw X cards, untap up to five lands, and you have no maximum hand size for the rest of the game.\nExile this spell."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "review_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transition-eternalize-2026-09-14",
+      "review_record": "docs/TRANSITION_CARD_REVIEW.md",
+      "source_facts_sha256": "c2f04ec9ecdcba06db5bdf4248f6ef95c3e61c024340fa9ce477e07f58fa1d72",
+      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
     },
     {
       "card_id": "fling",
@@ -1420,7 +1441,7 @@
     {
       "card_id": "hydra-broodmaster",
       "name": "Hydra Broodmaster",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1433,7 +1454,14 @@
           "face_id": "hydra-broodmaster",
           "text": "{X}{X}{G}: Monstrosity X.\nWhen this creature becomes monstrous, create X X/X green Hydra creature tokens."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "review_pending_hosted_validation",
+      "hosted_validation_status": "pending",
+      "batch": "counter-transition-eternalize-2026-09-14",
+      "review_record": "docs/TRANSITION_CARD_REVIEW.md",
+      "source_facts_sha256": "b3541bdc62118fbd6bb4d8f42ad9ef59e690a4cf9c0c7de79f5ca2f2982e1168",
+      "implementation_notes": "All printed clauses authored; hosted draft validation and promotion pending."
     },
     {
       "card_id": "indulgent-tormentor",
@@ -3334,125 +3362,39 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "4ced453d79a9df87d0e63823c9c3e7d469267939",
+    "base_commit": "5fd2f0071f9bcb2d52996cd1b1537976d449ab5a",
     "cards_written": [
-      "mirage-mirror",
-      "thespian-s-stage",
-      "march-from-velis-vel",
-      "ram-through"
+      "fangs-of-kalonia",
+      "hydra-broodmaster",
+      "fanatic-of-rhonas",
+      "finale-of-revelation"
     ],
-    "cards_promoted": [
-      "mirage-mirror",
-      "thespian-s-stage",
-      "march-from-velis-vel",
-      "ram-through"
-    ],
+    "cards_promoted": [],
     "new_test_methods": 56,
-    "runtime_checkpoint_schema": 124,
-    "state_checkpoint_schema": 15,
-    "validation_status": "passed",
+    "runtime_checkpoint_schema": 125,
+    "state_checkpoint_schema": 16,
+    "validation_status": "pending",
     "unresolved_defects": [],
-    "review_work_remaining": "",
+    "review_work_remaining": "Draft and required reviewed-loader hosted validation remain.",
     "shared_mechanics": [
-      "Timestamped layer-one snapshots on exact existing permanents, durable underlying copies and cleanup expiration",
-      "Copiable retained activations, current definitions across characteristics, triggers, attachments, mana and later copies",
-      "Authored nonbasic land-type selection and fixed recipient sets; separate temporary haste and flashback",
-      "Fixed-arity spell target groups, current source power and simultaneous noncombat excess damage"
+      "Nontargeted overload alternatives and actual counter placement recipients",
+      "Monstrous designation and immutable variable-size token characteristics",
+      "Conditional mana activation and costless eternalize copy exceptions",
+      "Whole graveyard shuffle and indefinite player permissions"
     ],
     "next_batch": [
       "replication-technique",
-      "sunken-palace",
-      "fangs-of-kalonia",
-      "hydra-broodmaster"
+      "sunken-palace"
     ],
-    "hosted_attempts": [
+    "source_corrections": [
       {
-        "stage": "draft",
-        "commit": "a6168a80ca61c835d02142052b6db22583d43c66",
-        "run_id": 34845198553,
-        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845198553",
-        "conclusion": "failure",
-        "tests_run_ubuntu": 1971,
-        "failures": 3,
-        "errors": 0,
-        "findings": [
-          "Two historical tests pinned the current state schema to 14; keep their feature minimum while accepting later layouts.",
-          "The Aura fixture was unattached and died during announcement, correctly invalidating Mirror's target. Attach the original Aura before activating Mirror.",
-          "Explicitly keep spell target groups fixed-arity and flat spell target domains finitely bounded; test duplicate references across independent clauses."
-        ]
+        "card_id": "hydra-broodmaster",
+        "field": "mana_cost",
+        "before": "{3}{G}{G}{G}",
+        "after": "{4}{G}{G}",
+        "source": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23"
       }
-    ],
-    "draft_hosted_validation": {
-      "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
-      "run_id": 34845683355,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355",
-      "conclusion": "success",
-      "tests_per_platform": 1973,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "draft conformance"
-      ]
-    },
-    "hosted_validation": {
-      "commit": "e8bb4f97f82573565eafbae3ec4910068e377057",
-      "run_id": 34846671618,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618",
-      "conclusion": "success",
-      "tests_per_platform": 1973,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ]
-    },
-    "next_batch_source_review": {
-      "date": "2026-09-14",
-      "status": "preparation_only",
-      "cards": [
-        "replication-technique",
-        "sunken-palace",
-        "fangs-of-kalonia",
-        "hydra-broodmaster"
-      ],
-      "requirements": [
-        "Replication Technique: actual spell copy objects, demonstrate cast trigger, optional caster copy, caster-chosen opponent copy and independently authored target reselection. Preserve copied announcement choices; copies are not cast.",
-        "Sunken Palace: printed tapped entry and blue mana; exact seven-card exile cost; track the distinct blue mana unit, spending it on a cast or activation, and its delayed copy trigger. Ordinary color totals alone cannot support this rider. Copy remains possible after the original is countered.",
-        "Fangs of Kalonia: ordinary targeting versus nontargeted overload as a true alternative cast mode; actual recipients of the first counter placement determine whose counters are doubled. Reuse replacement-aware counter transactions.",
-        "Hydra Broodmaster: permanent monstrous designation independent of counters, a once-only transition, X captured from the resolving activation, and an independent trigger creating X green X/X Hydra tokens. X=0 can still make the permanent monstrous. The monstrous designation survives copying and control changes, resets on departure and is not itself copiable."
-      ],
-      "sources": [
-        {
-          "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
-          "scope": "Demonstrate choices and stack order; prior source review retained."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
-          "scope": "Fangs overload and counter doubling; Sunken Palace's mana rider, copied targets and persistence after the original is countered."
-        },
-        {
-          "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23",
-          "scope": "Hydra Broodmaster's monstrosity and captured X."
-        }
-      ],
-      "inspected_commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
-      "rules": [
-        "701.37a",
-        "701.37b",
-        "702.144a",
-        "707.10"
-      ]
-    }
+    ]
   },
   "hosted_validation_history": [
     {
@@ -5449,6 +5391,128 @@
           "707.2",
           "707.9",
           "702.144a"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "4ced453d79a9df87d0e63823c9c3e7d469267939",
+      "cards_written": [
+        "mirage-mirror",
+        "thespian-s-stage",
+        "march-from-velis-vel",
+        "ram-through"
+      ],
+      "cards_promoted": [
+        "mirage-mirror",
+        "thespian-s-stage",
+        "march-from-velis-vel",
+        "ram-through"
+      ],
+      "new_test_methods": 56,
+      "runtime_checkpoint_schema": 124,
+      "state_checkpoint_schema": 15,
+      "validation_status": "passed",
+      "unresolved_defects": [],
+      "review_work_remaining": "",
+      "shared_mechanics": [
+        "Timestamped layer-one snapshots on exact existing permanents, durable underlying copies and cleanup expiration",
+        "Copiable retained activations, current definitions across characteristics, triggers, attachments, mana and later copies",
+        "Authored nonbasic land-type selection and fixed recipient sets; separate temporary haste and flashback",
+        "Fixed-arity spell target groups, current source power and simultaneous noncombat excess damage"
+      ],
+      "next_batch": [
+        "replication-technique",
+        "sunken-palace",
+        "fangs-of-kalonia",
+        "hydra-broodmaster"
+      ],
+      "hosted_attempts": [
+        {
+          "stage": "draft",
+          "commit": "a6168a80ca61c835d02142052b6db22583d43c66",
+          "run_id": 34845198553,
+          "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845198553",
+          "conclusion": "failure",
+          "tests_run_ubuntu": 1971,
+          "failures": 3,
+          "errors": 0,
+          "findings": [
+            "Two historical tests pinned the current state schema to 14; keep their feature minimum while accepting later layouts.",
+            "The Aura fixture was unattached and died during announcement, correctly invalidating Mirror's target. Attach the original Aura before activating Mirror.",
+            "Explicitly keep spell target groups fixed-arity and flat spell target domains finitely bounded; test duplicate references across independent clauses."
+          ]
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "run_id": 34845683355,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34845683355",
+        "conclusion": "success",
+        "tests_per_platform": 1973,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ]
+      },
+      "hosted_validation": {
+        "commit": "e8bb4f97f82573565eafbae3ec4910068e377057",
+        "run_id": 34846671618,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34846671618",
+        "conclusion": "success",
+        "tests_per_platform": 1973,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ]
+      },
+      "next_batch_source_review": {
+        "date": "2026-09-14",
+        "status": "preparation_only",
+        "cards": [
+          "replication-technique",
+          "sunken-palace",
+          "fangs-of-kalonia",
+          "hydra-broodmaster"
+        ],
+        "requirements": [
+          "Replication Technique: actual spell copy objects, demonstrate cast trigger, optional caster copy, caster-chosen opponent copy and independently authored target reselection. Preserve copied announcement choices; copies are not cast.",
+          "Sunken Palace: printed tapped entry and blue mana; exact seven-card exile cost; track the distinct blue mana unit, spending it on a cast or activation, and its delayed copy trigger. Ordinary color totals alone cannot support this rider. Copy remains possible after the original is countered.",
+          "Fangs of Kalonia: ordinary targeting versus nontargeted overload as a true alternative cast mode; actual recipients of the first counter placement determine whose counters are doubled. Reuse replacement-aware counter transactions.",
+          "Hydra Broodmaster: permanent monstrous designation independent of counters, a once-only transition, X captured from the resolving activation, and an independent trigger creating X green X/X Hydra tokens. X=0 can still make the permanent monstrous. The monstrous designation survives copying and control changes, resets on departure and is not itself copiable."
+        ],
+        "sources": [
+          {
+            "url": "https://magic.wizards.com/en/news/feature/strixhaven-school-mages-and-commander-2021-edition-release-notes-2021-04-16",
+            "scope": "Demonstrate choices and stack order; prior source review retained."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+            "scope": "Fangs overload and counter doubling; Sunken Palace's mana rider, copied targets and persistence after the original is countered."
+          },
+          {
+            "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23",
+            "scope": "Hydra Broodmaster's monstrosity and captured X."
+          }
+        ],
+        "inspected_commit": "2936bde63ebdcef71a9d1e928e55b640698d89eb",
+        "rules": [
+          "701.37a",
+          "701.37b",
+          "702.144a",
+          "707.10"
         ]
       }
     }

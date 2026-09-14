@@ -4,7 +4,7 @@ import json
 from collections import ChainMap
 from dataclasses import replace
 from types import MappingProxyType
-from .rules_program import CardProgram,CopyTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
+from .rules_program import CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
 from .rules_state import RulesViolation,Zone,ObjectRef
 from .rules_choices import Option
 from .rules_subtypes import SUBTYPE_SETS
@@ -22,8 +22,9 @@ class CopyRules:
         self.copy_programs=[]
         if not isinstance(records,(tuple,list)):raise RulesViolation('Invalid copy registry')
         for row in records:
-            if not isinstance(row,dict) or set(row)!={'parent','added_types','changes','definition_id','retained_activation'}:
+            if not isinstance(row,dict) or set(row)!={'parent','added_types','changes','definition_id','retained_activation','remove_mana_cost'}:
                 raise RulesViolation('Invalid copy lineage')
+            if type(row['remove_mana_cost']) is not bool:raise RulesViolation('Invalid mana-cost copy exception')
             if row['parent'] not in self.definitions:raise RulesViolation('Unknown copy parent')
             if not isinstance(row['added_types'],list) or any(t not in {'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'} for t in row['added_types']):
                 raise RulesViolation('Invalid copied type additions')
@@ -31,15 +32,16 @@ class CopyRules:
                 raise RulesViolation('Invalid copy exceptions')
             changes={k:decode(v) for k,v in row['changes'].items()}
             before=len(self.copy_programs)
-            program=self._register_copy_program(row['parent'],tuple(row['added_types']),changes,decode(row['retained_activation']))
+            program=self._register_copy_program(row['parent'],tuple(row['added_types']),changes,decode(row['retained_activation']),row['remove_mana_cost'])
             if program.definition_id!=row['definition_id'] or len(self.copy_programs)!=before+1:
                 raise RulesViolation('Invalid copy registry identity')
 
-    def _register_copy_program(self,parent,added_types,changes,retained_activation=None):
+    def _register_copy_program(self,parent,added_types,changes,retained_activation=None,remove_mana_cost=False):
         validate(CardProgram('copy:validation','Copy validation',('Artifact',),
             spell_effects=(CopyTokens('source',**changes),)))
         original=self.definitions[parent]
         attrs={'types':tuple(dict.fromkeys(original.types+tuple(added_types)))}
+        if remove_mana_cost:attrs.update(cast=None,mana_value=0)
         if changes['nonlegendary']:attrs['supertypes']=tuple(s for s in original.supertypes if s!='Legendary')
         if changes['power'] is not None:
             attrs.update(power=changes['power'],toughness=changes['toughness'],characteristic_pt=None)
@@ -77,7 +79,7 @@ class CopyRules:
         self._has_state_triggers|=any(a.event.kind=='counter_state' for a in program.abilities)
         self.copy_programs.append({'parent':parent,'added_types':list(added_types),
             'changes':{k:encode(v) for k,v in changes.items()},'definition_id':program.definition_id,
-            'retained_activation':encode(retained_activation)})
+            'retained_activation':encode(retained_activation),'remove_mana_cost':remove_mana_cost})
         return program
 
     def _copy_information(self,ref):
@@ -87,6 +89,12 @@ class CopyRules:
             return known[0] if known is not None else None
 
     def _execute_copy(self,effect,frame,key):
+        if isinstance(effect,CreateSizedTokens):
+            changes={name:getattr(CopyTokens('source'),name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
+            changes.update(power=self._quantity(effect.power,frame),toughness=self._quantity(effect.toughness,frame))
+            program=self._register_copy_program(effect.token.definition_id,(),changes)
+            self._execute(frame,{'id':key,'effect':encode(CreateTokens(program,effect.amount,effect.players))})
+            return True
         if isinstance(effect,SelectBySubtype):
             choice=self._choose(key+':subtype',frame['controller'],'subtype',
                 'Choose a nonbasic land type.',tuple(Option(t,t) for t in sorted(SUBTYPE_SETS[effect.subtype_set])),1,1)[0]
@@ -154,7 +162,7 @@ class CopyRules:
         if obj is None:return True
         original=self.definition(obj)
         changes={name:getattr(effect,name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
-        program=self._register_copy_program(original.definition_id,obj.effective_add_types,changes)
+        program=self._register_copy_program(original.definition_id,obj.effective_add_types,changes,remove_mana_cost=isinstance(effect,CostlessCopyTokens))
         token_effect=WithCreatedTokens(program,effect.amount,'controller',effect.effects)
         self._execute(frame,{'id':key,'effect':encode(token_effect)})
         return True

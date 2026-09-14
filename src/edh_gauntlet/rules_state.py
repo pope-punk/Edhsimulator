@@ -79,6 +79,7 @@ class RulesObject:
     copied_add_types:tuple[str,...]=()
     # Frozen layer-one snapshots: (definition, duration, creation timestamp).
     copy_effects:tuple[tuple[str,str,int],...]=()
+    monstrous:bool=False
 
     @property
     def effective_definition(self):return self.copy_effects[-1][0] if self.copy_effects else self.copied_definition or self.definition
@@ -140,7 +141,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=15
+    CHECKPOINT_SCHEMA=16
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -572,6 +573,13 @@ class RulesState:
         self._sequence+=1
         return self._sequence
 
+    def mark_monstrous(self,ref):
+        obj=self.get(ref)
+        if obj.zone!=Zone.BATTLEFIELD or obj.phased or obj.monstrous:
+            raise RulesViolation('Unavailable monstrosity transition')
+        self._objects[ref.card_id]=replace(obj,monstrous=True)
+        self._sequence+=1
+
     def apply_copy(self,refs,definition,*,until_end_of_turn=False):
         refs=tuple(refs)
         objects=tuple(self.get(ref) for ref in refs)
@@ -767,6 +775,7 @@ class RulesState:
                 if type(obj.damage_marked) is not int or obj.damage_marked<0 or type(obj.deathtouch_hit) is not bool or type(obj.combat_departure) is not int or not 0<=obj.combat_departure<=self._sequence:raise RulesViolation('Invalid damage/combat history')
                 if (not isinstance(obj.counters,tuple) or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0] or type(row[1]) is not int or row[1]<=0 for row in obj.counters)
                         or len({row[0] for row in obj.counters})!=len(obj.counters)):raise RulesViolation('Invalid object counter ledger')
+                if type(obj.monstrous) is not bool or obj.monstrous and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid monstrous designation')
                 if (not isinstance(obj.copy_effects,tuple) or obj.copy_effects and obj.zone!=Zone.BATTLEFIELD
                         or any(not isinstance(row,tuple) or len(row)!=3 or type(row[0]) is not str or not row[0]
                             or row[1] not in {'indefinite','until_end_of_turn'} or type(row[2]) is not int

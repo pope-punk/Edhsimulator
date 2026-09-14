@@ -12,7 +12,7 @@ from collections import Counter, deque
 from dataclasses import dataclass, replace
 from .rules_state import PlayerRef,target_from_json,ObjectRef, Zone, ZoneMove, RulesViolation, ResourcePayment, RulesObject
 from .rules_choices import ManaPaymentBoundary
-from .rules_program import ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
+from .rules_program import OverloadAlternative,ConditionalActivated,ConvokeCast,IfQuantityAtLeast,MovedCount,KickerCast,CleanupCast,ColoredSpellEvent,WithZoneResult,DelayedNextStep,EventPattern,Sacrifice,SpellEventPattern, division_spec, GraveyardAlternativeCost, EntryAlternativeCost, ACTOR_EVENTS, event_player_matches, ChosenX, ManaCost, CostSpec, ActivatedProgram, AddMana, ChooseMana, ChooseCommanderMana, Move, encode, decode, immediate_effect_nodes
 from .rules_characteristics import base, matches
 from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
@@ -230,7 +230,7 @@ class CastingRules:
             if program.cast is None:
                 raise RulesViolation('No reviewed casting specification for this fixture')
             specification = program.cast
-            target_spec = program.spell_targets
+            target_spec = None if isinstance(alternative,OverloadAlternative) else program.spell_targets
         elif kind == 'activate':
             specification = next((ability for ability in self.activated_abilities(source) if ability.ability_id == ability_id), None)
             if specification is None:
@@ -240,6 +240,8 @@ class CastingRules:
             permitted_actor=source.controller if source.zone==Zone.BATTLEFIELD else source.owner
             if source.zone!=specification.zone or source.phased or permitted_actor!=actor:
                 raise RulesViolation('Unavailable activated ability source')
+            if isinstance(specification,ConditionalActivated) and not self._condition_holds(specification.condition,source):
+                raise RulesViolation('Activation condition is not satisfied')
             if any(isinstance(effect,ChooseCommanderMana) for effect in immediate_effect_nodes(specification.effects)):
                 self.state.commander_identity(actor)
             target_spec = specification.targets
@@ -271,7 +273,7 @@ class CastingRules:
         elif mode_choices:
             raise RulesViolation('Nonmodal action has no mode choices')
         self._announcement_targets(source, actor, target_spec, targets,x_value)
-        effect_nodes=program.spell_effects if kind=='cast' else specification.effects
+        effect_nodes=(alternative.effects if isinstance(alternative,OverloadAlternative) else program.spell_effects) if kind=='cast' else specification.effects
         division=division_spec(effect_nodes,target_spec)
         if not isinstance(counter_division,tuple):raise RulesViolation('Counter division must be immutable')
         if division is None:
@@ -419,7 +421,9 @@ class CastingRules:
 
     def _spell_frame(self,source,quote):
         program=self.definition(source)
-        effects = program.spell_effects
+        alternative=next((a for a in program.cast.alternatives if a.alternative_id==quote.alternative_id),None)
+        effects = alternative.effects if isinstance(alternative,OverloadAlternative) else program.spell_effects
+        target_spec=None if isinstance(alternative,OverloadAlternative) else program.spell_targets
         if not effects and not {'Instant', 'Sorcery'} & set(program.types):
             effects = (Move('source', Zone.BATTLEFIELD),)
         sorcery_timing=self.active==quote.actor and self.phase in {'precombat_main','postcombat_main'} and not self.stack
@@ -429,10 +433,10 @@ class CastingRules:
                     DelayedNextStep(EventPattern('step_began',step='cleanup'),
                         (Sacrifice('moved',by_subject_controller=True),)),)),)),)
         frame = self._frame(source, quote.actor, effects, spell=True, targets=quote.targets,
-                            target_spec=program.spell_targets,chosen_x=quote.x_value)
-        if program.spell_targets is not None and program.spell_targets.groups:
+                            target_spec=target_spec,chosen_x=quote.x_value)
+        if target_spec is not None and target_spec.groups:
             frame['target_groups']=[];offset=0
-            for group in program.spell_targets.groups:
+            for group in target_spec.groups:
                 count=group.targets.minimum
                 frame['target_groups'].append({'group_id':group.group_id,'target_spec':encode(group.targets),
                     'targets':[ref.to_json() for ref in quote.targets[offset:offset+count]]})

@@ -121,8 +121,9 @@ class TurnRules:
             self.temporary_effects=retained
             self.state.allocate_effect_timestamp()
             self._event('temporary_effects_expired')
-        if self.player_effects:
-            self.player_effects=[]
+        permissions=[row for row in self.player_effects if row['duration']=='indefinite']
+        if permissions!=self.player_effects:
+            self.player_effects=permissions
             self._event('player_permissions_expired')
         copies=self.state.expire_turn_copies()
         if copies:self._event('copy_effects_expired',refs=[ref.to_json() for ref in copies])

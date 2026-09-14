@@ -290,7 +290,16 @@
       "120.4a",
       "613.2",
       "613.2a",
-      "613.2c"
+      "613.2c",
+      "701.37a",
+      "701.37b",
+      "702.96a",
+      "702.96b",
+      "702.129a",
+      "707.9",
+      "202.3a",
+      "701.20",
+      "608.2c"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -452,6 +461,18 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
       "scope": "March from Velis Vel: nonbasic land-type choice, current controlled recipients, copying without re-entry, separate haste and flashback."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+      "scope": "Fangs of Kalonia's nontargeted overload and replacement-aware doubling; Fanatic of Rhonas's 1/4 body, ferocious activation restriction and eternalize copy exceptions."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-04-23",
+      "scope": "Hydra Broodmaster's actual {4}{G}{G} cost, 7/7 body, monstrous transition and trigger X captured from the activation."
+    },
+    {
+      "url": "https://mtg-jp.com/products/card-gallery/0000284/680728/",
+      "scope": "Official English Finale of Revelation face: alternate X>=10 resolution, untap up to five lands without a controller restriction, no maximum hand size for the rest of the game, then exile itself."
     }
   ]
 }

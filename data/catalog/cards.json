@@ -12656,7 +12656,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "{3}{G}{G}{G}",
+          "mana_cost": "{4}{G}{G}",
           "mana_value": 6,
           "name": "Hydra Broodmaster",
           "oracle_text": "{X}{X}{G}: Monstrosity X.\nWhen this creature becomes monstrous, create X X/X green Hydra creature tokens.",

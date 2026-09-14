@@ -5,7 +5,7 @@ Replacement side effects and general counter-removal effects remain separate gat
 """
 from .rules_state import ObjectRef,PlayerRef,Zone,RulesViolation,target_from_json
 from .rules_choices import Option
-from .rules_program import RemoveCounters,PlaceDividedCounters,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind
+from .rules_program import WithCountersPlaced,Monstrosity,RemoveCounters,PlaceDividedCounters,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind
 from .rules_characteristics import matches
 
 
@@ -102,7 +102,26 @@ class CounterRules:
             self._emit_counters(recipient,dict(counts),frame['controller'],self._source(frame).ref)
 
     def _execute_counter_instruction(self,effect,frame,key):
-        if isinstance(effect,RemoveCounters):
+        if isinstance(effect,WithCountersPlaced):
+            amount=self._quantity(effect.amount,frame)
+            final,trace=self._plan_counter_placements(
+                ((ref,effect.kind,amount) for ref in self._refs(frame,effect.subject)),frame,key)
+            self._commit_counters(final,trace,frame)
+            frame['bindings']['counter_recipients']=[ref.to_json() for ref,counts in final
+                if isinstance(ref,ObjectRef) and dict(counts).get(effect.kind,0)>0]
+            self._insert(frame,effect.effects)
+        elif isinstance(effect,Monstrosity):
+            ref=self._source(frame).ref
+            try:source=self.state.get(ref)
+            except RulesViolation:return True
+            if source.zone!=Zone.BATTLEFIELD or source.phased or source.monstrous:return True
+            amount=self._quantity(effect.amount,frame)
+            final,trace=self._plan_counter_placements(((ref,'+1/+1',amount),),frame,key)
+            self._commit_counters(final,trace,frame)
+            self.state.mark_monstrous(ref)
+            self._event('becomes_monstrous',ref=ref.to_json(),amount=amount)
+            self._collect_announcement('becomes_monstrous',self.state.get(ref),source.controller,values={'event_x':amount})
+        elif isinstance(effect,RemoveCounters):
             removals=[]
             for ref in self._refs(frame,effect.subject):
                 counts=self._counter_counts(ref)

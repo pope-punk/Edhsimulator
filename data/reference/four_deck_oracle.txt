@@ -1788,7 +1788,7 @@ Rules text:
 
 [041] 1x Hydra Broodmaster
 --------------------------
-Mana cost: {3}{G}{G}{G}
+Mana cost: {4}{G}{G}
 Type line: Creature — Hydra
 Rules text:
   {X}{X}{G}: Monstrosity X.

@@ -27,6 +27,7 @@ def _card(kernel,obj,views):
         'supertypes':sorted(view.supertypes),'keywords':sorted(view.keywords),'colors':sorted(view.colors),
         'mana_value':view.mana_value,'power':view.power,'toughness':view.toughness,
         'tapped':obj.tapped,'phased':obj.phased,'counters':dict(obj.counters),
+        **({'monstrous':True} if obj.monstrous else {}),
         **({'untap_blocked':True} if view.untap_blocked else {}),
         'damage':obj.damage_marked,'commander':obj.commander,'token':obj.token,
         'attached_to':obj.attached_to.to_json() if obj.attached_to else None,
