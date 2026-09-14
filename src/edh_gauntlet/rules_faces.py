@@ -77,7 +77,7 @@ class FaceRules:
         window=self.phase_action;actor=window['actor']
         if 'sources' not in window:
             window['sources']=[obj.ref.to_json() for obj in self.state.objects(Zone.BATTLEFIELD,controller=actor)
-                if not obj.phased and 'Saga' in self.effective(obj.ref).subtypes and 'Enchantment' in self.effective(obj.ref).types]
+                if not obj.phased and 'Saga' in self.effective(obj.ref).subtypes and 'Enchantment' in self.effective(obj.ref).types and self._chapters(obj)]
         refs=tuple(ObjectRef.from_json(r) for r in window['sources'])
         if refs:
             source=self.state.get(refs[0])

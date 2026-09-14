@@ -636,10 +636,11 @@ class FacesSagasExtortTests(unittest.TestCase):
         objects=self.state.objects();defs=self.kernel.definitions
         self.assertEqual(evaluate(objects,defs),evaluate_exhaustive(objects,defs))
 
-    def test_saga_without_chapters_still_receives_turn_lore(self):
+    def test_saga_without_chapters_receives_no_turn_lore(self):
         saga=CardProgram('fs-blank-saga','Blank Saga',('Enchantment',),subtypes=('Saga',))
         self.game((saga,));ref=self.add('fs-blank-saga');self.main_phase()
-        self.assertEqual(1,dict(self.state.get(ref).counters)['lore'])
+        self.assertNotIn('lore',dict(self.state.get(ref).counters))
+        self.assertEqual(Zone.BATTLEFIELD,self.state.get(ref).zone)
 
 
 if __name__=='__main__':unittest.main()

@@ -4023,6 +4023,15 @@
       "victor-valgavoth-s-seneschal",
       "the-cruelty-of-gix",
       "urza-s-saga"
+    ],
+    "promotion_corrections": [
+      {
+        "basis": "Current Comprehensive Rules 714.3c and 714.4",
+        "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+        "change": "Turn-based lore requires at least one chapter ability. Corrected the lore guard and the no-chapters regression expectation; no card program changed.",
+        "supersedes_required_commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
+        "supersedes_required_run": 34903230871
+      }
     ]
   },
   "hosted_validation_history": [

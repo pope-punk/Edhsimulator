@@ -78,8 +78,10 @@ The first hosted run exposed repeated trigger-view queries, older Battle fixture
 without protectors, and scenario action-window gaps. The fixes retain the query
 optimization and give fixtures explicit rules state. A later fixture correction
 uses ChooseMana's indexed options and separates Sorin-copy controllers so a legend-rule
-choice does not suspend the intended transformation scenario. Lore counters still advance on a Saga whose
-chapter abilities are absent; such a Saga has no final chapter to sacrifice for.
+choice does not suspend the intended transformation scenario. Current CR 714.3c and 714.4 both require a chapter ability: a Saga without
+chapter abilities neither gains turn-based lore nor sacrifices itself. The final
+source audit corrected the lore guard and its regression expectation; the later
+required reviewed-loader run covers this promotion correction.
 No existing expected result was weakened.
 
 Production admission and historical/started-game contracts are unchanged.
