@@ -201,7 +201,7 @@
       "hosted_validation_status": "reviewed_loader_pending",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
       "source_facts_sha256": "77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d",
       "previous_draft_definition": "draft:apex-devastator",
       "reviewed_definition": "catalog:apex-devastator",
@@ -1512,7 +1512,7 @@
       "hosted_validation_status": "reviewed_loader_pending",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
       "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a",
       "previous_draft_definition": "draft:hidden-nursery",
       "reviewed_definition": "catalog:hidden-nursery",
@@ -2321,7 +2321,7 @@
       "hosted_validation_status": "reviewed_loader_pending",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
       "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549",
       "previous_draft_definition": "draft:oracle-of-mul-daya",
       "reviewed_definition": "catalog:oracle-of-mul-daya",
@@ -2772,7 +2772,7 @@
       "hosted_validation_status": "reviewed_loader_pending",
       "batch": "resolution-casting-library-2026-09-14",
       "review_record": "docs/RESOLUTION_CAST_CARD_REVIEW.md",
-      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 94-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
+      "implementation_notes": "Complete printed program and source binding; 85-method draft passed both hosted platforms. The 95-method required reviewed-loader run includes reveal-order, public-exile and mana-classification review corrections.",
       "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7",
       "previous_draft_definition": "draft:rishkar-s-expertise",
       "reviewed_definition": "catalog:rishkar-s-expertise",
@@ -3603,7 +3603,7 @@
       "apex-devastator",
       "oracle-of-mul-daya"
     ],
-    "new_test_methods": 94,
+    "new_test_methods": 95,
     "runtime_checkpoint_schema": 128,
     "state_checkpoint_schema": 17,
     "validation_status": "reviewed_loader_pending",
@@ -3636,7 +3636,7 @@
         ]
       }
     ],
-    "review_work_remaining": "Required reviewed-loader hosted validation for all 94 new methods.",
+    "review_work_remaining": "Required reviewed-loader hosted validation for all 95 new methods.",
     "unresolved_defects": [],
     "next_batch_source_review": {
       "status": "preparation_only",
@@ -3647,7 +3647,7 @@
         "parasitic-impetus"
       ],
       "requirements": [
-        "Chthonian Nightmare: player energy is already stored, but add an explicit gain effect and X energy payment plus two ordered zone-cost groups. Preserve target-before-cost ordering and allow X zero. Do not use object-counter costs for player energy.",
+        "Chthonian Nightmare: player energy already exists in state, but add an explicit gain effect, X energy payment and multiple zone-cost groups. Preserve target-before-cost ordering and allow X zero. Costs need an authored legal payment order under CR 601.2h, not an assumed printed order; do not use object-counter costs for player energy.",
         "Maze's End: reuse tapped entry, colorless mana, source-return cost and Gate search; add distinct current Gate-name counting and a real player-win transition after search/shuffle.",
         "Rhythm of the Wild: ongoing controlled-creature-spell counter immunity must stop when its source leaves; riot applies only to nontoken creatures and needs per-source entry choices of a +1/+1 counter or haste.",
         "Parasitic Impetus: reuse Aura attachment and P/T layers; implement complete goad attack requirements, attached-creature attack events and captured attacking controller for life loss.",
@@ -3655,7 +3655,7 @@
       ]
     },
     "draft_test_methods": 85,
-    "reviewed_test_methods": 94,
+    "reviewed_test_methods": 95,
     "draft_hosted_validation": {
       "commit": "c168dae7c628cde1f37e0381a21a609fe720f088",
       "run_id": 34876806875,
@@ -3718,7 +3718,8 @@
     "review_findings": [
       "Promotion includes library-moving mana classification and rejects unsupported nested free casting inside immediate mana abilities.",
       "Defer top-card disclosure until bottom/top placement is finalized, including discover/cascade and surveil; prevent transient top exposure or false reference retirement.",
-      "Preserve public face-up exile histories even when discover/cascade finishes without a hit."
+      "Preserve public face-up exile histories even when discover/cascade finishes without a hit.",
+      "Library scans and top disclosures ignore noncard spell copies waiting for state-based removal, just as they ignore tokens."
     ]
   },
   "hosted_validation_history": [

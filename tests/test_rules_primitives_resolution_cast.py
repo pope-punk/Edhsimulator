@@ -742,8 +742,21 @@ class ResolutionCastTests(unittest.TestCase):
             self.assertTrue(all(row['names']==['Forest'] for row in rows))
             self.assertTrue(all(row['refs'][0]!=self.current(ref).ref.to_json() for row,ref in zip(rows,reversed(refs))))
 
+    def test_library_operations_skip_noncard_spell_copy_awaiting_sba(self):
+        self.game();self.add(self.cards['oracle-of-mul-daya'].definition_id)
+        real=self.add(zone=Zone.LIBRARY)
+        copy=self.state.add_spell_copy('library-copy',self.state.get(real),'A')
+        self.state.move((ZoneMove(copy.ref,Zone.LIBRARY),),'fixture-counter')
+        self.discover()
+        self.assertEqual(real.card_id,self.hit().card_id)
+        self.assertNotIn('library-copy',json.dumps(project_actor(self.kernel,'B')['revealed_library_tops']))
+        self.assertNotIn('library-copy',json.dumps(project_actor(self.kernel,'B')['public_library_reveals']))
+        self.decline();self.assertEqual(Zone.HAND,self.current(real).zone)
+        self.assertFalse(self.state.zone('A',Zone.LIBRARY))
+
 
 if __name__=='__main__':unittest.main()
+
 
 
 

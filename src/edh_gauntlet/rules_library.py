@@ -47,9 +47,9 @@ class LibraryRules:
         self.library_tops=current
 
     def _library_cards(self,actor):
-        # Tokens are not cards (111.6); a departed token can await SBAs here,
-        # but it cannot replace a card in a reveal or mill instruction.
-        return tuple(obj for obj in self.state.zone(actor,Zone.LIBRARY) if not obj.token)
+        # Tokens and spell copies are not cards. Either may await SBAs here,
+        # but neither can replace a card in a reveal or library instruction.
+        return tuple(obj for obj in self.state.zone(actor,Zone.LIBRARY) if not obj.token and not obj.spell_copy)
 
     def _reveal_current_top(self,actor,key):
         from copy import deepcopy
