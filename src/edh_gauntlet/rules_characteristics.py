@@ -254,7 +254,7 @@ def condition_selectors(condition):
         for child in condition.conditions:yield from condition_selectors(child)
     elif isinstance(condition,NotCondition):
         yield from condition_selectors(condition.condition)
-    elif condition is not None and not isinstance(condition,(SourceCountersCondition,LifeLostCondition,EntryFlagCondition,LifeCondition,PlayerCountCondition,DevotionCondition)):
+    elif condition is not None and not isinstance(condition,(SourceCountersCondition,LifeLostCondition,EntryFlagCondition,LifeCondition,PlayerCountCondition,DevotionCondition,ClassLevelCondition,ControllerTurnCondition)):
         yield condition.selector
 
 

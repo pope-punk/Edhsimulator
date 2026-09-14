@@ -3808,7 +3808,9 @@
       "Entry subtype effects retain their original timestamp through later copies and are not copiable.",
       "Every current ward instance captures the exact targeted stack object and payer.",
       "Static keyword-selector dependencies include later keyword grants.",
-      "Avoid rebuilding unchanged CardProgram records while checking Class counter replacement gates."
+      "Avoid rebuilding unchanged CardProgram records while checking Class counter replacement gates.",
+      "Characteristic and proposal caches bind the active player; Class and controller-turn predicates do not claim selector reads.",
+      "Fixed-size activated target clauses reuse announcement validation while optional-size clauses remain closed."
     ],
     "validation_attempts": [
       {
@@ -3821,9 +3823,29 @@
       {
         "commit": "b67857c78bace19569fc2ff9874ce6025c52b77f",
         "run_id": 34891304108,
-        "status": "in_progress_at_followup",
+        "status": "failed",
+        "platform": "ubuntu-latest",
+        "tests": 2427,
+        "failures": 3,
+        "errors": 9,
         "findings": [
-          "Syntax, installation and packaged assets passed on both platforms; conformance was still running while source review expanded the suite and corrected edge cases."
+          "Minsc's only available sacrifice now proceeds without an unnecessary choice.",
+          "Sorin turn condition requires active-player cache invalidation.",
+          "Scenario fixtures need correct window, token-cessation, phase and combat-blocker interfaces.",
+          "Variable-size activation target groups remain unsupported and must be rejected."
+        ]
+      },
+      {
+        "commit": "c07f3aca12c6c2066a9ac837a32954976c5a72ce",
+        "run_id": 34892047736,
+        "status": "failed",
+        "platform": "ubuntu-latest",
+        "tests": 2446,
+        "failures": 2,
+        "errors": 8,
+        "findings": [
+          "The expanded ward regression exposed Class/turn conditions missing from selector-free dependency predicates.",
+          "Minsc and the additional rules edge cases passed; remaining earlier findings are corrected in the follow-up."
         ]
       }
     ],

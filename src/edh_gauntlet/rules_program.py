@@ -2279,7 +2279,11 @@ def validate(program,_depth=0):
                 allowed=({Zone.BATTLEFIELD} if zone_cost.kind in {'sacrifice','return'}
                     else {Zone.HAND} if zone_cost.kind=='discard' else {Zone.BATTLEFIELD,Zone.HAND,Zone.GRAVEYARD})
                 if ability.zone not in allowed:raise RulesViolation('Source zone cost does not match activation zone')
-        if ability.targets is not None:target(ability.targets,cost_has_x(ability.cost),allow_groups=True)
+        if ability.targets is not None:
+            target(ability.targets,cost_has_x(ability.cost),allow_groups=True)
+            if ability.targets.maximum is None:raise RulesViolation('Activation targets require a finite announced bound')
+            if ability.targets.groups and any(g.targets.minimum!=g.targets.maximum for g in ability.targets.groups):
+                raise RulesViolation('Announced activation target groups require fixed clause sizes')
         if ability.zone not in {Zone.BATTLEFIELD,Zone.STACK} and any(
                 isinstance(node,ExileLinked) for node in immediate_effect_nodes(ability.effects)):
             raise RulesViolation('Linked exile requires a public activation source')

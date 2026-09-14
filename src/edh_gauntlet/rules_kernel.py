@@ -228,8 +228,8 @@ class RulesKernel(WalkerRules,RuleEffects,ResolutionCastingRules,SpellCopyRules,
         # A mutation invalidates the single bounded cache. Historical event
         # views are passed explicitly and never retrieved through this cache.
         cached = getattr(self, '_characteristics_cache', None)
-        if cached is None or cached[0] != self.state.sequence:
-            cached = (self.state.sequence, evaluate_characteristics(self.state.objects(), self.definitions,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players},active_player=self.active))
+        if cached is None or cached[0] != (self.state.sequence,self.active):
+            cached = ((self.state.sequence,self.active), evaluate_characteristics(self.state.objects(), self.definitions,temporary=self._temporary_rows(),life_totals={p:self.state.life(p) for p in self.state.players},starting_life_totals={p:self.state.starting_life(p) for p in self.state.players},live_players=self.state.live_players,life_lost_totals={p:self.state.life_lost_this_turn(p) for p in self.state.players},active_player=self.active))
             self._characteristics_cache = cached
         return cached[1]
 
@@ -612,7 +612,7 @@ class RulesKernel(WalkerRules,RuleEffects,ResolutionCastingRules,SpellCopyRules,
     def _proposal_view(self, proposal):
         # Replacement ordering/trace bookkeeping cannot change characteristics.
         # Retain only this state epoch and a bounded number of material proposals.
-        epoch=(self.state,self.state.sequence)
+        epoch=(self.state,self.state.sequence,self.active)
         if getattr(self,'_entry_view_epoch',None)!=epoch:
             self._entry_view_epoch=epoch;self._entry_view_cache=OrderedDict()
         key=(proposal.before,proposal.controller,proposal.copied_definition,proposal.counters,proposal.tapped,proposal.copied_add_types,proposal.riot_haste,proposal.entry_subtypes)

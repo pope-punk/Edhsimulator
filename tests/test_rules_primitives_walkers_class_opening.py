@@ -66,6 +66,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
         self.state.add_mana(actor,symbols)
         return Payment(tuple(sorted(Counts(symbols).items())))
     def act(self,ref,ability,targets=(),x=0,actor='A',symbols=''):
+        if self.kernel.priority is None and not self.kernel.stack:self.kernel.open_window_for_scenario(actor)
         payment=self.payment(symbols,actor)
         quote=self.kernel.quote_activation('wc-act-'+str(len(self.kernel.action_receipts)),actor,ref,ability,targets,x_value=x)
         return self.kernel.commit_action(quote,payment)
@@ -113,7 +114,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
             elif self.kernel.phase=='declare_blockers':
                 actor=self.kernel._defenders()[self.kernel.combat['defender_index']]
                 rows=self.kernel._block_specification(actor)['attackers']
-                self.kernel.declare_blockers(actor,{r:[] for r in rows} if blocks is None else blocks,revision=self.kernel.revision)
+                self.kernel.declare_blockers(actor,{r['uid']:[] for r in rows} if blocks is None else blocks,revision=self.kernel.revision)
             else:self.kernel.advance()
         self.fail('Combat did not finish')
 
@@ -241,7 +242,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
 
     def test_aminatou_blinked_token_does_not_return(self):
         self.game();ref=self.card('aminatou-the-fateshifter');target=self.add(token=True)
-        self.act(ref,'blink-owned',(target,));self.drain();self.assertNotEqual(Zone.BATTLEFIELD,self.current(target).zone)
+        self.act(ref,'blink-owned',(target,));self.drain();self.assertFalse(any(o.ref.card_id==target.card_id for o in self.state.objects()))
 
     def test_aminatou_rotation_left_and_right_are_simultaneous(self):
         for direction in ('left','right'):
@@ -461,7 +462,7 @@ class WalkersClassOpeningTests(unittest.TestCase):
 
     def test_class_combat_counter_trigger_remains_at_level_three(self):
         self.game();talent=self.card('innkeeper-s-talent');self.level(talent,3);body=self.add()
-        self.kernel.begin_step('A','begin_combat');self.drain()
+        self.kernel._begin_phase('begin_combat');self.kernel.advance();self.drain()
         self.assertEqual(2,dict(self.state.get(body).counters)['+1/+1'])
 
     def test_ward_requires_level_two_and_any_counter_kind(self):
