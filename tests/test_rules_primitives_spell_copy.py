@@ -272,7 +272,7 @@ class SpellCopyTests(unittest.TestCase):
 
     def test_sunken_palace_enters_tapped(self):
         self.game();ref=self.add(self.cards['sunken-palace'].definition_id,zone=Zone.HAND)
-        self.kernel.play_land('palace-play','A',ref)
+        self.kernel.play_land('palace-play','A',ref,revision=self.kernel.revision)
         self.assertTrue(self.current(ref).tapped)
 
     def test_sunken_palace_basic_blue_is_unrestricted(self):
@@ -360,8 +360,6 @@ class SpellCopyTests(unittest.TestCase):
         self.assertEqual(1,len(self.events('stack_object_copied')))
 
     def test_separate_palace_mana_batches_each_copy(self):
-        self.game();self.tagged();self.tagged();units=self.tags()
-        spell=replace(self.cards['changing-loyalty'].cast,cost=CostSpec(ManaCost(2)))
         custom=CardProgram('cp-two','Two',('Instant',),cast=CastSpec(CostSpec(ManaCost(2)),timing='instant'),spell_effects=(Draw(1),))
         self.game((custom,));self.tagged();self.tagged()
         self.cast(self.add('cp-two',zone=Zone.HAND),tags=self.tags());self.drain()
