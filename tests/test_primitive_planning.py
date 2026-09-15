@@ -61,7 +61,7 @@ class PrimitivePlanningTests(unittest.TestCase):
     def test_diplomat_never_receives_private_hand_seed_or_rationales(self):
         self.publish_goal();job=planning.claim(self.game,'Omo',planning.DIPLOMAT)
         self.assertNotIn('hand',job['board']);self.assertNotIn('seed',job)
-        self.assertEqual([],job['rationales']);self.assertNotIn('plans',job)
+        self.assertEqual([],job['rationales']);self.assertEqual({'long_term'},set(job['plans']))
         for card in self.game.store.packet('Omo')['hand']:self.assertNotIn(card['ref']['card_id'],str(job))
         self.assertTrue(job['requires_public_post'])
         with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[],'urgent_material_plan_change':{},'private_assessments':{}})

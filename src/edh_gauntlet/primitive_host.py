@@ -183,7 +183,13 @@ Do not write tactics, continuity, approve proposals or execute game actions.
 '''
     elif role==planning.SHORT:
         specific='''Own continuity and tactical proposals only. Retain standing; read current goal and
-all supplied own-seat rationales. Prepare short_term with
+all supplied own-seat rationales. Write a complete, self-contained current tactical
+plan for a decider who does not have your previous planning turns. Do not write a
+change log or say "as before", "unchanged except", or refer to a previous plan.
+If the prior plan is still applicable and self-contained, reuse its prose verbatim.
+Otherwise replace it with the full new plan. Continuity may explain history, but
+short_term_plan must contain everything needed to understand the intended line.
+Prepare short_term with
 {short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid"|"pending",long_term_invalid_reason:TEXT}.
 Start immediately after the opening hand is kept, concurrently with the long-term
 planner. If no goal is in this frozen input, use standing strategy and the kept
@@ -210,7 +216,12 @@ supplied target_seat_turn. Do not set watches or poll for changes. Plans are adv
 only the decider approves execution. Never execute or contact a pilot.
 '''+COMMANDS
     else:
-        specific='''Own public conversation only. You have no private hand, seed, deck or rationales.
+        specific='''Own public conversation. Your input includes your own current long_term and
+short_term plan components in plans, verbatim, plus your diplomatic brief.
+Use those plans privately to understand what your seat wants; their contents are
+NOT permission to disclose hidden information. The brief's disclosure and commitment
+limits still govern public speech. You have no separate hand, seed, deck or decision
+rationales. A missing plan has not yet been published; do not invent it or wait for it.
 Compose within the supplied brief; never exceed its disclosure or commitment
 limits. Publish message with {messages:[{id:UNIQUE_ID,text:TEXT_MAX_600,to:[SEATS],
 reply_to:MESSAGE_ID_OR_NULL,urgent_material_plan_change:0_OR_1,private_assessment:{
@@ -218,8 +229,12 @@ explanation:TEXT_MAX_600,recommended_action:TEXT_MAX_600,
 truthfulness:"truthful"|"deceptive"|"uncertain"}}]}.
 Each long-term update requires 1..4 new messages. Optional tactical requests and
 incoming-message jobs may publish messages:[] when no response is useful.
-Your private assessments go only to your own decider; recommend diplomatic conduct,
-not hidden-hand tactics. Use uncertain when public facts cannot establish truth.
+Your private assessments go only to your own decider; connect diplomatic advice to
+the supplied own-seat plans without publishing their private contents. Use uncertain when public facts cannot establish truth.
+Do not send a message that merely summarizes public information or echoes recent
+messages. Add a proposal, acceptance, refusal, question, threat, bluff, or material
+correction. Optional work may choose silence; required posts need a fresh diplomatic
+position, not a board recap. Personality can color the message without replacing its purpose.
 Routine speech (0) preserves batches. Urgent material changes (1) cancel remaining
 batches with a notice. Do not mark routine banter urgent. Address relevant replies;
 reply chains are capped at three. Never poll or reply merely to keep a chain alive.

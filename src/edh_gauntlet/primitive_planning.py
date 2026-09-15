@@ -108,7 +108,8 @@ def claim(campaign,actor,role):
                 from .primitive_cadence import summary
                 seat['tactical_baseline']=summary(board,actor)
             else:
-                job['input'].pop('plans')
+                # Reuse the complete own-seat prose components; no extra summary inference.
+                job['input']['plans']={key:deepcopy(seat['plans'][key]) for key in ('long_term','short_term') if key in seat['plans']}
                 brief=seat['plans'].get('diplomacy_brief',{}).get('value',[])
                 job['input'].update(**({'brief':deepcopy(brief)} if type(brief) is dict else {'authorized_messages':deepcopy(brief)}),
                     requests=deepcopy(seat.get('diplomacy_requests',[])),

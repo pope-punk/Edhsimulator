@@ -69,3 +69,19 @@ If the review was initiated solely by diplomatic requests, this final publicatio
 does NOT trigger another diplomatic message. Independent strategic triggers and
 hold overrides retain normal mandatory posting. Ordinary continuation never
 repeatedly wakes the strategist.
+
+## Direct plan context and self-contained tactics
+
+Every new diplomatic job receives its own complete current long- and short-term
+prose components directly, including their IDs and metadata. No separate summary
+inference is used. The job remains frozen during its turn; later jobs capture new
+publications. These plans may include private intent; receiving them does not
+expand the brief's public disclosure permissions. Other seats' plans, raw private
+hand/deck packets and decision rationales remain excluded.
+
+Short-term plan prose must stand alone for a decider without earlier planning
+history. Reuse still-applicable self-contained prose verbatim, or write the complete
+replacement. Do not publish only differences or references to earlier plans.
+Historical explanation belongs in continuity, not as a prerequisite for reading
+the current tactical plan. Diplomats should add a real diplomatic contribution,
+not a board recap or echo; optional work can choose silence.

@@ -182,3 +182,20 @@ class WorkflowTests(TestCase):
         self.assertEqual(bounds(),job['brief'])
         self.assertIn('incoming:fixture',job['reasons'])
         self.assertTrue(job['requires_public_post'])
+
+    def test_diplomat_receives_complete_own_plans_without_cross_seat_or_extra_summary(self):
+        self.post(self.goal(),messages=[speech()])
+        with self.game.transaction() as state:
+            own={'id':'own-tactics','value':{'short_term_plan':'Develop resources; seek a temporary truce.',
+                 'continuity':'Private tactical details retained verbatim.'}}
+            state['actors']['Omo']['plans']['short_term']=deepcopy(own)
+            state['actors']['Elenda']['plans']['short_term']={'id':'other','value':{'short_term_plan':'Other seat secret'}}
+            planning.queue(state,'Omo',planning.DIPLOMAT,'incoming:fixture')
+        job=planning.claim(self.game,'Omo',planning.DIPLOMAT)
+        self.assertEqual(own,job['plans']['short_term'])
+        self.assertEqual({'long_term','short_term'},set(job['plans']))
+        self.assertNotIn('Other seat secret',str(job))
+        self.assertNotIn('hand',job['board']);self.assertEqual([],job['rationales'])
+        with self.game.transaction() as state:
+            state['actors']['Omo']['plans']['short_term']['value']['short_term_plan']='New later plan.'
+        self.assertEqual(job,planning.claim(self.game,'Omo',planning.DIPLOMAT))
