@@ -56,7 +56,7 @@ def configuration(root, *, seed, starting_player, max_rounds):
             'short_term_sol_fast': 1, 'async_diplomacy': 1, 'decision_roles': 1,
             'static_standing': 1, 'planner_stages': True, 'plan_tiers': True,
             'context_handling': 1, 'turn_batches': 1, 'primitive_surface': 1,
-            'mana_only_priority': 1,
+            'mana_only_priority': 1, 'combat_stage_batches': 1,
             'assets': {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in CONFIG_FILES}}
 
 

@@ -156,6 +156,8 @@ def validate_actions(value,job):
             raise RulesViolation('Host supplies command revision, actor binding and action identity')
         if step['command'].get('kind') not in {'cast','activate','play_land','unlock_room','attack','block','damage','pass','answer','pay_mana','decline_cast','allocate_counters'}:
             raise RulesViolation('Unsupported proposed primitive command')
+        if step['command'].get('kind') in {'attack','block','damage'} and step['phase']!='combat':
+            raise RulesViolation('Combat declarations require the combat phase; actual execution also requires the matching decision stage')
         from .primitive_actions import normalize_scheduler
         normalize_scheduler(step['scheduler'])
         from .primitive_batch_choices import validate as validate_choice

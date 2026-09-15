@@ -74,6 +74,10 @@ def delivered(campaign,actor,claim_id):
 
 def bind_command(campaign,actor,value,request_id):
     if type(value) is not dict or set(value)&{'revision','actor','action_id'}:raise RulesViolation('Host supplies revision, actor and action identity')
+    required={'attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}.get(value.get('kind'))
+    current=campaign.next_action().get('decision_kind')
+    if required and current!=required:
+        raise RulesViolation(f"{value['kind']} requires decision_kind {required}; current decision is {current} in {campaign.kernel.phase}. Combat phase alone does not authorize a declaration. At priority choose a legal priority response; if you choose no action, pass with your scheduler. Submit the declaration only when its required decision arrives. No action was accepted.")
     def resolve(value):
         if type(value) is dict and set(value)=={'owned_card','zone'}:
             # An explicitly proposed symbolic source follows a known own card
@@ -266,15 +270,24 @@ def automatic(campaign):
     state=campaign.state();action=campaign.next_action()
     if state['claim'] or action.get('kind')!='dispatch_pilot':return False
     actor=action['actor'];seat=state['actors'][actor];approved=seat['approved']
+    staged=campaign.config.get('combat_stage_batches')==1
+    attack_step=bool(staged and approved and approved['cursor']<len(approved['steps'])
+                     and approved['steps'][approved['cursor']]['command'].get('kind')=='attack')
     if action['decision_kind']=='declare_attackers' and not campaign.kernel.attack_candidates(actor):
         # A forced empty declaration preserves existing snoozes, but grants no new passes.
+        if (attack_step and approved['steps'][approved['cursor']]['seat_turn']==seat.get('turns',0)
+                and approved['steps'][approved['cursor']]['phase']=='combat'):
+            with campaign.transaction() as value:
+                value['actors'][actor]['approved']=None
+                value['actors'][actor]['last_rejection']='No eligible attackers remain; pending attack batch cancelled. Empty declaration is forced.'
         command={'kind':'attack','attackers':[],'revision':campaign.kernel.revision}
         request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':command})
         campaign.submit(actor,request_id,command,rationale='No eligible attackers; automatic empty declaration.')
         return True
     guarded=bool(approved and approved['cursor']<len(approved['steps'])
                  and 'choice_from' in approved['steps'][approved['cursor']]['command'])
-    if action['decision_kind']!='priority' and not (action['decision_kind']=='choice' and guarded):
+    if (action['decision_kind']!='priority' and not (action['decision_kind']=='choice' and guarded)
+            and not (attack_step and action['decision_kind']=='declare_attackers')):
         if approved or seat['snooze']:
             with campaign.transaction() as value:
                 value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None
@@ -289,7 +302,15 @@ def automatic(campaign):
         if turn>approved['turn_limit'] or expired_step:
             with campaign.transaction() as value:value['actors'][actor]['approved']=None
             return False
-        if (cursor<len(steps) and campaign.kernel.active==actor
+        if (attack_step and steps[cursor]['seat_turn']==turn
+                and action['decision_kind']=='priority' and campaign.kernel.active==actor
+                and phase=='combat' and campaign.kernel.phase!='begin_combat'):
+            with campaign.transaction() as value:
+                value['actors'][actor]['approved']=None
+                value['actors'][actor]['last_rejection']='Attack declaration window already passed; pending attack batch cancelled.'
+            return False
+        if (cursor<len(steps) and (not attack_step or action['decision_kind']=='declare_attackers')
+                and campaign.kernel.active==actor
                 and steps[cursor]['seat_turn']==turn and steps[cursor]['phase']==phase):
             step=steps[cursor];chosen=step['command'];rationale=step['rationale']
             control={'scheduler':normalize_scheduler(step['scheduler']),

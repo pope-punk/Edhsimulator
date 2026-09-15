@@ -138,3 +138,17 @@ class ManaOnlyPriorityTests(TestCase):
                 self.assertIsNone(game.state()['claim'])
             finally:
                 game.close()
+
+    def test_fully_tapped_painlands_and_city_trigger_do_not_hold_priority(self):
+        from edh_gauntlet.rules_bundle import load_reviewed
+        from edh_gauntlet.rules_state import ResourcePayment
+        cards=load_reviewed()
+        state=RulesState(('A','B'))
+        programs=[cards[key]['program'] for key in ('city-of-brass','caves-of-koilos','adarkar-wastes')]
+        refs=[state.add_card(p.definition_id,p.definition_id,'A',Zone.BATTLEFIELD) for p in programs]
+        k=RulesKernel(state,programs);k.open_window_for_scenario('B','precombat_main','A')
+        self.assertFalse(mana_only_window(k,'A'))  # An available activation has material effects.
+        state.move((),'fixture-tap',payment=ResourcePayment('A',taps=tuple(refs)))
+        before=k.snapshot()
+        self.assertTrue(mana_only_window(k,'A'))
+        self.assertEqual(before,k.snapshot())

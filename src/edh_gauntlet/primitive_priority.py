@@ -108,14 +108,18 @@ def mana_only_window(kernel, actor):
         objects.append(top)
     objects = list({o.ref: o for o in objects}.values())
     bound = _mana_bound(kernel, actor, objects)
+    mana_available = any(not obj.phased and
+        (obj.controller if obj.zone == Zone.BATTLEFIELD else obj.owner) == actor and
+        any(a.mana_ability and a.zone == obj.zone and not (a.cost.tap_source and obj.tapped)
+            for a in kernel.activated_abilities(obj)) for obj in objects)
     permissions = kernel.player_permissions()[actor] if main else None
     for obj in objects:
         if obj.phased:
             continue
         program = kernel.definition(obj)
-        if obj.zone == Zone.BATTLEFIELD and _orientation_sensitive(program.continuous):
+        if mana_available and obj.zone == Zone.BATTLEFIELD and _orientation_sensitive(program.continuous):
             return False
-        if any(kernel._trigger_abilities(obj, kind) for kind in ('becomes_tapped', 'ability_activated')):
+        if mana_available and any(kernel._trigger_abilities(obj, kind) for kind in ('becomes_tapped', 'ability_activated')):
             return False
         if obj.owner == actor and obj.zone != Zone.BATTLEFIELD:
             physical = kernel.definitions[obj.definition]
@@ -146,6 +150,8 @@ def mana_only_window(kernel, actor):
             return False  # Unlock is a separate special action.
         for ability in kernel.activated_abilities(obj):
             if ability.zone != obj.zone or ability.timing == 'sorcery' and not main:
+                continue
+            if ability.cost.tap_source and obj.tapped:
                 continue
             if not ability.mana_ability:
                 if _could_pay(kernel, obj, ability, bound):
