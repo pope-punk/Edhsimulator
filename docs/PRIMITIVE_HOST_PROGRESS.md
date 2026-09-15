@@ -202,3 +202,20 @@ source root from its own file. All three release tests pass both locally and
 against an isolated installed package (`/tmp/edh-ci-layout.log`). Runtime source
 and assets are unchanged, so the release receipt still matches. Final CI on this
 test correction remains required before merge and hosted-model gameplay.
+
+Final Ubuntu/Windows CI passed on 3e08637 and PR #2 merged to main as
+30ef03102291d95195df758498110e6de316d1b8. A fresh hosted-model game was initialized
+at `/workspaces/Edhsimulator/runs/primitive-hosted-test-20260915`, seed 2026091501,
+32-round horizon, learning disabled. It accepted one pilot decision before a
+transport-reader exception stopped the host. Process metadata confirms inactive
+transport generation 1 with contexts unloaded. Accepted prefix:
+`1:b906887dfc333bb7529fee019ac6f7ed425528d43098b4928d8b1661742ac0a7`.
+
+A reproduced telemetry defect hashes structured primitive inspection queries as
+if they were strings. The fix records only bounded category names and also avoids
+calling len on malformed proposal fields before tool validation. Two new tests
+and 13 existing telemetry/performance checks pass. Work continues on
+`fix/primitive-telemetry-inspection`. The game has not resumed or been replaced.
+Because the host implementation is bound, next work must provide explicit checked
+transport-repair compatibility while preserving its game contract, accepted
+prefix, journal and logical seats. Do not bypass the binding or replay actions.

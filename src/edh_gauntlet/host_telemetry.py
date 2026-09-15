@@ -90,13 +90,20 @@ class Timing:
                 while len(self.requests)>16:self.requests.pop(next(iter(self.requests)))
                 args=p.get('arguments',{});queries=args.get('queries') if isinstance(args,dict) else None
                 fields={'tool':p.get('tool'),'request':message['id'],'turn':p.get('turnId')}
-                if isinstance(queries,list):fields['inspection_categories']=[q if q in {'continuity','sequence','roles','deck','seed','history'} else 'other' for q in queries]
+                if isinstance(queries,list):
+                    categories=[]
+                    for query in queries:
+                        kind=query.get('kind') if isinstance(query,dict) else query
+                        categories.append(kind if isinstance(kind,str) and kind in {
+                            'continuity','sequence','roles','deck','seed','history','state','object','card'} else 'other')
+                    fields['inspection_categories']=categories
                 response=args.get('response',{}) if isinstance(args,dict) else {}
                 if isinstance(response,dict):
                     fields['submitted_chars']=len(json.dumps(response,ensure_ascii=False,separators=(',',':')))
                     if p.get('tool')=='edh_publish':
+                        sequence=response.get('action_sequence',[])
                         fields.update(publication_stage=args.get('stage'),strategic_disposition=response.get('strategic_disposition'),
-                            long_term_action=response.get('long_term_action'),proposed_actions=len(response.get('action_sequence',[])))
+                            long_term_action=response.get('long_term_action'),proposed_actions=len(sequence) if isinstance(sequence,list) else 0)
                         if isinstance(response.get('phase_coverage'),dict):
                             fields['phase_coverage']={phase:row.get('status') for phase,row in response['phase_coverage'].items()
                                 if phase in {'precombat_main','combat','postcombat_main'} and isinstance(row,dict)}
