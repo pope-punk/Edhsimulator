@@ -375,7 +375,7 @@ class FacesSagasExtortTests(unittest.TestCase):
 
     def test_all_seven_cards_require_reviewed_loader(self):
         reviewed=load_reviewed(self.root)
-        self.assertEqual(327,len(reviewed))
+        self.assertTrue(set(CARDS).issubset(reviewed))
         self.assertEqual({'catalog:'+key for key in CARDS},{p.definition_id for p in self.cards.values()})
 
     def test_sorin_ultimate_excludes_sorin_and_target(self):

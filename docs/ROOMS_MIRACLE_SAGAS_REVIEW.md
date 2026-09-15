@@ -86,3 +86,12 @@ reviewed rows remain unchanged. The same 56 methods now strictly require
 `load_reviewed()`, with no draft fallback. The existing library-wide trigger
 index test also checks both Room doors separately and together.
 Required reviewed-loader validation must pass before this pass is marked complete.
+
+
+The first required reviewed-loader run [34914282145](https://github.com/pope-punk/Edhsimulator/actions/runs/34914282145)
+at `5203a019c351ba3d6bb6c437d90d4a181122bd32` ran 2592 Windows tests with one
+failure: a Pass 3 fixture still asserted the former global count of 327. It now
+checks that its seven required cards are present; the dedicated full-library test
+continues to assert 334 unique cards and 400 deck copies. All other 2591 methods,
+including the final seven programs and Room index cases, passed. This is a fixture
+scope correction; no card program or runtime change is required.
