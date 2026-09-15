@@ -50,7 +50,11 @@ frozen object's activated_abilities for exact IDs and costs. Empty payment is
 Optional casting fields: face, modes, alternative_id, counter_division, kicker,
 replicate, life_costs, hybrid_choices. attack uses attackers:[{source:REF,defender:SEAT_OR_REF}];
 block and damage use assignments matching the supplied specification.
-pay_mana:{request_id,payment}; decline_cast:{request_id}; allocate_counters:{request_id,allocations};
+pay_mana:{request_id,payment}: use payment:null to decline a resolution payment
+(including extort); an empty payment object attempts to pay and is not a decline.
+To pay, activate available mana abilities first and supply the exact mana payment.
+Resolution payments must be answered with pay_mana, not a priority pass.
+decline_cast:{request_id}; allocate_counters:{request_id,allocations};
 unlock_room:{source,door,payment}; each also supplies kind. Announcements validate
 atomically; rejection does not pay costs. Required choice indexes cannot be inferred
 from old requests. Multi-selections and combat declarations are already batched.
