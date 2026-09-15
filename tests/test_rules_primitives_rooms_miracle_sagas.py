@@ -271,7 +271,7 @@ class RoomsMiracleSagasTests(unittest.TestCase):
         self.assertEqual(1,dict(self.state.get(ref).counters)['lore'])
         self.assertTrue(self.ability(ref,'saga-mana'))
         self.kernel.open_window_for_scenario('A');self.act(ref,'saga-mana')
-        self.assertEqual(1,self.state.mana_pool('A').get('C',0))
+        self.assertEqual(1,dict(self.state.mana_pool('A')).get('C',0))
 
     def test_urza_construct_counts_itself_and_live_artifacts(self):
         self.game();ref=self.enter(self.card('urza-s-saga'));self.chapters(ref,1);self.drain()
@@ -288,8 +288,9 @@ class RoomsMiracleSagasTests(unittest.TestCase):
         self.game(extra)
         refs={key:self.add('cost-'+key,zone=Zone.LIBRARY) for key in ('absent','zero','one','blue','x')}
         selector=ExactManaCostSelector(Zone.LIBRARY,types=('Artifact',),costs=(ManaCost(),ManaCost(1)))
-        frame=self.kernel._frame(self.state.get(self.anchor),'A',())
-        self.assertEqual({refs['zero'],refs['one']},{o.ref for o in self.kernel._query(selector,frame)})
+        from edh_gauntlet.rules_characteristics import matches
+        source=self.state.get(self.anchor);views=self.kernel.characteristics()
+        self.assertEqual({refs['zero'],refs['one']},{o.ref for o in self.state.zone('A',Zone.LIBRARY) if matches(selector,o,views[o.ref],source)})
 
     def test_miracle_first_draw_reveal_is_checkpointed(self):
         self.game();self.card('aminatou-veil-piercer',zone=Zone.BATTLEFIELD);ref=self.card('funeral-room-awakening-hall',zone=Zone.LIBRARY)
@@ -430,6 +431,66 @@ class RoomsMiracleSagasTests(unittest.TestCase):
         ref=self.current(ref).ref;life=self.state.life('A')
         self.chapters(ref,2);self.drain()
         self.assertEqual(life,self.state.life('A'))
+
+    def test_ghostly_uses_current_room_type(self):
+        blank=CardProgram('room-type-change','Room type change',('Enchantment',),continuous=(ContinuousProgram('creature-room',Selector(Zone.BATTLEFIELD,subtypes=('Room',)),(SetCardTypes(('Creature',),('Human',)),SetPT(5,5))),))
+        self.game((blank,));room=self.enter(self.card('funeral-room-awakening-hall'));self.add('room-type-change')
+        self.enter(self.card('ghostly-dancers'))
+        self.assertEqual((),self.state.get(room).unlocked)
+
+    def test_losing_abilities_removes_funeral_trigger(self):
+        blank=CardProgram('room-blank','Room blank',('Enchantment',),continuous=(ContinuousProgram('blank-room',Selector(Zone.BATTLEFIELD,subtypes=('Room',)),(LoseAbilities(),)),))
+        self.game((blank,));room=self.enter(self.card('funeral-room-awakening-hall'));self.unlocked(room)
+        self.add('room-blank');body=self.add();self.move(body,Zone.GRAVEYARD);self.drain()
+        self.assertEqual(40,self.state.life('A'))
+
+    def test_room_scanning_and_indexed_collectors_agree(self):
+        from edh_gauntlet.rules_trigger_benchmark import ScanningRulesKernel
+        self.game();self.card('entity-tracker',zone=Zone.BATTLEFIELD);room=self.enter(self.card('funeral-room-awakening-hall'))
+        state=self.kernel.snapshot()
+        self.run_effect((UnlockRoom('target','both'),),targets=(room,));self.drain()
+        expected=self.kernel.snapshot()
+        self.kernel=ScanningRulesKernel.restore(state,self.programs);self.state=self.kernel.state
+        self.run_effect((UnlockRoom('target','both'),),targets=(room,));self.drain()
+        self.assertEqual(expected,self.kernel.snapshot())
+
+    def test_counted_modifier_matches_exhaustive_layers(self):
+        self.game();program=self.cards['urza-s-saga'].abilities[1].effects[0].changes[0].ability.effects[0].token
+        self.run_effect((CreateTokens(program,2),));self.drain()
+        self.assertEqual(evaluate(self.state.objects(),self.kernel.definitions),evaluate_exhaustive(self.state.objects(),self.kernel.definitions))
+
+    def test_new_counter_state_rejects_negative_ordinal(self):
+        self.game();ref=self.card('victor-valgavoth-s-seneschal',zone=Zone.BATTLEFIELD)
+        self.run_effect(self.cards['victor-valgavoth-s-seneschal'].abilities[0].effects,source=ref);self.drain()
+        state=self.kernel.snapshot();key=next(iter(state['resolution_counts']));state['resolution_counts'][key]=0
+        with self.assertRaises(RulesViolation):RulesKernel.restore(state,self.programs)
+
+    def test_urza_third_chapter_searches_then_sacrifices(self):
+        self.game();artifact=self.add('catalog:sol-ring',zone=Zone.LIBRARY);ref=self.enter(self.card('urza-s-saga'))
+        self.chapters(ref,1);self.drain();self.chapters(ref,1);self.top()
+        self.assertEqual('library_search',self.kernel.pending_choice.kind)
+        q=self.kernel.pending_choice
+        self.answer([next(i for i,o in enumerate(q.options) if o.ref==artifact)])
+        self.drain();self.assertEqual(Zone.BATTLEFIELD,self.current(artifact).zone)
+        self.assertEqual(Zone.GRAVEYARD,self.current(ref).zone)
+        self.assertTrue(any(e['kind']=='library_shuffled' for e in self.kernel.semantic_events))
+
+    def test_urza_uses_land_play_and_ordinary_chapter_stack(self):
+        self.game();ref=self.card('urza-s-saga')
+        self.kernel.turn_schedule={'land_plays':0,'advance':False,'cleanup_priority':False}
+        self.kernel.play_land('saga-land','A',ref,revision=self.kernel.revision)
+        self.assertEqual(1,self.kernel.turn_schedule['land_plays'])
+        self.assertEqual(Zone.BATTLEFIELD,self.current(ref).zone)
+        self.assertEqual(1,len(self.kernel.stack));self.assertTrue(self.kernel.stack[0]['values']['saga_chapter'])
+        self.restore();self.top()
+        self.assertTrue(self.ability(self.current(ref).ref,'saga-mana'))
+
+    def test_actor_adapter_unlocks_without_activated_ability(self):
+        self.game();ref=self.enter(self.card('funeral-room-awakening-hall'));self.kernel.open_window_for_scenario('A')
+        paid=self.payment('CCB')
+        RulesActorAdapter(self.kernel)._execute('A',{'kind':'unlock_room','action_id':'actor-unlock','source':ref.to_json(),'door':'left','payment':paid.to_json(),'revision':self.kernel.revision})
+        self.assertEqual(('left',),self.state.get(ref).unlocked)
+        self.assertFalse(any(f.get('activated_program') for f in self.kernel.stack))
 
 
 if __name__=='__main__':unittest.main()

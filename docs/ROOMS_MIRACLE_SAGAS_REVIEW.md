@@ -58,6 +58,11 @@ and sacrifice; older notes about Sagas with no chapter abilities are superseded.
 
 ## Validation
 
-The new conformance module currently has 48 focused methods. Both hosted draft
+Initial draft run [34911639077](https://github.com/pope-punk/Edhsimulator/actions/runs/34911639077)
+at `593b793100867470a4585c92476189d683e83805` ran 2584 tests on Ubuntu:
+2581 passed; two test fixtures used the wrong inspection API, and catalog output
+needed the generator's literal Unicode formatting. These are corrected in the
+follow-up, which also adds eight edge-case and land/search integration methods. Windows was cancelled by the
+workflow's fail-fast setting. The new conformance module now has 56 focused methods. Both hosted draft
 validation and the required reviewed-loader run must pass on Ubuntu and Windows
 before promotion is recorded. No completion count is inferred from authoring.

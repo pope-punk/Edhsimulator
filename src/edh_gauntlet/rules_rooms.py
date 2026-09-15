@@ -35,7 +35,7 @@ class RoomRules:
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
             for kind in ('door_unlocked','fully_unlocked'):
-                if kind=='fully_unlocked' and not full:continue
+                if kind=='fully_unlocked' and (not full or 'Room' not in self.effective(obj.ref).subtypes):continue
                 for ability in self._trigger_abilities(source,kind):
                     pattern=ability.event
                     if pattern.kind!=kind:continue
@@ -125,7 +125,7 @@ class RoomRules:
             for obj,doors in choices:self._set_room_doors(obj,doors,actor)
         elif isinstance(effect,ReturnEnchantmentOrUnlock):
             cards=self._query(Selector(Zone.GRAVEYARD,types=('Enchantment',),relation='owned'),frame)
-            rooms=tuple(o for o in self.state.objects(Zone.BATTLEFIELD,controller=actor) if not o.phased and self._room(o) is not None and len(o.unlocked)<2)
+            rooms=tuple(o for o in self.state.objects(Zone.BATTLEFIELD,controller=actor) if not o.phased and self._room(o) is not None and 'Room' in self.effective(o.ref).subtypes and len(o.unlocked)<2)
             # This is a nonmodal instruction: choose a possible alternative at resolution.
             choices=tuple(Option('return:'+str(i),'Return '+self.definition(o).name,ref=o.ref) for i,o in enumerate(cards))+tuple(Option('unlock:'+str(i),'Unlock '+(self.definition(o).name or 'Room'),ref=o.ref) for i,o in enumerate(rooms))
             if choices:
