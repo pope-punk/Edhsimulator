@@ -62,3 +62,61 @@ class SourceSnoozeTests(TestCase):
         self.assertFalse(actions.automatic(self.game))
         self.assertIsNone(self.game.state()['actors']['Omo']['snooze'])
         self.assertEqual(0,self.game.store.generation)
+
+    def advance_to(self,actor,phase):
+        for index in range(150):
+            k=self.game.kernel
+            if k.active==actor and k.phase==phase:return
+            frontier=self.game.next_action();who=frontier['actor']
+            command=({'kind':'attack','attackers':[]} if frontier['decision_kind']=='declare_attackers'
+                     else {'kind':'pass'})
+            if frontier['decision_kind']=='choice':
+                choice=k.pending_choice
+                command={'kind':'answer','request_id':choice.request_id,'indexes':list(range(choice.minimum))}
+            self.game.submit(who,'advance:'+str(self.game.store.generation),
+                             {**command,'revision':k.revision},rationale='Offline boundary setup.')
+        self.fail('Fixture did not reach boundary')
+
+    def test_forced_empty_attack_preserves_snoozes_and_priority_window(self):
+        self.advance_to('Omo','declare_attackers')
+        directive=actions.normalize_scheduler({'mode':'snooze_table','time':'9 beginning of upkeep',
+                                               'wake_condition':'opponent_action'})
+        with self.game.transaction() as state:
+            for actor in state['actors']:actions.apply_control(self.game,state,actor,{'scheduler':directive})
+        before=self.game.store.generation
+        self.assertTrue(actions.automatic(self.game))
+        self.assertEqual(before+1,self.game.store.generation)
+        self.assertEqual('priority',self.game.next_action()['decision_kind'])
+        self.assertTrue(all(seat['snooze'] for seat in self.game.state()['actors'].values()))
+        self.assertTrue(actions.automatic(self.game))
+
+    def test_forced_empty_attack_does_not_authorize_new_priority_pass(self):
+        self.advance_to('Omo','declare_attackers')
+        self.assertTrue(actions.automatic(self.game))
+        self.assertFalse(actions.automatic(self.game))
+
+    def test_table_snooze_expires_at_own_upkeep_before_long_deadline(self):
+        directive=actions.normalize_scheduler({'mode':'snooze_table','time':'9 beginning of upkeep',
+                                               'wake_condition':'deadline_only'})
+        with self.game.transaction() as state:actions.apply_control(self.game,state,'Elenda',{'scheduler':directive})
+        self.advance_to('Elenda','upkeep')
+        self.assertIsNone(self.game.state()['actors']['Elenda']['snooze'])
+        self.assertFalse(actions.automatic(self.game))
+
+    def test_possible_attacker_still_requires_pilot(self):
+        self.advance_to('Omo','declare_attackers')
+        with patch.object(self.game.kernel,'attack_candidates',return_value={'candidate':object()}):
+            before=self.game.store.generation
+            self.assertFalse(actions.automatic(self.game))
+            self.assertEqual(before,self.game.store.generation)
+
+    def test_empty_attack_resulting_opposing_trigger_still_wakes(self):
+        directive=actions.normalize_scheduler({'mode':'snooze_table','time':'9 beginning of upkeep',
+                                               'wake_condition':'opponent_action'})
+        with self.game.transaction() as state:
+            actions.apply_control(self.game,state,'Elenda',{'scheduler':directive})
+            state['scheduler_event_cursor']=len(self.game.kernel.semantic_events)
+            self.game.kernel.semantic_events.append({'kind':'trigger_placed','controller':'Omo'})
+            try:actions.observe(self.game,state,'Omo',{'kind':'attack','attackers':[]})
+            finally:self.game.kernel.semantic_events.pop()
+            self.assertIsNone(state['actors']['Elenda']['snooze'])

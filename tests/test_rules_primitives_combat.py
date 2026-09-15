@@ -35,6 +35,20 @@ class CombatTests(unittest.TestCase):
         self.kernel.declare_blockers('B',assignments,revision=self.kernel.revision)
         return self.pass_round()
 
+    def test_attack_candidates_share_declaration_eligibility(self):
+        self.setup_game(((2,2,()),(2,2,('defender',)),(2,2,('haste',))),())
+        normal,defender,hasty=self.attackers
+        self.assertEqual({normal,hasty},set(self.kernel.attack_candidates('A')))
+        self.state.set_tapped_batch((normal,),True)
+        self.state.phase(hasty,True)
+        fresh=self.state.add_card('fresh','A0','A',Zone.BATTLEFIELD)
+        fresh_haste=self.state.add_card('fresh-haste','A2','A',Zone.BATTLEFIELD)
+        self.assertEqual({fresh_haste},set(self.kernel.attack_candidates('A')))
+        self.state.set_tapped_batch((fresh_haste,),True)
+        self.assertEqual({},self.kernel.attack_candidates('A'))
+        self.kernel.declare_attackers('A',{},revision=self.kernel.revision)
+        self.assertEqual([],self.kernel.combat['attackers'])
+
     def test_mutual_lethal_damage_commits_deaths_simultaneously(self):
         self.setup_game();self.block()
         deaths=[event for event in self.state.events if event.cause=='permanent_sba']
