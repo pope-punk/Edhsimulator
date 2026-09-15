@@ -63,7 +63,7 @@ class PrimitiveCampaign:
     @classmethod
     def create(cls, path, *, seed, starting_player, max_rounds=16, root=PROJECT_ROOT):
         from .rules_admission import require_production_ready
-        require_production_ready(root)
+        require_production_ready(root,scope='host')
         return cls._create(path, seed=seed, starting_player=starting_player, max_rounds=max_rounds, root=root)
 
     @classmethod

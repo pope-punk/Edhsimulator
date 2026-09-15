@@ -402,7 +402,7 @@ class PrimitiveRunner:
 def launch(args):
     """Called by host_runtime under the same exclusive host-driver OS lock."""
     from .rules_admission import require_production_ready
-    require_production_ready()
+    require_production_ready(scope='host')
     if args.model or args.decider_model or args.planner_model or args.fresh_contexts:
         raise RulesViolation('Primitive cohorts retain their bound models and require fenced recovery')
     campaign=PrimitiveCampaign.open(args.cohort,recover=False)

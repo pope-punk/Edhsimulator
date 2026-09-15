@@ -1,8 +1,7 @@
-"""Production readiness audit for the experimental rules kernel.
+"""Admit only a validated fixed-pod host build with matching local release evidence.
 
-A passing interaction fixture is not a whole-card certificate. This module
-provides an explicit rejecting production entrypoint while migration is partial;
-it never interprets legacy catalog support labels as primitive coverage.
+Host conformance is not a whole-card correctness guarantee. Fixture identities
+and authored coverage remain separately reported; generic factories stay closed.
 """
 import argparse
 import hashlib
@@ -30,13 +29,6 @@ FIXTURE_BINDINGS = {
     'uro-titan-of-nature-s-wrath': 'uro',
 }
 
-PRODUCTION_BLOCKERS = (
-    'No complete reviewed executable bundle for every face and clause in the fixed decks',
-    'Casting and activation still lack the full cost/announcement vocabulary and restricted mana; concessions, loss/win exceptions and planeswalker/battle combat are incomplete',
-    'Ability/control/color layers, prevention, full replacement semantics and state-based actions are incomplete',
-    'Hidden-information projections and production action routing are not bound to this kernel',
-    'Historical runtime selection, production replay parity and deployment gates are incomplete',
-)
 
 
 def digest(value):
@@ -49,6 +41,11 @@ def readiness(root=PROJECT_ROOT):
     catalog = tuple(load_catalog(catalog_path))
     programs = {program.definition_id: program for program in fixture_programs()}
     reviewed = load_reviewed(root)
+    from .primitive_release import evidence,SCOPE
+    receipt,release_error=evidence(root)
+    coverage=deck_coverage(root)
+    missing=sorted({row['card_id'] for deck in coverage['decks'] for row in deck['entries'] if not row['program_definition']})
+    blockers=([release_error] if release_error else [])+(['Fixed-pod programs are missing: '+', '.join(missing)] if missing else [])
     cards = []
     for card in catalog:
         program_id = FIXTURE_BINDINGS.get(card.card_id)
@@ -65,19 +62,23 @@ def readiness(root=PROJECT_ROOT):
             'fixture_program': program_id,
             'fixture_sha256': digest(encode(programs[program_id])) if program_id else None,
             'production_certified': False})
-    return {'schema': 1, 'production_ready': False, 'implementation_sha256': IMPLEMENTATION_ID,
+    return {'schema': 1, 'production_ready': not blockers, 'implementation_sha256': IMPLEMENTATION_ID,
+        'validated_scope':SCOPE,'release_receipt_sha256':receipt['sha256'] if receipt else None,
         'kernel_checkpoint_schema': RulesKernel.CHECKPOINT_SCHEMA, 'state_checkpoint_schema': RulesState.CHECKPOINT_SCHEMA,
-        'actor_packet_schema':1,'adapter_replay_schema':1,'durable_journal_schema':DurableRulesAdapter.SCHEMA,'production_host_bound':False,
+        'actor_packet_schema':1,'adapter_replay_schema':1,'durable_journal_schema':DurableRulesAdapter.SCHEMA,'production_host_bound':True,
         'catalog_sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest(),
         'fixture_bundle_sha256': digest([encode(p) for p in sorted(programs.values(), key=lambda p: p.definition_id)]),
         'card_count': len(cards), 'fixture_card_count': sum(row['status'] == 'fixture_only' for row in cards),
         'authored_card_count':len(reviewed),'unreviewed_program_count':len(cards)-len(reviewed),
-        'certified_card_count': 0, 'blockers': list(PRODUCTION_BLOCKERS), 'cards': cards}
+        'certified_card_count': 0, 'blockers': blockers, 'cards': cards}
 
 
-def require_production_ready(root=PROJECT_ROOT):
+def require_production_ready(root=PROJECT_ROOT,*,scope=None):
     report = readiness(root)
-    raise RulesViolation('Experimental kernel is not admitted for production: ' + '; '.join(report['blockers']))
+    if scope!='host' or not report['production_ready']:
+        raise RulesViolation('Experimental kernel is not admitted for production: ' +
+            '; '.join(report['blockers'] or ['Use the bound primitive host; generic production factories remain unavailable']))
+    return report
 
 
 def main():

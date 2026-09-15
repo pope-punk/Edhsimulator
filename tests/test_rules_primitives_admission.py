@@ -29,7 +29,7 @@ class AdmissionTests(unittest.TestCase):
     def test_production_entrypoint_rejects_before_any_state_is_constructed(self):
         with self.assertRaisesRegex(RulesViolation, 'not admitted for production'):
             RulesKernel.for_production()
-        with self.assertRaisesRegex(RulesViolation, 'Casting and activation'):
+        with self.assertRaisesRegex(RulesViolation, 'release receipt'):
             require_production_ready()
 
     def test_readiness_fingerprints_are_deterministic(self):

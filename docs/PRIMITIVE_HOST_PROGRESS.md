@@ -170,3 +170,19 @@ pilot's scheduler projection to avoid duplicating its source references.
 Next: reconcile `rules_admission` and `rules_launch_preflight`, whose static blocker
 text still describes pre-migration capabilities. Admission must consume actual
 current validation evidence and supported launch scope, not simply flip a flag.
+
+Admission now checks an explicit local release receipt selected with
+`EDH_PRIMITIVE_RELEASE_RECEIPT`. Produce it using
+`PYTHONPATH=src python -m edh_gauntlet.primitive_release --output /absolute/fresh-receipt.json`.
+The validator executes the entire repository suite, builds and installs a wheel
+in an isolated directory, verifies installed assets, compares installed/source
+fingerprints, and refuses publication if source or tests changed during the run.
+The receipt binds Python/kernel identity, all package modules, fixed-pod assets,
+policy documents and frozen strategy. It is local build evidence, not a whole-card
+correctness certificate. Generic production factories remain closed.
+
+With matching evidence, preflight supplies a primitive lifecycle command for one
+fresh game with learning disabled. It never initializes a cohort or adopts a
+legacy game. Unsupported multi-game/learning-enabled intents stay blocked.
+Focused admission, launch and release-evidence checks pass. The complete release
+validator is the next gate; no release receipt or hosted-model game exists yet.
