@@ -461,7 +461,10 @@ class CastingRules:
         if isinstance(quote.cost,LoyaltyCost):return self._commit_loyalty_action(quote,payment)
         if isinstance(quote.cost,OrderedCostSpec):return self._commit_ordered_action(quote,payment)
         if payment.cost_order:raise RulesViolation('This cost does not accept an ordered payment')
-        if payment.mana_actions:return self._commit_cast_mana_plan(quote,payment)
+        if payment.mana_actions:
+            if self._cast_waiting():return self._commit_cast_mana_plan(quote,payment)
+            from .primitive_autotap import commit_priority
+            return commit_priority(self,quote,payment)
         resources = self._resource_payment(quote, payment)
         zone_refs=self._zone_cost_refs(quote,payment)
         if quote.cost.zone_costs:

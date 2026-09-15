@@ -1,0 +1,196 @@
+"""Bounded deterministic payment selection for explicitly authorized auto-taps.
+
+Only ordinary, free tap-for-mana abilities are eligible. Reservations describe
+simultaneously available mana after payment, not a preference to ignore on failure.
+"""
+import hashlib
+from collections import Counter
+from copy import deepcopy
+from .rules_state import RulesViolation, Zone, ObjectRef
+from .rules_program import CostSpec, AddMana, ChooseMana, ChooseCommanderMana, LandMana, ProduceMana, ActivatedProgram, LoyaltyCost
+from .rules_casting import Payment, _mana_symbols_satisfied
+
+COLORS = 'WUBRGC'
+LIMIT = 20000
+
+
+def validate(command):
+    if 'autotap' not in command:return
+    spec=command['autotap']
+    if command.get('kind') not in ('cast','activate') or type(spec) is not dict or set(spec)-{'reserve'}:
+        raise RulesViolation('autotap is a cast/activate option with optional reserve mana counts')
+    reserve=spec.get('reserve',{})
+    if (type(reserve) is not dict or set(reserve)-set(COLORS)
+            or any(type(n) is not int or not 0<=n<=10 for n in reserve.values()) or sum(reserve.values())>10):
+        raise RulesViolation('autotap.reserve requires W/U/B/R/G/C counts, totaling at most 10')
+    payment=command.get('payment',{'mana':{},'taps':[]})
+    if type(payment) is not dict or payment.get('mana') or any(payment.get(k) for k in ('mana_actions','convoke','tagged_mana','cost_order')):
+        raise RulesViolation('autotap supplies mana and mana_actions; specify other payment costs explicitly')
+    try:Payment.from_json(payment)
+    except (KeyError,TypeError,ValueError) as exc:raise RulesViolation('Invalid explicit non-mana payment for autotap') from exc
+
+
+def options(kernel,actor,obj,*,reserve_check=False):
+    """Return finite ordinary mana options, never strategic side-effect choices."""
+    from .primitive_priority import _orientation_sensitive
+    if (obj.zone!=Zone.BATTLEFIELD or obj.controller!=actor or obj.tapped or obj.phased
+            or 'Creature' in kernel.effective(obj.ref).types):return []
+    for observer in kernel.state.objects(Zone.BATTLEFIELD):
+        if observer.phased:continue
+        if _orientation_sensitive(kernel.definition(observer).continuous):return []
+        for kind in ('becomes_tapped','ability_activated'):
+            for trigger in kernel._trigger_abilities(observer,kind):
+                pattern=trigger.event
+                if pattern.subject=='self' and observer.ref!=obj.ref:continue
+                if pattern.controller_only and observer.controller!=actor:continue
+                if pattern.types and not set(pattern.types)<=kernel.effective(obj.ref).types:continue
+                return []
+    result=[]
+    for ability in kernel.activated_abilities(obj):
+        if (not ability.mana_ability or ability.zone!=Zone.BATTLEFIELD
+                or type(ability.cost) is not CostSpec or ability.cost!=CostSpec(tap_source=True)
+                or len(ability.effects)!=1 or ability.targets is not None):continue
+        if reserve_check:
+            # A pending trigger-order choice need not invalidate physical capacity.
+            # For this post-payment proof admit only unrestricted instant abilities.
+            if type(ability) is not ActivatedProgram or ability.timing!='instant':continue
+        else:
+            try:kernel.quote_activation('autotap-eligibility',actor,obj.ref,ability.ability_id)
+            except RulesViolation:continue
+        e=ability.effects[0]
+        if type(e) is AddMana:bundles=(e.symbols,)
+        elif type(e) is ChooseMana:bundles=e.options
+        elif type(e) is ChooseCommanderMana:bundles=tuple((c,) for c in kernel.state.commander_identity(actor))
+        elif type(e) is LandMana:bundles=tuple((c,) for c in kernel.land_mana_options(e,actor))
+        elif type(e) is ProduceMana and type(e.amount) is int and 0<e.amount<=20:bundles=tuple((c,)*e.amount for c in e.options)
+        else:continue
+        for index,bundle in enumerate(bundles):
+            counts=Counter(kernel._mana_after_replacements(actor,bundle,tapped_for_mana=True))
+            if not counts or set(counts)-set(COLORS):continue
+            command={'kind':'activate','source':obj.ref.to_json(),'ability_id':ability.ability_id,
+                     'targets':[],'x_value':0,'payment':{'mana':{},'taps':[]}}
+            commands=[command]
+            if len(bundles)>1:commands.append({'kind':'answer','indexes':[index]})
+            result.append((tuple(counts[c] for c in COLORS),commands))
+    return result
+
+
+def quote(kernel,actor,command):
+    from .rules_adapter import RulesActorAdapter
+    adapter=RulesActorAdapter(kernel)
+    source=adapter._visible_ref(command['source'],actor)
+    targets=tuple(adapter._visible_target(v,actor) for v in command['targets'])
+    division=tuple((adapter._visible_ref(v['ref'],actor),v['amount']) for v in command.get('counter_division',[]))
+    if command['kind']=='activate':
+        return kernel.quote_activation(command['action_id'],actor,source,command['ability_id'],targets,x_value=command['x_value'],counter_division=division)
+    return kernel.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],
+        mode_choices=tuple((v['mode_id'],tuple(adapter._visible_target(t,actor) for t in v['targets'])) for v in command.get('modes',[])),
+        alternative_id=command.get('alternative_id'),counter_division=division,kicker=command.get('kicker',False),
+        replicate=command.get('replicate',0),life_costs=tuple(command.get('life_costs',[])),
+        hybrid_choices=tuple(command.get('hybrid_choices',[])),face=command.get('face'))
+
+
+def payment(kernel,actor,command):
+    validate(command)
+    q=quote(kernel,actor,command)
+    if type(q.cost) not in (CostSpec,LoyaltyCost):raise RulesViolation('autotap requires an ordinary quoted cost; use explicit payment for this cost')
+    need=q.cost.mana.generic+len(q.cost.mana.symbols)
+    if need>30:raise RulesViolation('autotap bounded search supports costs up to 30 mana; use explicit payment')
+    reserve=tuple(command['autotap'].get('reserve',{}).get(c,0) for c in COLORS)
+    pool=tuple(dict(kernel.state.mana_pool(actor)).get(c,0) for c in COLORS)
+    excluded={q.source}
+    base=deepcopy(command.get('payment',{'mana':{},'taps':[]}))
+    excluded.update(ObjectRef.from_json(r) for r in base.get('taps',[]))
+    for refs in base.get('zone_costs',{}).values():
+        excluded.update(ObjectRef.from_json(r) for r in refs)
+    # State is (available pool, mana producible by sources explicitly left untapped).
+    # Each source can contribute to either side once, never to both.
+    cap=tuple(need+r for r in reserve)
+    states={(tuple(min(p,c) for p,c in zip(pool,cap)),(0,)*6):(0,[])}
+    for obj in sorted(kernel.state.objects(Zone.BATTLEFIELD),key=lambda o:o.ref.card_id):
+        if obj.ref in excluded:continue
+        choices=options(kernel,actor,obj)
+        if not choices:continue
+        nxt=dict(states)
+        for (available,held),(taps,commands) in states.items():
+            for mana,line in choices:
+                candidates=[((tuple(min(c,a+m) for c,a,m in zip(cap,available,mana)),held),(taps+1,commands+line))]
+                if any(reserve):candidates.append(((available,tuple(min(r,h+m) for r,h,m in zip(reserve,held,mana))),(taps,commands)))
+                for key,value in candidates:
+                    if key not in nxt or value[0]<nxt[key][0]:nxt[key]=value
+        if len(nxt)>LIMIT:raise RulesViolation('autotap search limit reached; use explicit payment or a smaller reservation')
+        states=nxt
+    attempts=0
+    def expenditures(limits,total,prefix=()):
+        nonlocal attempts
+        if len(limits)==1:
+            if 0<=total<=limits[0]:
+                attempts+=1
+                if attempts>LIMIT:raise RulesViolation('autotap expenditure search limit reached; use explicit payment')
+                yield prefix+(total,)
+            return
+        for n in range(max(0,total-sum(limits[1:])),min(limits[0],total)+1):
+            yield from expenditures(limits[1:],total-n,prefix+(n,))
+    best=None
+    for (available,held),(taps,commands) in sorted(states.items(),key=lambda row:row[1][0]):
+        if best is not None and taps>best[0]:break
+        if sum(available)<need:continue
+        limits=[min(a,need,max(0,a+h-r)) for a,h,r in zip(available,held,reserve)]
+        if any(a+h<r for a,h,r in zip(available,held,reserve)):continue
+        # Enumerate exact expenditures, bounded by cost; no gratuitous mana spending.
+        for spend in expenditures(limits,need):
+            if _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
+                best=(taps,commands,spend);break
+        if best is not None:break
+    if best is None:raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
+    base['mana']={c:n for c,n in zip(COLORS,best[2]) if n}
+    if best[1]:base['mana_actions']=best[1]
+    if any(reserve):
+        from .rules_adapter import RulesActorAdapter
+        trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
+        final=deepcopy(command);final.pop('autotap');final['payment']=base
+        RulesActorAdapter(trial)._execute(actor,final)
+        remaining=tuple(dict(trial.state.mana_pool(actor)).get(c,0) for c in COLORS)
+        reachable={tuple(min(r,n) for r,n in zip(reserve,remaining))}
+        for obj in trial.state.objects(Zone.BATTLEFIELD):
+            choices=options(trial,actor,obj,reserve_check=True)
+            reachable|={tuple(min(r,h+n) for r,h,n in zip(reserve,held,mana))
+                        for held in tuple(reachable) for mana,_ in choices}
+            if reserve in reachable:break
+        if reserve not in reachable:
+            raise RulesViolation('autotap cannot preserve the reserve after the complete action costs; revise the payment or reserve')
+    return base
+
+
+def commit_priority(kernel,q,payment):
+    """Atomically execute the exact selected mana actions and final action.
+
+No inference, priority passing or non-mana choice is admitted inside this bundle.
+The isolated trial is committed only after the entire payment validates.
+"""
+    from dataclasses import replace
+    from .rules_adapter import RulesActorAdapter
+    if kernel.priority!=q.actor or kernel.pending_choice or kernel.resolving:
+        raise RulesViolation('Bundled ordinary mana payment requires priority')
+    trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
+    adapter=RulesActorAdapter(trial);lines=list(payment.mana_actions);index=0
+    while index<len(lines):
+        cmd=lines[index]
+        if cmd.get('kind')!='activate':raise RulesViolation('Bundled mana must begin with an ordinary activation')
+        obj=trial.state.get(ObjectRef.from_json(cmd['source']))
+        match=next((line for _,line in options(trial,q.actor,obj) if lines[index:index+len(line)]==line),None)
+        if match is None:raise RulesViolation('Bundled mana contains an unavailable or consequential mana action')
+        for row in match:
+            bound=deepcopy(row);bound['revision']=trial.revision
+            if row['kind']=='activate':bound['action_id']='autotap:'+hashlib.sha256((q.action_id+':'+str(index)).encode()).hexdigest()
+            else:
+                request=trial.pending_choice
+                if request is None or request.actor!=q.actor or request.kind!='mana_choice':raise RulesViolation('Bundled mana choice is unavailable')
+                bound['request_id']=request.request_id
+            adapter._execute(q.actor,bound);index+=1
+        if trial.pending_choice or trial.resolving or trial.priority!=q.actor:
+            raise RulesViolation('Bundled mana encountered an execution boundary')
+    result=trial.commit_action(replace(q,revision=trial.revision),replace(payment,mana_actions=()))
+    state=kernel.state;state.__dict__.update(trial.state.__dict__)
+    kernel.__dict__.update(trial.__dict__);kernel.state=state
+    return result

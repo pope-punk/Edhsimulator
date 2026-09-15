@@ -219,3 +219,43 @@ Tap/activation-trigger caution applies only while this actor has a potentially
 usable mana activation. A tapped City of Brass or painland cannot by itself wake
 a fully tapped-out pilot. Required choices, including Rhystic Study's optional draw
 and resolution payments, remain separate from ordinary priority and are delivered.
+
+## Default automatic mana payment
+
+Fresh games bind `autotap:1`. Planners propose the intended cast or activation
+without `payment`; deciders approve it or submit the same command directly.
+Do not normally propose preliminary land taps or mana-color answer steps.
+Python quotes the actual cost, selects ordinary mana sources and colors, and
+executes a single atomic payment plus the intended action. Exact selected mana
+commands are retained in `payment.mana_actions` for deterministic replay.
+Publication never authorizes execution; only the decider does.
+
+A hard reservation is attached to the action being paid for:
+
+```json
+{"kind":"cast","source":{"card_id":"KNOWN_CARD","incarnation":3},
+ "targets":[],"x_value":0,"autotap":{"reserve":{"B":1}}}
+```
+
+This leaves one black mana available after payment, either floating or producible
+from ordinary untapped sources. `{ "W":1, "B":1 }` requires both simultaneously;
+a single flexible one-mana source does not satisfy both. The reservation applies
+to this payment only, so repeat it on later actions when desired. The decider may
+replace the intended spell/ability and reservation using a complete batch step
+override retaining the step ID, or author a direct command/sequence. For example,
+replace `reserve:{B:1}` with `reserve:{W:1}`. Allocation is recomputed at execution,
+not frozen to the planner's earlier board.
+
+Explicit `payment` without `autotap` opts out. Use it for a deliberate mana float,
+a consequential mana source or a payment the bounded solver does not support.
+For automatic mana plus explicit non-mana costs, use `autotap:{}` alongside
+`payment:{mana:{},taps:[],zone_costs:{...}}`; pilots still select all targets,
+modes, X values and non-mana payments. No reservation is silently relaxed.
+
+The initial solver handles free tap-for-mana abilities on noncreature permanents:
+fixed production, ordinary color choices, commander colors, land-derived colors,
+and mana multipliers. It excludes paid filters, sacrifice/life/counter costs,
+creature tapping, consequential triggers and other effects. Search is bounded;
+unsupported or impossible payments return for revision without spending resources.
+Resolution-payment choices, attack taxes and room unlocks retain explicit payment.
+Older games retain their bound explicit-payment contract.
