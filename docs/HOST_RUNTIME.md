@@ -339,3 +339,7 @@ They never change terminal seals, clear rules-review gates, modify strategy,
 or count as verified wins in Cardwise. Future automatic estimates use bounded
 public terminal/rules facts and may be indeterminate; richer historical assessment
 must still exclude hidden pilot packets and future-library order.
+
+Fresh primitive mana batching supports exact approved color-choice continuations;
+see [Primitive hosted mana continuations](APPROVED_SEQUENCES.md#primitive-hosted-mana-continuations).
+Use complete known production-and-cast sequences to avoid one inference per mana source.

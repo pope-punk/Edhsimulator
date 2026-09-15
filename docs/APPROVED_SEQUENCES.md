@@ -258,3 +258,31 @@ rather than generating two identical plans. Telemetry retains both wake identiti
 Utilization reports distinguish planned steps, automatic priority passes, ignored
 rationale rewrites and net saved submissions. Publication telemetry records only
 the three coverage status labels, not another copy of plan text or board state.
+
+## Primitive hosted mana continuations
+
+Fresh primitive hosts accept up to 64 explicit steps within the existing 12,000-byte
+proposal limit. Prefer one approved sequence for known mana production and the
+subsequent cast. Every land, ability, payment, target and color remains pilot-authored.
+Do not add speculative choices just to fill a batch.
+
+A predictable mana choice can be included immediately after its activation:
+
+```json
+{"kind":"answer","choice_from":{"step_id":"tap-grove","option_labels":["{G}{G}","{G}{U}","{U}{U}"]},"indexes":[1]}
+```
+
+This is the `command` inside an otherwise ordinary action-sequence step. The named
+step must immediately precede it in the same own-turn/phase window. The full ordered
+option-label list must match the resulting single-select `mana_choice` exactly.
+The host binds its request ID only after that activation was accepted, and only
+while the exact same owned mana-ability resolution frame is awaiting the choice.
+A second guarded mana answer may follow the first within that same frame.
+
+This does not authorize arbitrary required choices. Changed options, a different
+frame, opposing material action, new hidden information or a rejected command stop
+execution and preserve the accepted prefix. An unanticipated choice returns to the
+pilot. Recovery restores the approval cursor and frame binding, so accepted taps
+are not replayed. The complete per-action audit remains available even when one
+approval replaces several inference turns. Started games retain their bound host
+implementation; use a fresh game to adopt this release.

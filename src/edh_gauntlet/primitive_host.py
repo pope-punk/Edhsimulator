@@ -68,6 +68,16 @@ decline_cast:{request_id}; allocate_counters:{request_id,allocations};
 unlock_room:{source,door,payment}; each also supplies kind. Announcements validate
 atomically; rejection does not pay costs. Required choice indexes cannot be inferred
 from old requests. Multi-selections and combat declarations are already batched.
+Batch predictable land activations and the resulting spell cast in one approval.
+For a known mana-color choice, insert an answer step immediately after its activation:
+{kind:"answer",choice_from:{step_id:PREVIOUS_STEP_ID,option_labels:[EXACT_ORDERED_LABELS]},indexes:[CHOSEN_INDEX]}.
+Labels must match the complete actual mana menu (for example "{W}", "{U}"); inspect
+the source program to establish them. Never guess the menu or future information.
+The host binds only an owned mana_choice from that exact accepted activation frame;
+changed menus, unrelated choices and new information stop the approved sequence.
+A following guarded mana choice can name the preceding guarded answer step.
+Use this to approve production/colors/payment together, with explicit mana sources
+and spending. Prefer a complete useful batch over one call per land when facts permit.
 A symbolic source {owned_card:CARD_ID,zone:ZONE} may explicitly follow a known own
 card into that visible zone in an approved sequence. Other references stay exact.
 '''
@@ -148,7 +158,7 @@ actions. Then publish actions with {action_sequence:[STEPS],phase_coverage:{
 precombat_main:{status:"planned"|"no_action"|"reassess",reason:TEXT},
 combat:{status:...,reason:...},postcombat_main:{status:...,reason:...}}}.
 Each step has id,seat_turn:POSITIVE_OWN_TURN_ORDINAL,phase,command,rationale:TEXT_MAX_300,
-scheduler:OBJECT. Maximum 16 steps/12000 bytes. Use exact known cards and legal
+scheduler:OBJECT. Maximum 64 steps/12000 bytes. Use exact known cards and legal
 primitive commands; never guess future draws or required choices. Cover known
 land/mana/spell/combat/postcombat plays; no_action/reassess needs a specific reason.
 The two preceding living opponents' end steps require full-turn updates at the
@@ -298,9 +308,11 @@ class PrimitiveRunner:
         from .primitive_diplomacy import flush
         flush(campaign)
         # Bound automatic work per loop so ready role replies cannot starve.
+        automatic_budget_used=False
         for _ in range(16):
             if not actions.automatic(campaign):break
             if campaign.store.generation-self.initial_count>=self.max_decisions:break
+        else:automatic_budget_used=True
         if (campaign.store.generation-self.initial_count>=self.max_decisions
                 or campaign.next_action()['kind']!='dispatch_pilot'):
             self.done=True;return
@@ -313,7 +325,7 @@ class PrimitiveRunner:
                 job=planning.claim(campaign,actor,role)
                 if job:self.deliver(self.context(actor,role),job)
         action=campaign.next_action()
-        if action['kind']=='dispatch_pilot':
+        if action['kind']=='dispatch_pilot' and not automatic_budget_used:
             actor=action['actor'];thread=self.lanes.get((actor,'decider'))
             if (thread not in self.running or thread in self.waiting) and self.retry_at.get(thread,0)<=time.monotonic():
                 packet=actions.claim(campaign,actor)

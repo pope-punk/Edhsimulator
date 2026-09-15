@@ -61,6 +61,17 @@ class PrimitiveHostTests(TestCase):
         parked=[v for _,v,_ in self.server.replies if v.get('state')=='parked']
         self.assertEqual(1,len(parked));self.assertIn('commit',parked[0]['previous_receipt'])
 
+    def test_automatic_chunk_boundary_does_not_claim_a_decider_input(self):
+        with patch('edh_gauntlet.primitive_host.actions.automatic',return_value=True) as automatic:
+            self.runner.pump()
+        self.assertEqual(16,automatic.call_count)
+        self.assertFalse(self.runner.done)
+        self.assertIsNone(self.game.state()['claim'])
+        self.assertNotIn(('Omo','decider'),self.runner.lanes)
+        with patch('edh_gauntlet.primitive_host.actions.automatic',return_value=False):
+            self.runner.pump()
+        self.assertIn(('Omo','decider'),self.runner.lanes)
+
     def test_automatic_limit_prevents_further_model_dispatch(self):
         self.runner.max_decisions=1
         def automatic(game):
