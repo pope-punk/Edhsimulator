@@ -133,3 +133,23 @@ class PrimitiveHostTests(TestCase):
         self.game.pause('operator requested pause')
         with self.assertRaisesRegex(RulesViolation,'operator pause'):
             PrimitiveRunner(self.game,FakeServer(),resume_fenced=True)
+
+    def test_fresh_memory_does_not_repeat_rationales_already_in_the_packet(self):
+        with self.game.transaction():
+            self.game.record('Omo','rationale',{'rationale':'Retain this complete fixture explanation.','command':{'kind':'pass'}})
+            self.game.record('Elenda','rationale',{'rationale':'Another seat private reason.','command':{'kind':'pass'}})
+        rows=self.game.evidence('Omo',kinds=('rationale',))
+        self.assertEqual({},self.runner.memory('Omo',planning.LONG,{'rationales':rows}))
+        restored=self.runner.memory('Omo',planning.LONG,{'rationales':[]})
+        self.assertIn('Retain this complete fixture explanation.',str(restored))
+        self.assertNotIn('Another seat private reason.',str(restored))
+
+    def test_waiting_context_parks_at_checkpoint_threshold_before_another_input(self):
+        self.runner.pump();thread=self.runner.lanes[('Omo','decider')]
+        q=self.game.kernel.pending_choice
+        self.runner.handle(self.tool(thread,'edh_act',{'command':{'kind':'answer','request_id':q.request_id,'indexes':[0]},
+            'rationale':'Keep this synthetic hand.','scheduler':{'mode':'hold_full_control'}}))
+        self.server.usage[thread]={'last':{'inputTokens':64000},'first':{'inputTokens':100}}
+        self.runner.pump()
+        self.assertNotIn(thread,self.runner.waiting)
+        self.assertTrue(any(value.get('state')=='parked' for _,value,_ in self.server.replies))

@@ -67,7 +67,7 @@ class PrimitivePlanningTests(unittest.TestCase):
         with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[]})
         planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello']})
         self.assertEqual(1,len(self.game.state()['messages']))
-        self.assertIsNotNone(planning.claim(self.game,'Elenda',planning.DIPLOMAT))
+        self.assertIsNone(planning.claim(self.game,'Elenda',planning.DIPLOMAT)) # Generic talk creates no reply inference.
 
     def test_pause_blocks_new_jobs_and_publications(self):
         job=planning.claim(self.game,'Omo',planning.LONG);self.game.pause('operator')
@@ -106,3 +106,42 @@ class PrimitivePlanningTests(unittest.TestCase):
         with self.assertRaisesRegex(RulesViolation,'requires revised'):
             planning.publish(self.game,'Omo',planning.LONG,revision['job_id'],'long_term',self.goal())
         self.assertIsNotNone(self.game.state()['actors']['Omo']['invalid_goal'])
+
+    def test_initial_tactical_job_waits_for_the_opening_goal(self):
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
+        self.assertIsNone(planning.claim(self.game,'Omo',planning.SHORT))
+        self.publish_goal()
+        self.assertIsNotNone(planning.claim(self.game,'Omo',planning.SHORT))
+
+    def test_own_maintenance_waits_until_cleanup_has_finished(self):
+        from types import SimpleNamespace
+        state={'actors':{'A':{'jobs':{},'next_job':0},'B':{'jobs':{},'next_job':0}}}
+        events=[{'index':1,'kind':'step_began','step':'cleanup','active':'A'}]
+        campaign=SimpleNamespace(kernel=SimpleNamespace(semantic_events=events))
+        planning.observe(campaign,state)
+        self.assertFalse(state['actors']['A']['jobs'])
+        events.append({'index':2,'kind':'turn_began','active':'B'})
+        planning.observe(campaign,state)
+        self.assertEqual(['own_turn_complete:2'],state['actors']['A']['jobs'][planning.SHORT]['reasons'])
+
+    def test_invalidation_after_strategic_claim_is_carried_into_a_fresh_review(self):
+        self.publish_goal()
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.LONG,'independent_review')
+        older=planning.claim(self.game,'Omo',planning.LONG)
+        tactical=planning.claim(self.game,'Omo',planning.SHORT)
+        planning.publish(self.game,'Omo',planning.SHORT,tactical['job_id'],'short_term',
+            {'short_term_plan':'Interim fixture.','continuity':'New facts appeared after the strategic claim.',
+             'long_term_validity':'invalid','long_term_invalid_reason':'A milestone is already complete.'})
+        planning.publish(self.game,'Omo',planning.LONG,older['job_id'],'long_term',self.goal())
+        next_review=planning.claim(self.game,'Omo',planning.LONG)
+        self.assertIsNotNone(next_review['invalid_goal'])
+        self.assertEqual('A milestone is already complete.',next_review['invalid_goal']['reason'])
+
+    def test_repeated_invalidation_already_covered_by_a_claim_does_not_queue_another(self):
+        self.publish_goal();goal_id=self.game.state()['actors']['Omo']['plans']['long_term']['id']
+        with self.game.transaction() as state:
+            state['actors']['Omo']['invalid_goal']={'goal_id':goal_id,'reason':'Fixture invalidation.'}
+            planning.queue(state,'Omo',planning.LONG,'invalid_goal:'+goal_id)
+        planning.claim(self.game,'Omo',planning.LONG)
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.LONG,'invalid_goal:'+goal_id)
+        self.assertEqual([],self.game.state()['actors']['Omo']['jobs'][planning.LONG]['queued'])

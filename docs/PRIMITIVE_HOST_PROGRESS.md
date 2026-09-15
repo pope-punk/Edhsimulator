@@ -33,11 +33,7 @@ or game action was started by this probe.
 
 Remaining release work:
 
-- Finish split-contract scheduling parity: planner watches, dependency invalidation,
-  public-post debt at unclaimed boundaries, and object snooze semantics. Generic
-chatter currently wakes too many diplomats; add explicit addressing and prevent
-reply cascades. Remove duplicate retained-memory rationales when they are already
-present in a fresh packet, preserving complete historical coverage. Expand
+- Finish object snooze semantics and audit declared tactical dependencies. Expand
   missed-window and multi-turn sequence tests; audit mandatory publication coverage.
 - Complete horizon handling, unexpected-crash fencing and host-level replay
   conformance. Validate that stopped physical contexts cannot continue inference.
@@ -65,3 +61,25 @@ Current local verification logs live under `/tmp/edh-primitive-*.log`; the broad
 pre-checkpoint suite is `/tmp/edh-primitive-full-suite.log` (exec session 79075).
 No real game cohort has been initialized. The original paused legacy run remains
 untouched. Host production admission remains explicitly closed.
+
+Latest host integration work adds one-shot planner watches for known casts, exact
+visible battlefield departures, and committed life-threshold crossings. Watch
+installation catches the claim-to-publication interval and unchanged watches do
+not rearm. Public messages use a durable outbox that flushes only at an unclaimed
+pilot frontier. Superseded/expired/duplicate authorizations retain their receipts
+and mandatory renewal debt. Only addressed root messages wake diplomats; replies
+and generic chatter do not recursively dispatch models.
+
+Initial tactical admission now waits for the opening goal; own-turn maintenance
+waits for cleanup to finish. Cold-context memory excludes rationales already in
+the current packet, and waiting contexts park before checkpoint-sized redelivery.
+The combined suite passed 63 tests, followed by 13 context/transport checks.
+CI also passed on the preceding immutable head 5fbcc92862a0f00c5c02b7270777b982dd676201
+(workflow run 34923775174). Further targeted strategic-review race tests are in
+`/tmp/edh-planner-frozen-review.log`.
+
+Subsequent focused checks passed: 13 planner tests cover late invalidation and
+coalescing, and seven diplomacy tests cover expired authorization after a held
+claim and private requests that cannot bypass the settled-hand goal gate. These
+changes preserve the frozen input instead of retroactively changing a running
+planner's publication obligations.

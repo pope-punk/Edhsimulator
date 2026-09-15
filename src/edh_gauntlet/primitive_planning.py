@@ -24,6 +24,9 @@ def queue(state,actor,role,reason):
     seat=state['actors'][actor]
     job=seat['jobs'].get(role)
     if job:
+        if (reason.startswith('invalid_goal:') and job.get('input') and job['input'].get('invalid_goal') and
+                str((job['input'].get('invalid_goal') or {}).get('goal_id'))==reason.removeprefix('invalid_goal:')):
+            return
         reasons=job.setdefault('queued',[]) if job.get('input') is not None else job['reasons']
         if reason not in reasons:reasons.append(reason)
     else:
@@ -40,6 +43,8 @@ def observe(campaign,state):
             actor=event['actor'];state['actors'][actor]['kept']=True
             queue(state,actor,LONG,'opening_hand_kept')
         if kind=='turn_began':
+            completed=state.pop('cleanup_actor',None)
+            if completed:queue(state,completed,SHORT,f'own_turn_complete:{event["index"]}')
             actor=event['active'];seat=state['actors'][actor]
             seat['turns']=seat.get('turns',0)+1
         if kind=='step_began' and event['step']=='end_step':
@@ -49,7 +54,7 @@ def observe(campaign,state):
                 upcoming=[players[(index+i)%len(players)] for i in range(1,len(players))][:2]
                 for actor in upcoming:queue(state,actor,SHORT,f'pre_turn:{event["index"]}')
         if kind=='step_began' and event['step']=='cleanup':
-            queue(state,event['active'],SHORT,f'own_turn_complete:{event["index"]}')
+            state['cleanup_actor']=event['active']
     state['event_cursor']=len(events)
 
 
@@ -76,12 +81,14 @@ def claim(campaign,actor,role):
         seat=state['actors'].get(actor)
         if seat is None or actor not in campaign.kernel.state.live_players:raise RulesViolation('Unavailable actor')
         job=seat['jobs'].get(role)
-        if job is None:return None
+        if job is None or role==SHORT and 'long_term' not in seat['plans'] or role==LONG and not seat['kept']:return None
         if job['input'] is None:
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)
             evidence=campaign.evidence(actor,after=cursor,kinds=('rationale',)) if role!=DIPLOMAT else []
             job['input']={'job_id':job['id'],'actor':actor,'role':role,'game':1,
+                '_event_cursor':len(campaign.kernel.semantic_events),'_zone_cursor':campaign.kernel.state.event_count,
+                'watches':deepcopy(seat.get('watches',{}).get(role,{}).get('watches',[])),
                 'context_handling':1,'board':board,'snapshot':digest(board),'reasons':job['reasons'][:],
                 'plans':deepcopy(seat['plans']),'target_seat_turn':max(1,seat.get('turns',0)+int(
                     campaign.kernel.active!=actor or campaign.kernel.phase in {'end_step','cleanup'})),
@@ -92,7 +99,7 @@ def claim(campaign,actor,role):
             else:
                 job['input'].pop('plans')
                 brief=seat['plans'].get('diplomacy_brief',{}).get('value',[])
-                job['input'].update(authorized_messages=deepcopy(brief),personality=seat['personality'],
+                job['input'].update(authorized_messages=deepcopy(brief),brief_id=seat['plans'].get('diplomacy_brief',{}).get('id'),personality=seat['personality'],
                     requires_public_post=any(r.startswith('strategic_publication:') for r in job['reasons']),
                     messages=deepcopy(state['messages'][-24:]))
             from .primitive_inspection import freeze
@@ -101,7 +108,7 @@ def claim(campaign,actor,role):
 
 
 def validate_actions(value,job):
-    if set(value)!={'action_sequence','phase_coverage'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
+    if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','watches'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
     steps=value['action_sequence'];coverage=value['phase_coverage']
     if type(steps) is not list or len(steps)>16 or len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())>12000:
         raise RulesViolation('Action proposals exceed the bound')
@@ -145,16 +152,23 @@ def publish(campaign,actor,role,job_id,stage,value):
         if job is None or job['id']!=job_id or job['input'] is None or STAGES[role][job['stage']]!=stage:
             raise RulesViolation('Publication does not own this frozen stage')
         if stage=='long_term':
-            if set(value)!={'long_term_plan','diplomacy'}:raise RulesViolation('Strategic publication requires goal and diplomacy authorization')
+            if not {'long_term_plan','diplomacy'}<=set(value) or set(value)-{'long_term_plan','diplomacy','watches'}:raise RulesViolation('Strategic publication requires goal and diplomacy authorization')
             text_field(value,'long_term_plan',1200)
-            if (seat.get('invalid_goal') and
+            if (job['input'].get('invalid_goal') and
+                    job['input']['invalid_goal']['goal_id']==seat['plans'].get('long_term',{}).get('id') and
                     value['long_term_plan']==seat['plans'].get('long_term',{}).get('value',{}).get('long_term_plan')):
                 raise RulesViolation('An invalid current goal requires revised strategic prose')
             messages=value['diplomacy']
             if type(messages) is not list or not 1<=len(messages)<=8:raise RulesViolation('Authorize at least one bounded public message')
             seen=set()
             for row in messages:
-                if type(row) is not dict or set(row)!={'id','text','expires_turn'}:raise RulesViolation('Invalid authorized message')
+                if type(row) is not dict or not {'id','text','expires_turn'}<=set(row) or set(row)-{'id','text','expires_turn','to','reply_to'}:
+                    raise RulesViolation('Invalid authorized message')
+                recipients=row.get('to',[])
+                if type(recipients) is not list or any(type(p) is not str or p not in state['actors'] or p==actor for p in recipients) or len(set(recipients))!=len(recipients):
+                    raise RulesViolation('Address only distinct other seats')
+                if row.get('reply_to') is not None and (type(row['reply_to']) is not str or len(row['reply_to'])>300 or not campaign.store.connection.execute('SELECT 1 FROM host_messages WHERE id=?',(row['reply_to'],)).fetchone()):
+                    raise RulesViolation('Reply must name a committed public message')
                 key=text_field(row,'id',80);text_field(row,'text',300)
                 if key in seen or type(row['expires_turn']) is not int or row['expires_turn']<campaign.kernel.state.turn_number:
                     raise RulesViolation('Duplicate or expired diplomatic authorization')
@@ -168,27 +182,11 @@ def publish(campaign,actor,role,job_id,stage,value):
             elif type(value['long_term_invalid_reason']) is not str:raise RulesViolation('Validity reason must be text')
         elif stage=='actions':validate_actions(value,job)
         elif stage=='message':
-            if set(value)!={'authorized_ids'} or type(value['authorized_ids']) is not list:raise RulesViolation('Select authorized public messages by ID')
-            ids=value['authorized_ids'];authorized={m['id']:m for m in job['input']['authorized_messages']
-                        if m['expires_turn']>=campaign.kernel.state.turn_number}
-            if len(set(ids))!=len(ids) or any(key not in authorized for key in ids):raise RulesViolation('Message authorization is missing or expired')
-            if not ids and job['input']['requires_public_post'] and authorized:raise RulesViolation('A strategic review requires an authorized public post')
-            if not ids and job['input']['requires_public_post'] and not authorized:queue(state,actor,LONG,'renew_expired_diplomacy')
-            posted=0
-            for key in ids:
-                message={'id':receipt_key+':'+key,'actor':actor,'text':authorized[key]['text'],'turn':campaign.kernel.state.turn_number}
-                # Exact repeated speech is retained as a suppressed publication,
-                # never posted twice by retries or duplicate authorizations.
-                normalized=' '.join(message['text'].split())
-                if not campaign.store.connection.execute('SELECT 1 FROM host_messages WHERE actor=? AND text=?',(actor,normalized)).fetchone():
-                    campaign.store.connection.execute('INSERT INTO host_messages VALUES (?,?,?,?)',(message['id'],actor,normalized,json.dumps(message)))
-                    posted+=1
-                    state['messages']=(state['messages']+[message])[-24:]
-                    for recipient in state['actors']:
-                        campaign.record(recipient,'message',message)
-                        if recipient!=actor:queue(state,recipient,DIPLOMAT,'incoming:'+message['id'])
-            if ids and not posted and job['input']['requires_public_post']:
-                queue(state,actor,LONG,'renew_duplicate_diplomacy:'+job_id)
+            from .primitive_diplomacy import prepare
+            prepare(campaign,state,actor,job,receipt_key,value)
+        if stage in {'actions','long_term'}:
+            from .primitive_watches import install
+            install(campaign,state,actor,role,job,value.get('watches',[]))
         component_value={'long_term_plan':value['long_term_plan']} if stage=='long_term' else deepcopy(value)
         component={'id':digest({'stage':stage,'value':component_value}),'job_id':job_id,'value':component_value}
         old=seat['plans'].get(stage)
@@ -204,7 +202,8 @@ def publish(campaign,actor,role,job_id,stage,value):
             brief={'id':digest({'stage':'diplomacy_brief','value':value['diplomacy']}),'job_id':job_id,'value':deepcopy(value['diplomacy'])}
             seat['plans']['diplomacy_brief']=brief
             campaign.record(actor,'publication',{'role':role,'stage':'diplomacy_brief',**brief})
-            seat['invalid_goal']=None
+            if not seat.get('invalid_goal') or seat['invalid_goal']['goal_id']!=component['id']:
+                seat['invalid_goal']=None
         campaign.record(actor,'publication',{'role':role,'stage':stage,**component})
         if stage=='long_term':
             if old is None or seat.get('invalid_goal') or any(r.startswith(('invalid_goal:','pilot_alarm:')) for r in job['reasons']):
@@ -224,4 +223,6 @@ def publish(campaign,actor,role,job_id,stage,value):
             seat['evidence_cursor'][role]=job['input']['evidence_through']
             queued=job['queued'];del seat['jobs'][role]
             for reason in queued:queue(state,actor,role,reason)
+        from .primitive_diplomacy import flush_state
+        flush_state(campaign,state)
         return result
