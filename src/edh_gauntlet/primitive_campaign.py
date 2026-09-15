@@ -301,7 +301,10 @@ class PrimitiveCampaign:
                     self._capture(state)
                 self.store.connection.execute('UPDATE host_inputs SET state=?,receipt=? WHERE request_id=?',
                     ('rejected' if error else 'accepted',encoded({k:v for k,v in receipt.items() if k!='packet'}),pending))
-                state['pending']=None;state['claim']=None
+                state['pending']=None
+                # A rejected command leaves the frozen decision and its owner intact.
+                # Only acceptance releases it and permits queued public delivery.
+                if not error:state['claim']=None
                 from .primitive_diplomacy import flush_state
                 flush_state(self,state)
         except BaseException as exc:
