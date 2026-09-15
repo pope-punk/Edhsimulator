@@ -14,7 +14,7 @@ from .rules_identity import IMPLEMENTATION_ID
 from .rules_state import RulesViolation
 from .runtime_store import read,write
 
-SCOPE='fixed_pod_host_single_game_learning_disabled'
+SCOPE='fixed_pod_host_campaign_dashboard_learning_disabled'
 CHECKS={'complete_tests','installed_assets','installed_fingerprint'}
 
 
@@ -25,6 +25,8 @@ def fingerprint(root=PROJECT_ROOT):
               'HOST_AGENT_POLICY.md','MANUAL_REFEREE_PROTOCOL.md')
     return {'kernel':IMPLEMENTATION_ID,'modules':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(package.glob('*.py'))},
+        'web_assets':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()
+                      for p in sorted((package/'dashboard_static').glob('*')) if p.is_file()},
         'assets':{name:hashlib.sha256((Path(root)/name).read_bytes()).hexdigest()
                   for name in (*CONFIG_FILES,*(f'docs/{p}' for p in policies))},
         'strategy':digest(frozen_strategy(Path(root)))}

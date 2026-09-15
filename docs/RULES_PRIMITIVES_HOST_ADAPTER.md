@@ -1,5 +1,8 @@
 # Primitive actor and replay adapter
 
+> Historical implementation/validation record. For current launch scope and the
+> latest release outcome, see [Primitive release status](PRIMITIVE_RELEASE.md).
+
 This is an experimental adapter over `RulesKernel`, not a deployed host or an
 admission certificate. `RulesActorAdapter.for_production` rejects while the
 whole-pod and runtime gates remain incomplete. Existing games are untouched.

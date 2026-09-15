@@ -37,7 +37,8 @@ class ReleaseEvidenceTests(TestCase):
             report=preflight(target)
             self.assertEqual('ready',report['status']);self.assertFalse(target.exists())
             self.assertIn('edh_gauntlet.primitive_lifecycle',report['launch_command'])
-            self.assertIsNone(preflight(target,games=2)['launch_command'])
+            self.assertIsNotNone(preflight(target,games=2)['launch_command'])
+            self.assertIsNone(preflight(target,games=1001)['launch_command'])
             self.assertIsNone(preflight(target,learning='enabled')['launch_command'])
             self.assertEqual(0,readiness()['certified_card_count']) # Host validation is not a whole-card guarantee.
 

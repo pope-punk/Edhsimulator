@@ -1,5 +1,24 @@
 # Software host and resident agents
 
+## Primitive campaign release
+
+Fresh primitive campaigns use `primitive_lifecycle init --games N --learning disabled`.
+Select a matching `EDH_PRIMITIVE_RELEASE_RECEIPT` produced by `primitive_release`.
+The dashboard's Start supervisor runs each game and advances only after a clean
+terminal seal, verified command/host journals and a bound learning skip. Starting
+players rotate and seeds increase by one; all games retain the frozen campaign
+schedule, deck and strategy. New games receive new isolated role identities.
+
+`primitive_lifecycle advance --game N` requires the exact next scheduled game and
+a stopped/unloaded transport. Interrupted zero-action initialization retains its
+prepared binding; retry never replays prior gameplay. Rules-review draws, pauses,
+pending inputs and horizon stops prevent advancement. Learning remains disabled.
+The online Resume action supports verified graceful stops. Crash recovery still
+requires `fence-crash` with owned process evidence before a fenced restart.
+See [current release scope](PRIMITIVE_RELEASE.md) and [dashboard deployment](DASHBOARD_DEPLOYMENT.md).
+
+## Existing legacy host contracts
+
 The supported current path is a fresh staged contract-4 game binding
 `agent_architecture:1`, `context_handling:1` and transport version 2. Python owns
 coordination; pilots never forward packets or wake another seat through a model.

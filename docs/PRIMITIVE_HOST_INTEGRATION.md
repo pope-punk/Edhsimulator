@@ -1,5 +1,8 @@
 # Primitive host integration
 
+> Historical implementation/validation record. For current launch scope and the
+> latest release outcome, see [Primitive release status](PRIMITIVE_RELEASE.md).
+
 The 2026-09-15 operator request authorizes local validation, reconciliation into
 main, and a fresh hosted-model test. This document tracks the integration after
 card authoring. Production admission remains closed until the entire path works.

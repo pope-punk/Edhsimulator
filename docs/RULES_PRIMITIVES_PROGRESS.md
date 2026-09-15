@@ -1,5 +1,8 @@
 # Rules primitives implementation progress
 
+> Historical implementation/validation record. For current launch scope and the
+> latest release outcome, see [Primitive release status](PRIMITIVE_RELEASE.md).
+
 Status: experimental vertical slice, 2026-09-09. **Not a production engine and not enabled in any game.** The migration plan remains in progress.
 
 ## Implemented

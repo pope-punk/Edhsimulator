@@ -21,35 +21,45 @@ that every card interaction is supported. See [validation](docs/VALIDATION.md).
 Windows also supports `gauntlet.cmd` and `gauntlet.ps1`. Activate your Python environment
 or set `EDH_PYTHON` to its executable. No machine-specific interpreter installation is required.
 
-## Initialize and run
+## Validate and run the primitive engine
+
+The primitive engine has authored programs for all 334 unique cards in the fixed
+400-card pod. Its hosted release scope is **multi-game campaigns with learning disabled**, operated through the web dashboard.
+Full-card authoring and passing tests do not certify every possible interaction.
+See [release status](docs/PRIMITIVE_RELEASE.md) for validation and hosted-trial results.
+
+From the source checkout, create a release receipt before initializing a new run:
 
 ```sh
-python -m edh_gauntlet --cohort runs/example init --games 1 --seed-start 2026090914 --max-rounds 16 --agent-architecture --async-diplomacy --learning disabled
+python -m edh_gauntlet.primitive_release --output "$PWD/archive/releases/local-release.json"
+export EDH_PRIMITIVE_RELEASE_RECEIPT="$PWD/archive/releases/local-release.json"
+python -m edh_gauntlet.primitive_lifecycle --cohort runs/example init --games 20 --seed 2026091503 --starting-player Omo --max-rounds 32 --learning disabled
 python -m edh_gauntlet.host_runtime --cohort runs/example --max-decisions 10000 --context-tokens 64000 --timing-events 4096
 ```
 
-For a hidden Windows host with a local process watcher:
+Use a fresh receipt filename and an empty cohort path. The validator runs the full
+repository suite, builds and installs a wheel, checks installed assets and compares
+source and installed fingerprints. Set the environment variable in every shell
+that starts the host. In PowerShell, use `$env:EDH_PRIMITIVE_RELEASE_RECEIPT`.
+Changes to bound runtime files require a new matching receipt.
 
-```powershell
-.\tools\start_host_game.ps1 -Cohort runs/example -MaxDecisions 10000 -TimingEvents 4096
-```
+The host controls isolated agents through Codex App Server. Current routing uses
+Terra-low decisions, Sol-high Fast tactical planning, Sol strategic planning and
+Luna-low diplomacy, with bounded capacity fallback. Sixteen seat/role lanes keep
+private contexts separate.
 
-The host controls agents through Codex App Server JSON-RPC. No desktop clicking or
-model coordinator is required. Model availability depends on the installed service;
-the current routing is Terra-low decisions, Terra-high short-term planning, Sol
-long-term planning, and Luna-low diplomacy, with bounded capacity fallback.
+`NEXT_ACTION.json` is authoritative. Rules-review terminal draws retain their
+accepted prefix and evidence; they cannot resume. Learning-disabled runs record
+an explicit skip and make no strategy updates. A horizon stop is unfinished play,
+not a result. [Campaign workflow](docs/GAUNTLET_WORKFLOW.md)
 
-`--learning enabled` (the default) requires the sealed post-game review and learning
-transaction before advancing. `--learning disabled` records an explicit skip, avoids
-learning evidence packets and inference, and leaves strategy memory unchanged. The
-setting is bound when a run is initialized. It does not change a started game's policy
-or waive rules blockers. [Learning policy](docs/LEARNING.md)
+### Existing legacy games
 
-`NEXT_ACTION.json` is authoritative. The host stops for a terminal result, adjudication,
-rules blocker, decision cap or explicit pause. For multi-game cohorts, advance only
-when the lifecycle says `advance_game`; do not create agents for a future game early.
-A local watcher reports attention without spending inference on unchanged status.
-[Campaign workflow](docs/GAUNTLET_WORKFLOW.md)
+The original `python -m edh_gauntlet` campaign CLI and Windows launch helpers serve
+legacy cohorts and their original contracts.
+Existing games keep their original engine, configuration and recovery rules.
+Never initialize over a saved cohort or switch its engine to continue it.
+[Legacy host runtime](docs/HOST_RUNTIME.md) · [Learning policy](docs/LEARNING.md)
 
 ## Planning and execution
 
@@ -70,25 +80,28 @@ A local watcher reports attention without spending inference on unchanged status
 [Architecture](docs/AGENT_ARCHITECTURE_V1.md) · [Approved sequences](docs/APPROVED_SEQUENCES.md)
 · [Host runtime](docs/HOST_RUNTIME.md) · [Communications](docs/COMMUNICATIONS.md)
 
-## Observe and export
+## Online interface and reports
 
-Create `OPERATOR_VIEW.json` in the cohort with `{"enabled":true}` before launching
-(or before initializing in a pre-created cohort directory). The four files in
-`operator/` show hands, life, permanents, graveyards, turn order, active/living seats,
-current plans and the messageboard. These omniscient views never enter agent packets.
+Run the dashboard with a private capability key and the same validated release selected:
 
-The Windows `tools/collect_host_telemetry.py` records local timing and process memory metadata;
-`tools/report_host_segments.py` combines complete segments, and
-`tools/report_sequence_utilization.py` measures actual batch shortcuts. Packet bytes,
-model input tokens, cached tokens and elapsed inference time are distinct metrics.
-Generated files belong under `runs/` and are excluded from GitHub.
+```sh
+export EDH_DASHBOARD_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+python -m edh_gauntlet.dashboard --host 0.0.0.0 --port 8765 --runs runs
+```
 
-A proposed no-login remote dashboard and CSV specification workflow is described in
-[REMOTE_DASHBOARD.md](docs/REMOTE_DASHBOARD.md). It is a design, not a deployed service.
+Open the private forwarded Codespace port and connect with that key. Configure a
+campaign, then select **Start supervisor**. The supervisor starts isolated hosted
+roles and advances only after a verified completed game. Pause and explicit Resume
+retain the accepted prefix. A rules blocker stops the campaign for operator review.
 
-GitHub/Codespaces preparation and the preserved decision-305 game are documented
-in [GITHUB_HANDOFF.md](docs/GITHUB_HANDOFF.md). Repository publication does not
-automatically start or migrate a game.
+The existing tabs show the live table, all four seat views, full decision log,
+messageboard, results and Aminatou cardwise ratings. Card statistics use original
+physical cards, count transient battlefield entries, exclude tokens/copies, and
+require matching terminal journals and learning-skip receipts. Rules-review games
+remain visible in results and are excluded from verified cardwise percentages.
+Operator views never enter pilot inputs. Generated runs and evidence stay local.
+
+[Dashboard deployment](docs/DASHBOARD_DEPLOYMENT.md) · [Release status](docs/PRIMITIVE_RELEASE.md)
 
 ## Project map
 
@@ -101,6 +114,6 @@ automatically start or migrate a game.
 
 [Module responsibilities](docs/PROJECT_LAYOUT.md) · [Documentation index](docs/README.md)
 
-The pre-release test suite and diagnostic archives were removed at the operator's
-request after validation. Release evidence records exactly what was tested and what
-was not. Future changes should receive new focused validation before deployment.
+The current repository includes the complete conformance suite under `tests/`.
+CI runs it on Windows and Linux. Earlier September 8 cleanup and paused-game
+reports are historical evidence; current release status is recorded separately.

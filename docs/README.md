@@ -1,5 +1,6 @@
 # Documentation
 
+- Current release: [primitive campaigns and web interface](PRIMITIVE_RELEASE.md).
 - Start: [README](../README.md), [project layout](PROJECT_LAYOUT.md), [validation](VALIDATION.md).
 - Run: [campaign lifecycle](GAUNTLET_WORKFLOW.md), [host runtime](HOST_RUNTIME.md), [learning policy](LEARNING.md).
 - Agents: [role architecture](AGENT_ARCHITECTURE_V1.md), [resident policy](HOST_AGENT_POLICY.md), [planner policy](PLANNER_RUNTIME_POLICY.md).

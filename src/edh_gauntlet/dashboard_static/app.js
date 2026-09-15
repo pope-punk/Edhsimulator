@@ -86,3 +86,5 @@ $('#downloadResults').onclick=()=>action(async()=>{
  const response=await fetch(state.api.replace(/\/$/,'')+`/api/runs/${state.run}/results.csv`,{headers:{Authorization:'Bearer '+state.key}});
  if(!response.ok)throw Error('Results download failed');const url=URL.createObjectURL(await response.blob()),link=document.createElement('a');link.href=url;link.download=state.run+'-results.csv';link.click();URL.revokeObjectURL(url);
 });
+
+$("#resume").onclick=()=>action(async()=>{await call(`/api/runs/${state.run}/resume`,{method:"POST",body:"{}"});await refresh()});

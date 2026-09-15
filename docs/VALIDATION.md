@@ -1,5 +1,8 @@
 # Release validation — 2026-09-08
 
+> Historical implementation/validation record. For current launch scope and the
+> latest release outcome, see [Primitive release status](PRIMITIVE_RELEASE.md).
+
 The final pre-cleanup regression suite passed **1,030 tests**, with no failures,
 errors or skips, in 968 seconds. Tests covered referee behavior, campaign/learning
 lifecycle, publication and handoff recovery, actor isolation, communication
