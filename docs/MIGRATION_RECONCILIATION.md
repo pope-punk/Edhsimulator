@@ -23,9 +23,11 @@ This is evidence for card authoring, not a production host certificate.
 
 The reconciliation workflow runs the entire repository suite, including host,
 campaign and legacy tests, then retains newly generated coverage, readiness and
-one-game launch-preflight reports for each platform. Existing committed readiness
-reports describe the older 226-card state and must not be used as current evidence.
-Keep validation on GitHub-hosted runners per the authoring branch's execution rule.
+one-game launch-preflight reports for each platform. Refreshed readiness and coverage reports now describe all 334 authored cards
+and 400 physical deck copies; none is advertised as production certified.
+The user explicitly authorized local Python, validation and hosted-model host
+processes in the Codespace on 2026-09-15, superseding the authoring branch's
+GitHub-only execution restriction. Both local and hosted validation are permitted.
 
 The current production admission function still unconditionally rejects, and
 rules_launch_preflight has no production campaign/host adapter registered.

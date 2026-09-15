@@ -2,22 +2,22 @@
   "schema": 1,
   "scope": "Exact fixed-pod program coverage; text units are evidence, not an automatically inferred clause count",
   "decks_sha256": "54b6257ea36f3614993d03b270a49fa8f26dd252ff1ceb533599205e49ee5f17",
-  "authored_unique_cards": 226,
+  "authored_unique_cards": 334,
   "production_ready": false,
   "decks": [
     {
       "deck": "Reaminatour \u2014 Aminatou, Veil Piercer",
       "cards": 100,
-      "authored_copies": 63,
-      "unmapped_copies": 37,
+      "authored_copies": 100,
+      "unmapped_copies": 0,
       "entries": [
         {
           "card_id": "aminatou-veil-piercer",
           "name": "Aminatou, Veil Piercer",
           "quantity": 1,
           "source_facts_sha256": "96afc686cad3279a1bc689000f1dc9279537235c756800a0b2fa7e3514980f1c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:aminatou-veil-piercer",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -39,8 +39,8 @@
           "name": "Aminatou, the Fateshifter",
           "quantity": 1,
           "source_facts_sha256": "0e1733f18ce5080c931144989f815c5475e174f5748d5f1b83d903c2e897d93a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:aminatou-the-fateshifter",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -91,8 +91,8 @@
           "name": "Animate Dead",
           "quantity": 1,
           "source_facts_sha256": "8e8ff57fa34cf27d4112ba87b04adab2caca6364ce4e919266d493b5b43ac8a6",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:animate-dead",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -137,8 +137,8 @@
           "name": "Changing Loyalty",
           "quantity": 1,
           "source_facts_sha256": "44674452cfbab449325f86c6e75485a61cb199b961d9f778a11b62274b00fb34",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:changing-loyalty",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -172,8 +172,8 @@
           "name": "Dance of the Dead",
           "quantity": 1,
           "source_facts_sha256": "8a10f4f1e9403538bb8ed98fcab0c60d95f64a1e391e4596fe8b019a9cd90742",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:dance-of-the-dead",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -236,8 +236,8 @@
           "name": "Fanatical Devotion",
           "quantity": 1,
           "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fanatical-devotion",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -252,9 +252,9 @@
           "card_id": "funeral-room-awakening-hall",
           "name": "Funeral Room // Awakening Hall",
           "quantity": 1,
-          "source_facts_sha256": "11dcc0ef505eac4161b6e7ddf3139393a36599ca92e9faa6ee4d9b91db83008f",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "4b831aeaf818c17aeae87d0f07a702a1f86f0e30ac3efe038f0f82730ff61d68",
+          "program_definition": "catalog:funeral-room-awakening-hall",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -276,8 +276,8 @@
           "name": "Karmic Guide",
           "quantity": 1,
           "source_facts_sha256": "d81e7f6361414795c44c79d16030b188b1e401c21230cc20929a650c03923a1a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:karmic-guide",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -305,8 +305,8 @@
           "name": "Necromancy",
           "quantity": 1,
           "source_facts_sha256": "c4554821addaf30621d06969189768655c9c2ddaca978644a18947a6926bfeca",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:necromancy",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -328,8 +328,8 @@
           "name": "Reveillark",
           "quantity": 1,
           "source_facts_sha256": "765929e275286e9bfc25c6634940cf6fa3485ca6da191a44afae4d1ec1b9bcae",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:reveillark",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -495,8 +495,8 @@
           "name": "Touch the Spirit Realm",
           "quantity": 1,
           "source_facts_sha256": "83aaac5ab0b65890aad8edb37ef6d71b9d246c222daf64c17c8cd03a3b39c168",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:touch-the-spirit-realm",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -518,8 +518,8 @@
           "name": "Fierce Guardianship",
           "quantity": 1,
           "source_facts_sha256": "2c756bcd5ee8d4c0a99e3ab059c78807c948f9784e7eff25ef2d6460d18d47f2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fierce-guardianship",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -633,8 +633,8 @@
           "name": "Mystic Remora",
           "quantity": 1,
           "source_facts_sha256": "049fc0391f3d8fd57dffc68e9db1153e5677bb547d2cb01e1e892273f4545c23",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:mystic-remora",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -685,8 +685,8 @@
           "name": "Rhystic Study",
           "quantity": 1,
           "source_facts_sha256": "b47109d0106da31fe7a0b27088ab8df5e916ef260a8f522ffdccec95888543e9",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:rhystic-study",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -702,8 +702,8 @@
           "name": "Gleaming Splendor",
           "quantity": 1,
           "source_facts_sha256": "0121e4f4d098b2d9842e721673e61a8e452807c07e25fb449550a84d7c5453c4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:gleaming-splendor",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -742,8 +742,8 @@
           "name": "Entity Tracker",
           "quantity": 1,
           "source_facts_sha256": "e9593d5e13e3c7e4aa7aaf71953f3a9eecdeeed05687e582d559c08326e9b221",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:entity-tracker",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -765,8 +765,8 @@
           "name": "Ghostly Dancers",
           "quantity": 1,
           "source_facts_sha256": "6af0e90a8304198ec6180c4ae6e85cc10fd65f6e61bc9f7ea536abc4e3956c48",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:ghostly-dancers",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -811,8 +811,8 @@
           "name": "Victor, Valgavoth's Seneschal",
           "quantity": 1,
           "source_facts_sha256": "83d149a031b3cc1e63b9a115eb57d624ee04f4215ecbc887d6bc0b7f4dc0b093",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:victor-valgavoth-s-seneschal",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -828,8 +828,8 @@
           "name": "Mulldrifter",
           "quantity": 1,
           "source_facts_sha256": "b24844dffa6709cea9d9b32743042e47f2bfb194896816d99f6410354bd5e49e",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:mulldrifter",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -896,9 +896,9 @@
           "card_id": "the-restoration-of-eiganjo",
           "name": "The Restoration of Eiganjo",
           "quantity": 1,
-          "source_facts_sha256": "3ef1396c7f17c07818b5423a4aa0951e20b120ee4309b3123040de287f83971f",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "0f40894b696a053b7300ae0f1ce18db9541665cac970dac663cb700ef86c6018",
+          "program_definition": "catalog:the-restoration-of-eiganjo",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -938,8 +938,8 @@
           "name": "Elspeth Conquers Death",
           "quantity": 1,
           "source_facts_sha256": "dbd945febb95618afa07581bdccdaab7c2cb2c943586fbd73d16d40168d96845",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:elspeth-conquers-death",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -967,8 +967,8 @@
           "name": "Smothering Tithe",
           "quantity": 1,
           "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:smothering-tithe",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -984,8 +984,8 @@
           "name": "Alseid of Life's Bounty",
           "quantity": 1,
           "source_facts_sha256": "72aafe6173c47fe7afdb2abee41877c7e4efa16850be102e2ad0c4cf797eceea",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:alseid-of-life-s-bounty",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1024,8 +1024,8 @@
           "name": "Leonin Relic-Warder",
           "quantity": 1,
           "source_facts_sha256": "cb04e79165008ce953bc0ff9ddde620330010808f6f003ad776f8f12ac914823",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:leonin-relic-warder",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1076,8 +1076,8 @@
           "name": "Oblivion Ring",
           "quantity": 1,
           "source_facts_sha256": "1579dfe03c1c2101fa254aded702a830b8b2dcc29837f4bfcbcba1c88984b1e3",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:oblivion-ring",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1099,8 +1099,8 @@
           "name": "Parallax Wave",
           "quantity": 1,
           "source_facts_sha256": "fa1e1c46b9e526bfbdc1eb978118fb9ac8ef435c93c72388b8b1c18a3bf2a398",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:parallax-wave",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1128,8 +1128,8 @@
           "name": "Chthonian Nightmare",
           "quantity": 1,
           "source_facts_sha256": "53f47db88f045789f2254fbc8c9db9b5592e9a5f73fd6bad1128d1a2a75d4473",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:chthonian-nightmare",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1191,8 +1191,8 @@
           "name": "Dimir House Guard",
           "quantity": 1,
           "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:dimir-house-guard",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1305,9 +1305,9 @@
           "card_id": "invasion-of-theros",
           "name": "Invasion of Theros",
           "quantity": 1,
-          "source_facts_sha256": "a5a277b6a7bd8ea67d75945f959b21bb649f1ce197e30224c1e5eac60ef5af6c",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "aa820cbaf5d95300c167d4986558a74248ea9afb69d0edc2ce3c581a4a58572d",
+          "program_definition": "catalog:invasion-of-theros",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1335,8 +1335,8 @@
           "name": "The Cruelty of Gix",
           "quantity": 1,
           "source_facts_sha256": "028214612d839be03d088a105ee9afa261d5eecf60274c84d2fbff7a603fa538",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:the-cruelty-of-gix",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1404,8 +1404,8 @@
           "name": "Fellwar Stone",
           "quantity": 1,
           "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fellwar-stone",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1696,8 +1696,8 @@
           "name": "Exotic Orchard",
           "quantity": 1,
           "source_facts_sha256": "cbc562116d86e72249cb5bf17db85d1bed23f9456d12c752b363d947d90c9a0c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:exotic-orchard",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1730,8 +1730,8 @@
           "name": "Godless Shrine",
           "quantity": 1,
           "source_facts_sha256": "07e67437462208d7d3174296e2879fadc4984d766ff93bf92cc727468e785756",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:godless-shrine",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1753,8 +1753,8 @@
           "name": "Hallowed Fountain",
           "quantity": 1,
           "source_facts_sha256": "a16da312f8c5610f7b38a6c420d87d8d5be2d7d453b502700324c1e74a5cff10",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:hallowed-fountain",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2102,8 +2102,8 @@
           "name": "Vesperlark",
           "quantity": 1,
           "source_facts_sha256": "1adf2ec959d168a00bb210ba9691af598300ea1e9fa6a9c27f419ef30334995f",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:vesperlark",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2131,8 +2131,8 @@
           "name": "Urza's Saga",
           "quantity": 1,
           "source_facts_sha256": "4a3aee2d51b070586feba7dc432f7b5a842f7825e59bcb342441a11c3246bd7f",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:urza-s-saga",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2200,8 +2200,8 @@
           "name": "Watery Grave",
           "quantity": 1,
           "source_facts_sha256": "34b28a99693c24bdec7e7076b2d60fd0613d72789f05151b59c1c9c99466585f",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:watery-grave",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2240,16 +2240,16 @@
     {
       "deck": "Minsc & Boo, Timeless Heroes",
       "cards": 100,
-      "authored_copies": 80,
-      "unmapped_copies": 20,
+      "authored_copies": 100,
+      "unmapped_copies": 0,
       "entries": [
         {
           "card_id": "minsc-boo-timeless-heroes",
           "name": "Minsc & Boo, Timeless Heroes",
           "quantity": 1,
           "source_facts_sha256": "6489a6dab639cc786e761d2c3358d40717149f92093d3e7976b3a976fb1e8cd3",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:minsc-boo-timeless-heroes",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2352,8 +2352,8 @@
           "name": "Defiler of Vigor",
           "quantity": 1,
           "source_facts_sha256": "1970fa55eba1aa844b136777ec3470bfacf1b9f4a9e80fae10e23e6ced0669dd",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:defiler-of-vigor",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2381,8 +2381,8 @@
           "name": "Delighted Halfling",
           "quantity": 1,
           "source_facts_sha256": "2d0e6ba4c2924cca986b52bba1b261dd6f82cede41d4dffcd448cf5bad95e9b1",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:delighted-halfling",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2455,8 +2455,8 @@
           "name": "Fanatic of Rhonas",
           "quantity": 1,
           "source_facts_sha256": "f9972af4f92c8e113d0c7d190f99b01bc2f4524242b715c74914b6e8e6867aa0",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fanatic-of-rhonas",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2484,8 +2484,8 @@
           "name": "Forgotten Ancient",
           "quantity": 1,
           "source_facts_sha256": "e3c90e3543c9d71797ec0c67d4bc4ee7f6de9b91b6fa31856a35102c65a1f07a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:forgotten-ancient",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2656,8 +2656,8 @@
           "name": "Kodama of the West Tree",
           "quantity": 1,
           "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:kodama-of-the-west-tree",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2869,8 +2869,8 @@
           "name": "Bulk Up",
           "quantity": 1,
           "source_facts_sha256": "1422387ff17f6aa9b02f558f7298a1295385866a23ed7c8c9dcd983b26f9ea54",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:bulk-up",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2892,8 +2892,8 @@
           "name": "Chaos Warp",
           "quantity": 1,
           "source_facts_sha256": "d71a7cccea38a8d4f21318069f24870713f24c88af9191882cd996da055d7ffd",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:chaos-warp",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2909,8 +2909,8 @@
           "name": "Fling",
           "quantity": 1,
           "source_facts_sha256": "d2890717c3fd8d584466565cb5dd58b45f218fde0672a069545ad3545768c0a7",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fling",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2982,9 +2982,9 @@
           "card_id": "kazuul-s-fury-kazuul-s-cliffs",
           "name": "Kazuul's Fury // Kazuul's Cliffs",
           "quantity": 1,
-          "source_facts_sha256": "b55987ca1d3a41315df7b448d891b7afe2d08552b4f1a926b5338a88c8fc22e9",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "05649eb3d07f0ee3caffe0f8bb9df1f95a5d65a3d6b6e3c0dece789a6bc495c2",
+          "program_definition": "catalog:kazuul-s-fury-kazuul-s-cliffs",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3018,8 +3018,8 @@
           "name": "Ram Through",
           "quantity": 1,
           "source_facts_sha256": "f52260881b1ade69624f7f166b643eb2a7091cc410886a0448ad784e23fc2dfd",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:ram-through",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3138,8 +3138,8 @@
           "name": "Fangs of Kalonia",
           "quantity": 1,
           "source_facts_sha256": "0435b0fba9ece9ca7d19c741f24c08d8fd1b1a305b0ed39e302a3408dadafeae",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fangs-of-kalonia",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3229,8 +3229,8 @@
           "name": "Rishkar's Expertise",
           "quantity": 1,
           "source_facts_sha256": "3f66d02ca36446abfcbad7b739341b71b50cf716bbe14ccff06773e861ebdcb7",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:rishkar-s-expertise",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3372,8 +3372,8 @@
           "name": "The Earth Crystal",
           "quantity": 1,
           "source_facts_sha256": "0cabcb8c3fc889dfaedf0d74e1fef0e44797fddbafac8f398d34be5ac513faaa",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:the-earth-crystal",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3401,8 +3401,8 @@
           "name": "The Ozolith",
           "quantity": 1,
           "source_facts_sha256": "38d3ab4a07bf008fbe1252996c25ac9dff5ae755497ee1b7b4e0738fadf032ab",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:the-ozolith",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3527,8 +3527,8 @@
           "name": "Innkeeper's Talent",
           "quantity": 1,
           "source_facts_sha256": "10d778c075cbb36d3a6d48648b33ee1edf520b92d92791d37bacc10f09775cf4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:innkeeper-s-talent",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3568,8 +3568,8 @@
           "name": "Rhythm of the Wild",
           "quantity": 1,
           "source_facts_sha256": "126a6d8e385f9efaa54dc8229f42b33651b2d2829e07ad40b2cbd80c1f6ccd6d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:rhythm-of-the-wild",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3625,8 +3625,8 @@
           "name": "Domri, Anarch of Bolas",
           "quantity": 1,
           "source_facts_sha256": "ca3fcd783344519327dc658ab0ddbf17e3ac335f165eae3184cbc1a3938902a5",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:domri-anarch-of-bolas",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3694,8 +3694,8 @@
           "name": "Game Trail",
           "quantity": 1,
           "source_facts_sha256": "ea8842c50a10fb77c94c4d7e27053b5a049b3e488d1609f4051f0093a619d52c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:game-trail",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3924,8 +3924,8 @@
           "name": "Stomping Ground",
           "quantity": 1,
           "source_facts_sha256": "de8d9dfb402c68722e07317b981869aed31465e768ea0519915bcc2941bdfe0c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:stomping-ground",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3998,8 +3998,8 @@
     {
       "deck": "Omo, Queen of Vesuva",
       "cards": 100,
-      "authored_copies": 67,
-      "unmapped_copies": 33,
+      "authored_copies": 100,
+      "unmapped_copies": 0,
       "entries": [
         {
           "card_id": "omo-queen-of-vesuva",
@@ -4058,8 +4058,8 @@
           "name": "Aggressive Biomancy",
           "quantity": 1,
           "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:aggressive-biomancy",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4074,9 +4074,9 @@
           "card_id": "apex-devastator",
           "name": "Apex Devastator",
           "quantity": 1,
-          "source_facts_sha256": "84f24ddb75b617d88631177de41eb5c9ed45b8d0bfbe94500de7f0aa9c8d4805",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "77af1405ee0efd9ebb3f5dc4d00dfeca21c23d976984ccf0e942e9c611e3ac4d",
+          "program_definition": "catalog:apex-devastator",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4092,8 +4092,8 @@
           "name": "Arcane Denial",
           "quantity": 1,
           "source_facts_sha256": "50edb16e0afcd12531f002d411cddb9f8dbfb9d2ffacb33a16d5f4422b2838c3",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:arcane-denial",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4132,8 +4132,8 @@
           "name": "Aven Courier",
           "quantity": 1,
           "source_facts_sha256": "8b3b0586224fa7b9478aa813bac65808142d8b026cadade3ad18a4326de0992b",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:aven-courier",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4194,7 +4194,7 @@
           "card_id": "baldur-s-gate",
           "name": "Baldur's Gate",
           "quantity": 1,
-          "source_facts_sha256": "1ec13cda862bc3b49822790b8ab1e1bb43fd09cf855e06cef23c605f63a8b59c",
+          "source_facts_sha256": "219f1fd41ef5b9f0fa550f82f10d93d2b87625f13eb96dcad7125b5406ddb398",
           "program_definition": "catalog:baldur-s-gate",
           "status": "program_authored",
           "production_certified": false,
@@ -4202,18 +4202,12 @@
             {
               "face_id": "baldur-s-gate",
               "index": 0,
-              "text": "This land enters tapped unless you control two or more other Gates.",
-              "sha256": "dd4851e88893231989fc8e459cabd40bfb78d7cebddd6c42adebbf205fc82055"
+              "text": "{T}: Add {C}.",
+              "sha256": "1e39776a27d528f18d8e8fa7b94cf267392d30d95d0ef24359946d0daf1e600a"
             },
             {
               "face_id": "baldur-s-gate",
               "index": 1,
-              "text": "{T}: Add {G}.",
-              "sha256": "9231ec8ed88e95d1df0ea928fdee13d6d3a0f8c2edfba8d1a59f03d364edfed3"
-            },
-            {
-              "face_id": "baldur-s-gate",
-              "index": 2,
               "text": "{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
               "sha256": "3dcfbd7e9ca22cf83495eba0511476fc43ad1f19f62fdc3362734ef5b758f0a1"
             }
@@ -4396,8 +4390,8 @@
           "name": "Crop Rotation",
           "quantity": 1,
           "source_facts_sha256": "48e88506dacc5edf0aa3177a3bed00a159af1bdf9e62156555ab6ceb41b61fe7",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:crop-rotation",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4436,8 +4430,8 @@
           "name": "Dark Depths",
           "quantity": 1,
           "source_facts_sha256": "f21ac0e6360b17a10ecf19314864436a4b2b4776a69e0111728cef923a8c9c5d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:dark-depths",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4465,8 +4459,8 @@
           "name": "Desert Warfare",
           "quantity": 1,
           "source_facts_sha256": "5379fe3951854242e50fb24fb03bb900f339d646a91dccefa7d5e497a5cb74f5",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:desert-warfare",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4631,8 +4625,8 @@
           "name": "Finale of Revelation",
           "quantity": 1,
           "source_facts_sha256": "c2f04ec9ecdcba06db5bdf4248f6ef95c3e61c024340fa9ce477e07f58fa1d72",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:finale-of-revelation",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4717,8 +4711,8 @@
           "name": "Hakbal of the Surging Soul",
           "quantity": 1,
           "source_facts_sha256": "9ccdcf5c34639456d004add864425dee5d121ca5e8967481e616cc7752417fdd",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:hakbal-of-the-surging-soul",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4786,8 +4780,8 @@
           "name": "Helm of the Host",
           "quantity": 1,
           "source_facts_sha256": "9d52634afc7db9e90e7e9ed64e565c83c6e06701bcabcad2f094979f43b009e4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:helm-of-the-host",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4809,8 +4803,8 @@
           "name": "Hidden Nursery",
           "quantity": 1,
           "source_facts_sha256": "eb589611b11ef161411131bf93fc2de2b25fec7a1dda8a8f44c96d23ae43ad7a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:hidden-nursery",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4838,8 +4832,8 @@
           "name": "Horizon of Progress",
           "quantity": 1,
           "source_facts_sha256": "868537fbdd8088bc679d6dcbb6ed95fd734b2f50458d16019bdb0f42da092a16",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:horizon-of-progress",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4883,9 +4877,9 @@
           "card_id": "hydra-broodmaster",
           "name": "Hydra Broodmaster",
           "quantity": 1,
-          "source_facts_sha256": "5b85358607525226ae85a16fe228f38da9d79f67b8298b13b261f14de7292b72",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "b3541bdc62118fbd6bb4d8f42ad9ef59e690a4cf9c0c7de79f5ca2f2982e1168",
+          "program_definition": "catalog:hydra-broodmaster",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4936,8 +4930,8 @@
           "name": "Jyoti, Moag Ancient",
           "quantity": 1,
           "source_facts_sha256": "947c188cbc40a24a9eb49679457dad9b862694006026980f4f69e8877dc16bd9",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:jyoti-moag-ancient",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4988,8 +4982,8 @@
           "name": "Lazotep Quarry",
           "quantity": 1,
           "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:lazotep-quarry",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5126,8 +5120,8 @@
           "name": "March from Velis Vel",
           "quantity": 1,
           "source_facts_sha256": "8a0f2cde30721197f82d9b517ba6b67986316db74583f4daf031dcaec667dbaa",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:march-from-velis-vel",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5149,8 +5143,8 @@
           "name": "Maze's End",
           "quantity": 1,
           "source_facts_sha256": "5e7f1716b6a9013de9141537da4290147a7655f63f27457d651d3628b127e3e2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:maze-s-end",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5178,8 +5172,8 @@
           "name": "Mirage Mirror",
           "quantity": 1,
           "source_facts_sha256": "85f592fad38801b3b000816b07b1386d77025877178923e16b9bcdcdba9fc3b8",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:mirage-mirror",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5195,8 +5189,8 @@
           "name": "Nissa, Steward of Elements",
           "quantity": 1,
           "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:nissa-steward-of-elements",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5224,8 +5218,8 @@
           "name": "Oracle of Mul Daya",
           "quantity": 1,
           "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:oracle-of-mul-daya",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5299,8 +5293,8 @@
           "name": "Pongify",
           "quantity": 1,
           "source_facts_sha256": "59a5d0c1e859a1c3ed9aa299e6fe9786660dddd0e679631871283f73f923c979",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:pongify",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5333,8 +5327,8 @@
           "name": "Propaganda",
           "quantity": 1,
           "source_facts_sha256": "843cf0e31cd630835298c0d4c13b69b8714032b07b3a9827f1a20da1b6c03c07",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:propaganda",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5373,8 +5367,8 @@
           "name": "Rampant Frogantua",
           "quantity": 1,
           "source_facts_sha256": "a0317571b9a621c9278439fc329ccabb1b68eb490c9411d1ee4b8e99597ce0dc",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:rampant-frogantua",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5419,8 +5413,8 @@
           "name": "Replication Technique",
           "quantity": 1,
           "source_facts_sha256": "567938c6529bfc7261d06df950f64fcff12a29047eaa9ad68b9150d9b9e3bedc",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:replication-technique",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5488,8 +5482,8 @@
           "name": "Scute Swarm",
           "quantity": 1,
           "source_facts_sha256": "89ae041eccf2ba6740a6f1fddfd306b9bd1d2e4c4dcba92b0501265a7708d28b",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:scute-swarm",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5614,8 +5608,8 @@
           "name": "Sunken Palace",
           "quantity": 1,
           "source_facts_sha256": "40ee2361e7174737d95a07b8125d9d5916d138212aa97346513a8294d8c4a7ca",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:sunken-palace",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5660,8 +5654,8 @@
           "name": "Talon Gates of Madara",
           "quantity": 1,
           "source_facts_sha256": "c1fd0a20ba37f7cdb5d77ea536e9d71c5e89dfaf903605e8ea9d074988148ffc",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:talon-gates-of-madara",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5758,8 +5752,8 @@
           "name": "Thespian's Stage",
           "quantity": 1,
           "source_facts_sha256": "2c4f3160d20b93d8869a76f9391f5207c25c60b0bee895e1812c675339e69969",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:thespian-s-stage",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5850,8 +5844,8 @@
           "name": "Uro, Titan of Nature's Wrath",
           "quantity": 1,
           "source_facts_sha256": "16596c98bb602560722dd3f2023d9f602e0f74863f7fe0e44c1264708ff9431c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:uro-titan-of-nature-s-wrath",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5970,8 +5964,8 @@
           "name": "Vineglimmer Snarl",
           "quantity": 1,
           "source_facts_sha256": "e4e2b42bb524a496d251cff25e5f9dabada82d6f13fe59cebb2a920956e945d4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:vineglimmer-snarl",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5993,8 +5987,8 @@
           "name": "Volatile Fault",
           "quantity": 1,
           "source_facts_sha256": "7be3aaf3d64e39686c3af45c0985e6ce23011c5d3a6122875f892d502939d5fa",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:volatile-fault",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6033,8 +6027,8 @@
           "name": "Wonderscape Sage",
           "quantity": 1,
           "source_facts_sha256": "bbc98a6da6e605773cc013aef7c4f39e0bff8f0cb593c619cf5f8f67233e0438",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:wonderscape-sage",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6056,8 +6050,8 @@
           "name": "Xolatoyac, the Smiling Flood",
           "quantity": 1,
           "source_facts_sha256": "dec7453e5735bac0ef01878b37a2ce0fae130d6081c9f8e1edffb15eba183b45",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:xolatoyac-the-smiling-flood",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6153,8 +6147,8 @@
     {
       "deck": "Elenda, Saint of Dusk",
       "cards": 100,
-      "authored_copies": 81,
-      "unmapped_copies": 19,
+      "authored_copies": 100,
+      "unmapped_copies": 0,
       "entries": [
         {
           "card_id": "elenda-saint-of-dusk",
@@ -6184,8 +6178,8 @@
           "name": "Sorin, Vengeful Bloodlord",
           "quantity": 1,
           "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:sorin-vengeful-bloodlord",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6362,9 +6356,9 @@
           "card_id": "essence-channeler",
           "name": "Essence Channeler",
           "quantity": 1,
-          "source_facts_sha256": "753488e8d98d990b810eed5dd5c0d591748ebad58444f00318f54d4a96d11e34",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "a2e96ff0a43e27cea2c42b471a30d72d20e0494176e33866bfa9e761a5757862",
+          "program_definition": "catalog:essence-channeler",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6478,8 +6472,8 @@
           "name": "Indulgent Tormentor",
           "quantity": 1,
           "source_facts_sha256": "6c3b28a33ce320bc871b8a611e26fa05b7c5b85481513798ed259608c2297c55",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:indulgent-tormentor",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6524,8 +6518,8 @@
           "name": "Midnight Snack",
           "quantity": 1,
           "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:midnight-snack",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6668,8 +6662,8 @@
           "name": "Nullpriest of Oblivion",
           "quantity": 1,
           "source_facts_sha256": "6b42815f3e64ee0ba89e951d5301ff822305782d6d98e0e92da4895fbb8609cf",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:nullpriest-of-oblivion",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6720,8 +6714,8 @@
           "name": "Pontiff of Blight",
           "quantity": 1,
           "source_facts_sha256": "0b3e23aa155b3b9814739f215f94af02361a3377d16d1b8e0278babccadaaa16",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:pontiff-of-blight",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6788,9 +6782,9 @@
           "card_id": "sorin-of-house-markov",
           "name": "Sorin of House Markov",
           "quantity": 1,
-          "source_facts_sha256": "cfe50ea469f9605069927cda31a5694b474e59aa41f1e6086141cc6591c16b24",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "db89bb263f7353bfe4a11a2295670f82bbfe82b1dafbb13adcadbe00d8237716",
+          "program_definition": "catalog:sorin-of-house-markov",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6956,8 +6950,8 @@
           "name": "Restart Sequence",
           "quantity": 1,
           "source_facts_sha256": "4fa4d35aedf7420ba12a2f72b63bf96344e3d8d74a8ca3e8f9f7d0bc8966e5d5",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:restart-sequence",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7081,8 +7075,8 @@
           "name": "Devouring Light",
           "quantity": 1,
           "source_facts_sha256": "529a8bca36a37da0180a1dc759af60ed850e5243a491ebe3406c2adb83dc872e",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:devouring-light",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7242,8 +7236,8 @@
           "name": "Fellwar Stone",
           "quantity": 1,
           "source_facts_sha256": "33ef14fcff285d036572df648176f0bac18899380fff5883d3a7abad1613f10a",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fellwar-stone",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7460,8 +7454,8 @@
           "name": "Darksteel Mutation",
           "quantity": 1,
           "source_facts_sha256": "33a082ee71ee29e786c8036d3f99483be786d4de38eb317b306a5ad5928bf824",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:darksteel-mutation",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7483,8 +7477,8 @@
           "name": "Dawn of Hope",
           "quantity": 1,
           "source_facts_sha256": "6ee075220aed61bc54df17682675bb8309206ac5f3e4ccb186c389e5e1078fd4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:dawn-of-hope",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7505,9 +7499,9 @@
           "card_id": "glasswing-grace-age-graced-chapel",
           "name": "Glasswing Grace // Age-Graced Chapel",
           "quantity": 1,
-          "source_facts_sha256": "bc6f9bd70c8929089ec484c8b22392e37f6fb8ad0050c215a5748641a9016dde",
-          "program_definition": null,
-          "status": "unmapped",
+          "source_facts_sha256": "f6714c051ec38380893825b93fb8b4d8bc60bb43423a7b5f0abc5165c81c2743",
+          "program_definition": "catalog:glasswing-grace-age-graced-chapel",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7541,8 +7535,8 @@
           "name": "Grasp of Fate",
           "quantity": 1,
           "source_facts_sha256": "0c39d4d1ebc0e21fd916797496925b6ba0d85bb252f75e0cdd963297e2e1c411",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:grasp-of-fate",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7558,8 +7552,8 @@
           "name": "Leyline of Hope",
           "quantity": 1,
           "source_facts_sha256": "820785562dd116e103cf979bf64e353913e9fbe05cae20bbb10f0aed7961e760",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:leyline-of-hope",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7587,8 +7581,8 @@
           "name": "Parasitic Impetus",
           "quantity": 1,
           "source_facts_sha256": "cd1941d0ae8c0774226ac83ae4b672395ae6224134573fcdf29ada50fdf75591",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:parasitic-impetus",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7650,8 +7644,8 @@
           "name": "Prayer of Binding",
           "quantity": 1,
           "source_facts_sha256": "72001b0432a623710f91e2db40938076f495d105205e71c9e8edd74023f39af2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:prayer-of-binding",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7673,8 +7667,8 @@
           "name": "Sigarda's Splendor",
           "quantity": 1,
           "source_facts_sha256": "361531c0139fbe7ab320f3725346f3c87a59c04635651f7e93d88f27bbe72008",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:sigarda-s-splendor",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7806,8 +7800,8 @@
           "name": "Shineshadow Snarl",
           "quantity": 1,
           "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:shineshadow-snarl",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {

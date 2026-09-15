@@ -62,7 +62,7 @@ immutable and receive new plans only at the next real input.
 
 ## Transport and latency
 
-`host_runtime.AppServer` uses an owned `codex app-server` process and bidirectional
+`host_runtime.AppServer` uses an owned `codex app-server --listen stdio://` process and bidirectional
 JSON-lines RPC. It initializes once, starts isolated model threads and handles
 streamed notifications/dynamic tools. The installed implementation opts into
 experimental fields needed by the harness. Pin and validate a compatible Codex

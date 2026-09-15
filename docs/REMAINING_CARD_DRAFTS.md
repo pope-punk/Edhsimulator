@@ -3,8 +3,9 @@
 Branch: `codex/remaining-card-programs`, based on studious trout commit
 `e9c94a41b722a15621a1ab6352e96e97ccc5f8a7`.
 
-Project execution and validation are restricted to GitHub-hosted runners; no
-local Python, installation, tests or games are authorized. The library contains
+The authoring phase used GitHub-hosted runners. For the subsequent reconciliation
+and hosted-game work, the user authorized local execution in the Codespace on
+2026-09-15; see MIGRATION_RECONCILIATION.md. The library contains
 **334/334 source-bound reviewed programs / 400/400 deck copies**. All 107
 originally outstanding cards are complete. The draft bundle and remaining queue
 are empty; all four passes of the original 28-card plan are complete.

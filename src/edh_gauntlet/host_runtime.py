@@ -44,7 +44,7 @@ class AppServer:
     """JSON-lines RPC transport. Notifications stay in RAM, not a growing log."""
     def __init__(self, executable='codex', *, observer=None, config_overrides=()):
         self.observer=observer
-        arguments=[executable,'app-server','--stdio']
+        arguments=[executable,'app-server','--listen','stdio://']
         for setting in config_overrides:arguments.extend(['-c',setting])
         self.process=subprocess.Popen(arguments,stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf8',bufsize=1,

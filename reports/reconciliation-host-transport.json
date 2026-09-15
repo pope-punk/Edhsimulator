@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "codex_version": "0.153.4",
+  "command": [
+    "codex",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "initialization_verified": true,
+  "model_list_verified": true,
+  "required_models_present": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+  ],
+  "model_inference_started": false,
+  "game_initialized": false
+}

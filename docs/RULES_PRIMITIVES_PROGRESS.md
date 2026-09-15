@@ -15,7 +15,7 @@ Status: experimental vertical slice, 2026-09-09. **Not a production engine and n
 - `rules_casting.py`: pure revision-bound action quotes, revalidated atomic payments, unrestricted colored/colorless/generic mana and X, generic spell-cost modifiers, per-card commander tax, life/tap and atomic activation zone costs, stack activations and immediate mana abilities with supported additional effects. Accepted action receipts survive checkpoints and reject replay. Mana abilities during an announcement, restricted mana, casting zone costs, separately ordered activation cost groups and broader mana/cost semantics are still unsupported. One simultaneous activation zone-cost group now supports sacrifice, discard, exile and return. Creature tap-symbol readiness now uses continuous-control history and haste.
 - Shared battlefield target restrictions represent shroud and ordinary hexproof. Casting, trigger target menus and resolution use one check; copied definitions inherit it, current control determines opponents, and nontargeted selection/attachment use their own legality checks. Protection, ward, player defenses and continuously granted/removed abilities remain unsupported. Player targets are implemented below.
 - `rules_identity.py`: import-time source and Python identity bound into checkpoints.
-- `rules_admission.py`: deterministic production-readiness report and a rejecting production factory. Seven mapped interaction fixtures and 226 authored card programs are explicitly distinguished from production certification; no cards are production-certified by this experimental interpreter.
+- `rules_admission.py`: deterministic production-readiness report and a rejecting production factory. Seven mapped interaction fixtures and 334 authored card programs are explicitly distinguished from production certification; no cards are production-certified by this experimental interpreter.
 - `rules_kernel.py`: an isolated scenario interpreter with effective copied abilities, entry and upkeep discovery, pre-event leaves observations, APNAP trigger placement, explicit priority passes, target revalidation, commander destination choices, and a subset of state-based actions. Choices are bound to actor, request and state revision; accepted answers cannot be resubmitted. Nested selections retain independent bindings.
 - `rules_scenarios.py`: authored fixture programs for Body Double copying Uro's ETB abilities, Starfield's upkeep and animation abilities, Evolution Sage's proliferate trigger, Remand's counter/draw sequence, and Animate Dead/Felidar reanimation and blink sequences. These are **partial interaction fixtures**, not declarations of full card support. Runtime mechanics contain no card-name dispatch.
 
@@ -2879,3 +2879,23 @@ controller partitions, destination replacement and closed validation. Kernel
 schema is 107; state remains 12. Coverage is 226/334 authored cards and 291/400
 copies, with 108 remaining. Production admission stays closed; the legacy game
 remains paused and main is unchanged.
+
+
+## Completed-card branch reconciliation (2026-09-15)
+
+The remaining-card branch contains 334 source-bound programs covering all 400
+fixed-pod copies. The branch preserves the local shared-mechanics snapshot;
+its e9c94a4 starting tree exactly matches preservation commit 2970435.
+Fresh readiness and deck-coverage reports now reflect kernel/state schemas
+132/20 and zero unreviewed programs. Historical milestone reports below retain
+their original scope and are not current production certificates.
+
+Reconciliation expands CI to the complete repository suite and verifies the
+installed distribution locally. The user authorized local Codespace execution.
+The host's App Server launch now uses --listen stdio://, tested with Codex
+0.153.4 initialization and a model-list request. Sol, Terra and Luna are listed.
+No model inference or game was started by those transport checks.
+
+The production campaign/host adapter is still unregistered. Admission remains
+closed, and the legacy game's accepted prefix remains paused and unchanged.
+See MIGRATION_RECONCILIATION.md for integration status.
