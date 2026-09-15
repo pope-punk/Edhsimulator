@@ -1,7 +1,7 @@
 """Validate a proposed fresh primitive-engine launch without creating a cohort.
 
-There is deliberately no fallback to the legacy campaign initializer. Once the
-rules and host-adapter gates exist, a launch must consume this exact bound intent.
+There is no fallback to the legacy initializer. A supported launch requires
+matching release evidence and still leaves cohort creation to the lifecycle.
 """
 import argparse
 import hashlib
@@ -13,7 +13,7 @@ from .rules_bundle import deck_coverage
 from .rules_state import RulesViolation
 
 
-def preflight(destination, *, root=PROJECT_ROOT, games=20, seed_start=2026090901,
+def preflight(destination, *, root=PROJECT_ROOT, games=1, seed_start=2026090901,
               max_rounds=16, learning='disabled'):
     root=Path(root);destination=Path(destination).resolve()
     if destination.exists():raise RulesViolation('Fresh launch destination already exists; never overwrite a cohort')
@@ -27,20 +27,26 @@ def preflight(destination, *, root=PROJECT_ROOT, games=20, seed_start=2026090901
         'planning_contract':4,'agent_architecture':1,'async_diplomacy':1,'short_term_sol_fast':1,
         'rules_implementation_sha256':report['implementation_sha256'],
         'catalog_sha256':report['catalog_sha256'],'decks_sha256':coverage['decks_sha256'],
+        'pod_configuration_sha256':hashlib.sha256((root/'data/decks/pod_configuration.json').read_bytes()).hexdigest(),
         'authored_bundle_sha256':hashlib.sha256((root/'data/rules/primitive_cards.json').read_bytes()).hexdigest()}
+    requested['release_receipt_sha256']=report['release_receipt_sha256']
     intent_hash=hashlib.sha256(json.dumps(requested,sort_keys=True,separators=(',',':')).encode()).hexdigest()
-    return {'schema':1,'status':'blocked_rules_migration','initialized':False,'intent_sha256':intent_hash,
+    blockers=list(report['blockers'])
+    if games!=1 or learning!='disabled':blockers.append('Validated primitive host scope requires one game with learning disabled')
+    command=['python','-m','edh_gauntlet.primitive_lifecycle','--cohort',str(destination),'init',
+             '--seed',str(seed_start),'--starting-player','Omo','--max-rounds',str(max_rounds),'--learning','disabled']
+    return {'schema':1,'status':'blocked_rules_migration' if blockers else 'ready','initialized':False,'intent_sha256':intent_hash,
         'requested':requested,'authored_unique_cards':coverage['authored_unique_cards'],
         'unreviewed_program_count':len(unmapped),'unreviewed_programs':unmapped,
-        'blockers':report['blockers'],
-        'launch_command':None,'adapter_status':'No production primitive-engine campaign/host adapter is registered'}
+        'blockers':blockers,'release_receipt_sha256':report['release_receipt_sha256'],
+        'launch_command':None if blockers else command,'adapter_status':'Durable primitive campaign with isolated software-host roles'}
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cohort',type=Path,required=True)
     parser.add_argument('--root',type=Path,default=PROJECT_ROOT)
-    parser.add_argument('--games',type=int,default=20);parser.add_argument('--seed-start',type=int,default=2026090901)
+    parser.add_argument('--games',type=int,default=1);parser.add_argument('--seed-start',type=int,default=2026090901)
     parser.add_argument('--max-rounds',type=int,default=16)
     parser.add_argument('--learning',choices=['enabled','disabled'],required=True)
     parser.add_argument('--output',type=Path,required=True)

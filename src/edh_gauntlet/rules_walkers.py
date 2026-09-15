@@ -134,14 +134,17 @@ class WalkerRules:
         """Bootstrap boundary after every player has completed mulligans."""
         self._idle()
         if (self.state.turn_number or self.phase is not None or self.turn_schedule is not None
-                or self.stack or self.opening_actions is not None or starting_player not in self.state.live_players):
+                or self.stack or self.opening_actions is not None or self.mulligans is not None or starting_player not in self.state.live_players):
             raise RulesViolation('Opening actions require an unstarted post-mulligan game')
+        self._start_opening_actions(starting_player)
+        return self.advance()
+
+    def _start_opening_actions(self,starting_player):
         self.active=starting_player;self.priority=None
         index=self.state.players.index(starting_player)
         players=self.state.players[index:]+self.state.players[:index]
         self.opening_actions={'id':self._id('opening'),'players':list(players),'index':0}
         self._event('opening_actions_began',starting_player=starting_player)
-        return self.advance()
 
     def _continue_opening_actions(self):
         window=self.opening_actions

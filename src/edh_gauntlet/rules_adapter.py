@@ -12,6 +12,7 @@ from .rules_state import PlayerRef,ObjectRef,Zone,RulesViolation
 from .rules_casting import Payment
 from .rules_kernel import RulesKernel
 from .rules_identity import IMPLEMENTATION_ID
+from .rules_program import encode
 
 
 def digest(value):
@@ -40,6 +41,24 @@ class RulesActorAdapter:
         if self.failed:packet['decision']={'kind':'engine_stopped'}
         return packet
 
+    def inspect(self,actor,query):
+        """Read visible rules without exporting a checkpoint or reserving an action.
+
+        Programs describe available vocabulary, not an assertion that an action
+        is legal now. The ordinary atomic submission still validates timing,
+        targets, costs and the exact revision.
+        """
+        if self.failed:raise AcceptedTransitionError('Adapter stopped after an accepted execution failure')
+        if actor not in self.kernel.state.live_players:raise RulesViolation('Unavailable actor')
+        if type(query) is not dict or set(query)!={'kind','source'} or query['kind']!='card_rules':
+            raise RulesViolation('Unsupported inspection request')
+        ref=self._visible_ref(query['source'],actor)
+        obj=self.kernel.state.get(ref)
+        return {'kind':'card_rules','actor':actor,'revision':self.kernel.revision,
+                'source':ref.to_json(),'program':encode(self.kernel.definition(obj)),
+                'activated_abilities':encode(self.kernel.activated_abilities(obj)),
+                'legality':'Submission validates current timing, targets and payment.'}
+
     def _visible_ref(self,value,actor):
         try:ref=ObjectRef.from_json(value)
         except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid object reference') from exc
@@ -63,7 +82,7 @@ class RulesActorAdapter:
         if type(command) is not dict or type(command.get('kind')) is not str:
             raise RulesViolation('Invalid actor command')
         kind=command['kind']
-        required={'answer':{'request_id','indexes'},'allocate_counters':{'request_id','allocations'},'pass':set(),
+        required={'answer':{'request_id','indexes'},'allocate_counters':{'request_id','allocations'},'pass':set(),'concede':set(),
             'decline_cast':{'action_id','request_id'},
             'pay_mana':{'action_id','request_id','payment'},
             'cast':{'action_id','source','targets','x_value','payment'},
@@ -75,7 +94,7 @@ class RulesActorAdapter:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
         decision=decision_for_actor(self.kernel,actor)['kind']
-        expected={'answer':'choice','allocate_counters':'choice','pass':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
+        expected={'answer':'choice','allocate_counters':'choice','pass':'priority','concede':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
                   'unlock_room':'priority','play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
         if decision!=expected[kind] and not (kind=='activate' and decision in {'mana_payment','casting_mana'} or kind=='cast' and decision=='resolution_cast'):
             raise RulesViolation('Actor does not own this decision stage')
@@ -84,6 +103,7 @@ class RulesActorAdapter:
         if kind=='allocate_counters':return k.allocate_counters(command['request_id'],actor,command['allocations'])
         if kind=='decline_cast':return k.decline_resolution_cast(command['action_id'],actor,command['request_id'],revision=command['revision'])
         if kind=='pass':return k.pass_priority(actor)
+        if kind=='concede':return k.concede_at_priority(actor)
         if kind=='pay_mana':
             try:payment=None if command['payment'] is None else Payment.from_json(command['payment'])
             except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid resolution payment') from exc

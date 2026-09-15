@@ -36,5 +36,12 @@ actor-scoped legal commands, planner scheduling, durable replay and fresh-game
 initialization remains necessary before an actual migrated hosted-model game.
 Do not merely remove the gate or silently launch the legacy engine.
 
-Main has not been updated. No test game has been initialized. The existing paused
-legacy cohort must retain its accepted prefix and contract throughout this work.
+PR #1 merged the validated card library into main at
+4f015af09077f38d00518ab6c93592089ac28cb7 on 2026-09-15. All 2,713 tests passed
+locally; GitHub Actions run 34918943925 passed on Ubuntu and Windows (one
+Windows platform skip). The rebuilt installed wheel also passed asset verification.
+
+Fresh setup and replayable mulligans are implemented in the subsequent integration
+branch; see PRIMITIVE_HOST_INTEGRATION.md. No test campaign or hosted-model
+game has been initialized. The existing paused legacy cohort retains its accepted
+prefix of 222 actions and its original contract.

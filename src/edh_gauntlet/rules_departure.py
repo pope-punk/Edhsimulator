@@ -66,6 +66,20 @@ class GameResult:
 
 
 class DepartureRules:
+    def concede_at_priority(self,actor):
+        """The host's offered concession boundary (CR 104.3a, 800.4a).
+
+        This entrypoint does not implement asynchronous concessions during a
+        suspended resolution; it only accepts the authenticated priority holder.
+        Ordinary departure machinery owns object removal and surviving choices.
+        """
+        if (self.outcome or actor not in self.state.live_players or self.priority!=actor
+                or self.pending_choice or self.resolving or self.announcement or self.departure):
+            raise RulesViolation('Concession command requires an owned priority boundary')
+        self._event('player_conceded',player=actor)
+        self._depart_players((actor,))
+        return self.advance()
+
     def turn_order(self):
         start=self.state.players.index(self.active)
         return tuple(p for p in self.state.players[start:]+self.state.players[:start] if p in self.state.live_players)

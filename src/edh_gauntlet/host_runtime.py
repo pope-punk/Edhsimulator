@@ -42,13 +42,16 @@ def tool_result_guidance(role,split=False):
 
 class AppServer:
     """JSON-lines RPC transport. Notifications stay in RAM, not a growing log."""
-    def __init__(self, executable='codex', *, observer=None, config_overrides=()):
+    def __init__(self, executable='codex', *, observer=None, config_overrides=(), isolated_process_group=False):
         self.observer=observer
+        import os
+        self.isolated_process_group=bool(isolated_process_group and os.name=='posix')
         arguments=[executable,'app-server','--listen','stdio://']
         for setting in config_overrides:arguments.extend(['-c',setting])
         self.process=subprocess.Popen(arguments,stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf8',bufsize=1,
-            creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0),
+            start_new_session=self.isolated_process_group)
         self.events=queue.Queue();self.replies={};self.serial=0;self.usage={}
         self.reader=threading.Thread(target=self._read,daemon=True)
         self.reader.start()
@@ -986,6 +989,9 @@ def main(argv=None):
     root=args.cohort.resolve()
     # OS-owned lock prevents two software drivers, with no stale lock recovery.
     with locked(root,'host-driver',timeout=0):
+        if read(root/'cohort.json',{}).get('rules_engine')=='primitives-v1':
+            from .primitive_host import launch
+            return launch(args)
         server=AppServer(args.codex)
         try:
             runner=Runner(root,server,model=args.model,decider_model=args.decider_model,
