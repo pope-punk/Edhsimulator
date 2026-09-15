@@ -39,6 +39,13 @@ class MultiGameTests(unittest.TestCase):
         self.assertEqual(0,self.game.store.generation);self.assertEqual({},self.game.state()['registrations'])
         self.assertEqual(94,self.game.config['seed']);self.assertNotEqual('Omo',self.game.config['starting_player'])
         self.assertEqual(2,self.game.next_action()['game'])
+        from edh_gauntlet import primitive_actions as actions,primitive_planning as planning
+        actor=self.game.next_action()['actor']
+        self.assertEqual(2,actions.claim(self.game,actor)['game'])
+        q=self.game.kernel.pending_choice
+        self.game.submit(actor,'game-two-keep',{'kind':'answer','request_id':q.request_id,
+            'revision':self.game.kernel.revision,'indexes':[0]},rationale='Synthetic second-game keep.')
+        self.assertEqual(2,planning.claim(self.game,actor,planning.LONG)['game'])
         finish(self.game)
         self.assertEqual('cohort_complete',self.game.next_action()['reason'])
         report=cardwise(self.root)

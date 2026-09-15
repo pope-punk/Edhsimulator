@@ -1,5 +1,14 @@
 # Resident agent contract
 
+For fresh `primitives-v1` releases, the primitive section of
+[HOST_RUNTIME.md](HOST_RUNTIME.md#primitive-campaign-release) governs delivery.
+Deciders receive current facts and plans, without historical decision logs, including
+at checkpoints. Planners receive complete non-pass decision reasons. Passes remain
+in the replay audit but are omitted from model-received decision logs. Direct pass
+commands may omit rationale. Bounded inspection and large-input parking preserve
+exact current choice IDs; never infer an ID from a truncated tool return.
+The following legacy packet details do not silently change a saved game's binding.
+
 When `turn_batches:1` is bound, follow the full-turn policy in
 [APPROVED_SEQUENCES.md](APPROVED_SEQUENCES.md#full-turn-batches-turn_batches1):
 the two preceding opponents' end steps require short-term prose plus concrete

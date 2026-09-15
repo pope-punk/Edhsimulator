@@ -146,13 +146,16 @@ class PrimitiveHostTests(TestCase):
 
     def test_fresh_memory_does_not_repeat_rationales_already_in_the_packet(self):
         with self.game.transaction():
-            self.game.record('Omo','rationale',{'rationale':'Retain this complete fixture explanation.','command':{'kind':'pass'}})
+            self.game.record('Omo','rationale',{'rationale':'Retain this complete fixture explanation.','command':{'kind':'cast'}})
+            self.game.record('Omo','rationale',{'rationale':'Do not restore this pass.','command':{'kind':'pass'}})
             self.game.record('Elenda','rationale',{'rationale':'Another seat private reason.','command':{'kind':'pass'}})
         rows=self.game.evidence('Omo',kinds=('rationale',))
         self.assertEqual({},self.runner.memory('Omo',planning.LONG,{'rationales':rows}))
         restored=self.runner.memory('Omo',planning.LONG,{'rationales':[]})
         self.assertIn('Retain this complete fixture explanation.',str(restored))
         self.assertNotIn('Another seat private reason.',str(restored))
+        self.assertNotIn('Do not restore this pass.',str(restored))
+        self.assertEqual({},self.runner.memory('Omo','decider',{}))
 
     def test_waiting_context_parks_at_checkpoint_threshold_before_another_input(self):
         self.runner.pump();thread=self.runner.lanes[('Omo','decider')]
@@ -163,3 +166,29 @@ class PrimitiveHostTests(TestCase):
         self.runner.pump()
         self.assertNotIn(thread,self.runner.waiting)
         self.assertTrue(any(value.get('state')=='parked' for _,value,_ in self.server.replies))
+
+    def test_large_next_decision_parks_before_full_delivery_without_replaying(self):
+        import json
+        self.runner.pump();thread=self.runner.lanes[('Omo','decider')]
+        previous=self.runner.inputs[thread];baseline=self.runner.deliveries[thread]
+        q=self.game.kernel.pending_choice
+        self.runner.handle(self.tool(thread,'edh_act',{'command':{'kind':'answer','request_id':q.request_id,'indexes':[1]},
+            'rationale':'Synthetic mulligan to test a consecutive same-seat choice.','scheduler':{'mode':'hold_full_control'}}))
+        while self.game.next_action()['actor']!='Omo':
+            q=self.game.kernel.pending_choice
+            self.game.submit(q.actor,'fixture-keep:'+q.request_id,{'kind':'answer',
+                'revision':self.game.kernel.revision,'request_id':q.request_id,'indexes':[0]},rationale='Synthetic opposing keep.')
+        committed=self.game.store.committed_head()
+        with self.game.transaction() as state:state['actors']['Omo']['plans']['large']={'id':'fixture','value':'x'*100000}
+        self.runner.pump()
+        self.assertEqual('parked',self.server.replies[-1][1]['state'])
+        self.assertEqual(previous,self.runner.inputs[thread]);self.assertEqual(baseline,self.runner.deliveries[thread])
+        self.assertEqual(committed,self.game.store.committed_head())
+        self.runner.handle({'method':'turn/completed','params':{'threadId':thread,
+            'turn':{'id':self.runner.running[thread],'status':'completed'}}})
+        self.runner.pump()
+        turns=[p for m,p in self.server.calls if m=='turn/start' and p['threadId']==thread]
+        packet=json.loads(turns[-1]['input'][0]['text'])
+        self.assertEqual('x'*100000,packet['plans']['large']['value'])
+        self.assertEqual(self.game.kernel.pending_choice.request_id,packet['current_decision']['choice']['request_id'])
+        self.assertEqual(committed,self.game.store.committed_head());self.assertFalse(self.runner.unanswered)

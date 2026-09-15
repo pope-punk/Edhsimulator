@@ -280,7 +280,9 @@ class PrimitiveCampaign:
 
     def prepare(self,actor,request_id,command,*,rationale,plan_refs=None,control=None):
         if type(request_id) is not str or not request_id or len(request_id)>128:raise RulesViolation('Invalid host request ID')
-        if type(rationale) is not str or not rationale.strip() or len(rationale)>2400:raise RulesViolation('A bounded pilot-authored rationale is required')
+        no_pass_rationale=type(command) is dict and command.get('kind')=='pass' and rationale is None
+        if not no_pass_rationale and (type(rationale) is not str or not rationale.strip() or len(rationale)>2400):
+            raise RulesViolation('A bounded pilot-authored rationale is required for non-pass actions')
         payload={'command':command,'rationale':rationale,'plan_refs':plan_refs or {},'control':control}
         with self.transaction() as state:
             existing=self.store.connection.execute('SELECT actor,payload,state,receipt FROM host_inputs WHERE request_id=?',(request_id,)).fetchone()

@@ -33,7 +33,7 @@ def claim(campaign,actor):
         seat=state['actors'][actor];packet=campaign.store.packet(actor)
         from .primitive_snoozes import annotate
         annotate(campaign,actor,packet,seat['snooze'])
-        value={'actor':actor,'game':1,'revision':campaign.kernel.revision,'board':packet,
+        value={'actor':actor,'game':campaign.binding['game_number'],'revision':campaign.kernel.revision,'board':packet,
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
@@ -42,9 +42,7 @@ def claim(campaign,actor):
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
         value['_knowledge']=freeze(campaign,actor,packet)
-        rows=campaign.evidence(actor,kinds=('rationale','batch_approval'))
         value['evidence_through']=campaign.evidence_position(actor)
-        value['rationales']=[row for row in rows if row['kind'] in {'rationale','batch_approval'}]
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1
         value['claim_id']=digest({'binding':campaign.binding,'commit':campaign.store.committed_head(),'actor':actor,'claim_serial':state['claim_serial']})

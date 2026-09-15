@@ -1,5 +1,13 @@
 # EDH gauntlet agent entrypoint
 
+Fresh primitive releases use the delivery split in
+[HOST_RUNTIME.md](docs/HOST_RUNTIME.md#primitive-campaign-release): historical
+decision logs go to planners, with pass entries omitted. Deciders receive current
+choices, board, plans and rejection feedback, without historical decision logs
+or checkpoint restoration of them. Preserve the complete replay tape and original
+actor evidence. This supersedes the legacy full-rationale decider-packet wording
+below only for fresh primitive releases; never migrate a started game silently.
+
 For fresh games explicitly binding `agent_architecture:1`, the role, component,
 escalation and scheduling rules in [AGENT_ARCHITECTURE_V1.md](docs/AGENT_ARCHITECTURE_V1.md)
 supersede the single-planner instructions below. Sol owns strategic goals; static standing files serve fresh split games;

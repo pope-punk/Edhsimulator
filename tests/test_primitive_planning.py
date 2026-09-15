@@ -145,3 +145,12 @@ class PrimitivePlanningTests(unittest.TestCase):
         planning.claim(self.game,'Omo',planning.LONG)
         with self.game.transaction() as state:planning.queue(state,'Omo',planning.LONG,'invalid_goal:'+goal_id)
         self.assertEqual([],self.game.state()['actors']['Omo']['jobs'][planning.LONG]['queued'])
+
+    def test_planner_history_keeps_nonpass_prose_and_excludes_passes(self):
+        with self.game.transaction():
+            self.game.record('Omo','rationale',{'rationale':'Routine pass omitted.','command':{'kind':'pass'}})
+            self.game.record('Omo','rationale',{'rationale':'Complete resource-development reason.','command':{'kind':'activate'}})
+        job=planning.claim(self.game,'Omo',planning.LONG)
+        self.assertNotIn('Routine pass omitted.',str(job['rationales']))
+        self.assertIn('Complete resource-development reason.',str(job['rationales']))
+        self.assertIn('Routine pass omitted.',str(self.game.evidence('Omo',kinds=('rationale',))))

@@ -151,3 +151,11 @@ class PrimitiveActionTests(unittest.TestCase):
                  'wake_condition':'deadline_only'})
         self.assertEqual(before,self.game.store.committed_head())
         self.assertEqual(frozen['claim_id'],self.game.state()['claim']['claim_id'])
+
+    def test_pass_needs_no_prose_but_nonpass_requires_a_rationale(self):
+        frozen=actions.claim(self.game,'Omo')
+        with self.assertRaisesRegex(RulesViolation,'rationale'):
+            actions.submit(self.game,'Omo',frozen['claim_id'],'missing-prose',{'kind':'concede'},None,{'mode':'hold_full_control'})
+        actions.submit(self.game,'Omo',frozen['claim_id'],'pass-without-prose',{'kind':'pass'},None,{'mode':'hold_full_control'})
+        self.assertEqual(5,self.game.store.generation)
+        self.assertIsNone(self.game.evidence('Omo',kinds=('rationale',))[-1]['value']['rationale'])
