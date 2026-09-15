@@ -15,7 +15,7 @@ from .host_runtime import AppServer,tool
 from .host_routing import Routing
 from .host_failures import metadata
 from .host_telemetry import Timing
-from .communications import prepare as present
+from .primitive_delivery import prepare as present
 from .agent_architecture import MODELS,EFFORTS
 from .rules_adapter import digest
 from .rules_state import RulesViolation
@@ -83,19 +83,29 @@ card into that visible zone in an approved sequence. Other references stay exact
 '''
 
 
+def inspection_schema(role):
+    pointer={'path':{'type':'string'},'offset':{'type':'integer','minimum':0},'limit':{'type':'integer','minimum':1,'maximum':32}}
+    ref={'type':'object','properties':{'card_id':{'type':'string'},'incarnation':{'type':'integer'}},'required':['card_id','incarnation'],'additionalProperties':False}
+    kinds=[('object',{'source':ref},['source']),('card',{'name':{'type':'string'}},['name']),
+           ('state',{},[]),('decision',{},[]),('history',{'after':{'type':'integer','minimum':0},'page_size':{'type':'integer','minimum':1,'maximum':32}},['after'])]
+    if role==planning.LONG:kinds.append(('deck',{},[]))
+    return {'oneOf':[{'type':'object','properties':{'kind':{'type':'string','enum':[kind]},**fields,**pointer},
+                     'required':['kind',*required],'additionalProperties':False} for kind,fields,required in kinds]}
+
+
 def schemas(role):
     inspect_tool=tool('edh_inspect','Inspect only your frozen input. Batch related queries.',
-        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':{'type':'object'}}},['queries'])
+        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role)}},['queries'])
     if role=='decider':
-        return [tool('edh_act','Prefer a sequence for known mana production and cast chains, even without a planner proposal. Use command for a single decision or batch to approve planner steps. Await the next input or park.',
+        return [tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit a direct sequence for a known mana/cast line, or command for one decision. Await the next input or park.',
             {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object'},'sequence':{'type':'array','minItems':1,'maxItems':64,
              'items':{'type':'object','properties':{'id':{'type':'string'},'command':{'type':'object'},'rationale':{'type':'string'}},'required':['id','command'],'additionalProperties':False}}},[]),
             tool('edh_planner_alarm','Set, replace or cancel your planner alarm at a priority decision.',
                  {'alarm':{'type':'object'}},['alarm']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
                  {'reason':{'type':'string'}},['reason'])]
-    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish exactly the next frozen stage. End when next is null.',
-        {'stage':{'type':'string','enum':list(planning.STAGES[role])},'response':{'type':'object'}},['stage','response'])]
+    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Prefer short_term_and_actions to atomically publish both short-term stages; otherwise publish exactly the next frozen stage. End when next is null.',
+        {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else [])},'response':{'type':'object'}},['stage','response'])]
 
 
 def instructions(actor,role):
@@ -163,14 +173,14 @@ Do not write tactics, continuity, approve proposals or execute game actions.
 '''
     elif role==planning.SHORT:
         specific='''Own continuity and tactical proposals only. Retain standing; read current goal and
-all supplied own-seat rationales. First publish short_term with
+all supplied own-seat rationales. Prepare short_term with
 {short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid",long_term_invalid_reason:TEXT}.
 Optional dependencies:[JSON_POINTERS] declares up to 24 distinct factual paths in
 this frozen board, for example /players/0/life or /hand. List indexes are zero-based.
 Only existing facts may be declared. A revised goal queues tactical follow-up when
 these facts changed; a goal version change alone does not wake you.
 Invalidity requires a concrete reason, queues strategic work and still proceeds to
-actions. Then publish actions with {action_sequence:[STEPS],phase_coverage:{
+actions. Prepare actions with {action_sequence:[STEPS],phase_coverage:{
 precombat_main:{status:"planned"|"no_action"|"reassess",reason:TEXT},
 combat:{status:...,reason:...},postcombat_main:{status:...,reason:...}}}.
 Each step has id,seat_turn:POSITIVE_OWN_TURN_ORDINAL,phase,command,rationale:TEXT_MAX_300,
@@ -213,8 +223,9 @@ The host parks oversized tool deliveries and supplies a complete next real input
     elif role==planning.DIPLOMAT:
         common='Use only your authorized publication tool and supplied public input. Only planners inspect. End on stop or next:null; never replay an accepted publication.\n'
     else:common=COMMON
+    specific+='\nPublication and batch policy: short-term planners should publish stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} once both are ready. Both stages validate and commit atomically. Separate stages remain available when early prose is useful. If short_term was already accepted, publish only actions. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
     specific+='\nLand planning: supplied intrinsic_land_mana describes conditional battlefield abilities, including exact IDs and costs. A land in hand cannot tap yet. In an approved play-land/tap/cast sequence, use {owned_card:CARD_ID,zone:"battlefield"} for its new incarnation. Check entry/tapped conditions and other effects; an unexecuted planned land drop is not a completed action. Current board and accepted receipts establish what happened.'
-    specific+='\nScheduler policy: every snooze ends no later than your next upkeep. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
+    specific+='\nScheduler policy: ordinary snoozes end no later than your next upkeep. To explicitly pass through intervening turns and your own upkeep/draw until your next precombat main, use {mode:"snooze_until_own_main",wake_condition:"deadline_only"} or another supported wake condition. Required choices and the chosen wake condition still interrupt it; it never passes your precombat main. Prefer this over repeated upkeep/draw prompts when you intend no optional action before your main phase. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
     return f'You are the {actor} {role}.\n'+common+specific
 
 
@@ -304,6 +315,7 @@ class PrimitiveRunner:
 
     def deliver(self,thread,packet):
         actor,role=self.threads[thread]
+        warm=thread in self.waiting
         value=public_input(packet)
         if role=='decider':value={'current_decision':deepcopy(packet['board']['decision']),'action_facts':action_facts(packet),**value}
         if thread not in self.deliveries:
@@ -334,6 +346,7 @@ class PrimitiveRunner:
             self.running[thread]=result['turn']['id'];self.tool_counts[thread]=0;self.turn_models[thread]=model
             self.timing.record('turn_request',thread,input_chars=len(text),model=model,role=role)
         self.inputs[thread]=packet;self.deliveries[thread]=next_state
+        self.timing.record('input_delivered',thread,warm=warm,accepted=self.campaign.store.generation,input_chars=len(text))
         if role=='decider':actions.delivered(self.campaign,actor,packet['claim_id'])
         return True
 
@@ -351,7 +364,9 @@ class PrimitiveRunner:
         # Bound automatic work per loop so ready role replies cannot starve.
         automatic_budget_used=False
         for _ in range(16):
-            if not actions.automatic(campaign):break
+            started=time.monotonic();before=campaign.store.generation;advanced=actions.automatic(campaign)
+            if advanced and campaign.store.generation>before:self.timing.record('automatic_action',seconds=time.monotonic()-started,accepted=campaign.store.generation,kind=campaign.store._adapter.records[-1]['command']['kind'])
+            if not advanced:break
             if campaign.store.generation-self.initial_count>=self.max_decisions:break
         else:automatic_budget_used=True
         if (campaign.store.generation-self.initial_count>=self.max_decisions
@@ -437,6 +452,7 @@ class PrimitiveRunner:
                         raise RulesViolation('Ordinary action requires command and scheduler; non-pass actions also require rationale')
                     value=actions.submit(self.campaign,actor,frozen['claim_id'],'rpc:'+digest(key),
                                          **{**args,'rationale':args.get('rationale')})
+                if 'sequence' in args or 'batch' in args:self.timing.record('batch_authorized',thread,mode='direct' if 'sequence' in args else 'planner',steps=value.get('approved',0))
                 self.waiting_receipts[thread]=value
                 self.waiting[thread]=(request,time.monotonic())
                 return
@@ -448,8 +464,11 @@ class PrimitiveRunner:
                 reason=planning.text_field(args,'reason',1200)
                 self.campaign.rules_blocker(actor,reason);value={'state':'stop','reason':'rules_review'};self.done=True
             else:raise RulesViolation('Tool is not owned by this role')
+            if name=='edh_publish':self.timing.record('publication_accepted',thread,stage=args.get('stage'),combined=args.get('stage')=='short_term_and_actions')
+            if name=='edh_inspect':self.timing.record('inspection_batch',thread,queries=len(args['queries']),rejected=sum(bool(r.get('rejected')) for r in value['results']))
             self.server.respond(request,value)
         except (RulesViolation,ValueError,KeyError,TypeError) as exc:
+            self.timing.record('input_rejected',thread,tool=name,reason_sha256=digest(str(exc)))
             self.server.respond(request,{'rejected':True,'reason':str(exc),'instruction':'Correct only this unaccepted input. Never replay an accepted action or stage.'},False)
 
     def run(self):

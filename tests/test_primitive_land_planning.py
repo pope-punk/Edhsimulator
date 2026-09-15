@@ -21,6 +21,12 @@ class LandPlanningTests(TestCase):
         self.assertEqual((),intrinsic_land_mana(['Gate']))
 
     def test_hand_forest_can_be_planned_played_tapped_and_spent_from_one_tool_call(self):
+        self.land_line(False)
+
+    def test_combined_planner_publication_can_be_approved_as_one_mana_batch(self):
+        self.land_line(True)
+
+    def land_line(self,planner):
         directory=self.enterContext(TemporaryDirectory())
         game=PrimitiveCampaign._create(Path(directory)/'game',seed=93,starting_player='Omo')
         self.addCleanup(game.close)
@@ -49,6 +55,23 @@ class LandPlanningTests(TestCase):
                 'ability_id':ability,'targets':[],'x_value':0,'payment':{'mana':{},'taps':[]}}},
             {'id':'cast','command':{'kind':'cast','source':bauble.to_json(),'targets':[],'x_value':0,'payment':{'mana':{'G':1},'taps':[]}}}],
             'rationale':'Play Forest, produce green and cast Bauble.','scheduler':{'mode':'hold_full_control'}}
+        if planner:
+            from edh_gauntlet import primitive_planning as planning
+            # Finish the real opening strategic job, then publish one atomic tactical job.
+            job=planning.claim(game,'Omo',planning.LONG)
+            planning.publish(game,'Omo',planning.LONG,job['job_id'],'long_term',
+                {'long_term_plan':'Develop mana in the fixture.','diplomacy':[{'id':'fixture','text':'Fixture public note.','expires_turn':999}]})
+            job=planning.claim(game,'Omo',planning.SHORT)
+            proposal={'action_sequence':[{**step,'seat_turn':1,'phase':'precombat_main',
+                      'rationale':args['rationale'],'scheduler':args['scheduler']} for step in args['sequence']],
+                      'phase_coverage':{phase:({'status':'planned'} if phase=='precombat_main' else {'status':'no_action','reason':'Fixture.'}) for phase in planning.PHASES}}
+            planning.publish(game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',
+                {'short_term':{'short_term_plan':'Play Forest, tap it and cast Bauble.','continuity':'No land played.',
+                               'long_term_validity':'valid','long_term_invalid_reason':''},'actions':proposal})
+            # Existing claims are immutable; model a new delivery before approving the new plan.
+            with game.transaction() as state:state['claim']=None
+            frozen=actions.claim(game,'Omo');runner.inputs[thread]=frozen
+            args={'batch':{'approve_ids':['land','tap','cast'],'reject_ids':[],'pass_priority':False}}
         runner.handle({'id':'land-line','method':'item/tool/call','params':{'threadId':thread,
             'turnId':runner.running[thread],'callId':'land-line','tool':'edh_act','arguments':args}})
         before=game.store.generation

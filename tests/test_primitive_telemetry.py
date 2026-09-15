@@ -27,3 +27,13 @@ class PrimitiveTelemetryTests(TestCase):
                         'tool':'edh_publish','arguments':{'response':{'action_sequence':sequence}}}})
                     self.assertEqual(0,timing.events[-1]['proposed_actions'])
             finally:timing.close()
+
+    def test_aggregate_counts_survive_rolling_event_eviction(self):
+        with TemporaryDirectory() as directory:
+            timing=Timing(Path(directory)/'timing.json',limit=2)
+            try:
+                for _ in range(5):timing.record('automatic_action',kind='pass',seconds=.1)
+                self.assertEqual(2,len(timing.events))
+                aggregate=timing.aggregates['automatic_action|host|pass']
+                self.assertEqual(5,aggregate['count']);self.assertAlmostEqual(.5,aggregate['seconds_sum'])
+            finally:timing.close()

@@ -120,3 +120,14 @@ class SourceSnoozeTests(TestCase):
             try:actions.observe(self.game,state,'Omo',{'kind':'attack','attackers':[]})
             finally:self.game.kernel.semantic_events.pop()
             self.assertIsNone(state['actors']['Elenda']['snooze'])
+
+    def test_explicit_own_main_snooze_survives_upkeep_but_not_main(self):
+        directive=actions.normalize_scheduler({'mode':'snooze_until_own_main','wake_condition':'deadline_only'})
+        self.assertEqual(directive,actions.normalize_scheduler(directive))
+        with self.game.transaction() as state:actions.apply_control(self.game,state,'Elenda',{'scheduler':directive})
+        self.advance_to('Elenda','upkeep')
+        self.assertIsNotNone(self.game.state()['actors']['Elenda']['snooze'])
+        self.assertTrue(actions.automatic(self.game))
+        self.advance_to('Elenda','precombat_main')
+        self.assertIsNone(self.game.state()['actors']['Elenda']['snooze'])
+        self.assertFalse(actions.automatic(self.game))
