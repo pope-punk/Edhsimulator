@@ -45,6 +45,7 @@ def freeze(campaign,actor,board):
 
 
 def inspect(campaign,actor,role,frozen,queries):
+    if role not in ('short_term_planner','long_term_planner'):raise RulesViolation('Inspection belongs only to short-term and long-term planners')
     if type(queries) is not list or not 1<=len(queries)<=8:raise RulesViolation('Batch one to eight inspections')
     catalog=load_catalog(campaign.assets/'data/catalog/cards.json')
     cards={c.name:c for c in catalog};results=[]
@@ -84,3 +85,21 @@ def inspect(campaign,actor,role,frozen,queries):
 
 
 def public_input(value):return {k:deepcopy(v) for k,v in value.items() if not k.startswith('_')}
+
+
+def action_facts(frozen):
+    """Current visible rules, deduplicated for a decider that has no inspection tool."""
+    def compact(value):
+        if type(value) is list:return [compact(v) for v in value]
+        if type(value) is dict:
+            # Omit only empty/inactive values, never numeric costs or quantities.
+            return {k:compact(v) for k,v in value.items()
+                    if v is not None and v is not False and v!=[] and v!={}}
+        return value
+    programs={};objects=[]
+    for row in frozen.get('_knowledge',{}).values():
+        rules=compact({'program':row['program'],'activated_abilities':row['activated_abilities']})
+        key=digest(rules);programs.setdefault(key,rules)
+        objects.append({'source':deepcopy(row['source']),'rules_id':key})
+    return {'objects':objects,'rules':programs,
+            'format':'Current frozen visible rules only. Empty/null fields and false flags are omitted; numeric costs and quantities are retained. Objects reference deduplicated rules by rules_id. Submission validates legality.'}

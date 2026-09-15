@@ -305,7 +305,8 @@ priority in a supported turn phase, it may submit:
 ```
 
 The references, ability, exact menu and spending above are illustrative: use the
-actual frozen objects and card programs. Python binds only the current own-turn
+actual frozen objects and card programs supplied in action_facts. Only planners
+may call inspection tools; deciders read these already-supplied facts. Python binds only the current own-turn
 ordinal and phase. A step can override the shared rationale. This form is mutually
 exclusive with `command` and planner `batch`; it does not approve unlisted planner
 steps or unplanned priority passes. The explicitly supplied scheduler still applies.

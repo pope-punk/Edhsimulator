@@ -343,3 +343,15 @@ must still exclude hidden pilot packets and future-library order.
 Fresh primitive mana batching supports exact approved color-choice continuations;
 see [Primitive hosted mana continuations](APPROVED_SEQUENCES.md#primitive-hosted-mana-continuations).
 Use complete known production-and-cast sequences to avoid one inference per mana source.
+
+
+Fresh primitive role tools enforce planner-only inspection. Only short-term and
+long-term planners expose or may invoke `edh_inspect`; deciders and diplomats are
+rejected by both host routing and the inspection provider. Decider inputs include
+`current_decision` and `action_facts`, derived from their already-frozen visible
+objects. Exact source references map to deduplicated current rules/programs and
+activated abilities. Empty/null values and false flags are omitted; numeric costs
+and quantities remain explicit. These are action facts, not historical decision
+logs or a guarantee that an action is currently legal. Submission still validates
+choices, timing, targets and payment. No additional hidden objects or future library
+order enters the packet. Diplomats do not receive this private action material.
