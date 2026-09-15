@@ -1,7 +1,7 @@
 """Closed, serializable ability programs for the experimental rules interpreter."""
 from __future__ import annotations
 from .rules_creature_types import CREATURE_TYPES
-from dataclasses import dataclass,fields
+from dataclasses import dataclass,fields,replace
 from .rules_state import Zone,RulesViolation
 from .rules_subtypes import SUBTYPE_SETS,SUBTYPE_SUPPORT
 
@@ -825,6 +825,11 @@ class ModifyPT:
 
 
 @dataclass(frozen=True)
+class CountedPT(ModifyPT):
+    selector: Selector
+
+
+@dataclass(frozen=True)
 class LostPlayerPT(ModifyPT):
     """A live modifier multiplied by the number of players who lost."""
     pass
@@ -1450,10 +1455,109 @@ class OpeningHandPermissions(PlayerPermissions):
 
 
 
+@dataclass(frozen=True)
+class RoomProgram(CardProgram):
+    right: CardProgram | None = None
+    shared_abilities: tuple = ()
+    shared_activated: tuple = ()
+    copy_colors: tuple | None = None
+    cost_removed: bool = False
+
+
+@dataclass(frozen=True)
+class ReadAheadProgram(CardProgram):
+    pass
+
+
+@dataclass(frozen=True)
+class MiraclePermissions(PlayerPermissions):
+    generic_reduction: int = 4
+
+
+@dataclass(frozen=True)
+class ExactManaCostSelector(Selector):
+    costs: tuple[ManaCost,...] = ()
+
+
+@dataclass(frozen=True)
+class RoomEventPattern(EventPattern):
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class UnlockRoom:
+    subject: str = 'source'
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class LockRoom:
+    subject: str = 'source'
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class ResolutionSequence:
+    group: str
+    stages: tuple[tuple,...]
+
+
+@dataclass(frozen=True)
+class DiscardPlayers:
+    players: str = 'opponents'
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class RevealHandDiscard:
+    selector: Selector
+    players: str = 'target'
+
+
+@dataclass(frozen=True)
+class ReturnEnchantmentOrUnlock:
+    pass
+
+
+@dataclass(frozen=True)
+class MiracleCast:
+    reduction: int
+
+
+def room_profile(program,obj):
+    """Room halves are copiable; unlocked designations belong to the object."""
+    if not isinstance(program,RoomProgram):return program
+    left=CardProgram(**{f.name:getattr(program,f.name) for f in fields(CardProgram)})
+    right=program.right
+    halves=(obj.room_cast,) if obj.room_cast else obj.unlocked if obj.zone==Zone.BATTLEFIELD else ('left','right')
+    if halves==('left',):profile=left
+    elif halves==('right',):profile=right
+    elif not halves:
+        profile=CardProgram(program.definition_id,'',program.types,subtypes=program.subtypes,
+            supertypes=program.supertypes,power=program.power,toughness=program.toughness)
+    else:
+        arrays=('abilities','activated','continuous','entry_modifiers','entry_counters','replacements',
+            'counter_replacements','life_gain_replacements','block_restrictions','tapped_mana_replacements',
+            'entry_restrictions','casting_restrictions','cost_modifiers','target_restrictions')
+        attrs={name:getattr(left,name)+getattr(right,name) for name in arrays}
+        costs=tuple(p.cast.cost.mana for p in (left,right) if p.cast)
+        mana=ManaCost(sum(c.generic for c in costs),tuple(s for c in costs for s in c.symbols),sum(c.x_symbols for c in costs))
+        profile=replace(left,name=left.name+' // '+right.name,mana_value=left.mana_value+right.mana_value,
+            colors=tuple(sorted(set(left.colors+right.colors))),keywords=tuple(dict.fromkeys(left.keywords+right.keywords)),
+            cast=CastSpec(CostSpec(mana)) if costs else None,**attrs)
+    return replace(profile,abilities=profile.abilities+program.shared_abilities,activated=profile.activated+program.shared_activated,
+        colors=program.copy_colors if program.copy_colors is not None else profile.colors)
+
+
+
+def object_program(obj,definitions):
+    return room_profile(definitions[obj.effective_definition],obj)
+
+
 KEYWORDS=frozenset(('fear','protection_white','protection_blue','protection_black','protection_red','protection_green','phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
 
-TYPES={cls.__name__:cls for cls in (BattleProgram,MoveFace,DoubleFacedProgram,ChapterAbility,LifeGainedCondition,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,AddTriggered,CommanderProgram,KeywordSelector,LoyaltyCost,ClassLevelCondition,ControllerTurnCondition,ClassCounterReplacement,AddWard,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,OpeningHandPermissions,WithLastKnownControllers,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,CountDistinctNames,WinGame,RulePermissions,SetCardTypes,LoseAbilities,Goaded,AddRiot,TopLibraryPermissions,CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
-EFFECTS=(MoveFace,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,WithLastKnownControllers,WinGame,CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+TYPES={cls.__name__:cls for cls in (CountedPT,RoomEventPattern,RoomProgram,ReadAheadProgram,MiraclePermissions,ExactManaCostSelector,UnlockRoom,LockRoom,ResolutionSequence,DiscardPlayers,RevealHandDiscard,ReturnEnchantmentOrUnlock,MiracleCast,BattleProgram,MoveFace,DoubleFacedProgram,ChapterAbility,LifeGainedCondition,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,AddTriggered,CommanderProgram,KeywordSelector,LoyaltyCost,ClassLevelCondition,ControllerTurnCondition,ClassCounterReplacement,AddWard,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,OpeningHandPermissions,WithLastKnownControllers,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,CountDistinctNames,WinGame,RulePermissions,SetCardTypes,LoseAbilities,Goaded,AddRiot,TopLibraryPermissions,CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(UnlockRoom,LockRoom,ResolutionSequence,DiscardPlayers,RevealHandDiscard,ReturnEnchantmentOrUnlock,MiracleCast,MoveFace,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,WithLastKnownControllers,WinGame,CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
 
 
 def encode(value):
@@ -1480,6 +1584,8 @@ def immediate_effect_nodes(nodes):
     """Walk effects executed now, excluding bodies of future delayed triggers."""
     for node in nodes:
         yield node
+        if isinstance(node,ResolutionSequence):
+            for stage in node.stages:yield from immediate_effect_nodes(stage)
         if isinstance(node,WithZoneResult):
             yield from immediate_effect_nodes((node.operation,))
             yield from immediate_effect_nodes(node.effects)
@@ -1560,10 +1666,19 @@ def activation_is_mana(ability):
 
 
 def validate(program,_depth=0):
+    if isinstance(program,RoomProgram):
+        if (type(program.right) is not CardProgram or program.right.definition_id!=program.definition_id+':right'
+                or program.types!=program.right.types or program.subtypes!=program.right.subtypes
+                or 'Room' not in program.subtypes or 'Enchantment' not in program.types
+                or type(program.cost_removed) is not bool or not program.cost_removed and (program.cast is None or program.right.cast is None)):raise RulesViolation('Invalid Room program')
+        validate(CardProgram('room-shared','Room shared copy abilities',program.types,abilities=program.shared_abilities,activated=program.shared_activated,colors=program.copy_colors or ()),_depth+1)
+        validate(program.right,_depth+1)
+    if isinstance(program,ReadAheadProgram) and ('Saga' not in program.subtypes or not any(isinstance(a,ChapterAbility) for a in program.abilities)):raise RulesViolation('Read ahead requires chapter abilities')
     if isinstance(program,BattleProgram) and (type(program.defense) is not int or program.defense<0 or bool(program.defense)!=('Battle' in program.types)):raise RulesViolation('Invalid printed defense')
     if isinstance(program,DoubleFacedProgram):
         if program.layout not in {'modal','transform'} or type(program.back) is not CardProgram or program.back.definition_id!=program.definition_id+':back':raise RulesViolation('Invalid double-faced program')
         validate(program.back,_depth+1)
+    if isinstance(program.player_permissions,MiraclePermissions) and (type(program.player_permissions.generic_reduction) is not int or program.player_permissions.generic_reduction<0):raise RulesViolation('Invalid miracle reduction')
     if isinstance(program,CommanderProgram) and program.can_be_commander is not True:raise RulesViolation('Invalid printed commander permission')
     if _depth>16:raise RulesViolation('Token program nesting is too deep')
     """Reject malformed programs and unresolved bindings before execution."""
@@ -1584,6 +1699,8 @@ def validate(program,_depth=0):
             seen.add(value.statistic)
 
     def selector(value,dynamic=False,allow_x=False,available_values=frozenset()):
+        if isinstance(value,ExactManaCostSelector):
+            if not isinstance(value.costs,tuple) or not value.costs or any(type(m) is not ManaCost or type(m.generic) is not int or m.generic<0 or not isinstance(m.symbols,tuple) or any(s not in ('W','U','B','R','G','C') for s in m.symbols) or type(m.x_symbols) is not int or m.x_symbols<0 for m in value.costs):raise RulesViolation('Invalid exact mana-cost selector')
         if isinstance(value,KeywordSelector) and (value.zone!=Zone.BATTLEFIELD or not strings(value.any_keywords) or not value.any_keywords or not set(value.any_keywords)<=KEYWORDS):
             raise RulesViolation('Invalid keyword selection')
         if isinstance(value,ModifiedSelector) and value.zone!=Zone.BATTLEFIELD:
@@ -1836,6 +1953,17 @@ def validate(program,_depth=0):
         for node in nodes:
             if type(node) not in EFFECTS:
                 raise RulesViolation('Unregistered effect node')
+            if isinstance(node,MiracleCast):raise RulesViolation('Miracle casting is interpreter-bound')
+            if isinstance(node,(UnlockRoom,LockRoom)):
+                if node.subject not in bindings or node.door not in {None,'left','right','both'}:raise RulesViolation('Invalid Room designation instruction')
+            if isinstance(node,ResolutionSequence):
+                if type(node.group) is not str or not node.group or not isinstance(node.stages,tuple) or not node.stages:raise RulesViolation('Invalid resolution sequence')
+                for stage in node.stages:effects(stage,bindings,allow_x,available_values)
+            if isinstance(node,DiscardPlayers):
+                if node.players not in {'controller','opponents','all','target'} or node.players=='target' and 'target' not in bindings or type(node.amount) is not int or node.amount<1:raise RulesViolation('Invalid player discard')
+            if isinstance(node,RevealHandDiscard):
+                selector(node.selector)
+                if node.selector.zone!=Zone.HAND or node.players!='target' or 'target' not in bindings:raise RulesViolation('Revealed hand discard requires targeted players')
             if isinstance(node,(DefeatBattle,WardPayment,CounterBoundStack)):
                 raise RulesViolation('Ward continuation is interpreter-bound')
             if isinstance(node,SetClassLevel) and (type(node.level) is not int or node.level not in {2,3}):
@@ -1950,7 +2078,7 @@ def validate(program,_depth=0):
             if isinstance(node,UntilEndOfTurn):
                 if not isinstance(node.changes,tuple) or not node.changes:raise RulesViolation('Empty or mutable temporary changes')
                 for change in node.changes:
-                    if isinstance(change,LostPlayerPT):raise RulesViolation('Lost-player modifiers require static continuous programs')
+                    if isinstance(change,(LostPlayerPT,CountedPT)):raise RulesViolation('Live count modifiers require static continuous programs')
                     if isinstance(change,(ModifyPT,SetPT)):
                         for value in (change.power,change.toughness):
                             if type(value) is not int:quantity(value,allow_x,available_values=available_values|{'recipient_stat','signed_scaling'})
@@ -1962,6 +2090,9 @@ def validate(program,_depth=0):
                         subtype_addition(change)
                     elif isinstance(change,ChangeTypes):
                         if not strings(change.add) or not strings(change.remove):raise RulesViolation('Invalid type changes')
+                    elif isinstance(change,AddActivated):
+                        if not isinstance(change.ability,ActivatedProgram) or change.ability.zone!=Zone.BATTLEFIELD:raise RulesViolation('Granted activation must be a battlefield ability')
+                        validate(CardProgram('grant-validation','Grant validation',('Artifact',),activated=(change.ability,)),_depth+1)
                     elif not isinstance(change,SwitchPT):raise RulesViolation('Unsupported temporary continuous change')
             if isinstance(node,WithCreatedTokens):
                 effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_count','moved_controllers'})
@@ -2183,7 +2314,7 @@ def validate(program,_depth=0):
             if isinstance(node,SearchLibrary) and node.partition_player=='target':
                 if spec is None or spec.players is None or spec.selector is not None or spec.minimum!=1 or spec.maximum!=1:
                     raise RulesViolation('Search partition requires exactly one player target')
-            if isinstance(node,(PayLifeOrSacrifice,Draw,Mill,LoseLife,WithLifeLost,CreateTokens)) and node.players in {'target','controller_and_target'}:
+            if isinstance(node,(RevealHandDiscard,DiscardPlayers,PayLifeOrSacrifice,Draw,Mill,LoseLife,WithLifeLost,CreateTokens)) and node.players in {'target','controller_and_target'}:
                 if spec is None or spec.players is None or spec.selector is not None:
                     raise RulesViolation('Player instructions require player-only targets')
             if spec is not None and spec.players is not None:
@@ -2474,6 +2605,9 @@ def validate(program,_depth=0):
                 if any(type(v) is not int and v != 'mana_value' for v in (change.power, change.toughness)):
                     raise RulesViolation('Unsupported power/toughness expression')
             elif isinstance(change, ModifyPT):
+                if isinstance(change,CountedPT):
+                    selector(change.selector)
+                    if effect.subject!='self' or change.selector.zone!=Zone.BATTLEFIELD or change.selector.characteristics:raise RulesViolation('Live count modifiers require self and nonnumeric battlefield selection')
                 if type(change.power) is not int or type(change.toughness) is not int:
                     raise RulesViolation('Invalid power/toughness modifier')
             elif not isinstance(change, (SwitchPT,SkipUntap)):
@@ -2567,11 +2701,14 @@ def validate(program,_depth=0):
                 or (event.any_types or event.exclude_source) and event.kind!='zone_changed'
                 or event.exclude_source and event.subject=='self'):
             raise RulesViolation('Invalid zone-event type union or source exclusion')
+        if event.kind in {'door_unlocked','fully_unlocked'}:
+            if (event.from_zone is not None or event.to_zone is not None or event.step is not None or event.counter_kind is not None or event.types or event.subject=='attached' or isinstance(event,RoomEventPattern) and (event.kind!='door_unlocked' or event.door not in {'left','right'})):raise RulesViolation('Invalid Room event')
+        elif isinstance(event,RoomEventPattern):raise RulesViolation('Door qualifier requires an unlock event')
         if isinstance(event,DrawEventPattern) and (event.kind!='card_drawn' or type(event.occurrence) is not int or event.occurrence<1):
             raise RulesViolation('Draw ordinals require a positive card-drawn occurrence')
         if event.characteristics and event.kind!='zone_changed':
             raise RulesViolation('Characteristic event filters require zone events')
-        if (event.kind not in {'becomes_monstrous','counter_state','zone_changed', 'step_began', 'spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} or event.subject not in {'any', 'self', 'attached'}
+        if (event.kind not in {'door_unlocked','fully_unlocked','becomes_monstrous','counter_state','zone_changed', 'step_began', 'spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} or event.subject not in {'any', 'self', 'attached'}
                 or not strings(event.types) or type(event.controller_only) is not bool
                 or any(z is not None and not isinstance(z, Zone) for z in (event.from_zone, event.to_zone))):
             raise RulesViolation('Unsupported trigger event')
@@ -2590,7 +2727,7 @@ def validate(program,_depth=0):
             raise RulesViolation('Only self counter-event once-per-turn limits are currently supported')
         if (event.counter_kind is not None and (event.kind!='counters_added' or type(event.counter_kind) is not str or not event.counter_kind)
                 or event.recipient_relation not in {'any','controlled','opponent_controlled'}
-                or event.kind not in {'counters_added','zone_changed'}|ACTOR_EVENTS and event.recipient_relation!='any'
+                or event.kind not in {'door_unlocked','fully_unlocked','counters_added','zone_changed'}|ACTOR_EVENTS and event.recipient_relation!='any'
                 or event.controller_only and event.recipient_relation=='opponent_controlled'):
             raise RulesViolation('Invalid counter event filters')
         if event.kind in {'life_gained','card_drawn','library_searched','library_shuffled', 'scried','surveilled'} and (event.subject!='any' or event.types or event.from_zone is not None or event.to_zone is not None or event.step is not None):
@@ -2684,6 +2821,9 @@ def validate(program,_depth=0):
 def printed_trigger_programs(program):
     """Printed and embedded granted triggers, for conservative observer indexes."""
     yield from program.abilities
+    if isinstance(program,RoomProgram):
+        yield from printed_trigger_programs(program.right)
+        yield from program.shared_abilities
     for effect in program.continuous:
         for change in effect.changes:
             if isinstance(change,AddTriggered):yield change.ability
@@ -2701,5 +2841,6 @@ def token_programs(program):
         elif hasattr(type(value),'__dataclass_fields__'):
             for field in fields(value):yield from walk(getattr(value,field.name))
     if isinstance(program,DoubleFacedProgram):yield program.back
+    if isinstance(program,RoomProgram):yield program.right
     for field in fields(program):
-        if field.name!='back':yield from walk(getattr(program,field.name))
+        if field.name not in {'back','right'}:yield from walk(getattr(program,field.name))

@@ -68,7 +68,7 @@ class RulesActorAdapter:
             'pay_mana':{'action_id','request_id','payment'},
             'cast':{'action_id','source','targets','x_value','payment'},
             'activate':{'action_id','source','targets','x_value','payment','ability_id'},
-            'play_land':{'action_id','source'},'attack':{'attackers'},
+            'unlock_room':{'action_id','source','door','payment'},'play_land':{'action_id','source'},'attack':{'attackers'},
             'block':{'assignments'},'damage':{'assignments'}}
         optional={'face','modes','alternative_id','counter_division','kicker','replicate','life_costs','hybrid_choices'} if kind=='cast' else {'counter_division'} if kind=='activate' else {'payment'} if kind=='attack' else {'face'} if kind=='play_land' else set()
         if kind not in required or set(command)-optional!={'kind','revision',*required[kind]}:
@@ -76,7 +76,7 @@ class RulesActorAdapter:
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
         decision=decision_for_actor(self.kernel,actor)['kind']
         expected={'answer':'choice','allocate_counters':'choice','pass':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
-                  'play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
+                  'unlock_room':'priority','play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
         if decision!=expected[kind] and not (kind=='activate' and decision in {'mana_payment','casting_mana'} or kind=='cast' and decision=='resolution_cast'):
             raise RulesViolation('Actor does not own this decision stage')
         k=self.kernel
@@ -109,6 +109,10 @@ class RulesActorAdapter:
             if kind=='cast':quote=k.quote_cast(command['action_id'],actor,source,targets,x_value=command['x_value'],mode_choices=choices,alternative_id=command.get('alternative_id'),counter_division=division,kicker=command.get('kicker',False),replicate=command.get('replicate',0),life_costs=tuple(command.get('life_costs',())),hybrid_choices=tuple(command.get('hybrid_choices',())),face=command.get('face'))
             else:quote=k.quote_activation(command['action_id'],actor,source,command['ability_id'],targets,x_value=command['x_value'],counter_division=division)
             return k.commit_action(quote,payment)
+        if kind=='unlock_room':
+            try:payment=Payment.from_json(command['payment'])
+            except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid unlock payment') from exc
+            return k.unlock_room(command['action_id'],actor,self._visible_ref(command['source'],actor),command['door'],payment,revision=command['revision'])
         if kind=='play_land':return k.play_land(command['action_id'],actor,self._visible_ref(command['source'],actor),revision=command['revision'],face=command.get('face','front'))
         if kind=='attack':
             if type(command['attackers']) is not list:raise RulesViolation('Invalid attackers')

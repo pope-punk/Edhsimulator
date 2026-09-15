@@ -87,6 +87,9 @@ class RulesObject:
     back_face:bool=False
     protector:str|None=None
     counter_timestamps:tuple[tuple[str,int],...]=()
+    room_cast:str|None=None
+    unlocked:tuple[str,...]=()
+    entered_turn:int|None=None
 
     @property
     def effective_definition(self):return self.copy_effects[-1][0] if self.copy_effects else self.copied_definition or (self.definition+':back' if self.back_face else self.definition)
@@ -107,6 +110,7 @@ class RulesObject:
         value['entry_flags']=frozenset(value['entry_flags']);value['counters']=tuple(tuple(row) for row in value['counters'])
         value['copied_add_types']=tuple(value['copied_add_types'])
         value['copy_effects']=tuple(tuple(row) for row in value['copy_effects'])
+        value['unlocked']=tuple(value['unlocked'])
         value['entry_subtypes']=tuple(value['entry_subtypes'])
         value['counter_timestamps']=tuple(tuple(r) for r in value['counter_timestamps'])
         return cls(**value)
@@ -140,6 +144,8 @@ class ZoneMove:
     entry_subtypes:tuple[str,...]=()
     back_face:bool=False
     protector:str|None=None
+    room_cast:str|None=None
+    unlocked:tuple[str,...]=()
 
 
 @dataclass(frozen=True)
@@ -155,7 +161,7 @@ class ZoneEvent:
 
 class RulesState:
     """Single physical-card index; immutable objects returned to every caller."""
-    CHECKPOINT_SCHEMA=19
+    CHECKPOINT_SCHEMA=20
 
     def __init__(self,players:Iterable[str],*,seed=0,commander_identities=None,starting_life=40):
         if type(seed) is not int or seed<0:raise RulesViolation('Invalid shuffle seed')
@@ -258,7 +264,7 @@ class RulesState:
         if not card_id or card_id in self._issued:raise RulesViolation('Duplicate physical identity')
         if owner not in self.players or controller not in self.players:raise RulesViolation('Unknown player')
         self._sequence+=1
-        obj=RulesObject(ObjectRef(card_id,0),definition,owner,controller,zone,token,commander,timestamp=self._sequence,controlled_since=self._sequence)
+        obj=RulesObject(ObjectRef(card_id,0),definition,owner,controller,zone,token,commander,timestamp=self._sequence,controlled_since=self._sequence,entered_turn=self.turn_number if zone==Zone.BATTLEFIELD else None)
         self._issued.add(card_id)
         self._objects[card_id]=obj;self._order[(owner,zone)].append(card_id)
         if not token:self._physical.add(card_id)
@@ -341,11 +347,14 @@ class RulesState:
             if not isinstance(move.entry_subtypes,tuple) or any(type(t) is not str or not t for t in move.entry_subtypes):raise RulesViolation('Invalid entry subtype effect')
             if type(move.back_face) is not bool or move.back_face and destination not in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('Face orientation requires a spell or permanent')
             if move.protector is not None and (destination!=Zone.BATTLEFIELD or move.protector not in self.live_players):raise RulesViolation('Invalid battle protector')
+            if move.room_cast not in {None,'left','right'} or move.room_cast is not None and destination!=Zone.STACK:raise RulesViolation('Invalid Room spell half')
+            if not isinstance(move.unlocked,tuple) or move.unlocked not in ((),('left',),('right',),('left','right')) or move.unlocked and destination!=Zone.BATTLEFIELD:raise RulesViolation('Invalid unlocked designations')
             if type(move.tapped) is not bool:raise RulesViolation('Invalid entry tapped status')
             if destination!=Zone.BATTLEFIELD and (move.copied_definition or move.entry_flags or move.attached_to or move.tapped or move.counters or move.copied_add_types or move.entry_subtypes):raise RulesViolation('Entry attributes require battlefield entry')
             after=RulesObject(ObjectRef(before.ref.card_id,before.ref.incarnation+1),before.definition,before.owner,
                 controller,destination,before.token or before.spell_copy and destination==Zone.BATTLEFIELD,before.commander,move.copied_definition,
                 spell_copy=before.spell_copy and destination!=Zone.BATTLEFIELD,back_face=move.back_face,protector=move.protector,
+                room_cast=move.room_cast,unlocked=move.unlocked,entered_turn=self.turn_number if destination==Zone.BATTLEFIELD else None,
                 counter_timestamps=tuple((kind,self._sequence+len(pending)+1) for kind,_ in sorted(move.counters)),
                 entry_subtypes=move.entry_subtypes,copied_add_types=tuple(sorted(move.copied_add_types)),counters=tuple(sorted(move.counters)),entry_flags=move.entry_flags,tapped=move.tapped,attached_to=move.attached_to,timestamp=self._sequence+len(pending)+1,cast_x=move.cast_x,controlled_since=self._sequence+len(pending)+1)
             pending.append((move,before,after))
@@ -515,6 +524,11 @@ class RulesState:
 
     def expire_turn_control(self):
         return self.end_control_effects(tuple(key for key,row in self._control_effects.items() if row['duration']=='until_end_of_turn'))
+
+    def set_unlocked(self,ref,doors):
+        obj=self.get(ref)
+        if obj.zone!=Zone.BATTLEFIELD or obj.phased or doors not in ((),('left',),('right',),('left','right')):raise RulesViolation('Invalid Room designation')
+        self._sequence+=1;self._objects[ref.card_id]=replace(obj,unlocked=doors)
 
     def set_face(self,ref,back_face):
         obj=self.get(ref)
@@ -763,7 +777,7 @@ class RulesState:
             raise RulesViolation('Invalid spell copy')
         self._sequence+=1
         obj=RulesObject(ObjectRef(card_id,0),original.definition,controller,controller,Zone.STACK,
-            spell_copy=True,back_face=original.back_face,cast_x=original.cast_x,timestamp=self._sequence,controlled_since=self._sequence)
+            spell_copy=True,room_cast=original.room_cast,back_face=original.back_face,cast_x=original.cast_x,timestamp=self._sequence,controlled_since=self._sequence)
         self._issued.add(card_id);self._objects[card_id]=obj
         self._order[(controller,Zone.STACK)].append(card_id)
         self.assert_invariants();return obj
@@ -914,6 +928,9 @@ class RulesState:
                 if type(obj.spell_copy) is not bool or obj.spell_copy and (obj.token or obj.commander or obj.zone==Zone.BATTLEFIELD):
                     raise RulesViolation('Invalid spell-copy designation')
                 if not isinstance(obj.counter_timestamps,tuple) or len(dict(obj.counter_timestamps))!=len(obj.counter_timestamps) or any(type(k) is not str or type(t) is not int or not 0<=t<=self.sequence for k,t in obj.counter_timestamps):raise RulesViolation('Invalid counter timestamps')
+                if obj.room_cast not in {None,'left','right'} or obj.room_cast is not None and obj.zone!=Zone.STACK:raise RulesViolation('Invalid Room spell half')
+                if obj.unlocked not in ((),('left',),('right',),('left','right')) or obj.unlocked and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid unlocked designations')
+                if obj.entered_turn is not None and (type(obj.entered_turn) is not int or not 0<=obj.entered_turn<=self.turn_number or obj.zone!=Zone.BATTLEFIELD):raise RulesViolation('Invalid entry turn')
                 if type(obj.back_face) is not bool or obj.back_face and obj.zone not in {Zone.BATTLEFIELD,Zone.STACK}:raise RulesViolation('Invalid face orientation')
                 if obj.protector is not None and (obj.zone!=Zone.BATTLEFIELD or obj.protector not in self.players):raise RulesViolation('Invalid protector designation')
                 if type(obj.class_level) is not int or obj.class_level<1 or obj.class_level!=1 and obj.zone!=Zone.BATTLEFIELD:raise RulesViolation('Invalid Class designation')

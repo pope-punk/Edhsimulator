@@ -9,10 +9,10 @@
     "catalog_unique": 334,
     "reviewed_bundle_unique": 327,
     "remaining_outside_reviewed_bundle": 7,
-    "drafts_written": 0,
-    "not_started_on_this_branch": 7,
+    "drafts_written": 7,
+    "not_started_on_this_branch": 0,
     "reviewed_bundle_copies": 393,
-    "draft_copies": 0,
+    "draft_copies": 7,
     "drafts_remotely_validated": 0,
     "promoted_on_this_branch": 100,
     "remaining_outside_reviewed_bundle_copies": 7
@@ -137,7 +137,7 @@
     {
       "card_id": "aminatou-veil-piercer",
       "name": "Aminatou, Veil Piercer",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -150,7 +150,14 @@
           "face_id": "aminatou-veil-piercer",
           "text": "At the beginning of your upkeep, surveil 2.\nEach enchantment card in your hand has miracle. Its miracle cost is equal to its mana cost reduced by {4}."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:aminatou-veil-piercer",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "animate-dead",
@@ -920,7 +927,7 @@
     {
       "card_id": "entity-tracker",
       "name": "Entity Tracker",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -933,7 +940,14 @@
           "face_id": "entity-tracker",
           "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:entity-tracker",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "essence-channeler",
@@ -1300,7 +1314,7 @@
     {
       "card_id": "funeral-room-awakening-hall",
       "name": "Funeral Room // Awakening Hall",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1317,7 +1331,14 @@
           "face_id": "awakening-hall",
           "text": "When you unlock this door, return all creature cards from your graveyard to the battlefield."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:funeral-room-awakening-hall",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "game-trail",
@@ -1355,7 +1376,7 @@
     {
       "card_id": "ghostly-dancers",
       "name": "Ghostly Dancers",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1368,7 +1389,14 @@
           "face_id": "ghostly-dancers",
           "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:ghostly-dancers",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "glasswing-grace-age-graced-chapel",
@@ -3438,7 +3466,7 @@
     {
       "card_id": "the-cruelty-of-gix",
       "name": "The Cruelty of Gix",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3451,7 +3479,14 @@
           "face_id": "the-cruelty-of-gix",
           "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:the-cruelty-of-gix",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "the-earth-crystal",
@@ -3690,7 +3725,7 @@
     {
       "card_id": "urza-s-saga",
       "name": "Urza's Saga",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3703,7 +3738,14 @@
           "face_id": "urza-s-saga",
           "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:urza-s-saga",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "vesperlark",
@@ -3749,7 +3791,7 @@
     {
       "card_id": "victor-valgavoth-s-seneschal",
       "name": "Victor, Valgavoth's Seneschal",
-      "status": "not_started_on_this_branch",
+      "status": "draft_written_review_pending",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3762,7 +3804,14 @@
           "face_id": "victor-valgavoth-s-seneschal",
           "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
         }
-      ]
+      ],
+      "authoring_status": "complete_printed_draft",
+      "rules_review_status": "pending",
+      "hosted_validation_status": "pending",
+      "draft_definition": "draft:victor-valgavoth-s-seneschal",
+      "batch": "rooms-miracle-sagas-2026-09-14",
+      "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
+      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
     },
     {
       "card_id": "vineglimmer-snarl",
@@ -8233,8 +8282,8 @@
       }
     ]
   },
-  "completed_request_batch": true,
-  "completed_heartbeat_cycle": true,
+  "completed_request_batch": false,
+  "completed_heartbeat_cycle": false,
   "hosted_validation": {
     "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
     "run_id": 34904127697,
@@ -8393,7 +8442,8 @@
           "urza-s-saga"
         ],
         "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit.",
-        "status": "planned"
+        "status": "draft_written_validation_pending",
+        "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960"
       }
     ],
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",

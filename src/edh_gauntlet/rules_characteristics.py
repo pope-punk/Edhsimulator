@@ -9,11 +9,11 @@ from dataclasses import dataclass, replace
 import json
 from types import MappingProxyType
 from .rules_state import Zone, RulesViolation
-from .rules_program import KEYWORDS,DoubleFacedProgram,AddTriggered,KeywordSelector,ClassLevelCondition,ControllerTurnCondition,AddWard,ContinuousProgram,Selector,SetCardTypes,LoseAbilities,Goaded,AddRiot
+from .rules_program import object_program,ExactManaCostSelector,KEYWORDS,DoubleFacedProgram,AddTriggered,KeywordSelector,ClassLevelCondition,ControllerTurnCondition,AddWard,ContinuousProgram,Selector,SetCardTypes,LoseAbilities,Goaded,AddRiot
 
 ARTIFACT_TYPES=frozenset('Attraction Blood Bobblehead Book Clue Contraption Equipment Food Fortification Gold Incubator Infinity Junk Lander Map Mutagen Powerstone Spacecraft Stone Treasure Vehicle Vibranium'.split())
 from .rules_subtypes import CREATURE_TYPES,LAND_TYPES,SUBTYPE_SETS,expanded_subtypes
-from .rules_program import ModifiedSelector, LostPlayerPT, SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
+from .rules_program import CountedPT,ModifiedSelector, LostPlayerPT, SupertypeSelector, SourceCountersCondition, LifeLostCondition, EntryFlagCondition, DevotionCondition, AddActivated, SetColors, PlayerCountCondition, LifeCondition, AllConditions, AnyConditions, NotCondition, AddSubtypes, SkipUntap, AddKeywords, ChangeTypes, SetPT, ModifyPT, SwitchPT
 
 
 @dataclass(frozen=True)
@@ -37,10 +37,11 @@ class Characteristics:
     riot: tuple = ()
     goaded_by: frozenset[str] = frozenset()
     wards: tuple = ()
+    printed_mana_cost: tuple | None = None
 
 
 def base(obj, definitions):
-    definition = definitions[obj.effective_definition]
+    definition = object_program(obj,definitions)
     physical=definitions[obj.definition]
     mana_value=(physical.mana_value if obj.back_face and isinstance(physical,DoubleFacedProgram) and physical.layout=='transform' and not obj.copy_effects and not obj.copied_definition else definition.mana_value)
     subtypes = frozenset(definition.subtypes) | ({'Aura'} if definition.enchant else set())
@@ -51,7 +52,8 @@ def base(obj, definitions):
                            target_restrictions=definition.target_restrictions if obj.zone == Zone.BATTLEFIELD else (),
                            keywords=frozenset(definition.keywords)|({'haste'} if obj.zone==Zone.BATTLEFIELD and 'riot_haste' in obj.entry_flags else set()),
                            supertypes=frozenset(definition.supertypes),colors=frozenset(definition.colors),
-                           mana_symbols=definition.cast.cost.mana.symbols if definition.cast else ())
+                           mana_symbols=definition.cast.cost.mana.symbols if definition.cast else (),
+                           printed_mana_cost=(definition.cast.cost.mana.generic,definition.cast.cost.mana.symbols,definition.cast.cost.mana.x_symbols) if definition.cast else None)
 
 
 def characteristics_match(ranges, view):
@@ -71,6 +73,7 @@ def counters_match(ranges, obj):
 
 
 def matches(selector, obj, view, source):
+    if isinstance(selector,ExactManaCostSelector) and view.printed_mana_cost not in tuple((c.generic,c.symbols,c.x_symbols) for c in selector.costs):return False
     if isinstance(selector,KeywordSelector) and not set(selector.any_keywords)&view.keywords:return False
     if isinstance(selector,ModifiedSelector) and not view.modified:return False
     if selector.characteristics and obj.zone==Zone.BATTLEFIELD and 'Creature' not in view.types and any(bound.statistic in {'power','toughness'} for bound in selector.characteristics):return False
@@ -96,7 +99,7 @@ def matches(selector, obj, view, source):
 
 
 def _layer(change):
-    return {AddTriggered:6,AddWard:6,SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
+    return {AddTriggered:6,AddWard:6,SetCardTypes:4,LoseAbilities:6,Goaded:8,AddRiot:6,SkipUntap: 8, ChangeTypes: 4, AddSubtypes: 4, SetColors: 5, AddKeywords: 6, AddActivated: 6, SetPT: 72, ModifyPT: 73, CountedPT: 73, LostPlayerPT: 73, SwitchPT: 74}[type(change)]
 
 
 def condition_holds(condition, source, objects, views, *, excluding_ref=None, life_totals=None, starting_life_totals=None, live_players=None, life_lost_totals=None, active_player=None):
@@ -233,6 +236,9 @@ def _apply(views, refs, changes, key, grant_key=None, objects=(), lost_players=0
                     view = replace(view, power=value(change.power), toughness=value(change.toughness))
                 elif isinstance(change, ModifyPT):
                     factor=lost_players if isinstance(change,LostPlayerPT) else 1
+                    if isinstance(change,CountedPT):
+                        recipient=next(o for o in objects if o.ref==ref)
+                        factor=sum(matches(change.selector,o,views[o.ref],recipient) for o in objects)
                     view = replace(view, power=power + change.power*factor, toughness=toughness + change.toughness*factor)
                 else:
                     view = replace(view, power=toughness, toughness=power)
@@ -313,7 +319,7 @@ def _evaluate(objects, definitions, *, entering_ref, temporary, dependency_pruni
     effects = []
     characteristic_setters=[]
     for source in objects:
-        definition=definitions[source.effective_definition]
+        definition=object_program(source,definitions)
         if definition.characteristic_pt is not None:characteristic_setters.append((source,definition.characteristic_pt.selector))
         if source.zone != Zone.BATTLEFIELD or source.phased:
             continue

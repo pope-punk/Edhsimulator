@@ -17,7 +17,7 @@ class ScanningRulesKernel(RulesKernel):
     def _trigger_abilities(self,source,kind,views=None):
         view=views.get(source.ref) if views is not None else (
             self.characteristics().get(source.ref) if source.zone==Zone.BATTLEFIELD and not source.phased else None)
-        printed=() if view is not None and view.abilities_removed else self.definitions[source.effective_definition].abilities
+        printed=() if view is not None and view.abilities_removed else self._room_profile_abilities(source)
         return printed+tuple(view.granted_triggers if view is not None else ())
 
 

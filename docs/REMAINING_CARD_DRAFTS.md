@@ -9,6 +9,15 @@ local Python, installation, tests or games are authorized. The library contains
 All seven Pass 3 cards have passed draft and required reviewed-loader validation.
 Reviewed coverage is not production certification.
 
+## Pass 4 underway
+
+All seven remaining printed programs are authored as separate drafts. Shared
+Room, miracle, resolution-count and remaining Saga support and 48 focused tests
+are ready for hosted checks. Validation and source review remain pending; none
+of these seven is counted as reviewed yet. Continue this same pass through draft
+checks, promotion, required reviewed-loader checks and final inventory audit.
+See [the current review](ROOMS_MIRACLE_SAGAS_REVIEW.md).
+
 ## Pass 3 complete
 
 Glasswing Grace // Age-Graced Chapel; Kazuul's Fury // Kazuul's Cliffs;

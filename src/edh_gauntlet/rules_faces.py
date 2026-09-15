@@ -8,7 +8,7 @@ from .rules_state import ObjectRef,RulesObject,Zone,RulesViolation
 from .rules_choices import Option
 from .rules_characteristics import matches
 from .rules_replacements import ReplacementCandidate
-from .rules_program import (DoubleFacedProgram,BattleProgram,ChapterAbility,EntryCounters,
+from .rules_program import (RoomProgram,ReadAheadProgram,DoubleFacedProgram,BattleProgram,ChapterAbility,EntryCounters,
     ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,
     IfOtherPermanent,DefeatBattle,AbilityProgram,EventPattern,AddCounters,Selector,
     encode,decode)
@@ -37,8 +37,11 @@ class FaceRules:
             ids.add(row['id'])
 
     def _announced_face(self,obj,face,*,resolution_cast=False,land=False):
-        if type(face) is not str or face not in {'front','back'}:raise RulesViolation('Choose front or back')
         physical=self.definitions[obj.definition]
+        if isinstance(physical,RoomProgram):
+            if face not in {'front','left','right'} or land or obj.token or obj.spell_copy:raise RulesViolation('Choose a castable Room door')
+            return replace(obj,room_cast='left' if face=='front' else face)
+        if type(face) is not str or face not in {'front','back'}:raise RulesViolation('Choose front or back')
         if obj.token or obj.spell_copy:raise RulesViolation('A token or spell copy cannot be played as a card')
         if face=='back':
             if not isinstance(physical,DoubleFacedProgram):raise RulesViolation('This card has no back face')

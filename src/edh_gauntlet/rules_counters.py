@@ -204,5 +204,7 @@ class CounterRules:
                 from .rules_program import ChapterAbility
                 if isinstance(ability,ChapterAbility):
                     current=dict(obj.counters).get('lore',0) if obj else 0
+                    from .rules_program import ReadAheadProgram
+                    if isinstance(self.definitions[source.effective_definition],ReadAheadProgram) and not self.effective(source.ref).abilities_removed and source.entered_turn==self.state.turn_number and current!=ability.chapter:continue
                     if not current-amount<ability.chapter<=current:continue
                 if amount:self._trigger(source,ability,values={'event_amount':amount})

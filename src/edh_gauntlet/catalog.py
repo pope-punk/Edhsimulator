@@ -526,7 +526,7 @@ class CardCatalog:
                 continue
             if not card.oracle_text.strip():
                 errors.append(f"{card.name}: empty Oracle text")
-            if card.layout is not None and (card.layout not in {'modal','transform'} or len(card.faces)!=2):errors.append(f"{card.name}: invalid double-face layout")
+            if card.layout is not None and (card.layout not in {'modal','transform','room'} or len(card.faces)!=2):errors.append(f"{card.name}: invalid double-face layout")
             face_ids = {face.face_id for face in card.faces}
             if len(face_ids) != len(card.faces):
                 errors.append(f"{card.name}: duplicate face IDs")

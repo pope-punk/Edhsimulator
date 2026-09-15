@@ -6,7 +6,7 @@ face-down objects remain unsupported. Production admission stays closed.
 """
 import json
 from copy import deepcopy
-from .rules_program import DoubleFacedProgram,encode,ConvokeCast,CopyCast
+from .rules_program import RoomProgram,DoubleFacedProgram,encode,ConvokeCast,CopyCast
 from .rules_creature_types import CREATURE_TYPES
 from .rules_state import Zone,RulesViolation,RulesObject,ObjectRef
 
@@ -21,7 +21,8 @@ def _card(kernel,obj,views):
     limits=[{'ability_id':ability.ability_id,'remaining':kernel.remaining_trigger_uses(obj,ability)}
             for ability in kernel.definition(obj).abilities if ability.trigger_limit is not None] if obj.zone==Zone.BATTLEFIELD else []
     return {'ref':obj.ref.to_json(),'name':kernel.definition(obj).name,
-        'definition_id':obj.effective_definition,'face':'back' if obj.back_face else 'front',
+        'definition_id':obj.effective_definition,'face':obj.room_cast or ('back' if obj.back_face else 'front'),
+        **({'layout':'room','unlocked':list(obj.unlocked),'doors':[{'door':door,'name':p.name,'mana_cost':encode(p.cast.cost.mana) if p.cast else None} for door,p in (('left',kernel.definitions[obj.effective_definition]),('right',kernel.definitions[obj.effective_definition].right))]} if isinstance(kernel.definitions[obj.effective_definition],RoomProgram) else {}),
         **({'layout':physical.layout,'faces':[{'face':face,'name':p.name,'types':list(p.types),'colors':list(p.colors),'mana_cost':encode(p.cast.cost.mana) if p.cast else None}
             for face,p in (('front',physical),('back',physical.back))]} if isinstance(physical,DoubleFacedProgram) else {}),
         **({'protector':obj.protector} if 'Battle' in view.types else {}),'owner':obj.owner,'controller':obj.controller,
@@ -64,7 +65,7 @@ def decision_for_actor(kernel,actor):
         window=kernel.resolution_cast
         if actor!=window['actor']:return {'kind':'waiting','actor':window['actor']}
         return {'kind':'resolution_cast','request_id':window['id'],'maximum':window['maximum'],
-            'origin':window['origin'],'face':'back' if window.get('transformed') else 'front','candidates':[ref.to_json() for ref in kernel._resolution_cast_candidates()],
+            'origin':window['origin'],'miracle_reduction':window.get('miracle_reduction'),'face':'back' if window.get('transformed') else 'front','candidates':[ref.to_json() for ref in kernel._resolution_cast_candidates()],
             'revision':kernel.revision}
     if kernel._payment_waiting():
         window=kernel.mana_payment
@@ -182,6 +183,8 @@ def project_actor(kernel,actor):
                   for event in kernel.semantic_events
                   if event['kind']=='cards_revealed' and event.get('cause')=='entry_payment']
     if entry_reveals:packet['public_entry_reveals']=entry_reveals
+    disclosures=[{'event_index':e['index'],'player':e['player'],'refs':deepcopy(e['refs']),'names':list(e['names']),'cause':e['cause']} for e in kernel.semantic_events if e['kind']=='cards_revealed' and e.get('cause') in {'miracle','hand_discard'}]
+    if disclosures:packet['public_hand_disclosures']=disclosures
     # Links disclose only exact objects still face up in exile. Source refs
     # describe their public historical incarnation, never its later hidden card.
     links=[]

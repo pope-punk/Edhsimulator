@@ -4,7 +4,7 @@ import json
 from collections import ChainMap
 from dataclasses import replace,fields
 from types import MappingProxyType
-from .rules_program import printed_trigger_programs,DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
+from .rules_program import RoomProgram,printed_trigger_programs,DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
 from .rules_state import RulesViolation,Zone,ObjectRef
 from .rules_choices import Option
 from .rules_subtypes import SUBTYPE_SETS
@@ -72,8 +72,16 @@ class CopyRules:
             while ability_id in ids:
                 ability_id=retained_activation.ability_id+':copy:'+str(number);number+=1
             attrs['activated']=tuple(activated)+(replace(retained_activation,ability_id=ability_id),)
+        if isinstance(original,RoomProgram):
+            shared={k:v for k,v in attrs.items() if k not in {'abilities','activated'}}
+            attrs.update(right=replace(original.right,definition_id='copy:values:right',**shared),
+                shared_abilities=original.shared_abilities+tuple(abilities[len(original.abilities):]),
+                shared_activated=original.shared_activated+((attrs['activated'][-1],) if retained_activation is not None else ()),
+                copy_colors=changes['colors'] if changes['colors'] is not None else original.copy_colors,
+                cost_removed=original.cost_removed or remove_mana_cost,abilities=original.abilities,activated=original.activated)
         program=replace(original,definition_id='copy:values',**attrs)
         digest=hashlib.sha256(json.dumps(encode(program),sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        if isinstance(program,RoomProgram):program=replace(program,right=replace(program.right,definition_id='copy:'+digest+':right'))
         program=validate(replace(program,definition_id='copy:'+digest))
         existing=self.definitions.get(program.definition_id)
         if existing is not None:

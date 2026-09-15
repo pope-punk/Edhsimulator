@@ -10,7 +10,7 @@ from collections import Counter
 from pathlib import Path
 from .catalog import load_catalog
 from .paths import PROJECT_ROOT
-from .rules_program import DoubleFacedProgram,BattleProgram,decode,validate
+from .rules_program import RoomProgram,DoubleFacedProgram,BattleProgram,decode,validate
 from .rules_state import RulesViolation
 
 
@@ -63,8 +63,8 @@ def load_reviewed(root=PROJECT_ROOT):
         if row.get('scope')!='all_printed_faces' or not row.get('review_basis'):
             raise RulesViolation('Program needs an explicit reviewed scope and basis')
         program=validate(decode(row['program']))
-        faces=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,)
-        if len(faces)!=len(card.faces) or isinstance(program,DoubleFacedProgram) and card.layout!=program.layout:
+        faces=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,program.right) if isinstance(program,RoomProgram) else (program,)
+        if len(faces)!=len(card.faces) or isinstance(program,DoubleFacedProgram) and card.layout!=program.layout or isinstance(program,RoomProgram) and card.layout!='room':
             raise RulesViolation('Reviewed program does not match the printed faces or layout')
         if any(p.definition_id in identities for p in faces):raise RulesViolation('Duplicate reviewed face identity')
         for index,(face,face_program) in enumerate(zip(card.faces,faces)):

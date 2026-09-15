@@ -88,7 +88,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Ooze",
+          "type_line": "Creature \u2014 Ooze",
           "types": [
             "Creature"
           ]
@@ -161,7 +161,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Adarkar Wastes",
           "oracle_text": "{T}: Add {C}.\n{T}: Add {W} or {U}. This land deals 1 damage to you.",
@@ -315,7 +315,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Cat Soldier",
+          "type_line": "Creature \u2014 Cat Soldier",
           "types": [
             "Creature"
           ]
@@ -565,7 +565,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Enchantment Creature — Nymph",
+          "type_line": "Enchantment Creature \u2014 Nymph",
           "types": [
             "Enchantment",
             "Creature"
@@ -611,7 +611,7 @@
         },
         {
           "ability_id": "aminatou-the-fateshifter:oracle:002",
-          "cost_text": "[−1]",
+          "cost_text": "[\u22121]",
           "event": null,
           "face_id": "aminatou-the-fateshifter",
           "handler": null,
@@ -619,7 +619,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−1]: Exile another target permanent you own, then return it to the battlefield under your control.",
+          "rules_text": "[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -627,7 +627,7 @@
         },
         {
           "ability_id": "aminatou-the-fateshifter:oracle:003",
-          "cost_text": "[−6]",
+          "cost_text": "[\u22126]",
           "event": null,
           "face_id": "aminatou-the-fateshifter",
           "handler": null,
@@ -635,7 +635,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.",
+          "rules_text": "[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -727,7 +727,7 @@
           "mana_cost": "{W}{U}{B}",
           "mana_value": 3,
           "name": "Aminatou, the Fateshifter",
-          "oracle_text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[−1]: Exile another target permanent you own, then return it to the battlefield under your control.\n[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander.",
+          "oracle_text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander.",
           "power": null,
           "subtypes": [
             "Aminatou"
@@ -736,7 +736,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Aminatou",
+          "type_line": "Legendary Planeswalker \u2014 Aminatou",
           "types": [
             "Planeswalker"
           ]
@@ -752,7 +752,7 @@
         "variable_output": false
       },
       "name": "Aminatou, the Fateshifter",
-      "oracle_text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[−1]: Exile another target permanent you own, then return it to the battlefield under your control.\n[−6]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander.",
+      "oracle_text": "[+1]: Draw a card, then put a card from your hand on top of your library.\n[\u22121]: Exile another target permanent you own, then return it to the battlefield under your control.\n[\u22126]: Choose left or right. Each player gains control of all nonland permanents other than Aminatou controlled by the next player in the chosen direction.\nAminatou, the Fateshifter can be your commander.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -827,7 +827,7 @@
             "Legendary"
           ],
           "toughness": 4,
-          "type_line": "Legendary Creature — Human Wizard",
+          "type_line": "Legendary Creature \u2014 Human Wizard",
           "types": [
             "Creature"
           ]
@@ -932,7 +932,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Angel Artificer",
+          "type_line": "Creature \u2014 Angel Artificer",
           "types": [
             "Creature"
           ]
@@ -1034,7 +1034,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Angel",
+          "type_line": "Creature \u2014 Angel",
           "types": [
             "Creature"
           ]
@@ -1134,7 +1134,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -1234,7 +1234,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -1303,7 +1303,7 @@
           ],
           "supertypes": [],
           "toughness": 10,
-          "type_line": "Creature — Chimera Hydra",
+          "type_line": "Creature \u2014 Chimera Hydra",
           "types": [
             "Creature"
           ]
@@ -1519,7 +1519,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Arid Mesa",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Mountain or Plains card, put it onto the battlefield, then shuffle.",
@@ -1629,7 +1629,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Vampire Knight",
+          "type_line": "Legendary Creature \u2014 Vampire Knight",
           "types": [
             "Creature"
           ]
@@ -1716,7 +1716,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Bird Advisor",
+          "type_line": "Creature \u2014 Bird Advisor",
           "types": [
             "Creature"
           ]
@@ -1769,7 +1769,7 @@
           "mana_ability": false,
           "optional": true,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -1793,14 +1793,14 @@
           "mana_cost": "{5}{G}{G}",
           "mana_value": 7,
           "name": "Avenger of Zendikar",
-          "oracle_text": "When this creature enters, create a 0/1 green Plant creature token for each land you control.\nLandfall — Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
+          "oracle_text": "When this creature enters, create a 0/1 green Plant creature token for each land you control.\nLandfall \u2014 Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
           "power": 5,
           "subtypes": [
             "Elemental"
           ],
           "supertypes": [],
           "toughness": 5,
-          "type_line": "Creature — Elemental",
+          "type_line": "Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -1816,7 +1816,7 @@
         "variable_output": true
       },
       "name": "Avenger of Zendikar",
-      "oracle_text": "When this creature enters, create a 0/1 green Plant creature token for each land you control.\nLandfall — Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
+      "oracle_text": "When this creature enters, create a 0/1 green Plant creature token for each land you control.\nLandfall \u2014 Whenever a land you control enters, you may put a +1/+1 counter on each Plant creature you control.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -1871,7 +1871,7 @@
             "Legendary"
           ],
           "toughness": 2,
-          "type_line": "Legendary Creature — Human Monk",
+          "type_line": "Legendary Creature \u2014 Human Monk",
           "types": [
             "Creature"
           ]
@@ -1941,7 +1941,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Baldur's Gate",
           "oracle_text": "{T}: Add {C}.\n{2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.",
@@ -1953,7 +1953,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Land — Gate",
+          "type_line": "Legendary Land \u2014 Gate",
           "types": [
             "Land"
           ]
@@ -2051,7 +2051,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Artifact Creature — Bird",
+          "type_line": "Artifact Creature \u2014 Bird",
           "types": [
             "Artifact",
             "Creature"
@@ -2138,7 +2138,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Basilisk Gate",
           "oracle_text": "{T}: Add {C}.\n{2}, {T}: Target creature gets +X/+X until end of turn, where X is the number of Gates you control. Activate only as a sorcery.",
@@ -2148,7 +2148,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Gate",
+          "type_line": "Land \u2014 Gate",
           "types": [
             "Land"
           ]
@@ -2314,7 +2314,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Bird",
+          "type_line": "Creature \u2014 Bird",
           "types": [
             "Creature"
           ]
@@ -2552,7 +2552,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Blast Zone",
           "oracle_text": "This land enters with a charge counter on it.\n{T}: Add {C}.\n{X}{X}, {T}: Put X charge counters on this land.\n{3}, {T}, Sacrifice this land: Destroy each nonland permanent with mana value equal to the number of charge counters on this land.",
@@ -2621,7 +2621,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Bloodstained Mire",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Swamp or Mountain card, put it onto the battlefield, then shuffle.",
@@ -2719,7 +2719,7 @@
           ],
           "supertypes": [],
           "toughness": 0,
-          "type_line": "Creature — Shapeshifter",
+          "type_line": "Creature \u2014 Shapeshifter",
           "types": [
             "Creature"
           ]
@@ -2954,7 +2954,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, put a +1/+1 counter on target creature.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -2994,7 +2994,7 @@
           "mana_cost": "{1}{G}",
           "mana_value": 2,
           "name": "Bristly Bill, Spine Sower",
-          "oracle_text": "Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature.\n{3}{G}{G}: Double the number of +1/+1 counters on each creature you control.",
+          "oracle_text": "Landfall \u2014 Whenever a land you control enters, put a +1/+1 counter on target creature.\n{3}{G}{G}: Double the number of +1/+1 counters on each creature you control.",
           "power": 2,
           "subtypes": [
             "Plant",
@@ -3004,7 +3004,7 @@
             "Legendary"
           ],
           "toughness": 2,
-          "type_line": "Legendary Creature — Plant Druid",
+          "type_line": "Legendary Creature \u2014 Plant Druid",
           "types": [
             "Creature"
           ]
@@ -3020,7 +3020,7 @@
         "variable_output": false
       },
       "name": "Bristly Bill, Spine Sower",
-      "oracle_text": "Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature.\n{3}{G}{G}: Double the number of +1/+1 counters on each creature you control.",
+      "oracle_text": "Landfall \u2014 Whenever a land you control enters, put a +1/+1 counter on target creature.\n{3}{G}{G}: Double the number of +1/+1 counters on each creature you control.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -3159,7 +3159,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Caves of Koilos",
           "oracle_text": "{T}: Add {C}.\n{T}: Add {W} or {B}. This land deals 1 damage to you.",
@@ -3308,7 +3308,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Artifact — Equipment",
+          "type_line": "Artifact \u2014 Equipment",
           "types": [
             "Artifact"
           ]
@@ -3393,7 +3393,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Human Warrior",
+          "type_line": "Creature \u2014 Human Warrior",
           "types": [
             "Creature"
           ]
@@ -3575,7 +3575,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -3992,7 +3992,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Cinder Glade",
           "oracle_text": "({T}: Add {R} or {G}.)\nThis land enters tapped unless you control two or more basic lands.",
@@ -4003,7 +4003,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Mountain Forest",
+          "type_line": "Land \u2014 Mountain Forest",
           "types": [
             "Land"
           ]
@@ -4081,7 +4081,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "City of Brass",
           "oracle_text": "Whenever this land becomes tapped, it deals 1 damage to you.\n{T}: Add one mana of any color.",
@@ -4182,7 +4182,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Cloudpost",
           "oracle_text": "This land enters tapped.\n{T}: Add {C} for each Locus on the battlefield.",
@@ -4192,7 +4192,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Locus",
+          "type_line": "Land \u2014 Locus",
           "types": [
             "Land"
           ]
@@ -4256,7 +4256,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Command Tower",
           "oracle_text": "{T}: Add one mana of any color in your commander's color identity.",
@@ -4908,7 +4908,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -5024,7 +5024,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Dark Depths",
           "oracle_text": "This land enters with ten ice counters on it.\n{3}: Remove an ice counter from this land.\nWhen this land has no ice counters on it, sacrifice it. If you do, create Marit Lage, a legendary 20/20 black Avatar creature token with flying and indestructible.",
@@ -5124,7 +5124,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -5510,7 +5510,7 @@
           ],
           "supertypes": [],
           "toughness": 5,
-          "type_line": "Creature — Vampire",
+          "type_line": "Creature \u2014 Vampire",
           "types": [
             "Creature"
           ]
@@ -5613,7 +5613,7 @@
           ],
           "supertypes": [],
           "toughness": 6,
-          "type_line": "Creature — Phyrexian Wurm",
+          "type_line": "Creature \u2014 Phyrexian Wurm",
           "types": [
             "Creature"
           ]
@@ -5698,7 +5698,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Halfling Citizen",
+          "type_line": "Creature \u2014 Halfling Citizen",
           "types": [
             "Creature"
           ]
@@ -5876,7 +5876,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Deserted Beach",
           "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {W} or {U}.",
@@ -6158,7 +6158,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Skeleton",
+          "type_line": "Creature \u2014 Skeleton",
           "types": [
             "Creature"
           ]
@@ -6219,7 +6219,7 @@
         },
         {
           "ability_id": "domri-anarch-of-bolas:oracle:003",
-          "cost_text": "[−2]",
+          "cost_text": "[\u22122]",
           "event": null,
           "face_id": "domri-anarch-of-bolas",
           "handler": null,
@@ -6227,7 +6227,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−2]: Target creature you control fights target creature you don't control.",
+          "rules_text": "[\u22122]: Target creature you control fights target creature you don't control.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -6253,7 +6253,7 @@
           "mana_cost": "{1}{R}{G}",
           "mana_value": 3,
           "name": "Domri, Anarch of Bolas",
-          "oracle_text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[−2]: Target creature you control fights target creature you don't control.",
+          "oracle_text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control.",
           "power": null,
           "subtypes": [
             "Domri"
@@ -6262,7 +6262,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Domri",
+          "type_line": "Legendary Planeswalker \u2014 Domri",
           "types": [
             "Planeswalker"
           ]
@@ -6281,7 +6281,7 @@
         "variable_output": false
       },
       "name": "Domri, Anarch of Bolas",
-      "oracle_text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[−2]: Target creature you control fights target creature you don't control.",
+      "oracle_text": "Creatures you control get +1/+0.\n[+1]: Add {R} or {G}. Creature spells you cast this turn can't be countered.\n[\u22122]: Target creature you control fights target creature you don't control.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -6302,7 +6302,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Constellation — Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
+          "rules_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -6326,14 +6326,14 @@
           "mana_cost": "{4}{B}",
           "mana_value": 5,
           "name": "Doomwake Giant",
-          "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
+          "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
           "power": 4,
           "subtypes": [
             "Giant"
           ],
           "supertypes": [],
           "toughness": 6,
-          "type_line": "Enchantment Creature — Giant",
+          "type_line": "Enchantment Creature \u2014 Giant",
           "types": [
             "Enchantment",
             "Creature"
@@ -6350,7 +6350,7 @@
         "variable_output": false
       },
       "name": "Doomwake Giant",
-      "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
+      "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, creatures your opponents control get -1/-1 until end of turn.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -6421,7 +6421,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Dreamroot Cascade",
           "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {G} or {U}.",
@@ -6492,7 +6492,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Target player draws X cards.",
+          "rules_text": "\u2022 Target player draws X cards.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -6508,7 +6508,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Target player mills twice X cards.",
+          "rules_text": "\u2022 Target player mills twice X cards.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -6532,7 +6532,7 @@
           "mana_cost": "{X}{2}{U}",
           "mana_value": 3,
           "name": "Drown in Dreams",
-          "oracle_text": "Choose one. If you control a commander as you cast this spell, you may choose both.\n• Target player draws X cards.\n• Target player mills twice X cards.",
+          "oracle_text": "Choose one. If you control a commander as you cast this spell, you may choose both.\n\u2022 Target player draws X cards.\n\u2022 Target player mills twice X cards.",
           "power": null,
           "subtypes": [],
           "supertypes": [],
@@ -6553,7 +6553,7 @@
         "variable_output": false
       },
       "name": "Drown in Dreams",
-      "oracle_text": "Choose one. If you control a commander as you cast this spell, you may choose both.\n• Target player draws X cards.\n• Target player mills twice X cards.",
+      "oracle_text": "Choose one. If you control a commander as you cast this spell, you may choose both.\n\u2022 Target player draws X cards.\n\u2022 Target player mills twice X cards.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -6622,7 +6622,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Enchantment Creature — Nymph Dryad",
+          "type_line": "Enchantment Creature \u2014 Nymph Dryad",
           "types": [
             "Enchantment",
             "Creature"
@@ -6668,7 +6668,7 @@
         },
         {
           "ability_id": "eiganjo-seat-of-the-empire:oracle:002",
-          "cost_text": "Channel — {2}{W}, Discard this card",
+          "cost_text": "Channel \u2014 {2}{W}, Discard this card",
           "event": null,
           "face_id": "eiganjo-seat-of-the-empire",
           "handler": null,
@@ -6676,7 +6676,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Channel — {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
+          "rules_text": "Channel \u2014 {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -6711,10 +6711,10 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Eiganjo, Seat of the Empire",
-          "oracle_text": "{T}: Add {W}.\nChannel — {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
+          "oracle_text": "{T}: Add {W}.\nChannel \u2014 {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
           "power": null,
           "subtypes": [],
           "supertypes": [
@@ -6744,7 +6744,7 @@
         "variable_output": true
       },
       "name": "Eiganjo, Seat of the Empire",
-      "oracle_text": "{T}: Add {W}.\nChannel — {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
+      "oracle_text": "{T}: Add {W}.\nChannel \u2014 {2}{W}, Discard this card: It deals 4 damage to target attacking or blocking creature. This ability costs {1} less to activate for each legendary creature you control.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -6831,7 +6831,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Vampire Cleric",
+          "type_line": "Creature \u2014 Vampire Cleric",
           "types": [
             "Creature"
           ]
@@ -6922,7 +6922,7 @@
             "Legendary"
           ],
           "toughness": 4,
-          "type_line": "Legendary Creature — Vampire Knight",
+          "type_line": "Legendary Creature \u2014 Vampire Knight",
           "types": [
             "Creature"
           ]
@@ -6959,7 +6959,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "I — Exile target permanent an opponent controls with mana value 3 or greater.",
+          "rules_text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -6975,7 +6975,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "II — Noncreature spells your opponents cast cost {2} more to cast until your next turn.",
+          "rules_text": "II \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -6991,7 +6991,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "III — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
+          "rules_text": "III \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -7015,14 +7015,14 @@
           "mana_cost": "{3}{W}{W}",
           "mana_value": 5,
           "name": "Elspeth Conquers Death",
-          "oracle_text": "I — Exile target permanent an opponent controls with mana value 3 or greater.\nII — Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
+          "oracle_text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
           "power": null,
           "subtypes": [
             "Saga"
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Saga",
+          "type_line": "Enchantment \u2014 Saga",
           "types": [
             "Enchantment"
           ]
@@ -7038,7 +7038,7 @@
         "variable_output": false
       },
       "name": "Elspeth Conquers Death",
-      "oracle_text": "I — Exile target permanent an opponent controls with mana value 3 or greater.\nII — Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII — Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
+      "oracle_text": "I \u2014 Exile target permanent an opponent controls with mana value 3 or greater.\nII \u2014 Noncreature spells your opponents cast cost {2} more to cast until your next turn.\nIII \u2014 Return target creature or planeswalker card from your graveyard to the battlefield. Put a +1/+1 counter or a loyalty counter on it.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -7091,7 +7091,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -7164,7 +7164,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -7283,7 +7283,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
+          "rules_text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -7307,7 +7307,7 @@
           "mana_cost": "{2}{U}",
           "mana_value": 3,
           "name": "Entity Tracker",
-          "oracle_text": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
+          "oracle_text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
           "power": 2,
           "subtypes": [
             "Human",
@@ -7315,7 +7315,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Human Scout",
+          "type_line": "Creature \u2014 Human Scout",
           "types": [
             "Creature"
           ]
@@ -7331,7 +7331,7 @@
         "variable_output": false
       },
       "name": "Entity Tracker",
-      "oracle_text": "Flash\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
+      "oracle_text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -7416,7 +7416,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Bat Cleric",
+          "type_line": "Creature \u2014 Bat Cleric",
           "types": [
             "Creature"
           ]
@@ -7485,7 +7485,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Human Shaman",
+          "type_line": "Creature \u2014 Human Shaman",
           "types": [
             "Creature"
           ]
@@ -7656,7 +7656,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, proliferate.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, proliferate.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -7680,7 +7680,7 @@
           "mana_cost": "{2}{G}",
           "mana_value": 3,
           "name": "Evolution Sage",
-          "oracle_text": "Landfall — Whenever a land you control enters, proliferate.",
+          "oracle_text": "Landfall \u2014 Whenever a land you control enters, proliferate.",
           "power": 3,
           "subtypes": [
             "Elf",
@@ -7688,7 +7688,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -7704,7 +7704,7 @@
         "variable_output": false
       },
       "name": "Evolution Sage",
-      "oracle_text": "Landfall — Whenever a land you control enters, proliferate.",
+      "oracle_text": "Landfall \u2014 Whenever a land you control enters, proliferate.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -7790,7 +7790,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Angel",
+          "type_line": "Creature \u2014 Angel",
           "types": [
             "Creature"
           ]
@@ -7844,7 +7844,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Exotic Orchard",
           "oracle_text": "{T}: Add one mana of any color that a land an opponent controls could produce.",
@@ -8123,7 +8123,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -8168,7 +8168,7 @@
         },
         {
           "ability_id": "fanatic-of-rhonas:oracle:002",
-          "cost_text": "Ferocious — {T}",
+          "cost_text": "Ferocious \u2014 {T}",
           "event": null,
           "face_id": "fanatic-of-rhonas",
           "handler": "primitive:mana",
@@ -8176,7 +8176,7 @@
           "mana_ability": true,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Ferocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.",
+          "rules_text": "Ferocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.",
           "support_status": "generic",
           "timing": "priority",
           "uses_stack": false,
@@ -8216,7 +8216,7 @@
           "mana_cost": "{1}{G}",
           "mana_value": 2,
           "name": "Fanatic of Rhonas",
-          "oracle_text": "{T}: Add {G}.\nFerocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}",
+          "oracle_text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}",
           "power": 1,
           "subtypes": [
             "Snake",
@@ -8224,7 +8224,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Creature — Snake Druid",
+          "type_line": "Creature \u2014 Snake Druid",
           "types": [
             "Creature"
           ]
@@ -8244,7 +8244,7 @@
         "variable_output": true
       },
       "name": "Fanatic of Rhonas",
-      "oracle_text": "{T}: Add {G}.\nFerocious — {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}",
+      "oracle_text": "{T}: Add {G}.\nFerocious \u2014 {T}: Add {G}{G}{G}{G}. Activate only if you control a creature with power 4 or greater.\nEternalize {2}{G}{G}",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -8527,7 +8527,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Creature — Cat Beast",
+          "type_line": "Creature \u2014 Cat Beast",
           "types": [
             "Creature"
           ]
@@ -8689,7 +8689,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Bear Demon",
+          "type_line": "Creature \u2014 Bear Demon",
           "types": [
             "Creature"
           ]
@@ -9008,7 +9008,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Flooded Grove",
           "oracle_text": "{T}: Add {C}.\n{G/U}, {T}: Add {G}{G}, {G}{U}, or {U}{U}.",
@@ -9079,7 +9079,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Flooded Strand",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Plains or Island card, put it onto the battlefield, then shuffle.",
@@ -9153,7 +9153,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Forest",
           "oracle_text": "No printed Oracle text. The basic land type Forest intrinsically grants \"{T}: Add {G}.\"",
@@ -9165,7 +9165,7 @@
             "Basic"
           ],
           "toughness": null,
-          "type_line": "Basic Land — Forest",
+          "type_line": "Basic Land \u2014 Forest",
           "types": [
             "Land"
           ]
@@ -9263,7 +9263,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Elemental",
+          "type_line": "Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -9363,7 +9363,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Room",
+          "type_line": "Enchantment \u2014 Room",
           "types": [
             "Enchantment"
           ]
@@ -9386,7 +9386,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Room",
+          "type_line": "Enchantment \u2014 Room",
           "types": [
             "Enchantment"
           ]
@@ -9409,7 +9409,8 @@
           "ordinal": 10,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "room"
     },
     {
       "abilities": [
@@ -9455,7 +9456,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -9546,7 +9547,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Game Trail",
           "oracle_text": "As this land enters, you may reveal a Mountain or Forest card from your hand. If you don't, this land enters tapped.\n{T}: Add {R} or {G}.",
@@ -9749,7 +9750,7 @@
             "Legendary"
           ],
           "toughness": 12,
-          "type_line": "Legendary Creature — Elder Dinosaur",
+          "type_line": "Legendary Creature \u2014 Elder Dinosaur",
           "types": [
             "Creature"
           ]
@@ -9818,7 +9819,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
+          "rules_text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -9844,14 +9845,14 @@
           "mana_cost": "{3}{W}{W}",
           "mana_value": 5,
           "name": "Ghostly Dancers",
-          "oracle_text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
+          "oracle_text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
           "power": 3,
           "subtypes": [
             "Spirit"
           ],
           "supertypes": [],
           "toughness": 5,
-          "type_line": "Creature — Spirit",
+          "type_line": "Creature \u2014 Spirit",
           "types": [
             "Creature"
           ]
@@ -9867,7 +9868,7 @@
         "variable_output": false
       },
       "name": "Ghostly Dancers",
-      "oracle_text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
+      "oracle_text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -10113,7 +10114,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -10124,7 +10125,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Age-Graced Chapel",
           "oracle_text": "This land enters tapped.\n{T}: Add {W} or {B}.",
@@ -10145,7 +10146,6 @@
         ],
         "fetch_types": []
       },
-      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -10160,14 +10160,15 @@
         "variable_output": false
       },
       "name": "Glasswing Grace // Age-Graced Chapel",
-      "oracle_text": "FRONT — GLASSWING GRACE\nEnchant creature\nEnchanted creature gets +2/+2 and has flying and lifelink.\n\nBACK — AGE-GRACED CHAPEL\nThis land enters tapped.\n{T}: Add {W} or {B}.",
+      "oracle_text": "FRONT \u2014 GLASSWING GRACE\nEnchant creature\nEnchanted creature gets +2/+2 and has flying and lifelink.\n\nBACK \u2014 AGE-GRACED CHAPEL\nThis land enters tapped.\n{T}: Add {W} or {B}.",
       "source_decks": [
         {
           "deck": "Elenda",
           "ordinal": 60,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "modal"
     },
     {
       "abilities": [
@@ -10361,7 +10362,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Faerie Wizard",
+          "type_line": "Creature \u2014 Faerie Wizard",
           "types": [
             "Creature"
           ]
@@ -10431,7 +10432,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Glimmerpost",
           "oracle_text": "When this land enters, you gain 1 life for each Locus on the battlefield.\n{T}: Add {C}.",
@@ -10441,7 +10442,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Locus",
+          "type_line": "Land \u2014 Locus",
           "types": [
             "Land"
           ]
@@ -10521,7 +10522,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Goblin Shaman",
+          "type_line": "Creature \u2014 Goblin Shaman",
           "types": [
             "Creature"
           ]
@@ -10608,7 +10609,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Godless Shrine",
           "oracle_text": "({T}: Add {W} or {B}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
@@ -10619,7 +10620,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Plains Swamp",
+          "type_line": "Land \u2014 Plains Swamp",
           "types": [
             "Land"
           ]
@@ -10798,7 +10799,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Enchantment Creature — Snake Lamia",
+          "type_line": "Enchantment Creature \u2014 Snake Lamia",
           "types": [
             "Enchantment",
             "Creature"
@@ -10836,7 +10837,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Constellation — Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
+          "rules_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -10860,14 +10861,14 @@
           "mana_cost": "{2}{B}",
           "mana_value": 3,
           "name": "Grim Guardian",
-          "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
+          "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
           "power": 1,
           "subtypes": [
             "Zombie"
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Enchantment Creature — Zombie",
+          "type_line": "Enchantment Creature \u2014 Zombie",
           "types": [
             "Enchantment",
             "Creature"
@@ -10884,7 +10885,7 @@
         "variable_output": false
       },
       "name": "Grim Guardian",
-      "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
+      "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, each opponent loses 1 life.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -11023,7 +11024,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Goblin Shaman",
+          "type_line": "Legendary Creature \u2014 Goblin Shaman",
           "types": [
             "Creature"
           ]
@@ -11194,7 +11195,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Gruul Turf",
           "oracle_text": "This land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.\n{T}: Add {R}{G}.",
@@ -11302,7 +11303,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Merfolk Scout",
+          "type_line": "Legendary Creature \u2014 Merfolk Scout",
           "types": [
             "Creature"
           ]
@@ -11394,7 +11395,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Human Ranger",
+          "type_line": "Legendary Creature \u2014 Human Ranger",
           "types": [
             "Creature"
           ]
@@ -11482,7 +11483,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Hall of Heliod's Generosity",
           "oracle_text": "{T}: Add {C}.\n{1}{W}, {T}: Put target enchantment card from your graveyard on top of your library.",
@@ -11586,7 +11587,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Hallowed Fountain",
           "oracle_text": "({T}: Add {W} or {U}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
@@ -11597,7 +11598,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Plains Island",
+          "type_line": "Land \u2014 Plains Island",
           "types": [
             "Land"
           ]
@@ -11859,7 +11860,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Hashep Oasis",
           "oracle_text": "{T}: Add {C}.\n{T}, Pay 1 life: Add {G}.\n{1}{G}{G}, {T}, Sacrifice a Desert: Target creature you control gets +3/+3 until end of turn. Activate only as a sorcery.",
@@ -11869,7 +11870,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Desert",
+          "type_line": "Land \u2014 Desert",
           "types": [
             "Land"
           ]
@@ -11950,7 +11951,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Bird",
+          "type_line": "Creature \u2014 Bird",
           "types": [
             "Creature"
           ]
@@ -12048,7 +12049,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Artifact — Equipment",
+          "type_line": "Legendary Artifact \u2014 Equipment",
           "types": [
             "Artifact"
           ]
@@ -12280,7 +12281,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Hidden Nursery",
           "oracle_text": "This land enters tapped.\n{T}: Add {G}.\n{4}{G}, {T}, Sacrifice this land: Discover 4. Activate only as a sorcery.",
@@ -12290,7 +12291,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Cave",
+          "type_line": "Land \u2014 Cave",
           "types": [
             "Land"
           ]
@@ -12371,7 +12372,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Human Cleric",
+          "type_line": "Creature \u2014 Human Cleric",
           "types": [
             "Creature"
           ]
@@ -12505,7 +12506,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Horizon of Progress",
           "oracle_text": "{T}, Pay 1 life: Add one mana of any type that a land you control could produce.\n{3}, {T}: You may put a land card from your hand onto the battlefield tapped.\n{1}, {T}, Sacrifice this land: Draw a card.",
@@ -12668,7 +12669,7 @@
           ],
           "supertypes": [],
           "toughness": 7,
-          "type_line": "Creature — Hydra",
+          "type_line": "Creature \u2014 Hydra",
           "types": [
             "Creature"
           ]
@@ -12789,7 +12790,7 @@
           ],
           "supertypes": [],
           "toughness": 0,
-          "type_line": "Creature — Jellyfish Hydra Beast",
+          "type_line": "Creature \u2014 Jellyfish Hydra Beast",
           "types": [
             "Creature"
           ]
@@ -12875,7 +12876,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Demon",
+          "type_line": "Creature \u2014 Demon",
           "types": [
             "Creature"
           ]
@@ -13039,7 +13040,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Class",
+          "type_line": "Enchantment \u2014 Class",
           "types": [
             "Enchantment"
           ]
@@ -13192,7 +13193,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Angel Cleric",
+          "type_line": "Creature \u2014 Angel Cleric",
           "types": [
             "Creature"
           ]
@@ -13279,7 +13280,6 @@
           "colors": [
             "W"
           ],
-          "defense": 4,
           "face_id": "invasion-of-theros",
           "keywords": [],
           "loyalty": null,
@@ -13294,10 +13294,11 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Battle — Siege",
+          "type_line": "Battle \u2014 Siege",
           "types": [
             "Battle"
-          ]
+          ],
+          "defense": 4
         },
         {
           "colors": [
@@ -13308,7 +13309,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Ephara, Ever-Sheltering",
           "oracle_text": "Ephara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card.",
@@ -13320,7 +13321,7 @@
             "Legendary"
           ],
           "toughness": 4,
-          "type_line": "Legendary Enchantment Creature — God",
+          "type_line": "Legendary Enchantment Creature \u2014 God",
           "types": [
             "Enchantment",
             "Creature"
@@ -13328,7 +13329,6 @@
         }
       ],
       "land": null,
-      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],
@@ -13338,14 +13338,15 @@
         "variable_output": false
       },
       "name": "Invasion of Theros",
-      "oracle_text": "FRONT — INVASION OF THEROS\nWhen this Siege enters, search your library for an Aura, God, or Demigod card, reveal it, put it into your hand, then shuffle.\n\nBACK — EPHARA, EVER-SHELTERING\nEphara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card.",
+      "oracle_text": "FRONT \u2014 INVASION OF THEROS\nWhen this Siege enters, search your library for an Aura, God, or Demigod card, reveal it, put it into your hand, then shuffle.\n\nBACK \u2014 EPHARA, EVER-SHELTERING\nEphara has lifelink and indestructible as long as you control at least three other enchantments.\nWhenever another enchantment you control enters, draw a card.",
       "source_decks": [
         {
           "deck": "Reaminatour",
           "ordinal": 55,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "transform"
     },
     {
       "abilities": [
@@ -13444,7 +13445,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Island",
           "oracle_text": "No printed Oracle text. The basic land type Island intrinsically grants \"{T}: Add {U}.\"",
@@ -13456,7 +13457,7 @@
             "Basic"
           ],
           "toughness": null,
-          "type_line": "Basic Land — Island",
+          "type_line": "Basic Land \u2014 Island",
           "types": [
             "Land"
           ]
@@ -13558,7 +13559,7 @@
             "Legendary"
           ],
           "toughness": 4,
-          "type_line": "Legendary Creature — Elemental",
+          "type_line": "Legendary Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -13674,7 +13675,7 @@
           ],
           "supertypes": [],
           "toughness": 0,
-          "type_line": "Creature — Hydra",
+          "type_line": "Creature \u2014 Hydra",
           "types": [
             "Creature"
           ]
@@ -13758,7 +13759,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Spirit",
+          "type_line": "Creature \u2014 Spirit",
           "types": [
             "Creature"
           ]
@@ -13864,7 +13865,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Angel Spirit",
+          "type_line": "Creature \u2014 Angel Spirit",
           "types": [
             "Creature"
           ]
@@ -13937,7 +13938,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Karplusan Forest",
           "oracle_text": "{T}: Add {C}.\n{T}: Add {R} or {G}. This land deals 1 damage to you.",
@@ -14091,7 +14092,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Kazuul's Cliffs",
           "oracle_text": "This land enters tapped.\n{T}: Add {R}.",
@@ -14112,7 +14113,6 @@
         ],
         "fetch_types": []
       },
-      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -14126,14 +14126,15 @@
         "variable_output": true
       },
       "name": "Kazuul's Fury // Kazuul's Cliffs",
-      "oracle_text": "FRONT — KAZUUL'S FURY\nAs an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target.\n\nBACK — KAZUUL'S CLIFFS\nThis land enters tapped.\n{T}: Add {R}.",
+      "oracle_text": "FRONT \u2014 KAZUUL'S FURY\nAs an additional cost to cast this spell, sacrifice a creature.\nThis spell deals damage equal to the sacrificed creature's power to any target.\n\nBACK \u2014 KAZUUL'S CLIFFS\nThis land enters tapped.\n{T}: Add {R}.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
           "ordinal": 34,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "modal"
     },
     {
       "abilities": [
@@ -14199,7 +14200,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Kessig Wolf Run",
           "oracle_text": "{T}: Add {C}.\n{X}{R}{G}, {T}: Target creature gets +X/+0 and gains trample until end of turn.",
@@ -14318,7 +14319,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Spirit",
+          "type_line": "Legendary Creature \u2014 Spirit",
           "types": [
             "Creature"
           ]
@@ -14386,7 +14387,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Sorcery — Arcane",
+          "type_line": "Sorcery \u2014 Arcane",
           "types": [
             "Sorcery"
           ]
@@ -14494,7 +14495,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Dog",
+          "type_line": "Legendary Creature \u2014 Dog",
           "types": [
             "Creature"
           ]
@@ -14596,7 +14597,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Lair of the Hydra",
           "oracle_text": "If you control two or more other lands, this land enters tapped.\n{T}: Add {G}.\n{X}{G}: Until end of turn, this land becomes an X/X green Hydra creature. It's still a land. X can't be 0.",
@@ -14713,7 +14714,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Lazotep Quarry",
           "oracle_text": "{T}: Add {C}.\n{T}, Sacrifice a creature: Add one mana of any color.\n{X}{2}, {T}, Sacrifice a Desert: Exile target creature card with mana value X from your graveyard. Create a token that's a copy of it, except it's a 4/4 black Zombie. Activate only as a sorcery.",
@@ -14723,7 +14724,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Desert",
+          "type_line": "Land \u2014 Desert",
           "types": [
             "Land"
           ]
@@ -14822,7 +14823,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Cat Cleric",
+          "type_line": "Creature \u2014 Cat Cleric",
           "types": [
             "Creature"
           ]
@@ -15023,7 +15024,7 @@
             "Legendary"
           ],
           "toughness": 2,
-          "type_line": "Legendary Creature — Human Cleric",
+          "type_line": "Legendary Creature \u2014 Human Cleric",
           "types": [
             "Creature"
           ]
@@ -15092,7 +15093,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -15217,7 +15218,7 @@
             "Legendary"
           ],
           "toughness": 1,
-          "type_line": "Legendary Creature — Human Artificer",
+          "type_line": "Legendary Creature \u2014 Human Artificer",
           "types": [
             "Creature"
           ]
@@ -15286,7 +15287,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Human Wizard",
+          "type_line": "Creature \u2014 Human Wizard",
           "types": [
             "Creature"
           ]
@@ -15497,7 +15498,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Lumbering Falls",
           "oracle_text": "This land enters tapped.\n{T}: Add {G} or {U}.\n{2}{G}{U}: Until end of turn, this land becomes a 3/3 green and blue Elemental creature with hexproof. It's still a land.",
@@ -15616,7 +15617,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Lush Oasis",
           "oracle_text": "This land enters tapped.\nWhen this land enters, it deals 1 damage to target opponent.\n{T}: Add {G} or {U}.",
@@ -15626,7 +15627,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Desert",
+          "type_line": "Land \u2014 Desert",
           "types": [
             "Land"
           ]
@@ -15727,7 +15728,7 @@
             "Legendary"
           ],
           "toughness": 5,
-          "type_line": "Legendary Creature — Angel",
+          "type_line": "Legendary Creature \u2014 Angel",
           "types": [
             "Creature"
           ]
@@ -15812,7 +15813,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Human Wizard",
+          "type_line": "Creature \u2014 Human Wizard",
           "types": [
             "Creature"
           ]
@@ -15868,7 +15869,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Mana Confluence",
           "oracle_text": "{T}, Pay 1 life: Add one mana of any color.",
@@ -16039,7 +16040,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Hydra",
+          "type_line": "Creature \u2014 Hydra",
           "types": [
             "Creature"
           ]
@@ -16108,7 +16109,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Vampire Cleric",
+          "type_line": "Creature \u2014 Vampire Cleric",
           "types": [
             "Creature"
           ]
@@ -16340,7 +16341,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Marsh Flats",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Plains or Swamp card, put it onto the battlefield, then shuffle.",
@@ -16472,7 +16473,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Maze's End",
           "oracle_text": "This land enters tapped.\n{T}: Add {C}.\n{3}, {T}, Return this land to its owner's hand: Search your library for a Gate card, put it onto the battlefield, then shuffle. If you control ten or more Gates with different names, you win the game.",
@@ -16526,7 +16527,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.",
+          "rules_text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -16582,7 +16583,7 @@
           "mana_cost": "{2}{B}",
           "mana_value": 3,
           "name": "Midnight Snack",
-          "oracle_text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.",
+          "oracle_text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.",
           "power": null,
           "subtypes": [],
           "supertypes": [],
@@ -16603,7 +16604,7 @@
         "variable_output": false
       },
       "name": "Midnight Snack",
-      "oracle_text": "Raid — At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.",
+      "oracle_text": "Raid \u2014 At the beginning of your end step, if you attacked this turn, create a Food token.\n{2}{B}, Sacrifice this enchantment: Target opponent loses X life, where X is the amount of life you gained this turn.",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -16736,7 +16737,7 @@
             "Legendary"
           ],
           "toughness": 0,
-          "type_line": "Legendary Creature — Human Cleric",
+          "type_line": "Legendary Creature \u2014 Human Cleric",
           "types": [
             "Creature"
           ]
@@ -16895,7 +16896,7 @@
         },
         {
           "ability_id": "minsc-boo-timeless-heroes:oracle:003",
-          "cost_text": "[−2]",
+          "cost_text": "[\u22122]",
           "event": null,
           "face_id": "minsc-boo-timeless-heroes",
           "handler": null,
@@ -16903,7 +16904,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.",
+          "rules_text": "[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -16977,7 +16978,7 @@
           "mana_cost": "{2}{R}{G}",
           "mana_value": 4,
           "name": "Minsc & Boo, Timeless Heroes",
-          "oracle_text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander.",
+          "oracle_text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander.",
           "power": null,
           "subtypes": [
             "Minsc"
@@ -16986,7 +16987,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Minsc",
+          "type_line": "Legendary Planeswalker \u2014 Minsc",
           "types": [
             "Planeswalker"
           ]
@@ -17002,7 +17003,7 @@
         "variable_output": false
       },
       "name": "Minsc & Boo, Timeless Heroes",
-      "oracle_text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[−2]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander.",
+      "oracle_text": "When Minsc & Boo enters and at the beginning of your upkeep, you may create Boo, a legendary 1/1 red Hamster creature token with trample and haste.\n[+1]: Put three +1/+1 counters on up to one target creature with trample or haste.\n[\u22122]: Sacrifice a creature. When you do, Minsc & Boo deals X damage to any target, where X is that creature's power. If the sacrificed creature was a Hamster, draw X cards.\nMinsc & Boo, Timeless Heroes can be your commander.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -17118,7 +17119,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Misty Rainforest",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Forest or Island card, put it onto the battlefield, then shuffle.",
@@ -17289,7 +17290,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Morphic Pool",
           "oracle_text": "This land enters tapped unless you have two or more opponents.\n{T}: Add {U} or {B}.",
@@ -17362,7 +17363,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Mossfire Valley",
           "oracle_text": "{1}, {T}: Add {R}{G}.",
@@ -17434,7 +17435,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Mountain",
           "oracle_text": "No printed Oracle text. The basic land type Mountain intrinsically grants \"{T}: Add {R}.\"",
@@ -17446,7 +17447,7 @@
             "Basic"
           ],
           "toughness": null,
-          "type_line": "Basic Land — Mountain",
+          "type_line": "Basic Land \u2014 Mountain",
           "types": [
             "Land"
           ]
@@ -17557,7 +17558,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Elemental",
+          "type_line": "Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -17914,7 +17915,7 @@
         },
         {
           "ability_id": "nissa-steward-of-elements:oracle:003",
-          "cost_text": "[−6]",
+          "cost_text": "[\u22126]",
           "event": null,
           "face_id": "nissa-steward-of-elements",
           "handler": null,
@@ -17922,7 +17923,7 @@
           "mana_ability": false,
           "optional": true,
           "origin": "oracle",
-          "rules_text": "[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
+          "rules_text": "[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -17996,7 +17997,7 @@
           "mana_cost": "{X}{G}{U}",
           "mana_value": 2,
           "name": "Nissa, Steward of Elements",
-          "oracle_text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
+          "oracle_text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
           "power": null,
           "subtypes": [
             "Nissa"
@@ -18005,7 +18006,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Nissa",
+          "type_line": "Legendary Planeswalker \u2014 Nissa",
           "types": [
             "Planeswalker"
           ]
@@ -18021,7 +18022,7 @@
         "variable_output": true
       },
       "name": "Nissa, Steward of Elements",
-      "oracle_text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[−6]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
+      "oracle_text": "[+2]: Scry 2.\n[0]: Look at the top card of your library. If it's a land or creature card with mana value less than or equal to the number of loyalty counters on Nissa, you may put that card onto the battlefield.\n[\u22126]: Untap up to two target lands you control. They become 5/5 Elemental creatures with flying and haste until end of turn. They're still lands.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -18091,7 +18092,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Artifact Creature — Construct",
+          "type_line": "Artifact Creature \u2014 Construct",
           "types": [
             "Artifact",
             "Creature"
@@ -18196,7 +18197,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Vampire Cleric",
+          "type_line": "Creature \u2014 Vampire Cleric",
           "types": [
             "Creature"
           ]
@@ -18276,7 +18277,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Artifact Creature — Scarecrow",
+          "type_line": "Artifact Creature \u2014 Scarecrow",
           "types": [
             "Artifact",
             "Creature"
@@ -18586,7 +18587,7 @@
             "Legendary"
           ],
           "toughness": 5,
-          "type_line": "Legendary Creature — Shapeshifter Noble",
+          "type_line": "Legendary Creature \u2014 Shapeshifter Noble",
           "types": [
             "Creature"
           ]
@@ -18769,7 +18770,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Elf Shaman",
+          "type_line": "Creature \u2014 Elf Shaman",
           "types": [
             "Creature"
           ]
@@ -18882,7 +18883,7 @@
         },
         {
           "ability_id": "otawara-soaring-city:oracle:002",
-          "cost_text": "Channel — {3}{U}, Discard this card",
+          "cost_text": "Channel \u2014 {3}{U}, Discard this card",
           "event": null,
           "face_id": "otawara-soaring-city",
           "handler": null,
@@ -18890,7 +18891,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Channel — {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
+          "rules_text": "Channel \u2014 {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -18925,10 +18926,10 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Otawara, Soaring City",
-          "oracle_text": "{T}: Add {U}.\nChannel — {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
+          "oracle_text": "{T}: Add {U}.\nChannel \u2014 {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
           "power": null,
           "subtypes": [],
           "supertypes": [
@@ -18958,7 +18959,7 @@
         "variable_output": true
       },
       "name": "Otawara, Soaring City",
-      "oracle_text": "{T}: Add {U}.\nChannel — {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
+      "oracle_text": "{T}: Add {U}.\nChannel \u2014 {3}{U}, Discard this card: Return target artifact, creature, enchantment, or planeswalker to its owner's hand. This ability costs {1} less to activate for each legendary creature you control.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -18999,7 +19000,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Overflowing Basin",
           "oracle_text": "{1}, {T}: Add {G}{U}.",
@@ -19345,7 +19346,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Aura",
+          "type_line": "Enchantment \u2014 Aura",
           "types": [
             "Enchantment"
           ]
@@ -19467,7 +19468,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Plains",
           "oracle_text": "No printed Oracle text. The basic land type Plains intrinsically grants \"{T}: Add {W}.\"",
@@ -19479,7 +19480,7 @@
             "Basic"
           ],
           "toughness": null,
-          "type_line": "Basic Land — Plains",
+          "type_line": "Basic Land \u2014 Plains",
           "types": [
             "Land"
           ]
@@ -19579,7 +19580,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Planar Nexus",
           "oracle_text": "This land is every nonbasic land type.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.",
@@ -19719,7 +19720,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Polluted Delta",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for an Island or Swamp card, put it onto the battlefield, then shuffle.",
@@ -19888,7 +19889,7 @@
           ],
           "supertypes": [],
           "toughness": 7,
-          "type_line": "Creature — Zombie Cleric",
+          "type_line": "Creature \u2014 Zombie Cleric",
           "types": [
             "Creature"
           ]
@@ -20039,7 +20040,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elf Druid",
+          "type_line": "Creature \u2014 Elf Druid",
           "types": [
             "Creature"
           ]
@@ -20293,7 +20294,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Raffine's Tower",
           "oracle_text": "This land enters tapped.\n{T}: Add {W}, {U}, or {B}.\nCycling {3}",
@@ -20305,7 +20306,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Plains Island Swamp",
+          "type_line": "Land \u2014 Plains Island Swamp",
           "types": [
             "Land"
           ]
@@ -20435,7 +20436,7 @@
           "mana_ability": false,
           "optional": true,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -20461,14 +20462,14 @@
           "mana_cost": "{4}{G}{G}",
           "mana_value": 6,
           "name": "Rampaging Baloths",
-          "oracle_text": "Trample\nLandfall — Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
+          "oracle_text": "Trample\nLandfall \u2014 Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
           "power": 6,
           "subtypes": [
             "Beast"
           ],
           "supertypes": [],
           "toughness": 6,
-          "type_line": "Creature — Beast",
+          "type_line": "Creature \u2014 Beast",
           "types": [
             "Creature"
           ]
@@ -20484,7 +20485,7 @@
         "variable_output": false
       },
       "name": "Rampaging Baloths",
-      "oracle_text": "Trample\nLandfall — Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
+      "oracle_text": "Trample\nLandfall \u2014 Whenever a land you control enters, you may create a 4/4 green Beast creature token.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -20570,7 +20571,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Frog",
+          "type_line": "Creature \u2014 Frog",
           "types": [
             "Creature"
           ]
@@ -20721,7 +20722,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Naga Cleric",
+          "type_line": "Creature \u2014 Naga Cleric",
           "types": [
             "Creature"
           ]
@@ -20791,7 +20792,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Reliquary Tower",
           "oracle_text": "You have no maximum hand size.\n{T}: Add {C}.",
@@ -21251,7 +21252,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Restless Fortress",
           "oracle_text": "This land enters tapped.\n{T}: Add {W} or {B}.\n{2}{W}{B}: Until end of turn, this land becomes a 1/4 white and black Nightmare creature in addition to its other types.\nWhenever this land attacks, defending player loses 2 life and you gain 2 life.",
@@ -21306,7 +21307,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Choose one —",
+          "rules_text": "Choose one \u2014",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -21322,7 +21323,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Draw cards equal to the greatest power among non-Human creatures you control.",
+          "rules_text": "\u2022 Draw cards equal to the greatest power among non-Human creatures you control.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -21338,7 +21339,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Non-Human creatures you control get +3/+3 until end of turn.",
+          "rules_text": "\u2022 Non-Human creatures you control get +3/+3 until end of turn.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -21362,7 +21363,7 @@
           "mana_cost": "{4}{G}",
           "mana_value": 5,
           "name": "Return of the Wildspeaker",
-          "oracle_text": "Choose one —\n• Draw cards equal to the greatest power among non-Human creatures you control.\n• Non-Human creatures you control get +3/+3 until end of turn.",
+          "oracle_text": "Choose one \u2014\n\u2022 Draw cards equal to the greatest power among non-Human creatures you control.\n\u2022 Non-Human creatures you control get +3/+3 until end of turn.",
           "power": null,
           "subtypes": [],
           "supertypes": [],
@@ -21383,7 +21384,7 @@
         "variable_output": true
       },
       "name": "Return of the Wildspeaker",
-      "oracle_text": "Choose one —\n• Draw cards equal to the greatest power among non-Human creatures you control.\n• Non-Human creatures you control get +3/+3 until end of turn.",
+      "oracle_text": "Choose one \u2014\n\u2022 Draw cards equal to the greatest power among non-Human creatures you control.\n\u2022 Non-Human creatures you control get +3/+3 until end of turn.",
       "source_decks": [
         {
           "deck": "Minsc & Boo",
@@ -21469,7 +21470,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Elemental",
+          "type_line": "Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -21788,7 +21789,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Rockfall Vale",
           "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {R} or {G}.",
@@ -21892,7 +21893,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Rogue's Passage",
           "oracle_text": "{T}: Add {C}.\n{4}, {T}: Target creature can't be blocked this turn.",
@@ -21999,7 +22000,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Rootbound Crag",
           "oracle_text": "This land enters tapped unless you control a Mountain or a Forest.\n{T}: Add {R} or {G}.",
@@ -22122,7 +22123,7 @@
             "Legendary"
           ],
           "toughness": 2,
-          "type_line": "Legendary Creature — Human Scout",
+          "type_line": "Legendary Creature \u2014 Human Scout",
           "types": [
             "Creature"
           ]
@@ -22213,7 +22214,7 @@
           ],
           "supertypes": [],
           "toughness": 6,
-          "type_line": "Creature — Demon",
+          "type_line": "Creature \u2014 Demon",
           "types": [
             "Creature"
           ]
@@ -22314,7 +22315,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Elf Wizard",
+          "type_line": "Creature \u2014 Elf Wizard",
           "types": [
             "Creature"
           ]
@@ -22399,7 +22400,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Snake Shaman",
+          "type_line": "Creature \u2014 Snake Shaman",
           "types": [
             "Creature"
           ]
@@ -22467,7 +22468,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Satyr",
+          "type_line": "Creature \u2014 Satyr",
           "types": [
             "Creature"
           ]
@@ -22521,7 +22522,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Scalding Tarn",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for an Island or Mountain card, put it onto the battlefield, then shuffle.",
@@ -22640,7 +22641,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Scoured Barrens",
           "oracle_text": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {W} or {B}.",
@@ -22695,7 +22696,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -22719,14 +22720,14 @@
           "mana_cost": "{2}{G}",
           "mana_value": 3,
           "name": "Scute Swarm",
-          "oracle_text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
+          "oracle_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
           "power": 1,
           "subtypes": [
             "Insect"
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Insect",
+          "type_line": "Creature \u2014 Insect",
           "types": [
             "Creature"
           ]
@@ -22742,7 +22743,7 @@
         "variable_output": false
       },
       "name": "Scute Swarm",
-      "oracle_text": "Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
+      "oracle_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -22813,7 +22814,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Sea of Clouds",
           "oracle_text": "This land enters tapped unless you have two or more opponents.\n{T}: Add {W} or {U}.",
@@ -23026,7 +23027,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Shattered Sanctum",
           "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {W} or {B}.",
@@ -23131,7 +23132,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Shineshadow Snarl",
           "oracle_text": "As this land enters, you may reveal a Plains or Swamp card from your hand. If you don't, this land enters tapped.\n{T}: Add {W} or {B}.",
@@ -23234,7 +23235,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Shipwreck Marsh",
           "oracle_text": "This land enters tapped unless you control two or more other lands.\n{T}: Add {U} or {B}.",
@@ -23451,7 +23452,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Silent Clearing",
           "oracle_text": "{T}, Pay 1 life: Add {W} or {B}.\n{1}, {T}, Sacrifice this land: Draw a card.",
@@ -23568,7 +23569,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Simic Growth Chamber",
           "oracle_text": "This land enters tapped.\nWhen this land enters, return a land you control to its owner's hand.\n{T}: Add {G}{U}.",
@@ -23672,7 +23673,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Simic Guildgate",
           "oracle_text": "This land enters tapped.\n{T}: Add {G} or {U}.",
@@ -23682,7 +23683,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Gate",
+          "type_line": "Land \u2014 Gate",
           "types": [
             "Land"
           ]
@@ -23920,7 +23921,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Artifact Creature — Golem",
+          "type_line": "Artifact Creature \u2014 Golem",
           "types": [
             "Artifact",
             "Creature"
@@ -24030,7 +24031,7 @@
         },
         {
           "ability_id": "sorin-of-house-markov:oracle:006",
-          "cost_text": "[−1]",
+          "cost_text": "[\u22121]",
           "event": null,
           "face_id": "sorin-ravenous-neonate",
           "handler": null,
@@ -24038,7 +24039,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.",
+          "rules_text": "[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -24046,7 +24047,7 @@
         },
         {
           "ability_id": "sorin-of-house-markov:oracle:007",
-          "cost_text": "[−6]",
+          "cost_text": "[\u22126]",
           "event": null,
           "face_id": "sorin-ravenous-neonate",
           "handler": null,
@@ -24054,7 +24055,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
+          "rules_text": "[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
           "support_status": "oracle_only",
           "timing": "sorcery",
           "uses_stack": true,
@@ -24139,7 +24140,7 @@
             "Legendary"
           ],
           "toughness": 4,
-          "type_line": "Legendary Creature — Human Noble",
+          "type_line": "Legendary Creature \u2014 Human Noble",
           "types": [
             "Creature"
           ]
@@ -24153,10 +24154,10 @@
           "keywords": [],
           "loyalty": 3,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Sorin, Ravenous Neonate",
-          "oracle_text": "Extort\n[+2]: Create a Food token.\n[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
+          "oracle_text": "Extort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
           "power": null,
           "subtypes": [
             "Sorin"
@@ -24165,14 +24166,13 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Sorin",
+          "type_line": "Legendary Planeswalker \u2014 Sorin",
           "types": [
             "Planeswalker"
           ]
         }
       ],
       "land": null,
-      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],
@@ -24182,14 +24182,15 @@
         "variable_output": true
       },
       "name": "Sorin of House Markov",
-      "oracle_text": "FRONT — SORIN OF HOUSE MARKOV\nLifelink\nExtort\nAt the beginning of each of your postcombat main phases, if you gained 3 or more life this turn, exile Sorin, then return him to the battlefield transformed under his owner's control.\n\nBACK — SORIN, RAVENOUS NEONATE\nExtort\n[+2]: Create a Food token.\n[−1]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[−6]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
+      "oracle_text": "FRONT \u2014 SORIN OF HOUSE MARKOV\nLifelink\nExtort\nAt the beginning of each of your postcombat main phases, if you gained 3 or more life this turn, exile Sorin, then return him to the battlefield transformed under his owner's control.\n\nBACK \u2014 SORIN, RAVENOUS NEONATE\nExtort\n[+2]: Create a Food token.\n[\u22121]: Sorin deals damage equal to the amount of life you gained this turn to any target.\n[\u22126]: Gain control of target creature. It becomes a Vampire in addition to its other types. Put a lifelink counter on it if you control a white permanent other than that creature or Sorin.",
       "source_decks": [
         {
           "deck": "Elenda",
           "ordinal": 27,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "transform"
     },
     {
       "abilities": [
@@ -24227,7 +24228,7 @@
         },
         {
           "ability_id": "sorin-vengeful-bloodlord:oracle:003",
-          "cost_text": "[−X]",
+          "cost_text": "[\u2212X]",
           "event": null,
           "face_id": "sorin-vengeful-bloodlord",
           "handler": null,
@@ -24235,7 +24236,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
+          "rules_text": "[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -24293,7 +24294,7 @@
           "mana_cost": "{2}{W}{B}",
           "mana_value": 4,
           "name": "Sorin, Vengeful Bloodlord",
-          "oracle_text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
+          "oracle_text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
           "power": null,
           "subtypes": [
             "Sorin"
@@ -24302,7 +24303,7 @@
             "Legendary"
           ],
           "toughness": null,
-          "type_line": "Legendary Planeswalker — Sorin",
+          "type_line": "Legendary Planeswalker \u2014 Sorin",
           "types": [
             "Planeswalker"
           ]
@@ -24318,7 +24319,7 @@
         "variable_output": false
       },
       "name": "Sorin, Vengeful Bloodlord",
-      "oracle_text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[−X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
+      "oracle_text": "During your turn, creatures and planeswalkers you control have lifelink.\n[+2]: Sorin deals 1 damage to target player or planeswalker.\n[\u2212X]: Return target creature card with mana value X from your graveyard to the battlefield. That creature is a Vampire in addition to its other types.",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -24483,7 +24484,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Spire Garden",
           "oracle_text": "This land enters tapped unless you have two or more opponents.\n{T}: Add {R} or {G}.",
@@ -24567,7 +24568,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Enchantment Creature — Dog",
+          "type_line": "Enchantment Creature \u2014 Dog",
           "types": [
             "Enchantment",
             "Creature"
@@ -24737,7 +24738,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Stomping Ground",
           "oracle_text": "({T}: Add {R} or {G}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
@@ -24748,7 +24749,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Mountain Forest",
+          "type_line": "Land \u2014 Mountain Forest",
           "types": [
             "Land"
           ]
@@ -24910,7 +24911,7 @@
           ],
           "supertypes": [],
           "toughness": 6,
-          "type_line": "Creature — Giant",
+          "type_line": "Creature \u2014 Giant",
           "types": [
             "Creature"
           ]
@@ -25026,7 +25027,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Sunken Palace",
           "oracle_text": "This land enters tapped.\n{T}: Add {U}.\n{1}{U}, {T}, Exile seven cards from your graveyard: Add {U}. When you spend this mana to cast a spell or activate an ability, copy that spell or ability. You may choose new targets for the copy.",
@@ -25036,7 +25037,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Cave",
+          "type_line": "Land \u2014 Cave",
           "types": [
             "Land"
           ]
@@ -25102,7 +25103,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Swamp",
           "oracle_text": "No printed Oracle text. The basic land type Swamp intrinsically grants \"{T}: Add {B}.\"",
@@ -25114,7 +25115,7 @@
             "Basic"
           ],
           "toughness": null,
-          "type_line": "Basic Land — Swamp",
+          "type_line": "Basic Land \u2014 Swamp",
           "types": [
             "Land"
           ]
@@ -25290,7 +25291,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Artifact — Equipment",
+          "type_line": "Artifact \u2014 Equipment",
           "types": [
             "Artifact"
           ]
@@ -25740,7 +25741,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Talon Gates of Madara",
           "oracle_text": "When this land enters, up to one target creature phases out.\n{T}: Add {C}.\n{1}, {T}: Add one mana of any color.\n{4}: Put this card from your hand onto the battlefield.",
@@ -25750,7 +25751,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Gate",
+          "type_line": "Land \u2014 Gate",
           "types": [
             "Land"
           ]
@@ -25801,7 +25802,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Landfall — Whenever a land you control enters, you gain 1 life and draw a card.",
+          "rules_text": "Landfall \u2014 Whenever a land you control enters, you gain 1 life and draw a card.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -25827,7 +25828,7 @@
           "mana_cost": "{3}{G}{U}",
           "mana_value": 5,
           "name": "Tatyova, Benthic Druid",
-          "oracle_text": "Landfall — Whenever a land you control enters, you gain 1 life and draw a card.",
+          "oracle_text": "Landfall \u2014 Whenever a land you control enters, you gain 1 life and draw a card.",
           "power": 3,
           "subtypes": [
             "Merfolk",
@@ -25837,7 +25838,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Merfolk Druid",
+          "type_line": "Legendary Creature \u2014 Merfolk Druid",
           "types": [
             "Creature"
           ]
@@ -25853,7 +25854,7 @@
         "variable_output": false
       },
       "name": "Tatyova, Benthic Druid",
-      "oracle_text": "Landfall — Whenever a land you control enters, you gain 1 life and draw a card.",
+      "oracle_text": "Landfall \u2014 Whenever a land you control enters, you gain 1 life and draw a card.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -25921,7 +25922,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Creature — Shapeshifter",
+          "type_line": "Creature \u2014 Shapeshifter",
           "types": [
             "Creature"
           ]
@@ -26022,7 +26023,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Temple of Mystery",
           "oracle_text": "This land enters tapped.\nWhen this land enters, scry 1.\n{T}: Add {G} or {U}.",
@@ -26141,7 +26142,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Temple of Silence",
           "oracle_text": "This land enters tapped.\nWhen this land enters, scry 1.\n{T}: Add {W} or {B}.",
@@ -26227,7 +26228,7 @@
           ],
           "supertypes": [],
           "toughness": 9,
-          "type_line": "Creature — Elephant",
+          "type_line": "Creature \u2014 Elephant",
           "types": [
             "Creature"
           ]
@@ -26346,7 +26347,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "I — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.",
+          "rules_text": "I \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26362,7 +26363,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "II — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.",
+          "rules_text": "II \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26378,7 +26379,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "III — Put target creature card from a graveyard onto the battlefield under your control.",
+          "rules_text": "III \u2014 Put target creature card from a graveyard onto the battlefield under your control.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26402,14 +26403,14 @@
           "mana_cost": "{3}{B}{B}",
           "mana_value": 5,
           "name": "The Cruelty of Gix",
-          "oracle_text": "Read ahead\nI — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII — Put target creature card from a graveyard onto the battlefield under your control.",
+          "oracle_text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control.",
           "power": null,
           "subtypes": [
             "Saga"
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Saga",
+          "type_line": "Enchantment \u2014 Saga",
           "types": [
             "Enchantment"
           ]
@@ -26425,7 +26426,7 @@
         "variable_output": false
       },
       "name": "The Cruelty of Gix",
-      "oracle_text": "Read ahead\nI — Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII — Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII — Put target creature card from a graveyard onto the battlefield under your control.",
+      "oracle_text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -26742,7 +26743,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.",
+          "rules_text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26758,7 +26759,7 @@
           "mana_ability": false,
           "optional": true,
           "origin": "oracle",
-          "rules_text": "II — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.",
+          "rules_text": "II \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26774,7 +26775,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "III — Exile this Saga, then return it to the battlefield transformed under your control.",
+          "rules_text": "III \u2014 Exile this Saga, then return it to the battlefield transformed under your control.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -26830,14 +26831,14 @@
           "mana_cost": "{2}{W}",
           "mana_value": 3,
           "name": "The Restoration of Eiganjo",
-          "oracle_text": "I — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
+          "oracle_text": "I \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control.",
           "power": null,
           "subtypes": [
             "Saga"
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment — Saga",
+          "type_line": "Enchantment \u2014 Saga",
           "types": [
             "Enchantment"
           ]
@@ -26852,7 +26853,7 @@
           ],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Architect of Restoration",
           "oracle_text": "Vigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token.",
@@ -26863,7 +26864,7 @@
           ],
           "supertypes": [],
           "toughness": 4,
-          "type_line": "Enchantment Creature — Fox Monk",
+          "type_line": "Enchantment Creature \u2014 Fox Monk",
           "types": [
             "Enchantment",
             "Creature"
@@ -26871,7 +26872,6 @@
         }
       ],
       "land": null,
-      "layout": "transform",
       "mana": {
         "base_amount": null,
         "colors": [],
@@ -26881,14 +26881,15 @@
         "variable_output": false
       },
       "name": "The Restoration of Eiganjo",
-      "oracle_text": "FRONT — THE RESTORATION OF EIGANJO\nI — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.\n\nBACK — ARCHITECT OF RESTORATION\nVigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token.",
+      "oracle_text": "FRONT \u2014 THE RESTORATION OF EIGANJO\nI \u2014 Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII \u2014 You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII \u2014 Exile this Saga, then return it to the battlefield transformed under your control.\n\nBACK \u2014 ARCHITECT OF RESTORATION\nVigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token.",
       "source_decks": [
         {
           "deck": "Reaminatour",
           "ordinal": 38,
           "quantity": 1
         }
-      ]
+      ],
+      "layout": "transform"
     },
     {
       "abilities": [
@@ -26951,7 +26952,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Thespian's Stage",
           "oracle_text": "{T}: Add {C}.\n{2}, {T}: This land becomes a copy of target land, except it has this ability.",
@@ -27159,7 +27160,7 @@
         },
         {
           "ability_id": "touch-the-spirit-realm:oracle:002",
-          "cost_text": "Channel — {1}{W}, Discard this card",
+          "cost_text": "Channel \u2014 {1}{W}, Discard this card",
           "event": null,
           "face_id": "touch-the-spirit-realm",
           "handler": null,
@@ -27167,7 +27168,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Channel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+          "rules_text": "Channel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -27207,7 +27208,7 @@
           "mana_cost": "{2}{W}",
           "mana_value": 3,
           "name": "Touch the Spirit Realm",
-          "oracle_text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+          "oracle_text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
           "power": null,
           "subtypes": [],
           "supertypes": [],
@@ -27228,7 +27229,7 @@
         "variable_output": false
       },
       "name": "Touch the Spirit Realm",
-      "oracle_text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel — {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
+      "oracle_text": "When this enchantment enters, exile up to one target artifact or creature until this enchantment leaves the battlefield.\nChannel \u2014 {1}{W}, Discard this card: Exile target artifact or creature. Return it to the battlefield under its owner's control at the beginning of the next end step.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -27472,7 +27473,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Trenchpost",
           "oracle_text": "{T}: Add {C}.\n{3}, {T}: Target player mills a card for each Locus you control.",
@@ -27482,7 +27483,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Locus",
+          "type_line": "Land \u2014 Locus",
           "types": [
             "Land"
           ]
@@ -27576,7 +27577,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Human Knight",
+          "type_line": "Creature \u2014 Human Knight",
           "types": [
             "Creature"
           ]
@@ -27679,7 +27680,7 @@
           ],
           "supertypes": [],
           "toughness": 0,
-          "type_line": "Creature — Hydra",
+          "type_line": "Creature \u2014 Hydra",
           "types": [
             "Creature"
           ]
@@ -27716,7 +27717,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Constellation — Whenever this creature or another enchantment you control enters, you gain 1 life.",
+          "rules_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, you gain 1 life.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -27758,7 +27759,7 @@
           "mana_cost": "{W}{B}",
           "mana_value": 2,
           "name": "Underworld Coinsmith",
-          "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, you gain 1 life.\n{1}{W}{B}, Pay 1 life: Each opponent loses 1 life.",
+          "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, you gain 1 life.\n{1}{W}{B}, Pay 1 life: Each opponent loses 1 life.",
           "power": 2,
           "subtypes": [
             "Human",
@@ -27766,7 +27767,7 @@
           ],
           "supertypes": [],
           "toughness": 2,
-          "type_line": "Enchantment Creature — Human Cleric",
+          "type_line": "Enchantment Creature \u2014 Human Cleric",
           "types": [
             "Enchantment",
             "Creature"
@@ -27783,7 +27784,7 @@
         "variable_output": false
       },
       "name": "Underworld Coinsmith",
-      "oracle_text": "Constellation — Whenever this creature or another enchantment you control enters, you gain 1 life.\n{1}{W}{B}, Pay 1 life: Each opponent loses 1 life.",
+      "oracle_text": "Constellation \u2014 Whenever this creature or another enchantment you control enters, you gain 1 life.\n{1}{W}{B}, Pay 1 life: Each opponent loses 1 life.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -28036,7 +28037,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Escape—{G}{G}{U}{U}, Exile five other cards from your graveyard.",
+          "rules_text": "Escape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard.",
           "support_status": "oracle_only",
           "timing": "static",
           "uses_stack": true,
@@ -28062,7 +28063,7 @@
           "mana_cost": "{1}{G}{U}",
           "mana_value": 3,
           "name": "Uro, Titan of Nature's Wrath",
-          "oracle_text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard.",
+          "oracle_text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard.",
           "power": 6,
           "subtypes": [
             "Elder",
@@ -28072,7 +28073,7 @@
             "Legendary"
           ],
           "toughness": 6,
-          "type_line": "Legendary Creature — Elder Giant",
+          "type_line": "Legendary Creature \u2014 Elder Giant",
           "types": [
             "Creature"
           ]
@@ -28088,7 +28089,7 @@
         "variable_output": false
       },
       "name": "Uro, Titan of Nature's Wrath",
-      "oracle_text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape—{G}{G}{U}{U}, Exile five other cards from your graveyard.",
+      "oracle_text": "When Uro enters, sacrifice it unless it escaped.\nWhenever Uro enters or attacks, you gain 3 life and draw a card, then you may put a land card from your hand onto the battlefield.\nEscape\u2014{G}{G}{U}{U}, Exile five other cards from your graveyard.",
       "source_decks": [
         {
           "deck": "Omo",
@@ -28158,7 +28159,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Urza's Cave",
           "oracle_text": "{T}: Add {C}.\n{3}, {T}, Sacrifice this land: Search your library for a land card, put it onto the battlefield tapped, then shuffle.",
@@ -28168,7 +28169,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Cave",
+          "type_line": "Land \u2014 Cave",
           "types": [
             "Land"
           ]
@@ -28231,7 +28232,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Urza's Mine",
           "oracle_text": "{T}: Add {C}. If you control an Urza's Power-Plant and an Urza's Tower, add {C}{C} instead.",
@@ -28242,7 +28243,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Urza's Mine",
+          "type_line": "Land \u2014 Urza's Mine",
           "types": [
             "Land"
           ]
@@ -28303,7 +28304,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Urza's Power Plant",
           "oracle_text": "{T}: Add {C}. If you control an Urza's Mine and an Urza's Tower, add {C}{C} instead.",
@@ -28314,7 +28315,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Urza's Power-Plant",
+          "type_line": "Land \u2014 Urza's Power-Plant",
           "types": [
             "Land"
           ]
@@ -28350,7 +28351,7 @@
       "abilities": [
         {
           "ability_id": "urza-s-saga:oracle:001",
-          "cost_text": "I — This Saga gains \"{T}",
+          "cost_text": "I \u2014 This Saga gains \"{T}",
           "event": null,
           "face_id": "urza-s-saga",
           "handler": "primitive:mana",
@@ -28358,7 +28359,7 @@
           "mana_ability": true,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "I — This Saga gains \"{T}: Add {C}.\"",
+          "rules_text": "I \u2014 This Saga gains \"{T}: Add {C}.\"",
           "support_status": "generic",
           "timing": "priority",
           "uses_stack": false,
@@ -28366,7 +28367,7 @@
         },
         {
           "ability_id": "urza-s-saga:oracle:002",
-          "cost_text": "II — This Saga gains \"{2}, {T}",
+          "cost_text": "II \u2014 This Saga gains \"{2}, {T}",
           "event": null,
           "face_id": "urza-s-saga",
           "handler": null,
@@ -28374,7 +28375,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "II — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"",
+          "rules_text": "II \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -28390,7 +28391,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "III — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
+          "rules_text": "III \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -28423,10 +28424,10 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Urza's Saga",
-          "oracle_text": "I — This Saga gains \"{T}: Add {C}.\"\nII — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"\nIII — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
+          "oracle_text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
           "power": null,
           "subtypes": [
             "Urza's",
@@ -28434,7 +28435,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Enchantment Land — Urza's Saga",
+          "type_line": "Enchantment Land \u2014 Urza's Saga",
           "types": [
             "Enchantment",
             "Land"
@@ -28458,7 +28459,7 @@
         "variable_output": true
       },
       "name": "Urza's Saga",
-      "oracle_text": "I — This Saga gains \"{T}: Add {C}.\"\nII — This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with ‘This creature gets +1/+1 for each artifact you control.’\"\nIII — Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
+      "oracle_text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -28496,7 +28497,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Urza's Tower",
           "oracle_text": "{T}: Add {C}. If you control an Urza's Mine and an Urza's Power-Plant, add {C}{C}{C} instead.",
@@ -28507,7 +28508,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Urza's Tower",
+          "type_line": "Land \u2014 Urza's Tower",
           "types": [
             "Land"
           ]
@@ -28619,7 +28620,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Choose one —",
+          "rules_text": "Choose one \u2014",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -28635,7 +28636,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Target creature gains indestructible until end of turn.",
+          "rules_text": "\u2022 Target creature gains indestructible until end of turn.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -28651,7 +28652,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "• Destroy target creature with toughness 4 or greater.",
+          "rules_text": "\u2022 Destroy target creature with toughness 4 or greater.",
           "support_status": "oracle_only",
           "timing": "priority",
           "uses_stack": true,
@@ -28675,7 +28676,7 @@
           "mana_cost": "{1}{W}",
           "mana_value": 2,
           "name": "Valorous Stance",
-          "oracle_text": "Choose one —\n• Target creature gains indestructible until end of turn.\n• Destroy target creature with toughness 4 or greater.",
+          "oracle_text": "Choose one \u2014\n\u2022 Target creature gains indestructible until end of turn.\n\u2022 Destroy target creature with toughness 4 or greater.",
           "power": null,
           "subtypes": [],
           "supertypes": [],
@@ -28696,7 +28697,7 @@
         "variable_output": false
       },
       "name": "Valorous Stance",
-      "oracle_text": "Choose one —\n• Target creature gains indestructible until end of turn.\n• Destroy target creature with toughness 4 or greater.",
+      "oracle_text": "Choose one \u2014\n\u2022 Target creature gains indestructible until end of turn.\n\u2022 Destroy target creature with toughness 4 or greater.",
       "source_decks": [
         {
           "deck": "Elenda",
@@ -28833,7 +28834,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Vault of Champions",
           "oracle_text": "This land enters tapped unless you have two or more opponents.\n{T}: Add {W} or {B}.",
@@ -28903,7 +28904,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Verdant Catacombs",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Swamp or Forest card, put it onto the battlefield, then shuffle.",
@@ -29023,7 +29024,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Elemental",
+          "type_line": "Creature \u2014 Elemental",
           "types": [
             "Creature"
           ]
@@ -29089,7 +29090,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Vesuva",
           "oracle_text": "You may have this land enter tapped as a copy of any land on the battlefield.",
@@ -29139,7 +29140,7 @@
           "mana_ability": false,
           "optional": false,
           "origin": "oracle",
-          "rules_text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
+          "rules_text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
           "support_status": "oracle_only",
           "timing": "triggered",
           "uses_stack": true,
@@ -29165,7 +29166,7 @@
           "mana_cost": "{1}{W}{B}",
           "mana_value": 3,
           "name": "Victor, Valgavoth's Seneschal",
-          "oracle_text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
+          "oracle_text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
           "power": 3,
           "subtypes": [
             "Human",
@@ -29175,7 +29176,7 @@
             "Legendary"
           ],
           "toughness": 3,
-          "type_line": "Legendary Creature — Human Warlock",
+          "type_line": "Legendary Creature \u2014 Human Warlock",
           "types": [
             "Creature"
           ]
@@ -29191,7 +29192,7 @@
         "variable_output": false
       },
       "name": "Victor, Valgavoth's Seneschal",
-      "oracle_text": "Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
+      "oracle_text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control.",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -29262,7 +29263,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Vineglimmer Snarl",
           "oracle_text": "As this land enters, you may reveal a Forest or Island card from your hand. If you don't, this land enters tapped.\n{T}: Add {G} or {U}.",
@@ -29363,7 +29364,7 @@
           ],
           "supertypes": [],
           "toughness": 1,
-          "type_line": "Creature — Vampire Wizard",
+          "type_line": "Creature \u2014 Vampire Wizard",
           "types": [
             "Creature"
           ]
@@ -29449,7 +29450,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Volatile Fault",
           "oracle_text": "{T}: Add {C}.\n{1}, {T}, Sacrifice this land: Destroy target nonbasic land an opponent controls. That player may search their library for a basic land card, put it onto the battlefield, then shuffle. You create a Treasure token.",
@@ -29459,7 +29460,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Cave",
+          "type_line": "Land \u2014 Cave",
           "types": [
             "Land"
           ]
@@ -29574,7 +29575,7 @@
             "Legendary"
           ],
           "toughness": 6,
-          "type_line": "Legendary Creature — Phyrexian Praetor",
+          "type_line": "Legendary Creature \u2014 Phyrexian Praetor",
           "types": [
             "Creature"
           ]
@@ -29661,7 +29662,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Watery Grave",
           "oracle_text": "({T}: Add {U} or {B}.)\nAs this land enters, you may pay 2 life. If you don't, it enters tapped.",
@@ -29672,7 +29673,7 @@
           ],
           "supertypes": [],
           "toughness": null,
-          "type_line": "Land — Island Swamp",
+          "type_line": "Land \u2014 Island Swamp",
           "types": [
             "Land"
           ]
@@ -29880,7 +29881,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Windswept Heath",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Forest or Plains card, put it onto the battlefield, then shuffle.",
@@ -30001,7 +30002,7 @@
           ],
           "supertypes": [],
           "toughness": 3,
-          "type_line": "Creature — Moonfolk Wizard",
+          "type_line": "Creature \u2014 Moonfolk Wizard",
           "types": [
             "Creature"
           ]
@@ -30055,7 +30056,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Wooded Foothills",
           "oracle_text": "{T}, Pay 1 life, Sacrifice this land: Search your library for a Mountain or Forest card, put it onto the battlefield, then shuffle.",
@@ -30179,7 +30180,7 @@
             "Legendary"
           ],
           "toughness": 5,
-          "type_line": "Legendary Enchantment Creature — God",
+          "type_line": "Legendary Enchantment Creature \u2014 God",
           "types": [
             "Enchantment",
             "Creature"
@@ -30269,7 +30270,7 @@
             "Legendary"
           ],
           "toughness": 6,
-          "type_line": "Legendary Creature — Salamander Serpent",
+          "type_line": "Legendary Creature \u2014 Salamander Serpent",
           "types": [
             "Creature"
           ]
@@ -30342,7 +30343,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Yavimaya Coast",
           "oracle_text": "{T}: Add {C}.\n{T}: Add {G} or {U}. This land deals 1 damage to you.",
@@ -30413,7 +30414,7 @@
           "keywords": [],
           "loyalty": null,
           "loyalty_variable": null,
-          "mana_cost": "—",
+          "mana_cost": "\u2014",
           "mana_value": 0,
           "name": "Yavimaya, Cradle of Growth",
           "oracle_text": "Each land is a Forest in addition to its other land types.",

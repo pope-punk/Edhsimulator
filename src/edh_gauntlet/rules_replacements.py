@@ -7,7 +7,7 @@ Entry-control changes, transforming entries and prevention remain outside this v
 """
 from dataclasses import dataclass, replace
 from .rules_state import RulesObject, Zone
-from .rules_program import EntryLifeNote,EntryPayment
+from .rules_program import EntryLifeNote,EntryPayment,object_program,room_profile
 
 
 @dataclass(frozen=True)
@@ -30,6 +30,7 @@ class ZoneProposal:
     riot_haste: bool = False
     entry_subtypes: tuple = ()
     back_face: bool = False
+    unlocked: tuple = ()
 
     @property
     def entry_definition(self):
@@ -56,7 +57,7 @@ def affected_player(proposal):
 
 def candidates(state, definitions, proposal, affected_types=None, applicable_entry_ids=None, inactive_sources=frozenset()):
     obj = proposal.before
-    definition = definitions[proposal.entry_definition if proposal.destination==Zone.BATTLEFIELD else obj.effective_definition]
+    definition = room_profile(definitions[proposal.entry_definition],replace(obj,zone=Zone.BATTLEFIELD,room_cast=None,unlocked=proposal.unlocked)) if proposal.destination==Zone.BATTLEFIELD else object_program(obj,definitions)
     result = []
     if obj.commander and proposal.destination in {Zone.HAND, Zone.LIBRARY} and not proposal.commander_considered:
         result.append(ReplacementCandidate('rule:903.9b', 'Commander destination', 'commander', 3, obj.owner))
@@ -76,7 +77,7 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
     for source in state.objects(Zone.BATTLEFIELD):
         if source.phased or source.ref in inactive_sources:
             continue
-        for program in definitions[source.effective_definition].replacements:
+        for program in object_program(source,definitions).replacements:
             key = f'{source.ref.card_id}@{source.ref.incarnation}:{program.replacement_id}'
             if key in proposal.used or program.destination != proposal.destination:
                 continue

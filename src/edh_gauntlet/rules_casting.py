@@ -256,7 +256,9 @@ class CastingRules:
             raise RulesViolation('Actor does not own the action window')
         source = self.state.get(ref)
         face=('back' if resolution_cast and self.resolution_cast.get('transformed') else 'front') if face is None else face
-        if kind=='cast':source=self._announced_face(source,face,resolution_cast=resolution_cast)
+        if kind=='cast':
+            source=self._announced_face(source,face,resolution_cast=resolution_cast)
+            if source.room_cast:face=source.room_cast
         elif face!='front':raise RulesViolation('Face selection is available only when casting or playing a land')
         program = self.definition(source)
         if kind == 'cast':
@@ -265,6 +267,7 @@ class CastingRules:
             if resolution_cast:
                 if ref not in self._resolution_cast_candidates():raise RulesViolation('Card is outside the current resolution-cast permission')
                 origins=(Zone(self.resolution_cast['origin']),)
+                if base(source,self.definitions).mana_value>self.resolution_cast['maximum']:raise RulesViolation('Chosen face exceeds this casting permission')
             if program.cast is None or source.zone not in origins or source.owner != actor and not (resolution_cast and self.resolution_cast.get('transformed')):
                 raise RulesViolation('Unsupported spell origin or permission')
             if source.zone == Zone.COMMAND and not source.commander:
@@ -294,15 +297,19 @@ class CastingRules:
         if type(kicker) is not bool or kicker and (kind!='cast' or not isinstance(specification,KickerCast)):
             raise RulesViolation('Invalid kicker declaration')
         cost = specification.cost
+        miracle=self.resolution_cast.get('miracle_reduction') if resolution_cast else None
         if resolution_cast:
-            if alternative_id is not None or x_value!=0:raise RulesViolation('Free casts require X zero and forbid other alternative costs')
-            cost=replace(cost,mana=ManaCost())
+            if alternative_id is not None or miracle is None and x_value!=0:raise RulesViolation('Resolution casts forbid other alternative costs; free casts require X zero')
+            if miracle is None:cost=replace(cost,mana=ManaCost())
         if alternative_id is not None:
             if kind!='cast' or type(alternative_id) is not str:raise RulesViolation('Invalid alternative casting declaration')
             alternative=next((a for a in specification.alternatives if a.alternative_id==alternative_id),None)
             if alternative is None or not self._condition_holds(alternative.condition,replace(source,controller=actor)):
                 raise RulesViolation('Alternative casting cost is unavailable')
             cost=alternative.cost
+        if miracle is not None:
+            if type(x_value) is not int or x_value<0 or x_value and not cost_has_x(cost):raise RulesViolation('Invalid miracle X')
+            cost=replace(cost,mana=replace(cost.mana,generic=max(0,cost.mana.generic+cost.mana.x_symbols*x_value-miracle),x_symbols=0))
         if (type(replicate) is not int or replicate<0 or replicate and
                 (kind!='cast' or not isinstance(specification,CopyCast) or specification.copy_kind!='replicate')):
             raise RulesViolation('Invalid replicate declaration')
@@ -314,7 +321,7 @@ class CastingRules:
             extra=specification.kicker.mana
             cost=replace(cost,mana=ManaCost(cost.mana.generic+extra.generic,
                 cost.mana.symbols+extra.symbols,cost.mana.x_symbols))
-        if type(x_value) is not int or x_value < 0 or x_value and not cost_has_x(cost):
+        if type(x_value) is not int or x_value < 0 or x_value and not cost_has_x(cost) and miracle is None:
             raise RulesViolation('Invalid announced X')
         if isinstance(cost,LoyaltyCost):
             if kind!='activate':raise RulesViolation('Loyalty symbols cannot pay for spells')
@@ -410,7 +417,7 @@ class CastingRules:
         if not isinstance(payment, Payment):
             raise RulesViolation('Payment must be an authored payment packet')
         source = source or self.state.get(quote.source)
-        if quote.kind=='cast':source=replace(source,back_face=quote.face=='back')
+        if quote.kind=='cast':source=replace(source,back_face=quote.face=='back',room_cast=quote.face if quote.face in {'left','right'} else None)
         taps = payment.taps
         if not isinstance(taps, tuple) or any(not isinstance(ref, ObjectRef) for ref in taps) or len(taps) != quote.cost.tap_count:
             raise RulesViolation('Wrong number of tap-cost selections')
@@ -459,7 +466,7 @@ class CastingRules:
             if quote.kind=='cast':
                 # The announced spell is public on the stack throughout payment.
                 # Validate the complete declaration/payment before this first mutation.
-                source=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back'),),'spell_announced')[0].after
+                source=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back',room_cast=quote.face if quote.face in {'left','right'} else None),),'spell_announced')[0].after
                 announced_frame=self._spell_frame(source,quote)
             else:
                 ability=next(a for a in self.activated_abilities(source) if a.ability_id==quote.ability_id)
@@ -493,7 +500,7 @@ class CastingRules:
         frames=list(self.stack)
         if self.resolving:frames.append(self.resolving)
         if self.mana_payment:frames.append(self.mana_payment['parent'])
-        result={}
+        result={obj.ref:obj for obj in self._live_miracle_sources()}
         for frame in frames:
             value=frame.get('announced_source')
             if value is None:continue
@@ -564,7 +571,7 @@ class CastingRules:
                 frame=prepared_frame
                 stack_source=self.state.get(ObjectRef.from_json(frame['source']['ref']))
             else:
-                events=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back'),),'cast',payment=resources)
+                events=self.state.move((ZoneMove(source.ref,Zone.STACK,quote.actor,cast_x=quote.x_value,back_face=quote.face=='back',room_cast=quote.face if quote.face in {'left','right'} else None),),'cast',payment=resources)
                 stack_source=events[0].after
                 frame=self._spell_frame(stack_source,quote);self.stack.append(frame)
             if source.commander and source.zone==Zone.COMMAND:
@@ -607,7 +614,7 @@ class CastingRules:
         self._event(event_kind, action_id=quote.action_id, source=source.ref.to_json(), controller=quote.actor)
         if quote.kind=='cast' and self.resolution_cast and not self.resolution_cast['completed']:
             self.resolution_cast['completed']=True;self.resolution_cast['cast']=True
-            frame['without_mana_cost']=True
+            frame['without_mana_cost']=self.resolution_cast.get('miracle_reduction') is None
         self.priority = None if self.mana_payment or self.resolution_cast or self.declaration_mana else quote.actor
         self.passes = []
         self._collect_announcement(event_kind, source, quote.actor,previous_types=previous_types)
