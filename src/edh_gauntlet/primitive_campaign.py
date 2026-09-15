@@ -103,6 +103,8 @@ class PrimitiveCampaign:
                    'actors':actors,'messages':[],'claim':None,'last_rules_commit':store.committed_head(),
                    'last_turn':None,'registrations':{},'transport_generation':0}
             connection.execute('INSERT INTO host_state VALUES (1,?)',(encoded(state),))
+            from .primitive_journal import initialize
+            initialize(connection,binding,store.committed_head(),state)
             self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=binding;self.store=store
             with self.transaction() as state:
                 self._capture(state,initial=True)
@@ -126,6 +128,8 @@ class PrimitiveCampaign:
             raise RulesViolation('Bound host implementation changed; use its historical checkout')
         self._reopen()
         try:
+            from .primitive_journal import verify
+            verify(self.store.connection,self.binding)
             strategy={actor:{key:seat[key] for key in ('standing','seed','personality')}
                       for actor,seat in self.state()['actors'].items()}
             if digest(strategy)!=config['strategy_sha256']:
@@ -151,15 +155,21 @@ class PrimitiveCampaign:
     @contextmanager
     def transaction(self):
         connection=self.store.connection
+        from .primitive_journal import capture,delta,append
+        rows=capture(connection)
         connection.execute('BEGIN IMMEDIATE')
         try:
             state=self.state()
+            before=deepcopy(state)
             yield state
             connection.execute('UPDATE host_state SET value=? WHERE id=1',(encoded(state),))
+            changes=delta(before,state)
+            if changes or rows:append(connection,self.binding,self.store.committed_head(),changes,rows)
             connection.execute('COMMIT')
         except BaseException:
             if connection.in_transaction:connection.execute('ROLLBACK')
             raise
+        finally:connection.create_function('edh_capture',-1,None)
 
     def evidence(self,actor,*,after=0,through=None,limit=None,kinds=None):
         if actor not in self.kernel.state.players:raise RulesViolation('Unknown actor')
@@ -225,6 +235,8 @@ class PrimitiveCampaign:
         write(self.root/'NEXT_ACTION.json',{'schema':1,'next_action':action})
         seal=self.state()['terminal']
         if seal:
+            from .primitive_journal import head
+            seal={**seal,'host_commit':head(self.store.connection)}
             write(self.root/'game_01/terminal_result.json',seal)
             write(self.root/'game_01/postgame_learning/skipped.json',
                   {'status':'skipped_by_configuration','terminal_sha256':digest(seal),'rules_commit':seal['rules_commit']})

@@ -50,6 +50,7 @@ def main(argv=None):
     init.add_argument('--learning',choices=['disabled'],required=True,
                       help='This initial primitive host supports explicitly disabled learning only.')
     commands.add_parser('status')
+    commands.add_parser('verify-journal')
     pause=commands.add_parser('pause');pause.add_argument('--reason',required=True)
     resume=commands.add_parser('resume-pause')
     resume.add_argument('--expected-sequence',type=int,required=True)
@@ -84,6 +85,12 @@ def main(argv=None):
                                                max_rounds=args.max_rounds)
         else:campaign=PrimitiveCampaign.open(root,recover=False)
         try:
+            if args.command=='verify-journal':
+                from .primitive_journal import head
+                # Open already reconstructed and checked the host projections.
+                print(json.dumps({'verified':True,'host_commit':head(campaign.store.connection),
+                                  'rules_commit':campaign.store.committed_head()},indent=2))
+                return
             if args.command=='fence-crash':
                 from .primitive_recovery import fence_crash
                 fence_crash(campaign,{'sequence':args.expected_sequence,'sha256':args.expected_sha256})

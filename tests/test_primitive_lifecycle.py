@@ -30,6 +30,16 @@ class PrimitiveLifecycleTests(TestCase):
         self.assertNotIn('hand',str(result));self.assertEqual(0,self.game.store.generation)
         self.assertEqual('prepared',self.game.state()['pending'])
 
+    def test_journal_audit_reports_only_hashes_and_does_not_recover(self):
+        q=self.game.kernel.pending_choice
+        self.game.prepare('Omo','audit-pending',{'kind':'answer','revision':self.game.kernel.revision,
+            'request_id':q.request_id,'indexes':[0]},rationale='Synthetic pending input.')
+        result=self.call('verify-journal')
+        self.assertTrue(result['verified'])
+        self.assertEqual({'verified','host_commit','rules_commit'},set(result))
+        self.assertEqual(0,self.game.store.generation)
+        self.assertEqual('audit-pending',self.game.state()['pending'])
+
     def test_pause_marker_does_not_make_a_game_action(self):
         before=self.game.store.committed_head()
         result=self.call('pause','--reason','operator pause')

@@ -35,7 +35,7 @@ Remaining release work:
 
 - Finish object snooze semantics. Expand
   missed-window and multi-turn sequence tests; audit mandatory publication coverage.
-- Complete host-level replay conformance.
+- Finish final host conformance and admission checks.
 - Expand fault tests, full suite and installed-package checks; bind admission to
   actual completed host conformance, not a manually flipped readiness flag.
 - Update release documentation, push/review/merge the host branch, and initialize
@@ -131,3 +131,21 @@ duplicate paths and invalid pointers are rejected at publication.
 The combined primitive suite passed 90 tests in 101.616 seconds after this change
 (`/tmp/edh-primitive-dependencies.log`). Distribution CI for preceding commit
 1d1c479 is running as workflow 34925867957; final-head release validation remains.
+
+Host projection replay now has a transactional hash chain. It records changed
+state plus affected input, publication, message and compressed evidence rows in
+the same SQLite transaction. No-op and rolled-back transactions do not advance
+the journal. Reopening reconstructs those projections and compares them with
+the stored tables before any pending-input recovery; each entry binds an existing
+rules prefix. Replay does not dispatch tools, run models or execute game actions.
+Terminal artifacts include the host commit as well as the rules commit.
+
+`primitive_lifecycle --cohort PATH verify-journal` performs an explicit stopped
+audit and reports only the verified host/rules hashes. It does not recover pending
+choices. Full reconstruction is an open-time/offline check; the live transaction
+path appends changes without replaying the archive. Focused checks passed six
+journal tests, nine campaign tests and nine lifecycle tests, including corrupted
+state, interrupted transactions and a pending choice during audit.
+The combined primitive suite passed 96 tests in 121.471 seconds
+(`/tmp/edh-primitive-journal-suite.log`). A final focused regression also checks
+that changing a numeric state value to a boolean cannot pass replay equality.
