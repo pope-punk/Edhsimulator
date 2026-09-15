@@ -52,6 +52,7 @@ def claim(campaign,actor):
                     'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
                         and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},
                'executed_steps':deepcopy(seat.get('executed_steps',{}).get(seat['plans'].get('actions',{}).get('id'),[]))}
+        if campaign.config.get('autotap')==1:value['payment_policy']='autotap:1; omit payment for automatic cast/activate payment; explicit payment opts out'
         if value['snooze']:value['snooze'].pop('sources',None)
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
@@ -91,6 +92,17 @@ def bind_command(campaign,actor,value,request_id):
         if type(value) is list:return [resolve(v) for v in value]
         return value
     result=resolve(deepcopy(value));result['revision']=campaign.kernel.revision
+    if (campaign.config.get('autotap')!=1 and current=='priority'
+            and (result.get('payment') or {}).get('mana_actions')):
+        raise RulesViolation('Priority bundled mana requires a fresh autotap:1 contract')
+    auto=('autotap' in result or result.get('kind') in {'cast','activate'} and 'payment' not in result)
+    if auto:
+        if campaign.config.get('autotap')!=1:raise RulesViolation('Auto-tap is available only in fresh autotap:1 games; supply explicit payment')
+        from .primitive_autotap import payment
+        result.setdefault('autotap',{})
+        result['action_id']=request_id
+        result['payment']=payment(campaign.kernel,actor,result)
+        result.pop('autotap')
     if result.get('kind') in {'cast','activate','play_land','unlock_room','pay_mana','decline_cast'}:result['action_id']=request_id
     return result
 

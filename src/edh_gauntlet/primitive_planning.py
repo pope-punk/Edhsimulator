@@ -107,6 +107,7 @@ def claim(campaign,actor,role):
                     campaign.kernel.active!=actor or campaign.kernel.phase in {'end_step','cleanup'})),
                 'rationales':decision_records(evidence),
                 'evidence_after':cursor,'evidence_through':campaign.evidence_position(actor) if role!=DIPLOMAT else cursor}
+            if role in (SHORT,LONG) and campaign.config.get('autotap')==1:job['input']['payment_policy']='autotap:1; propose casts/activations without preliminary taps; optional hard mana reserve'
             if role==LONG:job['input'].update(seed=seat['seed'],personality=seat['personality'],invalid_goal=deepcopy(seat.get('invalid_goal')),brief_change_requests=deepcopy(seat.get('brief_change_requests',[])))
             elif role==SHORT:
                 job['input']['standing']=seat['standing']
@@ -158,6 +159,8 @@ def validate_actions(value,job):
             raise RulesViolation('Unsupported proposed primitive command')
         if step['command'].get('kind') in {'attack','block','damage'} and step['phase']!='combat':
             raise RulesViolation('Combat declarations require the combat phase; actual execution also requires the matching decision stage')
+        from .primitive_autotap import validate as validate_autotap
+        validate_autotap(step['command'])
         from .primitive_actions import normalize_scheduler
         normalize_scheduler(step['scheduler'])
         from .primitive_batch_choices import validate as validate_choice

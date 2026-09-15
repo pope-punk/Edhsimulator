@@ -46,12 +46,15 @@ number. Array slices retain their original indexes by adding the returned offset
 COMMANDS='''Primitive commands omit revision, action_id and actor; Python supplies them.
 answer:{kind:"answer",request_id:CURRENT_CHOICE_ID,indexes:[ZERO_BASED_INDEXES]};
 pass:{kind:"pass"}; concede:{kind:"concede"} only at your priority decision; play_land:{kind:"play_land",source:REF,face:"front"|"back"};
-activate:{kind:"activate",source:REF,ability_id:EXACT_ID,targets:[],x_value:0,payment:{mana:{},taps:[]}};
-cast:{kind:"cast",source:REF,targets:[],x_value:0,payment:{mana:{},taps:[]}}.
-REF is {card_id,incarnation}; player targets are {player:SEAT}. Produce mana by
-activating lands/rocks first; payment spends the resulting mana pool. Inspect the
-frozen object's activated_abilities for exact IDs and costs. Empty payment is
-{mana:{},taps:[]}. Source tap costs are implicit; do not repeat them in taps.
+activate:{kind:"activate",source:REF,ability_id:EXACT_ID,targets:[],x_value:0};
+cast:{kind:"cast",source:REF,targets:[],x_value:0}.
+In fresh autotap:1 games these use automatic payment by default. Submit the spell
+or ability itself, not preliminary ordinary land taps. Optional autotap:{reserve:{B:1}}
+leaves one black mana of available capacity after payment. Each planner step uses
+the same syntax. The decider can override the reservation or intended action.
+An explicit payment:{mana:COUNTS,taps:[]} instead uses manual payment from the pool;
+older contracts require this explicit payment. REF is {card_id,incarnation}; player
+targets are {player:SEAT}. Source tap costs are implicit; do not repeat them in taps.
 For costs that select cards to return, sacrifice, discard or exile, add
 payment.zone_costs:{EXACT_COST_ID:[REF,...]}. Copy cost_id from the ability/cast
 cost.zone_costs entry and select the required count using its selector. These are
@@ -80,16 +83,12 @@ decline_cast:{request_id}; allocate_counters:{request_id,allocations};
 unlock_room:{source,door,payment}; each also supplies kind. Announcements validate
 atomically; rejection does not pay costs. Required choice indexes cannot be inferred
 from old requests. Multi-selections and combat declarations are already batched.
-Batch predictable land activations and the resulting spell cast in one approval.
-For a known mana-color choice, insert an answer step immediately after its activation:
-{kind:"answer",choice_from:{step_id:PREVIOUS_STEP_ID,option_labels:[EXACT_ORDERED_LABELS]},indexes:[CHOSEN_INDEX]}.
-Labels must match the complete actual mana menu (for example "{W}", "{U}"); inspect
-the source program to establish them. Never guess the menu or future information.
-The host binds only an owned mana_choice from that exact accepted activation frame;
-changed menus, unrelated choices and new information stop the approved sequence.
-A following guarded mana choice can name the preceding guarded answer step.
-Use this to approve production/colors/payment together, with explicit mana sources
-and spending. Prefer a complete useful batch over one call per land when facts permit.
+For intentionally manual production only, a guarded answer may follow a mana
+activation: {kind:"answer",choice_from:{step_id:PREVIOUS_STEP_ID,
+option_labels:[EXACT_ORDERED_LABELS]},indexes:[CHOSEN_INDEX]}. The host binds only
+that owned mana choice; unrelated choices and new information stop the sequence.
+Do not build these manual tap/color chains when automatic payment can fund the
+intended cast/ability. Propose the cast itself and any reservation instead.
 A symbolic source {owned_card:CARD_ID,zone:ZONE} may explicitly follow a known own
 card into that visible zone in an approved sequence. Other references stay exact.
 '''
@@ -109,7 +108,7 @@ def schemas(role):
     inspect_tool=tool('edh_inspect','Inspect only your frozen input. Batch related queries.',
         {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role)}},['queries'])
     if role=='decider':
-        return [tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit a direct sequence for a known mana/cast line, or command for one decision. Await the next input or park.',
+        return [tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit the intended cast/ability directly: fresh autotap games pay automatically when payment is omitted. Use a direct sequence for multiple known actions. Await the next input or park.',
             {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object'},'sequence':{'type':'array','minItems':1,'maxItems':64,
              'items':{'type':'object','properties':{'id':{'type':'string'},'command':{'type':'object'},'rationale':{'type':'string'}},'required':['id','command'],'additionalProperties':False}}},[]),
             tool('edh_diplomatic_override','Override named own diplomatic holds with rationale; does not execute an action.',{'hold_ids':{'type':'array','items':{'type':'string'}},'rationale':{'type':'string'}},['hold_ids','rationale']),
@@ -148,18 +147,15 @@ and damage requires combat_damage. A planner combat phase label does not authori
 an ordinary declaration early. Fresh combat_stage_batches:1 planner approvals wait
 through explicitly authorized passes and execute the approved attack only at its
 actual declaration. Required unapproved choices still return to you.
-Plan the full known line before submitting its first action.
-Use edh_act {sequence:[{id:"tap",command:ACTIVATE},{id:"color",command:GUARDED_ANSWER},
-{id:"cast",command:CAST}],rationale:SHARED_INTENT,scheduler:OBJECT} for predictable
-mana-production-and-cast chains. No planner action proposal is required. The host
-binds the current own turn and phase; you supply every action and choice. Each step
-may override the shared rationale. Choose the final scheduler once for the line.
-For example a known two-color source can use a color step with
-command:{kind:"answer",choice_from:{step_id:"tap",option_labels:["1 {W}","1 {B}"]},indexes:[1]}.
-Inspect the exact source ability/menu and spell costs together, then submit the
-complete sequence instead of activate -> another inference -> color -> another
-inference -> cast. Use a single command when the next action depends on genuinely
-unknown information; do not batch guesses or wait for a planner just to batch.
+Plan the full known line before submitting its first action. In fresh autotap:1 games,
+submit the intended cast/activate directly with payment omitted; Python pays it.
+Do not activate ordinary lands first or author color-choice steps just to fund it.
+For multiple known actions use sequence:[{id:"cast-1",command:CAST_WITH_AUTOTAP},...]
+with a shared rationale and scheduler, or approve the planner's cast steps.
+Explicit mana activation is for a deliberate float or a consequential/unsupported
+source, not the normal pathway to casting. Use manual payment only when necessary
+or when intentionally choosing the exact payment. Earlier contracts require an
+explicit mana-production/payment sequence. Never batch unknown gameplay choices.
 Current batch_context tells you when direct sequences are available. The existing
 batch form remains available to approve a planner's proposed full-turn steps.
 Every ordinary edh_act supplies
@@ -249,7 +245,7 @@ combat:{status:...,reason:...},postcombat_main:{status:...,reason:...}}}.
 Each step has id,seat_turn:POSITIVE_OWN_TURN_ORDINAL,phase,command,rationale:TEXT_MAX_300,
 scheduler:OBJECT. Maximum 64 steps/12000 bytes. Use exact known cards and legal
 primitive commands; never guess future draws or required choices. Cover known
-land/mana/spell/combat/postcombat plays; no_action/reassess needs a specific reason.
+land/spell/ability/combat/postcombat plays; no_action/reassess needs a specific reason.
 Always review after own cleanup. Review at the opposite seat's end step only
 when Python detects changed nonland battlefields or own hand count. Use the
 supplied target_seat_turn. Do not set watches or poll for changes. Plans are advisory;
@@ -321,6 +317,8 @@ The host parks oversized tool deliveries and supplies a complete next real input
     elif role==planning.DIPLOMAT:
         common='Use only your authorized publication tool and supplied public input. Only planners inspect. End on stop or next:null; never replay an accepted publication.\n'
     else:common=COMMON
+    if role in ('decider',planning.SHORT,planning.LONG):
+        specific+='\nFresh autotap:1 payment policy: default to automatic mana payment for cast/activate commands by omitting payment. Do not list ordinary land taps or mana-color answers. Add autotap:{reserve:{B:1}} to preserve one black mana of simultaneous remaining capacity (floating or untapped ordinary sources) after that action; reserve:{W:1,B:1} preserves both together. The reservation is hard, not a preference. A planner proposes this on the cast/activate command; only a decider approves execution. Deciders may change the spell/ability or reservation through a complete step override retaining its id, e.g. replace reserve:{B:1} with reserve:{W:1}. Payment is recalculated from the actual execution state, not the planning snapshot. An explicit payment packet opts out; omit autotap when choosing manual mana. Ordinary automatic tapping excludes creatures, paid/filter/sacrifice/life-cost sources and consequential mana effects; failure returns for revision without spending resources. Specify targets, modes, X and non-mana costs yourself. For explicit non-mana costs alongside autotap use payment:{mana:{},taps:[],zone_costs:{...}}. Reservations last for this payment only; repeat them on subsequent steps if needed. Earlier contracts require explicit payment.'
     specific+='\nPublication and batch policy: short-term planners publish the supplied first stage as soon as ready. If both are already ready without delaying the first, stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} validates both atomically in the frozen publication_order. If one stage was accepted, publish only the stage named in next. EOT3 actions remain available when the same job publishes its following prose; proposal IDs and executed-step tracking are preserved. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
     specific+='\nLand planning: supplied intrinsic_land_mana describes conditional battlefield abilities, including exact IDs and costs. A land in hand cannot tap yet. In an approved play-land/tap/cast sequence, use {owned_card:CARD_ID,zone:"battlefield"} for its new incarnation. Check entry/tapped conditions and other effects; an unexecuted planned land drop is not a completed action. Current board and accepted receipts establish what happened.'
     specific+='\nScheduler policy: ordinary snoozes end no later than your next upkeep. To explicitly pass through intervening turns and your own upkeep/draw until your next precombat main, use {mode:"snooze_until_own_main",wake_condition:"deadline_only"} or another supported wake condition. Required choices and the chosen wake condition still interrupt it; it never passes your precombat main. Prefer this over repeated upkeep/draw prompts when you intend no optional action before your main phase. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
