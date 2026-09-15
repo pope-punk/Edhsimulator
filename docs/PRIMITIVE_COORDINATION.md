@@ -189,3 +189,33 @@ not overridden. Required choices and frozen claims are untouched. Automatic pass
 retain the normal accepted replay/evidence and do not publish a new snooze. Games
 without this binding retain their original behavior; deployment does not migrate
 an active game.
+
+
+## Combat decision stages
+
+Fresh games bind `combat_stage_batches:1`. A `combat` proposal covers several
+steps; it does not make an attack legal during beginning-of-combat priority.
+An explicitly approved attack waits for `declare_attackers`. While waiting,
+Python passes priority only under the pilot's existing batch/snooze authorization.
+At the declaration it validates and executes that exact approved attack, advances
+the cursor once, and preserves the rest of the approved sequence. Changed legality
+or diplomacy holds still cancel execution and return control to the pilot.
+
+Without an approved attack, the declaration remains a pilot decision. Forced empty
+attacks remain automatic; if no eligible attackers remain, the stale attack batch
+is cancelled with an explanation. A missed declaration window cannot execute a
+late attack or silently roll it into another combat. Old bindings retain their
+original scheduling. Direct sequences with explicitly approved attack commands
+follow the same stage gate in fresh bound games.
+
+Ordinary attack, block and damage commands require `declare_attackers`,
+`declare_blockers` and `combat_damage` respectively. Mistimed calls now identify
+both the actual and required stages, retain the claim, and accept no action.
+Blocker/damage decisions retain their existing pilot-owned boundaries.
+
+
+Tapped sources whose abilities require tapping no longer keep priority alive.
+Tap/activation-trigger caution applies only while this actor has a potentially
+usable mana activation. A tapped City of Brass or painland cannot by itself wake
+a fully tapped-out pilot. Required choices, including Rhystic Study's optional draw
+and resolution payments, remain separate from ordinary priority and are delivered.

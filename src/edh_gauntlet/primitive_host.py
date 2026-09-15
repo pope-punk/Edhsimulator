@@ -141,6 +141,13 @@ rejection_rationale:"Step 1 was already performed.",pass_priority:true,
 resume_after_passes:true}}). The outer object contains only batch: do not also send rationale, command, sequence or scheduler.
 If the supplied proposal is unsuitable, explain the concrete mismatch briefly in
 your normal action rationale; no extra turn or separate report is needed.
+Decision kind controls command timing. priority in begin_combat is not declare_attackers.
+At priority choose a legal priority command (pass if you choose no action); attack
+requires current_decision.kind declare_attackers, block requires declare_blockers,
+and damage requires combat_damage. A planner combat phase label does not authorize
+an ordinary declaration early. Fresh combat_stage_batches:1 planner approvals wait
+through explicitly authorized passes and execute the approved attack only at its
+actual declaration. Required unapproved choices still return to you.
 Plan the full known line before submitting its first action.
 Use edh_act {sequence:[{id:"tap",command:ACTIVATE},{id:"color",command:GUARDED_ANSWER},
 {id:"cast",command:CAST}],rationale:SHARED_INTENT,scheduler:OBJECT} for predictable
