@@ -56,7 +56,13 @@ use play_land with face:"back" and the hand card source; do not cast its land fa
 The current face in hand does not prevent playing a permitted back land face.
 Optional casting fields: face, modes, alternative_id, counter_division, kicker,
 replicate, life_costs, hybrid_choices. attack uses attackers:[{source:REF,defender:SEAT_OR_REF}];
-block and damage use assignments matching the supplied specification.
+block uses assignments:{ATTACKER_UID:[BLOCKER_UID,...],...}, a JSON OBJECT,
+not an array. Include EVERY specification.attackers[].uid exactly once, using []
+for each unblocked attacker. Copy exact UIDs, including @incarnation; use blockers
+from that attacker's eligibility_group, each at most once across the declaration.
+Example with no eligible blockers: {kind:"block",assignments:{"attacker@4":[]}}.
+A nonempty blocker list must meet min_blockers. damage uses assignments matching
+the supplied specification.
 pay_mana:{request_id,payment}: use payment:null to decline a resolution payment
 (including extort); an empty payment object attempts to pay and is not a decline.
 To pay, activate available mana abilities first and supply the exact mana payment.
@@ -102,7 +108,7 @@ def schemas(role):
                  {'alarm':{'type':'object'}},['alarm']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
                  {'reason':{'type':'string'}},['reason'])]
-    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners publish initial prose promptly; use short_term_and_actions when both are ready without delaying it. End when next is null.',
+    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners follow the supplied stage and publication_order; publish the first stage promptly. Use short_term_and_actions only if both are already ready. End when next is null.',
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
 
 
@@ -115,7 +121,16 @@ strategic review but never require waiting for it. Private diplomacy advice is
 advisory; no message itself authorizes gameplay. Follow the current strategic
 and tactical plans; adapt to changed facts. Historical decision logs belong to your
 planners, not your default input or checkpoint memory.
-At own-turn priority, plan the full known line before submitting its first action.
+At own-turn priority, first examine plans.actions.value.action_sequence and
+executed_steps. Prefer approving usable planner steps by ID instead of rewriting
+them as a direct sequence. Reject already performed, expired or unwanted steps;
+use overrides only for changed commands and retain unchanged planner rationales.
+Example: edh_act({batch:{approve_ids:["step-2","step-3"],reject_ids:["step-1"],
+rejection_rationale:"Step 1 was already performed.",pass_priority:true,
+resume_after_passes:true}}). Do not also send command, sequence or scheduler.
+If the supplied proposal is unsuitable, explain the concrete mismatch briefly in
+your normal action rationale; no extra turn or separate report is needed.
+Plan the full known line before submitting its first action.
 Use edh_act {sequence:[{id:"tap",command:ACTIVATE},{id:"color",command:GUARDED_ANSWER},
 {id:"cast",command:CAST}],rationale:SHARED_INTENT,scheduler:OBJECT} for predictable
 mana-production-and-cast chains. No planner action proposal is required. The host
@@ -156,9 +171,8 @@ Only an existing priority choice permits alarm control. It never delays gameplay
 No batch makes opponents pass or answers unknown required choices. Preserve unchanged
 planner rationales; only changed steps need your replacement rationale. No public
 speech or plan authorship belongs to you. Use retained standing during mulligans
-and until the initial strategic goal arrives. Inspect kind:decision to retrieve the
-exact current choice; answer uses its choice.request_id. Other queries have kind state,
-object with source:REF, card with name:PRINTED_NAME, or history with after:INTEGER.
+and until the initial strategic goal arrives. Read current_decision directly; answer uses its choice.request_id. Only planners
+can inspect; never attempt an inspection call.
 '''+COMMANDS
     elif role==planning.LONG:
         specific='''Own strategic goals only. Retain the full frozen seed and own deck. Inspect kind:deck
@@ -183,7 +197,13 @@ Do not write tactics, continuity, approve proposals or execute game actions.
 '''
     elif role==planning.SHORT:
         specific='''Own continuity and tactical proposals only. Retain standing; read current goal and
-all supplied own-seat rationales. Prepare short_term with
+all supplied own-seat rationales. Write a complete, self-contained current tactical
+plan for a decider who does not have your previous planning turns. Do not write a
+change log or say "as before", "unchanged except", or refer to a previous plan.
+If the prior plan is still applicable and self-contained, reuse its prose verbatim.
+Otherwise replace it with the full new plan. Continuity may explain history, but
+short_term_plan must contain everything needed to understand the intended line.
+Prepare short_term with
 {short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid"|"pending",long_term_invalid_reason:TEXT}.
 Start immediately after the opening hand is kept, concurrently with the long-term
 planner. If no goal is in this frozen input, use standing strategy and the kept
@@ -194,9 +214,17 @@ this frozen board, for example /players/0/life or /hand. List indexes are zero-b
 Only existing facts may be declared. A revised goal queues tactical follow-up when
 these facts changed; a goal version change alone does not wake you.
 Invalidity requires a concrete reason, queues strategic work and still proceeds to
-actions. Publish the initial tactical prose promptly before optional inspections.
-Afterward, actions may include diplomacy_request:{objective:TEXT_MAX_600,player:SEAT}
+actions. Follow the frozen publication_order and current stage:
+EOT1 (after own cleanup): short_term prose, then actions.
+EOT3 (opposite-seat check): actions, then short_term prose.
+Opening and other wakes use prose then actions. Publish the first stage promptly
+from supplied facts; do not delay it for optional inspection or the other stage.
+Inspect only what is necessary to make a legal, useful proposal; never guess.
+The second publication may include diplomacy_request:{objective:TEXT_MAX_600,player:SEAT}
 for one concrete negotiation within the current brief; do not wait for its reply.
+After both publications, finish. There is no automatic refinement stage or extra
+inspection/revision turn. Accepted stages are immutable; corrections require a
+later authorized job, never resubmission of an accepted stage with altered content.
 Prepare actions with {action_sequence:[STEPS],phase_coverage:{
 precombat_main:{status:"planned"|"no_action"|"reassess",reason:TEXT},
 combat:{status:...,reason:...},postcombat_main:{status:...,reason:...}}}.
@@ -210,7 +238,12 @@ supplied target_seat_turn. Do not set watches or poll for changes. Plans are adv
 only the decider approves execution. Never execute or contact a pilot.
 '''+COMMANDS
     else:
-        specific='''Own public conversation only. You have no private hand, seed, deck or rationales.
+        specific='''Own public conversation. Your input includes your own current long_term and
+short_term plan components in plans, verbatim, plus your diplomatic brief.
+Use those plans privately to understand what your seat wants; their contents are
+NOT permission to disclose hidden information. The brief's disclosure and commitment
+limits still govern public speech. You have no separate hand, seed, deck or decision
+rationales. A missing plan has not yet been published; do not invent it or wait for it.
 Compose within the supplied brief; never exceed its disclosure or commitment
 limits. Publish message with {messages:[{id:UNIQUE_ID,text:TEXT_MAX_600,to:[SEATS],
 reply_to:MESSAGE_ID_OR_NULL,urgent_material_plan_change:0_OR_1,private_assessment:{
@@ -218,14 +251,25 @@ explanation:TEXT_MAX_600,recommended_action:TEXT_MAX_600,
 truthfulness:"truthful"|"deceptive"|"uncertain"}}]}.
 Each long-term update requires 1..4 new messages. Optional tactical requests and
 incoming-message jobs may publish messages:[] when no response is useful.
-Your private assessments go only to your own decider; recommend diplomatic conduct,
-not hidden-hand tactics. Use uncertain when public facts cannot establish truth.
+Your private assessments go only to your own decider; connect diplomatic advice to
+the supplied own-seat plans without publishing their private contents. Use uncertain when public facts cannot establish truth.
+Do not send a message that merely summarizes public information or echoes recent
+messages. Add a proposal, acceptance, refusal, question, threat, bluff, or material
+correction. Optional work may choose silence; required posts need a fresh diplomatic
+position, not a board recap. Personality can color the message without replacing its purpose.
 Routine speech (0) preserves batches. Urgent material changes (1) cancel remaining
 batches with a notice. Do not mark routine banter urgent. Address relevant replies;
-reply chains are capped at three. Never poll or reply merely to keep a chain alive.
+reply chains are capped at three. Copy reply_to EXACTLY from a supplied message's
+id, not its authorization ID, suffix, job ID or a reconstructed name. Reply only
+when you are addressed and reply_depth is below 3; otherwise choose optional
+silence or an independently meaningful new message with reply_to:null. Never poll or reply merely to keep a chain alive.
 Optional holds:[{id,player,scopes:["attack"|"target_permanents"],expires_turn,
 rationale,negotiation_id}] restrains your OWN decider while bargaining, within
-hold_authority. Holds use game-turn expiry and cannot renew overridden negotiations.
+hold_authority. Copy permitted players/scopes from that authority. expires_turn
+is an absolute table-wide game turn: current board.turn.number < expires_turn <=
+current board.turn.number + max_turns. With max_turns 0 no hold is permitted.
+Use short local hold and negotiation IDs (at most 80 characters), not full message
+IDs. Holds cannot renew overridden negotiations.
 Optional release_holds:[IDS] releases restraint. Unrelated actions continue.
 Negotiate autonomously within the standing brief. Only request long-term work to
 CHANGE that brief, using authorization_request:TEXT_MAX_600. A request grants no
@@ -255,7 +299,7 @@ The host parks oversized tool deliveries and supplies a complete next real input
     elif role==planning.DIPLOMAT:
         common='Use only your authorized publication tool and supplied public input. Only planners inspect. End on stop or next:null; never replay an accepted publication.\n'
     else:common=COMMON
-    specific+='\nPublication and batch policy: short-term planners should publish stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} once both are ready. Both stages validate and commit atomically. Separate stages remain available when early prose is useful. If short_term was already accepted, publish only actions. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
+    specific+='\nPublication and batch policy: short-term planners publish the supplied first stage as soon as ready. If both are already ready without delaying the first, stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} validates both atomically in the frozen publication_order. If one stage was accepted, publish only the stage named in next. EOT3 actions remain available when the same job publishes its following prose; proposal IDs and executed-step tracking are preserved. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
     specific+='\nLand planning: supplied intrinsic_land_mana describes conditional battlefield abilities, including exact IDs and costs. A land in hand cannot tap yet. In an approved play-land/tap/cast sequence, use {owned_card:CARD_ID,zone:"battlefield"} for its new incarnation. Check entry/tapped conditions and other effects; an unexecuted planned land drop is not a completed action. Current board and accepted receipts establish what happened.'
     specific+='\nScheduler policy: ordinary snoozes end no later than your next upkeep. To explicitly pass through intervening turns and your own upkeep/draw until your next precombat main, use {mode:"snooze_until_own_main",wake_condition:"deadline_only"} or another supported wake condition. Required choices and the chosen wake condition still interrupt it; it never passes your precombat main. Prefer this over repeated upkeep/draw prompts when you intend no optional action before your main phase. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
     return f'You are the {actor} {role}.\n'+common+specific

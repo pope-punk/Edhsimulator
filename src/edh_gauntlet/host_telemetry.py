@@ -12,7 +12,7 @@ class Timing:
     def __init__(self,path,limit=512,*,flush_interval=1.0):
         self.path=path;self.events=deque(maxlen=limit);self.roles={};self.requests={}
         self.first=set();self.lock=threading.RLock();self.count=0
-        self.usage_totals={};self.aggregates={}
+        self.usage_totals={};self.aggregates={};self.input_started={}
         self.flush_interval=flush_interval;self.flushed_count=0
         self.flush_lock=threading.Lock();self.stop=threading.Event()
         self.failure=None;self.closed=False
@@ -57,10 +57,16 @@ class Timing:
         with self.lock:
             if self.failure is not None:raise self.failure
             if self.closed:raise RuntimeError('Telemetry is closed.')
+            if event=='input_delivered' and thread:
+                self.input_started.pop(thread,None)
+                self.input_started[thread]=time.monotonic()
+                while len(self.input_started)>256:self.input_started.pop(next(iter(self.input_started)))
+            elif event=='tool_arrived' and thread in self.input_started:
+                self.record('input_to_first_tool',thread,seconds=time.monotonic()-self.input_started.pop(thread))
             self.count+=1
             row={'event':event,'epoch':time.time(),'thread':thread,**fields}
             if thread in self.roles:row.update(zip(('actor','role'),self.roles[thread]))
-            if event in {'automatic_action','publication_accepted','input_rejected','inspection_batch','batch_authorized','input_delivered'}:
+            if event in {'automatic_action','publication_accepted','input_rejected','inspection_batch','batch_authorized','input_delivered','input_to_first_tool'}:
                 labels=[event,str(row.get('role','host')),str(row.get('kind',row.get('stage',row.get('mode',row.get('tool','')))))]
                 key='|'.join(labels);aggregate=self.aggregates.setdefault(key,{'count':0})
                 aggregate['count']+=1

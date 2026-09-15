@@ -37,3 +37,23 @@ class PrimitiveTelemetryTests(TestCase):
                 aggregate=timing.aggregates['automatic_action|host|pass']
                 self.assertEqual(5,aggregate['count']);self.assertAlmostEqual(.5,aggregate['seconds_sum'])
             finally:timing.close()
+
+    def test_first_tool_latency_survives_eviction_and_excludes_waiting_tool(self):
+        from unittest.mock import patch
+        with TemporaryDirectory() as directory:
+            timing=Timing(Path(directory)/'timing.json',limit=2)
+            try:
+                timing.bind('fixture','Omo','short_term_planner')
+                with patch('edh_gauntlet.host_telemetry.time.monotonic',side_effect=[10,14,100,103]):
+                    timing.record('input_delivered','fixture')
+                    timing.record('tool_arrived','fixture')
+                    timing.record('tool_returned','fixture',seconds=80)
+                    timing.record('tool_arrived','fixture') # No new input: not a new latency sample.
+                    timing.record('input_delivered','fixture',warm=True)
+                    timing.record('tool_arrived','fixture')
+                for _ in range(4):timing.record('model_item','fixture')
+                aggregate=timing.aggregates['input_to_first_tool|short_term_planner|']
+                self.assertEqual(2,aggregate['count'])
+                self.assertEqual(7,aggregate['seconds_sum'])
+                self.assertEqual(4,aggregate['seconds_max'])
+            finally:timing.close()

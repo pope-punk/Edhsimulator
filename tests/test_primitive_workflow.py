@@ -173,3 +173,45 @@ class WorkflowTests(TestCase):
         self.post(job,messages=[],authorization_request='Allow more restraint.')
         self.assertEqual(bounds(),self.game.state()['actors']['Omo']['plans']['diplomacy_brief']['value'])
         self.assertFalse(self.game.state()['actors']['Omo'].get('diplomatic_holds'))
+
+    def test_addressed_diplomat_waits_for_initial_authority(self):
+        with self.game.transaction() as state:
+            planning.queue(state,'Omo',planning.DIPLOMAT,'incoming:fixture')
+        self.assertIsNone(planning.claim(self.game,'Omo',planning.DIPLOMAT))
+        job=self.goal()
+        self.assertEqual(bounds(),job['brief'])
+        self.assertIn('incoming:fixture',job['reasons'])
+        self.assertTrue(job['requires_public_post'])
+
+    def test_diplomat_receives_complete_own_plans_without_cross_seat_or_extra_summary(self):
+        self.post(self.goal(),messages=[speech()])
+        with self.game.transaction() as state:
+            own={'id':'own-tactics','value':{'short_term_plan':'Develop resources; seek a temporary truce.',
+                 'continuity':'Private tactical details retained verbatim.'}}
+            state['actors']['Omo']['plans']['short_term']=deepcopy(own)
+            state['actors']['Elenda']['plans']['short_term']={'id':'other','value':{'short_term_plan':'Other seat secret'}}
+            planning.queue(state,'Omo',planning.DIPLOMAT,'incoming:fixture')
+        job=planning.claim(self.game,'Omo',planning.DIPLOMAT)
+        self.assertEqual(own,job['plans']['short_term'])
+        self.assertEqual({'long_term','short_term'},set(job['plans']))
+        self.assertNotIn('Other seat secret',str(job))
+        self.assertNotIn('hand',job['board']);self.assertEqual([],job['rationales'])
+        with self.game.transaction() as state:
+            state['actors']['Omo']['plans']['short_term']['value']['short_term_plan']='New later plan.'
+        self.assertEqual(job,planning.claim(self.game,'Omo',planning.DIPLOMAT))
+
+    def test_opposite_gate_requests_diplomacy_with_second_prose_stage(self):
+        self.goal()
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        request={'objective':'Ask Elenda about a one-turn truce.','player':'Elenda'}
+        value={'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Fixture.'} for p in planning.PHASES}}
+        with self.assertRaisesRegex(RulesViolation,'first planning stage'):
+            planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',{**value,'diplomacy_request':request})
+        planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',value)
+        result=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',{
+            'short_term_plan':'Develop while exploring a truce.','continuity':'Fixture.',
+            'long_term_validity':'valid','long_term_invalid_reason':'','diplomacy_request':request})
+        self.assertIsNone(result['next'])
+        self.assertEqual(request['objective'],self.game.state()['actors']['Omo']['diplomacy_requests'][-1]['objective'])
+        self.assertNotIn(planning.SHORT,self.game.state()['actors']['Omo']['jobs'])

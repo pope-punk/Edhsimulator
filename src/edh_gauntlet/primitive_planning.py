@@ -13,6 +13,11 @@ STAGES={SHORT:('short_term','actions'),LONG:('long_term',),DIPLOMAT:('message',)
 PHASES=('precombat_main','combat','postcombat_main')
 
 
+def stages(role,job):
+    """Publication order is frozen with the job, never changed by queued wakes."""
+    return tuple(job.get('input',{}).get('publication_order',STAGES[role])) if job.get('input') else STAGES[role]
+
+
 def text_field(value,name,maximum):
     result=value.get(name)
     if type(result) is not str or not result.strip() or len(result)>maximum:
@@ -89,6 +94,7 @@ def claim(campaign,actor,role):
         if seat is None or actor not in campaign.kernel.state.live_players:raise RulesViolation('Unavailable actor')
         job=seat['jobs'].get(role)
         if job is None or role in (SHORT,LONG) and not seat['kept']:return None
+        if role==DIPLOMAT and not seat['plans'].get('diplomacy_brief'):return None
         if job['input'] is None:
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)
@@ -104,10 +110,15 @@ def claim(campaign,actor,role):
             if role==LONG:job['input'].update(seed=seat['seed'],personality=seat['personality'],invalid_goal=deepcopy(seat.get('invalid_goal')),brief_change_requests=deepcopy(seat.get('brief_change_requests',[])))
             elif role==SHORT:
                 job['input']['standing']=seat['standing']
+                # A coalesced opposite-seat gate takes precedence before claim;
+                # later queued reasons cannot reorder a started publication.
+                job['input']['publication_order']=list(('actions','short_term') if
+                    any(r.startswith('pre_turn:') for r in job['reasons']) else STAGES[SHORT])
                 from .primitive_cadence import summary
                 seat['tactical_baseline']=summary(board,actor)
             else:
-                job['input'].pop('plans')
+                # Reuse the complete own-seat prose components; no extra summary inference.
+                job['input']['plans']={key:deepcopy(seat['plans'][key]) for key in ('long_term','short_term') if key in seat['plans']}
                 brief=seat['plans'].get('diplomacy_brief',{}).get('value',[])
                 job['input'].update(**({'brief':deepcopy(brief)} if type(brief) is dict else {'authorized_messages':deepcopy(brief)}),
                     requests=deepcopy(seat.get('diplomacy_requests',[])),
@@ -117,7 +128,7 @@ def claim(campaign,actor,role):
                     messages=deepcopy(state['messages'][-24:]))
             from .primitive_inspection import freeze
             job['input']['_knowledge']=freeze(campaign,actor,board) if role!=DIPLOMAT else {}
-        return {**deepcopy(job['input']),'stage':STAGES[role][job['stage']]}
+        return {**deepcopy(job['input']),'stage':stages(role,job)[job['stage']]}
 
 
 def validate_actions(value,job):
@@ -167,9 +178,11 @@ def publish(campaign,actor,role,job_id,stage,value):
             raise RulesViolation('Combined publication requires short_term and actions from the short-term planner')
         # Both stages commit together or neither does. Existing individual receipts
         # remain authoritative, so retrying cannot replay either accepted stage.
-        first=_publish(campaign,state,actor,role,job_id,'short_term',value['short_term'])
-        second=_publish(campaign,state,actor,role,job_id,'actions',value['actions'])
-        return {'accepted':True,'components':{'short_term':first['component_id'],'actions':second['component_id']},'next':None}
+        job=state['actors'][actor]['jobs'].get(role)
+        # For a completed-job retry, receipts alone are sufficient and immutable.
+        order=stages(role,job) if job and job['id']==job_id else STAGES[role]
+        results={key:_publish(campaign,state,actor,role,job_id,key,value[key]) for key in order}
+        return {'accepted':True,'components':{key:result['component_id'] for key,result in results.items()},'next':None}
 
 
 def _publish(campaign,state,actor,role,job_id,stage,value):
@@ -183,7 +196,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
     if receipt:
         if receipt[:3]!=(actor,role,digest(value)):raise RulesViolation('Accepted stage cannot be replaced')
         return json.loads(receipt[3])
-    if job is None or job['id']!=job_id or job['input'] is None or STAGES[role][job['stage']]!=stage:
+    if job is None or job['id']!=job_id or job['input'] is None or stages(role,job)[job['stage']]!=stage:
         raise RulesViolation('Publication does not own this frozen stage')
     if stage=='long_term':
         if not {'long_term_plan','diplomacy'}<=set(value) or set(value)-{'long_term_plan','diplomacy'}:raise RulesViolation('Strategic publication requires goal and diplomacy authorization')
@@ -213,7 +226,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
                 seen.add(key)
     elif stage=='short_term':
         required={'short_term_plan','continuity','long_term_validity','long_term_invalid_reason'}
-        if not required<=set(value) or set(value)-required-{'dependencies'}:
+        if not required<=set(value) or set(value)-required-{'dependencies','diplomacy_request'}:
             raise RulesViolation('Supply tactical prose, continuity and strategic validity')
         text_field(value,'short_term_plan',600);text_field(value,'continuity',1200)
         if value['long_term_validity'] not in {'valid','invalid','pending'}:raise RulesViolation('Invalid strategic assessment')
@@ -225,18 +238,18 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         dependencies=freeze(job['input']['board'],value.get('dependencies',[]))
     elif stage=='actions':
         validate_actions(value,job)
-        if 'diplomacy_request' in value:
-            if job['stage']<1:raise RulesViolation('Publish initial tactical prose before requesting diplomacy')
-            request=value['diplomacy_request']
-            if type(request) is not dict or set(request)!={'objective','player'} or request['player'] not in state['actors'] or request['player']==actor:raise RulesViolation('Diplomacy request requires objective and opposing player')
-            text_field(request,'objective',600)
-            pending=seat.setdefault('diplomacy_requests',[])
-            pending.append({'id':receipt_key,**deepcopy(request)})
-            seat['diplomacy_requests']=pending[-4:]
-            if type(seat['plans'].get('diplomacy_brief',{}).get('value')) is dict:queue(state,actor,DIPLOMAT,'tactical_request:'+receipt_key)
     elif stage=='message':
         from .primitive_diplomacy import prepare
         prepare(campaign,state,actor,job,receipt_key,value)
+    if stage in ('short_term','actions') and 'diplomacy_request' in value:
+        if job['stage']!=1:raise RulesViolation('Publish the first planning stage before requesting diplomacy')
+        request=value['diplomacy_request']
+        if type(request) is not dict or set(request)!={'objective','player'} or request['player'] not in state['actors'] or request['player']==actor:raise RulesViolation('Diplomacy request requires objective and opposing player')
+        text_field(request,'objective',600)
+        pending=seat.setdefault('diplomacy_requests',[])
+        pending.append({'id':receipt_key,**deepcopy(request)})
+        seat['diplomacy_requests']=pending[-4:]
+        if type(seat['plans'].get('diplomacy_brief',{}).get('value')) is dict:queue(state,actor,DIPLOMAT,'tactical_request:'+receipt_key)
     component_value={'long_term_plan':value['long_term_plan']} if stage=='long_term' else deepcopy(value)
     component={'id':digest({'stage':stage,'value':component_value}),'job_id':job_id,'value':component_value}
     old=seat['plans'].get(stage)
@@ -248,11 +261,16 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
     if stage=='short_term':
         component['assessed_goal']=job['input']['plans'].get('long_term',{}).get('id')
         component['id']=digest({'stage':stage,'value':component_value,'assessed_goal':component['assessed_goal']})
-        if old is None or old['id']!=component['id']:seat['plans'].pop('actions',None)
+        if ((old is None or old['id']!=component['id']) and
+                seat['plans'].get('actions',{}).get('job_id')!=job_id):
+            seat['plans'].pop('actions',None)
         seat['tactical_dependencies']={'component_id':component['id'],'goal_id':component['assessed_goal'],
                                       'values':dependencies}
     if stage=='actions':
-        component['short_term_id']=seat['plans'].get('short_term',{}).get('id')
+        # An actions-first proposal belongs to this job, not the old prose.
+        # Its identity stays stable when the same job's prose later arrives.
+        component['short_term_id']=(seat['plans'].get('short_term',{}).get('id')
+            if stages(role,job)[0]=='short_term' else None)
         component['id']=digest({'stage':stage,'value':component_value,'short_term_id':component['short_term_id']})
     if stage!='message':seat['plans'][stage]=component
     else:
@@ -287,7 +305,8 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
             seat['invalid_goal']={'goal_id':assessed,'reason':value['long_term_invalid_reason']}
             queue(state,actor,LONG,'invalid_goal:'+str(assessed))
     job['stage']+=1
-    next_stage=STAGES[role][job['stage']] if job['stage']<len(STAGES[role]) else None
+    order=stages(role,job)
+    next_stage=order[job['stage']] if job['stage']<len(order) else None
     result={'accepted':True,'component_id':component['id'],'next':next_stage}
     campaign.store.connection.execute('INSERT INTO host_publications VALUES (?,?,?,?,?)',(receipt_key,actor,role,digest(value),json.dumps(result)))
     if next_stage is None:
