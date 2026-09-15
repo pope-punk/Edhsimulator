@@ -63,3 +63,27 @@ class PrimitiveActionTests(unittest.TestCase):
             state['actors']['Omo']['snooze']={'mode':'snooze_table','remaining':1,'time':{'occurrences':1,'edge':'beginning','phase':'upkeep'},'wake_condition':'deadline_only'}
         self.assertFalse(actions.automatic(self.game))
         self.assertEqual(0,self.game.store.generation)
+
+    def test_executed_proposal_step_cannot_be_approved_again(self):
+        step={'id':'pass-once','seat_turn':1,'phase':'precombat_main','command':{'kind':'pass'},
+              'rationale':'Synthetic pass proposal.','scheduler':{'mode':'hold_full_control'}}
+        with self.game.transaction() as state:
+            seat=state['actors']['Omo']
+            seat['plans']['actions']={'id':'proposal','value':{'action_sequence':[step]}}
+            seat['executed_steps']={'proposal':['pass-once']}
+        frozen=actions.claim(self.game,'Omo')
+        self.assertEqual(['pass-once'],frozen['executed_steps'])
+        before=self.game.store.committed_head()
+        with self.assertRaisesRegex(RulesViolation,'already executed'):
+            actions.approve(self.game,'Omo',frozen['claim_id'],approve_ids=['pass-once'],reject_ids=[])
+        self.assertEqual(before,self.game.store.committed_head())
+
+    def test_own_draw_stops_an_approved_continuation(self):
+        with self.game.transaction() as state:
+            state['actors']['Omo']['approved']={'resume_after_passes':True}
+            state['scheduler_event_cursor']=len(self.game.kernel.semantic_events)
+            self.game.kernel.semantic_events.append({'index':len(self.game.kernel.semantic_events)+1,
+                                                     'kind':'card_drawn','player':'Omo'})
+            actions.observe(self.game,state,'Omo',{'kind':'pass'})
+            self.assertIsNone(state['actors']['Omo']['approved'])
+            self.game.kernel.semantic_events.pop()

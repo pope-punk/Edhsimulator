@@ -62,6 +62,19 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(self.kernel.snapshot(),replayed.kernel.snapshot())
         for actor in self.state.players:self.assertEqual(self.adapter.packet(actor),replayed.packet(actor))
 
+    def test_priority_concession_removes_owned_objects_and_replays_terminal_result(self):
+        self.adapter.submit('A',self.command('concede'))
+        self.assertEqual(['B'],self.kernel.outcome['winners'])
+        self.assertEqual(Zone.OUTSIDE,self.state.get(self.state.current('rock')).zone)
+        self.assertEqual(Zone.OUTSIDE,self.state.get(self.state.current('spell')).zone)
+        replayed=RulesActorAdapter.replay(self.adapter.archive(),self.programs)
+        self.assertEqual(self.kernel.snapshot(),replayed.kernel.snapshot())
+
+    def test_concession_cannot_be_submitted_for_another_seat(self):
+        before=self.kernel.snapshot()
+        with self.assertRaises(RulesViolation):self.adapter.submit('B',self.command('concede'))
+        self.assertEqual(before,self.kernel.snapshot())
+
     def test_authenticated_actor_cannot_be_replaced_in_payload(self):
         before=self.kernel.snapshot();command=self.activate();command['actor']='A'
         with self.assertRaises(RulesViolation):self.adapter.submit('B',command)

@@ -91,6 +91,8 @@ class PrimitiveCampaign:
                 CREATE TABLE host_messages (id TEXT PRIMARY KEY, actor TEXT NOT NULL, text TEXT NOT NULL, payload TEXT NOT NULL, UNIQUE(actor,text));
                 CREATE TABLE host_evidence (seq INTEGER PRIMARY KEY AUTOINCREMENT, actor TEXT NOT NULL,
                                             kind TEXT NOT NULL, rules_seq INTEGER NOT NULL, payload BLOB NOT NULL);
+                CREATE INDEX host_evidence_actor_seq ON host_evidence(actor,seq);
+                CREATE INDEX host_evidence_actor_kind_seq ON host_evidence(actor,kind,seq);
             ''')
             strategy=frozen_strategy(root)
             actors={actor:{**strategy[actor],
@@ -159,17 +161,23 @@ class PrimitiveCampaign:
             if connection.in_transaction:connection.execute('ROLLBACK')
             raise
 
-    def evidence(self,actor,*,after=0,through=None,limit=None):
+    def evidence(self,actor,*,after=0,through=None,limit=None,kinds=None):
         if actor not in self.kernel.state.players:raise RulesViolation('Unknown actor')
         query='SELECT seq,kind,rules_seq,payload FROM host_evidence WHERE actor=? AND seq>?'
         args=[actor,after]
         if through is not None:query+=' AND seq<=?';args.append(through)
+        if kinds is not None:
+            if not kinds or any(type(kind) is not str for kind in kinds):raise RulesViolation('Invalid evidence kinds')
+            query+=' AND kind IN ('+','.join('?' for _ in kinds)+')';args.extend(kinds)
         query+=' ORDER BY seq'
         if limit is not None:
             if type(limit) is not int or limit<1:raise RulesViolation('Invalid evidence page size')
             query+=' LIMIT ?';args.append(limit)
         return [{'id':seq,'kind':kind,'rules_sequence':rules_seq,'value':json.loads(zlib.decompress(payload))}
                 for seq,kind,rules_seq,payload in self.store.connection.execute(query,args)]
+
+    def evidence_position(self,actor):
+        return self.store.connection.execute('SELECT COALESCE(MAX(seq),0) FROM host_evidence WHERE actor=?',(actor,)).fetchone()[0]
 
     def record(self,actor,kind,value):
         self.store.connection.execute('INSERT INTO host_evidence(actor,kind,rules_seq,payload) VALUES (?,?,?,?)',
@@ -183,6 +191,8 @@ class PrimitiveCampaign:
         state['last_rules_commit']=self.store.committed_head()
         from .primitive_planning import observe
         observe(self,state)
+        from .primitive_scheduling import observe as observe_alarms
+        observe_alarms(self,state)
         if self.kernel.outcome is not None and not state['terminal']:
             state['terminal']={'kind':self.kernel.outcome['kind'],'winners':self.kernel.outcome['winners'],
                 'rules_commit':self.store.committed_head(),'contract_sha256':self.binding['contract_sha256'],
@@ -257,17 +267,22 @@ class PrimitiveCampaign:
         except RulesViolation as exc:
             if self.store.connection is None:self._reopen()
             receipt={'request_id':pending,'rejected':True,'reason':str(exc)};error=exc
-        with self.transaction() as state:
-            if state['pending']!=pending:raise RulesViolation('Prepared input changed during recovery')
+        try:
+            with self.transaction() as state:
+                if state['pending']!=pending:raise RulesViolation('Prepared input changed during recovery')
+                if not error:
+                    from .primitive_actions import apply_control,observe
+                    apply_control(self,state,actor,payload.get('control'))
+                    observe(self,state,actor,payload['command'])
+                    self.record(actor,'rationale',{'request_id':pending,**payload})
+                    self._capture(state)
+                self.store.connection.execute('UPDATE host_inputs SET state=?,receipt=? WHERE request_id=?',
+                    ('rejected' if error else 'accepted',encoded({k:v for k,v in receipt.items() if k!='packet'}),pending))
+                state['pending']=None;state['claim']=None
+        except BaseException as exc:
             if not error:
-                from .primitive_actions import apply_control,observe
-                apply_control(self,state,actor,payload.get('control'))
-                observe(self,state,actor,payload['command'])
-                self.record(actor,'rationale',{'request_id':pending,**payload})
-                self._capture(state)
-            self.store.connection.execute('UPDATE host_inputs SET state=?,receipt=? WHERE request_id=?',
-                ('rejected' if error else 'accepted',encoded({k:v for k,v in receipt.items() if k!='packet'}),pending))
-            state['pending']=None;state['claim']=None
+                raise AcceptedTransitionError('Rules command committed; reconcile the exact pending host receipt before dispatch') from exc
+            raise
         self.publish_next()
         if error:raise error
         return receipt

@@ -39,3 +39,16 @@ class PrimitiveInspectionTests(TestCase):
         result=inspect(self.game,'Omo','long_term_planner',frozen,[{'kind':'deck'},{'kind':'card','name':'Island'}])
         self.assertEqual(100,sum(row['quantity'] for row in result['results'][0]['cards']))
         self.assertEqual('Island',result['results'][1]['name'])
+
+    def test_claim_loads_rationales_without_decompressing_historical_boards(self):
+        import zlib
+        from unittest.mock import patch
+        with self.game.transaction():
+            self.game.record('Omo','rationale',{'rationale':'Keep the complete reason.','command':{'kind':'pass'}})
+            for _ in range(10):self.game.record('Omo','observation',{'board':'Archived fixture board'})
+        with patch('edh_gauntlet.primitive_campaign.zlib.decompress',wraps=zlib.decompress) as decompress:
+            frozen=claim(self.game,'Omo')
+        self.assertEqual(1,decompress.call_count)
+        self.assertEqual('Keep the complete reason.',frozen['rationales'][0]['value']['rationale'])
+        self.assertEqual(self.game.evidence_position('Omo'),frozen['evidence_through'])
+        self.assertNotIn('Archived fixture board',str(frozen))

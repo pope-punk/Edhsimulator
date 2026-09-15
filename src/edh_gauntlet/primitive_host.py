@@ -34,7 +34,7 @@ bound to the frozen actor input. Use edh_inspect with a batch of relevant querie
 '''
 COMMANDS='''Primitive commands omit revision, action_id and actor; Python supplies them.
 answer:{kind:"answer",request_id:CURRENT_CHOICE_ID,indexes:[ZERO_BASED_INDEXES]};
-pass:{kind:"pass"}; play_land:{kind:"play_land",source:REF};
+pass:{kind:"pass"}; concede:{kind:"concede"} only at your priority decision; play_land:{kind:"play_land",source:REF};
 activate:{kind:"activate",source:REF,ability_id:EXACT_ID,targets:[],x_value:0,payment:{mana:{},taps:[]}};
 cast:{kind:"cast",source:REF,targets:[],x_value:0,payment:{mana:{},taps:[]}}.
 REF is {card_id,incarnation}; player targets are {player:SEAT}. Produce mana by
@@ -59,8 +59,8 @@ def schemas(role):
     if role=='decider':
         return [inspect_tool,tool('edh_act','Submit one decision or approve a frozen proposal batch. Await the returned decision or park.',
             {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object'}},[]),
-            tool('edh_planner_alarm','Request immediate strategic or tactical reconsideration.',
-                 {'long_term':{'type':'boolean'},'reason':{'type':'string'}},['long_term','reason']),
+            tool('edh_planner_alarm','Set, replace or cancel your planner alarm at a priority decision.',
+                 {'alarm':{'type':'object'}},['alarm']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
                  {'reason':{'type':'string'}},['reason'])]
     return [inspect_tool,tool('edh_publish','Publish exactly the next frozen stage. End when next is null.',
@@ -78,6 +78,9 @@ always wake you. edh_act batch instead supplies approve_ids and reject_ids for e
 frozen action ID, optional added full steps, overrides keyed by ID, rejection_rationale,
 pass_priority and resume_after_passes. Both booleans default true: this explicitly
 authorizes passing unplanned priority and continuing after ordinary opposing passes.
+edh_planner_alarm takes alarm:{mode:"now",long_term:false}, {mode:"cancel"},
+or {mode:"schedule",seat:SEAT,time:"1 beginning of upkeep",long_term:true}.
+Only an existing priority choice permits alarm control. It never delays gameplay.
 No batch makes opponents pass or answers unknown required choices. Preserve unchanged
 planner rationales; only changed steps need your replacement rationale. No public
 speech or plan authorship belongs to you. Use retained standing during mulligans
@@ -180,7 +183,7 @@ class PrimitiveRunner:
         seat=self.campaign.state()['actors'][actor]
         if role==planning.DIPLOMAT:return {'personality':seat['personality']}
         groups={}
-        for row in self.campaign.evidence(actor):
+        for row in self.campaign.evidence(actor,kinds=('rationale',)):
             if row['kind']=='rationale':
                 value=row['value'];key=(value['rationale'],value['command']['kind'])
                 groups.setdefault(key,[]).append(row['id'])
@@ -215,6 +218,9 @@ class PrimitiveRunner:
 
     def pump(self):
         campaign=self.campaign
+        marker=read(campaign.root/'HOST_PAUSED.json',{})
+        if marker:
+            campaign.pause(marker['reason']);self.done=True;return
         if (campaign.store.generation-self.initial_count>=self.max_decisions
                 or campaign.next_action()['kind']!='dispatch_pilot'):
             self.done=True;return
@@ -250,6 +256,9 @@ class PrimitiveRunner:
             write(self.directory/'status.json',status);self.last_status=status
 
     def handle(self,message):
+        marker=read(self.campaign.root/'HOST_PAUSED.json',{})
+        if marker:
+            self.campaign.pause(marker['reason']);self.done=True;return
         method=message.get('method');params=message.get('params',{});thread=params.get('threadId')
         if method=='error':
             error=metadata(method,params)
@@ -306,10 +315,9 @@ class PrimitiveRunner:
                 self.waiting[thread]=(request,time.monotonic())
                 return
             elif name=='edh_planner_alarm' and role=='decider':
-                with self.campaign.transaction() as state:
-                    planning.text_field(args,'reason',600)
-                    planning.queue(state,actor,planning.LONG if args['long_term'] else planning.SHORT,'pilot_alarm:'+args['reason'])
-                value={'queued':True}
+                from .primitive_scheduling import control
+                if set(args)!={'alarm'}:raise RulesViolation('Supply only the alarm object')
+                value=control(self.campaign,actor,frozen['claim_id'],'rpc:'+digest(key),args['alarm'])
             elif name=='edh_rules_issue' and role=='decider':
                 reason=planning.text_field(args,'reason',1200)
                 self.campaign.rules_blocker(actor,reason);value={'state':'stop','reason':'rules_review'};self.done=True
@@ -334,6 +342,10 @@ class PrimitiveRunner:
                     try:self.server.respond(request,{'state':'stop',
                         'previous_receipt':self.waiting_receipts.pop(thread,None),
                         'instruction':'End. The host is stopping.'})
+                    except (OSError,RuntimeError):pass
+                for thread,turn in self.running.items():
+                    try:self.server.send({'id':'shutdown:'+str(uuid.uuid4()),'method':'turn/interrupt',
+                                          'params':{'threadId':thread,'turnId':turn}})
                     except (OSError,RuntimeError):pass
                 self.server.close();unloaded=True
             finally:

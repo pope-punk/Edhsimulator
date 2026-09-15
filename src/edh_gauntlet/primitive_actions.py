@@ -25,12 +25,13 @@ def claim(campaign,actor):
         value={'actor':actor,'game':1,'revision':campaign.kernel.revision,'board':packet,
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
-               'rejection':seat.get('last_rejection')}
+               'rejection':seat.get('last_rejection'),
+               'executed_steps':deepcopy(seat.get('executed_steps',{}).get(seat['plans'].get('actions',{}).get('id'),[]))}
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
         value['_knowledge']=freeze(campaign,actor,packet)
-        rows=campaign.evidence(actor)
-        value['evidence_through']=rows[-1]['id'] if rows else 0
+        rows=campaign.evidence(actor,kinds=('rationale','batch_approval'))
+        value['evidence_through']=campaign.evidence_position(actor)
         value['rationales']=[row for row in rows if row['kind'] in {'rationale','batch_approval'}]
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1
@@ -92,6 +93,9 @@ def approve(campaign,actor,claim_id,*,approve_ids,reject_ids,added=(),overrides=
         if (len(set(approve_ids+reject_ids))!=len(approve_ids+reject_ids)
                 or set(approve_ids+reject_ids)!=set(by_id)):
             raise RulesViolation('Approve or reject every frozen proposal exactly once')
+        executed=seat.get('executed_steps',{}).get(proposal.get('id'),[])
+        if any(key in executed for key in approve_ids):
+            raise RulesViolation('An already executed proposal step cannot be approved again')
         overrides=overrides or {}
         if type(overrides) is not dict or set(overrides)-set(approve_ids):raise RulesViolation('Overrides require approved step IDs')
         if reject_ids and (type(rejection_rationale) is not str or not rejection_rationale.strip() or len(rejection_rationale)>300):
@@ -124,7 +128,12 @@ def apply_control(campaign,state,actor,control):
         expected=control['sequence'];approved=seat['approved']
         if not approved or approved['id']!=expected['id'] or approved['cursor']!=expected['cursor']:
             raise RulesViolation('Prepared approved-sequence cursor changed')
-        if expected.get('advance'):approved['cursor']+=1
+        if expected.get('advance'):
+            step=approved['steps'][approved['cursor']]
+            if approved.get('proposal_id'):
+                rows=seat.setdefault('executed_steps',{}).setdefault(approved['proposal_id'],[])
+                if step['id'] not in rows:rows.append(step['id'])
+            approved['cursor']+=1
     if 'scheduler' in control:
         directive=deepcopy(control['scheduler'])
         directive['remaining']=directive.get('time',{}).get('occurrences')
@@ -149,6 +158,10 @@ def observe(campaign,state,actor,command):
     events=campaign.kernel.semantic_events[state.get('scheduler_event_cursor',0):]
     previous=state.get('scheduler_phase')
     for event in events:
+        if event['kind']=='card_drawn':
+            state['actors'][event['player']]['approved']=None
+        if event['kind']=='cards_revealed':
+            for seat in state['actors'].values():seat['approved']=None
         if event['kind']=='trigger_placed':
             for owner,seat in state['actors'].items():
                 if event['controller']!=owner:
@@ -181,7 +194,11 @@ def automatic(campaign):
     chosen=None;control=None;rationale=None
     if approved:
         cursor=approved['cursor'];steps=approved['steps'];turn=seat.get('turns',0);phase=phase_group(campaign.kernel.phase)
-        if turn>approved['turn_limit']:
+        from .primitive_planning import PHASES
+        expired_step=cursor<len(steps) and (steps[cursor]['seat_turn']<turn or
+            (campaign.kernel.active==actor and steps[cursor]['seat_turn']==turn and
+             phase in PHASES and PHASES.index(steps[cursor]['phase'])<PHASES.index(phase)))
+        if turn>approved['turn_limit'] or expired_step:
             with campaign.transaction() as value:value['actors'][actor]['approved']=None
             return False
         if cursor<len(steps) and steps[cursor]['seat_turn']==turn and steps[cursor]['phase']==phase:
@@ -200,7 +217,8 @@ def automatic(campaign):
     request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':chosen,'control':control})
     try:
         command=bind_command(campaign,actor,chosen,request_id)
-        campaign.submit(actor,request_id,command,rationale=rationale,control=control)
+        campaign.submit(actor,request_id,command,rationale=rationale,control=control,
+            plan_refs={'actions':approved['proposal_id']} if approved and approved.get('proposal_id') else {})
     except RulesViolation as exc:
         with campaign.transaction() as value:
             value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None

@@ -18,6 +18,7 @@ class FakeServer:
         if method=='thread/start':return {'thread':{'id':f'thread-{len(self.calls)}'}}
         if method=='turn/start':return {'turn':{'id':f'turn-{len(self.calls)}'}}
         return {}
+    def send(self,value):self.calls.append((value['method'],value['params']))
     def respond(self,request,value,success=True):self.replies.append((request,value,success))
     def close(self):self.closed=True
 

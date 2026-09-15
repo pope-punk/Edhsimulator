@@ -5,6 +5,7 @@ import unittest
 from unittest.mock import patch
 from edh_gauntlet.primitive_campaign import PrimitiveCampaign
 from edh_gauntlet.rules_state import RulesViolation
+from edh_gauntlet.rules_adapter import AcceptedTransitionError
 from edh_gauntlet.runtime_store import read
 
 
@@ -78,3 +79,16 @@ class PrimitiveCampaignTests(unittest.TestCase):
     def test_production_constructor_remains_gated(self):
         with self.assertRaises(RulesViolation):PrimitiveCampaign.create(Path(self.temp.name)/'not-admitted',seed=9,starting_player='Omo')
         self.assertFalse((Path(self.temp.name)/'not-admitted').exists())
+
+    def test_host_projection_failure_after_acceptance_is_not_reported_as_a_rejected_action(self):
+        actor,command=self.answer()
+        with patch.object(self.game,'_capture',side_effect=RulesViolation('Synthetic projection defect')):
+            with self.assertRaises(AcceptedTransitionError):
+                self.game.submit(actor,'accepted',command,rationale='Keep the fixture hand.')
+        self.assertEqual(1,self.game.store.generation)
+        self.assertEqual('accepted',self.game.state()['pending'])
+        before=self.game.store.committed_head()
+        self.game.recover()
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertIsNone(self.game.state()['pending'])
+        self.assertEqual(1,len(self.game.evidence(actor,kinds=('rationale',))))

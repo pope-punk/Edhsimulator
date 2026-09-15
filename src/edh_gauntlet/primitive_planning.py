@@ -80,13 +80,13 @@ def claim(campaign,actor,role):
         if job['input'] is None:
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)
-            evidence=campaign.evidence(actor,after=cursor) if role!=DIPLOMAT else []
+            evidence=campaign.evidence(actor,after=cursor,kinds=('rationale',)) if role!=DIPLOMAT else []
             job['input']={'job_id':job['id'],'actor':actor,'role':role,'game':1,
                 'context_handling':1,'board':board,'snapshot':digest(board),'reasons':job['reasons'][:],
                 'plans':deepcopy(seat['plans']),'target_seat_turn':max(1,seat.get('turns',0)+int(
                     campaign.kernel.active!=actor or campaign.kernel.phase in {'end_step','cleanup'})),
                 'rationales':[row for row in evidence if row['kind']=='rationale'],
-                'evidence_after':cursor,'evidence_through':evidence[-1]['id'] if evidence else cursor}
+                'evidence_after':cursor,'evidence_through':campaign.evidence_position(actor) if role!=DIPLOMAT else cursor}
             if role==LONG:job['input'].update(seed=seat['seed'],personality=seat['personality'],invalid_goal=deepcopy(seat.get('invalid_goal')))
             elif role==SHORT:job['input']['standing']=seat['standing']
             else:
