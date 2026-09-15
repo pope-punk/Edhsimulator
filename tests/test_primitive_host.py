@@ -35,6 +35,16 @@ class PrimitiveHostTests(TestCase):
         return {'id':request,'method':'item/tool/call','params':{'threadId':thread,
             'turnId':self.runner.running[thread],'callId':request,'tool':name,'arguments':args}}
 
+    def test_batch_wrapper_rejection_explains_correction_without_acceptance(self):
+        self.runner.pump(); thread=self.runner.lanes[('Omo','decider')]
+        before=self.game.store.committed_head()
+        self.runner.handle(self.tool(thread,'edh_act',{
+            'batch':{'approve_ids':[],'reject_ids':[]},'rationale':'Extra wrapper field'}))
+        value=self.server.replies[-1][1]
+        self.assertTrue(value['rejected'])
+        self.assertIn('Remove top-level rationale',value['reason'])
+        self.assertEqual(before,self.game.store.committed_head())
+
     def test_role_contexts_have_independent_lanes_and_fast_tactical_model(self):
         threads=set()
         for actor in self.game.kernel.state.players:

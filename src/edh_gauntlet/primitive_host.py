@@ -138,7 +138,7 @@ them as a direct sequence. Reject already performed, expired or unwanted steps;
 use overrides only for changed commands and retain unchanged planner rationales.
 Example: edh_act({batch:{approve_ids:["step-2","step-3"],reject_ids:["step-1"],
 rejection_rationale:"Step 1 was already performed.",pass_priority:true,
-resume_after_passes:true}}). Do not also send command, sequence or scheduler.
+resume_after_passes:true}}). The outer object contains only batch: do not also send rationale, command, sequence or scheduler.
 If the supplied proposal is unsuitable, explain the concrete mismatch briefly in
 your normal action rationale; no extra turn or separate report is needed.
 Plan the full known line before submitting its first action.
@@ -539,7 +539,7 @@ class PrimitiveRunner:
                     if set(args)!={'sequence','rationale','scheduler'}:raise RulesViolation('Direct sequence requires sequence, rationale and scheduler only')
                     value=actions.approve_sequence(self.campaign,actor,frozen['claim_id'],**args)
                 elif 'batch' in args:
-                    if set(args)!={'batch'}:raise RulesViolation('Choose an ordinary answer or batch approval')
+                    if set(args)!={'batch'}:raise RulesViolation('Batch approval requires only the top-level batch field. Remove top-level rationale, command, sequence and scheduler. Approved steps retain planner rationales; explain rejected IDs with batch.rejection_rationale. No batch was accepted.')
                     value=actions.approve(self.campaign,actor,frozen['claim_id'],**args['batch'])
                 else:
                     if not {'command','scheduler'}<=set(args) or set(args)-{'command','rationale','scheduler'}:

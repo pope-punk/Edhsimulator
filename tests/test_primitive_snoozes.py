@@ -13,6 +13,8 @@ class SourceSnoozeTests(TestCase):
         self.tmp=TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.game=PrimitiveCampaign._create(Path(self.tmp.name)/'game',seed=93,starting_player='Omo')
         self.addCleanup(self.game.close)
+        # These cases exercise the legacy explicit-snooze policy.
+        self.game.config.pop('mana_only_priority', None)
         while self.game.kernel.pending_choice:
             q=self.game.kernel.pending_choice
             self.game.submit(q.actor,'setup:'+q.request_id,{'kind':'answer','revision':self.game.kernel.revision,

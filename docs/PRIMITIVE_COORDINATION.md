@@ -164,3 +164,28 @@ contract, bypass a pending receipt, or reopen a terminal game. Leave such a game
 suspended for verified repair through the existing procedures. `edh_rules_issue`
 remains available for actual rules-integrity concerns. This fresh-build feature
 does not retroactively unseal H or other terminal games.
+
+
+## Mana-only priority windows
+
+Fresh games bind `mana_only_priority:1`. Before admitting an unclaimed decider,
+Python can pass an empty-stack priority window with no affordable non-mana action.
+It counts floating mana plus an optimistic bound on untapped mana sources, including
+mana doublers and color choices. It compares lower-bound spell/ability costs,
+including alternative payments and discounts. It does not select a payment.
+Insufficient total mana or an impossible color requirement can therefore skip
+inference even when an instant or instant-speed ability exists.
+
+This is deliberately a proof of unavailability, not an exhaustive legal menu.
+Uncertain mana engines, dynamic reductions, convoke, material mana side effects,
+tap/activation triggers, temporary or delayed effects, and stack responses retain
+pilot control. Affordable candidates retain control even if a later target/cost
+check might reject them. Available land plays, Room actions and affordable own-main
+plays also retain control. Mana-source color capacities can overestimate mutually
+exclusive color choices; that causes extra wakes, never an unsafe skip.
+
+Approved sequences run first; an extant batch that declines automatic passing is
+not overridden. Required choices and frozen claims are untouched. Automatic passes
+retain the normal accepted replay/evidence and do not publish a new snooze. Games
+without this binding retain their original behavior; deployment does not migrate
+an active game.
