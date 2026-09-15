@@ -238,3 +238,39 @@ an adoption turn or changes an existing claim. Context checkpoints between jobs
 do not create planning work, discharge queued debt or reinitialize your seed.
 
 <!-- END -->
+
+## Primitive host throughput
+
+For fresh builds supporting `short_term_and_actions`, short-term planners can send
+`response:{short_term:PROSE_OBJECT,actions:PROPOSAL_OBJECT}` in one publication.
+Both ordinary stages validate and commit atomically with their own durable receipts.
+A corrected retry cannot replace an already accepted stage. Separate publication
+remains available when early tactical prose is useful. Publication is advice;
+only a decider's batch approval authorizes execution. Prefer approving usable
+complete planner steps, including land-entry sources and guarded mana choices,
+before constructing a redundant direct sequence. A frozen decider claim retains
+its original plans; a later publication does not rewrite that received input.
+
+Primitive decider delivery retains immutable rule definitions and public messages
+by content ID only within the same acknowledged physical conversation. Changed
+rules receive new IDs; new conversations receive complete current baselines.
+Board deltas use exact key paths and carry base/result hashes. The previous actual
+pilot-seen board may be encoded against the current board, preserving its distinct
+comparison origin. Original evidence is unchanged; no inspection is needed to
+reconstruct the supplied facts.
+
+Planner inspection schemas enumerate permitted kinds and exact field names.
+A multi-query batch returns results in query order, with individual rejection
+reasons; successful results survive an unrelated malformed query. Correct only
+the failed queries. Deciders and diplomats still cannot inspect.
+
+The explicit `snooze_until_own_main` directive takes a supported `wake_condition`.
+It may pass the pilot's own upkeep/draw and intervening turns, but expires on entry
+to that pilot's next precombat main. Required choices and chosen event wakeups
+still interrupt it. Ordinary snoozes retain their earlier own-upkeep cutoff.
+No snooze invents a land drop, attack, target, payment or other optional action.
+
+Metadata telemetry separately records automatic execution time, delivered input
+size, accepted publication mode, planner/direct batch approvals, and rejected
+input hashes. Aggregate counters survive rolling event eviction; tool-return
+wait time is not engine execution time.

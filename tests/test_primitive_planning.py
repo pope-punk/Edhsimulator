@@ -154,3 +154,23 @@ class PrimitivePlanningTests(unittest.TestCase):
         self.assertNotIn('Routine pass omitted.',str(job['rationales']))
         self.assertIn('Complete resource-development reason.',str(job['rationales']))
         self.assertIn('Routine pass omitted.',str(self.game.evidence('Omo',kinds=('rationale',))))
+
+    def test_combined_publication_commits_both_stages_and_retries_idempotently(self):
+        self.publish_goal();job=planning.claim(self.game,'Omo',planning.SHORT)
+        value={'short_term':{'short_term_plan':'Keep the fixture line.','continuity':'Known fixture state.',
+                            'long_term_validity':'valid','long_term_invalid_reason':''},
+               'actions':{'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Fixture.'} for p in planning.PHASES}}}
+        result=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value)
+        self.assertIsNone(result['next']);self.assertEqual({'short_term','actions'},set(result['components']))
+        count=self.game.store.connection.execute('select count(*) from host_publications').fetchone()[0]
+        self.assertEqual(result,planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value))
+        self.assertEqual(count,self.game.store.connection.execute('select count(*) from host_publications').fetchone()[0])
+        self.assertEqual(self.game.state()['actors']['Omo']['plans']['short_term']['id'],
+                         self.game.state()['actors']['Omo']['plans']['actions']['short_term_id'])
+
+    def test_invalid_combined_actions_roll_back_prose_and_strategic_alarm(self):
+        self.publish_goal();job=planning.claim(self.game,'Omo',planning.SHORT);before=self.game.state()
+        value={'short_term':{'short_term_plan':'Changed fixture.','continuity':'Fixture.',
+                            'long_term_validity':'invalid','long_term_invalid_reason':'Fixture test.'},'actions':{}}
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value)
+        self.assertEqual(before,self.game.state())

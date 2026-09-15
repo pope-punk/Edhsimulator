@@ -56,6 +56,18 @@ def freeze(campaign,actor,board):
 def inspect(campaign,actor,role,frozen,queries):
     if role not in ('short_term_planner','long_term_planner'):raise RulesViolation('Inspection belongs only to short-term and long-term planners')
     if type(queries) is not list or not 1<=len(queries)<=8:raise RulesViolation('Batch one to eight inspections')
+    if len(queries)==1:return _inspect(campaign,actor,role,frozen,queries)
+    results=[]
+    for query in queries:
+        try:results.append(_inspect(campaign,actor,role,frozen,[query],budget=12000//len(queries))['results'][0])
+        except (RulesViolation,KeyError,TypeError,ValueError) as exc:
+            results.append({'rejected':True,'reason':str(exc),'instruction':'Correct only this query; retain the successful results in this batch.'})
+    return {'results':results}
+
+
+def _inspect(campaign,actor,role,frozen,queries,*,budget=12000):
+    if role not in ('short_term_planner','long_term_planner'):raise RulesViolation('Inspection belongs only to short-term and long-term planners')
+    if type(queries) is not list or not 1<=len(queries)<=8:raise RulesViolation('Batch one to eight inspections')
     catalog=load_catalog(campaign.assets/'data/catalog/cards.json')
     cards={c.name:c for c in catalog};results=[]
     for query in queries:
@@ -82,10 +94,10 @@ def inspect(campaign,actor,role,frozen,queries):
         elif kind=='decision' and set(query)=={'kind'}:
             results.append(deepcopy(frozen['board']['decision']))
         elif kind=='state' and set(query)=={'kind'}:results.append(deepcopy(frozen['board']))
-        else:raise RulesViolation('Unsupported inspection for this role')
+        else:raise RulesViolation('Use object with source:{card_id,incarnation}; card with name; state or decision; history with after; deck is long-term only. Plans/goals are supplied in plans, not inspection kinds.')
         value=select(results.pop(),path,offset,limit)
         size=len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())
-        if size>12000//len(queries):
+        if size>budget//len(queries):
             value={'inspection_too_large':True,'bytes':size,
                 'read':'Narrow this same frozen query with path (JSON pointer); arrays support offset and limit 1..32. History supports page_size 1..32. Use kind:decision for current choice IDs.',
                 **({'keys':list(value)[:32],'key_count':len(value)} if type(value) is dict else {'items':len(value)} if type(value) is list else {})}

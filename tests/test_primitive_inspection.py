@@ -102,3 +102,10 @@ class ActionFactCompactionTests(TestCase):
         program=next(iter(facts['rules'].values()))['program']
         self.assertEqual(0,program['cost']['generic']);self.assertNotIn('flag',program)
         self.assertEqual(before,frozen)
+
+    def test_bad_query_does_not_discard_other_batched_results(self):
+        from types import SimpleNamespace
+        campaign=SimpleNamespace(assets=Path(__file__).resolve().parents[1]);frozen={'board':{}}
+        result=inspect(campaign,'Omo','short_term_planner',frozen,[{'kind':'goal'},{'kind':'card','name':'Forest'}])['results']
+        self.assertTrue(result[0]['rejected']);self.assertIn('plans',result[0]['reason'])
+        self.assertEqual('Forest',result[1]['name'])

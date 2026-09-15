@@ -12,7 +12,7 @@ class Timing:
     def __init__(self,path,limit=512,*,flush_interval=1.0):
         self.path=path;self.events=deque(maxlen=limit);self.roles={};self.requests={}
         self.first=set();self.lock=threading.RLock();self.count=0
-        self.usage_totals={}
+        self.usage_totals={};self.aggregates={}
         self.flush_interval=flush_interval;self.flushed_count=0
         self.flush_lock=threading.Lock();self.stop=threading.Event()
         self.failure=None;self.closed=False
@@ -31,7 +31,7 @@ class Timing:
             with self.lock:
                 if self.failure is not None:raise self.failure
                 if self.flushed_count==self.count:return
-                value={'version':1,'total_events':self.count,'retained_events':list(self.events)}
+                value={'version':1,'total_events':self.count,'retained_events':list(self.events),'aggregates':json.loads(json.dumps(self.aggregates))}
             write(self.path,value)
             with self.lock:self.flushed_count=value['total_events']
 
@@ -51,7 +51,7 @@ class Timing:
     def bind(self,thread,actor,role):
         with self.lock:
             self.roles.pop(thread,None);self.roles[thread]=(actor,role)
-            while len(self.roles)>32:self.roles.pop(next(iter(self.roles)))
+            while len(self.roles)>256:self.roles.pop(next(iter(self.roles)))
 
     def record(self,event,thread=None,**fields):
         with self.lock:
@@ -60,6 +60,15 @@ class Timing:
             self.count+=1
             row={'event':event,'epoch':time.time(),'thread':thread,**fields}
             if thread in self.roles:row.update(zip(('actor','role'),self.roles[thread]))
+            if event in {'automatic_action','publication_accepted','input_rejected','inspection_batch','batch_authorized','input_delivered'}:
+                labels=[event,str(row.get('role','host')),str(row.get('kind',row.get('stage',row.get('mode',row.get('tool','')))))]
+                key='|'.join(labels);aggregate=self.aggregates.setdefault(key,{'count':0})
+                aggregate['count']+=1
+                for metric in ('seconds','input_chars','steps','queries','rejected'):
+                    value=row.get(metric)
+                    if isinstance(value,(int,float)) and not isinstance(value,bool):
+                        aggregate[metric+'_sum']=aggregate.get(metric+'_sum',0)+value
+                        aggregate[metric+'_max']=max(aggregate.get(metric+'_max',0),value)
             self.events.append(row)
 
     def observe(self,message):
@@ -128,7 +137,7 @@ class Timing:
                     'tactical_rework':bool(value.get('tactical_rework')),
                     'publication_timing':value.get('telemetry',{})}
             if not success and isinstance(value,dict):
-                message=str(value.get('error',''))
+                message=str(value.get('error',value.get('reason','')))
                 validation={'validation_sections':[s for s in ('action_sequence','scheduler','watches','choice') if s in message],
                             'error_sha256':hashlib.sha256(message.encode()).hexdigest()}
                 if any(s in message for s in ('Boundary notes','Coalesced maintenance requires','reserved boundary')):

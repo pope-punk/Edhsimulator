@@ -10,6 +10,14 @@ from .scheduler import normalize_directive
 
 
 def normalize_scheduler(value):
+    if type(value) is dict and value.get('mode')=='snooze_until_own_main':
+        if set(value)!={'mode','wake_condition'}:raise RulesViolation('Own-main snooze requires only mode and wake_condition')
+        directive=normalize_directive({'mode':'snooze_table','time':'1 beginning of precombat_main','wake_condition':value['wake_condition']})
+        return {**directive,'until_own_main':True}
+    if type(value) is dict and value.get('until_own_main') is True:
+        expected=normalize_scheduler({'mode':'snooze_until_own_main','wake_condition':value.get('wake_condition')})
+        if value!=expected:raise RulesViolation('Invalid normalized own-main snooze')
+        return expected
     if type(value) is dict and value.get('mode')=='snooze_objects':
         from .primitive_snoozes import normalize
         return normalize(value,normalize_directive)
@@ -228,11 +236,15 @@ def observe(campaign,state,actor,command):
         if event['kind']!='step_began':continue
         if event['step']=='upkeep':
             # Table-wide deadlines must never sleep through a new own turn.
-            state['actors'][event['active']]['snooze']=None
+            active_seat=state['actors'][event['active']]
+            if not (active_seat.get('snooze') or {}).get('until_own_main'):active_seat['snooze']=None
         if event['step']=='cleanup':state['actors'][event['active']]['approved']=None
         phase=phase_group(event['step'])
-        for seat in state['actors'].values():
+        for owner,seat in state['actors'].items():
             snooze=seat['snooze']
+            if snooze and snooze.get('until_own_main'):
+                if event['active']==owner and event['step']=='precombat_main':seat['snooze']=None
+                continue
             if not snooze or not snooze.get('time'):continue
             deadline=snooze['time']
             hit=(phase==deadline['phase'] and phase!=previous if deadline['edge']=='beginning'
