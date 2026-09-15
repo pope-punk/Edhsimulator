@@ -114,7 +114,7 @@ class PrimitiveCampaign:
             store.close();raise
 
     @classmethod
-    def open(cls,path,*,root=PROJECT_ROOT,recover=True):
+    def open(cls,path,*,root=PROJECT_ROOT,recover=True,telemetry_repair=None):
         path=Path(path).resolve();root=Path(root)
         manifest=read(path/'cohort.json',{})
         if manifest.get('rules_engine')!='primitives-v1':raise RulesViolation('Not a primitive campaign; never adopt a legacy run')
@@ -124,12 +124,20 @@ class PrimitiveCampaign:
         if any(hashlib.sha256((root/name).read_bytes()).hexdigest()!=value for name,value in config['assets'].items()):
             raise RulesViolation('Bound primitive assets changed')
         self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=manifest['binding']
+        if telemetry_repair is not None and (recover or config.get('host_implementation')==host_implementation()):
+            raise RulesViolation('Telemetry repair candidates are only for stopped installation without recovery')
+        repair = None
         if config.get('host_implementation')!=host_implementation():
-            raise RulesViolation('Bound host implementation changed; use its historical checkout')
+            from .primitive_telemetry_repair import validate
+            repair = telemetry_repair if telemetry_repair is not None else read(path/'host_runtime/telemetry_repair.json', {})
+            validate(repair, self.binding, config, root)
         self._reopen()
         try:
             from .primitive_journal import verify
             verify(self.store.connection,self.binding)
+            if repair is not None:
+                from .primitive_telemetry_repair import verify_prefix
+                verify_prefix(self, repair, candidate=telemetry_repair is not None)
             strategy={actor:{key:seat[key] for key in ('standing','seed','personality')}
                       for actor,seat in self.state()['actors'].items()}
             if digest(strategy)!=config['strategy_sha256']:

@@ -219,3 +219,19 @@ and 13 existing telemetry/performance checks pass. Work continues on
 Because the host implementation is bound, next work must provide explicit checked
 transport-repair compatibility while preserving its game contract, accepted
 prefix, journal and logical seats. Do not bypass the binding or replay actions.
+
+### Explicit telemetry-only stopped transport repair
+
+`python -m edh_gauntlet.primitive_telemetry_repair --cohort PATH --before OLD_RECEIPT --after NEW_RECEIPT`
+installs a narrowly scoped operator repair for the structured-query telemetry fault.
+Both releases must carry complete validation evidence. Only telemetry and the two
+repair admission modules may differ; rules, all other modules, assets, policies and
+strategy must match. The installer takes the host-driver lock, verifies the exact
+stopped/unloaded generation and accepted prefix, and records actor-scoped repair
+evidence in the existing host journal. It preserves the original configuration,
+logical registrations, frozen jobs, pending inputs and accepted decisions. An
+interrupted sidecar write can be retried without duplicating journal evidence.
+Normal opens require both the checked sidecar and its journal marker; subsequent
+accepted play must retain the repair's prefix. Resume separately with the existing
+`--resume-fenced` host option and the new validated release selected. This facility
+is not a general rules or game-contract migration mechanism.
