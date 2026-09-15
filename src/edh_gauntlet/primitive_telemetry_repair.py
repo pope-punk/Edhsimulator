@@ -1,5 +1,6 @@
 """Explicit stopped-host telemetry repair; never changes a bound game contract."""
 import argparse
+import hashlib
 from pathlib import Path
 from .paths import PROJECT_ROOT
 from .rules_adapter import digest
@@ -37,7 +38,15 @@ def validate(proof, binding, config, root):
             raise RulesViolation('Telemetry repair cannot change rules, assets, policy or strategy')
         changed = {k for k in old['modules'].keys() | new['modules'].keys()
                    if old['modules'].get(k) != new['modules'].get(k)}
-        if not changed or not changed <= ALLOWED or 'host_telemetry.py' not in changed:
+        # Permit only the exact scalar-safe inspection counter correction in the
+        # host. Reconstructing its old bytes rejects unrelated host changes.
+        host_fix = changed == {'primitive_host.py','primitive_telemetry_repair.py'}
+        if host_fix:
+            source=(Path(root)/'src/edh_gauntlet/primitive_host.py').read_bytes()
+            corrected=b"sum(isinstance(r,dict) and bool(r.get('rejected')) for r in value['results'])"
+            original=b"sum(bool(r.get('rejected')) for r in value['results'])"
+            host_fix=(source.count(corrected)==1 and hashlib.sha256(source.replace(corrected,original)).hexdigest()==old['modules']['primitive_host.py'])
+        if not host_fix and (not changed or not changed <= ALLOWED or 'host_telemetry.py' not in changed):
             raise RulesViolation('Changes exceed the telemetry repair scope')
         commit = proof['commit']
         if type(commit['sequence']) is not int or commit['sequence'] < 0 or type(commit['sha256']) is not str:

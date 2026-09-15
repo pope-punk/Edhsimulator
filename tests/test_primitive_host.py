@@ -229,3 +229,14 @@ class PrimitiveHostTests(TestCase):
         import json
         sent=[p for m,p in self.server.calls if m=='turn/start'][-1]
         self.assertIn('action_facts',json.dumps(sent))
+
+    def test_planner_scalar_inspections_do_not_crash_telemetry(self):
+        thread=self.runner.context('Omo',planning.SHORT)
+        self.runner.running[thread]='fixture-turn'
+        self.runner.inputs[thread]={}
+        values=['precombat_main',3,True,None,[],{'rejected':True}, {'phase':'main'}]
+        with patch('edh_gauntlet.primitive_host.inspect',return_value={'results':values}):
+            self.runner.handle(self.tool(thread,'edh_inspect',{'queries':[{'kind':'state'}]}))
+        self.assertEqual({'results':values},self.server.replies[-1][1])
+        self.assertTrue(self.server.replies[-1][2])
+        self.assertIsNone(self.game.state()['paused'])
