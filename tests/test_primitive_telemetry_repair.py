@@ -87,3 +87,22 @@ class TelemetryRepairTests(TestCase):
         with campaign.transaction() as state:state.pop('telemetry_repair')
         campaign.close()
         with self.assertRaises(RulesViolation):PrimitiveCampaign.open(self.path, recover=False)
+
+
+class InspectionRepairScopeTests(TestCase):
+    def test_only_exact_counter_edit_is_permitted(self):
+        import hashlib
+        root=Path(__file__).resolve().parents[1]
+        new=fingerprint(root);old=deepcopy(new)
+        source=(root/'src/edh_gauntlet/primitive_host.py').read_bytes()
+        corrected=b"sum(isinstance(r,dict) and bool(r.get('rejected')) for r in value['results'])"
+        original=b"sum(bool(r.get('rejected')) for r in value['results'])"
+        self.assertEqual(1,source.count(corrected))
+        old['modules']['primitive_host.py']=hashlib.sha256(source.replace(corrected,original)).hexdigest()
+        old['modules']['primitive_telemetry_repair.py']='previous-repair'
+        proof={'schema':1,'binding':{},'before':receipt(old),'after':receipt(new),'commit':{'sequence':40,'sha256':'prefix'}}
+        config={'host_implementation':repair.host_hash(old['modules'])}
+        repair.validate(proof,{},config,root)
+        old['modules']['primitive_host.py']='unrelated-host-edit'
+        proof['before']=receipt(old);config['host_implementation']=repair.host_hash(old['modules'])
+        with self.assertRaises(RulesViolation):repair.validate(proof,{},config,root)

@@ -468,7 +468,7 @@ class PrimitiveRunner:
                 self.campaign.rules_blocker(actor,reason);value={'state':'stop','reason':'rules_review'};self.done=True
             else:raise RulesViolation('Tool is not owned by this role')
             if name=='edh_publish':self.timing.record('publication_accepted',thread,stage=args.get('stage'),combined=args.get('stage')=='short_term_and_actions')
-            if name=='edh_inspect':self.timing.record('inspection_batch',thread,queries=len(args['queries']),rejected=sum(bool(r.get('rejected')) for r in value['results']))
+            if name=='edh_inspect':self.timing.record('inspection_batch',thread,queries=len(args['queries']),rejected=sum(isinstance(r,dict) and bool(r.get('rejected')) for r in value['results']))
             self.server.respond(request,value)
         except (RulesViolation,ValueError,KeyError,TypeError) as exc:
             self.timing.record('input_rejected',thread,tool=name,reason_sha256=digest(str(exc)))
