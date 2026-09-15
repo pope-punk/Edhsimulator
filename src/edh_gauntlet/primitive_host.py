@@ -51,6 +51,14 @@ REF is {card_id,incarnation}; player targets are {player:SEAT}. Produce mana by
 activating lands/rocks first; payment spends the resulting mana pool. Inspect the
 frozen object's activated_abilities for exact IDs and costs. Empty payment is
 {mana:{},taps:[]}. Source tap costs are implicit; do not repeat them in taps.
+For costs that select cards to return, sacrifice, discard or exile, add
+payment.zone_costs:{EXACT_COST_ID:[REF,...]}. Copy cost_id from the ability/cast
+cost.zone_costs entry and select the required count using its selector. These are
+cost selections, not targets or later answer choices. Source-only costs without
+a selector are implicit. Example: payment:{mana:{},taps:[],
+zone_costs:{"land-return":[{card_id:CHOSEN_LAND_ID,incarnation:CURRENT_INCARNATION}]}}.
+Optional payment fields also include convoke:[{ref:REF,color:SYMBOL}],
+tagged_mana:[EXACT_UNIT_IDS], and cost_order:[EXACT_COST_IDS] when applicable.
 Land face defaults to front. For a modal double-faced card with a land back face,
 use play_land with face:"back" and the hand card source; do not cast its land face.
 The current face in hand does not prevent playing a permitted back land face.

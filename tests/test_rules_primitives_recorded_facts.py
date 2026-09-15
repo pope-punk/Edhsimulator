@@ -554,5 +554,20 @@ class RecordedFactTests(unittest.TestCase):
         checkpoint['schema']=119
         with self.assertRaises(RulesViolation):RulesKernel.restore(checkpoint,self.programs)
 
+    def test_sage_adapter_explains_and_accepts_land_return_payment(self):
+        self.sage();adapter=RulesActorAdapter(self.kernel)
+        command={'kind':'activate','action_id':'sage-zone-cost-fixture','revision':self.kernel.revision,
+                 'source':self.source.to_json(),'ability_id':'return-draw','targets':[],
+                 'x_value':0,'payment':{'mana':{},'taps':[]}}
+        before=self.kernel.snapshot()
+        with self.assertRaisesRegex(RulesViolation,'payment.zone_costs') as error:
+            adapter.submit('A',command)
+        self.assertIn('land-return',str(error.exception))
+        self.assertEqual(before,self.kernel.snapshot())
+        command['payment']['zone_costs']={'land-return':[self.land.to_json()]}
+        adapter.submit('A',command)
+        self.assertEqual(Zone.HAND,self.kernel.state.get(self.kernel.state.current(self.land.card_id)).zone)
+        self.assertTrue(self.kernel.state.get(self.source).tapped)
+
 
 if __name__=='__main__':unittest.main()
