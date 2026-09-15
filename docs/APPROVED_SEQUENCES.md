@@ -286,3 +286,30 @@ pilot. Recovery restores the approval cursor and frame binding, so accepted taps
 are not replayed. The complete per-action audit remains available even when one
 approval replaces several inference turns. Started games retain their bound host
 implementation; use a fresh game to adopt this release.
+
+### Direct pilot-authored current-phase sequences
+
+A decider does not need an actions proposal to batch a known line. At its own-turn
+priority in a supported turn phase, it may submit:
+
+```json
+{
+  "sequence": [
+    {"id":"tap","command":{"kind":"activate","source":{"card_id":"KNOWN_SOURCE","incarnation":1},"ability_id":"mana","targets":[],"x_value":0,"payment":{"mana":{},"taps":[]}}},
+    {"id":"color","command":{"kind":"answer","choice_from":{"step_id":"tap","option_labels":["1 {W}","1 {B}"]},"indexes":[1]}},
+    {"id":"cast","command":{"kind":"cast","source":{"card_id":"KNOWN_SPELL","incarnation":1},"targets":[],"x_value":0,"payment":{"mana":{"B":1},"taps":[]}}}
+  ],
+  "rationale":"Produce black and spend it to deploy the planned one-mana artifact.",
+  "scheduler":{"mode":"resolve_my_sequence"}
+}
+```
+
+The references, ability, exact menu and spending above are illustrative: use the
+actual frozen objects and card programs supplied in action_facts. Only planners
+may call inspection tools; deciders read these already-supplied facts. Python binds only the current own-turn
+ordinal and phase. A step can override the shared rationale. This form is mutually
+exclusive with `command` and planner `batch`; it does not approve unlisted planner
+steps or unplanned priority passes. The explicitly supplied scheduler still applies.
+Existing planner-batch approval supports future turn phases; direct sequences cover
+only the current phase. All guarded-choice and interruption checks above still apply.
+The `batch_context` in the decider input states whether this form is available.

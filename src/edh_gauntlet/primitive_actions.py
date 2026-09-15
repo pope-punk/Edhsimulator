@@ -37,6 +37,9 @@ def claim(campaign,actor):
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
+               'batch_context':{'own_turn':seat.get('turns',0),'phase':phase_group(campaign.kernel.phase),
+                    'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
+                        and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},
                'executed_steps':deepcopy(seat.get('executed_steps',{}).get(seat['plans'].get('actions',{}).get('id'),[]))}
         if value['snooze']:value['snooze'].pop('sources',None)
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
@@ -129,6 +132,41 @@ def approve(campaign,actor,claim_id,*,approve_ids,reject_ids,added=(),overrides=
         campaign.record(actor,'batch_approval',{'claim_id':claim_id,**seat['approved'],'rejected':reject_ids,'rejection_rationale':rejection_rationale})
         state['claim']=None
         return {'accepted':True,'approved':len(chosen),'approval_id':seat['approved']['id']}
+
+
+def approve_sequence(campaign,actor,claim_id,*,sequence,rationale,scheduler):
+    """Authorize a pilot-authored current-window line, without a planner proposal."""
+    if (type(sequence) is not list or not 1<=len(sequence)<=64
+            or type(rationale) is not str or not rationale.strip() or len(rationale)>300):
+        raise RulesViolation('Supply 1..64 explicit sequence steps and a rationale of at most 300 characters')
+    directive=normalize_scheduler(scheduler)
+    with campaign.transaction() as state:
+        current=state['claim'];seat=state['actors'][actor];frontier=campaign.next_action()
+        if (not current or current['actor']!=actor or current['claim_id']!=claim_id
+                or current['revision']!=campaign.kernel.revision
+                or frontier.get('kind')!='dispatch_pilot' or frontier.get('actor')!=actor):
+            raise RulesViolation('Sequence does not own the current frozen claim')
+        from .primitive_planning import validate_actions,PHASES
+        phase=phase_group(campaign.kernel.phase);turn=seat.get('turns',0)
+        if (current['board']['decision']['kind']!='priority' or campaign.kernel.active!=actor
+                or phase not in PHASES or turn<1):
+            raise RulesViolation('Direct sequences require priority in your current turn phase')
+        steps=[]
+        for row in sequence:
+            if type(row) is not dict or not {'id','command'}<=set(row) or set(row)-{'id','command','rationale'}:
+                raise RulesViolation('Each direct step requires id and command; rationale is optional')
+            steps.append({'id':row['id'],'command':deepcopy(row['command']),
+                'rationale':row.get('rationale',rationale),'scheduler':deepcopy(directive),
+                'seat_turn':turn,'phase':phase})
+        coverage={p:({'status':'planned'} if p==phase else {'status':'no_action','reason':'Only the current phase is approved.'}) for p in PHASES}
+        validate_actions({'action_sequence':steps,'phase_coverage':coverage},{'reasons':[]})
+        approval={'id':digest({'claim':claim_id,'mode':'direct','steps':steps}),'steps':steps,
+            'cursor':0,'pass_priority':False,'resume_after_passes':True,'proposal_id':None,'turn_limit':turn}
+        seat['approved']=approval
+        campaign.record(actor,'batch_approval',{'claim_id':claim_id,**approval,'mode':'direct',
+            'plan_refs':{k:v['id'] for k,v in current['plans'].items()}})
+        state['claim']=None
+        return {'accepted':True,'approved':len(steps),'approval_id':approval['id']}
 
 
 def apply_control(campaign,state,actor,control):

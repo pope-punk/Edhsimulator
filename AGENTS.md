@@ -5,7 +5,9 @@ Fresh primitive releases use the delivery split in
 decision logs go to planners, with pass entries omitted. Deciders receive current
 choices, board, plans and rejection feedback, without historical decision logs
 or checkpoint restoration of them. Preserve the complete replay tape and original
-actor evidence. This supersedes the legacy full-rationale decider-packet wording
+actor evidence. Only short-term and long-term planners may call inspection tools.
+Deciders receive the current decision and deduplicated visible action rules directly;
+diplomats receive only their authorized public input. This supersedes the legacy full-rationale decider-packet wording
 below only for fresh primitive releases; never migrate a started game silently.
 
 For fresh games explicitly binding `agent_architecture:1`, the role, component,

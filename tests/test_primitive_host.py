@@ -203,3 +203,29 @@ class PrimitiveHostTests(TestCase):
         self.assertEqual('x'*100000,packet['plans']['large']['value'])
         self.assertEqual(self.game.kernel.pending_choice.request_id,packet['current_decision']['choice']['request_id'])
         self.assertEqual(committed,self.game.store.committed_head());self.assertFalse(self.runner.unanswered)
+
+    def test_inspection_is_exposed_only_to_planners_and_denied_to_other_roles(self):
+        from edh_gauntlet.primitive_host import schemas,instructions
+        for role in ('decider',planning.DIPLOMAT,planning.LONG,planning.SHORT):
+            names={t['name'] for t in schemas(role)}
+            self.assertEqual(role in (planning.LONG,planning.SHORT),'edh_inspect' in names)
+            if role in ('decider',planning.DIPLOMAT):self.assertNotIn('edh_inspect',instructions('Omo',role))
+        self.runner.pump();thread=self.runner.lanes[('Omo','decider')]
+        before=self.game.store.committed_head()
+        with patch('edh_gauntlet.primitive_host.inspect') as inspect:
+            self.runner.handle(self.tool(thread,'edh_inspect',{'queries':[{'kind':'state'}]},request='forbidden-inspection'))
+            inspect.assert_not_called()
+        self.assertFalse(self.server.replies[-1][2]);self.assertEqual(before,self.game.store.committed_head())
+
+    def test_decider_receives_current_visible_rules_without_an_inspection_call(self):
+        from edh_gauntlet.primitive_inspection import action_facts
+        self.runner.pump();thread=self.runner.lanes[('Omo','decider')];frozen=self.runner.inputs[thread]
+        facts=action_facts(frozen);refs={tuple(sorted(o['source'].items())) for o in facts['objects']}
+        own=frozen['board']['hand'][0]['ref'];hidden=self.game.store.packet('Elenda')['hand'][0]['ref']
+        self.assertIn(tuple(sorted(own.items())),refs)
+        self.assertNotIn(tuple(sorted(hidden.items())),refs)
+        self.assertTrue(facts['rules'])
+        for obj in facts['objects']:self.assertIn(obj['rules_id'],facts['rules'])
+        import json
+        sent=[p for m,p in self.server.calls if m=='turn/start'][-1]
+        self.assertIn('action_facts',json.dumps(sent))
