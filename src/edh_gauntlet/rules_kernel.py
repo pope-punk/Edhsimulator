@@ -15,6 +15,7 @@ from .rules_characteristics import Characteristics, evaluate as evaluate_charact
 from .rules_rooms import RoomRules
 from .rules_faces import FaceRules
 from .rules_walkers import WalkerRules
+from .rules_opening import OpeningRules
 from .rules_rule_effects import RuleEffects
 from .rules_program import RoomProgram,ReadAheadProgram,object_program,room_profile,printed_trigger_programs,MoveFace,LifeGainedCondition,ChapterAbility,DoubleFacedProgram,MoveWithSubtypes,CountDistinctNames,WinGame,PlayerPermissions
 from .rules_identity import IMPLEMENTATION_ID
@@ -49,8 +50,8 @@ class _NeedsChoice(Exception):pass
 from .rules_state import PlayerRef,target_from_json
 
 
-class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
-    CHECKPOINT_SCHEMA=132
+class RulesKernel(OpeningRules,RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingRules,SpellCopyRules,CopyRules,ManaRules,GuardRules,PhasingRules,CounterRules,LibraryRules,DepartureRules,CombatRules,TurnRules,CastingRules,AttachmentRules):
+    CHECKPOINT_SCHEMA=133
     @classmethod
     def for_production(cls, *args, **kwargs):
         # Only scenario construction is available until the complete production
@@ -95,7 +96,7 @@ class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingR
         self.regeneration_shields={};self.upkeep_history={p:0 for p in state.players}
         self.turn_history={'turn':state.turn_number,'attacked':[],'freerunning':[]}
         self.library_tops={}
-        self.loyalty_uses={};self.opening_actions=None
+        self.loyalty_uses={};self.opening_actions=None;self.mulligans=None
         self.phase_action=None;self.timed_spell_taxes=[]
         self.resolution_counts={};self.resolution_count_turn=self.state.turn_number
         self.declaration_mana=None
@@ -1662,6 +1663,7 @@ class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingR
         try:
             while True:
                 if self.outcome:return GameResult(self.outcome['kind'],tuple(self.outcome['winners']),tuple(self.outcome['departed']))
+                if self.mulligans is not None:self._continue_mulligans();continue
                 self._sync_library_tops()
                 self._expire_counter_effects()
                 self._collect_state_triggers()
@@ -1746,7 +1748,7 @@ class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingR
             'attachment_rules':self.attachment_rules,'delayed_triggers':self.delayed_triggers,'linked_exile':self.linked_exile,'exile_durations':self.exile_durations,'player_effects':self.player_effects,'trigger_limits':self.trigger_limits,'trigger_limit_turn':self.trigger_limit_turn,
             'phase_links':self.phase_links,'object_notes':self.object_notes,
             'regeneration_shields':self.regeneration_shields,'upkeep_history':self.upkeep_history,'turn_history':self.turn_history,
-            'resolution_counts':self.resolution_counts,'resolution_count_turn':self.resolution_count_turn,'phase_action':self.phase_action,'timed_spell_taxes':self.timed_spell_taxes,'loyalty_uses':self.loyalty_uses,'opening_actions':self.opening_actions,'declaration_mana':self.declaration_mana,'library_tops':self.library_tops,'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
+            'resolution_counts':self.resolution_counts,'resolution_count_turn':self.resolution_count_turn,'phase_action':self.phase_action,'timed_spell_taxes':self.timed_spell_taxes,'loyalty_uses':self.loyalty_uses,'opening_actions':self.opening_actions,'mulligans':self.mulligans,'declaration_mana':self.declaration_mana,'library_tops':self.library_tops,'resolution_cast':self.resolution_cast,'mana_payment':self.mana_payment,'draw_counts':self.draw_counts,'draw_count_turn':self.draw_count_turn,
             'commander_sba_handled':[ref.to_json() for ref in sorted(getattr(self,'_commander_sba_handled',set()))]}
         return json.loads(json.dumps(value))
 
@@ -1757,7 +1759,7 @@ class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingR
         kernel=cls(RulesState.restore(value['state']),definitions,value['active'],copy_programs=value['copy_programs'])
         if kernel.bundle!=value['bundle']:raise RulesViolation('Rules bundle changed across checkpoint')
         value=json.loads(json.dumps(value))
-        for name in ('resolution_counts','resolution_count_turn','phase_action','timed_spell_taxes','loyalty_uses','opening_actions','regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','declaration_mana','library_tops','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
+        for name in ('resolution_counts','resolution_count_turn','phase_action','timed_spell_taxes','loyalty_uses','opening_actions','mulligans','regeneration_shields','upkeep_history','turn_history','object_notes','phase_links','temporary_effects','counter_effects','library_observations','stack','resolving','pending_triggers','placement','answers','accepted','semantic_events','priority','passes','attachment_rules','delayed_triggers','linked_exile','exile_durations','phase','action_receipts','turn_schedule','combat','departure','outcome','announcement','player_effects','trigger_limits','trigger_limit_turn','declaration_mana','library_tops','resolution_cast','mana_payment','draw_counts','draw_count_turn'):
             setattr(kernel,name,value[name])
         if kernel.mana_payment and kernel.resolving and kernel.resolving['id']==kernel.mana_payment['parent']['id']:
             kernel.resolving=kernel.mana_payment['parent']

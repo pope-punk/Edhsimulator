@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "starting_life": 40,
+  "starting_hand_size": 7,
+  "seats": [
+    {"actor": "Reaminatour", "commander": "aminatou-veil-piercer"},
+    {"actor": "Minsc & Boo", "commander": "minsc-boo-timeless-heroes"},
+    {"actor": "Omo", "commander": "omo-queen-of-vesuva"},
+    {"actor": "Elenda", "commander": "elenda-saint-of-dusk"}
+  ]
+}

@@ -9,7 +9,7 @@ import sys
 # Captured at import, not recomputed after a developer edits files underneath a
 # running process. Production historical launchers remain a separate gate.
 _MODULES = (
-    'rules_identity.py', 'rules_modal.py', 'rules_state.py', 'rules_program.py', 'rules_choices.py',
+    'rules_identity.py', 'rules_opening.py', 'rules_setup.py', 'rules_modal.py', 'rules_state.py', 'rules_program.py', 'rules_choices.py',
     'rules_kernel.py', 'rules_rooms.py', 'rules_faces.py', 'rules_walkers.py', 'rules_rule_effects.py', 'rules_resolution_cast.py','rules_spell_copy.py', 'rules_copy.py', 'rules_mana.py', 'rules_guard.py', 'rules_phasing.py', 'rules_counters.py', 'rules_actor.py', 'rules_adapter.py', 'rules_durable.py', 'rules_departure.py', 'rules_library.py', 'rules_attachments.py', 'rules_replacements.py',
     'rules_subtypes.py', 'rules_creature_types.py', 'rules_characteristics.py', 'rules_casting.py', 'rules_turns.py', 'rules_combat.py', 'block_declaration.py', 'combat_damage.py',
 )

@@ -27,6 +27,7 @@ def preflight(destination, *, root=PROJECT_ROOT, games=20, seed_start=2026090901
         'planning_contract':4,'agent_architecture':1,'async_diplomacy':1,'short_term_sol_fast':1,
         'rules_implementation_sha256':report['implementation_sha256'],
         'catalog_sha256':report['catalog_sha256'],'decks_sha256':coverage['decks_sha256'],
+        'pod_configuration_sha256':hashlib.sha256((root/'data/decks/pod_configuration.json').read_bytes()).hexdigest(),
         'authored_bundle_sha256':hashlib.sha256((root/'data/rules/primitive_cards.json').read_bytes()).hexdigest()}
     intent_hash=hashlib.sha256(json.dumps(requested,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     return {'schema':1,'status':'blocked_rules_migration','initialized':False,'intent_sha256':intent_hash,
