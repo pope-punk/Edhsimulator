@@ -366,4 +366,4 @@ host policy documentation. It preserves the original game contract, logical seat
 accepted commands and pending choice, verifies full deterministic replay, and journals
 a prefix-bound sidecar. Existing snoozes are cleared once at installation; explicit
 approved sequences are retained. Resume through the ordinary fenced dashboard route.
-The first resumed role delivery explains the changed scheduler behavior.
+Resumed isolated role contexts receive the updated scheduler instructions.

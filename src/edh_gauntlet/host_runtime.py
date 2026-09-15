@@ -535,8 +535,6 @@ class Runner:
                 'The prior software host stopped. Its route was fenced and the '
                 'accepted prefix was verified during explicit recovery. Prior tool invocations ended with that host; '
                 'do not retry them. Use only this current packet and retain your own-seat context.')}
-            if (self.root/'host_runtime/scheduler_upgrade.json').exists():
-                packet['host_resume_notice']+=' Authorized scheduler upgrade: existing snoozes were cleared. Every future snooze ends no later than your next upkeep. With no eligible attackers, the host declares none without inference and preserves existing snoozes; this grants no additional priority passes.'
         if is_planner(role) and self.contexts.enabled:
             from .planner_memory import inventory
             packet={**packet,'knowledge_inventory':inventory(value.get('knowledge',{}),

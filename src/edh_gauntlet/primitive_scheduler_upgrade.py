@@ -9,7 +9,7 @@ from .primitive_release import fingerprint
 from .primitive_telemetry_repair import checked_release, host_hash, fence
 
 ALLOWED={'primitive_actions.py','rules_combat.py','primitive_campaign.py',
-         'primitive_scheduler_upgrade.py','host_runtime.py'}
+         'primitive_scheduler_upgrade.py','primitive_host.py'}
 POLICIES={'docs/HOST_AGENT_POLICY.md','docs/HOST_RUNTIME.md'}
 
 

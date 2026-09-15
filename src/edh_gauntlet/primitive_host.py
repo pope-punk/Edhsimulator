@@ -213,6 +213,7 @@ The host parks oversized tool deliveries and supplies a complete next real input
     elif role==planning.DIPLOMAT:
         common='Use only your authorized publication tool and supplied public input. Only planners inspect. End on stop or next:null; never replay an accepted publication.\n'
     else:common=COMMON
+    specific+='\nScheduler policy: every snooze ends no later than your next upkeep. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
     return f'You are the {actor} {role}.\n'+common+specific
 
 
