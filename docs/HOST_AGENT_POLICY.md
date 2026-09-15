@@ -1,5 +1,10 @@
 # Resident agent contract
 
+For the new primitive build, [PRIMITIVE_COORDINATION.md](PRIMITIVE_COORDINATION.md)
+is authoritative for cadence, authored diplomacy, private advice and holds.
+The legacy watch/mandatory pre-turn/authorized-text details below do not apply to
+this build. Existing game bindings are not silently migrated.
+
 For fresh `primitives-v1` releases, the primitive section of
 [HOST_RUNTIME.md](HOST_RUNTIME.md#primitive-campaign-release) governs delivery.
 Deciders receive current facts and plans, without historical decision logs, including

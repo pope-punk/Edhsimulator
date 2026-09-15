@@ -60,11 +60,13 @@ full seed/personality and initialize the goal as soon as the hand is kept. Short
 planners retain standing doctrine and maintain continuity plus concrete actions.
 Deciders retain standing until the initial goal arrives. Diplomats own all talk.
 
-The two preceding living opponents' end steps trigger mandatory short-term updates
-in fresh turn-batch games. Every update covers precombat, combat and postcombat.
+For the new primitive build, follow [PRIMITIVE_COORDINATION.md](PRIMITIVE_COORDINATION.md):
+concurrent opening planners, own-cleanup maintenance and a conditional opposite-seat
+end-step review replace the two mandatory pre-turn updates. Every update covers precombat, combat and postcombat.
 An invalid goal triggers long-term work, while those mandatory tactical updates
-still publish an interim batch. Completed long-term review always requires a
-renewed diplomat message, including when the brief is kept unchanged.
+still publish an interim batch. Ordinary long-term review requires a renewed diplomat message, including unchanged
+goals. A review initiated solely to approve/veto a diplomat-requested brief change
+is the exception; approval already releases the diplomat before strategic prose.
 
 ## Pause, blockers and recovery
 
