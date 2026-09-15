@@ -65,6 +65,8 @@ class WorkflowTests(TestCase):
         reasons=self.game.state()['actors']['Omo']['jobs'][planning.LONG]['reasons']
         self.assertEqual(1,len([r for r in reasons if r.startswith('diplomatic_override:')]))
         self.assertEqual(['n1'],self.game.state()['actors']['Omo']['overridden_negotiations'])
+        review=planning.claim(self.game,'Omo',planning.LONG)
+        self.assertEqual('The agreement no longer serves our goal.',review['diplomatic_overrides'][0]['rationale'])
 
     def test_brief_approval_releases_diplomat_before_long_term_completion(self):
         job=self.goal();self.post(job,messages=[],authorization_request='Allow another recipient.')

@@ -198,7 +198,8 @@ Set a standing brief, not prewritten messages. The diplomat composes within thes
 boundaries and must post after every long-term publication, even an unchanged goal.
 Authorize only your own disclosures and commitments. Holds restrain only your own
 seat, expire after bounded game turns, and can be overridden by its decider.
-An override queues one strategic reassessment; avoid reimposing the same failed
+An override queues one strategic reassessment; read diplomatic_overrides for the
+decider's exact explanation and avoid reimposing the same failed
 negotiation. An unchanged sound goal is allowed with refreshed diplomatic guidance.
 For brief_change_requests, first publish brief_decision:{approved:BOOLEAN,
 rationale:TEXT_MAX_600,brief:REVISED_BRIEF_IF_APPROVED,update_plan:BOOLEAN}. Use
@@ -207,6 +208,15 @@ You have unconditional
 veto. Approval releases the diplomat immediately; then finish long_term, keeping
 the approved brief (or old brief after veto). You may retain unchanged strategic
 prose. Reviews initiated solely by diplomatic requests do not force another message.
+Make the goal concrete and current: name the particular cards/engine or win route
+you are pursuing, which pieces you already have, which are missing, the material
+opposing cards affecting that route, and a fallback if a named piece is lost or a
+better route becomes available. Distinguish known available cards from cards you
+hope to draw or find; never invent access. Keep this within the existing 1200
+characters; do not duplicate standing deck doctrine or tactical tap/cast sequences.
+A review_goal is a request to reassess priorities, not proof the route is impossible.
+Read its concrete reason, then update the named route, missing pieces and fallback;
+you may retain the goal if those details are still current. Do not set watches.
 Do not write tactics, continuity, approve proposals or execute game actions.
 '''
     elif role==planning.SHORT:
@@ -218,7 +228,7 @@ If the prior plan is still applicable and self-contained, reuse its prose verbat
 Otherwise replace it with the full new plan. Continuity may explain history, but
 short_term_plan must contain everything needed to understand the intended line.
 Prepare short_term with
-{short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid"|"pending",long_term_invalid_reason:TEXT}.
+{short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"review"|"invalid"|"pending",long_term_invalid_reason:TEXT}.
 Start immediately after the opening hand is kept, concurrently with the long-term
 planner. If no goal is in this frozen input, use standing strategy and the kept
 hand, mark long_term_validity:"pending", and publish an actionable opening plan
@@ -227,8 +237,17 @@ Optional dependencies:[JSON_POINTERS] declares up to 24 distinct factual paths i
 this frozen board, for example /players/0/life or /hand. List indexes are zero-based.
 Only existing facts may be declared. A revised goal queues tactical follow-up when
 these facts changed; a goal version change alone does not wake you.
-Invalidity requires a concrete reason, queues strategic work and still proceeds to
-actions. Follow the frozen publication_order and current stage:
+In strategic_review:1 games, use review when the named route or its priorities
+need reevaluation: a named piece is lost, a missing piece becomes available, a
+named milestone is achieved, an opposing card obstructs the route, or a concrete
+better card/engine changes the preferred route. The broad strategy need not be
+invalid. Put the changed card/fact and what needs reconsideration in
+long_term_invalid_reason (max 300 characters). Do not request review merely for
+routine tapping, priority changes, or facts already incorporated into the goal.
+Use invalid for a demonstrably obsolete goal; valid when its concrete route and
+priorities remain current. Earlier contracts accept only valid/invalid/pending.
+Both review and invalid queue long-term work without delaying your action proposal.
+Do not wait for that review or set watches. Follow the frozen publication_order and current stage:
 EOT1 (after own cleanup): short_term prose, then actions.
 EOT3 (opposite-seat check): actions, then short_term prose.
 Opening and other wakes use prose then actions. Publish the first stage promptly

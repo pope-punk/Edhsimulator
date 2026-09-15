@@ -259,3 +259,25 @@ creature tapping, consequential triggers and other effects. Search is bounded;
 unsupported or impossible payments return for revision without spending resources.
 Resolution-payment choices, attack taxes and room unlocks retain explicit payment.
 Older games retain their bound explicit-payment contract.
+
+## Concrete strategic reviews
+
+Fresh `strategic_review:1` games ask long-term planners to name the current cards,
+engine/win route, available and missing pieces, opposing obstacles, and fallback.
+Standing deck doctrine remains separate; tactical mana/cast sequencing remains
+with the short-term planner and decider. The existing 1200-character limit remains.
+Both short-term and long-term planner watches remain disabled.
+
+Short-term `long_term_validity` adds `review` alongside `valid`, `invalid`, and
+`pending`. Use `review` for a material change to named pieces, achieved milestones,
+obstacles, or a better concrete route, even when the broad strategy remains viable.
+Supply the changed card/fact and question in `long_term_invalid_reason` (300 chars).
+The host binds the request to the assessed goal, supplies it as `review_goal`,
+coalesces work, and ignores assessments of superseded goals. Tactical publication
+continues without waiting. A review may confirm the goal; `invalid` still requires
+revised prose. Routine mana/priority changes do not warrant strategic review.
+
+A decider's explicit override of a diplomatic hold already queues long-term review
+once per newly overridden negotiation. It does not execute a gameplay action.
+That review retains the ordinary diplomatic-publication behavior; the exception
+for reviews initiated solely by diplomat brief-change requests remains unchanged.
