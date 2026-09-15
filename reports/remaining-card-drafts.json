@@ -153,16 +153,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "96afc686cad3279a1bc689000f1dc9279537235c756800a0b2fa7e3514980f1c",
       "previous_draft_definition": "draft:aminatou-veil-piercer",
       "reviewed_definition": "catalog:aminatou-veil-piercer",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -949,16 +953,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "e9593d5e13e3c7e4aa7aaf71953f3a9eecdeeed05687e582d559c08326e9b221",
       "previous_draft_definition": "draft:entity-tracker",
       "reviewed_definition": "catalog:entity-tracker",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -1346,16 +1354,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "4b831aeaf818c17aeae87d0f07a702a1f86f0e30ac3efe038f0f82730ff61d68",
       "previous_draft_definition": "draft:funeral-room-awakening-hall",
       "reviewed_definition": "catalog:funeral-room-awakening-hall",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -1410,16 +1422,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "6af0e90a8304198ec6180c4ae6e85cc10fd65f6e61bc9f7ea536abc4e3956c48",
       "previous_draft_definition": "draft:ghostly-dancers",
       "reviewed_definition": "catalog:ghostly-dancers",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -3506,16 +3522,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "028214612d839be03d088a105ee9afa261d5eecf60274c84d2fbff7a603fa538",
       "previous_draft_definition": "draft:the-cruelty-of-gix",
       "reviewed_definition": "catalog:the-cruelty-of-gix",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -3771,16 +3791,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "4a3aee2d51b070586feba7dc432f7b5a842f7825e59bcb342441a11c3246bd7f",
       "previous_draft_definition": "draft:urza-s-saga",
       "reviewed_definition": "catalog:urza-s-saga",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -3843,16 +3867,20 @@
       ],
       "authoring_status": "complete_printed_program",
       "rules_review_status": "reviewed",
-      "hosted_validation_status": "required_reviewed_loader_pending",
+      "hosted_validation_status": "passed",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "implementation_notes": "Complete printed program with exact source binding. All 56 focused methods and the full conformance suite passed on Ubuntu and Windows through both draft and required reviewed loaders.",
       "source_facts_sha256": "83d149a031b3cc1e63b9a115eb57d624ee04f4215ecbc887d6bc0b7f4dc0b093",
       "previous_draft_definition": "draft:victor-valgavoth-s-seneschal",
       "reviewed_definition": "catalog:victor-valgavoth-s-seneschal",
       "draft_hosted_validation": {
         "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
         "run_id": 34913303661
+      },
+      "hosted_validation": {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658
       }
     },
     {
@@ -4074,7 +4102,7 @@
       "the-cruelty-of-gix",
       "urza-s-saga"
     ],
-    "validation_status": "required_reviewed_loader_pending",
+    "validation_status": "passed",
     "runtime_checkpoint_schema": 132,
     "state_checkpoint_schema": 20,
     "new_test_methods": 56,
@@ -4124,12 +4152,28 @@
         "stage": "draft",
         "status": "passed",
         "test_count": 2592
+      },
+      {
+        "commit": "5203a019c351ba3d6bb6c437d90d4a181122bd32",
+        "run_id": 34914282145,
+        "stage": "required_reviewed_loader",
+        "status": "failed",
+        "test_count": 2592,
+        "failures": 1,
+        "errors": 0,
+        "corrections": [
+          "Replace the previous batch's stale global count assertion with required-card membership. Dedicated complete-library assertions retain the exact 334/400 totals."
+        ]
+      },
+      {
+        "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+        "run_id": 34915167658,
+        "stage": "required_reviewed_loader",
+        "status": "passed",
+        "test_count": 2592
       }
     ],
-    "review_work_remaining": [
-      "Successful required reviewed-loader validation on Ubuntu and Windows.",
-      "Final inventory and completion records; pause the existing heartbeat."
-    ],
+    "review_work_remaining": [],
     "shared_mechanics": [
       "Room door characteristics, special actions and unlock events",
       "First-draw miracle revelation and exact-card resolution casting",
@@ -4171,6 +4215,70 @@
           "conclusion": "success"
         }
       ]
+    },
+    "hosted_validation": {
+      "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+      "run_id": 34915167658,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34915167658",
+      "conclusion": "success",
+      "tests_per_platform": 2592,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104211111294,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2592,
+          "seconds": 548.599,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104211111444,
+          "name": "verify (windows-latest)",
+          "tests": 2592,
+          "seconds": 510.442,
+          "conclusion": "success"
+        }
+      ]
+    },
+    "final_inventory_audit": {
+      "unique": 334,
+      "catalog_unique": 334,
+      "source_binding_mismatches": [],
+      "unmapped": [],
+      "decks": [
+        {
+          "deck": "Reaminatour \u2014 Aminatou, Veil Piercer",
+          "total": 100,
+          "mapped": 100
+        },
+        {
+          "deck": "Minsc & Boo, Timeless Heroes",
+          "total": 100,
+          "mapped": 100
+        },
+        {
+          "deck": "Omo, Queen of Vesuva",
+          "total": 100,
+          "mapped": 100
+        },
+        {
+          "deck": "Elenda, Saint of Dusk",
+          "total": 100,
+          "mapped": 100
+        }
+      ],
+      "original_outstanding": 107,
+      "all_original_outstanding_in_candidate": true,
+      "previous_327_unchanged": true
     }
   },
   "hosted_validation_history": [
@@ -5231,6 +5339,40 @@
           "name": "verify (windows-latest)",
           "tests": 2592,
           "seconds": 392.701,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "stage": "required_reviewed_loader",
+      "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+      "run_id": 34915167658,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34915167658",
+      "conclusion": "success",
+      "tests_per_platform": 2592,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "required reviewed-loader conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104211111294,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2592,
+          "seconds": 548.599,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104211111444,
+          "name": "verify (windows-latest)",
+          "tests": 2592,
+          "seconds": 510.442,
           "conclusion": "success"
         }
       ]
@@ -8406,45 +8548,8 @@
       "Read focused source ranges and avoid repeated full inventory or file dumps.",
       "Keep exact validation evidence and all existing review, privacy and compatibility requirements."
     ],
-    "candidate_families": [
-      {
-        "cards": [
-          "aminatou-the-fateshifter",
-          "domri-anarch-of-bolas",
-          "minsc-boo-timeless-heroes",
-          "nissa-steward-of-elements",
-          "sorin-vengeful-bloodlord",
-          "innkeeper-s-talent",
-          "leyline-of-hope"
-        ],
-        "focus": "Share loyalty activation support, X loyalty and entry, control changes, counter/layer updates, Class levels and pregame choices; retain each commander's printed clauses."
-      },
-      {
-        "cards": [
-          "glasswing-grace-age-graced-chapel",
-          "kazuul-s-fury-kazuul-s-cliffs",
-          "sorin-of-house-markov",
-          "pontiff-of-blight",
-          "invasion-of-theros",
-          "the-restoration-of-eiganjo",
-          "elspeth-conquers-death"
-        ],
-        "focus": "Implement face selection, transform/return identity, battle protection and defeat, extort and granted triggers, plus complete Saga chapters and lifecycle. Reuse the preceding loyalty and payment primitives."
-      },
-      {
-        "cards": [
-          "aminatou-veil-piercer",
-          "entity-tracker",
-          "funeral-room-awakening-hall",
-          "ghostly-dancers",
-          "victor-valgavoth-s-seneschal",
-          "the-cruelty-of-gix",
-          "urza-s-saga"
-        ],
-        "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit."
-      }
-    ],
-    "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
+    "candidate_families": [],
+    "selection_note": "All 28 baseline cards completed in four substantive passes. No remaining implementation queue. Resume only on a new user request."
   },
   "draft_hosted_validation": {
     "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
@@ -8479,20 +8584,20 @@
       }
     ]
   },
-  "completed_request_batch": false,
-  "completed_heartbeat_cycle": false,
+  "completed_request_batch": true,
+  "completed_heartbeat_cycle": true,
   "completion_plan": {
     "requested_on": "2026-09-14",
     "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
     "baseline_remaining_unique": 28,
     "target_maximum_passes": 4,
-    "completed_passes": 3,
+    "completed_passes": 4,
     "baseline_cards_per_pass": 7,
     "usual_target_range": [
       7,
       10
     ],
-    "status": "required_reviewed_loader_pending",
+    "status": "complete",
     "passes": [
       {
         "pass": 1,
@@ -8606,7 +8711,7 @@
           "urza-s-saga"
         ],
         "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit.",
-        "status": "required_reviewed_loader_pending",
+        "status": "complete",
         "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960",
         "draft_hosted_validation": {
           "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
@@ -8620,13 +8725,76 @@
           "victor-valgavoth-s-seneschal",
           "the-cruelty-of-gix",
           "urza-s-saga"
-        ]
+        ],
+        "cards_completed": [
+          "aminatou-veil-piercer",
+          "entity-tracker",
+          "funeral-room-awakening-hall",
+          "ghostly-dancers",
+          "victor-valgavoth-s-seneschal",
+          "the-cruelty-of-gix",
+          "urza-s-saga"
+        ],
+        "hosted_validation": {
+          "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+          "run_id": 34915167658
+        }
       }
     ],
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",
     "completion": "Every printed clause, source-bound review, successful draft validation and required reviewed-loader validation.",
     "planning_rule": "Aim to finish in four or fewer substantive implementation passes. Rebalance and combine groups when dependencies permit. Continuations and validation repairs belong to the same pass. Record actual completions and remaining pass budget without resetting this baseline; report a concrete blocker and revised grouping if the target becomes infeasible.",
-    "remaining_passes_in_target": 1,
-    "remaining_unique": 7
+    "remaining_passes_in_target": 0,
+    "remaining_unique": 0
+  },
+  "hosted_validation": {
+    "commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+    "run_id": 34915167658,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34915167658",
+    "conclusion": "success",
+    "tests_per_platform": 2592,
+    "platforms": [
+      "ubuntu-latest",
+      "windows-latest"
+    ],
+    "checks": [
+      "source syntax",
+      "full distribution installation",
+      "packaged assets",
+      "required reviewed-loader conformance"
+    ],
+    "jobs": [
+      {
+        "job_id": 104211111294,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2592,
+        "seconds": 548.599,
+        "conclusion": "success"
+      },
+      {
+        "job_id": 104211111444,
+        "name": "verify (windows-latest)",
+        "tests": 2592,
+        "seconds": 510.442,
+        "conclusion": "success"
+      }
+    ]
+  },
+  "completion_summary": {
+    "reviewed_unique": 334,
+    "deck_copies": 400,
+    "original_outstanding_completed": 107,
+    "remaining_unique": 0,
+    "remaining_copies": 0,
+    "draft_bundle_empty": true,
+    "prior_reviewed_rows_preserved": 327,
+    "completed_passes": 4,
+    "target_maximum_passes": 4,
+    "heartbeat_id": "complete-remaining-edh-cards",
+    "heartbeat_action": "pause_after_final_records",
+    "production_admission_changed": false,
+    "local_project_execution": false,
+    "validated_code_commit": "108572c4eeacbb55635a0aaa30ade1eed50e04dc",
+    "validation_run": 34915167658
   }
 }

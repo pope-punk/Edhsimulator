@@ -6,9 +6,10 @@ Ghostly Dancers; Victor, Valgavoth's Seneschal; The Cruelty of Gix; and Urza's S
 
 ## Status
 
-Source-bound review and hosted draft validation are complete. The reviewed library
-contains 334/334 unique cards and 400/400 deck copies; its draft bundle is empty.
-Required reviewed-loader validation is pending, so Pass 4 is not yet complete.
+Source-bound review, hosted draft validation and required reviewed-loader validation
+are complete. The reviewed library contains **334/334 unique cards and 400/400
+deck copies**; its draft bundle is empty. All 107 originally outstanding cards
+are complete, including all 28 baseline cards within four substantive passes.
 No local Python, installations, tests or games have run. No production admission,
 existing game contracts, hosts or migrations are changed. This work remains on
 `codex/remaining-card-programs`, based on `ad19e060ff529c17b0b260b64be4499003f2b960`.
@@ -85,7 +86,12 @@ The seven promoted rows bind every printed face to the catalog; all 327 prior
 reviewed rows remain unchanged. The same 56 methods now strictly require
 `load_reviewed()`, with no draft fallback. The existing library-wide trigger
 index test also checks both Room doors separately and together.
-Required reviewed-loader validation must pass before this pass is marked complete.
+Required reviewed-loader [run 34915167658](https://github.com/pope-punk/Edhsimulator/actions/runs/34915167658) at
+`108572c4eeacbb55635a0aaa30ade1eed50e04dc` passed **2592 tests on each of Ubuntu and Windows**,
+plus source syntax, full installation and packaged assets. The final 56 methods
+strictly load reviewed programs. The library-wide Room door assertions passed.
+The following result-recording commit changes only documentation and inventory;
+runtime, programs and tests remain identical to this validated commit.
 
 
 The first required reviewed-loader run [34914282145](https://github.com/pope-punk/Edhsimulator/actions/runs/34914282145)
@@ -95,3 +101,14 @@ checks that its seven required cards are present; the dedicated full-library tes
 continues to assert 334 unique cards and 400 deck copies. All other 2591 methods,
 including the final seven programs and Room index cases, passed. This is a fixture
 scope correction; no card program or runtime change is required.
+
+
+## Final inventory audit
+
+The reviewed bundle has exactly 334 distinct catalog IDs with matching source-fact
+hashes. Every deck has 100/100 authored copies: Reaminatour, Minsc & Boo, Omo and
+Elenda. All 327 previously reviewed rows are unchanged. All 107 original work-order
+cards have passed required hosted validation. The draft bundle and remaining queue
+are empty. The original 28-card plan completed in four passes; validation repairs
+remained within their original passes. The existing 40-minute heartbeat is to be
+paused after recording these results. No project code ran locally.

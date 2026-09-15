@@ -5,23 +5,38 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**334 source-bound reviewed programs / 400 deck copies**. The final seven cards
-have passed source review and draft validation; required reviewed-loader validation
-remains pending.
+**334/334 source-bound reviewed programs / 400/400 deck copies**. All 107
+originally outstanding cards are complete. The draft bundle and remaining queue
+are empty; all four passes of the original 28-card plan are complete.
 Reviewed coverage is not production certification.
 
-## Pass 4: final reviewed-loader validation
+## Pass 4 complete
 
-All seven remaining cards are promoted to the source-bound reviewed bundle.
-The draft bundle is empty; all 327 previous reviewed rows are unchanged.
+Aminatou, Veil Piercer; Entity Tracker; Funeral Room // Awakening Hall;
+Ghostly Dancers; Victor, Valgavoth's Seneschal; The Cruelty of Gix; and Urza's
+Saga have complete printed programs and source-bound review. Shared support
+covers Room doors and unlocking, first-draw miracle casting, per-turn ability
+resolution counts, simultaneous private discard, read ahead, persistent Saga
+grants, live Construct modifiers and exact printed mana-cost searches.
+
 Hosted draft [run 34913303661](https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661) at `245c67c9d5e5192a4fa3577a4e9fe570a976f158`
-passed **2592 tests per platform**, including **56 focused methods**,
-on Ubuntu and Windows, plus syntax, full installation and packaged assets.
-The same methods now require the reviewed loader. Continue this pass through
-its required hosted validation, final inventory audit and completion records.
-See [the current review](ROOMS_MIRACLE_SAGAS_REVIEW.md).
+passed **2592 tests per platform**, including **56 focused methods**.
+Required reviewed-loader [run 34915167658](https://github.com/pope-punk/Edhsimulator/actions/runs/34915167658) at `108572c4eeacbb55635a0aaa30ade1eed50e04dc`
+passed **2592 tests per platform**. Both Ubuntu and Windows also passed
+source syntax, full installation and packaged assets. The same focused tests
+require the reviewed bundle, with no draft fallback.
 
-## Pass 3 complete
+All four decks have **100/100** authored copies. The final audit found no missing
+catalog IDs or source-hash mismatches; all 327 previous reviewed rows are unchanged.
+Kernel/state schemas are **132/20**. All 107 original outstanding cards and all 28
+cards in the four-pass baseline are complete. The following result-recording commit
+changes only documentation and inventory; runtime, programs and tests remain
+identical to the validated commit. See [the complete review](ROOMS_MIRACLE_SAGAS_REVIEW.md).
+
+No implementation cards remain. Pause the existing 40-minute heartbeat after
+recording completion; further repository work requires a new user request.
+
+## Previous completed Pass 3
 
 Glasswing Grace // Age-Graced Chapel; Kazuul's Fury // Kazuul's Cliffs;
 Sorin of House Markov; Pontiff of Blight; Invasion of Theros;
@@ -86,11 +101,11 @@ revise the grouping explicitly.
 Reuse existing primitives. During hosted CI waits, review or prepare the next
 family where useful. Group related validation and avoid redundant full-suite
 runs. All existing GitHub-only execution constraints remain in force, and the
-heartbeat remains active every 40 minutes.
+heartbeat used a 40-minute interval. It is paused when the completed final records are saved.
 
-## Next pass: Rooms, miracle and remaining Sagas
+## Retained Pass 4 work order (completed above)
 
-Begin Pass 4 with Aminatou, Veil Piercer; Entity Tracker;
+The completed Pass 4 scope was Aminatou, Veil Piercer; Entity Tracker;
 Funeral Room // Awakening Hall; Ghostly Dancers; Victor, Valgavoth's Seneschal;
 The Cruelty of Gix; and Urza's Saga.
 
@@ -104,7 +119,7 @@ cost rather than mana value. Keep all seven in scope and finish with the complet
 
 ## Final-pass source preparation
 
-Preparation only; no Pass 4 program is implemented by these notes.
+Historical source preparation, subsequently implemented and validated in Pass 4 above.
 
 Rooms need independent locked/unlocked doors, a stack choice of one half, and
 combined characteristics outside the stack/battlefield. Entry from elsewhere
@@ -753,7 +768,7 @@ admission remain separate review steps.
 ## Continuing the remaining cards
 
 [The static inventory](../reports/remaining-card-drafts.json) retains all 107
-originally outstanding card IDs, including the 86 now promoted. It records
+originally outstanding card IDs, including all 107 now promoted. It records
 deck membership, printed text and each card's current authoring/review status. It is an authoring report, not an executable-coverage report.
 
 The entry lands, evoke cards, linked-exile cards and Animate Dead completed
@@ -765,8 +780,8 @@ queue and validation record at the top of this file.
 Uro's graveyard alternative now supports its five-card exile group. Ordered public activation cost groups are now supported for Nightmare, and
 bounded authored mana plans support resolution casting and paid attack declarations. Resolution-time optional
 mana payments are also implemented and reviewed. Saga,
-Room, planeswalker and transforming programs still need their shared lifecycle
-support before whole-card coverage.
+Room, planeswalker and transforming programs now have their shared lifecycle
+support and complete source-bound coverage, validated in the four passes above.
 
 ## Rules references used while writing
 
