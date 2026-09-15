@@ -89,6 +89,7 @@ def claim(campaign,actor,role):
         if seat is None or actor not in campaign.kernel.state.live_players:raise RulesViolation('Unavailable actor')
         job=seat['jobs'].get(role)
         if job is None or role in (SHORT,LONG) and not seat['kept']:return None
+        if role==DIPLOMAT and not seat['plans'].get('diplomacy_brief'):return None
         if job['input'] is None:
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)

@@ -173,3 +173,12 @@ class WorkflowTests(TestCase):
         self.post(job,messages=[],authorization_request='Allow more restraint.')
         self.assertEqual(bounds(),self.game.state()['actors']['Omo']['plans']['diplomacy_brief']['value'])
         self.assertFalse(self.game.state()['actors']['Omo'].get('diplomatic_holds'))
+
+    def test_addressed_diplomat_waits_for_initial_authority(self):
+        with self.game.transaction() as state:
+            planning.queue(state,'Omo',planning.DIPLOMAT,'incoming:fixture')
+        self.assertIsNone(planning.claim(self.game,'Omo',planning.DIPLOMAT))
+        job=self.goal()
+        self.assertEqual(bounds(),job['brief'])
+        self.assertIn('incoming:fixture',job['reasons'])
+        self.assertTrue(job['requires_public_post'])
