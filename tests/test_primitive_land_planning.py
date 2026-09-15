@@ -67,7 +67,7 @@ class LandPlanningTests(TestCase):
                       'phase_coverage':{phase:({'status':'planned'} if phase=='precombat_main' else {'status':'no_action','reason':'Fixture.'}) for phase in planning.PHASES}}
             planning.publish(game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',
                 {'short_term':{'short_term_plan':'Play Forest, tap it and cast Bauble.','continuity':'No land played.',
-                               'long_term_validity':'valid','long_term_invalid_reason':''},'actions':proposal})
+                               'long_term_validity':'valid' if 'long_term' in job['plans'] else 'pending','long_term_invalid_reason':''},'actions':proposal})
             # Existing claims are immutable; model a new delivery before approving the new plan.
             with game.transaction() as state:state['claim']=None
             frozen=actions.claim(game,'Omo');runner.inputs[thread]=frozen

@@ -1,5 +1,10 @@
 # Agent architecture v1
 
+For the new primitive build, [PRIMITIVE_COORDINATION.md](PRIMITIVE_COORDINATION.md)
+is authoritative for cadence, authored diplomacy, private advice and holds.
+The legacy watch/mandatory pre-turn/authorized-text details below do not apply to
+this build. Existing game bindings are not silently migrated.
+
 Fresh split cohorts also bind `turn_batches:1`: two mandatory short-term updates
 at the preceding living opponents' end steps, full-turn phase coverage, and
 pilot-approved priority continuation. See [APPROVED_SEQUENCES.md](APPROVED_SEQUENCES.md#full-turn-batches-turn_batches1).

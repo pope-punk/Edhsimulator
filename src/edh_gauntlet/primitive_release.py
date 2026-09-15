@@ -22,7 +22,7 @@ def fingerprint(root=PROJECT_ROOT):
     from .primitive_campaign import CONFIG_FILES,frozen_strategy
     package=Path(__file__).parent
     policies=('AGENT_ARCHITECTURE_V1.md','GAUNTLET_WORKFLOW.md','HOST_RUNTIME.md',
-              'HOST_AGENT_POLICY.md','MANUAL_REFEREE_PROTOCOL.md')
+              'HOST_AGENT_POLICY.md','MANUAL_REFEREE_PROTOCOL.md','PRIMITIVE_COORDINATION.md')
     return {'kernel':IMPLEMENTATION_ID,'modules':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()
             for p in sorted(package.glob('*.py'))},
         'web_assets':{p.name:hashlib.sha256(p.read_bytes()).hexdigest()

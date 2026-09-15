@@ -39,14 +39,14 @@ def prepare(packet,role,previous=None,*,schema_available=True):
         facts['retained_rule_ids']=[key for key in rules if key in known]
         facts['format']='Objects list current source references. Resolve rules_id in rules or the retained rules with that exact ID from this physical conversation. Changed rules receive new IDs. A new conversation receives every current definition.'
         state['rules_ids']=sorted(known|set(rules))
-    messages=packet.get('messages')
-    if isinstance(messages,list):
-        known=set(previous.get('message_ids',[]));ids=[digest(row) for row in messages]
-        fresh={key:row for key,row in zip(ids,messages) if key not in known}
-        encoded={'encoding':'primitive_records_v1','ids':ids,'new':fresh,
-                 'read':'The ordered current list is ids; use each complete record in new or its previously delivered record with the same ID in this physical conversation.'}
-        # Always label initial records so later references have acknowledged IDs.
-        result['messages']=encoded;state['message_ids']=sorted(known|set(ids))
+    for field in ('messages','private_diplomacy'):
+        records=packet.get(field)
+        if isinstance(records,list):
+            known=set(previous.get(field+'_ids',[]));ids=[digest(row) for row in records]
+            fresh={key:row for key,row in zip(ids,records) if key not in known}
+            result[field]={'encoding':'primitive_records_v1','ids':ids,'new':fresh,
+                          'read':'Ordered current IDs reference records in new or previously delivered in this same physical conversation.'}
+            state[field+'_ids']=sorted(known|set(ids))
     return result,state
 
 
@@ -69,10 +69,13 @@ def expand(packet,previous=None):
         for key in facts.get('retained_rule_ids',[]):
             if key not in rules:raise ValueError('Missing retained rule')
         facts['rules']={key:rules[key] for key in set(facts.get('rules',{}))|set(facts.pop('retained_rule_ids',[]))}
-    messages=dict(previous.get('messages',{}));encoded=result.get('messages')
-    if isinstance(encoded,dict) and encoded.get('encoding')=='primitive_records_v1':
-        messages.update(encoded['new'])
-        try:result['messages']=[messages[key] for key in encoded['ids']]
-        except KeyError as exc:raise ValueError('Missing retained message') from exc
+    retained={}
+    for field in ('messages','private_diplomacy'):
+        records=dict(previous.get(field,{}));encoded=result.get(field)
+        if isinstance(encoded,dict) and encoded.get('encoding')=='primitive_records_v1':
+            records.update(encoded['new'])
+            try:result[field]=[records[key] for key in encoded['ids']]
+            except KeyError as exc:raise ValueError('Missing retained record') from exc
+        retained[field]=records
     result.pop('board_id',None)
-    return result,{'boards':bases,'rules':rules,'messages':messages}
+    return result,{'boards':bases,'rules':rules,**retained}

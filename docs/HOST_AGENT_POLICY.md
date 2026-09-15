@@ -1,5 +1,10 @@
 # Resident agent contract
 
+For the new primitive build, [PRIMITIVE_COORDINATION.md](PRIMITIVE_COORDINATION.md)
+is authoritative for cadence, authored diplomacy, private advice and holds.
+The legacy watch/mandatory pre-turn/authorized-text details below do not apply to
+this build. Existing game bindings are not silently migrated.
+
 For fresh `primitives-v1` releases, the primitive section of
 [HOST_RUNTIME.md](HOST_RUNTIME.md#primitive-campaign-release) governs delivery.
 Deciders receive current facts and plans, without historical decision logs, including
@@ -274,3 +279,23 @@ Metadata telemetry separately records automatic execution time, delivered input
 size, accepted publication mode, planner/direct batch approvals, and rejected
 input hashes. Aggregate counters survive rolling event eviction; tool-return
 wait time is not engine execution time.
+
+Diplomats privately tag every selected authorized message using
+`urgent_material_plan_change: {MESSAGE_ID: 0|1}`. Zero means routine speech and
+preserves approved actions and snoozes. One means urgent information requiring
+immediate tactical reconsideration; only actually posted messages interrupt
+remaining batches, with a bound interruption notice and no replay of executed
+steps. The private tag is not public speech. Missing tags are rejected for new
+submissions. Historical queued messages retain their prior interruption behavior.
+
+Each selected message also requires a private assessment with explanation,
+recommended_action, and truthfulness (truthful/deceptive/uncertain). These are
+advice for the speaker's own decider, never opponents' packets or public speech.
+Truthfulness is the diplomat's assessment, not engine-verified fact. Use uncertain
+when available information cannot establish it.
+
+Both planners queue when their seat keeps its opening hand. The short-term planner
+uses standing strategy without waiting for the initial long-term publication;
+mark long_term_validity pending exactly when its frozen input lacks a goal.
+The first goal publication queues follow-up tactical work without rewriting a
+claimed job. Independent lanes do not guarantee completion before the first main.

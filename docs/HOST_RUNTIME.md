@@ -1,5 +1,10 @@
 # Software host and resident agents
 
+For the new primitive build, [PRIMITIVE_COORDINATION.md](PRIMITIVE_COORDINATION.md)
+is authoritative for cadence, authored diplomacy, private advice and holds.
+The legacy watch/mandatory pre-turn/authorized-text details below do not apply to
+this build. Existing game bindings are not silently migrated.
+
 ## Primitive campaign release
 
 Fresh primitive campaigns use `primitive_lifecycle init --games N --learning disabled`.

@@ -245,8 +245,6 @@ class PrimitiveCampaign:
         observe(self,state)
         from .primitive_scheduling import observe as observe_alarms
         observe_alarms(self,state)
-        from .primitive_watches import observe as observe_watches
-        observe_watches(self,state)
         if self.kernel.outcome is not None and not state['terminal']:
             state['terminal']={'kind':self.kernel.outcome['kind'],'winners':self.kernel.outcome['winners'],
                 'rules_commit':self.store.committed_head(),'contract_sha256':self.binding['contract_sha256'],

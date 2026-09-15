@@ -41,10 +41,13 @@ def claim(campaign,actor):
         seat=state['actors'][actor];packet=campaign.store.packet(actor)
         from .primitive_snoozes import annotate
         annotate(campaign,actor,packet,seat['snooze'])
-        value={'actor':actor,'game':campaign.binding['game_number'],'revision':campaign.kernel.revision,'board':packet,
+        from .primitive_negotiation import active
+        value={'diplomatic_holds':deepcopy(active(campaign,seat)),'actor':actor,'game':campaign.binding['game_number'],'revision':campaign.kernel.revision,'board':packet,
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
+               'batch_interruption':deepcopy(seat.get('batch_interruption')),
+               'private_diplomacy':deepcopy(seat.get('private_diplomacy',[])),
                'batch_context':{'own_turn':seat.get('turns',0),'phase':phase_group(campaign.kernel.phase),
                     'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
                         and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},
@@ -57,6 +60,7 @@ def claim(campaign,actor):
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1
         value['claim_id']=digest({'binding':campaign.binding,'commit':campaign.store.committed_head(),'actor':actor,'claim_serial':state['claim_serial']})
+        seat.pop('batch_interruption',None)
         state['claim']=value
         return deepcopy(value)
 
@@ -95,6 +99,8 @@ def submit(campaign,actor,claim_id,request_id,command,rationale,scheduler):
     directive=bind(campaign,actor,directive)
     bound=bind_command(campaign,actor,command,request_id)
     if current['revision']!=campaign.kernel.revision:raise RulesViolation('Frozen decision revision changed')
+    from .primitive_negotiation import enforce
+    enforce(campaign,actor,bound)
     return campaign.submit(actor,request_id,bound,rationale=rationale,
         plan_refs={k:v['id'] for k,v in current['plans'].items()},control={'scheduler':directive,'clear_approval':True})
 
@@ -308,6 +314,8 @@ def automatic(campaign):
             from .primitive_batch_choices import bind
             chosen=bind(campaign,actor,approved,approved['steps'][approved['cursor']])
         command=bind_command(campaign,actor,chosen,request_id)
+        from .primitive_negotiation import enforce
+        enforce(campaign,actor,command)
         campaign.submit(actor,request_id,command,rationale=rationale,control=control,
             plan_refs={'actions':approved['proposal_id']} if approved and approved.get('proposal_id') else {})
     except RulesViolation as exc:
