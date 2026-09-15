@@ -186,3 +186,19 @@ fresh game with learning disabled. It never initializes a cohort or adopts a
 legacy game. Unsupported multi-game/learning-enabled intents stay blocked.
 Focused admission, launch and release-evidence checks pass. The complete release
 validator is the next gate; no release receipt or hosted-model game exists yet.
+
+Release validation completed successfully at runtime implementation 83edf6d:
+2,835 repository tests passed, isolated installed assets verified, and installed
+and source fingerprints matched. The receipt is
+`/workspaces/Edhsimulator/archive/releases/primitive-host-20260915-a1.json`
+(SHA256 `009aa748d550425cdac6e38f8be390311712c838caf415a342ad84dd75c4e84b`).
+Selected with `EDH_PRIMITIVE_RELEASE_RECEIPT`, it produces a ready preflight for
+`/workspaces/Edhsimulator/runs/primitive-hosted-test-20260915`; that directory has
+not been initialized.
+
+Ubuntu CI found one installed-layout test-path assumption: the release test used
+the installed asset root to locate repository tests. The fixture now derives its
+source root from its own file. All three release tests pass both locally and
+against an isolated installed package (`/tmp/edh-ci-layout.log`). Runtime source
+and assets are unchanged, so the release receipt still matches. Final CI on this
+test correction remains required before merge and hosted-model gameplay.

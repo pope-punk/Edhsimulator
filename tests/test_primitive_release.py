@@ -10,7 +10,6 @@ from edh_gauntlet.rules_launch_preflight import preflight
 from edh_gauntlet.rules_adapter import digest
 from edh_gauntlet.rules_state import RulesViolation
 from edh_gauntlet.runtime_store import write
-from edh_gauntlet.paths import PROJECT_ROOT
 
 
 class ReleaseEvidenceTests(TestCase):
@@ -44,5 +43,5 @@ class ReleaseEvidenceTests(TestCase):
 
     def test_failed_validation_never_publishes_receipt(self):
         with patch('edh_gauntlet.primitive_release.subprocess.run',side_effect=subprocess.CalledProcessError(1,'tests')):
-            with self.assertRaises(subprocess.CalledProcessError):release.validate(PROJECT_ROOT,self.path)
+            with self.assertRaises(subprocess.CalledProcessError):release.validate(Path(__file__).resolve().parents[1],self.path)
         self.assertFalse(self.path.exists())
