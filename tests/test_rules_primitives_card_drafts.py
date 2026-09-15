@@ -7,11 +7,12 @@ from edh_gauntlet.catalog import load_catalog
 from edh_gauntlet.rules_bundle import digest, load_reviewed, source_facts
 from edh_gauntlet.rules_casting import Payment
 from edh_gauntlet.rules_kernel import RulesKernel
-from edh_gauntlet.rules_program import CleanupCast, DoubleFacedProgram, EntryPayment, decode, encode, validate
+from edh_gauntlet.rules_program import CleanupCast, DoubleFacedProgram, RoomProgram, EntryPayment, decode, encode, validate
 from edh_gauntlet.rules_state import RulesState, RulesViolation, Zone
 
 
 PROMOTED_CARDS = frozenset((
+    'aminatou-veil-piercer', 'entity-tracker', 'funeral-room-awakening-hall', 'ghostly-dancers', 'victor-valgavoth-s-seneschal', 'the-cruelty-of-gix', 'urza-s-saga',
     'glasswing-grace-age-graced-chapel', 'kazuul-s-fury-kazuul-s-cliffs', 'sorin-of-house-markov', 'pontiff-of-blight', 'invasion-of-theros', 'the-restoration-of-eiganjo', 'elspeth-conquers-death',
     'aminatou-the-fateshifter', 'domri-anarch-of-bolas', 'minsc-boo-timeless-heroes', 'nissa-steward-of-elements', 'sorin-vengeful-bloodlord', 'innkeeper-s-talent', 'leyline-of-hope',
     'chthonian-nightmare', 'maze-s-end', 'rhythm-of-the-wild', 'parasitic-impetus', 'propaganda', 'defiler-of-vigor', 'darksteel-mutation',
@@ -74,7 +75,7 @@ class CardProgramReviewTests(unittest.TestCase):
 
     def test_promoted_cards_load_with_complete_printed_faces_and_review_bindings(self):
         catalog = {card.card_id: card for card in load_catalog(self.root / 'data/catalog/cards.json')}
-        self.assertEqual(100, len(self.cards))
+        self.assertEqual(107, len(self.cards))
         self.assertEqual(7, len(self.lands))
         for key, program in self.cards.items():
             with self.subTest(card=key):
@@ -84,9 +85,10 @@ class CardProgramReviewTests(unittest.TestCase):
                 self.assertTrue(review['review_basis'])
                 self.assertEqual(digest(source_facts(catalog[key])), review['source_facts_sha256'])
                 self.assertEqual(review['program'], encode(program))
-                printed=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,)
+                printed=(program,program.back) if isinstance(program,DoubleFacedProgram) else (program,program.right) if isinstance(program,RoomProgram) else (program,)
                 self.assertEqual(len(catalog[key].faces),len(printed))
                 if isinstance(program,DoubleFacedProgram):self.assertEqual(catalog[key].layout,program.layout)
+                if isinstance(program,RoomProgram):self.assertEqual('room',catalog[key].layout)
                 for face,face_program in zip(catalog[key].faces,printed):
                     self.assertEqual(face.name,face_program.name)
                     for field in ('types', 'subtypes', 'supertypes', 'colors'):

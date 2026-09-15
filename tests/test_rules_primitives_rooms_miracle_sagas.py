@@ -1,4 +1,4 @@
-"""Hosted conformance for Pass 3's complete printed cards and shared rules."""
+"""Required reviewed-loader conformance for the final seven printed cards."""
 import json
 import unittest
 from collections import Counter as Counts
@@ -23,10 +23,9 @@ class RoomsMiracleSagasTests(unittest.TestCase):
     def setUpClass(cls):
         cls.root=Path(__file__).resolve().parents[1]
         reviewed=load_reviewed(cls.root)
-        drafts=json.loads((cls.root/'data/rules/draft_cards.json').read_text())['drafts']
-        cls.rows={r['card_id']:r for r in drafts if r['card_id'] in CARDS}
-        cls.cards={key:validate(decode(cls.rows[key]['program'])) for key in CARDS}
-        cls.base=tuple(r['program'] for r in reviewed.values())+tuple(cls.cards.values())
+        cls.rows={key:reviewed[key]['review'] for key in CARDS}
+        cls.cards={key:reviewed[key]['program'] for key in CARDS}
+        cls.base=tuple(r['program'] for r in reviewed.values())
 
     def game(self,extra=(),players=('A','B','C','D')):
         body=CardProgram('fs-body','Body',('Creature',),power=4,toughness=4,mana_value=2,cast=CastSpec(CostSpec(ManaCost(2))))
@@ -106,7 +105,7 @@ class RoomsMiracleSagasTests(unittest.TestCase):
         for key,p in self.cards.items():
             with self.subTest(card=key):
                 self.assertEqual(encode(p),self.rows[key]['program'])
-                self.assertEqual(digest(source_facts(catalog[key])),digest(self.rows[key]['source_facts']))
+                self.assertEqual(digest(source_facts(catalog[key])),self.rows[key]['source_facts_sha256'])
                 faces=(p,p.right) if isinstance(p,RoomProgram) else (p,)
                 for f,q in zip(catalog[key].faces,faces):validate_printed_face(key,f,q)
                 self.assertEqual(p,decode(encode(p)))

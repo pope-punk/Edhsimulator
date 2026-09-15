@@ -1,13 +1,14 @@
 # Rooms, miracle and remaining Sagas: Pass 4
 
-Seven complete printed drafts are in `data/rules/draft_cards.json`:
+Seven complete printed programs are promoted to `data/rules/primitive_cards.json`:
 Aminatou, Veil Piercer; Entity Tracker; Funeral Room // Awakening Hall;
 Ghostly Dancers; Victor, Valgavoth's Seneschal; The Cruelty of Gix; and Urza's Saga.
 
 ## Status
 
-Draft authoring is complete. Source review and hosted validation are in progress.
-The reviewed library remains 327/334 unique cards and 393/400 deck copies.
+Source-bound review and hosted draft validation are complete. The reviewed library
+contains 334/334 unique cards and 400/400 deck copies; its draft bundle is empty.
+Required reviewed-loader validation is pending, so Pass 4 is not yet complete.
 No local Python, installations, tests or games have run. No production admission,
 existing game contracts, hosts or migrations are changed. This work remains on
 `codex/remaining-card-programs`, based on `ad19e060ff529c17b0b260b64be4499003f2b960`.
@@ -75,3 +76,13 @@ the scanning reference offered unrelated abilities to that collector. The filter
 is now explicit, matching the other collectors and preserving indexed behavior.
 The canonical Unicode catalog correction is already committed at
 `c83caac04b4296617dd09298721b470c8d0fc094`.
+
+
+Corrected draft [run 34913303661](https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661) at `245c67c9d5e5192a4fa3577a4e9fe570a976f158`
+passed **2592 tests on each of Ubuntu and Windows**, plus source syntax,
+full distribution installation and packaged assets. All 56 focused methods passed.
+The seven promoted rows bind every printed face to the catalog; all 327 prior
+reviewed rows remain unchanged. The same 56 methods now strictly require
+`load_reviewed()`, with no draft fallback. The existing library-wide trigger
+index test also checks both Room doors separately and together.
+Required reviewed-loader validation must pass before this pass is marked complete.

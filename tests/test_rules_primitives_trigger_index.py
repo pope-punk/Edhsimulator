@@ -31,8 +31,17 @@ class TriggerIndexTests(unittest.TestCase):
                 printed=tuple(a for a in program.abilities if a.event.kind==kind)
                 self.assertEqual(printed,kernel._trigger_index[program.definition_id].get(kind,()))
                 view=kernel.effective(source.ref)
-                active=(() if view.abilities_removed else printed)+tuple(a for a in view.granted_triggers if a.event.kind==kind)
+                applicable=() if isinstance(program,RoomProgram) else printed
+                active=(() if view.abilities_removed else applicable)+tuple(a for a in view.granted_triggers if a.event.kind==kind)
                 self.assertEqual(active,kernel._trigger_abilities(source,kind))
+            if isinstance(program,RoomProgram):
+                for doors,abilities in ((('left',),program.abilities),(('right',),program.right.abilities),
+                                        (('left','right'),program.abilities+program.right.abilities)):
+                    state.set_unlocked(ref,doors);source=state.get(ref);view=kernel.effective(ref)
+                    for kind in {a.event.kind for a in abilities}|{'absent'}:
+                        expected=() if view.abilities_removed else tuple(a for a in abilities+program.shared_abilities if a.event.kind==kind)
+                        expected+=tuple(a for a in view.granted_triggers if a.event.kind==kind)
+                        self.assertEqual(expected,kernel._trigger_abilities(source,kind))
         with self.assertRaises(TypeError):kernel._trigger_index['bad']={}
         with self.assertRaises(TypeError):kernel._trigger_index[programs[0].definition_id]['bad']=()
 

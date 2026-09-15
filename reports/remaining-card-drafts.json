@@ -7,15 +7,15 @@
   "local_python_executed": false,
   "counts": {
     "catalog_unique": 334,
-    "reviewed_bundle_unique": 327,
-    "remaining_outside_reviewed_bundle": 7,
-    "drafts_written": 7,
+    "reviewed_bundle_unique": 334,
+    "remaining_outside_reviewed_bundle": 0,
+    "drafts_written": 0,
     "not_started_on_this_branch": 0,
-    "reviewed_bundle_copies": 393,
-    "draft_copies": 7,
+    "reviewed_bundle_copies": 400,
+    "draft_copies": 0,
     "drafts_remotely_validated": 0,
-    "promoted_on_this_branch": 100,
-    "remaining_outside_reviewed_bundle_copies": 7
+    "promoted_on_this_branch": 107,
+    "remaining_outside_reviewed_bundle_copies": 0
   },
   "cards": [
     {
@@ -137,7 +137,7 @@
     {
       "card_id": "aminatou-veil-piercer",
       "name": "Aminatou, Veil Piercer",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -151,13 +151,19 @@
           "text": "At the beginning of your upkeep, surveil 2.\nEach enchantment card in your hand has miracle. Its miracle cost is equal to its mana cost reduced by {4}."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:aminatou-veil-piercer",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "96afc686cad3279a1bc689000f1dc9279537235c756800a0b2fa7e3514980f1c",
+      "previous_draft_definition": "draft:aminatou-veil-piercer",
+      "reviewed_definition": "catalog:aminatou-veil-piercer",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "animate-dead",
@@ -927,7 +933,7 @@
     {
       "card_id": "entity-tracker",
       "name": "Entity Tracker",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -941,13 +947,19 @@
           "text": "Flash\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:entity-tracker",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "e9593d5e13e3c7e4aa7aaf71953f3a9eecdeeed05687e582d559c08326e9b221",
+      "previous_draft_definition": "draft:entity-tracker",
+      "reviewed_definition": "catalog:entity-tracker",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "essence-channeler",
@@ -1314,7 +1326,7 @@
     {
       "card_id": "funeral-room-awakening-hall",
       "name": "Funeral Room // Awakening Hall",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1332,13 +1344,19 @@
           "text": "When you unlock this door, return all creature cards from your graveyard to the battlefield."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:funeral-room-awakening-hall",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "4b831aeaf818c17aeae87d0f07a702a1f86f0e30ac3efe038f0f82730ff61d68",
+      "previous_draft_definition": "draft:funeral-room-awakening-hall",
+      "reviewed_definition": "catalog:funeral-room-awakening-hall",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "game-trail",
@@ -1376,7 +1394,7 @@
     {
       "card_id": "ghostly-dancers",
       "name": "Ghostly Dancers",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -1390,13 +1408,19 @@
           "text": "Flying\nWhen Ghostly Dancers enters, return an enchantment card from your graveyard to your hand or unlock a locked door of a Room you control.\nEerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, create a 3/1 white Spirit creature token with flying."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:ghostly-dancers",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "6af0e90a8304198ec6180c4ae6e85cc10fd65f6e61bc9f7ea536abc4e3956c48",
+      "previous_draft_definition": "draft:ghostly-dancers",
+      "reviewed_definition": "catalog:ghostly-dancers",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "glasswing-grace-age-graced-chapel",
@@ -3466,7 +3490,7 @@
     {
       "card_id": "the-cruelty-of-gix",
       "name": "The Cruelty of Gix",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3480,13 +3504,19 @@
           "text": "Read ahead\nI \u2014 Target opponent reveals their hand. You choose a creature or planeswalker card from it. That player discards that card.\nII \u2014 Search your library for a card, put that card into your hand, then shuffle. You lose 3 life.\nIII \u2014 Put target creature card from a graveyard onto the battlefield under your control."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:the-cruelty-of-gix",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "028214612d839be03d088a105ee9afa261d5eecf60274c84d2fbff7a603fa538",
+      "previous_draft_definition": "draft:the-cruelty-of-gix",
+      "reviewed_definition": "catalog:the-cruelty-of-gix",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "the-earth-crystal",
@@ -3725,7 +3755,7 @@
     {
       "card_id": "urza-s-saga",
       "name": "Urza's Saga",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3739,13 +3769,19 @@
           "text": "I \u2014 This Saga gains \"{T}: Add {C}.\"\nII \u2014 This Saga gains \"{2}, {T}: Create a 0/0 colorless Construct artifact creature token with \u2018This creature gets +1/+1 for each artifact you control.\u2019\"\nIII \u2014 Search your library for an artifact card with mana cost {0} or {1}, put it onto the battlefield, then shuffle."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:urza-s-saga",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "4a3aee2d51b070586feba7dc432f7b5a842f7825e59bcb342441a11c3246bd7f",
+      "previous_draft_definition": "draft:urza-s-saga",
+      "reviewed_definition": "catalog:urza-s-saga",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "vesperlark",
@@ -3791,7 +3827,7 @@
     {
       "card_id": "victor-valgavoth-s-seneschal",
       "name": "Victor, Valgavoth's Seneschal",
-      "status": "draft_written_review_pending",
+      "status": "reviewed_program",
       "source_decks": [
         {
           "deck": "Reaminatour",
@@ -3805,13 +3841,19 @@
           "text": "Eerie \u2014 Whenever an enchantment you control enters and whenever you fully unlock a Room, surveil 2 if this is the first time this ability has resolved this turn. If it's the second time, each opponent discards a card. If it's the third time, put a creature card from a graveyard onto the battlefield under your control."
         }
       ],
-      "authoring_status": "complete_printed_draft",
-      "rules_review_status": "pending",
-      "hosted_validation_status": "pending",
-      "draft_definition": "draft:victor-valgavoth-s-seneschal",
+      "authoring_status": "complete_printed_program",
+      "rules_review_status": "reviewed",
+      "hosted_validation_status": "required_reviewed_loader_pending",
       "batch": "rooms-miracle-sagas-2026-09-14",
       "review_record": "docs/ROOMS_MIRACLE_SAGAS_REVIEW.md",
-      "implementation_notes": "All printed clauses authored in the shared vocabulary. Hosted draft checks and required reviewed-loader checks remain pending."
+      "implementation_notes": "Complete printed program with exact source binding; hosted draft validation passed on both platforms. Required reviewed-loader validation remains pending.",
+      "source_facts_sha256": "83d149a031b3cc1e63b9a115eb57d624ee04f4215ecbc887d6bc0b7f4dc0b093",
+      "previous_draft_definition": "draft:victor-valgavoth-s-seneschal",
+      "reviewed_definition": "catalog:victor-valgavoth-s-seneschal",
+      "draft_hosted_validation": {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661
+      }
     },
     {
       "card_id": "vineglimmer-snarl",
@@ -4012,129 +4054,9 @@
   ],
   "latest_cycle": {
     "date": "2026-09-14",
-    "base_commit": "2586180f67645ca9cc8511e979933511ea883551",
-    "pass": 3,
+    "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960",
+    "pass": 4,
     "cards_written": [
-      "glasswing-grace-age-graced-chapel",
-      "kazuul-s-fury-kazuul-s-cliffs",
-      "sorin-of-house-markov",
-      "pontiff-of-blight",
-      "invasion-of-theros",
-      "the-restoration-of-eiganjo",
-      "elspeth-conquers-death"
-    ],
-    "cards_promoted": [
-      "glasswing-grace-age-graced-chapel",
-      "kazuul-s-fury-kazuul-s-cliffs",
-      "sorin-of-house-markov",
-      "pontiff-of-blight",
-      "invasion-of-theros",
-      "the-restoration-of-eiganjo",
-      "elspeth-conquers-death"
-    ],
-    "validation_status": "passed",
-    "runtime_checkpoint_schema": 131,
-    "state_checkpoint_schema": 19,
-    "new_test_methods": 90,
-    "validation_attempts": [
-      {
-        "commit": "e5c849a7cf638a693cc6e0719673ea18e38c8a98",
-        "run_id": 34899755299,
-        "status": "failed",
-        "test_count": 2495,
-        "failures": 4,
-        "errors": 10,
-        "corrections": [
-          "Reuse cached characteristic views for trigger grants without repeating effective queries.",
-          "Give existing Battle fixtures explicit protector designations.",
-          "Restore scenario action windows before independent Sorin and tax actions."
-        ]
-      },
-      {
-        "commit": "0bbde8df92664bf567f752fc558265dde31e769a",
-        "run_id": 34901124410,
-        "status": "failed",
-        "test_count": 2536,
-        "failures": 2,
-        "errors": 2,
-        "corrections": [
-          "Open modal-land mana action windows.",
-          "Separate Sorin-copy fixture controllers so the legend rule does not suspend the intended scenario."
-        ]
-      },
-      {
-        "commit": "58bfc1f4e33dfd14786adb9e6ef271de96922989",
-        "run_id": 34901196896,
-        "status": "failed",
-        "test_count": 2536,
-        "failures": 2,
-        "errors": 1,
-        "corrections": [
-          "Use indexed ChooseMana options in the Chapel fixture.",
-          "Separate Sorin-copy fixture controllers and assert no pending legend choice."
-        ]
-      },
-      {
-        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
-        "run_id": 34902156812,
-        "status": "passed",
-        "test_count": 2536
-      },
-      {
-        "commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
-        "run_id": 34903230871,
-        "status": "failed",
-        "stage": "required_reviewed_loader",
-        "test_count": 2536,
-        "failures": 1,
-        "errors": 0,
-        "corrections": [
-          "Keep the printed trigger index invariant separate from current granted triggers.",
-          "Extend the scanning reference and announcement parity fixture to cover granted abilities."
-        ]
-      },
-      {
-        "commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
-        "run_id": 34903599852,
-        "status": "failed",
-        "stage": "required_reviewed_loader",
-        "test_count": 2536,
-        "failures": 1,
-        "errors": 0,
-        "corrections": [
-          "Legacy printed-only trigger assertion corrected in the subsequent index/parity revision."
-        ]
-      },
-      {
-        "commit": "fc6dcd90dbba7896bf89bcb9408a0adb660369b7",
-        "run_id": 34904056105,
-        "status": "failed",
-        "stage": "required_reviewed_loader",
-        "test_count": 2536,
-        "failures": 1,
-        "errors": 0,
-        "corrections": [
-          "Use a battlefield activation event in the granted-trigger parity fixture; this avoids a synthetic battlefield spell announcement counting its source twice."
-        ]
-      },
-      {
-        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
-        "run_id": 34904127697,
-        "status": "passed",
-        "stage": "required_reviewed_loader",
-        "test_count": 2536
-      }
-    ],
-    "review_work_remaining": [],
-    "shared_mechanics": [
-      "Physical-card face choices and transformation",
-      "Independent granted triggers and extort",
-      "Saga chapters and intrinsic lore",
-      "Siege defense, protector and transformed casting",
-      "Timed spell taxes and reflexive discard",
-      "Double-face token copies and keyword-counter timestamps"
-    ],
-    "next_batch": [
       "aminatou-veil-piercer",
       "entity-tracker",
       "funeral-room-awakening-hall",
@@ -4143,34 +4065,86 @@
       "the-cruelty-of-gix",
       "urza-s-saga"
     ],
-    "promotion_corrections": [
+    "cards_promoted": [
+      "aminatou-veil-piercer",
+      "entity-tracker",
+      "funeral-room-awakening-hall",
+      "ghostly-dancers",
+      "victor-valgavoth-s-seneschal",
+      "the-cruelty-of-gix",
+      "urza-s-saga"
+    ],
+    "validation_status": "required_reviewed_loader_pending",
+    "runtime_checkpoint_schema": 132,
+    "state_checkpoint_schema": 20,
+    "new_test_methods": 56,
+    "validation_attempts": [
       {
-        "basis": "Current Comprehensive Rules 714.3c and 714.4",
-        "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
-        "change": "Turn-based lore requires at least one chapter ability. Corrected the lore guard and the no-chapters regression expectation; no card program changed.",
-        "supersedes_required_commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
-        "supersedes_required_run": 34903230871,
-        "validated_by": {
-          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
-          "run_id": 34904127697
-        }
+        "commit": "593b793100867470a4585c92476189d683e83805",
+        "run_id": 34911639077,
+        "stage": "draft",
+        "status": "failed",
+        "test_count": 2584,
+        "failures": 1,
+        "errors": 2,
+        "corrections": [
+          "Use character matching for explicit library fixtures rather than a forbidden general library query.",
+          "Convert the mana-pool tuple to a mapping in the fixture.",
+          "Restore the catalog generator's literal Unicode serialization."
+        ]
       },
       {
-        "change": "Reviewed-loader trigger-index conformance includes dynamic grants while retaining immutable printed indexes. The scanning reference and existing parity test now cover granted triggers.",
-        "supersedes_required_commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
-        "supersedes_required_run": 34903599852,
-        "validated_by": {
-          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
-          "run_id": 34904127697
-        }
+        "commit": "6d8756b5b4eaf418ae2221f594bc7b51601cbc4f",
+        "run_id": 34912464358,
+        "stage": "draft",
+        "status": "failed",
+        "test_count": 2592,
+        "failures": 2,
+        "errors": 0,
+        "corrections": [
+          "Commit canonical catalog formatting.",
+          "The expanded Room parity fixture exposed the scanning reference's missing counter_state event-kind filter."
+        ]
+      },
+      {
+        "commit": "c83caac04b4296617dd09298721b470c8d0fc094",
+        "run_id": 34912840264,
+        "stage": "draft",
+        "status": "failed",
+        "test_count": 2592,
+        "failures": 1,
+        "errors": 0,
+        "corrections": [
+          "Preserve event-kind filtering in state-trigger collection; corrected at 245c67c9d5e5192a4fa3577a4e9fe570a976f158."
+        ]
+      },
+      {
+        "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+        "run_id": 34913303661,
+        "stage": "draft",
+        "status": "passed",
+        "test_count": 2592
       }
     ],
+    "review_work_remaining": [
+      "Successful required reviewed-loader validation on Ubuntu and Windows.",
+      "Final inventory and completion records; pause the existing heartbeat."
+    ],
+    "shared_mechanics": [
+      "Room door characteristics, special actions and unlock events",
+      "First-draw miracle revelation and exact-card resolution casting",
+      "Per-turn resolved-ability groups and simultaneous private discard",
+      "Read ahead and remaining Saga chapters",
+      "Persistent activated grants and live Construct artifact modifiers",
+      "Exact printed mana-cost selectors"
+    ],
+    "next_batch": [],
     "draft_hosted_validation": {
-      "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
-      "run_id": 34902156812,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
+      "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+      "run_id": 34913303661,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661",
       "conclusion": "success",
-      "tests_per_platform": 2536,
+      "tests_per_platform": 2592,
       "platforms": [
         "ubuntu-latest",
         "windows-latest"
@@ -4183,62 +4157,19 @@
       ],
       "jobs": [
         {
-          "job_id": 104170381916,
-          "name": "verify (windows-latest)",
-          "tests": 2536,
-          "seconds": 595.899,
+          "job_id": 104205375398,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2592,
+          "seconds": 682.657,
           "conclusion": "success"
         },
         {
-          "job_id": 104170382160,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2536,
-          "seconds": 493.37,
-          "conclusion": "success"
-        }
-      ]
-    },
-    "hosted_validation": {
-      "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
-      "run_id": 34904127697,
-      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
-      "conclusion": "success",
-      "tests_per_platform": 2536,
-      "platforms": [
-        "ubuntu-latest",
-        "windows-latest"
-      ],
-      "checks": [
-        "source syntax",
-        "full distribution installation",
-        "packaged assets",
-        "required reviewed-loader conformance"
-      ],
-      "jobs": [
-        {
-          "job_id": 104176706230,
+          "job_id": 104205375551,
           "name": "verify (windows-latest)",
-          "tests": 2536,
-          "seconds": 551.635,
-          "conclusion": "success"
-        },
-        {
-          "job_id": 104176706491,
-          "name": "verify (ubuntu-latest)",
-          "tests": 2536,
-          "seconds": 572.624,
+          "tests": 2592,
+          "seconds": 392.701,
           "conclusion": "success"
         }
-      ]
-    },
-    "next_batch_source_review": {
-      "status": "preparation_only",
-      "record": "docs/REMAINING_CARD_DRAFTS.md#final-pass-source-preparation",
-      "sources": [
-        "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes",
-        "https://magic.wizards.com/en/news/feature/dominaria-united-release-notes-2022-08-26",
-        "https://magic.wizards.com/en/news/feature/modern-horizons-2-release-notes-2021-06-04",
-        "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
       ]
     }
   },
@@ -5266,6 +5197,40 @@
           "name": "verify (ubuntu-latest)",
           "tests": 2536,
           "seconds": 572.624,
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "stage": "draft",
+      "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+      "run_id": 34913303661,
+      "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661",
+      "conclusion": "success",
+      "tests_per_platform": 2592,
+      "platforms": [
+        "ubuntu-latest",
+        "windows-latest"
+      ],
+      "checks": [
+        "source syntax",
+        "full distribution installation",
+        "packaged assets",
+        "draft conformance"
+      ],
+      "jobs": [
+        {
+          "job_id": 104205375398,
+          "name": "verify (ubuntu-latest)",
+          "tests": 2592,
+          "seconds": 682.657,
+          "conclusion": "success"
+        },
+        {
+          "job_id": 104205375551,
+          "name": "verify (windows-latest)",
+          "tests": 2592,
+          "seconds": 392.701,
           "conclusion": "success"
         }
       ]
@@ -8192,6 +8157,238 @@
           }
         }
       }
+    },
+    {
+      "date": "2026-09-14",
+      "base_commit": "2586180f67645ca9cc8511e979933511ea883551",
+      "pass": 3,
+      "cards_written": [
+        "glasswing-grace-age-graced-chapel",
+        "kazuul-s-fury-kazuul-s-cliffs",
+        "sorin-of-house-markov",
+        "pontiff-of-blight",
+        "invasion-of-theros",
+        "the-restoration-of-eiganjo",
+        "elspeth-conquers-death"
+      ],
+      "cards_promoted": [
+        "glasswing-grace-age-graced-chapel",
+        "kazuul-s-fury-kazuul-s-cliffs",
+        "sorin-of-house-markov",
+        "pontiff-of-blight",
+        "invasion-of-theros",
+        "the-restoration-of-eiganjo",
+        "elspeth-conquers-death"
+      ],
+      "validation_status": "passed",
+      "runtime_checkpoint_schema": 131,
+      "state_checkpoint_schema": 19,
+      "new_test_methods": 90,
+      "validation_attempts": [
+        {
+          "commit": "e5c849a7cf638a693cc6e0719673ea18e38c8a98",
+          "run_id": 34899755299,
+          "status": "failed",
+          "test_count": 2495,
+          "failures": 4,
+          "errors": 10,
+          "corrections": [
+            "Reuse cached characteristic views for trigger grants without repeating effective queries.",
+            "Give existing Battle fixtures explicit protector designations.",
+            "Restore scenario action windows before independent Sorin and tax actions."
+          ]
+        },
+        {
+          "commit": "0bbde8df92664bf567f752fc558265dde31e769a",
+          "run_id": 34901124410,
+          "status": "failed",
+          "test_count": 2536,
+          "failures": 2,
+          "errors": 2,
+          "corrections": [
+            "Open modal-land mana action windows.",
+            "Separate Sorin-copy fixture controllers so the legend rule does not suspend the intended scenario."
+          ]
+        },
+        {
+          "commit": "58bfc1f4e33dfd14786adb9e6ef271de96922989",
+          "run_id": 34901196896,
+          "status": "failed",
+          "test_count": 2536,
+          "failures": 2,
+          "errors": 1,
+          "corrections": [
+            "Use indexed ChooseMana options in the Chapel fixture.",
+            "Separate Sorin-copy fixture controllers and assert no pending legend choice."
+          ]
+        },
+        {
+          "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+          "run_id": 34902156812,
+          "status": "passed",
+          "test_count": 2536
+        },
+        {
+          "commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
+          "run_id": 34903230871,
+          "status": "failed",
+          "stage": "required_reviewed_loader",
+          "test_count": 2536,
+          "failures": 1,
+          "errors": 0,
+          "corrections": [
+            "Keep the printed trigger index invariant separate from current granted triggers.",
+            "Extend the scanning reference and announcement parity fixture to cover granted abilities."
+          ]
+        },
+        {
+          "commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
+          "run_id": 34903599852,
+          "status": "failed",
+          "stage": "required_reviewed_loader",
+          "test_count": 2536,
+          "failures": 1,
+          "errors": 0,
+          "corrections": [
+            "Legacy printed-only trigger assertion corrected in the subsequent index/parity revision."
+          ]
+        },
+        {
+          "commit": "fc6dcd90dbba7896bf89bcb9408a0adb660369b7",
+          "run_id": 34904056105,
+          "status": "failed",
+          "stage": "required_reviewed_loader",
+          "test_count": 2536,
+          "failures": 1,
+          "errors": 0,
+          "corrections": [
+            "Use a battlefield activation event in the granted-trigger parity fixture; this avoids a synthetic battlefield spell announcement counting its source twice."
+          ]
+        },
+        {
+          "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+          "run_id": 34904127697,
+          "status": "passed",
+          "stage": "required_reviewed_loader",
+          "test_count": 2536
+        }
+      ],
+      "review_work_remaining": [],
+      "shared_mechanics": [
+        "Physical-card face choices and transformation",
+        "Independent granted triggers and extort",
+        "Saga chapters and intrinsic lore",
+        "Siege defense, protector and transformed casting",
+        "Timed spell taxes and reflexive discard",
+        "Double-face token copies and keyword-counter timestamps"
+      ],
+      "next_batch": [
+        "aminatou-veil-piercer",
+        "entity-tracker",
+        "funeral-room-awakening-hall",
+        "ghostly-dancers",
+        "victor-valgavoth-s-seneschal",
+        "the-cruelty-of-gix",
+        "urza-s-saga"
+      ],
+      "promotion_corrections": [
+        {
+          "basis": "Current Comprehensive Rules 714.3c and 714.4",
+          "source": "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt",
+          "change": "Turn-based lore requires at least one chapter ability. Corrected the lore guard and the no-chapters regression expectation; no card program changed.",
+          "supersedes_required_commit": "77fc695b05d2b3277f37af22bc0fcc59236c9e54",
+          "supersedes_required_run": 34903230871,
+          "validated_by": {
+            "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+            "run_id": 34904127697
+          }
+        },
+        {
+          "change": "Reviewed-loader trigger-index conformance includes dynamic grants while retaining immutable printed indexes. The scanning reference and existing parity test now cover granted triggers.",
+          "supersedes_required_commit": "e4bf8ba079bef2d4a30632bc6114d23949b9c754",
+          "supersedes_required_run": 34903599852,
+          "validated_by": {
+            "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+            "run_id": 34904127697
+          }
+        }
+      ],
+      "draft_hosted_validation": {
+        "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
+        "run_id": 34902156812,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
+        "conclusion": "success",
+        "tests_per_platform": 2536,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "draft conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104170381916,
+            "name": "verify (windows-latest)",
+            "tests": 2536,
+            "seconds": 595.899,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104170382160,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2536,
+            "seconds": 493.37,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "hosted_validation": {
+        "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
+        "run_id": 34904127697,
+        "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
+        "conclusion": "success",
+        "tests_per_platform": 2536,
+        "platforms": [
+          "ubuntu-latest",
+          "windows-latest"
+        ],
+        "checks": [
+          "source syntax",
+          "full distribution installation",
+          "packaged assets",
+          "required reviewed-loader conformance"
+        ],
+        "jobs": [
+          {
+            "job_id": 104176706230,
+            "name": "verify (windows-latest)",
+            "tests": 2536,
+            "seconds": 551.635,
+            "conclusion": "success"
+          },
+          {
+            "job_id": 104176706491,
+            "name": "verify (ubuntu-latest)",
+            "tests": 2536,
+            "seconds": 572.624,
+            "conclusion": "success"
+          }
+        ]
+      },
+      "next_batch_source_review": {
+        "status": "preparation_only",
+        "record": "docs/REMAINING_CARD_DRAFTS.md#final-pass-source-preparation",
+        "sources": [
+          "https://magic.wizards.com/en/news/feature/duskmourn-house-of-horror-release-notes",
+          "https://magic.wizards.com/en/news/feature/dominaria-united-release-notes-2022-08-26",
+          "https://magic.wizards.com/en/news/feature/modern-horizons-2-release-notes-2021-06-04",
+          "https://media.wizards.com/2026/downloads/MagicCompRules%2020260819.txt"
+        ]
+      }
     }
   ],
   "execution_policy": {
@@ -8250,11 +8447,11 @@
     "selection_note": "Preserve completion_plan's original baseline and count only completed source review plus successful required hosted validation."
   },
   "draft_hosted_validation": {
-    "commit": "a2700d1b61aecfd9dd2e42ede5eed2d12788ec34",
-    "run_id": 34902156812,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34902156812",
+    "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+    "run_id": 34913303661,
+    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661",
     "conclusion": "success",
-    "tests_per_platform": 2536,
+    "tests_per_platform": 2592,
     "platforms": [
       "ubuntu-latest",
       "windows-latest"
@@ -8267,56 +8464,23 @@
     ],
     "jobs": [
       {
-        "job_id": 104170381916,
-        "name": "verify (windows-latest)",
-        "tests": 2536,
-        "seconds": 595.899,
+        "job_id": 104205375398,
+        "name": "verify (ubuntu-latest)",
+        "tests": 2592,
+        "seconds": 682.657,
         "conclusion": "success"
       },
       {
-        "job_id": 104170382160,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2536,
-        "seconds": 493.37,
+        "job_id": 104205375551,
+        "name": "verify (windows-latest)",
+        "tests": 2592,
+        "seconds": 392.701,
         "conclusion": "success"
       }
     ]
   },
   "completed_request_batch": false,
   "completed_heartbeat_cycle": false,
-  "hosted_validation": {
-    "commit": "60a62fa568428be6987f7f97463df955e5dc583f",
-    "run_id": 34904127697,
-    "url": "https://github.com/pope-punk/Edhsimulator/actions/runs/34904127697",
-    "conclusion": "success",
-    "tests_per_platform": 2536,
-    "platforms": [
-      "ubuntu-latest",
-      "windows-latest"
-    ],
-    "checks": [
-      "source syntax",
-      "full distribution installation",
-      "packaged assets",
-      "required reviewed-loader conformance"
-    ],
-    "jobs": [
-      {
-        "job_id": 104176706230,
-        "name": "verify (windows-latest)",
-        "tests": 2536,
-        "seconds": 551.635,
-        "conclusion": "success"
-      },
-      {
-        "job_id": 104176706491,
-        "name": "verify (ubuntu-latest)",
-        "tests": 2536,
-        "seconds": 572.624,
-        "conclusion": "success"
-      }
-    ]
-  },
   "completion_plan": {
     "requested_on": "2026-09-14",
     "baseline_commit": "1b78034e70c5fa1b29059809f3cde071f570329c",
@@ -8328,7 +8492,7 @@
       7,
       10
     ],
-    "status": "in_progress",
+    "status": "required_reviewed_loader_pending",
     "passes": [
       {
         "pass": 1,
@@ -8442,8 +8606,21 @@
           "urza-s-saga"
         ],
         "focus": "Finish Room doors, unlocking and fully-unlocked events; miracle draw/reveal/cast windows; per-turn ability-resolution counts; read ahead and the remaining Saga programs. Close with a complete inventory and cross-family audit.",
-        "status": "draft_written_validation_pending",
-        "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960"
+        "status": "required_reviewed_loader_pending",
+        "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960",
+        "draft_hosted_validation": {
+          "commit": "245c67c9d5e5192a4fa3577a4e9fe570a976f158",
+          "run_id": 34913303661
+        },
+        "cards_promoted": [
+          "aminatou-veil-piercer",
+          "entity-tracker",
+          "funeral-room-awakening-hall",
+          "ghostly-dancers",
+          "victor-valgavoth-s-seneschal",
+          "the-cruelty-of-gix",
+          "urza-s-saga"
+        ]
       }
     ],
     "execution": "GitHub connector authoring and GitHub-hosted validation only; no local project execution.",

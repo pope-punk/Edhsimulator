@@ -5,17 +5,20 @@ Branch: `codex/remaining-card-programs`, based on studious trout commit
 
 Project execution and validation are restricted to GitHub-hosted runners; no
 local Python, installation, tests or games are authorized. The library contains
-**327 source-bound reviewed programs / 393 deck copies**. Seven cards remain.
-All seven Pass 3 cards have passed draft and required reviewed-loader validation.
+**334 source-bound reviewed programs / 400 deck copies**. The final seven cards
+have passed source review and draft validation; required reviewed-loader validation
+remains pending.
 Reviewed coverage is not production certification.
 
-## Pass 4 underway
+## Pass 4: final reviewed-loader validation
 
-All seven remaining printed programs are authored as separate drafts. Shared
-Room, miracle, resolution-count and remaining Saga support and 56 focused tests
-are ready for hosted checks. Validation and source review remain pending; none
-of these seven is counted as reviewed yet. Continue this same pass through draft
-checks, promotion, required reviewed-loader checks and final inventory audit.
+All seven remaining cards are promoted to the source-bound reviewed bundle.
+The draft bundle is empty; all 327 previous reviewed rows are unchanged.
+Hosted draft [run 34913303661](https://github.com/pope-punk/Edhsimulator/actions/runs/34913303661) at `245c67c9d5e5192a4fa3577a4e9fe570a976f158`
+passed **2592 tests per platform**, including **56 focused methods**,
+on Ubuntu and Windows, plus syntax, full installation and packaged assets.
+The same methods now require the reviewed loader. Continue this pass through
+its required hosted validation, final inventory audit and completion records.
 See [the current review](ROOMS_MIRACLE_SAGAS_REVIEW.md).
 
 ## Pass 3 complete
