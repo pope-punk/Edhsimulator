@@ -235,3 +235,21 @@ Normal opens require both the checked sidecar and its journal marker; subsequent
 accepted play must retain the repair's prefix. Resume separately with the existing
 `--resume-fenced` host option and the new validated release selected. This facility
 is not a general rules or game-contract migration mechanism.
+
+### Hosted trial: rejection claim lifetime
+
+PR #3 merged as 07554ca after 2,842 passing source tests, isolated installation
+verification and successful Ubuntu/Windows CI. Its telemetry repair recovered
+`primitive-hosted-test-20260915` from the original accepted decision without
+replaying it. All 16 role lanes registered; the trial reached 39 accepted decisions.
+It then sealed a rules-review draw: an invalid command cleared the decider's frozen
+claim, so its legal correction could no longer own that decision. The terminal
+journal verified at host sequence 180 and rules sequence 39. Learning was disabled
+and was skipped, not performed. This remains a failed trial, retained for review.
+
+Rejection handling now retains the frozen claim while clearing only the pending
+input. Successful acceptance still releases the claim and queued public delivery.
+A regression reproduced the old failure, then passed with the fix, including
+close/reopen and a corrected answer using the original claim. All 13 action tests
+pass. Full validation and a subsequent clean hosted trial remain required; never
+resume the terminal rules-review game or remove its original evidence.

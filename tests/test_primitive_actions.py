@@ -18,6 +18,24 @@ class PrimitiveActionTests(unittest.TestCase):
                 {'kind':'answer','revision':self.game.kernel.revision,'request_id':q.request_id,
                  'indexes':[0] if q.kind=='mulligan' else []},rationale='Offline fixture initialization.')
 
+    def test_rejected_command_retains_frozen_claim_for_corrected_answer(self):
+        frozen=actions.claim(self.game,'Omo')
+        before=self.game.store.committed_head()
+        with self.assertRaises(RulesViolation):
+            actions.submit(self.game,'Omo',frozen['claim_id'],'bad-input',
+                           {'kind':'answer','request_id':'not-pending','indexes':[]},
+                           'Synthetic invalid response.',{'mode':'hold_full_control'})
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertEqual(frozen,self.game.state()['claim'])
+        self.game.close()
+        self.game=PrimitiveCampaign.open(Path(self.tmp.name)/'game',recover=False)
+        self.addCleanup(self.game.close)
+        self.assertEqual(frozen,actions.claim(self.game,'Omo'))
+        actions.submit(self.game,'Omo',frozen['claim_id'],'corrected-input',{'kind':'pass'},
+                       'Synthetic legal correction.',{'mode':'hold_full_control'})
+        self.assertEqual(before['sequence']+1,self.game.store.generation)
+        self.assertIsNone(self.game.state()['claim'])
+
     def test_unapproved_priority_never_advances(self):
         before=self.game.store.committed_head()
         self.assertFalse(actions.automatic(self.game))
