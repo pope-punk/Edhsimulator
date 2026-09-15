@@ -59,7 +59,7 @@ function renderDecisions(s){
  log.scrollTop=atTop?0:Math.max(0,position+log.scrollHeight-height);
 }
 function renderLive(s,request,action,board){
- const notice=$('#runNotice');const between=s.pending_game?`Game ${s.game} has ended. Game ${s.pending_game} has not started. ${s.supervisor?.alive?'Supervisor online.':'Automatic continuation is offline.'}`:'';notice.hidden=!s.pause?.reason&&!between;notice.textContent=s.pause?.reason==='rules_audit'?'Paused for a rules review. No decisions are being submitted.':s.pause?.reason?'Play is paused.':between;
+ const notice=$('#runNotice');const between=s.pending_game?`Game ${s.game} has ended. Game ${s.pending_game} has not started. ${s.supervisor?.alive?'Supervisor online.':'Automatic continuation is offline.'}`:'';const help=action.kind==='await_pilot_help'?`${action.actor||'A pilot'} requested technical help. The decision is preserved; awaiting an operator answer.`:'';notice.hidden=!help&&!s.pause?.reason&&!between;notice.textContent=help||(s.pause?.reason==='rules_audit'?'Paused for a rules review. No decisions are being submitted.':s.pause?.reason?'Play is paused.':between);
  const health=s.runtime_health||{};$('#runtimeHealth').innerHTML=`<p class="muted">${esc(health.scope||'No telemetry available.')}</p><p>Largest input: ${esc(health.largest_input||0)} tokens · ${esc(health.inputs_over_64k||0)} samples above 64k</p><p>Duplicate tool request IDs: ${esc(health.duplicate_request_ids||0)} · rejected tool calls: ${esc(health.rejected_tools||0)}</p>`;
 
  const actor=request.actor||action.actor,live=action.kind==='dispatch_pilot'&&!!request.actor;

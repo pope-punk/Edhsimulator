@@ -258,6 +258,9 @@ class PrimitiveCampaign:
     def next_action(self):
         state=self.state();number=self.binding['game_number']
         base={'game':number,'rules_engine':'primitives-v1','commit':self.store.committed_head()}
+        if state.get('help_request') and (not state['paused'] or state['paused']['reason']=='pilot_help_requested'):
+            request=state['help_request']
+            return {**base,'kind':'await_pilot_help','actor':request['actor'],'request_id':request['id']}
         if state['paused']:return {**base,'kind':'none','reason':'host_paused'}
         if state['pending']:return {**base,'kind':'recover_host_input'}
         if state['blocker']:return {**base,'kind':'repair_rules_work_items','terminal':state['terminal']}

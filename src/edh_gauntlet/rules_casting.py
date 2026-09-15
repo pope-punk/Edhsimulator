@@ -635,7 +635,7 @@ class CastingRules:
         if len(selections)!=len(payment.zone_costs):raise RulesViolation('Duplicate zone-cost selection key')
         costs=quote.cost.zone_costs
         expected={cost.cost_id for cost in costs if cost.selector is not None}
-        if set(selections)!=expected:raise RulesViolation('Zone-cost selections do not match the required costs')
+        if set(selections)!=expected:raise RulesViolation('Zone-cost selections do not match the required costs. Supply payment.zone_costs as an object mapping each required cost_id to a list of selected card references. Required cost IDs: '+str(sorted(expected)))
         refs=[];source=self.state.get(quote.source)
         for cost in costs:
             chosen=selections[cost.cost_id] if cost.selector is not None else (quote.source,)
