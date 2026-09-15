@@ -20,6 +20,14 @@ from .rules_identity import IMPLEMENTATION_ID
 from .rules_modal import prepare_modal
 
 
+def intrinsic_land_mana(subtypes):
+    """Mana abilities conferred by basic land types, shared with planning facts."""
+    return tuple(ActivatedProgram('intrinsic-land:'+subtype,CostSpec(tap_source=True),
+                 (AddMana((symbol,)),),mana_ability=True)
+                 for subtype,symbol in (('Plains','W'),('Island','U'),('Swamp','B'),('Mountain','R'),('Forest','G'))
+                 if subtype in subtypes)
+
+
 def _mana_symbols_satisfied(symbols,paid):
     """Match fixed and two-color hybrid pips against unrestricted paid mana."""
     remaining=dict(paid);hybrids=Counter()
@@ -193,11 +201,7 @@ class CastingRules:
         view = self.effective(source.ref)
         if source.zone == Zone.BATTLEFIELD:abilities+=view.granted_abilities
         if source.zone == Zone.BATTLEFIELD and 'Land' in view.types and not view.abilities_removed:
-            intrinsic = tuple(ActivatedProgram('intrinsic-land:' + subtype, CostSpec(tap_source=True),
-                (AddMana((symbol,)),), mana_ability=True)
-                for subtype, symbol in (('Plains','W'),('Island','U'),('Swamp','B'),('Mountain','R'),('Forest','G'))
-                if subtype in view.subtypes)
-            abilities += intrinsic
+            abilities += intrinsic_land_mana(view.subtypes)
         return abilities
 
     def open_window_for_scenario(self, active, phase='precombat_main', priority_actor=None):

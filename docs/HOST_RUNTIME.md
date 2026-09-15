@@ -355,3 +355,15 @@ and quantities remain explicit. These are action facts, not historical decision
 logs or a guarantee that an action is currently legal. Submission still validates
 choices, timing, targets and payment. No additional hidden objects or future library
 order enters the packet. Diplomats do not receive this private action material.
+
+### Authorized empty-combat scheduler upgrade
+
+At an explicitly user-authorized, gracefully stopped primitive host, run
+`python -m edh_gauntlet.primitive_scheduler_upgrade --cohort PATH --before OLD_RECEIPT --after NEW_RECEIPT`.
+Both receipts require full release validation. This narrow upgrade permits only
+own-upkeep snooze/empty-combat code, its admission/notice plumbing and corresponding
+host policy documentation. It preserves the original game contract, logical seats,
+accepted commands and pending choice, verifies full deterministic replay, and journals
+a prefix-bound sidecar. Existing snoozes are cleared once at installation; explicit
+approved sequences are retained. Resume through the ordinary fenced dashboard route.
+Resumed isolated role contexts receive the updated scheduler instructions.

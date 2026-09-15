@@ -139,17 +139,22 @@ class CombatRules:
             rows.extend(row for group in self.combat['blocks'].values() for row in group)
         return frozenset(ObjectRef.from_json(row['ref']) for row in rows if self._combat_present(row))
 
-    def _attack_rows(self,actor,attackers):
-        if self.pending_choice or self.resolving:raise RulesViolation('Resolve the current choice first')
-        if (self.turn_schedule is None or self.phase!='declare_attackers' or self.priority is not None
-                or actor!=self.active):raise RulesViolation('Not the current attacker declaration')
-        if not isinstance(attackers,dict):raise RulesViolation('Attackers require an explicit mapping')
+    def attack_candidates(self,actor):
+        """Use the same eligibility filter for declarations and forced empty combat."""
         eligible={}
         for obj in self.state.objects(Zone.BATTLEFIELD,controller=actor):
             view=self.effective(obj.ref)
             if (not obj.phased and not obj.tapped and combat_creature(view.types) and 'defender' not in view.keywords
                     and ('haste' in view.keywords or self.state.ready_since_turn_start(obj.ref))):
                 eligible[obj.ref]=(obj,view)
+        return eligible
+
+    def _attack_rows(self,actor,attackers):
+        if self.pending_choice or self.resolving:raise RulesViolation('Resolve the current choice first')
+        if (self.turn_schedule is None or self.phase!='declare_attackers' or self.priority is not None
+                or actor!=self.active):raise RulesViolation('Not the current attacker declaration')
+        if not isinstance(attackers,dict):raise RulesViolation('Attackers require an explicit mapping')
+        eligible=self.attack_candidates(actor)
         rows=[];taps=[];total=0
         for ref,defender in attackers.items():
             if ref not in eligible:

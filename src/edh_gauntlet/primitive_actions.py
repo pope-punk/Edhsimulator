@@ -196,9 +196,10 @@ def apply_control(campaign,state,actor,control):
 def observe(campaign,state,actor,command):
     # Unapproved responses and new opposing actions stop sequence execution.
     # An ordinary opposing pass preserves only explicit continuation approval.
+    passive=command['kind']=='pass' or (command['kind']=='attack' and not command['attackers'])
     for other,seat in state['actors'].items():
         approved=seat['approved']
-        if other!=actor and approved and (command['kind']!='pass' or not approved['resume_after_passes']):seat['approved']=None
+        if other!=actor and approved and (not passive or not approved['resume_after_passes']):seat['approved']=None
         snooze=seat['snooze']
         if not snooze:continue
         if snooze['mode']=='snooze_objects':
@@ -206,10 +207,10 @@ def observe(campaign,state,actor,command):
             held=retained(campaign,snooze)
             snooze['sources']=list(held.values());snooze['objects']=[row['ref'] for row in held.values()]
         wake=snooze.get('wake_condition')
-        if other!=actor and command['kind']!='pass' and (snooze['mode']=='resolve_my_sequence' or wake=='opponent_action'):
+        if other!=actor and not passive and (snooze['mode']=='resolve_my_sequence' or wake=='opponent_action'):
             seat['snooze']=None
         elif command['kind']=='cast' and (wake=='any_spell' or wake=='opponent_spell' and other!=actor):seat['snooze']=None
-        elif wake=='targeted_or_attacked' and command['kind'] in {'cast','activate','attack'}:
+        elif not passive and wake=='targeted_or_attacked' and command['kind'] in {'cast','activate','attack'}:
             # Conservative wake on new targeting/combat, never a silent pass.
             seat['snooze']=None
     events=campaign.kernel.semantic_events[state.get('scheduler_event_cursor',0):]
@@ -225,6 +226,9 @@ def observe(campaign,state,actor,command):
                     seat['approved']=None
                     if seat['snooze'] and (seat['snooze']['mode']=='resolve_my_sequence' or seat['snooze'].get('wake_condition')=='opponent_action'):seat['snooze']=None
         if event['kind']!='step_began':continue
+        if event['step']=='upkeep':
+            # Table-wide deadlines must never sleep through a new own turn.
+            state['actors'][event['active']]['snooze']=None
         if event['step']=='cleanup':state['actors'][event['active']]['approved']=None
         phase=phase_group(event['step'])
         for seat in state['actors'].values():
@@ -244,6 +248,12 @@ def automatic(campaign):
     state=campaign.state();action=campaign.next_action()
     if state['claim'] or action.get('kind')!='dispatch_pilot':return False
     actor=action['actor'];seat=state['actors'][actor];approved=seat['approved']
+    if action['decision_kind']=='declare_attackers' and not campaign.kernel.attack_candidates(actor):
+        # A forced empty declaration preserves existing snoozes, but grants no new passes.
+        command={'kind':'attack','attackers':[],'revision':campaign.kernel.revision}
+        request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':command})
+        campaign.submit(actor,request_id,command,rationale='No eligible attackers; automatic empty declaration.')
+        return True
     guarded=bool(approved and approved['cursor']<len(approved['steps'])
                  and 'choice_from' in approved['steps'][approved['cursor']]['command'])
     if action['decision_kind']!='priority' and not (action['decision_kind']=='choice' and guarded):

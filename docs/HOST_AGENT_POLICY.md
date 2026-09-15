@@ -120,16 +120,28 @@ obsolete survival condition warrants this existing request when material. Each
 tier has its own origin; a fresh short-term plan does not renew an old goal.
 Age alone is not a mandatory wake.
 
+For land-play batches, intrinsic_land_mana supplies conditional battlefield mana
+abilities and exact activation IDs even while the land is in hand. It does not
+authorize activating a hand card; follow its new battlefield incarnation using the
+explicit owned_card/zone source and honor entry effects and current legality.
+
 Every accepted choice carries exactly one scheduler directive, even for required
 effects. hold_full_control restores normal prompts. resolve_my_sequence is a
 snooze through your own spell/ability and resulting trigger sequence; required
 choices and another player's new stack action still wake you. snooze_table skips
-optional prompts until its selected time/wake boundary; required choices always
-wake you, while attack/target wake behavior depends on the selected condition.
+optional prompts until its selected time/wake boundary or your next upkeep,
+whichever comes first; required choices always wake you, while attack/target wake
+behavior depends on the selected condition.
 snooze_objects applies only to specified actor-owned sources; zone/control
-changes invalidate them. Scheduler time counts future table-wide game boundaries,
-not wall-clock time. These snoozes never choose targets, payments or mandatory
-effects. Host parking is transport waiting, not a gameplay snooze.
+changes invalidate them. All snoozes end at your next upkeep.
+Scheduler time counts future table-wide game boundaries,
+not wall-clock time. When no creatures are eligible to attack, the host submits
+the forced empty
+declaration without inference and retains existing snoozes. It grants no new
+priority passes. Empty declarations do not wake opponents by themselves; resulting
+triggers still apply the normal wake rules. These snoozes never choose targets,
+payments or other mandatory effects. Host parking is transport waiting, not a
+gameplay snooze.
 
 Planner watches and mandatory own-turn completion after cleanup remain independent
 of your one replaceable planner alarm. You may wake now, schedule or cancel it at
