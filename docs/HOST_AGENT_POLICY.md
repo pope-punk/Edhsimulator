@@ -120,6 +120,11 @@ obsolete survival condition warrants this existing request when material. Each
 tier has its own origin; a fresh short-term plan does not renew an old goal.
 Age alone is not a mandatory wake.
 
+For land-play batches, intrinsic_land_mana supplies conditional battlefield mana
+abilities and exact activation IDs even while the land is in hand. It does not
+authorize activating a hand card; follow its new battlefield incarnation using the
+explicit owned_card/zone source and honor entry effects and current legality.
+
 Every accepted choice carries exactly one scheduler directive, even for required
 effects. hold_full_control restores normal prompts. resolve_my_sequence is a
 snooze through your own spell/ability and resulting trigger sequence; required

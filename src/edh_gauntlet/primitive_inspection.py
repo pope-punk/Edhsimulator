@@ -35,7 +35,16 @@ def freeze(campaign,actor,board):
     def collect(value):
         if type(value) is dict:
             if 'name' in value and type(value.get('ref')) is dict:
-                try:objects[json.dumps(value['ref'],sort_keys=True)]=campaign.store.inspect(actor,{'kind':'card_rules','source':value['ref']})
+                try:
+                    row=campaign.store.inspect(actor,{'kind':'card_rules','source':value['ref']})
+                    from .rules_casting import intrinsic_land_mana
+                    from .rules_program import encode
+                    program=row['program']
+                    abilities=intrinsic_land_mana(program.get('subtypes',[])) if 'Land' in program.get('types',[]) else ()
+                    if abilities:
+                        row['intrinsic_land_mana']={'condition':'On the battlefield, while this land has these basic land types and its abilities are not removed. Not usable from hand. Entry effects and current legality still apply.',
+                                                    'abilities':encode(abilities)}
+                    objects[json.dumps(value['ref'],sort_keys=True)]=row
                 except RulesViolation:pass # Historical stack/LKI references are not live objects.
             for child in value.values():collect(child)
         elif type(value) is list:
@@ -98,7 +107,8 @@ def action_facts(frozen):
         return value
     programs={};objects=[]
     for row in frozen.get('_knowledge',{}).values():
-        rules=compact({'program':row['program'],'activated_abilities':row['activated_abilities']})
+        rules=compact({'program':row['program'],'activated_abilities':row['activated_abilities'],
+                       'intrinsic_land_mana':row.get('intrinsic_land_mana')})
         key=digest(rules);programs.setdefault(key,rules)
         objects.append({'source':deepcopy(row['source']),'rules_id':key})
     return {'objects':objects,'rules':programs,
