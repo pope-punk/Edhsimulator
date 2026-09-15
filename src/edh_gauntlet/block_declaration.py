@@ -37,7 +37,7 @@ def validate(request,value):
         except json.JSONDecodeError as exc:raise ValueError('Block declaration must be a JSON object of attacker UID to blocker UID lists.') from exc
     spec=request['block_declaration'];attackers=spec['attackers']
     if not isinstance(value,dict) or set(value)!={a['uid'] for a in attackers}:
-        raise ValueError('Declare every supplied attacker exactly once, using [] for each unblocked attacker; no unknown attackers.')
+        raise ValueError('assignments must be a JSON object mapping every attacker UID to a list of blocker UIDs, using [] for unblocked attackers; not an array. Required attacker keys: '+json.dumps([a['uid'] for a in attackers]))
     used=set();result={}
     for attacker in attackers:
         selected=value[attacker['uid']]

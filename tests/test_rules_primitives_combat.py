@@ -61,6 +61,19 @@ class CombatTests(unittest.TestCase):
         self.assertEqual(37,self.state.life('B'))
         self.assertFalse(self.state.get(self.attackers[0]).tapped)
 
+    def test_no_eligible_blockers_schema_error_is_actionable_and_atomic(self):
+        self.setup_game(((3,2,()),),())
+        self.attack()
+        spec=self.kernel._block_specification('B')
+        attacker=spec['attackers'][0]['uid']
+        before=self.kernel.snapshot()
+        with self.assertRaisesRegex(RulesViolation,'JSON object') as error:
+            self.kernel.declare_blockers('B',[],revision=self.kernel.revision)
+        self.assertIn(attacker,str(error.exception))
+        self.assertEqual(before,self.kernel.snapshot())
+        self.kernel.declare_blockers('B',{attacker:[]},revision=self.kernel.revision)
+        self.assertEqual([],self.kernel.combat['blocks'][attacker])
+
     def test_blocking_new_creatures_does_not_require_readiness(self):
         self.setup_game();self.assertFalse(self.state.ready_since_turn_start(self.blockers[0]))
         self.block();self.assertEqual(40,self.state.life('B'))

@@ -56,7 +56,13 @@ use play_land with face:"back" and the hand card source; do not cast its land fa
 The current face in hand does not prevent playing a permitted back land face.
 Optional casting fields: face, modes, alternative_id, counter_division, kicker,
 replicate, life_costs, hybrid_choices. attack uses attackers:[{source:REF,defender:SEAT_OR_REF}];
-block and damage use assignments matching the supplied specification.
+block uses assignments:{ATTACKER_UID:[BLOCKER_UID,...],...}, a JSON OBJECT,
+not an array. Include EVERY specification.attackers[].uid exactly once, using []
+for each unblocked attacker. Copy exact UIDs, including @incarnation; use blockers
+from that attacker's eligibility_group, each at most once across the declaration.
+Example with no eligible blockers: {kind:"block",assignments:{"attacker@4":[]}}.
+A nonempty blocker list must meet min_blockers. damage uses assignments matching
+the supplied specification.
 pay_mana:{request_id,payment}: use payment:null to decline a resolution payment
 (including extort); an empty payment object attempts to pay and is not a decline.
 To pay, activate available mana abilities first and supply the exact mana payment.
@@ -115,7 +121,16 @@ strategic review but never require waiting for it. Private diplomacy advice is
 advisory; no message itself authorizes gameplay. Follow the current strategic
 and tactical plans; adapt to changed facts. Historical decision logs belong to your
 planners, not your default input or checkpoint memory.
-At own-turn priority, plan the full known line before submitting its first action.
+At own-turn priority, first examine plans.actions.value.action_sequence and
+executed_steps. Prefer approving usable planner steps by ID instead of rewriting
+them as a direct sequence. Reject already performed, expired or unwanted steps;
+use overrides only for changed commands and retain unchanged planner rationales.
+Example: edh_act({batch:{approve_ids:["step-2","step-3"],reject_ids:["step-1"],
+rejection_rationale:"Step 1 was already performed.",pass_priority:true,
+resume_after_passes:true}}). Do not also send command, sequence or scheduler.
+If the supplied proposal is unsuitable, explain the concrete mismatch briefly in
+your normal action rationale; no extra turn or separate report is needed.
+Plan the full known line before submitting its first action.
 Use edh_act {sequence:[{id:"tap",command:ACTIVATE},{id:"color",command:GUARDED_ANSWER},
 {id:"cast",command:CAST}],rationale:SHARED_INTENT,scheduler:OBJECT} for predictable
 mana-production-and-cast chains. No planner action proposal is required. The host
@@ -156,9 +171,8 @@ Only an existing priority choice permits alarm control. It never delays gameplay
 No batch makes opponents pass or answers unknown required choices. Preserve unchanged
 planner rationales; only changed steps need your replacement rationale. No public
 speech or plan authorship belongs to you. Use retained standing during mulligans
-and until the initial strategic goal arrives. Inspect kind:decision to retrieve the
-exact current choice; answer uses its choice.request_id. Other queries have kind state,
-object with source:REF, card with name:PRINTED_NAME, or history with after:INTEGER.
+and until the initial strategic goal arrives. Read current_decision directly; answer uses its choice.request_id. Only planners
+can inspect; never attempt an inspection call.
 '''+COMMANDS
     elif role==planning.LONG:
         specific='''Own strategic goals only. Retain the full frozen seed and own deck. Inspect kind:deck
@@ -237,10 +251,17 @@ correction. Optional work may choose silence; required posts need a fresh diplom
 position, not a board recap. Personality can color the message without replacing its purpose.
 Routine speech (0) preserves batches. Urgent material changes (1) cancel remaining
 batches with a notice. Do not mark routine banter urgent. Address relevant replies;
-reply chains are capped at three. Never poll or reply merely to keep a chain alive.
+reply chains are capped at three. Copy reply_to EXACTLY from a supplied message's
+id, not its authorization ID, suffix, job ID or a reconstructed name. Reply only
+when you are addressed and reply_depth is below 3; otherwise choose optional
+silence or an independently meaningful new message with reply_to:null. Never poll or reply merely to keep a chain alive.
 Optional holds:[{id,player,scopes:["attack"|"target_permanents"],expires_turn,
 rationale,negotiation_id}] restrains your OWN decider while bargaining, within
-hold_authority. Holds use game-turn expiry and cannot renew overridden negotiations.
+hold_authority. Copy permitted players/scopes from that authority. expires_turn
+is an absolute table-wide game turn: current board.turn.number < expires_turn <=
+current board.turn.number + max_turns. With max_turns 0 no hold is permitted.
+Use short local hold and negotiation IDs (at most 80 characters), not full message
+IDs. Holds cannot renew overridden negotiations.
 Optional release_holds:[IDS] releases restraint. Unrelated actions continue.
 Negotiate autonomously within the standing brief. Only request long-term work to
 CHANGE that brief, using authorization_request:TEXT_MAX_600. A request grants no

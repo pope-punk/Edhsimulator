@@ -45,7 +45,7 @@ def compose(campaign,state,actor,job,operation,value):
         if type(row['to']) is not list or any(p not in bounds['allowed_recipients'] for p in row['to']):raise RulesViolation('Message recipient exceeds brief')
         if row['reply_to'] is not None:
             parent=campaign.store.connection.execute('SELECT payload FROM host_messages WHERE id=?',(row['reply_to'],)).fetchone()
-            if not parent:raise RulesViolation('Reply requires an existing message')
+            if not parent:raise RulesViolation('Reply requires an existing message: copy its exact messages[].id, including the full prefix and suffix; do not use authorization_id or reconstruct an ID')
             parent=json.loads(parent[0])
             if actor not in parent.get('to',[]):raise RulesViolation('Reply only to an addressed message')
             if parent.get('reply_depth',0)>=3:raise RulesViolation('Negotiation reply depth is capped at three')

@@ -85,3 +85,24 @@ replacement. Do not publish only differences or references to earlier plans.
 Historical explanation belongs in continuity, not as a prerequisite for reading
 the current tactical plan. Diplomats should add a real diplomatic contribution,
 not a board recap or echo; optional work can choose silence.
+
+
+## Telemetry follow-up from game g
+
+Deciders prefer approving usable supplied action steps by ID and preserve planner
+rationales. Direct sequences remain available for changed or absent proposals;
+explain a mismatch in the existing action rationale, without an extra inference.
+Executed or expired steps are rejected, never replayed. Deciders have no inspection
+tool; all command schemas and current choice facts must be delivered directly.
+Block assignments are an object mapping every exact attacker UID to blocker UID
+lists, including empty lists for unblocked attackers.
+
+Diplomats copy the complete public message ID for replies, not authorization IDs
+or reconstructed names. Holds obey the brief's allowed players/scopes and absolute
+game-turn expiry. Invalid references remain rejected rather than guessed.
+
+Host telemetry retains per-role input-to-first-tool count, sum and maximum after
+rolling event eviction. This measures the first tool after a real input, including
+warm delivery, and excludes time spent holding a tool before that input. It is
+neither complete planning-job duration nor proof that background planning blocked
+gameplay. Aggregates describe one host process lifetime and reset on recovery.
