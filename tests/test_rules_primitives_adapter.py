@@ -21,6 +21,30 @@ class AdapterTests(unittest.TestCase):
 
     def command(self,kind,**fields):return {'kind':kind,'revision':self.kernel.revision,**fields}
 
+    def test_rules_inspection_is_visible_detached_and_read_only(self):
+        before=self.adapter.archive()
+        query={'kind':'card_rules','source':self.spell.to_json()}
+        result=self.adapter.inspect('A',query)
+        self.assertEqual('Spell',result['program']['name'])
+        result['program']['name']='Changed by caller'
+        self.assertEqual('Spell',self.adapter.inspect('A',query)['program']['name'])
+        rock=self.adapter.inspect('B',{'kind':'card_rules','source':self.rock.to_json()})
+        self.assertEqual('mana',rock['activated_abilities'][0]['ability_id'])
+        self.assertEqual(before,self.adapter.archive())
+
+    def test_rules_inspection_rejects_hidden_refs_and_actor_spoofing(self):
+        before=self.adapter.archive();messages=[]
+        for ref in (self.hidden.to_json(),{'card_id':'missing','incarnation':0}):
+            with self.assertRaises(RulesViolation) as raised:
+                self.adapter.inspect('A',{'kind':'card_rules','source':ref})
+            messages.append(str(raised.exception))
+        self.assertEqual(messages[0],messages[1])
+        for actor,query in [('unknown',{'kind':'card_rules','source':self.rock.to_json()}),
+                            ('A',{'kind':'card_rules','source':self.hidden.to_json(),'actor':'B'}),
+                            ('A',{'kind':'checkpoint','source':self.rock.to_json()})]:
+            with self.assertRaises(RulesViolation):self.adapter.inspect(actor,query)
+        self.assertEqual(before,self.adapter.archive())
+
     def activate(self):
         return self.command('activate',action_id='mana',source=self.rock.to_json(),targets=[],x_value=0,
                             ability_id='mana',payment={'mana':{},'taps':[]})

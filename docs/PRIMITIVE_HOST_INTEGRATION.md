@@ -27,6 +27,16 @@ Vanguard, shared-team turns or pre-mulligan card exceptions absent from the pod.
 Kernel checkpoint schema is 133. Changed experimental checkpoints are rejected;
 the paused legacy game's contract and accepted prefix are untouched.
 
+## Actor-scoped inspection
+
+`RulesActorAdapter.inspect` exposes `card_rules` only for a currently visible
+object. It returns the current program and activation vocabulary, including
+intrinsic mana abilities and copied/granted behavior. This describes rules, not
+current action legality; atomic submission remains authoritative for timing,
+targets and payment. Unknown and hidden references share the same rejection.
+The durable wrapper fences stale writers and closed stores before inspection.
+Read-only inspection never writes an accepted command or exports a checkpoint.
+
 ## Remaining launch requirements
 
 - Bind the primitive durable store to a fresh campaign and authoritative

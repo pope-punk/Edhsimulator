@@ -12,6 +12,7 @@ from .rules_state import PlayerRef,ObjectRef,Zone,RulesViolation
 from .rules_casting import Payment
 from .rules_kernel import RulesKernel
 from .rules_identity import IMPLEMENTATION_ID
+from .rules_program import encode
 
 
 def digest(value):
@@ -39,6 +40,24 @@ class RulesActorAdapter:
         packet=project_actor(self.kernel,actor)
         if self.failed:packet['decision']={'kind':'engine_stopped'}
         return packet
+
+    def inspect(self,actor,query):
+        """Read visible rules without exporting a checkpoint or reserving an action.
+
+        Programs describe available vocabulary, not an assertion that an action
+        is legal now. The ordinary atomic submission still validates timing,
+        targets, costs and the exact revision.
+        """
+        if self.failed:raise AcceptedTransitionError('Adapter stopped after an accepted execution failure')
+        if actor not in self.kernel.state.live_players:raise RulesViolation('Unavailable actor')
+        if type(query) is not dict or set(query)!={'kind','source'} or query['kind']!='card_rules':
+            raise RulesViolation('Unsupported inspection request')
+        ref=self._visible_ref(query['source'],actor)
+        obj=self.kernel.state.get(ref)
+        return {'kind':'card_rules','actor':actor,'revision':self.kernel.revision,
+                'source':ref.to_json(),'program':encode(self.kernel.definition(obj)),
+                'activated_abilities':encode(self.kernel.activated_abilities(obj)),
+                'legality':'Submission validates current timing, targets and payment.'}
 
     def _visible_ref(self,value,actor):
         try:ref=ObjectRef.from_json(value)

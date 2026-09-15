@@ -170,6 +170,10 @@ class DurableRulesAdapter:
         self._current()
         return self._adapter.packet(actor)
 
+    def inspect(self,actor,query):
+        self._current()
+        return self._adapter.inspect(actor,query)
+
     def archive(self):
         self._current()
         return self._adapter.archive()

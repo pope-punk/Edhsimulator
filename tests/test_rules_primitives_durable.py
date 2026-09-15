@@ -90,8 +90,17 @@ class DurableTests(unittest.TestCase):
     def test_second_writer_is_fenced_after_first_advances(self):
         first=self.create();second=self.reopen();first.submit('A','request',self.command)
         with self.assertRaises(StaleDurableStore):second.packet('A')
+        with self.assertRaises(StaleDurableStore):second.inspect('A',{'kind':'card_rules','source':self.command['source']})
         with self.assertRaises(StaleDurableStore):second.submit('A','other',self.command)
         self.assertEqual(1,self.reopen().generation)
+
+    def test_inspection_retains_committed_head_and_rejects_closed_store(self):
+        store=self.create();before=store.committed_head()
+        query={'kind':'card_rules','source':self.command['source']}
+        self.assertEqual('Rock',store.inspect('B',query)['program']['name'])
+        self.assertEqual(before,store.committed_head())
+        store.close()
+        with self.assertRaises(DurableStoreError):store.inspect('B',query)
 
     def test_error_after_acceptance_commits_failed_checkpoint_without_reexecution(self):
         store=self.create()
