@@ -29,3 +29,38 @@ class WatcherTests(TestCase):
     def test_uncertain_delivery_is_not_replayed(self):
         def fail(*args,**kwargs):raise TimeoutError('Unknown queue outcome')
         self.assertEqual('uncertain',self.tick(fail)[0]['state']);self.assertEqual([],self.tick());self.assertFalse(self.calls)
+
+    def test_support_runs_separate_exec_once_and_verifies_resolution(self):
+        from unittest.mock import patch
+        with patch.object(watcher,'support_resolved',return_value=True):
+            result=watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support')
+        self.assertEqual('support_finished',result[0]['state'])
+        self.assertEqual(['codex','exec'],self.calls[0][:2])
+        self.assertIn('Never edit repository/runtime source',self.calls[0][-1])
+        self.assertIn('never print the key',self.calls[0][-1])
+        self.assertEqual([],watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support'))
+        self.assertEqual(1,len(self.calls))
+
+    def test_support_unresolved_exit_escalates_once_without_retry(self):
+        from unittest.mock import patch
+        with patch.object(watcher,'support_resolved',return_value=False):
+            result=watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support')
+        self.assertEqual('uncertain',result[0]['state'])
+        self.assertEqual(['codex','exec'],self.calls[0][:2])
+        self.assertEqual(['codex','queue'],self.calls[1][:2])
+        self.assertEqual([],watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support'))
+        self.assertEqual(2,len(self.calls))
+
+    def test_support_checks_durable_state_not_exit_text(self):
+        import sqlite3
+        game=self.run/'game_01';game.mkdir()
+        c=sqlite3.connect(game/'rules.sqlite');c.execute('create table host_state(value text)')
+        def state(value):
+            c.execute('delete from host_state');c.execute('insert into host_state values (?)',(json.dumps(value),));c.commit()
+        state({'help_request':{'id':'help-1'}})
+        self.assertFalse(watcher.support_resolved(self.run,'help-1'))
+        state({'help_responses':{'help-1':{}},'paused':{'reason':'pilot_help_answered'}})
+        self.assertFalse(watcher.support_resolved(self.run,'help-1'))
+        state({'help_responses':{'help-1':{}},'paused':None})
+        self.assertTrue(watcher.support_resolved(self.run,'help-1'))
+        c.close()

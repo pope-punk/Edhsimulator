@@ -27,3 +27,22 @@ The watcher can run independently of a stopped gameplay host. It must itself rem
 running, and the local Codespace/Codex environment must be available. It cannot
 wake a suspended Codespace. The existing primitive help-status, answer-help and
 fenced Resume workflow still handles the actual request.
+
+
+## Independent background support
+
+`--mode support` runs one fresh `codex exec` conversation for each new request,
+separately from the development thread. The same local watcher lock serializes
+support workers. The request/prefix receipt is written before launch, preventing
+repeat execution after an uncertain outcome. Idle polling performs no inference.
+Workers inherit the local Codex login and default model configuration, use
+approval policy never, and receive technical-only instructions with explicit
+stop/pause and stopped-prefix requirements. They may answer and resume through
+the existing supported lifecycle but may not choose game actions or edit source.
+
+The worker's JSONL and final report are retained beside its receipt. The watcher
+checks durable help state after completion; unresolved/uncertain attempts queue
+one escalation to the development thread rather than launch a duplicate worker.
+A different pending request receives its own fresh conversation on the next poll.
+This remains a local Codespace service: it needs the Codespace running and does
+not add a gameplay lane or change the game's contract.
