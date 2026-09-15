@@ -178,12 +178,15 @@ def publish(campaign,actor,role,job_id,stage,value):
                     raise RulesViolation('Duplicate or expired diplomatic authorization')
                 seen.add(key)
         elif stage=='short_term':
-            if set(value)!={'short_term_plan','continuity','long_term_validity','long_term_invalid_reason'}:
+            required={'short_term_plan','continuity','long_term_validity','long_term_invalid_reason'}
+            if not required<=set(value) or set(value)-required-{'dependencies'}:
                 raise RulesViolation('Supply tactical prose, continuity and strategic validity')
             text_field(value,'short_term_plan',600);text_field(value,'continuity',1200)
             if value['long_term_validity'] not in {'valid','invalid'}:raise RulesViolation('Invalid strategic assessment')
             if value['long_term_validity']=='invalid':text_field(value,'long_term_invalid_reason',300)
             elif type(value['long_term_invalid_reason']) is not str:raise RulesViolation('Validity reason must be text')
+            from .primitive_dependencies import freeze
+            dependencies=freeze(job['input']['board'],value.get('dependencies',[]))
         elif stage=='actions':validate_actions(value,job)
         elif stage=='message':
             from .primitive_diplomacy import prepare
@@ -198,6 +201,8 @@ def publish(campaign,actor,role,job_id,stage,value):
             component['assessed_goal']=job['input']['plans'].get('long_term',{}).get('id')
             component['id']=digest({'stage':stage,'value':component_value,'assessed_goal':component['assessed_goal']})
             if old is None or old['id']!=component['id']:seat['plans'].pop('actions',None)
+            seat['tactical_dependencies']={'component_id':component['id'],'goal_id':component['assessed_goal'],
+                                          'values':dependencies}
         if stage=='actions':
             component['short_term_id']=seat['plans'].get('short_term',{}).get('id')
             component['id']=digest({'stage':stage,'value':component_value,'short_term_id':component['short_term_id']})
@@ -213,6 +218,17 @@ def publish(campaign,actor,role,job_id,stage,value):
             if old is None or seat.get('invalid_goal') or any(r.startswith(('invalid_goal:','pilot_alarm:')) for r in job['reasons']):
                 queue(state,actor,SHORT,'strategic_publication:'+job_id)
             queue(state,actor,DIPLOMAT,'strategic_publication:'+job_id)
+        if stage=='short_term' or stage=='long_term' and old is not None and old['id']!=component['id']:
+            dependency=seat.get('tactical_dependencies',{})
+            goal=seat['plans'].get('long_term',{}).get('id')
+            if dependency.get('values') and dependency.get('goal_id')!=goal:
+                from .primitive_dependencies import changed
+                paths=changed(campaign.store.packet(actor),dependency['values'])
+                if paths:
+                    reason='changed_dependencies:'+digest({'tactical':dependency['component_id'],'goal':goal})
+                    queue(state,actor,SHORT,reason)
+                    campaign.record(actor,'dependency_review',{'reason':reason,'paths':paths,'goal_id':goal,
+                                                              'short_term_id':dependency['component_id']})
         if stage=='short_term' and value['long_term_validity']=='invalid':
             assessed=job['input']['plans'].get('long_term',{}).get('id')
             current_goal=seat['plans'].get('long_term',{}).get('id')

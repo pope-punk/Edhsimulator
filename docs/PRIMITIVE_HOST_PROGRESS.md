@@ -33,9 +33,9 @@ or game action was started by this probe.
 
 Remaining release work:
 
-- Finish object snooze semantics and audit declared tactical dependencies. Expand
+- Finish object snooze semantics. Expand
   missed-window and multi-turn sequence tests; audit mandatory publication coverage.
-- Complete host-level replay conformance and audit tactical dependency handling.
+- Complete host-level replay conformance.
 - Expand fault tests, full suite and installed-package checks; bind admission to
   actual completed host conformance, not a manually flipped readiness flag.
 - Update release documentation, push/review/merge the host branch, and initialize
@@ -119,3 +119,15 @@ including a real isolated subprocess (`/tmp/edh-primitive-process-evidence.log`)
 The combined primitive suite passed 83 tests in 115.826 seconds; the subsequently
 expanded recovery and host transport suites passed seven and 14 tests respectively.
 Logs: `/tmp/edh-primitive-crash-fence.log` and `/tmp/edh-primitive-shutdown.log`.
+
+Short-term publications now accept optional `dependencies`, up to 24 distinct
+JSON pointers into existing facts in the frozen actor board (for example `/hand`
+or `/players/0/life`). Only digests of those selected facts are retained for
+comparison; no extra historical board is added to the packet. A changed goal
+queues tactical follow-up only if declared facts changed. A late tactical
+publication is compared against its own frozen baseline, so a concurrent goal
+revision cannot lose the needed follow-up. Missing facts, nonfactual metadata,
+duplicate paths and invalid pointers are rejected at publication.
+The combined primitive suite passed 90 tests in 101.616 seconds after this change
+(`/tmp/edh-primitive-dependencies.log`). Distribution CI for preceding commit
+1d1c479 is running as workflow 34925867957; final-head release validation remains.

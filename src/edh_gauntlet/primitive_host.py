@@ -108,8 +108,12 @@ Do not write tactics, continuity, approve proposals or execute game actions.
 '''
     elif role==planning.SHORT:
         specific='''Own continuity and tactical proposals only. Retain standing; read current goal and
-all supplied own-seat rationales. First publish short_term with exactly
+all supplied own-seat rationales. First publish short_term with
 {short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid",long_term_invalid_reason:TEXT}.
+Optional dependencies:[JSON_POINTERS] declares up to 24 distinct factual paths in
+this frozen board, for example /players/0/life or /hand. List indexes are zero-based.
+Only existing facts may be declared. A revised goal queues tactical follow-up when
+these facts changed; a goal version change alone does not wake you.
 Invalidity requires a concrete reason, queues strategic work and still proceeds to
 actions. Then publish actions with {action_sequence:[STEPS],phase_coverage:{
 precombat_main:{status:"planned"|"no_action"|"reassess",reason:TEXT},
