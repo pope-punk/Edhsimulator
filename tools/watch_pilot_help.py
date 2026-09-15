@@ -32,10 +32,12 @@ def support_resolved(run, request_id):
     try:state=json.loads(connection.execute('select value from host_state').fetchone()[0])
     finally:connection.close()
     pending=state.get('help_request') or {}
+    if (run/'HOST_PAUSED.json').exists():return True
     if pending.get('id')==request_id:return False
+    if pending or state.get('terminal'):return True
     # A stop/pause or superseding request remains authoritative. An answered
     # request left at its help-answer pause still needs an explicit resume.
-    return (state.get('paused') or {}).get('reason')!='pilot_help_answered'
+    return not state.get('paused')
 
 
 def support_prompt(message, root, directory):
