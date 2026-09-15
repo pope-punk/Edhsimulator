@@ -111,11 +111,11 @@ def claim(campaign,actor,role):
 def validate_actions(value,job):
     if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','watches'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
     steps=value['action_sequence'];coverage=value['phase_coverage']
-    if type(steps) is not list or len(steps)>16 or len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())>12000:
+    if type(steps) is not list or len(steps)>64 or len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())>12000:
         raise RulesViolation('Action proposals exceed the bound')
     if type(coverage) is not dict or set(coverage)!=set(PHASES):raise RulesViolation('Cover all three turn phases')
     ids=set();previous_window=None
-    for step in steps:
+    for index,step in enumerate(steps):
         if type(step) is not dict or set(step)!={'id','seat_turn','phase','command','rationale','scheduler'}:
             raise RulesViolation('Each step requires id, seat_turn, phase, command, rationale and scheduler')
         key=text_field(step,'id',48)
@@ -135,6 +135,8 @@ def validate_actions(value,job):
             raise RulesViolation('Unsupported proposed primitive command')
         from .primitive_actions import normalize_scheduler
         normalize_scheduler(step['scheduler'])
+        from .primitive_batch_choices import validate as validate_choice
+        validate_choice(steps,index)
     for phase,row in coverage.items():
         if type(row) is not dict or set(row)-{'status','reason'} or row.get('status') not in {'planned','no_action','reassess'}:
             raise RulesViolation('Invalid phase coverage')

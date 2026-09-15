@@ -144,6 +144,10 @@ def apply_control(campaign,state,actor,control):
             if approved.get('proposal_id'):
                 rows=seat.setdefault('executed_steps',{}).setdefault(approved['proposal_id'],[])
                 if step['id'] not in rows:rows.append(step['id'])
+            frame=campaign.kernel.resolving
+            approved['continuation_frame']=(frame['id'] if frame and frame.get('mana_ability')
+                and frame.get('controller')==actor and (step['command']['kind']=='activate'
+                or frame['id']==approved.get('continuation_frame')) else None)
             approved['cursor']+=1
     if 'scheduler' in control:
         directive=deepcopy(control['scheduler'])
@@ -202,7 +206,9 @@ def automatic(campaign):
     state=campaign.state();action=campaign.next_action()
     if state['claim'] or action.get('kind')!='dispatch_pilot':return False
     actor=action['actor'];seat=state['actors'][actor];approved=seat['approved']
-    if action['decision_kind']!='priority':
+    guarded=bool(approved and approved['cursor']<len(approved['steps'])
+                 and 'choice_from' in approved['steps'][approved['cursor']]['command'])
+    if action['decision_kind']!='priority' and not (action['decision_kind']=='choice' and guarded):
         if approved or seat['snooze']:
             with campaign.transaction() as value:
                 value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None
@@ -222,10 +228,10 @@ def automatic(campaign):
             step=steps[cursor];chosen=step['command'];rationale=step['rationale']
             control={'scheduler':normalize_scheduler(step['scheduler']),
                      'sequence':{'id':approved['id'],'cursor':cursor,'advance':True}}
-        elif approved['pass_priority']:
+        elif approved['pass_priority'] and action['decision_kind']=='priority':
             chosen={'kind':'pass'};rationale='Priority pass explicitly authorized by batch '+approved['id']
             control={'sequence':{'id':approved['id'],'cursor':cursor,'advance':False}}
-    if chosen is None and seat['snooze']:
+    if chosen is None and seat['snooze'] and action['decision_kind']=='priority':
         snooze=seat['snooze'];mode=snooze['mode']
         active_own=any(frame['controller']==actor for frame in campaign.kernel.stack)
         from .primitive_snoozes import covers
@@ -238,6 +244,9 @@ def automatic(campaign):
         if control and control.get('scheduler'):
             from .primitive_snoozes import bind
             control['scheduler']=bind(campaign,actor,control['scheduler'])
+        if 'choice_from' in chosen:
+            from .primitive_batch_choices import bind
+            chosen=bind(campaign,actor,approved,approved['steps'][approved['cursor']])
         command=bind_command(campaign,actor,chosen,request_id)
         campaign.submit(actor,request_id,command,rationale=rationale,control=control,
             plan_refs={'actions':approved['proposal_id']} if approved and approved.get('proposal_id') else {})
