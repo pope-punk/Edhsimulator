@@ -60,7 +60,7 @@ class BundleTests(unittest.TestCase):
 
     def test_exact_pod_counts_and_unmapped_cards_remain_visible(self):
         coverage=deck_coverage()
-        self.assertEqual(199,coverage['authored_unique_cards'])
+        self.assertEqual(226,coverage['authored_unique_cards'])
         self.assertEqual(400,sum(deck['cards'] for deck in coverage['decks']))
         self.assertEqual(4,len(coverage['decks']));self.assertFalse(coverage['production_ready'])
         for deck in coverage['decks']:

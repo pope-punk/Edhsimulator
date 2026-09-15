@@ -20,6 +20,7 @@ class ZoneProposal:
     trace: tuple = ()
     tapped: bool = False
     counters: tuple = ()
+    copied_add_types: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,7 @@ class ReplacementCandidate:
     program: object = None
     source: RulesObject | None = None
     copy_tapped: bool = False
+    copy_add_types: tuple = ()
 
 
 def affected_player(proposal):
@@ -49,7 +51,7 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
         key = f'entry-copy:{obj.ref.card_id}@{obj.ref.incarnation}:{definition.definition_id}'
         if key not in proposal.used:
             result.append(ReplacementCandidate(key, 'Choose an entry copy', 'copy', 2,
-                                               proposal.controller, definition.entry_copy,copy_tapped=definition.entry_copy_tapped))
+                                               proposal.controller, definition.entry_copy,copy_tapped=definition.entry_copy_tapped,copy_add_types=definition.entry_copy_add_types))
     if proposal.destination == Zone.BATTLEFIELD:
         for modifier in definition.entry_modifiers:
             if modifier.selector is not None:continue
@@ -81,10 +83,11 @@ def candidates(state, definitions, proposal, affected_types=None, applicable_ent
     return tuple(candidate for candidate in result if candidate.priority == priority)
 
 
-def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=None,counters=None):
+def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=None,counters=None,copied_add_types=()):
     destination = proposal.destination
     copy = proposal.copied_definition
     tapped = proposal.tapped
+    copy_types = proposal.copied_add_types
     used = proposal.used | {candidate.key}
     commander_considered = proposal.commander_considered
     if candidate.kind == 'commander':
@@ -94,6 +97,7 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
     elif candidate.kind == 'copy':
         if accepted:
             copy = copied_definition
+            copy_types = tuple(sorted(set(copied_add_types) | set(candidate.copy_add_types)))
             tapped = tapped or candidate.copy_tapped
     elif candidate.kind == 'entry':
         if accepted:tapped = candidate.program.tapped
@@ -108,8 +112,9 @@ def apply_replacement(proposal, candidate, *, accepted=True, copied_definition=N
     trace = {'replacement': candidate.key, 'replacement_kind': candidate.kind, 'accepted': accepted,
              'from_destination': proposal.destination.value, 'to_destination': destination.value,
              'copied_definition': copy, 'from_tapped': proposal.tapped, 'to_tapped': tapped}
+    if copy_types:trace['copied_add_types']=list(copy_types)
     if counters is not None:trace['counters']=list(counters)
-    return replace(proposal, destination=destination, copied_definition=copy,
+    return replace(proposal, destination=destination, copied_definition=copy,copied_add_types=copy_types,
                    used=frozenset(used), commander_considered=commander_considered,
                    tapped=tapped,counters=proposal.counters if counters is None else counters,
                    trace=proposal.trace + (trace,))

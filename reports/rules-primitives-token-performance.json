@@ -1,80 +1,80 @@
 {
   "schema": 1,
-  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
   "repeats": 7,
   "scope": "Synthetic fixed-token creation and current public packet; no triggers, modifiers, inference, transport, live queues or production throughput claims",
   "cases": [
     {
       "tokens": 1,
-      "creation_median_ms": 0.600511,
+      "creation_median_ms": 0.665597,
       "creation_samples_ms": [
-        0.841637,
-        0.626419,
-        0.575974,
-        0.648491,
-        0.600511,
-        0.567181,
-        0.563215
+        0.906024,
+        0.719746,
+        0.623474,
+        0.618667,
+        0.665597,
+        0.615131,
+        0.72168
       ],
-      "packet_median_ms": 0.056754,
+      "packet_median_ms": 0.059047,
       "packet_samples_ms": [
-        0.076714,
-        0.062673,
-        0.072637,
-        0.056033,
-        0.056534,
-        0.056754,
-        0.055232
+        0.080639,
+        0.061832,
+        0.059098,
+        0.056875,
+        0.059047,
+        0.057775,
+        0.058467
       ],
       "one_atomic_batch": true,
       "checkpoint_parity": true
     },
     {
       "tokens": 10,
-      "creation_median_ms": 1.837023,
+      "creation_median_ms": 1.891064,
       "creation_samples_ms": [
-        1.837023,
-        1.97657,
-        2.627174,
-        1.696745,
-        1.682835,
-        1.756364,
-        2.130498
+        2.481398,
+        1.891064,
+        1.88231,
+        1.871044,
+        2.019934,
+        1.93597,
+        1.845396
       ],
-      "packet_median_ms": 0.111355,
+      "packet_median_ms": 0.118095,
       "packet_samples_ms": [
-        0.110093,
-        0.113859,
-        0.124365,
-        0.113108,
-        0.110173,
-        0.108841,
-        0.111355
+        0.113398,
+        0.152957,
+        0.113388,
+        0.113168,
+        0.118095,
+        0.119827,
+        0.125256
       ],
       "one_atomic_batch": true,
       "checkpoint_parity": true
     },
     {
       "tokens": 100,
-      "creation_median_ms": 15.359829,
+      "creation_median_ms": 18.076707,
       "creation_samples_ms": [
-        16.186004,
-        15.174213,
-        15.359829,
-        15.227533,
-        14.668184,
-        24.842856,
-        23.869613
+        18.785427,
+        17.052558,
+        17.753297,
+        18.076707,
+        16.740576,
+        18.217115,
+        18.257065
       ],
-      "packet_median_ms": 0.69488,
+      "packet_median_ms": 0.729671,
       "packet_samples_ms": [
-        0.724974,
-        0.683233,
-        0.686688,
-        0.69488,
-        0.689892,
-        1.267549,
-        0.732396
+        0.72797,
+        0.756191,
+        0.723062,
+        0.744013,
+        0.713778,
+        0.729671,
+        0.782079
       ],
       "one_atomic_batch": true,
       "checkpoint_parity": true

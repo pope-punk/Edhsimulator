@@ -1,9 +1,9 @@
 # Fixed-pod card migration list
 
-199 of 334 unique cards have authored primitive programs (264 of 400 deck copies).
+226 of 334 unique cards have authored primitive programs (291 of 400 deck copies).
 No card is production-certified. The host migration remains unfinished.
 “Authored” means a catalog-bound program exists; it does not waive missing general rules or production gates.
-“Remaining” means a complete program has not been authored. Uro, Animate Dead and Starfield of Nyx have bounded interaction fixtures only.
+“Remaining” means a complete program has not been authored. Uro and Animate Dead have bounded interaction fixtures only.
 
 Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). See [progress and gates](RULES_PRIMITIVES_PROGRESS.md).
 
@@ -18,9 +18,9 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Alseid of Life's Bounty | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Aminatou, the Fateshifter | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Aminatou, Veil Piercer | Remaining | Reaminatour — Aminatou, Veil Piercer |
-| Angel of Invention | Remaining | Elenda, Saint of Dusk |
+| Angel of Invention | Authored | Elenda, Saint of Dusk |
 | Angel of Vitality | Authored | Elenda, Saint of Dusk |
-| Angelic Destiny | Remaining | Elenda, Saint of Dusk |
+| Angelic Destiny | Authored | Elenda, Saint of Dusk |
 | Animate Dead | Fixture only | Reaminatour — Aminatou, Veil Piercer |
 | Apex Devastator | Remaining | Omo, Queen of Vesuva |
 | Arcane Denial | Remaining | Omo, Queen of Vesuva |
@@ -46,23 +46,23 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Bulk Up | Remaining | Minsc & Boo, Timeless Heroes |
 | Caves of Koilos | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Celestial Armor | Authored | Elenda, Saint of Dusk |
-| Champion of Lambholt | Remaining | Minsc & Boo, Timeless Heroes |
-| Chandra's Ignition | Remaining | Minsc & Boo, Timeless Heroes |
+| Champion of Lambholt | Authored | Minsc & Boo, Timeless Heroes |
+| Chandra's Ignition | Authored | Minsc & Boo, Timeless Heroes |
 | Changing Loyalty | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Chaos Warp | Remaining | Minsc & Boo, Timeless Heroes |
 | Charcoal Diamond | Authored | Elenda, Saint of Dusk |
-| Chromatic Lantern | Remaining | Omo, Queen of Vesuva |
+| Chromatic Lantern | Authored | Omo, Queen of Vesuva |
 | Chthonian Nightmare | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Cinder Glade | Authored | Minsc & Boo, Timeless Heroes |
-| City of Brass | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| City of Brass | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Cloudpost | Authored | Omo, Queen of Vesuva |
 | Command Tower | Authored | Reaminatour — Aminatou, Veil Piercer, Minsc & Boo, Timeless Heroes, Omo, Queen of Vesuva, Elenda, Saint of Dusk |
 | Consider | Authored | Reaminatour — Aminatou, Veil Piercer |
-| Copy Land | Remaining | Omo, Queen of Vesuva |
+| Copy Land | Authored | Omo, Queen of Vesuva |
 | Cosmos Elixir | Authored | Elenda, Saint of Dusk |
 | Counterspell | Authored | Omo, Queen of Vesuva |
 | Crop Rotation | Remaining | Omo, Queen of Vesuva |
-| Cultivate | Remaining | Minsc & Boo, Timeless Heroes |
+| Cultivate | Authored | Minsc & Boo, Timeless Heroes |
 | Curse of the Swine | Authored | Omo, Queen of Vesuva |
 | Dance of the Dead | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Dark Depths | Remaining | Omo, Queen of Vesuva |
@@ -84,12 +84,12 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Dreamroot Cascade | Authored | Omo, Queen of Vesuva |
 | Drown in Dreams | Authored | Omo, Queen of Vesuva |
 | Dryad of the Ilysian Grove | Authored | Omo, Queen of Vesuva |
-| Eiganjo, Seat of the Empire | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Eiganjo, Seat of the Empire | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Elenda's Hierophant | Authored | Elenda, Saint of Dusk |
-| Elenda, Saint of Dusk | Remaining | Elenda, Saint of Dusk |
+| Elenda, Saint of Dusk | Authored | Elenda, Saint of Dusk |
 | Elspeth Conquers Death | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Elvish Mystic | Authored | Minsc & Boo, Timeless Heroes |
-| Elvish Rejuvenator | Remaining | Omo, Queen of Vesuva |
+| Elvish Rejuvenator | Authored | Omo, Queen of Vesuva |
 | Enlightened Tutor | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Entity Tracker | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Essence Channeler | Remaining | Elenda, Saint of Dusk |
@@ -101,7 +101,7 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Exotic Orchard | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Expedition Map | Authored | Omo, Queen of Vesuva |
 | Exsanguinate | Authored | Elenda, Saint of Dusk |
-| Fallen Ideal | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Fallen Ideal | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Fanatic of Rhonas | Remaining | Minsc & Boo, Timeless Heroes |
 | Fanatical Devotion | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Fangs of Kalonia | Remaining | Minsc & Boo, Timeless Heroes |
@@ -122,16 +122,16 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Garruk's Uprising | Authored | Minsc & Boo, Timeless Heroes |
 | Ghalta, Primal Hunger | Authored | Minsc & Boo, Timeless Heroes |
 | Ghostly Dancers | Remaining | Reaminatour — Aminatou, Veil Piercer |
-| Gifts Ungiven | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Gifts Ungiven | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Give In to Violence | Authored | Elenda, Saint of Dusk |
 | Glasswing Grace // Age-Graced Chapel | Remaining | Elenda, Saint of Dusk |
 | Gleaming Splendor | Remaining | Reaminatour — Aminatou, Veil Piercer |
-| Glen Elendra Archmage | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Glen Elendra Archmage | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Glimmerpost | Authored | Omo, Queen of Vesuva |
 | Goblin Anarchomancer | Authored | Minsc & Boo, Timeless Heroes |
 | Godless Shrine | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Grasp of Fate | Remaining | Elenda, Saint of Dusk |
-| Gravebreaker Lamia | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Gravebreaker Lamia | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Grim Guardian | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Growth Spiral | Authored | Omo, Queen of Vesuva |
 | Grumgully, the Generous | Authored | Minsc & Boo, Timeless Heroes |
@@ -169,8 +169,8 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Kazuul's Fury // Kazuul's Cliffs | Remaining | Minsc & Boo, Timeless Heroes |
 | Kessig Wolf Run | Authored | Minsc & Boo, Timeless Heroes |
 | Kodama of the West Tree | Remaining | Minsc & Boo, Timeless Heroes |
-| Kodama's Reach | Remaining | Minsc & Boo, Timeless Heroes |
-| Kunoros, Hound of Athreos | Remaining | Elenda, Saint of Dusk |
+| Kodama's Reach | Authored | Minsc & Boo, Timeless Heroes |
+| Kunoros, Hound of Athreos | Authored | Elenda, Saint of Dusk |
 | Lair of the Hydra | Authored | Omo, Queen of Vesuva |
 | Lazotep Quarry | Remaining | Omo, Queen of Vesuva |
 | Leonin Relic-Warder | Remaining | Reaminatour — Aminatou, Veil Piercer |
@@ -185,7 +185,7 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Lyra Dawnbringer | Authored | Elenda, Saint of Dusk |
 | Magus of the Candelabra | Authored | Omo, Queen of Vesuva |
 | Mana Confluence | Authored | Reaminatour — Aminatou, Veil Piercer |
-| Mana Reflection | Remaining | Omo, Queen of Vesuva |
+| Mana Reflection | Authored | Omo, Queen of Vesuva |
 | Managorger Hydra | Authored | Minsc & Boo, Timeless Heroes |
 | Marauding Blight-Priest | Authored | Elenda, Saint of Dusk |
 | Marble Diamond | Authored | Elenda, Saint of Dusk |
@@ -213,18 +213,18 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Oasis Gardener | Authored | Elenda, Saint of Dusk |
 | Oblivion Ring | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Omen of the Sea | Authored | Reaminatour — Aminatou, Veil Piercer |
-| Omo, Queen of Vesuva | Remaining | Omo, Queen of Vesuva |
+| Omo, Queen of Vesuva | Authored | Omo, Queen of Vesuva |
 | Opt | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Oracle of Mul Daya | Remaining | Omo, Queen of Vesuva |
 | Orzhov Signet | Authored | Elenda, Saint of Dusk |
-| Otawara, Soaring City | Remaining | Reaminatour — Aminatou, Veil Piercer |
+| Otawara, Soaring City | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Overflowing Basin | Authored | Omo, Queen of Vesuva |
 | Ozolith, the Shattered Spire | Authored | Minsc & Boo, Timeless Heroes |
 | Parallax Wave | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | Parasitic Impetus | Remaining | Elenda, Saint of Dusk |
 | Phyrexian Arena | Authored | Elenda, Saint of Dusk |
 | Plains | Authored | Reaminatour — Aminatou, Veil Piercer ×3, Elenda, Saint of Dusk ×14 |
-| Planar Nexus | Remaining | Omo, Queen of Vesuva |
+| Planar Nexus | Authored | Omo, Queen of Vesuva |
 | Polluted Bonds | Authored | Elenda, Saint of Dusk |
 | Polluted Delta | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Pongify | Remaining | Omo, Queen of Vesuva |
@@ -257,7 +257,7 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Rune-Scarred Demon | Authored | Elenda, Saint of Dusk |
 | Sage of the Maze | Authored | Omo, Queen of Vesuva |
 | Sakura-Tribe Elder | Authored | Minsc & Boo, Timeless Heroes |
-| Satyr Wayfinder | Remaining | Omo, Queen of Vesuva |
+| Satyr Wayfinder | Authored | Omo, Queen of Vesuva |
 | Scalding Tarn | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Scoured Barrens | Authored | Elenda, Saint of Dusk |
 | Scute Swarm | Remaining | Omo, Queen of Vesuva |
@@ -278,9 +278,9 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Spelunking | Authored | Omo, Queen of Vesuva |
 | Spire Garden | Authored | Minsc & Boo, Timeless Heroes |
 | Spirited Companion | Authored | Reaminatour — Aminatou, Veil Piercer |
-| Starfield of Nyx | Fixture only | Reaminatour — Aminatou, Veil Piercer |
+| Starfield of Nyx | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Stomping Ground | Remaining | Minsc & Boo, Timeless Heroes |
-| Summary Dismissal | Remaining | Omo, Queen of Vesuva |
+| Summary Dismissal | Authored | Omo, Queen of Vesuva |
 | Sun Titan | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Sunken Palace | Remaining | Omo, Queen of Vesuva |
 | Swamp | Authored | Reaminatour — Aminatou, Veil Piercer, Elenda, Saint of Dusk ×13 |
@@ -292,11 +292,11 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Talisman of Progress | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Talon Gates of Madara | Remaining | Omo, Queen of Vesuva |
 | Tatyova, Benthic Druid | Authored | Omo, Queen of Vesuva |
-| Taurean Mauler | Remaining | Minsc & Boo, Timeless Heroes |
+| Taurean Mauler | Authored | Minsc & Boo, Timeless Heroes |
 | Temple of Mystery | Authored | Omo, Queen of Vesuva |
 | Temple of Silence | Authored | Elenda, Saint of Dusk |
 | Terastodon | Authored | Omo, Queen of Vesuva |
-| Terrasymbiosis | Remaining | Minsc & Boo, Timeless Heroes |
+| Terrasymbiosis | Authored | Minsc & Boo, Timeless Heroes |
 | The Cruelty of Gix | Remaining | Reaminatour — Aminatou, Veil Piercer |
 | The Earth Crystal | Remaining | Minsc & Boo, Timeless Heroes |
 | The Meathook Massacre | Authored | Reaminatour — Aminatou, Veil Piercer |
@@ -338,7 +338,7 @@ Generated from [deck coverage](../reports/rules-primitives-deck-coverage.json). 
 | Windswept Heath | Authored | Reaminatour — Aminatou, Veil Piercer |
 | Wonderscape Sage | Remaining | Omo, Queen of Vesuva |
 | Wooded Foothills | Authored | Minsc & Boo, Timeless Heroes |
-| Xenagos, God of Revels | Remaining | Minsc & Boo, Timeless Heroes |
+| Xenagos, God of Revels | Authored | Minsc & Boo, Timeless Heroes |
 | Xolatoyac, the Smiling Flood | Remaining | Omo, Queen of Vesuva |
 | Yavimaya Coast | Authored | Omo, Queen of Vesuva |
 | Yavimaya, Cradle of Growth | Authored | Omo, Queen of Vesuva |

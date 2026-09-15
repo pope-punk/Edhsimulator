@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "purpose": "Prioritization hints from overlapping text signals, not semantic coverage, support certification, or an exhaustive implementation inventory",
-  "unmapped_unique_cards": 135,
+  "unmapped_unique_cards": 108,
   "families": [
     {
       "family": "counters_or_variable_values",
-      "text_signal_count": 47,
+      "text_signal_count": 38,
       "cards": [
         {
           "card_id": "aggressive-biomancy",
@@ -31,16 +31,6 @@
           "card_id": "bulk-up",
           "name": "Bulk Up",
           "source_facts_sha256": "1422387ff17f6aa9b02f558f7298a1295385866a23ed7c8c9dcd983b26f9ea54"
-        },
-        {
-          "card_id": "champion-of-lambholt",
-          "name": "Champion of Lambholt",
-          "source_facts_sha256": "ee6cba2ea82f25d952f12b9510f8bbce21f26bb4d981cb5909ec39ee1a056d48"
-        },
-        {
-          "card_id": "chandra-s-ignition",
-          "name": "Chandra's Ignition",
-          "source_facts_sha256": "d7ea0fb76ee2117d85224b09db3cc3d68e00f1da5a2c180d47c55dbdf44f8723"
         },
         {
           "card_id": "chthonian-nightmare",
@@ -108,11 +98,6 @@
           "source_facts_sha256": "e3c90e3543c9d71797ec0c67d4bc4ee7f6de9b91b6fa31856a35102c65a1f07a"
         },
         {
-          "card_id": "glen-elendra-archmage",
-          "name": "Glen Elendra Archmage",
-          "source_facts_sha256": "43fbe62e2a20dbd9cc521b43e754a85ee5332ce9a4e5c16497da1a777afcecd4"
-        },
-        {
           "card_id": "hydra-broodmaster",
           "name": "Hydra Broodmaster",
           "source_facts_sha256": "5b85358607525226ae85a16fe228f38da9d79f67b8298b13b261f14de7292b72"
@@ -158,11 +143,6 @@
           "source_facts_sha256": "1c86b47ac77c127782cd041f73cc665d51bf036e1f26d5d6335a5f2c72dd9cf7"
         },
         {
-          "card_id": "omo-queen-of-vesuva",
-          "name": "Omo, Queen of Vesuva",
-          "source_facts_sha256": "746f7195ebadd7788596cf7880798b27b72fe39d16bbc83881280a123d99fb88"
-        },
-        {
           "card_id": "parallax-wave",
           "name": "Parallax Wave",
           "source_facts_sha256": "fa1e1c46b9e526bfbdc1eb978118fb9ac8ef435c93c72388b8b1c18a3bf2a398"
@@ -203,26 +183,6 @@
           "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8"
         },
         {
-          "card_id": "starfield-of-nyx",
-          "name": "Starfield of Nyx",
-          "source_facts_sha256": "c9d7fc59fc584c35a2d5e5c345b6f78ba59b229678a561d5f7e1434ca211f6f2"
-        },
-        {
-          "card_id": "summary-dismissal",
-          "name": "Summary Dismissal",
-          "source_facts_sha256": "b0a091754b47e85e9317d2cbce59addc8812477c1cc62dfcc97ef54ec94818d0"
-        },
-        {
-          "card_id": "taurean-mauler",
-          "name": "Taurean Mauler",
-          "source_facts_sha256": "0e993f94365d8e12d7aa155d8256f44b0c85fc82791772c0d9d20a48af5207f8"
-        },
-        {
-          "card_id": "terrasymbiosis",
-          "name": "Terrasymbiosis",
-          "source_facts_sha256": "38d61b29eff4f7d90188e6bc3dfc220319d502228861001b525d093e4ddfb3cb"
-        },
-        {
           "card_id": "the-earth-crystal",
           "name": "The Earth Crystal",
           "source_facts_sha256": "0cabcb8c3fc889dfaedf0d74e1fef0e44797fddbafac8f398d34be5ac513faaa"
@@ -233,11 +193,6 @@
           "source_facts_sha256": "38d3ab4a07bf008fbe1252996c25ac9dff5ae755497ee1b7b4e0738fadf032ab"
         },
         {
-          "card_id": "xenagos-god-of-revels",
-          "name": "Xenagos, God of Revels",
-          "source_facts_sha256": "82de69098ec26d1d1efc7edf7fd5523fa91b1753e6fd08b5ed32cf63cf30ba61"
-        },
-        {
           "card_id": "xolatoyac-the-smiling-flood",
           "name": "Xolatoyac, the Smiling Flood",
           "source_facts_sha256": "dec7453e5735bac0ef01878b37a2ce0fae130d6081c9f8e1edffb15eba183b45"
@@ -246,18 +201,8 @@
     },
     {
       "family": "mana_choices_or_restrictions",
-      "text_signal_count": 20,
+      "text_signal_count": 17,
       "cards": [
-        {
-          "card_id": "chromatic-lantern",
-          "name": "Chromatic Lantern",
-          "source_facts_sha256": "480119e99cf00b4d083cdf22f348fdf7570f9627e11ac95368a7d624c29989cd"
-        },
-        {
-          "card_id": "city-of-brass",
-          "name": "City of Brass",
-          "source_facts_sha256": "966fe4ea45cb111dc6c48163f72836a8984f3cda7c3dd7f71141e3a1c49ee5ff"
-        },
         {
           "card_id": "delighted-halfling",
           "name": "Delighted Halfling",
@@ -314,11 +259,6 @@
           "source_facts_sha256": "a43c091e2a528cbd047f338ac27bc14ab5388d7691eddbfbf1815a26a1dfeb8d"
         },
         {
-          "card_id": "planar-nexus",
-          "name": "Planar Nexus",
-          "source_facts_sha256": "e388566ba593ce30299075b10fbc2d63ab020d0604850e0b95c0cb37745d1611"
-        },
-        {
           "card_id": "shineshadow-snarl",
           "name": "Shineshadow Snarl",
           "source_facts_sha256": "909eb1e8501ee02d8e3c8a36e8d4143e80f691d6037df799d6da6b4ba39a4e86"
@@ -352,7 +292,7 @@
     },
     {
       "family": "search_or_top_library_manipulation",
-      "text_signal_count": 20,
+      "text_signal_count": 14,
       "cards": [
         {
           "card_id": "aminatou-the-fateshifter",
@@ -375,26 +315,6 @@
           "source_facts_sha256": "48e88506dacc5edf0aa3177a3bed00a159af1bdf9e62156555ab6ceb41b61fe7"
         },
         {
-          "card_id": "cultivate",
-          "name": "Cultivate",
-          "source_facts_sha256": "5bd35d19d13cda10e0627ba658679174693a0dddcef51353d43eeb1b0ef38725"
-        },
-        {
-          "card_id": "elvish-rejuvenator",
-          "name": "Elvish Rejuvenator",
-          "source_facts_sha256": "f2083f08719973b50958adc76bab1a34fce48fda58a007d3bdcfa6e81990164c"
-        },
-        {
-          "card_id": "gifts-ungiven",
-          "name": "Gifts Ungiven",
-          "source_facts_sha256": "1fefe1813077b143c824ddc8d883c4d8ddcc74b410d2ab22fcaf1df9765fc902"
-        },
-        {
-          "card_id": "gravebreaker-lamia",
-          "name": "Gravebreaker Lamia",
-          "source_facts_sha256": "867c403a923605d231400df1a9df8efd663c054c025b195ed849262cf50a2ae2"
-        },
-        {
           "card_id": "invasion-of-theros",
           "name": "Invasion of Theros",
           "source_facts_sha256": "a5a277b6a7bd8ea67d75945f959b21bb649f1ce197e30224c1e5eac60ef5af6c"
@@ -403,11 +323,6 @@
           "card_id": "kodama-of-the-west-tree",
           "name": "Kodama of the West Tree",
           "source_facts_sha256": "8fc9f3441fba17391ed1bc3d986ac7adfd88359f5561f315f9a2f319a7f49566"
-        },
-        {
-          "card_id": "kodama-s-reach",
-          "name": "Kodama's Reach",
-          "source_facts_sha256": "c85bb43096036710dbe142f7a132886b5c04084e7fd04d8d8cd384d684e34f62"
         },
         {
           "card_id": "maze-s-end",
@@ -423,11 +338,6 @@
           "card_id": "oracle-of-mul-daya",
           "name": "Oracle of Mul Daya",
           "source_facts_sha256": "1d68df5207da1f689698ffb09a39673c0660e5cfbf61922d2bd242cb07a2b549"
-        },
-        {
-          "card_id": "satyr-wayfinder",
-          "name": "Satyr Wayfinder",
-          "source_facts_sha256": "b64b05513e960cfd26979ad4b082199e3003eff456b0ffaa27bc162e56ed780d"
         },
         {
           "card_id": "the-cruelty-of-gix",
@@ -458,7 +368,7 @@
     },
     {
       "family": "sacrifice_discard_exile_or_return_costs",
-      "text_signal_count": 25,
+      "text_signal_count": 21,
       "cards": [
         {
           "card_id": "alseid-of-life-s-bounty",
@@ -496,16 +406,6 @@
           "source_facts_sha256": "1380ec20199b20420b44470b2877490acbfd4cc904a786bcc914d29b9e003c45"
         },
         {
-          "card_id": "eiganjo-seat-of-the-empire",
-          "name": "Eiganjo, Seat of the Empire",
-          "source_facts_sha256": "2bf4435c5d4528720cbc94b3e148cc91d86bb52e78bb6d2a60c1dbf7a1842485"
-        },
-        {
-          "card_id": "fallen-ideal",
-          "name": "Fallen Ideal",
-          "source_facts_sha256": "25bfbb8bb0f8452dcf1a3ecd40d6c3973b6e7c98dad70a0e6aaf7f5635243680"
-        },
-        {
           "card_id": "fanatical-devotion",
           "name": "Fanatical Devotion",
           "source_facts_sha256": "f7be0201def2cf6165473864aa34fcd7442fde842128f6515a10a4622a3620b2"
@@ -514,11 +414,6 @@
           "card_id": "fling",
           "name": "Fling",
           "source_facts_sha256": "d2890717c3fd8d584466565cb5dd58b45f218fde0672a069545ad3545768c0a7"
-        },
-        {
-          "card_id": "glen-elendra-archmage",
-          "name": "Glen Elendra Archmage",
-          "source_facts_sha256": "43fbe62e2a20dbd9cc521b43e754a85ee5332ce9a4e5c16497da1a777afcecd4"
         },
         {
           "card_id": "hidden-nursery",
@@ -554,11 +449,6 @@
           "card_id": "midnight-snack",
           "name": "Midnight Snack",
           "source_facts_sha256": "5a86c7ac0130d6285a5c7e85bcdfc96046e48f68243b99c6c13457f21cbafd9d"
-        },
-        {
-          "card_id": "otawara-soaring-city",
-          "name": "Otawara, Soaring City",
-          "source_facts_sha256": "570e97d4fbcc7180bb562ac8efce92f1fac9747a24997ae756874262a7d0169d"
         },
         {
           "card_id": "sunken-palace",
@@ -766,22 +656,12 @@
     },
     {
       "family": "granted_or_removed_abilities",
-      "text_signal_count": 13,
+      "text_signal_count": 9,
       "cards": [
         {
           "card_id": "aggressive-biomancy",
           "name": "Aggressive Biomancy",
           "source_facts_sha256": "ab7aecc550843477866d39c44724d51e05835ba1bad2aba7c580e801088a36e8"
-        },
-        {
-          "card_id": "angelic-destiny",
-          "name": "Angelic Destiny",
-          "source_facts_sha256": "40432f9ced75c677c5c51da5974d47eb9f1e57c6a38dabc79fc5225da651e543"
-        },
-        {
-          "card_id": "chromatic-lantern",
-          "name": "Chromatic Lantern",
-          "source_facts_sha256": "480119e99cf00b4d083cdf22f348fdf7570f9627e11ac95368a7d624c29989cd"
         },
         {
           "card_id": "darksteel-mutation",
@@ -797,11 +677,6 @@
           "card_id": "essence-channeler",
           "name": "Essence Channeler",
           "source_facts_sha256": "753488e8d98d990b810eed5dd5c0d591748ebad58444f00318f54d4a96d11e34"
-        },
-        {
-          "card_id": "fallen-ideal",
-          "name": "Fallen Ideal",
-          "source_facts_sha256": "25bfbb8bb0f8452dcf1a3ecd40d6c3973b6e7c98dad70a0e6aaf7f5635243680"
         },
         {
           "card_id": "glasswing-grace-age-graced-chapel",
@@ -827,17 +702,12 @@
           "card_id": "sorin-vengeful-bloodlord",
           "name": "Sorin, Vengeful Bloodlord",
           "source_facts_sha256": "54822c92e29df1db9f364310748a165cef8e9f0dd5cfee103f72c602095d0fb8"
-        },
-        {
-          "card_id": "xenagos-god-of-revels",
-          "name": "Xenagos, God of Revels",
-          "source_facts_sha256": "82de69098ec26d1d1efc7edf7fd5523fa91b1753e6fd08b5ed32cf63cf30ba61"
         }
       ]
     },
     {
       "family": "life_or_draw_event_dependencies",
-      "text_signal_count": 11,
+      "text_signal_count": 10,
       "cards": [
         {
           "card_id": "dawn-of-hope",
@@ -883,11 +753,6 @@
           "card_id": "smothering-tithe",
           "name": "Smothering Tithe",
           "source_facts_sha256": "ca1b380588c229831087733b4fd2a91abeec1a2ab1cd8c4d3cce1bd828f56d4e"
-        },
-        {
-          "card_id": "terrasymbiosis",
-          "name": "Terrasymbiosis",
-          "source_facts_sha256": "38d61b29eff4f7d90188e6bc3dfc220319d502228861001b525d093e4ddfb3cb"
         },
         {
           "card_id": "uro-titan-of-nature-s-wrath",

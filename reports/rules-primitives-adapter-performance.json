@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
   "repeats": 7,
   "scope": "Synthetic current-packet and empty-event-tail costs; excludes inference, live queues, durable storage and production replay throughput",
   "cases": [
@@ -9,54 +9,54 @@
       "public_permanents": 40,
       "cards_per_hand": 7,
       "packet_bytes": 18969,
-      "packet_median_ms": 0.373234,
+      "packet_median_ms": 0.37791,
       "packet_samples_ms": [
-        0.762109,
-        0.634361,
-        0.442376,
-        0.358862,
-        0.373234,
-        0.345823,
-        0.343479
+        0.525359,
+        0.454604,
+        0.373383,
+        0.392141,
+        0.365982,
+        0.37791,
+        0.370319
       ],
-      "full_history_slice_median_ms": 9.0765e-05,
-      "incremental_cursor_median_ms": 0.000180498
+      "full_history_slice_median_ms": 8.9202e-05,
+      "incremental_cursor_median_ms": 0.000176672
     },
     {
       "prior_zone_events": 1000,
       "public_permanents": 40,
       "cards_per_hand": 7,
       "packet_bytes": 18973,
-      "packet_median_ms": 0.363599,
+      "packet_median_ms": 0.405301,
       "packet_samples_ms": [
-        0.396909,
-        0.366453,
-        0.349198,
-        0.363599,
-        0.356078,
-        0.365292,
-        0.349207
+        0.417489,
+        0.504037,
+        0.405301,
+        0.392552,
+        0.662812,
+        0.383548,
+        0.379483
       ],
-      "full_history_slice_median_ms": 0.00193638,
-      "incremental_cursor_median_ms": 0.00019447800000000002
+      "full_history_slice_median_ms": 0.0020327130000000002,
+      "incremental_cursor_median_ms": 0.000192225
     },
     {
       "prior_zone_events": 10000,
       "public_permanents": 40,
       "cards_per_hand": 7,
       "packet_bytes": 18975,
-      "packet_median_ms": 0.67451,
+      "packet_median_ms": 0.477527,
       "packet_samples_ms": [
-        0.680418,
-        0.656894,
-        0.681119,
-        0.67451,
-        0.655592,
-        0.734689,
-        0.535043
+        0.740718,
+        0.502385,
+        0.475184,
+        0.470658,
+        0.475315,
+        0.477527,
+        0.698455
       ],
-      "full_history_slice_median_ms": 0.034678956999999996,
-      "incremental_cursor_median_ms": 0.000263341
+      "full_history_slice_median_ms": 0.023238968,
+      "incremental_cursor_median_ms": 0.00020229
     }
   ]
 }

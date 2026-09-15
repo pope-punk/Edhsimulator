@@ -15,7 +15,7 @@ Status: experimental vertical slice, 2026-09-09. **Not a production engine and n
 - `rules_casting.py`: pure revision-bound action quotes, revalidated atomic payments, unrestricted colored/colorless/generic mana and X, generic spell-cost modifiers, per-card commander tax, life/tap and atomic activation zone costs, stack activations and immediate mana abilities with supported additional effects. Accepted action receipts survive checkpoints and reject replay. Mana abilities during an announcement, restricted mana, casting zone costs, separately ordered activation cost groups and broader mana/cost semantics are still unsupported. One simultaneous activation zone-cost group now supports sacrifice, discard, exile and return. Creature tap-symbol readiness now uses continuous-control history and haste.
 - Shared battlefield target restrictions represent shroud and ordinary hexproof. Casting, trigger target menus and resolution use one check; copied definitions inherit it, current control determines opponents, and nontargeted selection/attachment use their own legality checks. Protection, ward, player defenses and continuously granted/removed abilities remain unsupported. Player targets are implemented below.
 - `rules_identity.py`: import-time source and Python identity bound into checkpoints.
-- `rules_admission.py`: deterministic production-readiness report and a rejecting production factory. Seven mapped interaction fixtures and 199 authored card programs are explicitly distinguished from production certification; no cards are production-certified by this experimental interpreter.
+- `rules_admission.py`: deterministic production-readiness report and a rejecting production factory. Seven mapped interaction fixtures and 226 authored card programs are explicitly distinguished from production certification; no cards are production-certified by this experimental interpreter.
 - `rules_kernel.py`: an isolated scenario interpreter with effective copied abilities, entry and upkeep discovery, pre-event leaves observations, APNAP trigger placement, explicit priority passes, target revalidation, commander destination choices, and a subset of state-based actions. Choices are bound to actor, request and state revision; accepted answers cannot be resubmitted. Nested selections retain independent bindings.
 - `rules_scenarios.py`: authored fixture programs for Body Double copying Uro's ETB abilities, Starfield's upkeep and animation abilities, Evolution Sage's proliferate trigger, Remand's counter/draw sequence, and Animate Dead/Felidar reanimation and blink sequences. These are **partial interaction fixtures**, not declarations of full card support. Runtime mechanics contain no card-name dispatch.
 
@@ -32,7 +32,7 @@ PYTHONPATH=src python -m edh_gauntlet.rules_admission --output reports/rules-pri
 
 On Windows or an installed checkout, omit `PYTHONPATH=src` after installing the package. CI runs the primitive conformance suite on both supported operating systems.
 
-914 conformance/tooling tests cover identity, copied triggers, priorities, choices, replacements, Aura/delayed-trigger lifecycles, layers, turn actions and combat. New layer cases include:
+1146 conformance/tooling tests cover identity, copied triggers, priorities, choices, replacements, Aura/delayed-trigger lifecycles, layers, turn actions and combat. New layer cases include:
 
 - Starfield's changing threshold, Aura exclusion, two-Starfield interaction, and phased/opponent permanents.
 - Setters, numeric modifiers, counters and switching; source timestamp changes; dependency ordering and cycles; and recipient retention across layers.
@@ -41,7 +41,7 @@ On Windows or an installed checkout, omit `PYTHONPATH=src` after installing the 
 - Atomic batches of zero-toughness moves, opposing-counter cancellation and creature-Aura detachment.
 - Checkpoint replay at timestamp choices, changed-implementation rejection, immutable views, and explicit rejection of missing creature statistics.
 
-Six catalog card-text fingerprints are checked. These are bounded interaction checks, not general Magic certification. The full repository suite passes **1035 tests** and catalog/runtime-asset verification passes. CI runs every `test_rules_primitives*.py` file without inference calls or live gauntlet games. The isolated installed wheel passes all 914 primitive tests and asset verification. A source-created SQLite journal reopens under that wheel, replays its bounded committed tail, suppresses a duplicate request and commits the next command with matching actor packets and archive.
+Six catalog card-text fingerprints are checked. These are bounded interaction checks, not general Magic certification. The full repository suite passes **1041 tests** and catalog/runtime-asset verification passes. CI runs every `test_rules_primitives*.py` file without inference calls or live gauntlet games. The isolated installed wheel passes all 914 primitive tests and asset verification. A source-created SQLite journal reopens under that wheel, replays its bounded committed tail, suppresses a duplicate request and commits the next command with matching actor packets and archive.
 
 
 ## Reference and checkpoint binding
@@ -877,7 +877,7 @@ Card coverage remains 143/334; this host-adapter work does not certify more card
 
 `rules_durable_benchmark` compares checkpoint intervals 1 and 32 over 65 synthetic
 commands, three repetitions, on local temporary storage. The recorded ordinary
-commit median is about 0.8 ms with periodic checkpoints; writing a checkpoint for
+commit median is about 0.9 ms with periodic checkpoints; writing a checkpoint for
 every command has a median of about 3.0 ms. The report also records checkpoint
 commit and reopen costs. These include engine/packet work but exclude inference,
 network, production disks and campaign integration. Full production host binding,
@@ -1995,3 +1995,887 @@ paid without a tap-symbol restriction, invalid costs/targets/timing and zero-Gat
 state-based death. Kernel remains 76; state remains 11. Coverage is 199/334
 unique cards and 264/400 copies, leaving 135 unauthored. Production and real-game
 commit gates remain closed.
+
+## Whole-card Starfield composition: 200 authored cards
+
+Starfield of Nyx now has a catalog-bound full printed program, using existing
+controller-upkeep targeting, optional graveyard return and continuous layers.
+The threshold counts all controlled enchantments; animation excludes the source
+and Auras and sets base power/toughness to each recipient’s mana value.
+Six added scenarios verify paid casting, threshold changes and counters,
+controller/phase exclusions, optional return and target invalidation, actor
+replay and duplicate rejection, nontargeted Aura entry onto a hexproof creature,
+two Starfields and copied-program controller semantics. No card-name runtime
+branch or schema change was needed.
+
+Coverage is 200/334 unique cards and 265/400 deck copies, leaving 134 unauthored.
+Only Uro and Animate Dead remain fixture-only; original Starfield fixtures are
+retained as historical interaction tests. Production admission remains blocked.
+The last user-requested local backup is commit 4582512 on
+`backup/rules-migration-20260910-200-wip`; main remains unchanged.
+
+## Bounded top-card selection: 201 authored cards
+
+`ChooseFromTop` inspects only a fixed top-library window, optionally reveals it
+to all players, and offers one optional filtered multiselection. Chosen cards
+move to hand; the remaining inspected cards move to graveyard. This is not
+a library search, so neither unseen cards nor search permissions are exposed.
+The original observation, selected references and completed hand-movement stage
+are retained across destination replacements and checkpoints. Public observations
+include the library owner; private looks remain actor-bound. No shuffle occurs.
+
+Satyr Wayfinder composes this primitive with the ordinary inherited ETB trigger.
+Seven scenarios cover paid casting and exact window boundaries, private and
+public observations, multiselection, empty/short/no-match/declined choices,
+selected and remaining destination replacements, copied-controller behavior,
+codec validation, mana-ability classification and exact replay/duplicate rejection.
+This bounded primitive currently moves selections to hand and the rest to
+graveyard; battlefield placement and random bottom ordering remain separate work.
+Kernel checkpoint schema is 77; state remains 11. Authored coverage is 201/334
+unique cards and 266/400 copies, leaving 133 unauthored. Production admission
+and real-game initialization remain blocked.
+
+## Top-card battlefield placement and random bottom ordering: 202 cards
+
+The same `ChooseFromTop` instruction now supports hand or battlefield placement,
+optional tapped entry, and either graveyard or random-bottom remainder handling.
+Elvish Rejuvenator uses private top-five inspection and the new destination pair.
+Entry replacements finish before remainder randomization. The shared state
+randomization helper uses the existing deterministic rejection-sampled shuffle
+algorithm; subset placement preserves unseen order, retires only randomized
+inspection references, and emits no zone-change or library-shuffle event.
+
+Four additional tests verify paid casting and unseen-prefix preservation, private
+observation, entry replacement checkpoints and actor replay, randomization across
+seeds, atomic invalid-subset rejection and unsupported program-field rejection.
+Kernel is 78; state remains 11. Coverage is 202/334 unique cards and 267/400
+copies, with 132 unauthored. Production admission remains blocked.
+
+## Split search destinations: 203 authored cards
+
+`SearchLibrary` now supports an ordered partition into hand and battlefield
+groups, with independent tapped-entry flags. One multiselection assigns both
+groups. Shared movement proposals resolve all replacement and entry choices
+before committing the heterogeneous zone batch, followed by one shuffle.
+No destination group is replayed or reassigned when a replacement redirects
+another group. Existing whole-group and library-top searches retain defaults.
+
+Cultivate composes a two-card optional basic-land search, public reveal, first
+card to battlefield tapped, and second to hand. Six scenarios verify printed
+casting, zero/one/two finds, primary and secondary replacement checkpoints,
+actor replay and duplicate rejection, simultaneous batches, reverse partitions
+and malformed-field rejection. Kernel is 79; state remains 11. Coverage is
+203/334 unique cards and 268/400 copies, leaving 131 unauthored. Production
+admission and real-game initialization remain blocked.
+
+## Bound damage sources: 204 authored cards
+
+`Damage` can now take its dealing objects from a bound subject, add controller,
+opponent or all-player recipients, and exclude each dealing object from its own
+recipients. Objects and players share one deduplicated damage batch. The existing
+damage pipeline supplies current or last-known source characteristics, control,
+lifelink and deathtouch; card programs do not duplicate those rules.
+
+Chandra’s Ignition uses its controlled creature target as dealer, reads current
+power, and selects all creatures plus opponents while excluding that dealer.
+Six scenarios cover printed casting, attribution, source exclusion, lifelink and
+deathtouch, one additive life replacement for the simultaneous gain, power
+changes, target invalidation, actor replay, departed bound sources, zero/negative
+power and malformed bindings. Kernel is 80; state remains 11. Coverage is
+204/334 unique cards and 269/400 copies, leaving 130 unauthored. Production
+admission remains blocked.
+
+## Waiting spell retirement on ordinary zone movement
+
+A shared stack audit found that ordinary `Move` instructions could move a waiting
+spell out of the stack without retiring its queued resolution frame. Only the
+`Counter` path explicitly removed those frames. The central zone-batch commit now
+retires waiting spell frames for exact references that actually leave the stack.
+Pending replacement choices retain the frame until movement commits. This is
+not a counter event, and independent abilities survive their source’s departure.
+An already resolving spell continues its remaining instructions when it moves.
+
+Five regressions cover exile/hand/graveyard moves, replacement-choice actor replay,
+independent abilities, mass stack exile, and a resolving spell that exiles itself
+before a later effect. Kernel checkpoint schema is 81; state remains 11. Authored
+coverage remains 204/334; production admission and real-game initialization remain
+blocked. This is a general correctness repair before further stack mechanics.
+
+## Waiting ability countering: 205 authored cards
+
+`CounterAbilities` removes waiting activated and triggered stack frames within
+a controller, opponent or all-player domain. It uses captured frame controllers,
+leaves resolving frames intact and does not remove triggers awaiting placement.
+Summary Dismissal composes this instruction with ordinary other-spell exile;
+spell exile emits no spell-counter event. No card-name runtime branch is added.
+
+Six regressions cover paid casting with mixed spells and abilities, newly triggered
+abilities after exile, source control changes, opponent-only filtering, exact
+actor replay after destination replacement, resolving-ability continuation and
+malformed domains. Kernel is 82; state remains 11. Authored coverage is 205/334
+unique cards and 270/400 copies, leaving 129 unauthored. Production admission
+and real-game initialization remain blocked.
+
+## Numeric blocking restrictions: 206 authored cards
+
+`BlockRestriction` combines attacker and blocker selectors with a current blocker
+statistic, comparison operator and source-bound threshold. Combat menus and
+declaration validation use the same evaluator. Rules and thresholds are collected
+lazily once per combat view, avoiding repeated battlefield scans for each pair.
+Copied definitions, source control changes and phasing use the existing object
+and characteristic model. Signed power comparisons retain negative values.
+
+Champion of Lambholt combines that restriction with the existing other-controlled
+creature entry-counter trigger. Six scenarios cover printed casting/self-entry
+exclusion, counter-driven thresholds, strict and negative comparisons, phasing,
+control changes, copied rules and replay, atomic illegal-block rejection and
+validation. Kernel is 83; state remains 11. Coverage is 206/334 unique cards
+and 271/400 copies, leaving 128 unauthored. Production admission remains blocked.
+
+## Blocking restriction interaction and cost audit
+
+Four additional regressions verify that restrictions are checked at declaration
+without retroactively removing established blocks, that multiple sources combine
+with flying/reach, and that filtered toughness comparisons work independently of
+Champion’s power rule. A measured call-count assertion verifies that four blocker
+pairs evaluate the source threshold only once within a combat view. All ten
+blocking-restriction tests pass without another engine change. Coverage remains
+206/334; kernel remains 83 and state 11. Production admission remains blocked.
+
+## Layer-six activated ability grants: 207 authored cards
+
+`AddActivated` grants a validated battlefield activation through the shared
+continuous-effect layer. The recipient supplies the ability source, costs and
+controller. Exact granting-source/effect identities distinguish multiple grants
+and are exposed in actor packets; optimized and exhaustive evaluation agree.
+Derived grants are not copiable printed values. Last-known characteristics encode
+them explicitly for checkpoint recovery. Temporary grants and arbitrary ability
+removal remain separate work.
+
+Chromatic Lantern combines a native tap-for-any-color ability with the same
+activation granted to controlled lands. Seven tests cover printed casting and
+recipient costs, intrinsic land abilities, copied granters, multiple sources,
+phasing/control, granter departure after activation, actor replay and projections,
+copy exclusions, last-known serialization, summoning sickness, compiler guards
+and optimized/exhaustive identity parity. Kernel is 84; state remains 11.
+Coverage is 207/334 unique cards and 272/400 copies, with 127 unauthored.
+Production admission and real-game initialization remain blocked.
+
+## Public successor effect bindings: 208 authored cards
+
+The existing exact public source-successor record is now available as an effect
+binding for self-observing battlefield-to-public-zone triggers. Validation rejects
+hidden destinations and events that cannot guarantee that binding. Effects retain
+the exact successor incarnation and never follow a later return to that zone.
+
+Fallen Ideal combines Aura targeting, attached flying and a granted sacrifice-to-
+pump activation with a successor-bound graveyard-to-owner-hand return. Seven
+scenarios verify printed casting, recipient-controlled costs, temporary pumping,
+sacrificing the host, exact return/replay, stale successor rejection, stolen Aura
+ownership, compiler guards and a copied Aura returning its underlying card.
+Kernel is 85; state remains 11. Coverage is 208/334 unique cards and 273/400
+copies, leaving 126 unauthored. Production admission remains blocked.
+
+
+## Shared split-search composition: 209 authored cards
+
+Kodama's Reach reuses the existing optional basic-land search and ordered
+battlefield-tapped/hand partition, preserving its Arcane subtype. No interpreter
+branch or schema change is needed. Both printed spells now exercise the same
+behavioral tests: zero/one/two finds, one shuffle, public reveal and private
+search, simultaneous placement, destination replacements, checkpoint recovery
+and duplicate rejection. An additional check preserves Arcane characteristics
+and rejects casting on another player's turn.
+
+Coverage is 209/334 unique cards and 274/400 copies, leaving 125 unauthored.
+Kernel remains 85 and state remains 11. Production admission remains blocked;
+this does not satisfy the real-test-game condition for committing to main.
+
+
+## Shared tap transition triggers: 210 authored cards
+
+`becomes_tapped` observes actual untapped-to-tapped transitions from effects,
+activation payments and attack declarations. Entering tapped, remaining tapped,
+untapping and phasing do not publish that event (pinned CR 603.2e). Observers use
+effective copied programs, captured controller identity and optional type/control
+filters. `event_subject` retains the exact observed incarnation for effects.
+
+City of Brass composes a five-color mana choice with a separate one-damage
+trigger. Its mana ability finishes before the damage trigger uses the stack.
+Tap-and-sacrifice payments retain the predeparture observer, while pending
+replacement choices publish no tap or trigger before payment commits. Recovery
+and accepted-command rejection preserve that boundary. Animated attacking
+sources trigger when tapped; vigilance avoids that tap.
+
+Bundles without tap-trigger subscriptions skip battlefield capture. Type/layer
+evaluation is deferred until a matching trigger actually needs it. This is not
+an implementation of untap triggers, arbitrary cost ordering, or triggered mana
+abilities. Existing production gates remain in force.
+
+Kernel checkpoint schema is 86; state remains 11. Coverage is 210/334 unique
+cards and 275/400 copies, leaving 124 unauthored. The stopped legacy game remains
+untouched and the authorized fresh cohort remains uninitialized.
+
+
+## Death-counter predicates and movement entry counters: 211 authored cards
+
+Zone-event patterns now share counter-range matching with ordinary selectors.
+Deaths inspect the complete predeparture counter state; entry events inspect the
+actual resulting counters. `Move.counters` supplies counters as part of entry,
+through the existing replacement and simultaneous-movement pipeline, before ETB
+observation and state-based actions. Other destinations reject entry counters.
+
+Glen Elendra Archmage composes these primitives with exact public successor
+bindings for persist, plus its printed flying body and sacrifice/counter-spell
+activation. The persist condition concerns a fixed historical death fact; its
+truth cannot change while the trigger waits. It does not read counters from a
+new graveyard incarnation or bypass dynamic intervening conditions generally.
+A copied Archmage returns as its underlying card under its owner's control.
+Leaving the graveyard invalidates the old trigger's exact successor reference.
+
+The regressions include repeated paid activations, graveyard replacements,
+pending return replacement recovery and duplicate rejection, counter-doubling
+entry replacements, ETB counter predicates, and simultaneous death/counter
+cancellation. The latter follows the pinned rules and
+[official persist notes](https://magic.wizards.com/en/news/feature/lorwyn-eclipsed-release-notes).
+These additions do not implement general ability grants of persist or certify
+production readiness.
+
+Kernel checkpoint schema is 87; state remains 11. Coverage is 211/334 unique
+cards and 276/400 copies, leaving 123 unauthored. The main-commit condition still
+requires a stable production build and a successful real test game.
+
+
+## Indexed trigger discovery
+
+Each immutable effective definition now has an event-kind index preserving its
+printed ability order. Player events, announcements/combat events, counters,
+zone changes, steps and tap transitions query that index before applying their
+existing filters. Copies use the effective definition on each lookup; phasing,
+controller identity, LKI and APNAP placement retain their existing semantics.
+The derived index is rebuilt at construction/recovery and is not checkpoint data.
+Kernel schema remains 87; authored coverage remains 211/334 (276/400 copies).
+
+`rules_trigger_benchmark` compares the indexed path against the same collectors
+with definition-wide scanning restored. It requires identical complete kernel
+snapshots for every sample, and alternates measurement order. The synthetic
+120-permanent cases include an event with no listeners and sparse upkeep
+listeners. Construction, inference, transport and live gameplay are excluded;
+these measurements do not explain or quantify the old host's queue stalls.
+Results are retained in `reports/rules-primitives-trigger-performance.json`.
+
+Six focused tests cover all authored definitions, immutable indexing, every
+collector family, copies/control/phasing, checkpoint continuation and benchmark
+parity. The existing full rules suite remains the regression gate. Production
+migration and the real-test-game condition for a main commit remain unfinished.
+
+
+## Shared dynamic activation reductions: 212 authored cards
+
+Activated programs now use the same generic-reduction quantity calculation as
+casting specifications. Reduction applies to the announced generic/X cost,
+floors at zero and leaves colored/colorless symbols unchanged. Revision-bound
+quotes are revalidated before acceptance, and the existing announcement/payment
+transaction retains the locked total through replacement choices. Spell-only
+static cost modifiers remain spell-only.
+
+Otawara, Soaring City composes the printed legendary land and U mana activation
+with hand-zone channel, source-discard payment, a four-type battlefield target
+union and a reduction counting controlled legendary creatures. The count uses
+current derived types, control and phasing. The discarded card's ability remains
+on the stack, and target departure does not refund the cost.
+
+Eight tests cover zero/one/many reducers, colored costs, stale quotes, animated
+legendary lands, target/zone checks, pending discard replacement recovery,
+duplicate rejection, target departure, X reductions and sacrificing a counted
+permanent as part of the locked payment. No card-name execution branch was added.
+
+Kernel schema is 88; state remains 11. Coverage is 212/334 unique cards and
+277/400 copies, leaving 122 unauthored. Production migration and the successful
+real-test-game requirement for a main commit remain unfinished.
+
+
+## Combat target domains and surviving blockers: 213 authored cards
+
+Target specifications now support attacking, blocking, and attacking-or-blocking
+battlefield domains. Announcement checks, trigger menus and resolution all use
+the same pure membership query. It checks current exact references, controller
+history, phasing, creature status and removal-from-combat history without pruning
+records or changing the revision during inspection. Targeting restrictions such
+as hexproof/shroud continue to apply independently.
+
+The audit found and repaired a combat-pruning defect: removing an attacker also
+removed its surviving blockers. CR 509.1g/510.1d retain those creatures as blocking
+until they leave combat or combat ends; they assign no damage without a surviving
+attacker. Block groups retain the historical attacker key to preserve membership.
+Such a blocker can still qualify for a first-strike damage step. Existing damage
+assignment only iterates surviving attackers and therefore produces no orphaned
+blocker damage.
+
+Eiganjo, Seat of the Empire composes the printed legendary land, W mana ability,
+hand-zone channel/discard, legendary-creature cost reduction and four damage to
+a combat-constrained target. Nine tests exercise these paths, including pure
+inspection, orphaned blockers, first strike, control changes, phase-out target
+invalidation, end-of-combat lifetime, trigger menus and replay.
+
+Kernel schema is 89; state remains 11. Coverage is 213/334 unique cards and
+278/400 copies, leaving 121 unauthored. Production admission and the real-test-game
+condition for committing to main remain unmet; the legacy game stays stopped.
+
+
+## Optional fallback branches and exact availability: 214 authored cards
+
+`May` now accepts an `otherwise` instruction sequence and an optional selector
+applied to an exact bound subject. An unavailable subject takes the fallback
+without presenting an impossible optional branch. Both branches are validated
+for bindings and target domains, included in immediate-effect classification,
+and traversed for embedded token definitions. The availability guard is a
+selector/exact-reference check, not a general instruction-legality evaluator;
+counter prohibitions and other unsupported replacements remain production gates.
+
+Angel of Invention composes its printed Angel Artificer body, three keywords,
+controlled-other-creature anthem, and fabricate using these primitives. The
+counter choice occurs on trigger resolution rather than entry; the fallback
+creates two colorless 1/1 artifact creature Servos in one shared movement batch.
+A departed/phased source cannot receive counters, and the old trigger cannot
+follow a newly entered incarnation. Copied abilities retain the original trigger
+controller even if control changes before resolution. These interactions follow
+[the official fabricate notes](https://magic.wizards.com/en/news/feature/kaladesh-release-notes-2016-09-16)
+and pinned CR 702.123.
+
+Eight focused tests cover printed casting/anthem, both branches, exact-reference
+availability, copied control, counter modifiers, token-entry replacement recovery,
+duplicate rejection and recursive validation. Kernel schema is 90; state remains
+11. Coverage is 214/334 unique cards and 279/400 copies, leaving 120 unauthored.
+Production admission and the real-test-game condition for a main commit remain
+unmet. The stopped legacy run is preserved.
+
+
+## Library-boundary mana classification audit
+
+The pinned August 2026 version of CR 605.1a explicitly excludes abilities whose
+cost or effect moves cards to or from a library. This is a recent functional
+change, documented in the
+[official Hobbit update bulletin](https://magic.wizards.com/en/news/announcements/the-hobbit-update-bulletin).
+The existing draw/mill restriction is therefore retained.
+
+The audit repaired two classification gaps. Positive surveil can move cards out
+of a library and must disqualify an otherwise mana-producing activation. Looking,
+scrying, searching to the same library's top, or randomly bottoming an inspected
+window without selecting any cards to leave the library do not cross that zone
+boundary and must not be rejected solely as library operations. Supported zero
+card draw/mill/surveil instructions likewise cannot move a card. Classification
+uses possible movement from the instruction, not the current library's contents,
+and does not account for ordinary external replacement effects. Immediate optional
+fallbacks count; bodies of future delayed triggers do not.
+
+Eight focused tests cover stack use, private choices, nonactive priority return,
+replay, same-zone search/rearrangement, empty libraries, fallback/delayed effects,
+and external replacement redirects. This does not enable mana abilities during
+spell announcements or implement self-replacements/loyalty/library-moving costs.
+Those remaining general rules and production gates are unchanged.
+
+Kernel schema is 91; state remains 11. Coverage remains 214/334 unique cards and
+279/400 copies. Production readiness and the real-test-game condition for a main
+commit remain unmet.
+
+
+## Source-type targeting restrictions: 215 authored cards
+
+`TargetRestriction` now accepts an optional union of source card types. The
+shared targeting query applies it at announcement, target choice and resolution,
+using current characteristics or exact-reference last-known information when
+the source has left its zone. Source characteristics are computed lazily once
+per query only when a qualified restriction requires them. Controller checks
+use the spell or ability controller, not the source's later controller. Ordinary
+non-targeted selection is unaffected. Empty type filters retain existing behavior.
+
+Elenda, Saint of Dusk composes hexproof from instants with this restriction,
+printed casting/lifelink, and two independent continuous effects measured against
+the current controller's starting life. Pinned CR 702.11d covers type-qualified
+hexproof, including abilities from instant sources; the
+[Foundations release notes](https://magic.wizards.com/en/news/feature/foundations-release-notes)
+explain how life thresholds interact with marked and simultaneous damage.
+
+Nine tests cover paid casting, both thresholds, controller changes, enemy instant
+versus sorcery and own-spell targeting, departed source identity, copied source
+last-known types, copied Elenda, phasing, simultaneous lifelink, lethal damage
+after life loss, replay, pure queries and validation. General ability removal,
+hexproof-ignoring permissions and keyword-quality queries remain unsupported
+production gates; this does not claim those semantics are implemented.
+
+Kernel schema is 92; state remains 11. Coverage is 215/334 unique cards and
+280/400 copies, leaving 119 unauthored. The mechanics backlog has also been
+filtered against current authored programs to remove stale completed entries.
+Production admission and the real-test-game condition for committing to main
+remain unmet. The stopped legacy game remains untouched.
+
+
+## Tapped-mana production replacements: 216 authored cards
+
+`TappedManaReplacement` supplies a shared multiplicative replacement for mana
+produced by activating a permanent's mana ability with the tap symbol in its
+cost. That provenance is retained through choices and zone-cost payment recovery.
+All four production instructions and the fixed-mana fast path share one emission
+method. Active replacements modify the chosen mana bundle once before the pool
+and production event are written. Multiple supported multipliers commute, so no
+meaningless ordering choice is introduced. Copies, control and phasing use current
+battlefield sources; a replacement sacrificed as a cost no longer applies.
+
+Mana Reflection composes its printed 4GG enchantment with a controller-scoped
+multiplier of two. Pinned CR 106.12 and 106.12b define the supported event. An
+activation that merely taps a selected permanent without the tap symbol is not
+a qualifying event. Nor is a non-mana ability that produces mana while moving
+a library card under August 2026 CR 605.1a. Independent triggered abilities and
+scenario mana additions do not inherit the activation's production provenance.
+
+Ten tests cover fixed/mixed and variable bundles, color and commander choices,
+native and granted land abilities, printed casting, multiplicative copied
+replacements, control/phasing, absent tap symbols, stack-using library abilities,
+sacrificed sources/replacements, independent triggers, zero output, validation,
+pending cost recovery and duplicate rejection. This does not implement restricted
+mana, mana abilities during announcement/resolution payment windows, triggered
+mana-ability scheduling, or other noncommuting mana replacement categories.
+Those remain explicit general production gates.
+
+Kernel schema is 93; state remains 11. Coverage is 216/334 unique cards and
+281/400 copies, leaving 118 unauthored. Production admission and the successful
+real-test-game condition for committing to main remain unmet; the legacy run
+remains stopped at its accepted prefix.
+
+
+## Static zero-quantity mana classification audit
+
+The shared classifier now distinguishes provably zero numeric formulas from
+state-bound values that happen to be zero on the current board. Constant amounts,
+scaling and explicitly rounded division are folded only for classification;
+validation still visits every operand, and execution retains normal binding
+checks. An activation whose only mana instruction always produces zero cannot
+qualify under CR 605.1a. A variable amount remains eligible even on a board where
+it produces nothing, as required by CR 605.2. Another positive immediate branch
+can still qualify it; future delayed bodies do not.
+
+The same analysis recognizes zero draw/mill formulas as incapable of crossing
+the library boundary. Dynamic draw/mill amounts and positive rounded amounts
+remain disqualifying under the pinned August 2026 rule. Surveil retains its
+existing constant-integer vocabulary; this audit does not broaden it.
+
+Six new tests cover stack versus immediate effects, rounded constants, zero
+scaling, dynamic empty-board values, library boundaries, optional/delayed branches,
+unbound operands and choice replay. The previous zero-mana modifier test now
+correctly uses a non-mana activation. No card gains authored status from this
+audit: coverage remains 216/334 unique cards and 281/400 copies.
+Kernel schema is 94; state remains 11. Production admission remains blocked,
+and the legacy game stays stopped.
+
+
+## Actor-relative events and captured triggering players
+
+The existing event relation vocabulary now also supports spell casts, activated
+abilities, life gain, card draws, library searches/shuffles and scry/surveil.
+For these events, `controlled` means the event player is the observer's controller;
+`opponent_controlled` means another player. One shared predicate preserves the
+existing `controller_only` behavior and rejects contradictory filters. Zone and
+counter event relations retain their existing meanings. Other event kinds remain
+closed to these new relation filters until explicitly implemented.
+
+Each supported event captures its player in the existing `event_controllers`
+value. Later instructions can address that exact player even after control of
+the observer changes. Existing life amounts and announced X are retained alongside
+that identity. This supplies common prerequisites for opponent-cast and opponent-
+draw cards without inventing card-specific trigger branches. It does not implement
+the optional payments, changeling or other remaining mechanics of those cards.
+
+Six tests cover every supported kind/relation across three players, paid casts
+and real activations, own/opponent filtering, per-card draws, copied/phased
+observers, event amount/X binding, changed control, replay and invalid/unbound
+forms. Kernel schema is 95; state remains 11. Coverage remains 216/334 authored
+unique cards and 281/400 copies. Production readiness is still blocked, and
+the stopped legacy run is preserved.
+
+
+## All-creature-type characteristics: 217 authored cards
+
+`CardProgram.all_creature_types` represents an all-zone characteristic-defining
+ability. The complete 324-type vocabulary is copied from pinned CR 205.3m and
+included in the implementation identity. Its exact sorted digest is checked by
+a regression test. It includes Time Lord as one type and excludes land, artifact
+and other noncreature subtypes. A printed Shapeshifter subtype alone does not
+activate this characteristic. Copies use the copied definition; a departed copy
+reverts to the physical card's printed characteristics.
+
+Shared type changes now remove creature subtypes when both Creature and Kindred
+are absent after the change, and dependency detection accounts for subtype reads.
+Actor projections use an explicit `all_creature_types: true` flag with only the
+remaining noncreature subtypes in `subtypes`, preventing a 324-name expansion in
+every board packet. The full derived set remains in the engine and checkpoint;
+the compact representation is lossless against the pinned registry.
+
+Taurean Mauler composes its printed 2R 2/2 body, all-creature-type characteristic,
+opponent-cast event and optional +1/+1 counter. Seven tests cover every zone,
+type inclusions/exclusions, paid casting, own/opponent triggers, optional decline,
+source departure, control changes, copy inheritance, tribal anthems, type removal,
+optimized/exhaustive layer parity, compact projection, validation and replay.
+These interactions follow pinned CR 702.73a and the
+[Lorwyn Eclipsed release notes](https://magic.wizards.com/en/news/feature/lorwyn-eclipsed-release-notes).
+Ability removal, arbitrary subtype-setting effects and other remaining general
+rules are still production gates.
+
+Kernel schema is 96; state remains 11. Coverage is 217/334 unique cards and
+282/400 copies, leaving 117 unauthored. Production admission and the successful
+real-test-game condition for committing to main remain unmet. The stopped legacy
+game remains preserved.
+
+
+## Named subtype sets and Planar Nexus: 218 authored cards
+
+The creature-only characteristic flag has been replaced by the shared immutable
+`all_subtype_sets` tuple. Supported names currently select all creature types or
+all nonbasic land types, with validation requiring a supporting printed card
+type. Both categories can coexist on one definition. Pinned CR 205.3i supplies
+the 12 current nonbasic land types, including Planet and Town. Apostrophes in
+the pinned type lists are normalized to the catalog's ASCII spelling, including
+Urza's, C'tan and Shi'ar; the creature-list digest test now checks that canonical
+representation. The new subtype registry is bound into implementation identity.
+
+Shared type changes remove land subtypes if Land is lost while preserving
+creature types when their supporting card type remains. Dependency detection
+tracks land-subtype reads. Additive basic land types still grant their ordinary
+intrinsic mana abilities; the nonbasic set alone grants none. Taurean Mauler
+uses the same named-set primitive and retains its compact actor projection.
+
+Planar Nexus composes the nonbasic-land set, printed tap-for-colorless ability
+and one-generic paid tap/color choice. Seven tests cover all zones, land play,
+atomic cost failure, choice recovery/duplicate rejection, Urza mana requirements,
+Locus counts, phasing, Gate library search, copy inheritance, category-specific
+type removal, additive Forest and optimized/exhaustive layer parity. The seven
+changeling regressions also pass with the generalized vocabulary. This follows
+the [Modern Horizons 3 release notes](https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes)
+and current pinned land-type list rather than the older reminder-text list.
+
+Kernel schema is 97; state remains 11. Coverage is 218/334 unique cards and
+283/400 copies, leaving 116 unauthored. General land-type setting/ability removal
+and other remaining rules still block production admission. The real-test-game
+condition for a main commit remains unmet; the legacy prefix is untouched.
+
+
+## Named subtype sets in continuous and temporary effects
+
+`AddSubtypes` now combines explicit names with supported named sets. Static and
+temporary effects share validation of category compatibility, immutable inputs
+and nonempty additions. The registry now also includes the complete land-type
+set, allowing a single Land effect to grant basic and nonbasic types together.
+Layer dependency analysis reads the expanded subtype set, so earlier effects
+that require Gate correctly wait for later effects that grant all land types.
+Expansion uses a bounded 128-entry immutable cache and is reused by all-zone
+characteristics as well as continuous additions.
+
+Five tests cover the continuous clauses needed by everything counters: marked
+lands gain all land types, marked nonland creatures gain all creature types, and
+marked land creatures receive only the land category. Effects apply across
+controllers; source departure/phasing removes the grants but leaves counters.
+Other tests cover intrinsic basic-land abilities, compact actor views, temporary
+expiry/replay, validation and optimized/exhaustive layer parity with a subtype
+dependency whose timestamps require reordering. These are explicitly bounded
+fixtures, not a complete authored Omo program: its multi-domain targeting trigger
+and other outstanding game rules remain to be migrated.
+
+Kernel schema is 98; state remains 11. Coverage remains 218/334 authored cards
+and 283/400 copies. Production admission remains blocked and the stopped legacy
+game is preserved.
+
+
+## Independent cardinalities in batched choices
+
+`ChoiceRequest.group_bounds` optionally binds named groups to independent
+minimum/maximum counts, in addition to overall bounds. Options must name a
+declared group. Immutable, unique and feasible bounds are validated before
+presentation; accepted indexes are checked against each group. Existing
+one-per-group choices retain their existing path. Distinct clause options may
+refer to the same physical object, while duplicate option indexes remain invalid.
+Group capacity and validation count options in linear passes instead of rescanning
+the whole menu for each group. Empty optional groups need no user prompt.
+
+The kernel choice helper binds these constraints into serialized requests and
+checkpoints. Six tests cover optional two-domain selection, arbitrary bounds,
+global feasibility, duplicate/foreign submissions, same-object distinct clauses,
+serialization, legacy choice decoding, malformed groups, kernel retention and
+empty-group behavior. This is the choice-protocol prerequisite for grouped targets,
+not a complete targeting implementation: target declaration, effect bindings and
+per-clause resolution legality still need integration. Omo remains unauthored.
+
+Kernel schema is 99; state remains 11. Coverage remains 218/334 authored cards
+and 283/400 copies. Production admission remains closed and the stopped legacy
+game remains preserved.
+
+
+## Trigger target clauses
+
+`TargetSpec.groups` now declares named, independent object-target clauses for
+triggered abilities. One batched choice enforces each clause's bounds; required
+empty clauses make the trigger unplaceable even when other clauses have excess
+candidates. Optional empty clauses do not create a prompt. Menu counting and
+selected-target partitioning use linear passes.
+
+Stack frames preserve each clause and revalidate it separately at resolution.
+A physical object may be selected once per clause, with different legality in
+each clause. The aggregate `target` recipient list preserves multiplicity;
+`target:<group_id>` addresses just one clause. Existing atomic counter placement
+merges repeated placements before replacement effects and event discovery.
+Object operations use unique physical recipients; named clauses are captured
+into delayed-effect bindings after resolution legality has been checked.
+An ability with no chosen targets resolves; one with chosen targets that all
+become illegal does not resolve. This follows the separate target-instance rule
+in CR 601.2c, triggered placement in 603.3d, and resolution in 608.2b.
+
+Ten tests cover independent bounds, duplicate physical targets, partial and
+complete illegality, optional empty clauses, required empty clauses, per-clause
+effects, delayed binding retention, single movement for repeated physical targets,
+actor-adapter replay, checkpoint continuation and closed validation.
+This stage supports fixed-bound, nonrecursive, object-only trigger clauses.
+Spell/activation announcements, player clauses, and controller grouping within
+clauses remain explicitly rejected. Omo remains unauthored pending its complete
+card composition and card-specific conformance tests; its printed target clauses
+are documented in the [official MH3 release notes](https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes).
+
+Kernel schema is 100; state remains 11. Coverage remains 218/334 authored cards
+and 283/400 copies. Production admission remains closed; no game was started.
+
+
+## Omo, Queen of Vesuva: 219 authored cards
+
+Omo composes existing primitives without runtime changes: self-entry and attack
+triggers share one counter-placement program and independent optional land and
+creature target clauses. The printed hybrid casting cost and characteristics
+are retained. Counter-selected static effects grant all land subtypes to lands
+and all creature subtypes to nonland creatures, across all controllers. A land
+creature gains land types but does not gain every creature type from Omo.
+
+Six card-specific tests cover both hybrid payment colors, a real attack
+declaration, optional empty selection, a land creature selected for both
+clauses, copied-entry inheritance, source departure and return, phasing, actor
+replay and compact creature-subtype presentation. Counters persist without Omo;
+the subtype grants require an active source. The existing shared target tests
+cover partial illegality, atomic repeated counter placement and delayed bindings.
+The [official MH3 release notes](https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes)
+provide the printed clauses; current subtype registries remain bound to the
+pinned Comprehensive Rules rather than old reminder-text lists.
+
+Kernel schema remains 100 and state remains 11. Coverage is 219/334 authored
+cards and 284/400 copies, leaving 115 cards unauthored. No card is production
+certified; production-host and general-rules gates remain open. The legacy
+accepted prefix is preserved and no fresh simulation was launched.
+
+
+## Shared devotion conditions and Xenagos: 220 authored cards
+
+`DevotionCondition` counts matching mana symbols on controlled, unphased
+battlefield permanents. Combined-color devotion counts a hybrid symbol once.
+Derived characteristics retain copied mana symbols independently of an object's
+current color, and last-known characteristics restore them immutably. Evaluation
+stops once the required threshold is reached. Entry replacement lookahead
+excludes incoming symbols; actual post-entry characteristics include them.
+No supported continuous instruction changes mana costs, so the new predicate
+introduces no selector/layer dependency on mutable types or colors.
+
+Xenagos uses that predicate to remove its creature type below seven devotion,
+while retaining printed indestructible. Its own beginning-of-combat trigger
+uses the existing target selector and temporary effects: another controlled
+creature gains haste and a nonnegative power/toughness bonus captured at resolution.
+CR 107.1b makes that calculated bonus zero for a negative-power target; it
+is not an instruction to double a characteristic.
+Later power changes do not change that captured bonus, and cleanup expires it.
+
+Nine tests cover hybrid counting, copied costs, color changes, control, phasing,
+nonbattlefield exclusions, entry lookahead, paid casting, negative-power zero bonuses,
+source departure, own/opponent combat, actor replay, last-known checkpoint
+values and closed validation. The [Born of the Gods release notes](https://magic.wizards.com/en/news/feature/release-notes-2014-01-22)
+confirm combined devotion's once-per-hybrid-symbol counting. The pinned CR
+entry-replacement and post-entry observation rules remain separate.
+
+Kernel schema is 101; state remains 11. Coverage is 220/334 authored cards and
+285/400 copies, leaving 114 unauthored. No production certification or fresh
+game launch is implied; the legacy accepted prefix remains preserved.
+
+
+## Casting origins and Gravebreaker Lamia: 221 authored cards
+
+`CastSpec.origin_zones` explicitly binds intrinsic casting permissions, defaulting
+to hand and command zone. The bounded vocabulary additionally admits owned
+cards in graveyard or exile when their program grants that permission. Command
+zone casting still requires a commander. This does not implement flashback,
+escape, external permissions, hidden exile cards, library casting, or alternative
+costs. Existing authored cards keep their original hand/command permissions.
+
+`CostModifier.origin_zones` independently filters the pre-stack source zone.
+An empty tuple retains the previous unrestricted cost-modifier behavior.
+Modifiers grant no casting permission, preserve the proposed stack selector,
+combine generic adjustments before clamping, and never reduce colored costs.
+Copied definitions, current control and phasing use the same shared path.
+
+Gravebreaker Lamia now has its printed cost and lifelink, a self-entry library
+search to graveyard followed by shuffling, and a controlled-spell generic
+reduction restricted to graveyard origin. SearchLibrary's single-destination
+vocabulary now includes graveyard using the existing move/replacement pipeline;
+unrestricted searches remain mandatory when the library contains cards.
+
+Eight tests cover origin permissions versus discounts, command/owner checks,
+paid graveyard casting with replay and duplicate rejection, copied stacking
+modifiers, generic clamping, colored payment, control/phasing quote invalidation,
+Lamia's paid entry and mandatory search, empty libraries, actor-scoped inspection,
+search checkpoints, and closed serialization/validation. Graveyard/exile casting
+permission is exercised with explicit synthetic programs, not implicitly granted
+to any existing card by Lamia.
+
+Kernel schema is 102; state remains 11. Coverage is 221/334 authored cards and
+286/400 copies, leaving 113 unauthored. Production admission remains closed;
+no fresh game was initialized and the legacy accepted prefix is preserved.
+
+
+## Optional turn-use limits and Terrasymbiosis: 222 authored cards
+
+`AbilityProgram.optional_once_per_turn` implements a bounded optional-use policy:
+one root May, no fallback, and no simultaneous trigger-count limit. Acceptance
+consumes the turn allowance before executing its effects; declining and countering
+the trigger do not. After acceptance, future occurrences are suppressed and
+already pending instances skip the optional action. Nested optional instructions
+in the accepted body are not accidentally limited again.
+
+The shared ledger keys source incarnation, definition, ability and controller.
+CR 603.2h tracks whether the source's controller has taken the action; a different
+controller has a separate allowance, while control returning to a previous
+controller retains that controller's used allowance. A new turn or a new source
+incarnation starts fresh. The existing trigger-count limit retains its behavior.
+
+Terrasymbiosis uses shared counter actor/recipient filters and captured actual
++1/+1 counter amounts to draw optionally. Simultaneous placements on multiple
+creatures generate separate instances, with one accepted use rather than summing
+all recipients into one draw. Eight tests cover decline/accept, simultaneous
+instances, countering with a paid spell, turn/incarnation resets, controller
+changes, event filters, pending/consumed replay, nested optional effects and
+closed validation. No card-name runtime branch was added.
+
+Kernel schema is 103; state remains 11. Coverage is 222/334 authored cards and
+287/400 copies, leaving 112 unauthored. Production admission remains closed;
+no fresh simulation was launched and the legacy accepted prefix is preserved.
+
+
+## Bounded prospective-entry characteristic cache
+
+Repeated replacement-order and trace changes now reuse prospective battlefield
+characteristics. The cache keys the immutable original object, prospective
+controller, copied definition, counters and tapped status. Any state sequence
+change discards the prior epoch; an LRU bound retains at most 64 entries.
+Material proposal changes still evaluate independently. Cached results are
+immutable and excluded from checkpoints, so restoration starts with no cache.
+The original evaluator remains available as the uncached reference path.
+
+Seven tests verify evaluator call counts, material keys, state invalidation,
+eviction, temporary-effect creation/cleanup, real replacement-choice replay,
+checkpoint continuation and benchmark parity. A paired synthetic benchmark
+compares 24 incoming objects over six passes on an 80-object battlefield,
+alternates measurement order and checks every resulting characteristic plus
+unchanged semantic snapshots. Its material-change case measures cache misses
+rather than implying all entry work benefits. This is engine evaluation timing,
+not a live-game or model-queue speed claim.
+
+The entry-view benchmark is retained alongside the five previous benchmark
+reports, increasing each package-verification evidence set to 21 artifacts.
+Kernel schema remains 103 and state remains 11; the implementation identity
+still fences source changes. Card coverage remains 222/334 and 287/400 copies.
+Production admission remains closed and the legacy run remains paused.
+
+
+## Origin prohibitions and Kunoros: 223 authored cards
+
+Shared entry selectors prevent prohibited graveyard/exile cards from moving to
+battlefield, preserving their incarnation and using their origin characteristics
+before entry copy choices. Shared casting restrictions override explicit casting
+permission from a prohibited origin. Active battlefield sources, including copies,
+supply both restrictions; phasing disables them and simultaneous incoming sources
+do not retroactively prohibit their own batch. Rejected entry does not interrupt
+later instructions. Casting quotes remain pure and are revalidated on commit.
+
+Kunoros uses these primitives for creature cards entering from graveyards and all
+spells cast from graveyards, alongside vigilance, menace and lifelink. Official
+[Theros Beyond Death release notes](https://magic.wizards.com/en/news/feature/theros-beyond-death-release-notes-2020-01-10)
+confirm origin characteristics determine entry legality and casting after moving
+to exile is permitted. Casting permission itself is a separate mechanism.
+
+Focused checks cover copies, devotion creatures, partial simultaneous movement,
+tokens, phasing, controllers, permissions, paid casting, replay and validation.
+Kernel schema is 104; state remains 11. Coverage is 223/334 authored cards and
+288/400 copies, leaving 111 unauthored. Production admission remains closed;
+no real game has been started and the legacy accepted prefix remains paused.
+
+
+## Copiable additive type exceptions and Copy Land: 224 authored cards
+
+Entry copying now supports additive card-type exceptions as copiable values.
+The immutable object and zone proposal retain those values separately from
+ordinary continuous effects. Copies inherit the target's exception, entry
+lookahead evaluates it, and leaving the battlefield resets it with the copy.
+The bounded entry-view cache includes the exception in its material key.
+
+Copy Land uses the shared optional land selector and Enchantment exception.
+Copied entry triggers and intrinsic land mana abilities use the existing engine.
+Declining preserves the printed enchantment. Tapped status, counters, token
+status and ordinary continuous type changes are not copied.
+[Official MH3 release notes](https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes)
+provide the card-specific conformance reference. This slice adds card types;
+it does not claim arbitrary name, color, ability or power/toughness copy exceptions.
+
+Eight focused tests cover paid casting, inherited triggers and mana, declining,
+copies of copies, noncopy changes, zone resets, actor/checkpoint replay, cache
+separation and invalid definitions. Kernel schema is 105; state schema is 12.
+Coverage is 224/334 authored cards, 289/400 copies, with 110 unauthored.
+Production admission remains closed and the paused legacy game is unchanged.
+
+
+## Attached-object departure and Angelic Destiny: 225 authored cards
+
+Zone-event patterns now support the exact previously attached object as their
+subject. Departure observers use pre-event attachments and characteristics.
+Aura observers receive a narrow graveyard successor binding under CR 400.7f
+and 603.6e: simultaneous movement qualifies, as does a later unattached-Aura
+state-based action. A separate later destruction does not. Exile and later
+incarnations cannot be followed. Pending tracking is serialized across choices
+inside the resolving effect, before state-based actions run. Bundles without
+attachment observers skip the extra tracking maps.
+
+Angelic Destiny composes this with existing Aura targeting and continuous
++4/+4, flying, first strike and additive Angel subtype primitives. Its return
+uses the Aura's owner even when another player controls it. Copied Auras inherit
+the ability and return their underlying cards. The pinned Comprehensive Rules
+and [Foundations release notes](https://magic.wizards.com/en/news/feature/foundations-release-notes)
+provide conformance references.
+
+Ten focused tests cover the paid Aura spell and bonuses, unrelated deaths,
+non-graveyard departures, simultaneous deaths, separate destruction, exile,
+later incarnations, stolen/copied Auras and replay before and after the Aura SBA.
+Kernel schema is 106; state remains 12. Coverage is 225/334 authored cards and
+290/400 copies, leaving 109 unauthored. Production admission remains closed;
+the paused legacy prefix and main branch remain unchanged.
+
+
+## Distinct-name search and player partitions: 226 authored cards
+
+Shared library searches now support distinct-name groups and a separate
+partition chooser, either the controller or exactly one targeted player.
+The compiler requires a public reveal before another player partitions the
+cards. The first choice remains an unordered, actor-private library search;
+the second includes only the selected revealed cards. Search inspection ends
+before partitioning. Both choices retain exact references through checkpoints.
+
+Gifts Ungiven composes these fields with the existing optional search, reveal,
+simultaneous placement and shuffle pipeline. When the entire found set must go
+to the primary destination, no redundant model choice is generated. The
+[official Double Masters 2022 release notes](https://magic.wizards.com/en/news/feature/double-masters-2022-release-notes-2022-06-24)
+confirm that finding one or two cards forces them all into the graveyard.
+
+Eight focused tests cover paid casting, duplicate-name and actor rejection,
+zero/one/two-card forced partitions, visibility, replay at both choices,
+controller partitions, destination replacement and closed validation. Kernel
+schema is 107; state remains 12. Coverage is 226/334 authored cards and 291/400
+copies, with 108 remaining. Production admission stays closed; the legacy game
+remains paused and main is unchanged.

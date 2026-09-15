@@ -1,19 +1,19 @@
 {
   "schema": 1,
   "production_ready": false,
-  "implementation_sha256": "184b3fc8e3675acfb4aaf6c44b573697bcdc2279a34f002c62396543eb47064c",
-  "kernel_checkpoint_schema": 76,
-  "state_checkpoint_schema": 11,
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
+  "kernel_checkpoint_schema": 107,
+  "state_checkpoint_schema": 12,
   "actor_packet_schema": 1,
   "adapter_replay_schema": 1,
   "durable_journal_schema": 2,
   "production_host_bound": false,
   "catalog_sha256": "6252a8461f796108a1f9b8ced2bddf1b94af8126b868708612564589b9120d02",
-  "fixture_bundle_sha256": "85055fe9f6e59c99b14ad535f91ff016d625799c603c6087c60e8351b02bb01c",
+  "fixture_bundle_sha256": "7f8a7b8ef3e8babdb204865ca55849ffa97f71b422a1c87a2d673de4ddf50dac",
   "card_count": 334,
-  "fixture_card_count": 3,
-  "authored_card_count": 199,
-  "unreviewed_program_count": 135,
+  "fixture_card_count": 2,
+  "authored_card_count": 226,
+  "unreviewed_program_count": 108,
   "certified_card_count": 0,
   "blockers": [
     "No complete reviewed executable bundle for every face and clause in the fixed decks",
@@ -30,7 +30,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:acidic-slime",
-      "authored_program_sha256": "ee925358cfd703cd71b854269608c7bc4dc3958d6c2a7c285a5d858f71dde9bb",
+      "authored_program_sha256": "3f3d9d24decefb0f22150073d59be8d66b03cbbd339a4c1bd35b18efc01a3a44",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -42,7 +42,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:adarkar-wastes",
-      "authored_program_sha256": "39fd08f67747d5213016f9dc1de2de66dad038831810ae043fd6b49b1ce92c7a",
+      "authored_program_sha256": "f7a8c233344c3a95e8318b13f4903eae7adb5532c41fa9311df2f1d9b125681b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -66,7 +66,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ajani-s-pridemate",
-      "authored_program_sha256": "683f2b188a00f1cf4e2fd15b06e72764aef863b0bbaa8b0517f76b88053b9e86",
+      "authored_program_sha256": "de7664a6ee8e77d2a765497d3074115ab424ffb8bb372363f3b67514f1252def",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -78,7 +78,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:akroma-s-vengeance",
-      "authored_program_sha256": "0e5d3655eab7beb61f712e3192250c7d91055e6f9e95b6611cf3f9d23054e342",
+      "authored_program_sha256": "4593b39aee8ad06f11c9b9c38ece27bcfb7dd95f4287aabb52fbcc45300f70f9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -90,7 +90,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:all-will-be-one",
-      "authored_program_sha256": "8b2f540bcdde9bf12b7ce8ee165ed1cbc6c954980e57489ad387b7dc8780df3b",
+      "authored_program_sha256": "1694c781bc91cc5cc6e8fbb611a2c5d66255611309d2489f3d2c20df7e2d3932",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -136,9 +136,9 @@
       "name": "Angel of Invention",
       "source_facts_sha256": "0fedfb9f2dac3ea33f70046e698b9aa9889b8b12e3f92927f7497a3040d05fec",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:angel-of-invention",
+      "authored_program_sha256": "8dd3419d73f3019a17e405fa785ec9359cfa583a323bfbb00382df36cd1ea49b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -150,7 +150,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:angel-of-vitality",
-      "authored_program_sha256": "3c1468fdac04730f6226d745453a404c6753c7846d2276cab442e7eb84a8040f",
+      "authored_program_sha256": "10f3cecbe0776513f57b149df12c9ad89234d700a3a7432c1049627e503b5e42",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -160,9 +160,9 @@
       "name": "Angelic Destiny",
       "source_facts_sha256": "75ef477601177825ffb1a9f511fe3b534c3e9bf1087504826e3e4edd206ca7e6",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:angelic-destiny",
+      "authored_program_sha256": "8cc56f1aa017b35ff156643179f39e3a776167fd98d18c44d522b4e11256761b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -176,7 +176,7 @@
       "authored_program": null,
       "authored_program_sha256": null,
       "fixture_program": "animate",
-      "fixture_sha256": "24178af544beb9ecb27d180258030ffdda758f378128bb65fa163a06e6d8d3d0",
+      "fixture_sha256": "233b732b72b6d4484d9b78c61d44900f113197d3ebd3044faf8fcf37d3a04a06",
       "production_certified": false
     },
     {
@@ -210,7 +210,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:arcane-signet",
-      "authored_program_sha256": "6cfa28f086883d35068030eb51b9f413b4ee29617163d7f6ab26f61004a1e4b3",
+      "authored_program_sha256": "e52f2f5152114527b709d4352ccf6638d4f64dd3adad3cc379e09fe95fc861e7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -222,7 +222,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:arid-mesa",
-      "authored_program_sha256": "6046b99d6ab2615a219767de9d17f6b775978c76198f918784cfc7d3f9376104",
+      "authored_program_sha256": "341c73626828bfd26c35604ae46a2ff08e5ed83b53eae54f7344b165837769b3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -234,7 +234,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:arvad-the-cursed",
-      "authored_program_sha256": "f6e266d76f238b0a654d1423775b4359cd823fdad41110702baf865f35c048dc",
+      "authored_program_sha256": "5bc3e70acd8f7df87950552fedacfdb5dfa45b7c8b6931bc46a1343cef40eb9d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -258,7 +258,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:avenger-of-zendikar",
-      "authored_program_sha256": "8aeb3f078cc5b4540d78f6b9dcfb63978950102c444c691415a0e86ef39bd828",
+      "authored_program_sha256": "753d369c3caaa93fa62d2800015eb1705cfc5be1eff6be0c762fb298abe9c47b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -270,7 +270,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:azusa-lost-but-seeking",
-      "authored_program_sha256": "7af5c388102b51bde8764c919e63da03475629075e0ea69e311aac8b2cdc7830",
+      "authored_program_sha256": "a93d24e2411755a902d51ce938959d7b7030553331181345046f49aed8b575b1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -282,7 +282,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:baldur-s-gate",
-      "authored_program_sha256": "bdfdff819ad0d2846f66aff6bd9f182607f419086ef5a342b3e9f1b55e95fde9",
+      "authored_program_sha256": "daf5f6452dffbdd2c86b703aeb4785891b68e2146df1368ffb5c8372c8263e8f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -294,7 +294,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:baleful-strix",
-      "authored_program_sha256": "94058209a4e10e4d274aaf252df601ebfd299b5180ac2ad739ac31790e869a0e",
+      "authored_program_sha256": "9becbf9a4d191de41a6ec39ba5330a46817240f8206d3596f5c9cdf3feef2d8a",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -306,7 +306,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:basilisk-gate",
-      "authored_program_sha256": "feb810e65a8e2ac9f5b1827d0c6e4060584e60f4ff97a895c6818556c2286f34",
+      "authored_program_sha256": "09449d8d464e3f227977c87c0211674a343da16bb365e06ada4af610eb7f790c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -318,7 +318,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:beast-within",
-      "authored_program_sha256": "c9911ba20c1fb88eb614bad250f8274815a5cec7640b8695dea04533933235cf",
+      "authored_program_sha256": "254160045be59f6f7e414044ea7261afdb94cb4ac0c767228ffc15848d87de5b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -330,7 +330,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:birds-of-paradise",
-      "authored_program_sha256": "9f3d75f0cd39f24678298fa5f376f9273f0c429f97af334224e0d3cbe2242053",
+      "authored_program_sha256": "c0410bad64599ba40423a6755d2f53bdc4807487c623ff3b37bda9dc9db6b110",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -342,7 +342,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:blasphemous-act",
-      "authored_program_sha256": "feff6e75aef2ea4d1e425cbb3abc1c6c93d07484e037958ab57cc2968581179b",
+      "authored_program_sha256": "857acca62e51cbdeb8a5d00a596358b5108abf1e13c995d2371a9979f533876d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -354,7 +354,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:blast-zone",
-      "authored_program_sha256": "85f982e1d1172a8c6f3e15bb09a7be8a0688294857950b11bbf4fa713d83046c",
+      "authored_program_sha256": "2d158e1cf2fddf8ceac49f53a8bf0b941351570650d90912a22d77058c304860",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -366,7 +366,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:bloodstained-mire",
-      "authored_program_sha256": "cb95f6dd3ed7f7658fc406987de71b38c803a5409aa4592a1356cdb89c0688f0",
+      "authored_program_sha256": "52b335d3b88a81f1315e77d3bf80519678bff7de946291fafbe0a351faa88415",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -378,9 +378,9 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:body-double",
-      "authored_program_sha256": "0333c339edec2bfa146e7d326858d347b6cd9638cb84d4bdede9d276ca5b53af",
+      "authored_program_sha256": "5873b7a126e60b49c12ee93c8a285a6025e7801bc64ff1c93b53be83735e245d",
       "fixture_program": "body-double",
-      "fixture_sha256": "e4d756ec963036cc6988fe2ab1c081ad1d198063a6e9c4e56fd00c1aba689528",
+      "fixture_sha256": "dc9d3b7944ddef5e45a01df81e556ac7e801122e4a4039fec64bf3958366ff2a",
       "production_certified": false
     },
     {
@@ -390,7 +390,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:brainstorm",
-      "authored_program_sha256": "90cb18f842cb3be504ddebef47af81c0feb74dfbafe80d1ee1ee9e9a553ca286",
+      "authored_program_sha256": "bcc713507317ff08f735042ea814eee8b2ccf589df0dcd8887ccef0ddf4ba90c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -402,7 +402,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:branching-evolution",
-      "authored_program_sha256": "e6da7d9bc8210b02839dcde66fc2cd39cfc6042aad15245453670e4eae2753af",
+      "authored_program_sha256": "7c8eaeb4f6f653dbcbeebf84019af3140217a55b6d037c75e4356300e81f7ccb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -414,7 +414,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:breathe-your-last",
-      "authored_program_sha256": "961621026af71cce9bf05599c45cc999eef9824f91767c11f777c32e9536b87d",
+      "authored_program_sha256": "1c0edd5ef2457f4dcee831ad13fd3e9ed8c6d11f240aa55eed77fd1d7084b62d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -426,7 +426,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:bristly-bill-spine-sower",
-      "authored_program_sha256": "46925ca4fa4745c4a24f3c85cc4684277f9f352f23bd0f9096b256c9a29c4a68",
+      "authored_program_sha256": "6532da1fb24aacd04e7c79d34bddbde7dd34a74fe5d09fc932a6dea3fb3ef1c6",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -450,7 +450,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:caves-of-koilos",
-      "authored_program_sha256": "a09f37e5f8c411f58eb5dc75480b309931ea79f8b874b15029a5a1212a7a5499",
+      "authored_program_sha256": "cb128b0a9e6c8e4fe489cbfbe1c99c3d6855ff1e757ca7d991037ae83b5f203e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -462,7 +462,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:celestial-armor",
-      "authored_program_sha256": "6d2538ca010492d2b314894bc46125c289ac59c40556150ff2f5b7b29b825399",
+      "authored_program_sha256": "4f1b429715c963f41e813694a1789768ee35d4c366575806b765a40f73a91b68",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -472,9 +472,9 @@
       "name": "Champion of Lambholt",
       "source_facts_sha256": "7e6556bd61e5969098a153000d20a293897fc99f465765e4e4d8c72e4db73bf3",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:champion-of-lambholt",
+      "authored_program_sha256": "83350a8940ab3eb71f681885944878b6af4eecda367899a9d8bf37219c3651cf",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -484,9 +484,9 @@
       "name": "Chandra's Ignition",
       "source_facts_sha256": "99748615154c64f4536fe37364da97f88b2598b5ee9556a82a1d5ec56866c64c",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:chandra-s-ignition",
+      "authored_program_sha256": "dcaf345c76a8ace735033771aadcc6beaa800d7cd490b542a462108661e4df01",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -522,7 +522,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:charcoal-diamond",
-      "authored_program_sha256": "139872bdfef7e1e664ae32277ddd1077557268c3eff18ec58716fe317c0f6254",
+      "authored_program_sha256": "7d1ff624bf58e50b139b6c6c68b7388e12d26b4c39c68dadcf587aa1bd6fcf96",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -532,9 +532,9 @@
       "name": "Chromatic Lantern",
       "source_facts_sha256": "a9b18c0f09241478d8edab8ffdecacd780faaeebbceade14275a36cc89fa2df6",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:chromatic-lantern",
+      "authored_program_sha256": "12902b4b937042edcd65e65a538a74dd4b74c593ddfa3eb0ffeeee63ded66c14",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -558,7 +558,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:cinder-glade",
-      "authored_program_sha256": "ff6951d29a8dd912fdfcd491f8e386fdd3d9acab819ffdc6b86a34642587d83f",
+      "authored_program_sha256": "fb5780e2190b928f2be00acb50bed79c72eaa92019b875d5bfd67a3961eb8397",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -568,9 +568,9 @@
       "name": "City of Brass",
       "source_facts_sha256": "f21406915880d5c5a3cc39f994cad9f9164ea19937ce8a00f15825bc820328d8",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:city-of-brass",
+      "authored_program_sha256": "d442773865df5be09035ea3314b2576f9d77652f9884f16c8453d02728a25b66",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -582,7 +582,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:cloudpost",
-      "authored_program_sha256": "e48ad86a65ff97f043ec6b6affff65e5244658e221470f9e1f0f80078ba7a5da",
+      "authored_program_sha256": "a45de08104303f6788e6327a637603087f2eefe02adc5ea1f69d2263d26f20e7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -594,7 +594,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:command-tower",
-      "authored_program_sha256": "aca2cd34474200da6cb44a2ffbc0e75f16f24442ec76c2aa7f895aadd6f14afc",
+      "authored_program_sha256": "83f9609ca79a7706b35e50cb2f3c20f6c96082cd656c697f8a2b106265f62d6f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -606,7 +606,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:consider",
-      "authored_program_sha256": "c0f4098d2cee8736b406015c1529e8c631361cc65bd33ba267ebb4b9192afe2d",
+      "authored_program_sha256": "329187fae6fa974f8c81c05030cfdb25d0c2d43acff127fe3f945d86804c8a81",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -616,9 +616,9 @@
       "name": "Copy Land",
       "source_facts_sha256": "815d124c886d6f146fe272f672753b4173670f2f997da49f22d7b1d721ed03e2",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:copy-land",
+      "authored_program_sha256": "9c37d8c574d73cefcdfb7de9fa7fc3e5bd1d9d7564a9b5473a864e4785e533ba",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -630,7 +630,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:cosmos-elixir",
-      "authored_program_sha256": "328424e6f0fb59fbc321e5ecda4891ba5bf89cad61efc625703b026fc99ab60d",
+      "authored_program_sha256": "0aa7cdcbed03d08d3ab36df2386cfae5b16ec1781feb19b9f557f7e60bd774cf",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -642,7 +642,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:counterspell",
-      "authored_program_sha256": "04d8429022ff348581acf37bee51a54311fad8f4e463319120c1773d5b09d413",
+      "authored_program_sha256": "08c202712532a64618cb04e9ff1f219229d3e0afa95fde08c8a8810f32f83548",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -664,9 +664,9 @@
       "name": "Cultivate",
       "source_facts_sha256": "9bcfd60b1f7e8260c5eff6cf121fc86198035f41fc181fd7dd7bea2e01d9d8ae",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:cultivate",
+      "authored_program_sha256": "742c6b2c7632312af035dd117619271d90c38b2459ae956bb0b86f9adb7106eb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -678,7 +678,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:curse-of-the-swine",
-      "authored_program_sha256": "8d8670d491af4eebbe8bfa7ebfcb4fcb829ded51839d397c0e31262ebcffec51",
+      "authored_program_sha256": "ca3ecc87c9f99f0a4d16f7a069da0a5d47a10119a2769bcf5da493585b941bac",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -738,7 +738,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:deadly-riposte",
-      "authored_program_sha256": "237cc7aa673339c009e691fbde3b4762b20963b37f3d19acc1fefe6918f1cdb2",
+      "authored_program_sha256": "517a2e17d5d3ab8c0631aa23e1c40b00e690a1f67910334748a4d71dc9533be3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -750,7 +750,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:death-grasp",
-      "authored_program_sha256": "6c481034308aa2e04f3851d2809c758e7573c5e7022466fd7b1ee4e742636c7b",
+      "authored_program_sha256": "634db2ecdb7ecbfaacb0f334c5ac045cf4439a48c00e8335a053494daa90c922",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -762,7 +762,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:debt-to-the-deathless",
-      "authored_program_sha256": "a1b5db117ee8b10ae4688db28508b4e7db5be14a40f5f77c381ac387d2c380a0",
+      "authored_program_sha256": "854c82f4b723f6f3dec9a867043156887308f498a01d35543eb3c8203e4b1e8a",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -774,7 +774,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:defiant-bloodlord",
-      "authored_program_sha256": "1f4e267f6e61d3c0e07f0f69b977401fbc283e96c66f8ade9cbd3acc2a572d91",
+      "authored_program_sha256": "7d5b9c249901006b54c2a7e36479d0ffa8164fb54b0494c9da0908e907b65eee",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -822,7 +822,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:deserted-beach",
-      "authored_program_sha256": "a153e6ba528f7f7172132618f4a37d2689b4459bc174a43bfd03962611c6a283",
+      "authored_program_sha256": "0ae14fb84988e8790b39c42caa549ba9066168e5f8d968e6f5a0f826ea7d70fc",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -846,7 +846,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:diabolic-tutor",
-      "authored_program_sha256": "fe92c42ea9e1e935432164af1ee2f4bc49c1ff55eb8ea9a0e3c5f4860110d7b8",
+      "authored_program_sha256": "5b92629490561b71e5468ada67e15754ec4988c25d0e15fe7b3ba547c2224cd5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -882,7 +882,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:doomwake-giant",
-      "authored_program_sha256": "77cf7d12e98992001f7f3bab789f5088fd6286a7a2c58795249aa2e43e9f4eb2",
+      "authored_program_sha256": "2b1334f594289af1451d380564a310f0e5b5582d979fbad8e754daf74bafbe16",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -894,7 +894,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:dreamroot-cascade",
-      "authored_program_sha256": "46fda4ab6964dc20240999cd5ccae19803eae7980222632fe1902f3890bca898",
+      "authored_program_sha256": "dfd6acc776c9cbd51dabbe2873072736561250c98fa800ffd458d7c1ae336116",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -906,7 +906,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:drown-in-dreams",
-      "authored_program_sha256": "005478d9957cf5dfc824b0866f5336a0b3aeb93fa0a586dfe85d17d14358d563",
+      "authored_program_sha256": "2ea1bccbf6f8764c881f9c930fbd590a2de5ed56f102609b5553c9d1dae48242",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -918,7 +918,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:dryad-of-the-ilysian-grove",
-      "authored_program_sha256": "30a50c19b23a166ffe3db96e79c664a8b9c20b2cc1b10fbd8b3584f639a7d314",
+      "authored_program_sha256": "22b499bd5824c84fb0b767bee8d4c8075ce49192de200f05aae12d4e529df334",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -928,9 +928,9 @@
       "name": "Eiganjo, Seat of the Empire",
       "source_facts_sha256": "bd4b9ba2add43c32c5b72561380f0b9e7df9b9babbbed6d95eab4f0909e5e8ed",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:eiganjo-seat-of-the-empire",
+      "authored_program_sha256": "d87675c23c9f942af75d3654445a0bce95a20a2560b2251d378ae91df404fff3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -942,7 +942,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:elenda-s-hierophant",
-      "authored_program_sha256": "7e0213238fbfe7705b3435eb34a154c118efbc60c0cbf405c233a108d81b77a8",
+      "authored_program_sha256": "f27796282071bd2d35a6da197d60a74a3ed6e27f4b5a7645a373820c8adef96e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -952,9 +952,9 @@
       "name": "Elenda, Saint of Dusk",
       "source_facts_sha256": "bcf9e7da6871105bc0762cc0178458f28ceea5c4bf6574fa38f1c1b18e2783de",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:elenda-saint-of-dusk",
+      "authored_program_sha256": "2cd8e699ae0064b015a09aece799d8989806b36370d4e607bdef415a5dfbc088",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -978,7 +978,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:elvish-mystic",
-      "authored_program_sha256": "314a6ec9eb00e2da3b0b198dd414e8901a00a3ed091f406a3de649b69a899207",
+      "authored_program_sha256": "f660aa8c4dc21d4ca3b2eabde4aede0b8f4ceb6371ee8684b5b0113a538aa0d2",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -988,9 +988,9 @@
       "name": "Elvish Rejuvenator",
       "source_facts_sha256": "427842a8742dbb872a7ff64990c383eac80e8aa3eb7ea4cfe21f8d5d9dcb2401",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:elvish-rejuvenator",
+      "authored_program_sha256": "84e244edb3dee3b2c839e81e5f0142f9cf6b412429a112f64741a9510b2f31e0",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1002,7 +1002,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:enlightened-tutor",
-      "authored_program_sha256": "1c45d30b344217d7abe1065188a3656678d2de2d7056e5b85326426e01b87b27",
+      "authored_program_sha256": "1ca31368c75992b79d73804efad615af18ce4f921699c247d1e75fef0f0bdeca",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1038,7 +1038,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:eternal-witness",
-      "authored_program_sha256": "5a7a8cf1cf226bf94b3a24d1f9d17fb4ce871ab5dacfca6c147a7341da21ecea",
+      "authored_program_sha256": "dab01cfc20c5102c362de03d68ff2ed86c4836d5cf623544f299065c84d8247f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1050,7 +1050,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:eureka-moment",
-      "authored_program_sha256": "734e98de7371e0bbac42b53d2eb11b54003b8564942ffe927eb648cb2be94a13",
+      "authored_program_sha256": "1816ba90a8d10e4611d0d65c76320ebddc0380452b8d7c2befa5d3892406c88d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1062,7 +1062,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:evacuation",
-      "authored_program_sha256": "95b9e2b556f1ae13e871497099fe7bd7d14c56436c1c391cbbcaee9231660ef4",
+      "authored_program_sha256": "8da11c5c62b4cd3bf72efe7ace74b9d79a9baf83b482cc080a9aa6b0c977fb47",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1074,9 +1074,9 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:evolution-sage",
-      "authored_program_sha256": "cdec2b2e61981e9d8bf6c00a64dceb501326fe2d3172a4a39b095b27bd1c7ee2",
+      "authored_program_sha256": "aeedb07640bb0479bfaed72292c73c4fb3fed7bd5596e572d9eefbd068c649c5",
       "fixture_program": "sage",
-      "fixture_sha256": "ea4af7f0b1d3a45eb86e1b6b87366a04978f19139d01c692c1ef2c6eb5275e95",
+      "fixture_sha256": "399ff2eba217f9424655db52be62b973f918bec9290a2aba115615704ab6335b",
       "production_certified": false
     },
     {
@@ -1086,7 +1086,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:exemplar-of-light",
-      "authored_program_sha256": "cbe735b2529be7814114588881311f690d4ceaae9d66c6c0f9a128ac1a1940ef",
+      "authored_program_sha256": "f5e714ca3de03132ca569ae59257d951df56f605fc259a4b393fb7fbe5deb981",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1110,7 +1110,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:expedition-map",
-      "authored_program_sha256": "3449ff99476b5445fffb9ff9c56d0bb5485428df535bf843035932df8e541704",
+      "authored_program_sha256": "1e5fd6342dd94b308328159b490f5010aadb9b5ac4ee10fda8694a15e3517ff4",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1122,7 +1122,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:exsanguinate",
-      "authored_program_sha256": "b6521b6199d9d87f7e530d217cfb1a6987f9ce3333b08d563f6ec6d37a65fa45",
+      "authored_program_sha256": "579c910f0523d181a1fb7dee162c34902c96a909bed12b07761202d628db0743",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1132,9 +1132,9 @@
       "name": "Fallen Ideal",
       "source_facts_sha256": "fdb8f44a3092226da749fac7f02a55c1f3a95ff4da81e4e7df5c45dc512bd220",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:fallen-ideal",
+      "authored_program_sha256": "d6286871131773d51aff0aa207ccddbfbf29784d65379405704abbb1ae374d36",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1182,7 +1182,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:farseek",
-      "authored_program_sha256": "d4ae92c0ba04ecdc462989367619826812941af30cb0ad88d6282d423b88d34a",
+      "authored_program_sha256": "76142dd2b066dc5766bf1e04db85ada041df2418e3d747dfc283447f4670506c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1194,9 +1194,9 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:felidar-guardian",
-      "authored_program_sha256": "f1f3a8fad144556b6ce4363d16aae067cb2e8a45c535c36c4d79790837418b53",
+      "authored_program_sha256": "37e92d6ae9b3260bce0f0a547edbcd69bdca8490967289a6f0af6002e18a9305",
       "fixture_program": "felidar",
-      "fixture_sha256": "1637475857a39da83d0b670cbd96f7758b293e926f339dc7830d0951c6acfbf9",
+      "fixture_sha256": "a95394c47e1a46c10b5ad64f295a0ec47043a73dfd72c3d8de9ad74f93aa3a46",
       "production_certified": false
     },
     {
@@ -1218,7 +1218,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:fiendish-panda",
-      "authored_program_sha256": "c303f2e0f5a124b128abfa969ca318ea6111d95e690e6595dbb2b5dd9e07adb8",
+      "authored_program_sha256": "9b4ab12119d2b950928873fb10aefa50eaf4d57bb082792d15cf3ef0345fb94e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1266,7 +1266,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:flooded-grove",
-      "authored_program_sha256": "b978c2b2b810d76a5f304ea1a0f0764ae406f77ad2c67b212b8e129825779398",
+      "authored_program_sha256": "eb4f84df0dc5e5e4f52d2156da479313304a80dec3bea0e5ea0f9955e333ceba",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1278,7 +1278,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:flooded-strand",
-      "authored_program_sha256": "f3d95ca507a1d1011bf33218fcbb0aa7d04b5e1cd385f1d99b2803a8ffab11c4",
+      "authored_program_sha256": "411ae5966e82e7e929cb6276e7231d5d075dea0a31d4a36e6c755d44c77f75eb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1290,7 +1290,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:forest",
-      "authored_program_sha256": "17f9ebed97bd4c0ebca3f9c6068b5569d7f9d1daa1f2effea8f649b89f40d0a6",
+      "authored_program_sha256": "9cb9326b594d1a998eb09f7fa6673f86f5285f87e7ed6d1e5e4ca76f8df19ee5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1326,7 +1326,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:fyndhorn-elves",
-      "authored_program_sha256": "a8eaa38e1620cafc381f9ab64925d15444d7c84f31f9f8132bee94f9b8ea292b",
+      "authored_program_sha256": "c0e4f5066b7f989de4f8c658fa5807c2a52e0e993f26737613b4b3720a975eb7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1350,7 +1350,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:garruk-s-uprising",
-      "authored_program_sha256": "1f1a1d880671d681ec551f60a8b4849fb5abb72e19a6d49970718f13cc0ce1fb",
+      "authored_program_sha256": "ff52fb8a660d5670970c9f784e70c70cc9403b3cdddf122689a652c92a3c72f1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1362,7 +1362,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ghalta-primal-hunger",
-      "authored_program_sha256": "0db72b35ea8f31cbcfb71b5497a174b9d75f3ec26f453bba12fa485aba85ffb3",
+      "authored_program_sha256": "e95e870d1ea44e36155c640ffa60e876e780ca5b73a6cda691077715a9d562b1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1384,9 +1384,9 @@
       "name": "Gifts Ungiven",
       "source_facts_sha256": "4003e0c26bad188a2263dae88d49bc3ad79e36b4181de8fa3a2cd49b00cf1776",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:gifts-ungiven",
+      "authored_program_sha256": "ea12fb9a7359227cddcfb50c86effc45999463a97d7880522a31e62b7235e871",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1398,7 +1398,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:give-in-to-violence",
-      "authored_program_sha256": "944731ed242d54405eb41bbdbe95d451342b811d7baab03182f1c298dbcf1333",
+      "authored_program_sha256": "5a6220e47738208d7d0fe16622d8d0fe5ad0f209d2c7fefa2bfc58ad867b4d19",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1432,9 +1432,9 @@
       "name": "Glen Elendra Archmage",
       "source_facts_sha256": "d7abf2b6a712afb56fc675470f486ae70aaeb5b2e3c9d12b0cb053d20a635927",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:glen-elendra-archmage",
+      "authored_program_sha256": "d4f345da4c5bf8fb3237df2f7ea2e12b7dacf8d25cb1ac78b43c10593c346a8a",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1446,7 +1446,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:glimmerpost",
-      "authored_program_sha256": "df159e18dfedcfe61ee29838765b7112ce25fa2e63e8bfc7b0a879f906269065",
+      "authored_program_sha256": "d577d95eb9137089ef2fd0431906322af6b73e6356937010f677b95578c0e86f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1458,7 +1458,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:goblin-anarchomancer",
-      "authored_program_sha256": "31aa871f6548308bee1c4105250125194f109aaf1583d7cbc36dae1fe73e2ec3",
+      "authored_program_sha256": "a91290090445872be0be1b1e34c794989de42af05d8d20adabdcde6cbd885afa",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1492,9 +1492,9 @@
       "name": "Gravebreaker Lamia",
       "source_facts_sha256": "c6ef458b7cc29d521872601f3ccab7ff0782b3559e001e84c95ada4349d025db",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:gravebreaker-lamia",
+      "authored_program_sha256": "c791a989d806351b2c89db66a86fb648e477f190e5b3e253069d3ed51f4f787b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1506,7 +1506,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:grim-guardian",
-      "authored_program_sha256": "c74e2eddbe7bb466e55a94283f6980a42b572a1e48f6abf4c6810119804516a8",
+      "authored_program_sha256": "69102675eb4edb1bc20cd23fd99387a865146ce26ad76c315544094d1ce08ff1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1518,7 +1518,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:growth-spiral",
-      "authored_program_sha256": "0e96c886c2c96237a1f6cea8c154c20559f28b6a4462c68b0cfbb161da1744d7",
+      "authored_program_sha256": "87acb402c3b06ebd52cf19106f6ed124af16c7133c660270f3e0603aebe2e1b6",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1530,7 +1530,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:grumgully-the-generous",
-      "authored_program_sha256": "ac2ba3dc0bb8810fcd7d07e25c25ff92c66131cbcf570c089d61cd6dfeeaa4d3",
+      "authored_program_sha256": "c748bf16ad9bd3fee57efa21b7377292fa0c2e3f74aeb2ac9457e75297b6c325",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1542,7 +1542,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:gruul-signet",
-      "authored_program_sha256": "36c6de5cb8d1abc550b6f5fcf69db38f21f9ee6363905ea8b73314614884753a",
+      "authored_program_sha256": "8dcadce26c5c5099ffdbc07eaf9d5e9196492b9fb1a6347a43e5d3ecd1489781",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1554,7 +1554,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:gruul-turf",
-      "authored_program_sha256": "d3947d87abc87d8e2b116965cfea120619de7b1fb4f3b1ce9d1979fc4efd6fe6",
+      "authored_program_sha256": "791b520841ce4b1a0a87c25cfaea9cb0aee8dce0607fa3f671966d50f99eccd9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1578,7 +1578,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:halana-and-alena-partners",
-      "authored_program_sha256": "1910fa698b24156ce736d8b6745567acf58eef6fb33c507ee01db206c7fc499e",
+      "authored_program_sha256": "36870889ec198ab8558ad75f380dcc6c35ccf7a481189e35197c08996a63e31c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1590,7 +1590,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hall-of-heliod-s-generosity",
-      "authored_program_sha256": "a41fbcbf8c35c1aef40fa5ccb7fc37d1719ac962e915589406264689ba1e96b7",
+      "authored_program_sha256": "f26b3c3bf19e32666f4f569c4437e120ce32b289ddc4949b5474652e5fc2da4b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1614,7 +1614,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hardened-scales",
-      "authored_program_sha256": "6037e0c7eaedc2650c09ec93fa570c6f78aa8b70772982c55c81c3148c5f6c56",
+      "authored_program_sha256": "355806bf87ca8b21490b54d92df01cc3d9df10cdfb26a929df7784dc981776ab",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1626,7 +1626,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:harmonize",
-      "authored_program_sha256": "73ff0a423982de6a959a3121678ce56cac09634aaae062706f635142e7bf9cf6",
+      "authored_program_sha256": "09abbaf215ae42f44bc0be359d906352136cd76a33483ff24786cb641be1826a",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1638,7 +1638,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hashep-oasis",
-      "authored_program_sha256": "d93449ea18c1fd5011c5a7063811819cb94ef41565bc08b9eaeb6e7f374e41ea",
+      "authored_program_sha256": "e99173732b1a34ac6992459a7efca568dc2f103d5bb5b2c239285c87368ae3a7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1650,7 +1650,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:healer-s-hawk",
-      "authored_program_sha256": "ebefd489516eabc974d01ed4eb78a1f68b83843acfa473713ec4f192b622c0d0",
+      "authored_program_sha256": "0abe9d289a8c4e1c6ea383afd0f6ec2b88f690fdafd883a6bfc9f161cb97c09b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1674,7 +1674,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hero-s-downfall",
-      "authored_program_sha256": "1c5d8076b811c02f93ac473fcd5b0e25ddc5441027dd275b6c02429e2f381e94",
+      "authored_program_sha256": "570271bd9172a33e5fcfd424edd3691e9905478b45ca6c776aba622b31366e38",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1686,7 +1686,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:heroic-intervention",
-      "authored_program_sha256": "0f6d188eab38195a52b091ce495a22ea7e71dc5e7f9612690d5fbd03238df6bd",
+      "authored_program_sha256": "7fa6a4c6befca9453622f4fcaab3ef1cf624822fd18a299431ecf672d22e71f5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1710,7 +1710,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:high-priest-of-penance",
-      "authored_program_sha256": "32b8cea8a7dffc1a6cd0b48bcb969a683bb186efccead4626fdcb8783f163d2d",
+      "authored_program_sha256": "5684c34a1008823598c044f71d5b2ec3f45ccb9692154a960f7d17fa74c6c547",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1734,7 +1734,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hour-of-promise",
-      "authored_program_sha256": "ba3c9b8f4c34944bf56ecc3da59c1c51ee6a83f30e5945e97c74df0fe4a76f39",
+      "authored_program_sha256": "1ca0fd8f3665b715c03b9438664fd76d9fa3b9f09b121c41de8125b59f190adb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1758,7 +1758,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:hydroid-krasis",
-      "authored_program_sha256": "476ee87094558feb2129cbb3e528255eda2567f594f7947d2689f066c2649602",
+      "authored_program_sha256": "f18d6e2fd916dc87f3d5e629f73d476404e93be2f7a3b6e6cba54671e737e480",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1794,7 +1794,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:inspiring-call",
-      "authored_program_sha256": "3a27f204e3de5ab24d481731cb47f81e2dc1ec95d7be49e1982957f3d311afec",
+      "authored_program_sha256": "b751d99b26bbdfeeb3d41a6cc0acf2b2d0c1b40318837a73509996c798c544b9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1806,7 +1806,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:inspiring-overseer",
-      "authored_program_sha256": "5507595f659de65739c5cce65edbbac111b05e40602e828b17255ba2a2cd7860",
+      "authored_program_sha256": "aad08fdcab70a70e81c97774d4876bc3c5e9d1a282abae8799081159128ed812",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1830,7 +1830,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:invigorating-surge",
-      "authored_program_sha256": "a76c058a7e8d54a511b5c80cd9ea7c4ca7be98e4f4d0c3510dcee3fec1674f87",
+      "authored_program_sha256": "4eccd7c69510c4b64d44fc3566489f21610dcf305fb62059c41dc9b908c72bf9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1842,7 +1842,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:island",
-      "authored_program_sha256": "b2856533a4f47d1d00b1c6560c6fce6ee4f6e60c8c061fd1fb652f079178818f",
+      "authored_program_sha256": "82794679246c02a9b90a70602e21069ad3381b01355c01f402e8569e6580a155",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1866,7 +1866,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:kalonian-hydra",
-      "authored_program_sha256": "19a3e6b465c7ebadf5bf201d1d8d84b36d40d9dfa7928a2ad66b3e2bcca2fe0e",
+      "authored_program_sha256": "7fae093b8751c27c9350c60e0d70498a5a9e9556c59e62a2fe2e31ff348a76a6",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1878,7 +1878,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:kami-of-whispered-hopes",
-      "authored_program_sha256": "c293c851e2d32ffc7309a04301f9718b133c8604532debf465abd4ea628e7ea9",
+      "authored_program_sha256": "06d4f0a34aa79821299c3bbbe78a2a4294a42f0a54cfb02d078b4b0a59c0b4f9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1902,7 +1902,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:karplusan-forest",
-      "authored_program_sha256": "b55ddec6e2ce4f7695ac027971a81b174197c4738177d21883f3682ce240e378",
+      "authored_program_sha256": "ccabbeec205ec2e0367b9cf5872f987807290ee9d115653380b2c982ccc41519",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1926,7 +1926,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:kessig-wolf-run",
-      "authored_program_sha256": "100b052c9240a2f54d6bcaa1828c5b09f212b8ae64f31a7d9f4f68cc6504e229",
+      "authored_program_sha256": "94feffeaab33d47d2ca83e059b84d41c646261989fe0a22930f684ac3486eb67",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1948,9 +1948,9 @@
       "name": "Kodama's Reach",
       "source_facts_sha256": "9393bbc20e149d75892fc288620a2a1aea32fe57f401d081c1b482bc995a4704",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:kodama-s-reach",
+      "authored_program_sha256": "d428cd8eaea21219b6224ffc5c1144ba5ce3727a1963f5075102ebc8c359ea67",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1960,9 +1960,9 @@
       "name": "Kunoros, Hound of Athreos",
       "source_facts_sha256": "54f2a4c4287b85d50e3bff3c0a5e4d5441e878bbd568642676ffe7c224861da3",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:kunoros-hound-of-athreos",
+      "authored_program_sha256": "c60677377f54024dd59275982aaf662cf5c27fcf8d842449753f524bd57011cb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -1974,7 +1974,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lair-of-the-hydra",
-      "authored_program_sha256": "dd21134f2b642fc2d08145887161c457080963ef229f6389a7cbd83b87ad9ec8",
+      "authored_program_sha256": "77c1b1addf1923627a2255d427bb8a9f99235b5922d0eed3248a0fd1aa85ebe5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2022,7 +2022,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:liliana-the-faultless",
-      "authored_program_sha256": "70543c0b0a238a2dd83deece5e6f244d03e0b9b6cd06016419a5d4d977ca5bf1",
+      "authored_program_sha256": "b266c2f43e081865d56979858ab3592cc99d54504738f1c9c589ce1f835899c0",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2034,7 +2034,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:llanowar-elves",
-      "authored_program_sha256": "41c0cd50fbddffa20fbfd431fc04c6dc9a0fca1eed002f28b53b94940dfaca91",
+      "authored_program_sha256": "bb30d4844f25a0a091bf00933c65fcb743f957367d8edba810a7aa60e6a1a24f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2046,7 +2046,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:loran-of-the-third-path",
-      "authored_program_sha256": "7b6d7f9cd52fbb7ba2590f1a34d6dd32649018b6b3cb92a5a4075b2845107492",
+      "authored_program_sha256": "7dbdb1c9235bd2a6bc759dd051a0e676a875117c9a75ec58fef0764b58d48046",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2058,7 +2058,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lord-of-the-unreal",
-      "authored_program_sha256": "eacf75d66eb6a1621165b79e8c61d6100600a5acf3264822eedf8fbca48e86a5",
+      "authored_program_sha256": "57f14c6d465d72fc8611973347a22cd3c2d356e03a052e2e5f68171e6520f291",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2070,7 +2070,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lotus-blossom",
-      "authored_program_sha256": "6f8eabded873a8ef98c404ac0dcd819bf56f28b0ac6e0f416926583c27494193",
+      "authored_program_sha256": "82bb27493592818e15baa474183ab563f45c5a1d616865d5b0e3d6e84324154f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2082,7 +2082,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lumbering-falls",
-      "authored_program_sha256": "9ed7d6849aed662671ad8a782bb03f66027deb24e7332f5560a9330db97b2b30",
+      "authored_program_sha256": "bec9739c869947c846b9c90a975ac70f8487797c8a13670efa9e2af6e0915ce9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2094,7 +2094,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lush-oasis",
-      "authored_program_sha256": "d3b58ffadb4b7def463c7f61bf474fc764c81c639a50b09385c15829b2f07d0e",
+      "authored_program_sha256": "597acc9e2e050f06dcd6cf59a2a50a695a50c4fc9bf73e39d868bce9271fab55",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2106,7 +2106,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:lyra-dawnbringer",
-      "authored_program_sha256": "125e8a67ffcc1becc6f11237a8284d46c6facceac81d3d8680b59ff827411105",
+      "authored_program_sha256": "3537c99925a18e8add22dca3388edf132a6f35aeffe44f55064345dd38c84059",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2118,7 +2118,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:magus-of-the-candelabra",
-      "authored_program_sha256": "367aeaca6b09dc1ee9a4297ba8d17ab97224941bbff38e3f84787ca7b0e8ceea",
+      "authored_program_sha256": "91ca054a0207739b3ba44195f94c030fcd2dd0d777dd51b17a97efa4a27aa4a9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2130,7 +2130,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:mana-confluence",
-      "authored_program_sha256": "58aa61e93606e607fd00bc5ace670b9a5aca94ef65bcf2710b605f60d4898308",
+      "authored_program_sha256": "397393264373523f9ad662290d8859df99f8b85da1605e4af31dbd931140c663",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2140,9 +2140,9 @@
       "name": "Mana Reflection",
       "source_facts_sha256": "c659c19f4ed3280b60f6e1fcf04212ea4478a12f43e0d874d2bf0118aa4d1fe6",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:mana-reflection",
+      "authored_program_sha256": "17ce85488f415b24cf52ac1b5e11640446459bf08e5f097b3fa4e2d7da67df38",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2154,7 +2154,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:managorger-hydra",
-      "authored_program_sha256": "7698ac0d6c4eba1a6fc24bc50e0c236e080d7b11c8c6feab356022694d272925",
+      "authored_program_sha256": "f99fd933e86e620238ae8b870c43964b6ff1cc7ad8eabf839b953272b0036831",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2166,7 +2166,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:marauding-blight-priest",
-      "authored_program_sha256": "41dc1722a6406a3bd6b2ab75980a57a1121f5a525d19eb2463cdcc640eea76a8",
+      "authored_program_sha256": "341d74fde677b4c73432e7c6ffb8514a48ff1ba1320a3e0e7983897cd3261210",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2178,7 +2178,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:marble-diamond",
-      "authored_program_sha256": "775566a752349a45fc388349b94a6245e76d191a5604b9f1ab90530d68cfb059",
+      "authored_program_sha256": "c06ea952d88fa4b63a6b47e0dc79da198dc9f10e12f68e8a7e7479aa1a79ebc5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2202,7 +2202,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:marsh-flats",
-      "authored_program_sha256": "56c87fb7f26a943b9e4fdb99b0ed2b8ebf1e88439bd53ea2c63acce500db0870",
+      "authored_program_sha256": "67be469b4470ffb0d518dc77e019f3ecbff1014085f1eddf372193f75d244122",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2238,7 +2238,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:mikaeus-the-lunarch",
-      "authored_program_sha256": "1a630dc3da9189783d7ab1a67cd506add4877c97e244854a4b5464b39d7e3542",
+      "authored_program_sha256": "508b1446679ec7a4dff6b6db38928f7a853fdcdb4771d120b5d4502e7dcfdb6f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2250,7 +2250,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:mind-stone",
-      "authored_program_sha256": "2af4c7df127340118e874864a2473e578ef7163536e6d97ae3dec4a477dc915c",
+      "authored_program_sha256": "79a062ea719e68aed6136ea3a013f0dba9f2c047649d91d08727739370c7b868",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2286,7 +2286,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:misty-rainforest",
-      "authored_program_sha256": "181e9a9d06576c099019087d447d511677358f0b6a0af97be5919ebaec7f98b5",
+      "authored_program_sha256": "9f20425bba8ba2079da618bc4f4605324ec62fa5b4a06a56658734c1943b1e09",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2298,7 +2298,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:moment-of-craving",
-      "authored_program_sha256": "9ea4ad4155e5dbc6502348e4ce8b1a3bc7ac06dbfe8c89bd9d78b5da8c849d79",
+      "authored_program_sha256": "c060d2e6dd852d4e6f3c6697686eeb9228e45640312de3a9238d62e28b11da77",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2310,7 +2310,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:morphic-pool",
-      "authored_program_sha256": "f6baf3d19ca9b59d555a19fe26dcf929dd8622bc681afe921c372a823212233b",
+      "authored_program_sha256": "75ed2d5c3e3a35340c37ac0c8389328b61820d2473baae6aa3b2566fa9e14cde",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2322,7 +2322,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:mossfire-valley",
-      "authored_program_sha256": "2dc7c414b259d503261035652c478e73335198ee3188e1994d78e217e86dfffa",
+      "authored_program_sha256": "ef819d81b0ac668f076f84b0e612ef0377cea02641bb02581db503da13a8fa44",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2334,7 +2334,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:mountain",
-      "authored_program_sha256": "a01b3a0304aed732616605a1e8c3bb75b73cc8c254a24b95164c0c307a2f88be",
+      "authored_program_sha256": "f8143d131c62523f4d9e1e79c4979aa299c476c5a85130bd67c8124de4127511",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2358,7 +2358,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:murder",
-      "authored_program_sha256": "a57945d82e79ef4ad9aa853b719e505c234b40c207bdead04893e4c04d9e84ed",
+      "authored_program_sha256": "2b19e870cae70cdf43bd08d0bc97dbf1cb543abeb2e8f8fff561a7af8b479a6d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2382,7 +2382,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:nature-s-lore",
-      "authored_program_sha256": "d91f50cd2a838d46d86ccf6f82ab1c59e73525d93b206b01aad03de5e2d0a57d",
+      "authored_program_sha256": "8473520277e25428a27965a2316c229f50bd86e959f1559a8b4611769f224e96",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2418,7 +2418,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:noxious-gearhulk",
-      "authored_program_sha256": "267da48f2d9730f525b907da640d7b1037178f96a75991461193fcb3740086f1",
+      "authored_program_sha256": "1ed8e449b3cf1acebdb241bac9adad449863f4217641d08ea9d5b4b2c505c869",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2442,7 +2442,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:oasis-gardener",
-      "authored_program_sha256": "6466c39dcf7501313fc59f38e97e8ca47bb5441205325abde61474310b05d5f0",
+      "authored_program_sha256": "8393eda757de4d2ffeca10cdc6b1356ca90f4f53a6dd3fea9864188d29501cce",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2466,7 +2466,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:omen-of-the-sea",
-      "authored_program_sha256": "0da1454592f4a66060b80088caaa858e446db5b6786d695c7be37781bc88f9ea",
+      "authored_program_sha256": "d11f947ac149113136717c5dd8c773ebe8c85b9bb9c3396ef8cfb68798b25f1f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2476,9 +2476,9 @@
       "name": "Omo, Queen of Vesuva",
       "source_facts_sha256": "cc47ee1aeb060dea6e141d5425d3c2c4d56855a70a693c9983445d7d556ca02d",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:omo-queen-of-vesuva",
+      "authored_program_sha256": "d2017efaec771d6c3ae8f848038783ad68ceff6380b48886df0904325217775b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2490,7 +2490,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:opt",
-      "authored_program_sha256": "b80e304cdf57259fd9914481f4021870b53885bf61ef9593de041c5b0e1f1f78",
+      "authored_program_sha256": "101f33a9eec0044abe2f0e1af9ffde7ff9e18bad0db9db186f82555b506b44bb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2514,7 +2514,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:orzhov-signet",
-      "authored_program_sha256": "db87cc25f1a80ffd4829889bf17a51cd483483eebcd469f11c011cb8fa2460c0",
+      "authored_program_sha256": "2b8d1eca40a612e87720237d94d880453a84df0d2281cee68fe50cd3c45c0ca8",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2524,9 +2524,9 @@
       "name": "Otawara, Soaring City",
       "source_facts_sha256": "80d5b1b50d59f78b5f4b0d7af800227b056f3fd7c10b02b63ea44ac496ae7370",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:otawara-soaring-city",
+      "authored_program_sha256": "350796d3357f133c4145bb5f902ab3dbdb3df9aa971f4c088fe596b2bf013dd4",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2538,7 +2538,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:overflowing-basin",
-      "authored_program_sha256": "ac652092a22a6eaea9066d3c9818a5a9229a18974ff2be56b2c85c5ac014db1c",
+      "authored_program_sha256": "8c0792c693a1675295dd952b7bd7bdc5144a72c32ebc4470cf448be8ad192032",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2550,7 +2550,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ozolith-the-shattered-spire",
-      "authored_program_sha256": "f381648b4ed2028864ffee67fe9a163efb9caf82c9c0660fae0427fd6ef48b2e",
+      "authored_program_sha256": "15349d9a62281d7ccc5885f72214be7e846eed0cf1dbc475f2f2c85005f91dd9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2586,7 +2586,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:phyrexian-arena",
-      "authored_program_sha256": "b6959f0556149ec8a7e9c18c4692bff1316b0b3ad87188593ad2625a53a03b75",
+      "authored_program_sha256": "aa58d99208cde86f967805231ef4729eabdf99e5ce3b5cc49dc55c90a5a4dec0",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2598,7 +2598,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:plains",
-      "authored_program_sha256": "880b1e60efb98cf411c48cc35e59072a1aafeafa35704e7750f3f45611139371",
+      "authored_program_sha256": "e9508d1721d6e182132028c51c168274112c2b0b166322ebfb41297a54208d7c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2608,9 +2608,9 @@
       "name": "Planar Nexus",
       "source_facts_sha256": "e3cd01963cb015502f2de50776af8b7128c4c01ef997728b0b1d61666f95cf0e",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:planar-nexus",
+      "authored_program_sha256": "40cb49510af18581f553ceaa304bd13e2ac73c7a349ffb40c7cf1812de6489e8",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2622,7 +2622,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:polluted-bonds",
-      "authored_program_sha256": "96e2c33c5d655c92c3c087a3aa20e3e3fbcd14638992f9c6faa6634ded2cadd5",
+      "authored_program_sha256": "77efa6010c5bdffe9459e68931c06700ed6f61a506cdb12fdd0d89d8e03471b4",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2634,7 +2634,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:polluted-delta",
-      "authored_program_sha256": "f716573d4fdccef1287d9ec707b18163b5fb9d4494ce53670b0eda24b87bbef4",
+      "authored_program_sha256": "c36825fb5058b4bf654f5c0b99b472736fdc38de0e25176cd44af7b6379c0a98",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2682,7 +2682,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:priest-of-titania",
-      "authored_program_sha256": "3bb305dc5ce7c3297eb6afbf2d64418ca0b9cb9125efc59d0f7a14f501e5166b",
+      "authored_program_sha256": "9c2e43cde343d0cfd9350285931cbec9c90ba0cf1b5f84c888955e19e98318c7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2694,7 +2694,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:pristine-talisman",
-      "authored_program_sha256": "7fd2dfe740b81e947406a53b60dceb4b32ca44b3c525f83a26dd3113b3e7ce0f",
+      "authored_program_sha256": "835d99b15afc98700dc62883d298cb3edd05d4ab9c8d7832e8c6585193329321",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2718,7 +2718,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:raffine-s-tower",
-      "authored_program_sha256": "880e37b551b371a172af612975b958e445d71934954c438a1db28485b13a61e8",
+      "authored_program_sha256": "4619acdf94f5438ee9e7c80535543d320b8935da1bb0e61327bee30421c036ca",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2742,7 +2742,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rampaging-baloths",
-      "authored_program_sha256": "f98d25632f3398b6560dca15193574d4f0cb86d8958868a852bf511bfdb17cac",
+      "authored_program_sha256": "29e85b55538d9d77612be09822746cd5af6104b3077e5a5f8281f6b20a789e13",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2766,7 +2766,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rampant-growth",
-      "authored_program_sha256": "9d22fdf66494b7cd7da59f8d9f72f1a16ad24c29b3b08eb0bf97a26cf661a926",
+      "authored_program_sha256": "2e020104c92a268e3b66436e55fffe137808b8b2f559965af8d04063c7b8c10c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2778,7 +2778,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ramunap-excavator",
-      "authored_program_sha256": "b879056815f195924f6d79d7bb6df0ae31db927ac6d1ca2b3c0462fd3ccb9639",
+      "authored_program_sha256": "684ccd2de6359876da0a5cb4842d5600f3db9f6d48f5865f4fb70d9afe58c428",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2790,7 +2790,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:reliquary-tower",
-      "authored_program_sha256": "3371e1e93a12ab19b03122ee2a0267606e941324bf7b2a5322d126ef8c7f9465",
+      "authored_program_sha256": "6104cce541df8ac32e9531fd1236e793af3ee43c1c2032562e3f7f844634620e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2802,9 +2802,9 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:remand",
-      "authored_program_sha256": "39450c71cb09c54e606bf650f56e674b2c9ade260808e3bd71c3586640114e15",
+      "authored_program_sha256": "cf359341340d696e15f931add234a7454634ad8fa79208b9312792bee0fde487",
       "fixture_program": "remand",
-      "fixture_sha256": "2fb671206b14eb8d703d79094d98652cf952c5aa150e362cf2089aef64c664f4",
+      "fixture_sha256": "2bc1c8aa5a5429f53ec31c92a5630f616aed9627d1d686c4dd2b884f955b58d4",
       "production_certified": false
     },
     {
@@ -2814,7 +2814,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:replenish",
-      "authored_program_sha256": "3e04bedda11191497795367c24b01c6be1c20087389906afc626a5ea74e942d4",
+      "authored_program_sha256": "299eefc051f2c6cb7bd3f9a9472a66ab8b94c2960f5c661d1feb4567bb7a644d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2850,7 +2850,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:restless-fortress",
-      "authored_program_sha256": "7a9327f0b3d979a900f6ca5f026570b8c3938214d138fa1ebb84ae13b761d5b1",
+      "authored_program_sha256": "23967ec335e6f39cab92fffde97eac2e4ea7e3d4a16cba5e49bbdbf9ddec5ef4",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2862,7 +2862,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:return-of-the-wildspeaker",
-      "authored_program_sha256": "e77a100c17d3378ca72de8ff519863886d4b49867d5b63789a422de004a60314",
+      "authored_program_sha256": "82a1a71da7468b05b0ca7c2d8dc8108d01244f7a819e3e8c8a0c684f5ee505da",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2922,7 +2922,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rockfall-vale",
-      "authored_program_sha256": "3358a2864a91968ecb3deeabc9fef2a9a872a43f1b903121ab9c9edebffba932",
+      "authored_program_sha256": "5a876e3041da7df680c5e91ad83e5995de74d4d41e71be6a0966405da567abe3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2934,7 +2934,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rogue-s-passage",
-      "authored_program_sha256": "28c368940f1f23b767e9837e06a1f771784c24e82f5bdcf7e3168d8b6cc4f14d",
+      "authored_program_sha256": "7ba720ebe75c89e2f95de85d4eb20ebedbec3b7b7d6916466ab8daf7ac00174f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2946,7 +2946,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rootbound-crag",
-      "authored_program_sha256": "5d203bef7a5f9987a871248a6243a143bc5be3b41ae9b0e96640bbfca61df033",
+      "authored_program_sha256": "3fb2abcbdb194df8417ad954b8db71fa4ed306658e74e3bdcf9005a653c09c7f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2958,7 +2958,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ruby-daring-tracker",
-      "authored_program_sha256": "753d11b739ae05d411b0718cc4d27c3530d6a16cf7bd464deda17747832fa92a",
+      "authored_program_sha256": "9de442926e1405e4a767c3b0b6f2767e79f76135ec0884296397622249801def",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2970,7 +2970,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:rune-scarred-demon",
-      "authored_program_sha256": "83aca0fa03292ef9246e8f04dd799f11706694af8041f9af39c48d30e1b3707e",
+      "authored_program_sha256": "130904273a757bc09011bd7fa4ef42ee8c1973a6d1fccef473c32faad1b854ea",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2982,7 +2982,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sage-of-the-maze",
-      "authored_program_sha256": "50fe7e7cbaa9941feca7244e394f3541a8107626995cdb8a45b1537a014ce5bc",
+      "authored_program_sha256": "6d232039988003daec7d9903756532df7a0208e5449675d6727d1891126a3f17",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -2994,7 +2994,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sakura-tribe-elder",
-      "authored_program_sha256": "6b938b6cd12e1cbb5eb3edced2c713c83e92b77f4f788083f699276d1ff8d8d7",
+      "authored_program_sha256": "54304b1f98b2250630b4004ddb40674c821aafc35c52542241b5c25f0274de5c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3004,9 +3004,9 @@
       "name": "Satyr Wayfinder",
       "source_facts_sha256": "5427cc3dd46ee6d3f4aef7a9caab5de54ac7ad2f8ad858ad7856e35defba1aca",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:satyr-wayfinder",
+      "authored_program_sha256": "e9d202f08e1483d9760c822d3c8e7823ed548d26c1390ca58b4eddbf0d24ca40",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3018,7 +3018,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:scalding-tarn",
-      "authored_program_sha256": "e8cadadc8fe35a5dc346e44e8e79539038b54ecd868f33b9529cb5df5e42aaae",
+      "authored_program_sha256": "2d4d1e922e2f244d34791351582136ec312569672bec39dd1df2e42e388832fd",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3030,7 +3030,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:scoured-barrens",
-      "authored_program_sha256": "75f8de37b96ef1d8fb902769add0d491f6f9bec35f947994637c09c162e83a4e",
+      "authored_program_sha256": "04571446667ad66a98a69f917917397864da671ace2bbefc9bb05f85027972e9",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3054,7 +3054,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sea-of-clouds",
-      "authored_program_sha256": "848c65d7a1d2b16eb69ce986d55e918c13e91749421d6b41caeb821e1ff1958d",
+      "authored_program_sha256": "fae0bfe6ed3f997f727269eb8657873d1ff451501c5785d8d9059b83fdc5adb2",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3066,7 +3066,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sensei-s-divining-top",
-      "authored_program_sha256": "e566bdf5c22619f03190346ccfeea1bd6fc7d1ea154c2f5fa7b901882f4b66be",
+      "authored_program_sha256": "29b49ac579bba676d0b5c8f5d31756d2ac30ce7f8065e742e5d9429e790df62b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3078,7 +3078,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:shattered-sanctum",
-      "authored_program_sha256": "9ff1487610696063aa3b9210bf50fded71cdcb75a0dc320a20562b43028d00e8",
+      "authored_program_sha256": "b871018abda7c20984cd251c00aa3158a52b77434931a823e738b83a1c26d119",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3102,7 +3102,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:shipwreck-marsh",
-      "authored_program_sha256": "dc7ca6d100dcd041184d54cb37b9c4640bef5910a7819d73de1acaf8bcb9d14f",
+      "authored_program_sha256": "4fafe0fee6eef60e253ae5c7534e0aad0b9e0c273271ea3976c9fc73c5ddc17a",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3126,7 +3126,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:silent-clearing",
-      "authored_program_sha256": "518d148767a5013a6a98a2409eb6819a10a8ea64aa56dc2610bfecc180800057",
+      "authored_program_sha256": "6996f505b7550399bded8b89c1db271c1ee74db68d0a9c65a7ea33c433b81781",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3138,7 +3138,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:simic-growth-chamber",
-      "authored_program_sha256": "f0105af28e886a42b6849f41e93342feec1ed8cd6fa2f2271593dbe28a5733b1",
+      "authored_program_sha256": "23dca0ddc1dfed44089033c0e18676805552a698dd48860225387c0d9256f33d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3150,7 +3150,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:simic-guildgate",
-      "authored_program_sha256": "6aeb55ad4ee7451412169de4acb9824944fc1950c669c1a0267b51e1777e9793",
+      "authored_program_sha256": "23354bdb5b79b4d3f1bb09e7ac9ea8ce2f561b07c7d31a7a9dac3aad0b056b73",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3174,7 +3174,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sol-ring",
-      "authored_program_sha256": "93fcca1e711580c3f9a042fdaaac5f18963577bd8144107e37d56f978e69e238",
+      "authored_program_sha256": "0e44b179ee491a452dd565cfc73ab59cac5a46328b5eb339981edad797636970",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3186,7 +3186,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:solemn-simulacrum",
-      "authored_program_sha256": "d2b2422d2c0ed26d8a0b28d68f9f5433a849b5dc95040042d44f1939000384fc",
+      "authored_program_sha256": "b86805e7a756d048ac6b649e5beb37effbd9292541c93346cb9ed188550574d1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3222,7 +3222,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:spelunking",
-      "authored_program_sha256": "e590141e3c0c00262991bcde4abf9c21c9035b4d6a24358dafc68425f294431b",
+      "authored_program_sha256": "a0fb95bc0a570ba7cdfa808170dc876ae9825e508cc6bbe840b60e1ad54c1dff",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3234,7 +3234,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:spire-garden",
-      "authored_program_sha256": "7689133eb9d4756a1508b2502bbff4b230238af0b6a8b66dd9ed4e0f913e190e",
+      "authored_program_sha256": "c3a8268651e75a56d563430e5b33100cb4277415ad76592f313ce0acf524d3b2",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3246,7 +3246,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:spirited-companion",
-      "authored_program_sha256": "927918bb56bae47c6f067077a195c305b71678a0ce09b4f1a4b76a6c8ac0f9db",
+      "authored_program_sha256": "d6d01e4fcee64d067e59f30de492ef6a8bbab3dfd34190b0d7986e1d58a0d035",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3256,11 +3256,11 @@
       "name": "Starfield of Nyx",
       "source_facts_sha256": "7efa020a1ba7308e7f49553538e9008d428653477673f68c306511fac465c87a",
       "face_count": 1,
-      "status": "fixture_only",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:starfield-of-nyx",
+      "authored_program_sha256": "00abe05dd5ae5eaff67fff96fb4ac7021366b9f0150cc1bb59b3096c631ca217",
       "fixture_program": "starfield",
-      "fixture_sha256": "a2a97b931fedbd000ddc95a6b1938f439753233c45777ec6c55f4d906850e06f",
+      "fixture_sha256": "22b496b85f25e8ca65f9ca7ffbe87ecefc36c37b07e45345b238cc3bafaa16cf",
       "production_certified": false
     },
     {
@@ -3280,9 +3280,9 @@
       "name": "Summary Dismissal",
       "source_facts_sha256": "e97be7b404ea73e6cf98acaa26f082286c6163fdbfe94f9304efd139468035f9",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:summary-dismissal",
+      "authored_program_sha256": "4826e8c595dabd80921a83bff44018d00d573db2c9252fe5971b17cd3296c18c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3294,7 +3294,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sun-titan",
-      "authored_program_sha256": "423acc7e33d1b87c07756b62d167cd2b91662ce7434b8ce54e1684bf2f38afc6",
+      "authored_program_sha256": "960cd00ebb6e7b392d37c298f87e147bfa7a39e60b05f84d579d6d23a0379174",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3318,7 +3318,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:swamp",
-      "authored_program_sha256": "6b863d11e8cc1b60634e63c7034df1f1402f19b3dba21d4352b55e43a8b9fcf1",
+      "authored_program_sha256": "51919fce02e8893fad8dce62f2a057290fa9e2b91965c58b388cc240f3b3d747",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3330,7 +3330,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:swan-song",
-      "authored_program_sha256": "4142d2db3ef826d3ba6e72ce76ceb5219d78e1b29da3ca5adab5d7be808e8181",
+      "authored_program_sha256": "ba828533cb2236ca248a2684734d057c30d5fb250856770a652cbabcc031cfe3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3342,7 +3342,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:swiftfoot-boots",
-      "authored_program_sha256": "c06029754703d05564dc9829be195b7a4807c14ec05cf92fd8ea20d07558be3e",
+      "authored_program_sha256": "9999e1e586ae7f9e438351803cac75f5ab1c45132bc1747879d1a6690bfbbd0f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3354,7 +3354,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:sylvan-scrying",
-      "authored_program_sha256": "a99b5792fac078c6015fd60044066a7959834abbfc2e10b4c323bba377e71fd6",
+      "authored_program_sha256": "d5ed90c5153cdfe974d42801d4ae029fd61ac9cee1094e3b08a126c841972f0b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3366,7 +3366,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:talisman-of-dominance",
-      "authored_program_sha256": "250e9d1a6c7ebe5aa121a8db7ac4313936e80fd256ba979370d76ffd700ced78",
+      "authored_program_sha256": "0d47029d6899b713ea5869693740d4590dc48d25bc141d1d684b06ae0fdaff4f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3378,7 +3378,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:talisman-of-hierarchy",
-      "authored_program_sha256": "f610e0cd05adf9972ec068e7a80cb65d5f16d9216e6ab6ca22abf158a237bbae",
+      "authored_program_sha256": "f1e88f992b883851a7f997605b4d97cb9913424b20483261e657ffb1a22bde56",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3390,7 +3390,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:talisman-of-progress",
-      "authored_program_sha256": "a0c455d031b2c35dde474a72157ba56f85a4797251863ebff560fc39b3782dd9",
+      "authored_program_sha256": "cbbb50f79160d7835533d4f5aa457f389ebc5fee48876402654b1da43c8a58e3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3414,7 +3414,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:tatyova-benthic-druid",
-      "authored_program_sha256": "2f72f3d044dca796e216539a76780f8f3ac4208eea02f2b86d655c0897183919",
+      "authored_program_sha256": "8299658cb8f804afc0de368e2a9712118b343cfce729c2488c5aadce448097af",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3424,9 +3424,9 @@
       "name": "Taurean Mauler",
       "source_facts_sha256": "6624860e65751346d153be2b0c54dbe1792771b4edc22a0e1911e8733c1c32cd",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:taurean-mauler",
+      "authored_program_sha256": "98417c7c1c83b37ee1c80ec24af8229129a2ab97458e6f4d739453358fd3906c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3438,7 +3438,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:temple-of-mystery",
-      "authored_program_sha256": "9ce31ee3aaf23d0adb6a4fa3cfb46c5d71a0cca4f3281a5ef86bd35b2935e6e2",
+      "authored_program_sha256": "c6e01d18d7657ae14ff4beb915a498b4ba20b98428a525214fa668884f6f1d71",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3450,7 +3450,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:temple-of-silence",
-      "authored_program_sha256": "9903dc1aef66d676a4727e4e223ac1fdfeeb95b8f334660eb088e971997fc25e",
+      "authored_program_sha256": "711c0798990b96ab1918c4fd179c6c14805d0a06dc070eb9e088be28906b5d0e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3462,7 +3462,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:terastodon",
-      "authored_program_sha256": "0ce704fb51ffcd55fa6ff7e435f41769cf1053766773b50e29a702191111bf70",
+      "authored_program_sha256": "f1a3b1471559927b7dad10f2d739ee7f545f1f11183ca46fe43b872c0bf19088",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3472,9 +3472,9 @@
       "name": "Terrasymbiosis",
       "source_facts_sha256": "5e8b8670838f9a9c3d2d1fe37cb92a84914ca67923aba293630a29c681149d1f",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:terrasymbiosis",
+      "authored_program_sha256": "5cd0b65b215888f816d0c8df693d8086538f31b2ea5d8fa430841f90b2d7651f",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3510,7 +3510,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:the-meathook-massacre",
-      "authored_program_sha256": "363a89f686ad840751ac8b6c9c8dcee908ed6828e900b284684134374f5f2d9f",
+      "authored_program_sha256": "efcdd47049f8426ce9cb2f3a4ec61b850dee0e8e42379355759033352be4ed2b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3558,7 +3558,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:thought-vessel",
-      "authored_program_sha256": "f8114dec605eba56055fcc2ba4270dde0e6917b9efdfe90af83f5c977f27bad2",
+      "authored_program_sha256": "83879977ad9f3208a24bb67b134dabbca11a5fc91d0db7a75699179c393c44d3",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3570,7 +3570,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:three-visits",
-      "authored_program_sha256": "bc306e689d3562c876ee522676987e420a6be20142a6476cfc89ecb14b940f50",
+      "authored_program_sha256": "192bcbde9c9f5c93a7d8893aae02cb104fc627082babd9a3d8d8d82b7b96abcd",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3594,7 +3594,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:trading-post",
-      "authored_program_sha256": "9d4087da00d2ed326d3d4dde324fc829853bd31b2a292a1dc532c3b9703bb4e0",
+      "authored_program_sha256": "5f794559619930c3ce283152b2f5d11a70c0120a86e772f4aeaa3357042e636d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3606,7 +3606,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:trenchpost",
-      "authored_program_sha256": "649dbde047ca0a38918d057fe1a9f6d7eea895063ee284051686baf3d12fb3b1",
+      "authored_program_sha256": "a5c508a49aa9fce62991d055dc0cf2995ecad923e95e3d5718c0e0d9cdead213",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3618,7 +3618,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:twinblade-paladin",
-      "authored_program_sha256": "22147b43d1f9748b5f4b3e668a6e6ca5514459ab6aa3bcd81a20694c7d19d522",
+      "authored_program_sha256": "b49d81717beda5192d0b66440ed5eb980d6a68152f86530c9dc48dead02bc2d5",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3630,7 +3630,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:ulvenwald-hydra",
-      "authored_program_sha256": "cd7ecf5afccefc0fb50e29008961335c2aa61657698b7bb90181ef5d2cdabd5e",
+      "authored_program_sha256": "5394a8001a366a3488a4ef108076cc222abb78a3e588d8f78016c233964f3242",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3642,7 +3642,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:underworld-coinsmith",
-      "authored_program_sha256": "458f3d0c622454d00c4b51545d05ce102ea31879723518bda335c78395376dc2",
+      "authored_program_sha256": "4e364525dd18780bbae5954951ca7ae3b5f0a68ab39139d4d2dd320bb1f93822",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3654,7 +3654,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:unleash-fury",
-      "authored_program_sha256": "f7ca5257975afcfadbb5287695e652a05506ae2ec83414085d5504e75aa66622",
+      "authored_program_sha256": "cd4c3879d39da520c35c710dcd041c24a911bb934a35d47bbde9bd0224c75a64",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3666,7 +3666,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:unnatural-growth",
-      "authored_program_sha256": "2e20338b27e713a104a8add518d8c3588e39d46ba3d03c111e573731586bd155",
+      "authored_program_sha256": "b5cc1a6b27d848174e2c6fbf4c9e9ab06f7645a99a702810647aee553e1581e1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3678,7 +3678,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:urban-evolution",
-      "authored_program_sha256": "07a128cf5fb140081336a7cc6c08044eb125d98907172ac1b6c55b9c17989585",
+      "authored_program_sha256": "016b89c933d8a11de0c9f91d61a6f1d9d84b557747c38ecc5317d44ee63ca5fb",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3692,7 +3692,7 @@
       "authored_program": null,
       "authored_program_sha256": null,
       "fixture_program": "uro",
-      "fixture_sha256": "e1cdfc24da3b32b919dd44b9662499e27f591e486528fd5cf7fd600e509073a4",
+      "fixture_sha256": "1222a2faf7d572dcb99e800e53aeb6aee8a26d3dae6e4b07aa33cbb01354198a",
       "production_certified": false
     },
     {
@@ -3702,7 +3702,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:urza-s-cave",
-      "authored_program_sha256": "9b92da90c4c1adf3b319defdccd52a188241c10f9dac87bcb37573216e5dfc75",
+      "authored_program_sha256": "403d694d3a1a9ad2e45c90e8943d92a651fe486ddc0f09b08cc30e6590d03e7e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3714,7 +3714,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:urza-s-mine",
-      "authored_program_sha256": "f9056769d3e767687037883965408f72be1f6f44950b09ac24fe445d198b3aa8",
+      "authored_program_sha256": "22f98393442785f2d862d996c3b0f481c3b1a36e59c45aeac74ecb57cd102999",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3726,7 +3726,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:urza-s-power-plant",
-      "authored_program_sha256": "2f9df69e59d18cb0b2da2fcb21e273c8d5d624edc46cc9c6350891e1aff0ac0d",
+      "authored_program_sha256": "c6acad5adecb93698af249f20edc24f71b1cad989b66f11ae194fed2ba395910",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3750,7 +3750,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:urza-s-tower",
-      "authored_program_sha256": "f85dbc30f0e7b33e0aaa4b02bd66e50e9113126f90e2d31c7f63b015456e47d0",
+      "authored_program_sha256": "75e42b3b543c06c25c1bf7ae761a9af66ec2e280d0f9b41a0cd115973ffe8aae",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3762,7 +3762,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:utter-end",
-      "authored_program_sha256": "3b243bd3269fd2208ce7d93753ebd5a4f9896aecdeee8eef0b57577d96c5a0c6",
+      "authored_program_sha256": "5945b6ead453cb4165ddd5da95245e52f100833a959bb18bee6b764de2c4288b",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3774,7 +3774,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:valorous-stance",
-      "authored_program_sha256": "943c2f636cf7fa96ebc177fc6689d03cb676b6c600e01f35fdc32360e7ef2c9f",
+      "authored_program_sha256": "cd119ea4805717fc42bb5588cda12a57e3ed2d84ef848351697562c9b0b3a56d",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3786,7 +3786,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:vampiric-tutor",
-      "authored_program_sha256": "d6e6f5ef06fed4aa3e8a327dbc4ff3dc9cfd2d3bc2120e66d609e20a6410e50c",
+      "authored_program_sha256": "0035a7c5243e42eb1b68bf43e6501980b22f818a8777261a0422ca7042606b67",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3798,7 +3798,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:vault-of-champions",
-      "authored_program_sha256": "37bd20ba57dc56ddb561ff6600309a659a45c2894f67d0838b84480aa8651d41",
+      "authored_program_sha256": "208c1cfc7e3e0b4633a70cec0d807fba6a994fab7282d010a9f84d2a4cb7c3a8",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3810,7 +3810,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:verdant-catacombs",
-      "authored_program_sha256": "91d0f9bce28d2cf11fd2e3855f92f798402969f6b625a3d3838aa89b8308ab78",
+      "authored_program_sha256": "6e15f95af049b9beab2b28adc930e22dd4273144be0c972fffaccf934eeb6fb1",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3834,7 +3834,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:vesuva",
-      "authored_program_sha256": "383f01b2f51d80b34454b98c24990b317d22b29ecbad8c3e272966e7031b5a41",
+      "authored_program_sha256": "bae8eb8b82c99f83909cabf9d6ffed85be6de51c0a7c4650ffbd7cc72489ae7e",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3870,7 +3870,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:viscera-seer",
-      "authored_program_sha256": "023ae71ceb3ca25d566dd3c28be5ff2f2ab25fd4ae866492222608f886a88c4a",
+      "authored_program_sha256": "daf449b094c49a4ff69187dab399bb51895b42dbce28b00453452c49d3742538",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3894,7 +3894,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:vorinclex-monstrous-raider",
-      "authored_program_sha256": "849cb23db62092518ea201b972cb2ad379be636bfbfe1e8d67eee6e0fd2c6ecf",
+      "authored_program_sha256": "6b6ee2fdff2a93a21e6f59862ecb210f808c22db3b2b68f31fa00dce45c7fc66",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3918,7 +3918,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:wayfarer-s-bauble",
-      "authored_program_sha256": "2f7ae05da690152f09cc727e0364203213d5105df20440f50b00d7401a002a5f",
+      "authored_program_sha256": "0711231473eb9eeb0d882b67f9531933e93aff4721be72b5b8ba5ae4544aca14",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3930,7 +3930,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:whelming-wave",
-      "authored_program_sha256": "45fe6c8a6b2cacf4db30c013a0ba8a58c97cc719cb8353ad1776b5a376fd9c5c",
+      "authored_program_sha256": "d58e51cc98aab63f0ef7c875b884ed4fd157dad1f70147892285071400333946",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3942,7 +3942,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:windswept-heath",
-      "authored_program_sha256": "cb329cb62de6b096dd88f9fd29db41727b3c09f1e5f7fe0ffd61a10852e99145",
+      "authored_program_sha256": "3f9b889845c5ea6cb881a01357d748310b5d629bab3d964d65f9395ec6efb6c8",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3966,7 +3966,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:wooded-foothills",
-      "authored_program_sha256": "a03ceba9e79e90eec704465c498951a3c44c77ab0db578064205b748abbe9c4e",
+      "authored_program_sha256": "fab008c44c2b033cee331e062c2e52eeac8a0caa4a4ec8a74e88af464db1fbc7",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -3976,9 +3976,9 @@
       "name": "Xenagos, God of Revels",
       "source_facts_sha256": "9395c31aa6a5517eb5b971a2c0facf1ff5a219567255575bbb1321572ae9c2c5",
       "face_count": 1,
-      "status": "unmapped",
-      "authored_program": null,
-      "authored_program_sha256": null,
+      "status": "program_authored",
+      "authored_program": "catalog:xenagos-god-of-revels",
+      "authored_program_sha256": "9e427b7af2b8da1689fefb1847181d15bbaf448f3db1a0b8fe3a2536e255d664",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -4002,7 +4002,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:yavimaya-coast",
-      "authored_program_sha256": "e944874ca9a9e22814db56bfeccff990867b3282e25922143a2238f5653ede9c",
+      "authored_program_sha256": "5b7f8cdc716e87636cb8b9d9a63c30e2183e9dfab10fa035db36137ea39fa49c",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -4014,7 +4014,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:yavimaya-cradle-of-growth",
-      "authored_program_sha256": "bac879373f7f6183b3b322afe1abfcef8834699216c4f2383db38092d76aa3e2",
+      "authored_program_sha256": "bd0f2945fb23e84774149715d6e16eec746d09b432c6da700fac4bccc16a92a6",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false
@@ -4026,7 +4026,7 @@
       "face_count": 1,
       "status": "program_authored",
       "authored_program": "catalog:zombify",
-      "authored_program_sha256": "ee569e5e23aed053ef34968ef973daf4d28b3c5ff60763a9251a297ce6141be9",
+      "authored_program_sha256": "3512df9c386d12dae2665714a6e82948a27bc91c831235c088052c59a0bb6633",
       "fixture_program": null,
       "fixture_sha256": null,
       "production_certified": false

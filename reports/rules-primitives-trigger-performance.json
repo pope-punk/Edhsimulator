@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "scope": "Synthetic trigger discovery only; excludes construction, inference, transport and live gameplay",
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
+  "python": "3.12.11",
+  "platform": "Linux-6.8.0-1064-azure-x86_64-with-glibc2.36",
+  "reference": "Identical collectors with definition-wide scanning instead of event indexing",
+  "repeats": 7,
+  "cases": [
+    {
+      "case": "unobserved_draw",
+      "objects": 120,
+      "events": 100,
+      "semantic_parity": true,
+      "snapshot_sha256": "ebcc0e4e8ca0ab374717b810a4c81acdbef6e6d2c42a11b15a2364069e92b108",
+      "timings": {
+        "indexed": {
+          "samples_ms": [
+            5.136013,
+            5.09965,
+            5.20793,
+            5.63969,
+            5.257303,
+            5.144456,
+            7.605103
+          ],
+          "median_ms": 5.20793,
+          "p95_ms": 7.605103
+        },
+        "scanning": {
+          "samples_ms": [
+            7.57517,
+            7.405458,
+            7.390215,
+            7.379379,
+            7.397075,
+            7.599836,
+            12.381194
+          ],
+          "median_ms": 7.405458,
+          "p95_ms": 12.381194
+        }
+      },
+      "median_speedup_vs_scanning": 1.4219580524315802
+    },
+    {
+      "case": "sparse_upkeep",
+      "objects": 120,
+      "events": 100,
+      "semantic_parity": true,
+      "snapshot_sha256": "658520e3241c1e87dbb5b179bf2c194049e178706095561336e631ef713e5590",
+      "timings": {
+        "indexed": {
+          "samples_ms": [
+            8.706447,
+            8.686116,
+            8.799805,
+            8.971559,
+            8.795408,
+            15.653224,
+            15.241634
+          ],
+          "median_ms": 8.799805,
+          "p95_ms": 15.653224
+        },
+        "scanning": {
+          "samples_ms": [
+            22.813868,
+            22.583677,
+            22.712369,
+            22.399204,
+            22.781271,
+            49.600736,
+            22.665829
+          ],
+          "median_ms": 22.712369,
+          "p95_ms": 49.600736
+        }
+      },
+      "median_speedup_vs_scanning": 2.581008215522958
+    }
+  ]
+}

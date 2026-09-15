@@ -2,14 +2,14 @@
   "schema": 1,
   "scope": "Exact fixed-pod program coverage; text units are evidence, not an automatically inferred clause count",
   "decks_sha256": "54b6257ea36f3614993d03b270a49fa8f26dd252ff1ceb533599205e49ee5f17",
-  "authored_unique_cards": 199,
+  "authored_unique_cards": 226,
   "production_ready": false,
   "decks": [
     {
       "deck": "Reaminatour \u2014 Aminatou, Veil Piercer",
       "cards": 100,
-      "authored_copies": 55,
-      "unmapped_copies": 45,
+      "authored_copies": 63,
+      "unmapped_copies": 37,
       "entries": [
         {
           "card_id": "aminatou-veil-piercer",
@@ -207,8 +207,8 @@
           "name": "Fallen Ideal",
           "quantity": 1,
           "source_facts_sha256": "25bfbb8bb0f8452dcf1a3ecd40d6c3973b6e7c98dad70a0e6aaf7f5635243680",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:fallen-ideal",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -472,8 +472,8 @@
           "name": "Starfield of Nyx",
           "quantity": 1,
           "source_facts_sha256": "c9d7fc59fc584c35a2d5e5c345b6f78ba59b229678a561d5f7e1434ca211f6f2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:starfield-of-nyx",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -541,8 +541,8 @@
           "name": "Glen Elendra Archmage",
           "quantity": 1,
           "source_facts_sha256": "43fbe62e2a20dbd9cc521b43e754a85ee5332ce9a4e5c16497da1a777afcecd4",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:glen-elendra-archmage",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1260,8 +1260,8 @@
           "name": "Gifts Ungiven",
           "quantity": 1,
           "source_facts_sha256": "1fefe1813077b143c824ddc8d883c4d8ddcc74b410d2ab22fcaf1df9765fc902",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:gifts-ungiven",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1277,8 +1277,8 @@
           "name": "Gravebreaker Lamia",
           "quantity": 1,
           "source_facts_sha256": "867c403a923605d231400df1a9df8efd663c054c025b195ed849262cf50a2ae2",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:gravebreaker-lamia",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1610,8 +1610,8 @@
           "name": "City of Brass",
           "quantity": 1,
           "source_facts_sha256": "966fe4ea45cb111dc6c48163f72836a8984f3cda7c3dd7f71141e3a1c49ee5ff",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:city-of-brass",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1673,8 +1673,8 @@
           "name": "Eiganjo, Seat of the Empire",
           "quantity": 1,
           "source_facts_sha256": "2bf4435c5d4528720cbc94b3e148cc91d86bb52e78bb6d2a60c1dbf7a1842485",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:eiganjo-seat-of-the-empire",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -1867,8 +1867,8 @@
           "name": "Otawara, Soaring City",
           "quantity": 1,
           "source_facts_sha256": "570e97d4fbcc7180bb562ac8efce92f1fac9747a24997ae756874262a7d0169d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:otawara-soaring-city",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2240,8 +2240,8 @@
     {
       "deck": "Minsc & Boo, Timeless Heroes",
       "cards": 100,
-      "authored_copies": 73,
-      "unmapped_copies": 27,
+      "authored_copies": 80,
+      "unmapped_copies": 20,
       "entries": [
         {
           "card_id": "minsc-boo-timeless-heroes",
@@ -2329,8 +2329,8 @@
           "name": "Champion of Lambholt",
           "quantity": 1,
           "source_facts_sha256": "ee6cba2ea82f25d952f12b9510f8bbce21f26bb4d981cb5909ec39ee1a056d48",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:champion-of-lambholt",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2771,8 +2771,8 @@
           "name": "Taurean Mauler",
           "quantity": 1,
           "source_facts_sha256": "0e993f94365d8e12d7aa155d8256f44b0c85fc82791772c0d9d20a48af5207f8",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:taurean-mauler",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -2823,8 +2823,8 @@
           "name": "Xenagos, God of Revels",
           "quantity": 1,
           "source_facts_sha256": "82de69098ec26d1d1efc7edf7fd5523fa91b1753e6fd08b5ed32cf63cf30ba61",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:xenagos-god-of-revels",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3104,8 +3104,8 @@
           "name": "Chandra's Ignition",
           "quantity": 1,
           "source_facts_sha256": "d7ea0fb76ee2117d85224b09db3cc3d68e00f1da5a2c180d47c55dbdf44f8723",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:chandra-s-ignition",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3121,8 +3121,8 @@
           "name": "Cultivate",
           "quantity": 1,
           "source_facts_sha256": "5bd35d19d13cda10e0627ba658679174693a0dddcef51353d43eeb1b0ef38725",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:cultivate",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3178,8 +3178,8 @@
           "name": "Kodama's Reach",
           "quantity": 1,
           "source_facts_sha256": "c85bb43096036710dbe142f7a132886b5c04084e7fd04d8d8cd384d684e34f62",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:kodama-s-reach",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3591,8 +3591,8 @@
           "name": "Terrasymbiosis",
           "quantity": 1,
           "source_facts_sha256": "38d61b29eff4f7d90188e6bc3dfc220319d502228861001b525d093e4ddfb3cb",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:terrasymbiosis",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -3998,16 +3998,16 @@
     {
       "deck": "Omo, Queen of Vesuva",
       "cards": 100,
-      "authored_copies": 59,
-      "unmapped_copies": 41,
+      "authored_copies": 67,
+      "unmapped_copies": 33,
       "entries": [
         {
           "card_id": "omo-queen-of-vesuva",
           "name": "Omo, Queen of Vesuva",
           "quantity": 1,
           "source_facts_sha256": "746f7195ebadd7788596cf7880798b27b72fe39d16bbc83881280a123d99fb88",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:omo-queen-of-vesuva",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4299,8 +4299,8 @@
           "name": "Chromatic Lantern",
           "quantity": 1,
           "source_facts_sha256": "480119e99cf00b4d083cdf22f348fdf7570f9627e11ac95368a7d624c29989cd",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:chromatic-lantern",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4362,8 +4362,8 @@
           "name": "Copy Land",
           "quantity": 1,
           "source_facts_sha256": "a42ab3e29553d1b4fb547fa5788dae4b0fe731ce3ce3d5f94f27a2e81b1f28f1",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:copy-land",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -4563,8 +4563,8 @@
           "name": "Elvish Rejuvenator",
           "quantity": 1,
           "source_facts_sha256": "f2083f08719973b50958adc76bab1a34fce48fda58a007d3bdcfa6e81990164c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:elvish-rejuvenator",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5109,8 +5109,8 @@
           "name": "Mana Reflection",
           "quantity": 1,
           "source_facts_sha256": "b3ab6c241d9bc38f4de3308765b598228024f3c03e0f41d0213723d39d9c62c1",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:mana-reflection",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5270,8 +5270,8 @@
           "name": "Planar Nexus",
           "quantity": 1,
           "source_facts_sha256": "e388566ba593ce30299075b10fbc2d63ab020d0604850e0b95c0cb37745d1611",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:planar-nexus",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5471,8 +5471,8 @@
           "name": "Satyr Wayfinder",
           "quantity": 1,
           "source_facts_sha256": "b64b05513e960cfd26979ad4b082199e3003eff456b0ffaa27bc162e56ed780d",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:satyr-wayfinder",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -5597,8 +5597,8 @@
           "name": "Summary Dismissal",
           "quantity": 1,
           "source_facts_sha256": "b0a091754b47e85e9317d2cbce59addc8812477c1cc62dfcc97ef54ec94818d0",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:summary-dismissal",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6153,16 +6153,16 @@
     {
       "deck": "Elenda, Saint of Dusk",
       "cards": 100,
-      "authored_copies": 77,
-      "unmapped_copies": 23,
+      "authored_copies": 81,
+      "unmapped_copies": 19,
       "entries": [
         {
           "card_id": "elenda-saint-of-dusk",
           "name": "Elenda, Saint of Dusk",
           "quantity": 1,
           "source_facts_sha256": "42274bc4fd9310266b0d303c46e560e8821280bad1d9321614da58f61fcccb1c",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:elenda-saint-of-dusk",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6230,8 +6230,8 @@
           "name": "Angel of Invention",
           "quantity": 1,
           "source_facts_sha256": "d72b1c39d7f4d55a74fe412dab6b7b250978705cf788a422b6629a42a099c34f",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:angel-of-invention",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -6547,8 +6547,8 @@
           "name": "Kunoros, Hound of Athreos",
           "quantity": 1,
           "source_facts_sha256": "34db15b391efe09de611c65e795566171ba3896dbe120a2c1ceaefbccd495107",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:kunoros-hound-of-athreos",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {
@@ -7431,8 +7431,8 @@
           "name": "Angelic Destiny",
           "quantity": 1,
           "source_facts_sha256": "40432f9ced75c677c5c51da5974d47eb9f1e57c6a38dabc79fc5225da651e543",
-          "program_definition": null,
-          "status": "unmapped",
+          "program_definition": "catalog:angelic-destiny",
+          "status": "program_authored",
           "production_certified": false,
           "text_units": [
             {

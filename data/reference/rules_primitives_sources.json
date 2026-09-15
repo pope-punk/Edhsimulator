@@ -183,7 +183,24 @@
       "611.3a",
       "611.3b",
       "611.3c",
-      "613.4c"
+      "613.4c",
+      "603.2e",
+      "702.79a",
+      "509.1g",
+      "702.123a",
+      "702.123b",
+      "702.11d",
+      "106.12",
+      "106.12b",
+      "205.3m",
+      "205.1a",
+      "702.73a",
+      "205.3i",
+      "700.5",
+      "700.5a",
+      "603.2h",
+      "400.7f",
+      "603.6e"
     ]
   },
   "card_text_source": "data/catalog/cards.json",
@@ -239,6 +256,14 @@
     {
       "url": "https://magic.wizards.com/en/news/feature/wilds-of-eldraine-release-notes",
       "scope": "Ruby, Daring Tracker checks the power threshold when declared as an attacker, without repeating it on resolution; represented as an occurrence-only predicate."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/modern-horizons-3-release-notes",
+      "scope": "Omo printed entry/attack target clauses and counter-dependent land and nonland-creature subtype grants; current subtype sets are bound to the pinned Comprehensive Rules."
+    },
+    {
+      "url": "https://magic.wizards.com/en/news/feature/release-notes-2014-01-22",
+      "scope": "Xenagos combined red/green devotion counts a hybrid symbol once; battlefield-only creature-status effect and combat power capture."
     }
   ]
 }

@@ -6,6 +6,7 @@ reach the shared departure interpreter.
 """
 from dataclasses import dataclass
 from copy import deepcopy
+from .rules_characteristics import matches
 from types import SimpleNamespace
 from . import block_declaration, combat_damage
 from .rules_state import ObjectRef, Zone, RulesViolation, ResourcePayment
@@ -27,10 +28,10 @@ class CombatChoiceBoundary:
 
 
 class CombatView:
-    def __init__(self,kernel):self.kernel=kernel;self.turn_number=kernel.state.turn_number
+    def __init__(self,kernel):self.kernel=kernel;self.turn_number=kernel.state.turn_number;self.block_rules=None
     def card(self,ref):
         obj=self.kernel.state.get(ref);view=self.kernel.effective(ref)
-        return SimpleNamespace(uid=uid(ref),name=self.kernel.definition(obj).name,
+        return SimpleNamespace(ref=ref,uid=uid(ref),name=self.kernel.definition(obj).name,
             power=view.power or 0,toughness=view.toughness or 0,keywords=view.keywords,
             metadata={'damage_marked':obj.damage_marked,
                       'unblockable_turn':self.turn_number if 'unblockable' in view.keywords else None})
@@ -38,7 +39,24 @@ class CombatView:
     def effective_power(self,card):return card.power
     def effective_toughness(self,card):return card.toughness
     def can_block(self,blocker,attacker):
-        return 'flying' not in attacker.keywords or bool({'flying','reach'} & blocker.keywords)
+        if 'flying' in attacker.keywords and not {'flying','reach'} & blocker.keywords:return False
+        if self.block_rules is None:
+            self.block_rules=[]
+            for source in self.kernel.state.objects(Zone.BATTLEFIELD):
+                if source.phased:continue
+                for rule in self.kernel.definition(source).block_restrictions:
+                    context={'source':source.to_json(),'controller':source.controller}
+                    self.block_rules.append((source,rule,self.kernel._quantity(rule.value,context)))
+        if not self.block_rules:return True
+        attacker_obj=self.kernel.state.get(attacker.ref);blocker_obj=self.kernel.state.get(blocker.ref)
+        attacker_view=self.kernel.effective(attacker.ref);blocker_view=self.kernel.effective(blocker.ref)
+        for source,rule,threshold in self.block_rules:
+            if not matches(rule.attackers,attacker_obj,attacker_view,source) or not matches(rule.blockers,blocker_obj,blocker_view,source):continue
+            value=getattr(blocker_view,rule.statistic)
+            if value is None:continue
+            prohibited={'lt':value<threshold,'le':value<=threshold,'eq':value==threshold,'ge':value>=threshold,'gt':value>threshold}[rule.comparison]
+            if prohibited:return False
+        return True
 
 
 class CombatRules:
@@ -61,8 +79,19 @@ class CombatRules:
         self.combat['attackers']=[row for row in self.combat['attackers'] if self._combat_present(row) and row['defender'] in self.state.live_players]
         remaining={row['uid'] for row in self.combat['attackers']}
         for key,rows in self.combat['blocks'].items():
-            self.combat['blocks'][key]=[row for row in rows if key in remaining and self._combat_present(row)]
+            self.combat['blocks'][key]=[row for row in rows if self._combat_present(row)]
         if before!=remaining:self._event('attackers_removed_from_combat',uids=sorted(before-remaining))
+
+    def _combat_target_refs(self,kind):
+        # Target inspection must be pure: filter current membership without
+        # pruning records or changing the revision used by an action quote.
+        if self.combat is None:return frozenset()
+        rows=[]
+        if kind in {'attacking','attacking_or_blocking'}:
+            rows.extend(row for row in self.combat['attackers'] if row['defender'] in self.state.live_players)
+        if kind in {'blocking','attacking_or_blocking'}:
+            rows.extend(row for group in self.combat['blocks'].values() for row in group)
+        return frozenset(ObjectRef.from_json(row['ref']) for row in rows if self._combat_present(row))
 
     def declare_attackers(self,actor,attackers,*,revision):
         if self.pending_choice or self.resolving:raise RulesViolation('Resolve the current choice first')
@@ -79,10 +108,12 @@ class CombatRules:
                 raise RulesViolation('Attacker has not been continuously controlled since turn start')
             rows.append(self._combat_record(ref,defender=defender))
             if 'vigilance' not in view.keywords:taps.append(ref)
+        tap_observers=self._tap_observers(taps)
         self.state.move((),'attack_taps',payment=ResourcePayment(actor,taps=tuple(taps)))
         self.combat={'attackers':rows,'blocks':{},'blocked':[],'declared_any':bool(rows),
             'defender_index':0,'first_strikers':[],'had_first_step':False,'damage_pending':None,'damage_done':False}
         self._event('attackers_declared',actor=actor,attackers=[{'ref':row['ref'],'defender':row['defender']} for row in rows])
+        self._collect_tapped(taps,tap_observers)
         for row in rows:self._collect_announcement('creature_attacks',self.state.get(ObjectRef.from_json(row['ref'])),actor,values={'defending_player':row['defender']})
         self.priority=actor;self.passes=[]
         return self.advance()
