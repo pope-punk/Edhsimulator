@@ -228,3 +228,44 @@ class PrimitivePlanningTests(unittest.TestCase):
         self.assertEqual(receipt,planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value))
         self.assertEqual(receipt['components']['actions'],self.game.state()['actors']['Omo']['plans']['actions']['id'])
         self.assertNotIn(planning.SHORT,self.game.state()['actors']['Omo']['jobs'])
+
+class StrategicReviewTests(PrimitivePlanningTests):
+    def review(self,job):
+        return planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',
+            {'short_term_plan':'Continue the independently selected fixture line.','continuity':'A named strategic piece changed.',
+             'long_term_validity':'review','long_term_invalid_reason':'Named engine piece became available; reassess the preferred route.'})
+
+    def test_review_queues_goal_with_reason_without_blocking_actions(self):
+        self.publish_goal();job=planning.claim(self.game,'Omo',planning.SHORT)
+        with self.assertRaises(RulesViolation):
+            planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',
+                {'short_term_plan':'Interim plan.','continuity':'Fixture.',
+                 'long_term_validity':'review','long_term_invalid_reason':''})
+        result=self.review(job);self.assertEqual('actions',result['next'])
+        strategic=planning.claim(self.game,'Omo',planning.LONG)
+        self.assertIn('engine piece',strategic['review_goal']['reason'])
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.LONG,'review_goal:'+strategic['review_goal']['goal_id'])
+        self.assertEqual([],self.game.state()['actors']['Omo']['jobs'][planning.LONG]['queued'])
+        self.assertIsNone(self.game.state()['actors']['Omo'].get('invalid_goal'))
+        planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',
+            {'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Offline boundary'} for p in planning.PHASES}})
+        planning.publish(self.game,'Omo',planning.LONG,strategic['job_id'],'long_term',self.goal())
+        self.assertIsNone(self.game.state()['actors']['Omo'].get('review_goal'))
+
+    def test_late_review_does_not_wake_for_replaced_goal(self):
+        self.publish_goal();job=planning.claim(self.game,'Omo',planning.SHORT)
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.LONG,'independent')
+        newer=planning.claim(self.game,'Omo',planning.LONG)
+        planning.publish(self.game,'Omo',planning.LONG,newer['job_id'],'long_term',{**self.goal(),'long_term_plan':'Updated route.'})
+        self.review(job)
+        self.assertNotIn(planning.LONG,self.game.state()['actors']['Omo']['jobs'])
+        self.assertIsNone(self.game.state()['actors']['Omo'].get('review_goal'))
+
+    def test_review_requires_reason_and_fresh_contract(self):
+        self.publish_goal();job=planning.claim(self.game,'Omo',planning.SHORT)
+        self.game.config.pop('strategic_review')
+        with self.assertRaisesRegex(RulesViolation,'strategic assessment'):self.review(job)
+
+    def test_review_and_invalid_do_not_enable_watches(self):
+        job=planning.claim(self.game,'Omo',planning.LONG)
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.LONG,job['job_id'],'long_term',{**self.goal(),'watches':[]})

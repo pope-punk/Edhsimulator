@@ -32,6 +32,9 @@ def queue(state,actor,role,reason):
         if (reason.startswith('invalid_goal:') and job.get('input') and job['input'].get('invalid_goal') and
                 str((job['input'].get('invalid_goal') or {}).get('goal_id'))==reason.removeprefix('invalid_goal:')):
             return
+        if (reason.startswith('review_goal:') and job.get('input') and
+                str((job['input'].get('review_goal') or {}).get('goal_id'))==reason.removeprefix('review_goal:')):
+            return
         reasons=job.setdefault('queued',[]) if job.get('input') is not None else job['reasons']
         if reason not in reasons:reasons.append(reason)
     else:
@@ -108,8 +111,12 @@ def claim(campaign,actor,role):
                 'rationales':decision_records(evidence),
                 'evidence_after':cursor,'evidence_through':campaign.evidence_position(actor) if role!=DIPLOMAT else cursor}
             if role in (SHORT,LONG) and campaign.config.get('autotap')==1:job['input']['payment_policy']='autotap:1; propose casts/activations without preliminary taps; optional hard mana reserve'
+            if role in (SHORT,LONG) and campaign.config.get('strategic_review')==1:job['input']['strategic_review']=1
             if role==LONG:job['input'].update(seed=seat['seed'],personality=seat['personality'],invalid_goal=deepcopy(seat.get('invalid_goal')),brief_change_requests=deepcopy(seat.get('brief_change_requests',[])))
-            elif role==SHORT:
+            if role==LONG and campaign.config.get('strategic_review')==1:
+                job['input']['review_goal']=deepcopy(seat.get('review_goal'))
+                job['input']['diplomatic_overrides']=[r['value'] for r in campaign.evidence(actor,after=cursor,kinds=('diplomatic_override',))][-4:]
+            if role==SHORT:
                 job['input']['standing']=seat['standing']
                 # A coalesced opposite-seat gate takes precedence before claim;
                 # later queued reasons cannot reorder a started publication.
@@ -117,7 +124,7 @@ def claim(campaign,actor,role):
                     any(r.startswith('pre_turn:') for r in job['reasons']) else STAGES[SHORT])
                 from .primitive_cadence import summary
                 seat['tactical_baseline']=summary(board,actor)
-            else:
+            elif role==DIPLOMAT:
                 # Reuse the complete own-seat prose components; no extra summary inference.
                 job['input']['plans']={key:deepcopy(seat['plans'][key]) for key in ('long_term','short_term') if key in seat['plans']}
                 brief=seat['plans'].get('diplomacy_brief',{}).get('value',[])
@@ -234,10 +241,10 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         if not required<=set(value) or set(value)-required-{'dependencies','diplomacy_request'}:
             raise RulesViolation('Supply tactical prose, continuity and strategic validity')
         text_field(value,'short_term_plan',600);text_field(value,'continuity',1200)
-        if value['long_term_validity'] not in {'valid','invalid','pending'}:raise RulesViolation('Invalid strategic assessment')
+        if value['long_term_validity'] not in ({'valid','invalid','pending','review'} if campaign.config.get('strategic_review')==1 else {'valid','invalid','pending'}):raise RulesViolation('Invalid strategic assessment')
         if (value['long_term_validity']=='pending') != ('long_term' not in job['input']['plans']):
             raise RulesViolation('Use pending exactly when this frozen input has no long-term goal')
-        if value['long_term_validity']=='invalid':text_field(value,'long_term_invalid_reason',300)
+        if value['long_term_validity'] in {'invalid','review'}:text_field(value,'long_term_invalid_reason',300)
         elif type(value['long_term_invalid_reason']) is not str:raise RulesViolation('Validity reason must be text')
         from .primitive_dependencies import freeze
         dependencies=freeze(job['input']['board'],value.get('dependencies',[]))
@@ -282,6 +289,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         consumed={r['id'] for r in job['input'].get('requests',[])}
         seat['diplomacy_requests']=[r for r in seat.get('diplomacy_requests',[]) if r['id'] not in consumed]
     if stage=='long_term':
+        seat.pop('review_goal',None)
         brief={'id':digest({'stage':'diplomacy_brief','value':value['diplomacy']}),'job_id':job_id,'value':deepcopy(value['diplomacy'])}
         seat['plans']['diplomacy_brief']=brief
         campaign.record(actor,'publication',{'role':role,'stage':'diplomacy_brief',**brief})
@@ -289,7 +297,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
             seat['invalid_goal']=None
     campaign.record(actor,'publication',{'role':role,'stage':stage,**component})
     if stage=='long_term':
-        if old is None or seat.get('invalid_goal') or any(r.startswith(('invalid_goal:','pilot_alarm:','diplomatic_override:')) for r in job['reasons']):
+        if old is None or seat.get('invalid_goal') or any(r.startswith(('invalid_goal:','review_goal:','pilot_alarm:','diplomatic_override:')) for r in job['reasons']):
             queue(state,actor,SHORT,'strategic_publication:'+job_id)
         if not diplomacy_review:queue(state,actor,DIPLOMAT,'strategic_publication:'+job_id)
     if stage=='short_term' or stage=='long_term' and old is not None and old['id']!=component['id']:
@@ -303,6 +311,11 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
                 queue(state,actor,SHORT,reason)
                 campaign.record(actor,'dependency_review',{'reason':reason,'paths':paths,'goal_id':goal,
                                                           'short_term_id':dependency['component_id']})
+    if stage=='short_term' and value['long_term_validity']=='review':
+        assessed=job['input']['plans'].get('long_term',{}).get('id')
+        if assessed==seat['plans'].get('long_term',{}).get('id'):
+            seat['review_goal']={'goal_id':assessed,'reason':value['long_term_invalid_reason']}
+            queue(state,actor,LONG,'review_goal:'+str(assessed))
     if stage=='short_term' and value['long_term_validity']=='invalid':
         assessed=job['input']['plans'].get('long_term',{}).get('id')
         current_goal=seat['plans'].get('long_term',{}).get('id')
