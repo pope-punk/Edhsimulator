@@ -232,7 +232,7 @@
       "mana": {
         "base_amount": 1,
         "colors": [
-          "G"
+          "C"
         ],
         "is_mana_source": true,
         "production_rule": "printed",
@@ -841,7 +841,7 @@
     "essence-channeler": {
       "combat": {
         "power": 2,
-        "toughness": 2
+        "toughness": 1
       }
     },
     "eternal-witness": {
@@ -927,6 +927,24 @@
         }
       ]
     },
+    "fanatic-of-rhonas": {
+      "combat": {
+        "power": 1,
+        "toughness": 4
+      },
+      "mana": {
+        "base_amount": 1,
+        "colors": [
+          "G"
+        ],
+        "is_mana_source": true,
+        "production_rule": "dynamic",
+        "source_kinds": [
+          "mana_dork"
+        ],
+        "variable_output": true
+      }
+    },
     "fanatical-devotion": {
       "registered_abilities": [
         {
@@ -946,24 +964,6 @@
           "zone": "battlefield"
         }
       ]
-    },
-    "fanatic-of-rhonas": {
-      "combat": {
-        "power": 1,
-        "toughness": 4
-      },
-      "mana": {
-        "base_amount": 1,
-        "colors": [
-          "G"
-        ],
-        "is_mana_source": true,
-        "production_rule": "dynamic",
-        "source_kinds": [
-          "mana_dork"
-        ],
-        "variable_output": true
-      }
     },
     "felidar-guardian": {
       "combat": {
@@ -1080,7 +1080,8 @@
           "uses_stack": true,
           "zone": "battlefield"
         }
-      ]
+      ],
+      "layout": "room"
     },
     "fyndhorn-elves": {
       "combat": {
@@ -1145,6 +1146,7 @@
         ],
         "fetch_types": []
       },
+      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -1635,10 +1637,18 @@
     "invasion-of-theros": {
       "faces": {
         "ephara-ever-sheltering": {
+          "colors": [
+            "W",
+            "U"
+          ],
           "power": 4,
           "toughness": 4
+        },
+        "invasion-of-theros": {
+          "defense": 4
         }
-      }
+      },
+      "layout": "transform"
     },
     "island": {
       "land": {
@@ -1729,6 +1739,7 @@
         ],
         "fetch_types": []
       },
+      "layout": "modal",
       "mana": {
         "base_amount": 1,
         "colors": [
@@ -3338,6 +3349,10 @@
       },
       "faces": {
         "sorin-ravenous-neonate": {
+          "colors": [
+            "W",
+            "B"
+          ],
           "loyalty": 3,
           "loyalty_variable": null
         }
@@ -3345,6 +3360,7 @@
       "keywords": [
         "lifelink"
       ],
+      "layout": "transform",
       "registered_abilities": [
         {
           "ability_id": "sorin-of-house-markov:registered:sorin_house_plus",
@@ -3746,10 +3762,17 @@
     "the-restoration-of-eiganjo": {
       "faces": {
         "architect-of-restoration": {
+          "colors": [
+            "W"
+          ],
+          "keywords": [
+            "vigilance"
+          ],
           "power": 3,
           "toughness": 4
         }
-      }
+      },
+      "layout": "transform"
     },
     "thespian-s-stage": {
       "land": {

@@ -1,0 +1,2846 @@
+"""Closed, serializable ability programs for the experimental rules interpreter."""
+from __future__ import annotations
+from .rules_creature_types import CREATURE_TYPES
+from dataclasses import dataclass,fields,replace
+from .rules_state import Zone,RulesViolation
+from .rules_subtypes import SUBTYPE_SETS,SUBTYPE_SUPPORT
+
+
+@dataclass(frozen=True)
+class CharacteristicRange:
+    statistic: str
+    minimum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat | None = None
+    maximum: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat | None = None
+
+
+@dataclass(frozen=True)
+class CounterRange:
+    kind: str | None
+    minimum: int | None = 1
+    maximum: int | None = None
+
+
+@dataclass(frozen=True)
+class Selector:
+    zone:Zone
+    types:tuple[str,...]=()
+    relation:str='any'  # any, owned, controlled, opponent_controlled
+    exclude_source:bool=False
+    subtypes:tuple[str,...]=()
+    excluded_subtypes:tuple[str,...]=()
+    supertypes:tuple[str,...]=()
+    any_types:tuple[str,...]=()
+    excluded_types:tuple[str,...]=()
+    any_subtypes:tuple[str,...]=()
+    characteristics:tuple[CharacteristicRange,...]=()
+    commander: bool | None = None
+    tapped: bool | None = None
+    counters: tuple[CounterRange,...] = ()
+    colors: tuple[str,...] = ()
+    any_colors: tuple[str,...] = ()
+    excluded_colors: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class ModifiedSelector(Selector):
+    """A current creature with counters, Equipment, or its controller's Aura."""
+    pass
+
+
+@dataclass(frozen=True)
+class SelectedCount:
+    """Number of exact objects captured by the enclosing selection."""
+    pass
+
+
+@dataclass(frozen=True)
+class MovedCount:
+    """Number of objects reaching the enclosing zone result's required destination."""
+    pass
+
+
+@dataclass(frozen=True)
+class LifeLost:
+    """Total life actually lost by the enclosing WithLifeLost instruction."""
+    pass
+
+
+@dataclass(frozen=True)
+class EventAmount:
+    """The amount captured when a supported life-gain trigger occurred."""
+    pass
+
+
+@dataclass(frozen=True)
+class RecipientStat:
+    """Statistic of one recipient when a temporary effect begins."""
+    statistic: str = 'power'
+    allow_negative: bool = False
+
+
+@dataclass(frozen=True)
+class TargetStat:
+    statistic: str = 'power'
+    operation: str = 'sum'
+
+
+@dataclass(frozen=True)
+class PaidCostStat:
+    """Sum of a named spell sacrifice group's pre-payment derived statistics."""
+    cost_id: str
+    statistic: str = 'power'
+
+
+@dataclass(frozen=True)
+class SourceCounter:
+    """Counters of one kind on the source, using exact last known information."""
+    kind: str
+
+
+@dataclass(frozen=True)
+class SourceStat:
+    """Current source statistic, or its exact last known public characteristics."""
+    statistic: str = 'power'
+    allow_negative: bool = False
+
+
+@dataclass(frozen=True)
+class BattlefieldStat:
+    selector: Selector
+    statistic: str = 'power'
+    operation: str = 'maximum'
+
+
+@dataclass(frozen=True)
+class EventX:
+    """Announced X retained by a cast or battlefield-entry event, independent of the trigger source."""
+    pass
+
+
+@dataclass(frozen=True)
+class DividedValue:
+    """Nonnegative integer quotient, explicitly rounded down or up."""
+    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+    divisor: int
+    rounding: str = "down"
+
+
+@dataclass(frozen=True)
+class ChosenX:
+    """The X announced for this spell or activated ability, not its source card."""
+    pass
+
+
+@dataclass(frozen=True)
+class CountObjects:
+    selector: Selector
+
+
+@dataclass(frozen=True)
+class ScaledValue:
+    value: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+    factor: int
+
+
+@dataclass(frozen=True)
+class ProduceMana:
+    """Produce an amount of one chosen type without enumerating mana bundles."""
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+    options: tuple[str,...]
+
+
+@dataclass(frozen=True)
+class SupertypeSelector(Selector):
+    excluded_supertypes: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class TargetSpec:
+    selector:Selector|None=None
+    minimum:int | ChosenX=1
+    maximum:int | ChosenX | None=1  # None permits one target per available controller group.
+    group_by_controller:bool=False
+    players:str|None=None
+    combat:str|None=None
+    groups:tuple[TargetGroup,...]=()
+
+
+@dataclass(frozen=True)
+class TargetGroup:
+    group_id:str
+    targets:TargetSpec
+
+
+@dataclass(frozen=True)
+class EventPattern:
+    kind:str  # zone_changed or step_began
+    from_zone:Zone|None=None
+    to_zone:Zone|None=None
+    subject:str='any'  # any or self
+    types:tuple[str,...]=()
+    controller_only:bool=False
+    step:str|None=None
+    counter_kind:str|None=None
+    recipient_relation:str='any'
+    characteristics:tuple[CharacteristicRange,...]=()
+    any_types:tuple[str,...]=()
+    exclude_source:bool=False
+    counters:tuple[CounterRange,...]=()
+
+
+@dataclass(frozen=True)
+class CombatDamageToPlayer(EventPattern):
+    modified: bool = False
+
+
+@dataclass(frozen=True)
+class ZoneEventPattern(EventPattern):
+    subtypes: tuple[str,...] = ()
+    cause: str | None = None
+    destination_owned: bool = False
+
+
+@dataclass(frozen=True)
+class SpellEventPattern(EventPattern):
+    """Spell-type exclusions are tested at the actual cast event."""
+    excluded_types: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class ColoredSpellEvent(SpellEventPattern):
+    colors: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class DrawEventPattern(EventPattern):
+    """The player's ordinal actual draw in the current turn."""
+    occurrence: int = 2
+
+
+@dataclass(frozen=True)
+class Move:
+    subject:str
+    destination:Zone
+    controller:str='effect'
+    tapped:bool=False
+    library_position:str|None=None
+    counters:tuple[tuple[str,int],...]=()
+
+
+@dataclass(frozen=True)
+class MoveFace(Move):
+    back_face: bool = False
+
+
+@dataclass(frozen=True)
+class PhaseOut:
+    subject: str = 'target'
+
+
+@dataclass(frozen=True)
+class Sacrifice:
+    subject:str
+    by_subject_controller:bool=False
+
+
+@dataclass(frozen=True)
+class Destroy:
+    subject: str
+
+
+@dataclass(frozen=True)
+class DestroyWithoutRegeneration(Destroy):
+    pass
+
+
+@dataclass(frozen=True)
+class Regenerate:
+    subject: str
+
+
+@dataclass(frozen=True)
+class ChooseProtection:
+    subject: str
+
+
+@dataclass(frozen=True)
+class Discard:
+    subject: str
+
+
+@dataclass(frozen=True)
+class Counter:
+    subject:str='target'
+    destination:Zone=Zone.GRAVEYARD
+
+
+@dataclass(frozen=True)
+class CounterAbilities:
+    """Counter waiting activated and triggered abilities in a controller domain."""
+    players: str = 'all'
+
+
+@dataclass(frozen=True)
+class Damage:
+    subject: str
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+
+    source_subject: str = 'source'
+    players: str | None = None
+    exclude_damage_source: bool = False
+
+@dataclass(frozen=True)
+class GainControl:
+    subject: str
+    duration: str = 'indefinite'
+
+
+@dataclass(frozen=True)
+class SearchLibrary:
+    selector: Selector
+    destination: Zone
+    count: int = 1
+    reveal: bool = False
+    optional_find: bool = False
+    tapped: bool = False
+    secondary_destination: Zone | None = None
+    primary_count: int = 1
+    secondary_tapped: bool = False
+    distinct_names: bool = False
+    partition_player: str | None = None
+
+
+@dataclass(frozen=True)
+class SearchByPlayer(SearchLibrary):
+    players: str = 'captured_controllers'
+    optional_search: bool = True
+
+
+@dataclass(frozen=True)
+class ChooseFromTop:
+    """Partition a bounded library window using a filtered optional selection."""
+    amount: int
+    selector: Selector
+    count: int = 1
+    reveal: bool = False
+    destination: Zone = Zone.HAND
+    remainder: str = 'graveyard'
+    tapped: bool = False
+
+
+@dataclass(frozen=True)
+class Surveil:
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class LookTop:
+    """Look at the top cards of your library and return them in any order."""
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class Scry:
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class Draw:
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat=1
+    players:str='controller'
+
+
+@dataclass(frozen=True)
+class DrawUpTo(Draw):
+    """Choose one count before any cards are drawn."""
+
+
+@dataclass(frozen=True)
+class Mill:
+    """Move up to the requested number of top library cards simultaneously."""
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat = 1
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class MayMill(Mill):
+    """Offer a whole optional mill, then bind actual graveyard arrivals."""
+    effects: tuple = ()
+
+
+@dataclass(frozen=True)
+class CastDuringResolution:
+    """Offer one spell from the resolving controller's hand at a fixed limit."""
+    maximum: int
+
+
+@dataclass(frozen=True)
+class Discover:
+    amount: int
+
+
+@dataclass(frozen=True)
+class Cascade:
+    """Use the current or last-known source spell's mana value."""
+    pass
+
+
+@dataclass(frozen=True)
+class Explore:
+    subject: str
+
+
+@dataclass(frozen=True)
+class ShuffleLibrary:
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class RevealTopPermanent:
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class WithLifeLost:
+    players: str
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class LoseLife:
+    players:str
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+
+
+@dataclass(frozen=True)
+class GainLife:
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+
+
+@dataclass(frozen=True)
+class May:
+    effects:tuple
+    otherwise:tuple=()
+    available:Selector|None=None
+    subject:str='source'
+
+
+@dataclass(frozen=True)
+class PayMana:
+    """Offer one player a fixed mana payment while suspending resolution."""
+    mana: ManaCost
+    effects: tuple
+    otherwise: tuple = ()
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class PayLifeOrSacrifice:
+    life: int
+    selector: Selector
+    effects: tuple = ()
+    otherwise: tuple = ()
+    players: str = 'target'
+
+
+@dataclass(frozen=True)
+class PayRepeatedMana(PayMana):
+    """Capture a repeated fixed mana cost when the resolution window opens."""
+    repetitions: int | SourceCounter = 1
+
+
+@dataclass(frozen=True)
+class UnlessEntered:
+    flag:str
+    effects:tuple
+
+
+@dataclass(frozen=True)
+class Proliferate:pass
+
+
+@dataclass(frozen=True)
+class MultiplyCounters:
+    subject: str
+    kind: str
+    factor: int = 2
+
+
+@dataclass(frozen=True)
+class CopyEventCounters:
+    subject: str
+
+
+@dataclass(frozen=True)
+class MoveCounters:
+    subject: str
+    to: str
+    kind: str | None = None
+
+
+@dataclass(frozen=True)
+class DistributeCounters:
+    subject: str
+    selector: Selector
+    kind: str
+
+
+@dataclass(frozen=True)
+class CopyCounterKind:
+    selector: Selector
+    subject: str
+    only_if_absent: bool = False
+
+
+@dataclass(frozen=True)
+class RemoveCounters:
+    subject: str
+    kind: str
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class PlaceDividedCounters:
+    """A fixed counter total divided among targets during announcement."""
+    kind: str
+    amount: int
+
+
+@dataclass(frozen=True)
+class AddCounters:
+    subject:str
+    kind:str
+    amount:int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat
+
+
+@dataclass(frozen=True)
+class Select:
+    selector:Selector
+    minimum:int
+    maximum:int
+    effects:tuple
+    ordered:bool=False
+    group_by_controller:bool=False
+
+
+@dataclass(frozen=True)
+class SelectBound(Select):
+    maximum: int | None
+    subject: str = 'moved'
+
+
+@dataclass(frozen=True)
+class SelectAll:
+    selector: Selector
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class SetTapped:
+    subject: str
+    tapped: bool
+
+
+@dataclass(frozen=True)
+class WithZoneResult:
+    operation: Move | Destroy | Sacrifice | Discard | Counter
+    destination: Zone | None
+    effects: tuple
+    selector: Selector | None = None
+
+
+@dataclass(frozen=True)
+class WithControllers:
+    subject: str
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class WithLastKnownControllers(WithControllers):
+    """Read current controllers, retaining exact-incarnation departure information."""
+    pass
+
+
+@dataclass(frozen=True)
+class WithOwners(WithControllers):
+    """Capture object owners before an operation changes their identities."""
+    pass
+
+
+@dataclass(frozen=True)
+class WithMoved:
+    subject: str
+    destination: Zone
+    effects: tuple
+    controller: str = 'effect'
+
+
+@dataclass(frozen=True)
+class ExileUntilSourceLeaves:
+    """Exile battlefield objects; return them immediately after this source leaves."""
+    subject: str
+
+
+@dataclass(frozen=True)
+class ExileLinked:
+    subject: str
+    link_id: str
+
+
+@dataclass(frozen=True)
+class WithLinkedExile:
+    link_id: str
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class WithAttached:
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class SetAttachmentRule:
+    selector: Selector
+    exact_subject: str | None = None
+
+
+@dataclass(frozen=True)
+class Attach:
+    subject: str
+    to: str
+
+
+@dataclass(frozen=True)
+class DelayedTrigger:
+    event: EventPattern
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class DelayedNextStep(DelayedTrigger):
+    """One future step occurrence, optionally excluding the current turn."""
+    next_turn: bool = False
+
+
+@dataclass(frozen=True)
+class AbilityProgram:
+    ability_id:str
+    event:EventPattern
+    effects:tuple
+    targets:TargetSpec|None=None
+    source_must_remain:Zone|None=None
+    intervening_if:EntryFlagCondition|CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|SourceCountersCondition|LifeLostCondition|AllConditions|AnyConditions|NotCondition|None=None
+    trigger_limit:int|None=None
+    occurrence_condition:EntryFlagCondition|CountCondition|PlayerCountCondition|DevotionCondition|LifeCondition|SourceCountersCondition|LifeLostCondition|AllConditions|AnyConditions|NotCondition|None=None
+    optional_once_per_turn:bool=False
+
+
+@dataclass(frozen=True)
+class ChapterAbility(AbilityProgram):
+    chapter: int = 1
+
+
+@dataclass(frozen=True)
+class EchoAbility(AbilityProgram):
+    """Own-upkeep occurrence bound to acquisition since the previous upkeep."""
+    pass
+
+
+@dataclass(frozen=True)
+class TurnHistoryCondition:
+    kind: str
+
+
+@dataclass(frozen=True)
+class PlayerStatistic:
+    statistic: str
+
+
+@dataclass(frozen=True)
+class ZoneReplacement:
+    replacement_id: str
+    destination: Zone
+    redirect: Zone
+    from_zone: Zone | None = None
+    types: tuple[str, ...] = ()
+    relation: str = 'any'
+    subject: str = 'any'
+    optional: bool = False
+
+
+@dataclass(frozen=True)
+class PlayerCountCondition:
+    minimum: int
+    players: str = 'opponents'
+
+
+@dataclass(frozen=True)
+class DevotionCondition:
+    colors:tuple[str,...]
+    minimum:int
+
+
+@dataclass(frozen=True)
+class SourceCountersCondition:
+    kind: str | None = None
+    minimum: int = 1
+
+
+@dataclass(frozen=True)
+class LifeLostCondition:
+    minimum: int = 1
+
+
+@dataclass(frozen=True)
+class LifeGainedCondition:
+    minimum: int = 1
+
+
+@dataclass(frozen=True)
+class LifeCondition:
+    """Inclusive life bounds, optionally measured relative to starting life."""
+    minimum: int | None = None
+    maximum: int | None = None
+    relative_to_starting: bool = False
+
+
+@dataclass(frozen=True)
+class EntryFlagCondition:
+    """A fact recorded on this exact battlefield incarnation as it entered."""
+    flag: str
+
+
+@dataclass(frozen=True)
+class CountCondition:
+    selector: Selector
+    minimum: int
+
+
+@dataclass(frozen=True)
+class AllConditions:
+    conditions: tuple
+
+
+@dataclass(frozen=True)
+class AnyConditions:
+    conditions: tuple
+
+
+@dataclass(frozen=True)
+class NotCondition:
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition
+
+
+@dataclass(frozen=True)
+class EntryModifier:
+    modifier_id: str
+    tapped: bool = True
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition | None = None
+    unless: bool = False
+    selector: Selector | None = None
+
+
+@dataclass(frozen=True)
+class EntryLifeNote(EntryModifier):
+    """Capture a public life total while this entry replacement is applied."""
+    tapped: bool = False
+    note_id: str = 'life'
+
+
+@dataclass(frozen=True)
+class NoteLife:
+    note_id: str = 'life'
+
+
+@dataclass(frozen=True)
+class CompareLifeNote(NoteLife):
+    effects: tuple = ()
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class IfPaidCostSubtype:
+    cost_id: str
+    subtypes: tuple[str,...] = ()
+    sets: tuple[str,...] = ()
+    effects: tuple = ()
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class EntryPayment(EntryModifier):
+    """Optional fixed life payment or one own-hand reveal; otherwise enter tapped.
+
+    Paying suppresses only this modifier. It never untaps an entry proposal
+    already made tapped by another instruction or replacement.
+    """
+    life: int = 0
+    reveal: Selector | None = None
+
+
+@dataclass(frozen=True)
+class IfCondition:
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition
+    effects: tuple
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class IfQuantityAtLeast:
+    value: object
+    minimum: int
+    effects: tuple
+    otherwise: tuple = ()
+
+
+@dataclass(frozen=True)
+class SetColors:
+    colors: tuple[str,...]
+
+
+@dataclass(frozen=True)
+class ChangeTypes:
+    add: tuple[str, ...] = ()
+    remove: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
+class AddSubtypes:
+    card_type: str
+    subtypes: tuple[str,...] = ()
+    sets: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class SetPT:
+    power: int | str
+    toughness: int | str
+
+
+@dataclass(frozen=True)
+class ModifyPT:
+    power: int
+    toughness: int
+
+
+@dataclass(frozen=True)
+class CountedPT(ModifyPT):
+    selector: Selector
+
+
+@dataclass(frozen=True)
+class LostPlayerPT(ModifyPT):
+    """A live modifier multiplied by the number of players who lost."""
+    pass
+
+
+@dataclass(frozen=True)
+class SwitchPT:
+    pass
+
+
+@dataclass(frozen=True)
+class AddActivated:
+    ability: ActivatedProgram
+
+
+@dataclass(frozen=True)
+class AddTriggered:
+    """Grant an independent triggered ability to each current recipient."""
+    ability: AbilityProgram
+
+
+@dataclass(frozen=True)
+class AddKeywords:
+    keywords: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class UntilEndOfTurn:
+    subject: str
+    changes: tuple
+
+
+@dataclass(frozen=True)
+class OngoingEffect(UntilEndOfTurn):
+    """Resolved characteristic changes without an end-of-turn duration."""
+
+
+@dataclass(frozen=True)
+class WhileCounter(UntilEndOfTurn):
+    """Resolved continuous changes lasting while each recipient retains a kind."""
+    counter_kind: str
+
+
+@dataclass(frozen=True)
+class SkipUntap:
+    """The affected permanent does not untap in its controller's untap step."""
+
+
+@dataclass(frozen=True)
+class ContinuousProgram:
+    effect_id: str
+    selector: Selector
+    changes: tuple
+    subject: str = 'any'
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition | None = None
+
+
+@dataclass(frozen=True)
+class ManaCost:
+    generic: int = 0
+    symbols: tuple[str, ...] = ()
+    x_symbols: int = 0
+
+
+@dataclass(frozen=True)
+class ZoneCost:
+    cost_id: str
+    kind: str
+    selector: Selector | None = None  # None means the activating source itself.
+    count: int = 1
+
+
+@dataclass(frozen=True)
+class CreateTokens:
+    token: CardProgram
+    amount: int | ChosenX | CountObjects | ScaledValue | LifeLost | EventAmount | MovedCount | SelectedCount | EventX | DividedValue | SourceCounter | SourceStat | BattlefieldStat | RecipientStat | TargetStat | PaidCostStat = 1
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class CreateSizedTokens(CreateTokens):
+    """Token base power/toughness fixed by the creating effect's quantities."""
+    power: int | ChosenX | EventX = 0
+    toughness: int | ChosenX | EventX = 0
+
+
+@dataclass(frozen=True)
+class WithCreatedTokens(CreateTokens):
+    effects: tuple = ()
+
+
+@dataclass(frozen=True)
+class CopyTokens:
+    """Create tokens with frozen copiable values and optional copy exceptions."""
+    subject: str
+    amount: int | ChosenX | CountObjects = 1
+    nonlegendary: bool = False
+    power: int | None = None
+    toughness: int | None = None
+    colors: tuple[str,...] | None = None
+    creature_types: tuple[str,...] | None = None
+    abilities: tuple = ()
+    effects: tuple = ()
+
+
+@dataclass(frozen=True)
+class CountDistinctNames(CountObjects):
+    """Count different current names among matching battlefield objects."""
+    pass
+
+
+@dataclass(frozen=True)
+class WinGame:
+    """The resolving controller wins immediately."""
+    pass
+
+
+@dataclass(frozen=True)
+class CostlessCopyTokens(CopyTokens):
+    """A copy exception removing the mana cost and its mana value."""
+
+
+@dataclass(frozen=True)
+class WithCountersPlaced:
+    """Bind only the objects that actually receive this kind of counter."""
+    subject: str
+    kind: str
+    amount: int | ChosenX
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class Monstrosity:
+    amount: int | ChosenX
+
+
+@dataclass(frozen=True)
+class ShuffleGraveyard:
+    """Shuffle the controller's entire graveyard into their library."""
+
+
+@dataclass(frozen=True)
+class CopyPermanent:
+    subject:str
+    original:str='target'
+    until_end_of_turn:bool=False
+    retain_activation:bool=False
+
+
+@dataclass(frozen=True)
+class SelectBySubtype:
+    selector:Selector
+    subtype_set:str
+    effects:tuple
+
+
+@dataclass(frozen=True)
+class PowerDamage:
+    source:str
+    target:str
+    trample_excess:bool=False
+
+
+@dataclass(frozen=True)
+class Fight:
+    first: str = 'source'
+    second: str = 'target'
+
+
+@dataclass(frozen=True)
+class CounterCost:
+    kind: str
+    amount: int
+
+
+@dataclass(frozen=True)
+class CostSpec:
+    mana: ManaCost = ManaCost()
+    life: int = 0
+    tap_source: bool = False
+    tap_selector: Selector | None = None
+    tap_count: int = 0
+    zone_costs: tuple[ZoneCost,...] = ()
+    counter_costs: tuple[CounterCost,...] = ()
+
+
+@dataclass(frozen=True)
+class PlayerCounterCost:
+    kind: str
+    amount: int | ChosenX
+
+
+@dataclass(frozen=True)
+class OrderedCostSpec(CostSpec):
+    """Explicitly ordered public zone costs and player counter payments."""
+    player_counter_costs: tuple[PlayerCounterCost,...] = ()
+
+
+def cost_has_x(cost):
+    return bool(cost.mana.x_symbols or isinstance(cost,LoyaltyCost) and isinstance(cost.loyalty,ChosenX) or isinstance(cost,OrderedCostSpec) and any(
+        isinstance(c.amount,ChosenX) for c in cost.player_counter_costs))
+
+
+@dataclass(frozen=True)
+class AlternativeCost:
+    alternative_id: str
+    cost: CostSpec
+    condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition | None = None
+
+
+@dataclass(frozen=True)
+class OverloadAlternative(AlternativeCost):
+    """An explicitly authored nontargeted body for an overloaded spell."""
+    effects: tuple = ()
+
+
+@dataclass(frozen=True)
+class EntryAlternativeCost(AlternativeCost):
+    """Fixed alternative payment recording noncopiable facts on cast entry."""
+    entry_flags: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class GraveyardAlternativeCost(AlternativeCost):
+    """Graveyard-only payment/permission, with cast-entry or stack-exit facts."""
+    entry_flags: tuple[str,...] = ()
+    exile_on_stack_exit: bool = False
+
+
+@dataclass(frozen=True)
+class CastSpec:
+    cost: CostSpec
+    timing: str = 'sorcery'
+    generic_reduction: int | CountObjects | BattlefieldStat | ScaledValue | DividedValue = 0
+    origin_zones:tuple[Zone,...]=(Zone.HAND,Zone.COMMAND)
+    alternatives:tuple[AlternativeCost,...]=()
+
+
+@dataclass(frozen=True)
+class ConvokeCast(CastSpec):
+    """Controlled untapped creatures may pay the final spell cost."""
+
+
+@dataclass(frozen=True)
+class KickerCast(CastSpec):
+    """One optional fixed mana additional cost; compatible with alternatives."""
+    kicker: CostSpec = CostSpec()
+    entry_flags: tuple[str,...] = ('kicked',)
+
+
+@dataclass(frozen=True)
+class CopyCast(CastSpec):
+    """A cast-triggered demonstrate or fixed-mana replicate ability."""
+    copy_kind: str = 'demonstrate'
+    replicate_cost: ManaCost | None = None
+
+
+@dataclass(frozen=True)
+class CopyCaptured:
+    """Interpreter-only instruction bound to an immutable announcement."""
+    copy_kind: str = 'single'
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class SpecialMana:
+    """Mana units with a spending restriction or one delayed copy trigger."""
+    options: tuple[str,...]
+    rider: str
+
+
+@dataclass(frozen=True)
+class CleanupCast(CastSpec):
+    """Instant permission with cast-time-dependent next-cleanup sacrifice."""
+
+
+@dataclass(frozen=True)
+class ActivatedProgram:
+    ability_id: str
+    cost: CostSpec
+    effects: tuple
+    targets: TargetSpec | None = None
+    timing: str = 'instant'
+    mana_ability: bool = False
+    zone: Zone = Zone.BATTLEFIELD
+    minimum_x: int = 0
+    generic_reduction: int | CountObjects | BattlefieldStat | ScaledValue | DividedValue = 0
+
+
+@dataclass(frozen=True)
+class ConditionalActivated(ActivatedProgram):
+    """An activation restriction evaluated using current derived state."""
+    condition: CountCondition | AllConditions | AnyConditions | NotCondition | None = None
+
+
+@dataclass(frozen=True)
+class AddMana:
+    symbols: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ChooseMana:
+    options: tuple[tuple[str,...],...]
+
+
+@dataclass(frozen=True)
+class LandMana:
+    """Choose one type another eligible land could produce under CR 106.7."""
+    relation: str = 'opponent_controlled'
+    colors_only: bool = True
+
+
+@dataclass(frozen=True)
+class ChooseCommanderMana:
+    pass
+
+
+@dataclass(frozen=True)
+class CostModifier:
+    modifier_id: str
+    selector: Selector
+    generic_delta: int
+    origin_zones:tuple[Zone,...]=()
+
+
+@dataclass(frozen=True)
+class LifeCostModifier(CostModifier):
+    """An optional additional life cost reducing one colored mana pip."""
+    color: str = 'G'
+    life: int = 2
+
+
+@dataclass(frozen=True)
+class CastRestriction:
+    selector:Selector
+    origin_zones:tuple[Zone,...]
+
+
+@dataclass(frozen=True)
+class BlockRestriction:
+    attackers: Selector
+    blockers: Selector
+    statistic: str
+    comparison: str
+    value: int | SourceStat | SourceCounter | CountObjects | BattlefieldStat | ScaledValue
+
+
+@dataclass(frozen=True)
+class TargetRestriction:
+    opponents_only: bool = False
+    source_types: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class EntryCounters:
+    replacement_id: str
+    kind: str
+    amount: int | ChosenX | CountObjects | ScaledValue | DividedValue
+    selector: Selector | None = None
+
+
+@dataclass(frozen=True)
+class CounterReplacement:
+    replacement_id: str
+    selector: Selector | None = None
+    players: str | None = None
+    kind: str | None = None
+    multiplier: int = 1
+    additional: int = 0
+    subject: str = 'any'
+    divisor: int = 1
+    actor_relation: str = 'any'
+
+
+@dataclass(frozen=True)
+class TappedManaReplacement:
+    replacement_id: str
+    multiplier: int = 2
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class LifeGainReplacement:
+    replacement_id: str
+    additional: int = 1
+    players: str = 'controller'
+
+
+@dataclass(frozen=True)
+class PlayerPermissions:
+    additional_land_plays: int = 0
+    no_maximum_hand_size: bool = False
+    land_zones: tuple[Zone,...] = ()
+
+
+@dataclass(frozen=True)
+class RulePermissions(PlayerPermissions):
+    creature_spells_uncounterable: bool = False
+    attack_tax: int = 0
+
+
+@dataclass(frozen=True)
+class SetCardTypes:
+    types: tuple[str,...]
+    creature_subtypes: tuple[str,...]
+
+
+@dataclass(frozen=True)
+class LoseAbilities:
+    pass
+
+
+@dataclass(frozen=True)
+class Goaded:
+    """A continuous designation, not an ability of the affected creature."""
+    pass
+
+
+@dataclass(frozen=True)
+class AddRiot:
+    """One distinct instance of riot, including entry lookahead."""
+    pass
+
+
+@dataclass(frozen=True)
+class TopLibraryPermissions(PlayerPermissions):
+    reveal_top: bool = True
+    play_top_land: bool = True
+
+
+@dataclass(frozen=True)
+class GrantPermissions:
+    permissions: PlayerPermissions
+    duration: str = 'until_end_of_turn'
+
+
+@dataclass(frozen=True)
+class SpellMode:
+    mode_id: str
+    effects: tuple
+    targets: TargetSpec | None = None
+
+
+@dataclass(frozen=True)
+class ModalSpec:
+    modes: tuple[SpellMode,...]
+    minimum: int = 1
+    maximum: int = 1
+    extra_mode_condition: EntryFlagCondition | CountCondition | PlayerCountCondition | DevotionCondition | LifeCondition | SourceCountersCondition | LifeLostCondition | AllConditions | AnyConditions | NotCondition | None = None
+    conditional_maximum: int | None = None
+
+
+@dataclass(frozen=True)
+class CardProgram:
+    definition_id:str
+    name:str
+    types:tuple[str,...]
+    abilities:tuple[AbilityProgram,...]=()
+    spell_effects:tuple=()
+    spell_targets:TargetSpec|None=None
+    entry_copy:Selector|None=None
+    entry_modifiers:tuple[EntryModifier,...]=()
+    replacements:tuple[ZoneReplacement,...]=()
+    enchant:Selector|None=None
+    subtypes:tuple[str,...]=()
+    mana_value:int=0
+    power:int|None=None
+    toughness:int|None=None
+    continuous:tuple[ContinuousProgram,...]=()
+    cast:CastSpec|None=None
+    activated:tuple[ActivatedProgram,...]=()
+    cost_modifiers:tuple[CostModifier,...]=()
+    target_restrictions:tuple[TargetRestriction,...]=()
+    keywords:tuple[str,...]=()
+    supertypes:tuple[str,...]=()
+    player_permissions:PlayerPermissions=PlayerPermissions()
+    counter_replacements:tuple[CounterReplacement,...]=()
+    entry_counters:tuple[EntryCounters,...]=()
+    colors:tuple[str,...]=()
+    modal:ModalSpec|None=None
+    entry_copy_tapped:bool=False
+    characteristic_pt:CountObjects|None=None
+    life_gain_replacements:tuple[LifeGainReplacement,...]=()
+    block_restrictions:tuple[BlockRestriction,...]=()
+    tapped_mana_replacements:tuple[TappedManaReplacement,...]=()
+    all_subtype_sets:tuple[str,...]=()
+    entry_restrictions:tuple[Selector,...]=()
+    casting_restrictions:tuple[CastRestriction,...]=()
+    entry_copy_add_types:tuple[str,...]=()
+
+
+@dataclass(frozen=True)
+class CommanderProgram(CardProgram):
+    can_be_commander: bool = True
+
+
+@dataclass(frozen=True)
+class KeywordSelector(Selector):
+    any_keywords: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class LoyaltyCost(CostSpec):
+    """A signed loyalty symbol; ChosenX denotes the negative X symbol."""
+    loyalty: int | ChosenX = 0
+
+
+@dataclass(frozen=True)
+class ClassLevelCondition:
+    minimum: int = 1
+    maximum: int | None = None
+
+
+@dataclass(frozen=True)
+class ControllerTurnCondition:
+    pass
+
+
+@dataclass(frozen=True)
+class ClassCounterReplacement(CounterReplacement):
+    minimum_level: int = 3
+
+
+@dataclass(frozen=True)
+class AddWard:
+    mana: ManaCost = ManaCost(generic=1)
+
+
+@dataclass(frozen=True)
+class SetClassLevel:
+    level: int
+
+
+@dataclass(frozen=True)
+class RotateControl:
+    selector: Selector
+
+
+@dataclass(frozen=True)
+class PutEligibleTop:
+    """Privately look; optionally put a land or a creature within the bound."""
+    maximum: object
+
+
+@dataclass(frozen=True)
+class SacrificeThenTrigger:
+    selector: Selector
+    targets: TargetSpec
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class BattleProgram(CardProgram):
+    defense: int = 0
+
+
+@dataclass(frozen=True)
+class DoubleFacedProgram(BattleProgram):
+    back: CardProgram | None = None
+    layout: str = 'transform'
+
+
+@dataclass(frozen=True)
+class ReturnTransformed:
+    subject: str = 'source'
+    controller: str = 'effect'
+
+
+@dataclass(frozen=True)
+class Transform:
+    subject: str = 'source'
+
+
+@dataclass(frozen=True)
+class DiscardThenTrigger:
+    targets: TargetSpec
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class SpellTaxUntilNextTurn:
+    selector: Selector
+    generic: int = 2
+
+
+@dataclass(frozen=True)
+class ChooseCounter:
+    subject: str
+    kinds: tuple[str,...]
+
+
+@dataclass(frozen=True)
+class IfOtherPermanent:
+    selector: Selector
+    excluded: str
+    effects: tuple
+
+
+@dataclass(frozen=True)
+class DefeatBattle:
+    pass
+
+
+@dataclass(frozen=True)
+class WardPayment:
+    """Interpreter-bound ward trigger, retaining the spell/ability being targeted."""
+    mana: ManaCost
+
+
+@dataclass(frozen=True)
+class CounterBoundStack:
+    pass
+
+
+@dataclass(frozen=True)
+class MoveWithSubtypes(Move):
+    added_subtypes: tuple[str,...] = ()
+
+
+@dataclass(frozen=True)
+class OpeningHandPermissions(PlayerPermissions):
+    battlefield_from_opening_hand: bool = True
+
+
+
+@dataclass(frozen=True)
+class RoomProgram(CardProgram):
+    right: CardProgram | None = None
+    shared_abilities: tuple = ()
+    shared_activated: tuple = ()
+    copy_colors: tuple | None = None
+    cost_removed: bool = False
+
+
+@dataclass(frozen=True)
+class ReadAheadProgram(CardProgram):
+    pass
+
+
+@dataclass(frozen=True)
+class MiraclePermissions(PlayerPermissions):
+    generic_reduction: int = 4
+
+
+@dataclass(frozen=True)
+class ExactManaCostSelector(Selector):
+    costs: tuple[ManaCost,...] = ()
+
+
+@dataclass(frozen=True)
+class RoomEventPattern(EventPattern):
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class UnlockRoom:
+    subject: str = 'source'
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class LockRoom:
+    subject: str = 'source'
+    door: str | None = None
+
+
+@dataclass(frozen=True)
+class ResolutionSequence:
+    group: str
+    stages: tuple[tuple,...]
+
+
+@dataclass(frozen=True)
+class DiscardPlayers:
+    players: str = 'opponents'
+    amount: int = 1
+
+
+@dataclass(frozen=True)
+class RevealHandDiscard:
+    selector: Selector
+    players: str = 'target'
+
+
+@dataclass(frozen=True)
+class ReturnEnchantmentOrUnlock:
+    pass
+
+
+@dataclass(frozen=True)
+class MiracleCast:
+    reduction: int
+
+
+def room_profile(program,obj):
+    """Room halves are copiable; unlocked designations belong to the object."""
+    if not isinstance(program,RoomProgram):return program
+    left=CardProgram(**{f.name:getattr(program,f.name) for f in fields(CardProgram)})
+    right=program.right
+    halves=(obj.room_cast,) if obj.room_cast else obj.unlocked if obj.zone==Zone.BATTLEFIELD else ('left','right')
+    if halves==('left',):profile=left
+    elif halves==('right',):profile=right
+    elif not halves:
+        profile=CardProgram(program.definition_id,'',program.types,subtypes=program.subtypes,
+            supertypes=program.supertypes,power=program.power,toughness=program.toughness)
+    else:
+        arrays=('abilities','activated','continuous','entry_modifiers','entry_counters','replacements',
+            'counter_replacements','life_gain_replacements','block_restrictions','tapped_mana_replacements',
+            'entry_restrictions','casting_restrictions','cost_modifiers','target_restrictions')
+        attrs={name:getattr(left,name)+getattr(right,name) for name in arrays}
+        costs=tuple(p.cast.cost.mana for p in (left,right) if p.cast)
+        mana=ManaCost(sum(c.generic for c in costs),tuple(s for c in costs for s in c.symbols),sum(c.x_symbols for c in costs))
+        profile=replace(left,name=left.name+' // '+right.name,mana_value=left.mana_value+right.mana_value,
+            colors=tuple(sorted(set(left.colors+right.colors))),keywords=tuple(dict.fromkeys(left.keywords+right.keywords)),
+            cast=CastSpec(CostSpec(mana)) if costs else None,**attrs)
+    return replace(profile,abilities=profile.abilities+program.shared_abilities,activated=profile.activated+program.shared_activated,
+        colors=program.copy_colors if program.copy_colors is not None else profile.colors)
+
+
+
+def object_program(obj,definitions):
+    return room_profile(definitions[obj.effective_definition],obj)
+
+
+KEYWORDS=frozenset(('fear','protection_white','protection_blue','protection_black','protection_red','protection_green','phasing','haste','flying','reach','menace','vigilance','defender','first_strike','double_strike','trample','deathtouch','lifelink','indestructible','unblockable','flash','hexproof','shroud'))
+
+TYPES={cls.__name__:cls for cls in (CountedPT,RoomEventPattern,RoomProgram,ReadAheadProgram,MiraclePermissions,ExactManaCostSelector,UnlockRoom,LockRoom,ResolutionSequence,DiscardPlayers,RevealHandDiscard,ReturnEnchantmentOrUnlock,MiracleCast,BattleProgram,MoveFace,DoubleFacedProgram,ChapterAbility,LifeGainedCondition,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,AddTriggered,CommanderProgram,KeywordSelector,LoyaltyCost,ClassLevelCondition,ControllerTurnCondition,ClassCounterReplacement,AddWard,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,OpeningHandPermissions,WithLastKnownControllers,OrderedCostSpec,PlayerCounterCost,LifeCostModifier,CountDistinctNames,WinGame,RulePermissions,SetCardTypes,LoseAbilities,Goaded,AddRiot,TopLibraryPermissions,CastDuringResolution,Discover,Cascade,CopyCast,CopyCaptured,SpecialMana,ModifiedSelector,CombatDamageToPlayer,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,LostPlayerPT,OverloadAlternative,ConditionalActivated,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,ConvokeCast,DestroyWithoutRegeneration,Regenerate,ChooseProtection,EchoAbility,TurnHistoryCondition,PlayerStatistic,IfQuantityAtLeast,KickerCast,CleanupCast,EntryLifeNote,NoteLife,CompareLifeNote,IfPaidCostSubtype,ColoredSpellEvent,OngoingEffect,WithCreatedTokens,SupertypeSelector,PayLifeOrSacrifice,SearchByPlayer,ZoneEventPattern,PhaseOut,SpellEventPattern,DrawUpTo,PayRepeatedMana,SkipUntap,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,SourceCountersCondition,LifeLostCondition,PayMana,DrawEventPattern,ExileUntilSourceLeaves,GraveyardAlternativeCost,ExileLinked,WithLinkedExile,EntryFlagCondition,EntryAlternativeCost,EntryPayment,AlternativeCost,CastRestriction,DevotionCondition,TappedManaReplacement,AddActivated,BlockRestriction,LifeGainReplacement,SourceCounter,TargetStat,PaidCostStat,SetColors,SelectedCount,CounterRange,PlayerCountCondition,SpellMode,ModalSpec,LifeCondition,AddSubtypes,CharacteristicRange,AllConditions,AnyConditions,NotCondition,RecipientStat,UntilEndOfTurn,AddKeywords,SourceStat,BattlefieldStat,EventX,DividedValue,MovedCount,SetTapped,WithZoneResult,WithControllers,CreateTokens,CounterCost,EntryCounters,CounterReplacement,MultiplyCounters,LifeLost,EventAmount,WithLifeLost,LoseLife,PlayerPermissions,GrantPermissions,ChosenX,CountObjects,ScaledValue,ProduceMana,Selector,TargetSpec,TargetGroup,EventPattern,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AbilityProgram,ZoneReplacement,CountCondition,EntryModifier,IfCondition,ChangeTypes,SetPT,ModifyPT,SwitchPT,ContinuousProgram,ManaCost,ZoneCost,CostSpec,CastSpec,ActivatedProgram,AddMana,ChooseMana,ChooseCommanderMana,CostModifier,TargetRestriction,CardProgram)}
+EFFECTS=(UnlockRoom,LockRoom,ResolutionSequence,DiscardPlayers,RevealHandDiscard,ReturnEnchantmentOrUnlock,MiracleCast,MoveFace,ReturnTransformed,Transform,DiscardThenTrigger,SpellTaxUntilNextTurn,ChooseCounter,IfOtherPermanent,DefeatBattle,SetClassLevel,RotateControl,PutEligibleTop,SacrificeThenTrigger,WardPayment,CounterBoundStack,MoveWithSubtypes,WithLastKnownControllers,WinGame,CastDuringResolution,Discover,Cascade,CopyCaptured,SpecialMana,MayMill,Explore,ShuffleLibrary,RevealTopPermanent,SelectBound,WithOwners,CreateSizedTokens,CostlessCopyTokens,WithCountersPlaced,Monstrosity,ShuffleGraveyard,CopyPermanent,SelectBySubtype,PowerDamage,CopyTokens,Fight,LandMana,DestroyWithoutRegeneration,Regenerate,ChooseProtection,IfQuantityAtLeast,NoteLife,CompareLifeNote,IfPaidCostSubtype,OngoingEffect,WithCreatedTokens,PayLifeOrSacrifice,SearchByPlayer,PhaseOut,DrawUpTo,PayRepeatedMana,DelayedNextStep,RemoveCounters,PlaceDividedCounters,WhileCounter,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind,PayMana,ExileUntilSourceLeaves,ExileLinked,WithLinkedExile,UntilEndOfTurn,SetTapped,WithZoneResult,WithControllers,CreateTokens,MultiplyCounters,WithLifeLost,LoseLife,GrantPermissions,ProduceMana,Move,Sacrifice,Destroy,Discard,Counter,CounterAbilities,Damage,GainControl,ChooseFromTop,SearchLibrary,Surveil,LookTop,Scry,Draw,Mill,GainLife,May,UnlessEntered,Proliferate,AddCounters,Select,SelectAll,WithMoved,WithAttached,SetAttachmentRule,Attach,DelayedTrigger,AddMana,ChooseMana,ChooseCommanderMana,IfCondition)
+
+
+def encode(value):
+    if type(value).__name__ in TYPES and type(value) is TYPES[type(value).__name__]:
+        return {'node':type(value).__name__,**{field.name:encode(getattr(value,field.name)) for field in fields(value)}}
+    if isinstance(value,Zone):return {'zone':value.value}
+    if isinstance(value,tuple):return [encode(item) for item in value]
+    if value is None or type(value) in (str,int,bool):return value
+    raise RulesViolation('Program contains an unsupported value')
+
+
+def decode(value):
+    if isinstance(value,list):return tuple(decode(item) for item in value)
+    if isinstance(value,dict):
+        if set(value)=={'zone'}:return Zone(value['zone'])
+        cls=TYPES.get(value.get('node'))
+        if cls is None or set(value)-{'node'}!={field.name for field in fields(cls)}:raise RulesViolation('Unknown or malformed program node')
+        return cls(**{key:decode(item) for key,item in value.items() if key!='node'})
+    if value is None or type(value) in (str,int,bool):return value
+    raise RulesViolation('Invalid serialized program')
+
+
+def immediate_effect_nodes(nodes):
+    """Walk effects executed now, excluding bodies of future delayed triggers."""
+    for node in nodes:
+        yield node
+        if isinstance(node,ResolutionSequence):
+            for stage in node.stages:yield from immediate_effect_nodes(stage)
+        if isinstance(node,WithZoneResult):
+            yield from immediate_effect_nodes((node.operation,))
+            yield from immediate_effect_nodes(node.effects)
+        if isinstance(node,(IfOtherPermanent,MayMill,WithCountersPlaced,SelectBySubtype,IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,CopyTokens,WithCreatedTokens,PayLifeOrSacrifice,PayMana,May,UnlessEntered,Select,SelectAll,WithMoved,WithLinkedExile,WithControllers,WithAttached,IfCondition,WithLifeLost)):
+            yield from immediate_effect_nodes(node.effects)
+        if isinstance(node,(IfQuantityAtLeast,CompareLifeNote,IfPaidCostSubtype,PayLifeOrSacrifice,PayMana,IfCondition,May)):
+            yield from immediate_effect_nodes(node.otherwise)
+
+
+ACTOR_EVENTS=frozenset({'spell_cast','ability_activated','life_gained','card_drawn',
+    'library_searched','library_shuffled','scried','surveilled'})
+
+
+def event_player_matches(pattern,controller,player):
+    return ((not pattern.controller_only or controller==player)
+        and (pattern.recipient_relation=='any'
+             or (controller==player)==(pattern.recipient_relation=='controlled')))
+
+
+def constant_quantity(value):
+    """Return a provable nonnegative constant, or None for state-bound values.
+
+    This is static classification only; program validation still visits every
+    operand and runtime evaluation still enforces its ordinary bindings.
+    """
+    if type(value) is int:return max(0,value)
+    if isinstance(value,ScaledValue):
+        if value.factor==0:return 0
+        operand=constant_quantity(value.value)
+        if operand is not None:return max(0,operand*value.factor)
+    if isinstance(value,DividedValue):
+        operand=constant_quantity(value.value)
+        if operand is not None:
+            return (operand+value.divisor-1)//value.divisor if value.rounding=='up' else operand//value.divisor
+    return None
+
+
+def division_spec(nodes,spec):
+    """One unconditional fixed division in a nonmodal announced action."""
+    if not isinstance(nodes,tuple):raise RulesViolation('Effects must be immutable tuples')
+    divided=tuple(node for node in immediate_effect_nodes(nodes) if isinstance(node,PlaceDividedCounters))
+    if not divided:return None
+    if any(type(node.amount) is not int or node.amount<1 for node in divided):
+        raise RulesViolation('Invalid announced counter total')
+    if (len(divided)!=1 or not any(node is divided[0] for node in nodes) or not isinstance(spec,TargetSpec)
+            or spec.selector is None or spec.selector.zone!=Zone.BATTLEFIELD or spec.players is not None
+            or spec.combat is not None or spec.groups or spec.group_by_controller
+            or type(spec.minimum) is not int or type(spec.maximum) is not int
+            or not 1<=spec.minimum<=spec.maximum<=divided[0].amount):
+        raise RulesViolation('Unsupported announced counter division')
+    return divided[0]
+
+
+def activation_is_mana(ability):
+    """Classify the supported activation vocabulary under 605.1a.
+
+    Loyalty and library-moving costs need their own nodes.
+    """
+    if isinstance(ability.cost,LoyaltyCost):return False
+    nodes=tuple(immediate_effect_nodes(ability.effects))
+    produces=any(isinstance(node,(SpecialMana,AddMana,ChooseMana,ChooseCommanderMana,LandMana))
+        or isinstance(node,ProduceMana) and constant_quantity(node.amount)!=0 for node in nodes)
+    # CR 605.1a (August 2026): moving cards across the library boundary
+    # disqualifies an activation. Merely looking, shuffling or rearranging
+    # within that zone does not. Assess possible movement, not current contents.
+    def moves_library_card(node):
+        if isinstance(node,(PutEligibleTop,Discover,Cascade,Explore,RevealTopPermanent,ShuffleGraveyard)):return True
+        if isinstance(node,(Draw,Mill,Surveil)):
+            return constant_quantity(node.amount)!=0
+        if isinstance(node,SearchLibrary):
+            return node.count>0 and (node.destination!=Zone.LIBRARY or node.secondary_destination is not None)
+        if isinstance(node,ChooseFromTop):
+            return node.amount>0 and (node.remainder=='graveyard' or node.count>0)
+        return (isinstance(node,(Move,WithMoved,Counter)) and node.destination==Zone.LIBRARY
+            or isinstance(node,(Select,SelectAll)) and node.selector.zone==Zone.LIBRARY)
+    library=any(moves_library_card(node) for node in nodes)
+    return ability.targets is None and produces and not library
+
+
+def validate(program,_depth=0):
+    if isinstance(program,RoomProgram):
+        if (type(program.right) is not CardProgram or program.right.definition_id!=program.definition_id+':right'
+                or program.types!=program.right.types or program.subtypes!=program.right.subtypes
+                or 'Room' not in program.subtypes or 'Enchantment' not in program.types
+                or type(program.cost_removed) is not bool or not program.cost_removed and (program.cast is None or program.right.cast is None)):raise RulesViolation('Invalid Room program')
+        validate(CardProgram('room-shared','Room shared copy abilities',program.types,abilities=program.shared_abilities,activated=program.shared_activated,colors=program.copy_colors or ()),_depth+1)
+        validate(program.right,_depth+1)
+    if isinstance(program,ReadAheadProgram) and ('Saga' not in program.subtypes or not any(isinstance(a,ChapterAbility) for a in program.abilities)):raise RulesViolation('Read ahead requires chapter abilities')
+    if isinstance(program,BattleProgram) and (type(program.defense) is not int or program.defense<0 or bool(program.defense)!=('Battle' in program.types)):raise RulesViolation('Invalid printed defense')
+    if isinstance(program,DoubleFacedProgram):
+        if program.layout not in {'modal','transform'} or type(program.back) is not CardProgram or program.back.definition_id!=program.definition_id+':back':raise RulesViolation('Invalid double-faced program')
+        validate(program.back,_depth+1)
+    if isinstance(program.player_permissions,MiraclePermissions) and (type(program.player_permissions.generic_reduction) is not int or program.player_permissions.generic_reduction<0):raise RulesViolation('Invalid miracle reduction')
+    if isinstance(program,CommanderProgram) and program.can_be_commander is not True:raise RulesViolation('Invalid printed commander permission')
+    if _depth>16:raise RulesViolation('Token program nesting is too deep')
+    """Reject malformed programs and unresolved bindings before execution."""
+    def strings(values):
+        return isinstance(values, tuple) and all(type(v) is str and v for v in values)
+
+    def characteristic_ranges(values,dynamic=False,allow_x=False,available_values=frozenset()):
+        if not isinstance(values,tuple):raise RulesViolation('Characteristic ranges must be immutable')
+        seen=set()
+        for value in values:
+            if (not isinstance(value,CharacteristicRange) or type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value'}
+                    or value.statistic in seen or value.minimum is None and value.maximum is None
+                    or not dynamic and any(bound is not None and type(bound) is not int for bound in (value.minimum,value.maximum))
+                    or type(value.minimum) is int and type(value.maximum) is int and value.minimum>value.maximum):
+                raise RulesViolation('Invalid characteristic range')
+            for bound in (value.minimum,value.maximum):
+                if bound is not None and type(bound) is not int:quantity(bound,allow_x,available_values=available_values|{'signed_bound','signed_scaling'})
+            seen.add(value.statistic)
+
+    def selector(value,dynamic=False,allow_x=False,available_values=frozenset()):
+        if isinstance(value,ExactManaCostSelector):
+            if not isinstance(value.costs,tuple) or not value.costs or any(type(m) is not ManaCost or type(m.generic) is not int or m.generic<0 or not isinstance(m.symbols,tuple) or any(s not in ('W','U','B','R','G','C') for s in m.symbols) or type(m.x_symbols) is not int or m.x_symbols<0 for m in value.costs):raise RulesViolation('Invalid exact mana-cost selector')
+        if isinstance(value,KeywordSelector) and (value.zone!=Zone.BATTLEFIELD or not strings(value.any_keywords) or not value.any_keywords or not set(value.any_keywords)<=KEYWORDS):
+            raise RulesViolation('Invalid keyword selection')
+        if isinstance(value,ModifiedSelector) and value.zone!=Zone.BATTLEFIELD:
+            raise RulesViolation('Modified selectors require battlefield creatures')
+        if isinstance(value,SupertypeSelector) and not strings(value.excluded_supertypes):
+            raise RulesViolation('Invalid excluded supertypes')
+        if (not isinstance(value, Selector) or not isinstance(value.zone, Zone)
+                or value.relation not in {'any', 'owned', 'controlled', 'opponent_controlled'}
+                or not strings(value.types) or not strings(value.any_subtypes) or not strings(value.any_types) or not strings(value.excluded_types) or not strings(value.supertypes) or not strings(value.subtypes) or not strings(value.excluded_subtypes) or type(value.exclude_source) is not bool or value.commander is not None and type(value.commander) is not bool):
+            raise RulesViolation('Invalid selector')
+        if value.tapped is not None and (type(value.tapped) is not bool or value.zone!=Zone.BATTLEFIELD):raise RulesViolation('Orientation selectors require battlefield objects')
+        characteristic_ranges(value.characteristics,dynamic,allow_x,available_values)
+        for colors in (value.colors,value.any_colors,value.excluded_colors):
+            if not strings(colors) or len(set(colors))!=len(colors) or any(color not in 'WUBRG' or len(color)!=1 for color in colors):raise RulesViolation('Invalid color selector')
+        if not isinstance(value.counters,tuple) or value.counters and value.zone!=Zone.BATTLEFIELD:raise RulesViolation('Counter selectors require battlefield objects')
+        kinds=set()
+        for counter in value.counters:
+            if (not isinstance(counter,CounterRange) or counter.kind is not None and (type(counter.kind) is not str or not counter.kind) or counter.kind in kinds
+                    or counter.minimum is None and counter.maximum is None
+                    or any(bound is not None and (type(bound) is not int or bound<0) for bound in (counter.minimum,counter.maximum))
+                    or counter.minimum is not None and counter.maximum is not None and counter.minimum>counter.maximum):
+                raise RulesViolation('Invalid counter range')
+            kinds.add(counter.kind)
+
+    def subtype_addition(change):
+        if (type(change.card_type) is not str or change.card_type not in {'Land','Creature','Kindred','Artifact','Enchantment','Planeswalker','Battle','Instant','Sorcery'}
+                or not strings(change.subtypes) or len(set(change.subtypes))!=len(change.subtypes)
+                or not strings(change.sets) or len(set(change.sets))!=len(change.sets)
+                or not (change.subtypes or change.sets)
+                or any(name not in SUBTYPE_SETS or change.card_type not in SUBTYPE_SUPPORT[name] for name in change.sets)):
+            raise RulesViolation('Invalid subtype additions')
+
+    def bounds(minimum, maximum):
+        if type(minimum) is not int or type(maximum) is not int or not 0 <= minimum <= maximum:
+            raise RulesViolation('Invalid choice bounds')
+
+    def target(value,allow_x=False,allow_groups=False):
+        if not isinstance(value, TargetSpec) or type(value.group_by_controller) is not bool:
+            raise RulesViolation('Invalid targets')
+        if not isinstance(value.groups,tuple):raise RulesViolation('Target groups must be immutable')
+        if value.groups:
+            if not allow_groups:raise RulesViolation('Grouped targets currently require a triggered ability')
+            if value.selector is not None or value.players is not None or value.combat is not None or value.group_by_controller:
+                raise RulesViolation('Grouped targets cannot also declare a flat domain')
+            bounds(value.minimum,value.maximum);ids=[]
+            for group in value.groups:
+                if not isinstance(group,TargetGroup) or type(group.group_id) is not str or not group.group_id:
+                    raise RulesViolation('Invalid target group')
+                target(group.targets)
+                if group.targets.players is not None or group.targets.group_by_controller:
+                    raise RulesViolation('Grouped targets currently require object-only independent clauses')
+                ids.append(group.group_id)
+            if len(ids)!=len(set(ids)):raise RulesViolation('Duplicate target group ID')
+            if (value.minimum,value.maximum)!=(sum(g.targets.minimum for g in value.groups),sum(g.targets.maximum for g in value.groups)):
+                raise RulesViolation('Grouped target bounds must equal the clause totals')
+            return
+        if value.selector is not None:selector(value.selector,dynamic=True,allow_x=allow_x)
+        if (value.combat is not None and (type(value.combat) is not str or value.combat not in {'attacking','blocking','attacking_or_blocking'}
+                or value.selector is None or value.selector.zone!=Zone.BATTLEFIELD or value.players is not None)):
+            raise RulesViolation('Invalid combat target domain')
+        if value.players not in {None,'all','opponents','controller'} or value.selector is None and value.players is None:
+            raise RulesViolation('Invalid target domains')
+        if isinstance(value.minimum,ChosenX) or isinstance(value.maximum,ChosenX):
+            if not allow_x:raise RulesViolation('Variable targets require an announced X cost')
+            for bound in (value.minimum,value.maximum):
+                if not isinstance(bound,ChosenX) and (type(bound) is not int or bound<0):raise RulesViolation('Invalid variable target bounds')
+        elif value.maximum is None:
+            if (not allow_groups or not value.group_by_controller or type(value.minimum) is not int or value.minimum<0
+                    or value.selector is None or value.selector.zone!=Zone.BATTLEFIELD or value.players is not None):
+                raise RulesViolation('Unbounded targets require a triggered battlefield target per controller')
+        else:bounds(value.minimum,value.maximum)
+
+    def mana(value):
+        if (not isinstance(value, ManaCost) or type(value.generic) is not int or value.generic < 0
+                or type(value.x_symbols) is not int or value.x_symbols < 0
+                or not isinstance(value.symbols, tuple) or any(not (type(symbol) is str and (symbol in tuple('WUBRGC')
+                    or len(symbol)==3 and symbol[1]=='/' and symbol[0] in 'WUBRG' and symbol[2] in 'WUBRG' and symbol[0]!=symbol[2])) for symbol in value.symbols)):
+            raise RulesViolation('Unsupported mana cost')
+
+    def cost(value):
+        if (not isinstance(value, CostSpec) or type(value.life) is not int or value.life < 0
+                or type(value.tap_source) is not bool or type(value.tap_count) is not int or value.tap_count < 0):
+            raise RulesViolation('Invalid cost specification')
+        mana(value.mana)
+        if isinstance(value,LoyaltyCost):
+            if (value.mana!=ManaCost() or value.life or value.tap_source or value.tap_selector is not None
+                    or value.tap_count or value.zone_costs or value.counter_costs
+                    or not isinstance(value.loyalty,ChosenX) and type(value.loyalty) is not int):
+                raise RulesViolation('A loyalty cost requires exactly one signed loyalty symbol')
+        if not isinstance(value.counter_costs,tuple):raise RulesViolation('Counter costs must be immutable')
+        kinds=[]
+        for counter_cost in value.counter_costs:
+            if (not isinstance(counter_cost,CounterCost) or type(counter_cost.kind) is not str or not counter_cost.kind
+                    or type(counter_cost.amount) is not int or counter_cost.amount<1):raise RulesViolation('Invalid source counter cost')
+            kinds.append(counter_cost.kind)
+        if len(kinds)!=len(set(kinds)):raise RulesViolation('Duplicate counter-cost kind')
+        if value.counter_costs and value.zone_costs:raise RulesViolation('Counter and zone costs require separately ordered cost groups')
+        if isinstance(value,OrderedCostSpec):
+            if value.tap_source or value.tap_selector is not None or value.counter_costs:
+                raise RulesViolation('Ordered costs currently support mana, life, player counters and zone groups')
+            if not isinstance(value.player_counter_costs,tuple):
+                raise RulesViolation('Player-counter costs must be immutable')
+            kinds=[]
+            for counter in value.player_counter_costs:
+                if (not isinstance(counter,PlayerCounterCost) or type(counter.kind) is not str or not counter.kind
+                        or not isinstance(counter.amount,ChosenX) and (type(counter.amount) is not int or counter.amount<0)):
+                    raise RulesViolation('Invalid player-counter cost')
+                kinds.append(counter.kind)
+            if len(kinds)!=len(set(kinds)):raise RulesViolation('Duplicate player-counter cost kind')
+        if not isinstance(value.zone_costs,tuple) or len(value.zone_costs)>(16 if isinstance(value,OrderedCostSpec) else 1):
+            raise RulesViolation('Unsupported number of zone-cost groups')
+        if len({c.cost_id for c in value.zone_costs})!=len(value.zone_costs):
+            raise RulesViolation('Duplicate zone-cost identity')
+        for zone_cost in value.zone_costs:
+            if (not isinstance(zone_cost,ZoneCost) or type(zone_cost.cost_id) is not str or not zone_cost.cost_id
+                    or zone_cost.kind not in {'sacrifice','discard','exile','return'}
+                    or type(zone_cost.count) is not int or zone_cost.count<1):raise RulesViolation('Invalid zone cost')
+            if zone_cost.selector is None:
+                if zone_cost.count!=1:raise RulesViolation('Invalid source zone cost')
+            else:
+                selector(zone_cost.selector);sel=zone_cost.selector
+                allowed=(sel.zone==Zone.BATTLEFIELD and sel.relation=='controlled' if zone_cost.kind in {'sacrifice','return'}
+                    else sel.zone==Zone.HAND and sel.relation=='owned' if zone_cost.kind=='discard'
+                    else sel.zone in {Zone.HAND,Zone.GRAVEYARD} and sel.relation=='owned' or sel.zone==Zone.BATTLEFIELD and sel.relation in {'owned','controlled'})
+                if not allowed:raise RulesViolation('Unsupported zone-cost selection')
+        if (value.tap_selector is None) != (value.tap_count == 0):
+            raise RulesViolation('Tap selection and count must be supplied together')
+        if value.tap_selector is not None:
+            selector(value.tap_selector)
+            if value.tap_selector.zone != Zone.BATTLEFIELD or value.tap_selector.relation != 'controlled':
+                raise RulesViolation('Tap costs require controlled battlefield objects')
+
+    def condition(value,depth=0,allow_history=False):
+        if depth>16:raise RulesViolation('Condition expression is too deep')
+        if isinstance(value,(AllConditions,AnyConditions)):
+            if not isinstance(value.conditions,tuple) or not 1<=len(value.conditions)<=32:
+                raise RulesViolation('Compound conditions require 1 to 32 immutable operands')
+            for child in value.conditions:condition(child,depth+1,allow_history)
+            return
+        if isinstance(value,NotCondition):
+            condition(value.condition,depth+1,allow_history)
+            return
+        if isinstance(value,ClassLevelCondition):
+            if type(value.minimum) is not int or value.minimum<1 or value.maximum is not None and (type(value.maximum) is not int or value.maximum<value.minimum):
+                raise RulesViolation('Invalid Class level condition')
+            return
+        if isinstance(value,ControllerTurnCondition):return
+        if isinstance(value,LifeGainedCondition):
+            if not allow_history or type(value.minimum) is not int or value.minimum<1:raise RulesViolation('Invalid life-gain history condition')
+            return
+        if isinstance(value,TurnHistoryCondition):
+            if not allow_history or type(value.kind) is not str or value.kind not in {'attacked','freerunning'}:
+                raise RulesViolation('Turn history requires a supported resolution, trigger or casting condition')
+            return
+        if isinstance(value,(LifeLostCondition,SourceCountersCondition)):
+            if type(value.minimum) is not int or value.minimum<1:raise RulesViolation('Invalid history or counter threshold')
+            if isinstance(value,SourceCountersCondition) and value.kind is not None and (type(value.kind) is not str or not value.kind):
+                raise RulesViolation('Invalid source counter kind')
+            return
+        if isinstance(value,EntryFlagCondition):
+            if type(value.flag) is not str or not value.flag:raise RulesViolation('Invalid entry fact condition')
+            return
+        if isinstance(value,PlayerCountCondition):
+            if type(value.minimum) is not int or value.minimum<0 or type(value.players) is not str or value.players not in {'all','opponents','controller'}:
+                raise RulesViolation('Invalid player-count condition')
+            return
+        if isinstance(value,DevotionCondition):
+            if (not strings(value.colors) or not value.colors or len(value.colors)!=len(set(value.colors)) or not set(value.colors)<=set("WUBRG")
+                    or type(value.minimum) is not int or value.minimum<0):raise RulesViolation("Invalid devotion condition")
+            return
+        if isinstance(value,LifeCondition):
+            if (type(value.relative_to_starting) is not bool or value.minimum is None and value.maximum is None
+                    or any(bound is not None and type(bound) is not int for bound in (value.minimum,value.maximum))
+                    or value.minimum is not None and value.maximum is not None and value.minimum>value.maximum):
+                raise RulesViolation('Invalid life condition bounds')
+            return
+        if not isinstance(value, CountCondition):
+            raise RulesViolation('Unsupported rules condition')
+        selector(value.selector)
+        if value.selector.zone != Zone.BATTLEFIELD or type(value.minimum) is not int or value.minimum < 0:
+            raise RulesViolation('Count conditions require a nonnegative battlefield threshold')
+
+    def permissions(value):
+        if isinstance(value,OpeningHandPermissions) and type(value.battlefield_from_opening_hand) is not bool:
+            raise RulesViolation('Invalid opening-hand permission')
+        if isinstance(value,RulePermissions) and (type(value.creature_spells_uncounterable) is not bool
+                or type(value.attack_tax) is not int or value.attack_tax<0):
+            raise RulesViolation('Invalid rule permissions')
+        if isinstance(value,TopLibraryPermissions) and (type(value.reveal_top) is not bool or type(value.play_top_land) is not bool):
+            raise RulesViolation('Invalid top-library permissions')
+        if (not isinstance(value,PlayerPermissions) or type(value.additional_land_plays) is not int or value.additional_land_plays<0
+                or type(value.no_maximum_hand_size) is not bool or not isinstance(value.land_zones,tuple)
+                or any(zone!=Zone.GRAVEYARD or not isinstance(zone,Zone) for zone in value.land_zones)
+                or len(set(value.land_zones))!=len(value.land_zones)):
+            raise RulesViolation('Unsupported player permissions')
+
+    def quantity(value,allow_x=False,depth=0,available_values=frozenset(),allow_source=True):
+        if depth>16:raise RulesViolation('Quantity expression is too deep')
+        if type(value) is int:
+            if value<0:raise RulesViolation('Invalid quantity')
+        elif isinstance(value,PlayerStatistic):
+            if 'player_statistics' not in available_values or type(value.statistic) is not str or value.statistic not in {'life_gained','command_casts'}:
+                raise RulesViolation('Player statistics require a supported resolving effect')
+        elif isinstance(value,SourceCounter):
+            if not allow_source:raise RulesViolation('Incoming source counter expressions are not yet supported')
+            if type(value.kind) is not str or not value.kind:raise RulesViolation('Invalid source counter kind')
+        elif isinstance(value,PaidCostStat):
+            if type(value.cost_id) is not str or not value.cost_id or 'paid_cost:'+value.cost_id not in available_values:
+                raise RulesViolation('Unbound paid-cost statistic')
+            if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value'}:
+                raise RulesViolation('Invalid paid-cost statistic')
+        elif isinstance(value,TargetStat):
+            if 'target_statistics' not in available_values:raise RulesViolation('Unbound target statistic')
+            if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value','color_count'} or type(value.operation) is not str or value.operation not in {'sum','maximum'}:raise RulesViolation('Invalid target statistic')
+        elif isinstance(value,RecipientStat):
+            if 'recipient_stat' not in available_values:raise RulesViolation('Unbound recipient statistic')
+            if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value'} or type(value.allow_negative) is not bool:raise RulesViolation('Invalid recipient statistic')
+        elif isinstance(value,(SourceStat,BattlefieldStat)):
+            if isinstance(value,SourceStat):
+                if not allow_source:raise RulesViolation('Incoming source statistic expressions are not yet supported')
+                if type(value.allow_negative) is not bool or value.allow_negative and 'signed_bound' not in available_values:
+                    raise RulesViolation('Signed source statistics require a numeric selection bound')
+            if type(value.statistic) is not str or value.statistic not in {'power','toughness','mana_value'}:raise RulesViolation('Invalid characteristic statistic')
+            if isinstance(value,BattlefieldStat):
+                selector(value.selector)
+                if value.selector.zone!=Zone.BATTLEFIELD or type(value.operation) is not str or value.operation not in {'maximum','sum'}:raise RulesViolation('Invalid battlefield statistic aggregation')
+        elif isinstance(value,EventX):
+            if "event_x" not in available_values:raise RulesViolation("Unbound numeric result: event_x")
+        elif isinstance(value,(LifeLost,EventAmount,MovedCount,SelectedCount)):
+            key='selected_count' if isinstance(value,SelectedCount) else 'life_lost' if isinstance(value,LifeLost) else 'moved_count' if isinstance(value,MovedCount) else 'event_amount'
+            if key not in available_values:raise RulesViolation('Unbound numeric result: '+key)
+        elif isinstance(value,ChosenX):
+            if not allow_x:raise RulesViolation('Chosen X requires this action to have an X cost')
+        elif isinstance(value,CountObjects):
+            selector(value.selector)
+            if value.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Count expressions currently require battlefield objects')
+        elif isinstance(value,DividedValue):
+            if type(value.divisor) is not int or value.divisor<=0 or type(value.rounding) is not str or value.rounding not in {"down","up"}:raise RulesViolation("Invalid quantity division")
+            quantity(value.value,allow_x,depth+1,available_values,allow_source)
+        elif isinstance(value,ScaledValue):
+            if type(value.factor) is not int or value.factor<0 and 'signed_scaling' not in available_values:raise RulesViolation('Invalid quantity multiplier')
+            quantity(value.value,allow_x,depth+1,available_values,allow_source)
+        else:raise RulesViolation('Invalid quantity expression')
+
+    def effects(nodes, bindings,allow_x=False,available_values=frozenset()):
+        available_values=available_values|{'player_statistics'}
+        if 'target' in bindings:available_values=available_values|{'target_statistics'}
+        if not isinstance(nodes, tuple):
+            raise RulesViolation('Effects must be immutable tuples')
+        for node in nodes:
+            if type(node) not in EFFECTS:
+                raise RulesViolation('Unregistered effect node')
+            if isinstance(node,MiracleCast):raise RulesViolation('Miracle casting is interpreter-bound')
+            if isinstance(node,(UnlockRoom,LockRoom)):
+                if node.subject not in bindings or node.door not in {None,'left','right','both'}:raise RulesViolation('Invalid Room designation instruction')
+            if isinstance(node,ResolutionSequence):
+                if type(node.group) is not str or not node.group or not isinstance(node.stages,tuple) or not node.stages:raise RulesViolation('Invalid resolution sequence')
+                for stage in node.stages:effects(stage,bindings,allow_x,available_values)
+            if isinstance(node,DiscardPlayers):
+                if node.players not in {'controller','opponents','all','target'} or node.players=='target' and 'target' not in bindings or type(node.amount) is not int or node.amount<1:raise RulesViolation('Invalid player discard')
+            if isinstance(node,RevealHandDiscard):
+                selector(node.selector)
+                if node.selector.zone!=Zone.HAND or node.players!='target' or 'target' not in bindings:raise RulesViolation('Revealed hand discard requires targeted players')
+            if isinstance(node,(DefeatBattle,WardPayment,CounterBoundStack)):
+                raise RulesViolation('Ward continuation is interpreter-bound')
+            if isinstance(node,SetClassLevel) and (type(node.level) is not int or node.level not in {2,3}):
+                raise RulesViolation('Invalid Class level transition')
+            if isinstance(node,RotateControl):
+                selector(node.selector)
+                if node.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Control rotation requires permanents')
+            if isinstance(node,PutEligibleTop):quantity(node.maximum,allow_x,available_values=available_values)
+            if isinstance(node,MoveWithSubtypes):
+                if node.destination!=Zone.BATTLEFIELD or not strings(node.added_subtypes) or not node.added_subtypes or not set(node.added_subtypes)<=CREATURE_TYPES:
+                    raise RulesViolation('Invalid entry subtype addition')
+            if isinstance(node,MoveFace) and (node.destination!=Zone.BATTLEFIELD or type(node.back_face) is not bool):raise RulesViolation('Invalid face entry')
+            if isinstance(node,(ReturnTransformed,Transform,ChooseCounter)):
+                if type(node.subject) is not str or node.subject not in bindings:raise RulesViolation('Unbound face or counter subject')
+                if isinstance(node,ReturnTransformed) and node.controller not in {'owner','effect'}:raise RulesViolation('Invalid transformed-return controller')
+                if isinstance(node,ChooseCounter) and (not strings(node.kinds) or not node.kinds or len(set(node.kinds))!=len(node.kinds)):raise RulesViolation('Invalid counter choice')
+            if isinstance(node,DiscardThenTrigger):
+                target(node.targets)
+                effects(node.effects,{'source','target'})
+                target_effects(node.effects,node.targets)
+            if isinstance(node,SpellTaxUntilNextTurn):
+                selector(node.selector)
+                if node.selector.zone!=Zone.STACK or type(node.generic) is not int or node.generic<1:raise RulesViolation('Invalid temporary spell tax')
+            if isinstance(node,IfOtherPermanent):
+                selector(node.selector)
+                if node.selector.zone!=Zone.BATTLEFIELD or type(node.excluded) is not str or node.excluded not in bindings:raise RulesViolation('Invalid excluded permanent binding')
+                effects(node.effects,bindings,allow_x,available_values)
+            if isinstance(node,SacrificeThenTrigger):
+                selector(node.selector);target(node.targets)
+                if node.selector.zone!=Zone.BATTLEFIELD or node.selector.relation!='controlled':raise RulesViolation('Reflexive sacrifice requires controlled permanents')
+                effects(node.effects,{'source','target'},available_values={'paid_subtype:sacrifice','paid_cost:sacrifice'})
+            if isinstance(node,(Regenerate,ChooseProtection)) and (type(node.subject) is not str or node.subject not in bindings):
+                raise RulesViolation('Unbound protection or regeneration subject')
+            if isinstance(node,(Explore,SelectBound)) and (type(node.subject) is not str or node.subject not in bindings):
+                raise RulesViolation('Unbound library instruction subject')
+            if isinstance(node,(ShuffleLibrary,RevealTopPermanent)):
+                if node.players not in {'controller','captured_owners'} or node.players=='captured_owners' and node.players not in available_values:
+                    raise RulesViolation('Unbound library owner')
+            if isinstance(node,MayMill):
+                if node.players!='controller':raise RulesViolation('Optional mill requires the resolving controller')
+                effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_count','moved_controllers'})
+            if isinstance(node,IfQuantityAtLeast):
+                quantity(node.value,allow_x,available_values=available_values)
+                if type(node.minimum) is not int or node.minimum<0:raise RulesViolation('Invalid quantity comparison bound')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,NoteLife):
+                if (type(node.note_id) is not str or not node.note_id
+                        or node.note_id not in {m.note_id for m in program.entry_modifiers if isinstance(m,EntryLifeNote)}):
+                    raise RulesViolation('Unbound source life note')
+                if isinstance(node,CompareLifeNote):
+                    effects(node.effects,bindings,allow_x,available_values)
+                    effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,IfPaidCostSubtype):
+                if (type(node.cost_id) is not str or 'paid_subtype:'+node.cost_id not in available_values
+                        or not strings(node.subtypes) or not strings(node.sets)
+                        or not node.subtypes and not node.sets or any(s not in SUBTYPE_SETS for s in node.sets)):
+                    raise RulesViolation('Invalid or unbound paid-cost subtype comparison')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,PhaseOut) and (type(node.subject) is not str or node.subject not in bindings):
+                raise RulesViolation('Unbound phased subject')
+            if isinstance(node,RemoveCounters):
+                if type(node.subject) is not str or node.subject not in bindings:raise RulesViolation('Unbound counter removal')
+                if type(node.kind) is not str or not node.kind or type(node.amount) is not int or node.amount<0:
+                    raise RulesViolation('Invalid counter removal effect')
+            if isinstance(node,PlaceDividedCounters):
+                if 'counter_division' not in available_values or 'target' not in bindings:
+                    raise RulesViolation('Divided counters require an announced target division')
+                if type(node.kind) is not str or not node.kind or type(node.amount) is not int or node.amount<1:
+                    raise RulesViolation('Invalid divided counter total')
+            if isinstance(node,WhileCounter) and (type(node.counter_kind) is not str or not node.counter_kind):
+                raise RulesViolation('Invalid counter duration kind')
+            if isinstance(node,(CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind)):
+                if type(node.subject) is not str or node.subject not in bindings:raise RulesViolation('Unbound counter subject')
+                if isinstance(node,CopyEventCounters) and 'event_counters' not in available_values:
+                    raise RulesViolation('Counter copy requires a captured battlefield departure')
+                if isinstance(node,MoveCounters):
+                    if type(node.to) is not str or node.to not in bindings:raise RulesViolation('Unbound counter destination')
+                    if node.kind is not None and (type(node.kind) is not str or not node.kind):raise RulesViolation('Invalid moved counter kind')
+                if isinstance(node,(CopyCounterKind,DistributeCounters)):
+                    selector(node.selector)
+                    if node.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Counter choices require battlefield objects')
+                if isinstance(node,DistributeCounters) and (type(node.kind) is not str or not node.kind):raise RulesViolation('Invalid distributed counter kind')
+                if isinstance(node,CopyCounterKind) and type(node.only_if_absent) is not bool:raise RulesViolation('Invalid missing-counter predicate')
+            if isinstance(node,PayLifeOrSacrifice):
+                selector(node.selector)
+                if (type(node.life) is not int or node.life<1 or node.players!='target'
+                        or node.selector.zone!=Zone.BATTLEFIELD or node.selector.relation!='controlled'):
+                    raise RulesViolation('Unsupported alternate resolution payment')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,SearchByPlayer):
+                if (node.players!='captured_controllers' or node.players not in available_values
+                        or type(node.optional_search) is not bool or node.partition_player is not None):
+                    raise RulesViolation('Player search requires one captured controller and no partition')
+            if isinstance(node,DrawUpTo):
+                if type(node.amount) is not int or not 0<=node.amount<=100 or node.players not in {'controller','captured_controllers','event_controllers'}:
+                    raise RulesViolation('Optional draw needs one supported recipient and a fixed bounded amount')
+            if isinstance(node,PayRepeatedMana):
+                if type(node.repetitions) is not int and not isinstance(node.repetitions,SourceCounter):
+                    raise RulesViolation('Repeated payment needs a fixed or source-counter count')
+                quantity(node.repetitions,allow_x,available_values=available_values)
+            if isinstance(node,PayMana):
+                mana(node.mana)
+                if node.mana.x_symbols or type(node.players) is not str or node.players not in {'controller','event_controllers'}:
+                    raise RulesViolation('Resolution payments require fixed mana and one supported payer')
+                if node.players=='event_controllers' and 'event_controllers' not in available_values:
+                    raise RulesViolation('Resolution payer requires a captured event player')
+                effects(node.effects,bindings,allow_x,available_values)
+                effects(node.otherwise,bindings,allow_x,available_values)
+            if isinstance(node,UntilEndOfTurn):
+                if not isinstance(node.changes,tuple) or not node.changes:raise RulesViolation('Empty or mutable temporary changes')
+                for change in node.changes:
+                    if isinstance(change,(LostPlayerPT,CountedPT)):raise RulesViolation('Live count modifiers require static continuous programs')
+                    if isinstance(change,(ModifyPT,SetPT)):
+                        for value in (change.power,change.toughness):
+                            if type(value) is not int:quantity(value,allow_x,available_values=available_values|{'recipient_stat','signed_scaling'})
+                    elif isinstance(change,AddKeywords):
+                        if not strings(change.keywords) or not change.keywords or set(change.keywords)-KEYWORDS:raise RulesViolation('Invalid keyword grants')
+                    elif isinstance(change,SetColors):
+                        if not strings(change.colors) or len(set(change.colors))!=len(change.colors) or any(c not in tuple('WUBRG') for c in change.colors):raise RulesViolation('Invalid color changes')
+                    elif isinstance(change,AddSubtypes):
+                        subtype_addition(change)
+                    elif isinstance(change,ChangeTypes):
+                        if not strings(change.add) or not strings(change.remove):raise RulesViolation('Invalid type changes')
+                    elif isinstance(change,AddActivated):
+                        if not isinstance(change.ability,ActivatedProgram) or change.ability.zone!=Zone.BATTLEFIELD:raise RulesViolation('Granted activation must be a battlefield ability')
+                        validate(CardProgram('grant-validation','Grant validation',('Artifact',),activated=(change.ability,)),_depth+1)
+                    elif not isinstance(change,SwitchPT):raise RulesViolation('Unsupported temporary continuous change')
+            if isinstance(node,WithCreatedTokens):
+                effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_count','moved_controllers'})
+            if isinstance(node,CopyPermanent):
+                if any(type(s) is not str or s not in bindings for s in (node.subject,node.original)):
+                    raise RulesViolation('Unbound permanent copy participant')
+                if type(node.until_end_of_turn) is not bool or type(node.retain_activation) is not bool:
+                    raise RulesViolation('Invalid permanent copy duration or exception')
+                if node.retain_activation and (node.subject!='source' or 'activated_context' not in available_values):
+                    raise RulesViolation('Retained activation requires the activating source')
+            if isinstance(node,SelectBySubtype):
+                selector(node.selector)
+                if node.selector.zone!=Zone.BATTLEFIELD or node.subtype_set!='nonbasic_land' or node.selector.types!=('Land',):
+                    raise RulesViolation('Subtype selection requires battlefield lands and the nonbasic land set')
+                effects(node.effects,bindings|{'selected'},allow_x,available_values)
+            if isinstance(node,PowerDamage):
+                if any(type(s) is not str or s not in bindings for s in (node.source,node.target)) or type(node.trample_excess) is not bool:
+                    raise RulesViolation('Invalid power damage participants or excess rule')
+            if isinstance(node,CopyTokens):
+                if type(node.subject) is not str or node.subject not in bindings|{'equipped'}:
+                    raise RulesViolation('Unbound copy source')
+                quantity(node.amount,allow_x,available_values=available_values)
+                if type(node.nonlegendary) is not bool:raise RulesViolation('Invalid legendary copy exception')
+                if ((node.power is None)!=(node.toughness is None)
+                        or node.power is not None and (type(node.power) is not int or type(node.toughness) is not int)):
+                    raise RulesViolation('Invalid copy power/toughness')
+                if node.colors is not None and (not strings(node.colors) or len(set(node.colors))!=len(node.colors)
+                        or any(c not in {'W','U','B','R','G'} for c in node.colors)):
+                    raise RulesViolation('Invalid copy colors')
+                if node.creature_types is not None and (not strings(node.creature_types)
+                        or len(set(node.creature_types))!=len(node.creature_types)
+                        or any(t not in CREATURE_TYPES for t in node.creature_types)):
+                    raise RulesViolation('Invalid copy creature types')
+                validate(CardProgram('copy:ability-review','Copy ability review',('Creature',),
+                    power=1,toughness=1,abilities=node.abilities),_depth+1)
+                effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_count','moved_controllers'})
+            if isinstance(node,Fight) and any(type(s) is not str or s not in bindings for s in (node.first,node.second)):
+                raise RulesViolation('Unbound fight participant')
+            if isinstance(node,WithCountersPlaced):
+                if (type(node.subject) is not str or node.subject not in bindings
+                        or type(node.kind) is not str or not node.kind):
+                    raise RulesViolation('Invalid counter-result binding')
+                quantity(node.amount,allow_x,available_values=available_values)
+                effects(node.effects,bindings|{'counter_recipients'},allow_x,available_values)
+            if isinstance(node,Monstrosity):
+                quantity(node.amount,allow_x,available_values=available_values)
+            if isinstance(node,CreateSizedTokens):
+                if not isinstance(node.token,CardProgram) or 'Creature' not in node.token.types:
+                    raise RulesViolation('Sized tokens require a creature program')
+                quantity(node.power,allow_x,available_values=available_values)
+                quantity(node.toughness,allow_x,available_values=available_values)
+            if isinstance(node,CreateTokens):
+                if type(node.players) is not str or node.players not in {'controller','opponents','all','target','controller_and_target','captured_controllers','moved_controllers','event_controllers','defending_player'}:raise RulesViolation('Invalid token creators')
+                if node.players in {'captured_controllers','moved_controllers','event_controllers','defending_player'} and node.players not in available_values:raise RulesViolation('Unbound captured token creators')
+                if not isinstance(node.token,CardProgram) or node.token.cast is not None:raise RulesViolation('Token creation requires a permanent token program without casting permission')
+                if not set(node.token.types)&{'Artifact','Battle','Creature','Enchantment','Land','Planeswalker'} or set(node.token.types)&{'Instant','Sorcery'}:raise RulesViolation('Token program must describe a permanent')
+                validate(node.token,_depth+1);quantity(node.amount,allow_x,available_values=available_values)
+            if isinstance(node,ChooseFromTop):
+                selector(node.selector)
+                if (type(node.amount) is not int or node.amount<0 or type(node.count) is not int or node.count<0
+                        or type(node.reveal) is not bool or type(node.tapped) is not bool
+                        or not isinstance(node.destination,Zone) or node.destination not in {Zone.HAND,Zone.BATTLEFIELD,Zone.GRAVEYARD}
+                        or node.tapped and node.destination!=Zone.BATTLEFIELD
+                        or type(node.remainder) is not str or node.remainder not in {'graveyard','random_bottom'}
+                        or node.selector.zone!=Zone.LIBRARY
+                        or node.selector.relation!='owned' or node.selector.exclude_source):
+                    raise RulesViolation('Unsupported top-card selection')
+            if isinstance(node, SearchLibrary):
+                selector(node.selector,True,allow_x,available_values)
+                if (node.selector.zone!=Zone.LIBRARY or node.selector.relation!='owned' or node.selector.exclude_source
+                        or not isinstance(node.destination,Zone) or node.destination not in {Zone.HAND,Zone.BATTLEFIELD,Zone.LIBRARY,Zone.GRAVEYARD} or type(node.count) is not int or node.count<1
+                        or type(node.reveal) is not bool or type(node.optional_find) is not bool or type(node.tapped) is not bool or node.tapped and node.destination!=Zone.BATTLEFIELD):
+                    raise RulesViolation('Unsupported library search')
+                if (type(node.primary_count) is not int or node.primary_count<1
+                        or type(node.secondary_tapped) is not bool
+                        or node.secondary_destination is None and (node.primary_count!=1 or node.secondary_tapped)
+                        or node.secondary_destination is not None and (not isinstance(node.secondary_destination,Zone)
+                            or node.secondary_destination not in {Zone.HAND,Zone.BATTLEFIELD,Zone.GRAVEYARD}
+                            or node.destination not in {Zone.HAND,Zone.BATTLEFIELD,Zone.GRAVEYARD}
+                            or node.secondary_destination==node.destination
+                            or node.primary_count>node.count
+                            or node.secondary_tapped and node.secondary_destination!=Zone.BATTLEFIELD)):
+                    raise RulesViolation('Unsupported split library search')
+                if (type(node.distinct_names) is not bool or node.partition_player is not None and type(node.partition_player) is not str or node.partition_player not in {None,'controller','target'}
+                        or node.partition_player is not None and node.secondary_destination is None
+                        or node.partition_player=='target' and (not node.reveal or 'target' not in bindings)):
+                    raise RulesViolation('Invalid search name constraint or partition player')
+            if isinstance(node,GrantPermissions):
+                permissions(node.permissions)
+                if type(node.duration) is not str or node.duration not in {'until_end_of_turn','indefinite'}:raise RulesViolation('Unsupported permission duration')
+            if isinstance(node,LandMana) and (type(node.relation) is not str or node.relation not in {'controlled','opponent_controlled'} or type(node.colors_only) is not bool):
+                raise RulesViolation('Invalid could-produce land query')
+            if isinstance(node,ProduceMana):
+                quantity(node.amount,allow_x,available_values=available_values)
+                if (not strings(node.options) or not node.options or len(set(node.options))!=len(node.options)
+                        or any(symbol not in tuple('WUBRGC') for symbol in node.options)):
+                    raise RulesViolation('Invalid mana type choices')
+            if isinstance(node,(CastDuringResolution,Discover)):
+                amount=node.maximum if isinstance(node,CastDuringResolution) else node.amount
+                if type(amount) is not int or amount<0:raise RulesViolation('Invalid resolution-casting mana-value limit')
+            if isinstance(node,Cascade) and 'cascade_source' not in available_values:
+                raise RulesViolation('Cascade requires an own spell-cast trigger')
+            if isinstance(node,CopyCaptured):
+                raise RulesViolation('Captured copies are interpreter-bound instructions')
+            if isinstance(node,SpecialMana):
+                if ('special_mana_context' not in available_values or type(node.rider) is not str
+                        or node.rider not in {'copy','legendary'} or not strings(node.options)
+                        or not node.options or len(set(node.options))!=len(node.options)
+                        or any(c not in tuple('WUBRGC') for c in node.options)):
+                    raise RulesViolation('Invalid special mana production')
+            if isinstance(node, ChooseMana):
+                if (not isinstance(node.options,tuple) or not node.options or len(node.options)>32
+                        or any(not isinstance(option,tuple) or not option or any(symbol not in tuple('WUBRGC') for symbol in option) for option in node.options)
+                        or len(set(node.options))!=len(node.options)):
+                    raise RulesViolation('Invalid mana production choices')
+            if isinstance(node, AddMana) and (not isinstance(node.symbols, tuple) or not node.symbols
+                    or any(symbol not in tuple('WUBRGC') for symbol in node.symbols)):
+                raise RulesViolation('Unsupported mana production')
+            if isinstance(node, (Move, ExileUntilSourceLeaves, ExileLinked, Sacrifice, Destroy, Discard, Counter, Damage, GainControl, AddCounters, MultiplyCounters, WithMoved, WithControllers, SetTapped, UntilEndOfTurn, Attach)) and (type(node.subject) is not str or node.subject not in bindings and not (isinstance(node,Damage) and node.subject=='controller') and not (isinstance(node,(AddCounters,MultiplyCounters)) and node.subject in {'controller','opponents','all'})):
+                raise RulesViolation('Unbound subject: ' + str(node.subject))
+            if isinstance(node,(ExileLinked,WithLinkedExile)) and (type(node.link_id) is not str or not node.link_id.strip()):
+                raise RulesViolation('Invalid linked-ability identity')
+            if isinstance(node,WithLinkedExile):
+                effects(node.effects,bindings|{'linked'},allow_x,available_values)
+            if isinstance(node,CounterAbilities) and (type(node.players) is not str or node.players not in {'controller','opponents','all'}):
+                raise RulesViolation('Invalid ability-counter controller domain')
+            if isinstance(node,Damage):
+                if (type(node.source_subject) is not str or node.source_subject not in bindings
+                        or node.players is not None and (type(node.players) is not str or node.players not in {'controller','opponents','all'})
+                        or type(node.exclude_damage_source) is not bool):raise RulesViolation('Invalid damage source or additional recipients')
+            if isinstance(node,SetTapped) and type(node.tapped) is not bool:raise RulesViolation('Invalid orientation effect')
+            if isinstance(node,Move) and node.library_position is not None and (node.destination!=Zone.LIBRARY or type(node.library_position) is not str or node.library_position not in {'top','bottom'}):raise RulesViolation('Invalid library placement')
+            if isinstance(node,Move) and (type(node.tapped) is not bool or node.tapped and node.destination!=Zone.BATTLEFIELD):raise RulesViolation('Tapped placement requires battlefield entry')
+            if isinstance(node,Move) and (not isinstance(node.counters,tuple)
+                    or any(not isinstance(row,tuple) or len(row)!=2 or type(row[0]) is not str or not row[0] or type(row[1]) is not int or row[1]<=0 for row in node.counters)
+                    or len({row[0] for row in node.counters})!=len(node.counters)
+                    or node.counters and node.destination!=Zone.BATTLEFIELD):raise RulesViolation('Invalid movement entry counters')
+            if isinstance(node, (Move, Counter, WithMoved)) and not isinstance(node.destination, Zone):
+                raise RulesViolation('Invalid destination')
+            if isinstance(node,(Draw,Mill,LoseLife,WithLifeLost,GainLife,AddCounters,Damage)):quantity(node.amount,allow_x,available_values=available_values)
+            if isinstance(node,(Draw,Mill,LoseLife,WithLifeLost)):
+                if node.players not in {'controller','opponents','all','target','controller_and_target','captured_controllers','event_controllers','defending_player'}:raise RulesViolation('Invalid player recipients')
+                if node.players in {'captured_controllers','event_controllers','defending_player'} and node.players not in available_values:raise RulesViolation('Unbound event player recipients')
+            if isinstance(node,(Scry,Surveil,LookTop)) and (type(node.amount) is not int or node.amount<0):raise RulesViolation('Invalid quantity')
+            if isinstance(node,MultiplyCounters) and (type(node.factor) is not int or node.factor<1):raise RulesViolation('Invalid counter multiplier')
+            if isinstance(node, (AddCounters,MultiplyCounters)) and (type(node.kind) is not str or not node.kind):
+                raise RulesViolation('Invalid counter kind')
+            if isinstance(node, UnlessEntered) and (type(node.flag) is not str or not node.flag):
+                raise RulesViolation('Invalid entry flag')
+            if isinstance(node, (Move, WithMoved)) and node.controller not in {'effect', 'owner'}:
+                raise RulesViolation('Invalid destination controller mode')
+            if isinstance(node, GainControl) and node.duration not in {'indefinite','until_end_of_turn'}:
+                raise RulesViolation('Unsupported control duration')
+            if isinstance(node, Sacrifice) and type(node.by_subject_controller) is not bool:
+                raise RulesViolation('Invalid sacrifice instruction')
+            if isinstance(node, Attach) and node.to not in bindings:
+                raise RulesViolation('Unbound attachment destination')
+            if isinstance(node, SetAttachmentRule):
+                selector(node.selector)
+                if node.exact_subject is not None and node.exact_subject not in bindings:
+                    raise RulesViolation('Unbound attachment restriction')
+            if isinstance(node, DelayedTrigger):
+                if isinstance(node,DelayedNextStep):
+                    if (type(node.next_turn) is not bool or node.event not in (
+                            EventPattern('step_began',step='end_step'),EventPattern('step_began',step='upkeep'),
+                            EventPattern('step_began',step='end_step',controller_only=True),
+                            EventPattern('step_began',step='cleanup'))):
+                        raise RulesViolation('Unsupported delayed step')
+                    retained=bindings-{'target'}-{name for name in bindings if name.startswith('target:')}
+                    effects(node.effects,retained,available_values=available_values-{'counter_division','target_statistics'})
+                else:
+                    if node.event != EventPattern('zone_changed', from_zone=Zone.BATTLEFIELD, subject='self'):
+                        raise RulesViolation('Unsupported delayed event pattern')
+                    effects(node.effects, bindings)
+            if isinstance(node, IfCondition):
+                condition(node.condition,allow_history=True)
+                effects(node.effects, bindings,allow_x,available_values)
+                effects(node.otherwise, bindings,allow_x,available_values)
+            if isinstance(node,WithLifeLost):
+                effects(node.effects,bindings,allow_x,available_values|{'life_lost'})
+            if isinstance(node,WithZoneResult):
+                if type(node.operation) not in (Move,Destroy,Sacrifice,Discard,Counter) or node.destination is not None and not isinstance(node.destination,Zone):raise RulesViolation('Invalid zone result operation')
+                if node.selector is not None:
+                    selector(node.selector)
+                    if node.destination is not None and node.selector.zone!=node.destination:raise RulesViolation('Zone result selector destination mismatch')
+                effects((node.operation,),bindings,allow_x,available_values)
+                effects(node.effects,bindings|{'moved'},allow_x,available_values|{'moved_controllers','moved_count'})
+            if isinstance(node,WithControllers):
+                effects(node.effects,bindings,allow_x,available_values|{'captured_owners' if isinstance(node,WithOwners) else 'captured_controllers'})
+            if isinstance(node, WithMoved):
+                effects(node.effects, bindings | {'moved'},allow_x,available_values|{'moved_controllers','moved_count'})
+            if isinstance(node, WithAttached):
+                effects(node.effects, bindings | {'attached'},allow_x,available_values)
+            if isinstance(node, SelectAll):
+                selector(node.selector,True,allow_x,available_values)
+                if node.selector.zone==Zone.LIBRARY:raise RulesViolation('Library operations require explicit visibility semantics')
+                effects(node.effects, bindings | {'selected'},allow_x,available_values|{'selected_count'})
+            if isinstance(node, Select):
+                selector(node.selector,True,allow_x,available_values)
+                if node.selector.zone==Zone.LIBRARY:raise RulesViolation('Library operations require explicit visibility semantics')
+                bounds(node.minimum, node.minimum if isinstance(node,SelectBound) and node.maximum is None else node.maximum)
+                if type(node.ordered) is not bool or type(node.group_by_controller) is not bool:
+                    raise RulesViolation('Invalid selection semantics')
+                effects(node.effects, bindings | {'selected'},allow_x,available_values|{'selected_count'})
+            elif isinstance(node, (May, UnlessEntered)):
+                effects(node.effects, bindings,allow_x,available_values)
+                if isinstance(node,May):
+                    effects(node.otherwise,bindings,allow_x,available_values)
+                    if type(node.subject) is not str or node.subject not in bindings:raise RulesViolation('Unbound optional availability subject')
+                    if node.available is None:
+                        if node.subject!='source':raise RulesViolation('Availability subject requires an availability selector')
+                    else:
+                        selector(node.available)
+                        if node.available.zone in {Zone.LIBRARY,Zone.OUTSIDE}:raise RulesViolation('Unsupported optional availability zone')
+
+    def target_effects(nodes,spec):
+        for node in immediate_effect_nodes(nodes):
+            if isinstance(node,DelayedTrigger):target_effects(node.effects,None if isinstance(node,DelayedNextStep) else spec)
+            if isinstance(node,SearchLibrary) and node.partition_player=='target':
+                if spec is None or spec.players is None or spec.selector is not None or spec.minimum!=1 or spec.maximum!=1:
+                    raise RulesViolation('Search partition requires exactly one player target')
+            if isinstance(node,(RevealHandDiscard,DiscardPlayers,PayLifeOrSacrifice,Draw,Mill,LoseLife,WithLifeLost,CreateTokens)) and node.players in {'target','controller_and_target'}:
+                if spec is None or spec.players is None or spec.selector is not None:
+                    raise RulesViolation('Player instructions require player-only targets')
+            if spec is not None and spec.players is not None:
+                if (isinstance(node,CopyPermanent) and 'target' in (node.subject,node.original)
+                        or isinstance(node,PowerDamage) and 'target' in (node.source,node.target)):
+                    raise RulesViolation('Permanent copy and power damage require object targets')
+                if isinstance(node,PlaceDividedCounters) or isinstance(node,(RemoveCounters,CopyEventCounters,MoveCounters,DistributeCounters,CopyCounterKind)) and (node.subject=='target' or isinstance(node,MoveCounters) and node.to=='target'):
+                    raise RulesViolation('Counter transfer instructions require object targets')
+                if (isinstance(node,(WithCountersPlaced,Regenerate,ChooseProtection,PhaseOut,Move,ExileUntilSourceLeaves,ExileLinked,Sacrifice,Destroy,Discard,Counter,GainControl,WithMoved,WithControllers,SetTapped,UntilEndOfTurn,Attach,May)) and node.subject=='target'
+                        or isinstance(node,Attach) and node.to=='target'
+                        or isinstance(node,SetAttachmentRule) and node.exact_subject=='target'):
+                    raise RulesViolation('Object instructions cannot consume player targets')
+
+    if (not isinstance(program, CardProgram) or type(program.definition_id) is not str
+            or not program.definition_id or type(program.name) is not str or not program.name
+            or not strings(program.types) or not isinstance(program.abilities, tuple)):
+        raise RulesViolation('Invalid card program')
+    if (not strings(program.subtypes) or type(program.mana_value) is not int or program.mana_value < 0
+            or any(value is not None and type(value) is not int for value in (program.power, program.toughness))
+            or (program.power is None) != (program.toughness is None)):
+        raise RulesViolation('Invalid base characteristics')
+    if not isinstance(program.entry_counters,tuple):raise RulesViolation('Entry counter rules must be immutable')
+    entry_counter_ids=[]
+    for rule in program.entry_counters:
+        if (not isinstance(rule,EntryCounters) or type(rule.replacement_id) is not str or not rule.replacement_id
+                or type(rule.kind) is not str or not rule.kind):raise RulesViolation('Invalid entry counters')
+        if rule.selector is not None:
+            selector(rule.selector)
+            if rule.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Entry counter selectors require battlefield objects')
+        quantity(rule.amount,bool(rule.selector is None and isinstance(program.cast,CastSpec) and isinstance(program.cast.cost,CostSpec) and isinstance(program.cast.cost.mana,ManaCost) and program.cast.cost.mana.x_symbols),allow_source=False)
+        entry_counter_ids.append(rule.replacement_id)
+    if len(entry_counter_ids)!=len(set(entry_counter_ids)):raise RulesViolation('Duplicate entry counter ID')
+    if not isinstance(program.counter_replacements,tuple):raise RulesViolation('Counter replacements must be immutable')
+    counter_ids=[]
+    for rule in program.counter_replacements:
+        if isinstance(rule,ClassCounterReplacement) and (type(rule.minimum_level) is not int or rule.minimum_level<1):
+            raise RulesViolation('Invalid Class counter-replacement level')
+        if (not isinstance(rule,CounterReplacement) or type(rule.replacement_id) is not str or not rule.replacement_id
+                or rule.subject not in {'any','self'} or rule.subject=='self' and rule.players is not None
+                or rule.players not in {None,'controller','opponents','all'}
+                or rule.selector is None and rule.players is None
+                or rule.kind is not None and (type(rule.kind) is not str or not rule.kind)
+                or type(rule.multiplier) is not int or rule.multiplier<0
+                or type(rule.additional) is not int or rule.additional<0
+                or type(rule.divisor) is not int or rule.divisor<1 or rule.actor_relation not in {'any','controller','opponents'}
+                or rule.multiplier==1 and rule.additional==0 and rule.divisor==1):raise RulesViolation('Invalid counter replacement')
+        if rule.selector is not None:
+            selector(rule.selector)
+            if rule.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Counter replacement selectors require battlefield objects')
+        counter_ids.append(rule.replacement_id)
+    if len(counter_ids)!=len(set(counter_ids)):raise RulesViolation('Duplicate counter replacement ID')
+    if not strings(program.colors) or set(program.colors)-set('WUBRG') or len(set(program.colors))!=len(program.colors):raise RulesViolation('Invalid printed colors')
+    permissions(program.player_permissions)
+    if not isinstance(program.target_restrictions, tuple) or any(
+            not isinstance(rule, TargetRestriction) or type(rule.opponents_only) is not bool
+            or not strings(rule.source_types) or len(set(rule.source_types))!=len(rule.source_types)
+            or set(rule.source_types)-{'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'}
+            for rule in program.target_restrictions):
+        raise RulesViolation('Unsupported target restriction')
+    if (not strings(program.all_subtype_sets) or len(set(program.all_subtype_sets))!=len(program.all_subtype_sets)
+            or any(name not in SUBTYPE_SETS or not SUBTYPE_SUPPORT[name]&set(program.types) for name in program.all_subtype_sets)):
+        raise RulesViolation('Invalid all-subtype-set characteristic')
+    if not strings(program.supertypes) or set(program.supertypes)-{'Basic','Legendary','Snow'}:
+        raise RulesViolation('Unsupported supertype semantics')
+    if not strings(program.keywords) or set(program.keywords)-KEYWORDS:
+        raise RulesViolation('Unsupported keyword semantics')
+    if 'Creature' in program.types and program.power is None:
+        raise RulesViolation('Creature definition requires explicit base power and toughness')
+    if not isinstance(program.block_restrictions,tuple):raise RulesViolation('Block restrictions must be immutable')
+    for rule in program.block_restrictions:
+        if not isinstance(rule,BlockRestriction):raise RulesViolation('Invalid block restriction')
+        selector(rule.attackers);selector(rule.blockers)
+        if (rule.attackers.zone!=Zone.BATTLEFIELD or rule.blockers.zone!=Zone.BATTLEFIELD
+                or type(rule.statistic) is not str or rule.statistic not in {'power','toughness','mana_value'}
+                or type(rule.comparison) is not str or rule.comparison not in {'lt','le','eq','ge','gt'}):
+            raise RulesViolation('Invalid block comparison')
+        if type(rule.value) is not int:quantity(rule.value,available_values=frozenset({'signed_bound','signed_scaling'}))
+    if program.cast is not None:
+        if not isinstance(program.cast, CastSpec) or program.cast.timing not in {'instant', 'sorcery'}:
+            raise RulesViolation('Invalid casting specification')
+        if (not isinstance(program.cast.origin_zones,tuple) or not program.cast.origin_zones
+                or any(not isinstance(zone,Zone) or zone not in {Zone.HAND,Zone.COMMAND,Zone.GRAVEYARD,Zone.EXILE} for zone in program.cast.origin_zones)
+                or len(program.cast.origin_zones)!=len(set(program.cast.origin_zones))):raise RulesViolation("Invalid casting origin permission")
+        cost(program.cast.cost)
+        if isinstance(program.cast,CopyCast):
+            if type(program.cast.copy_kind) is not str or program.cast.copy_kind not in {'demonstrate','replicate'}:
+                raise RulesViolation('Invalid cast-copy ability')
+            extra=program.cast.replicate_cost
+            if program.cast.copy_kind=='demonstrate':
+                if extra is not None:raise RulesViolation('Demonstrate has no replicate payment')
+            elif (not isinstance(extra,ManaCost) or type(extra.generic) is not int or extra.generic<0
+                    or not strings(extra.symbols) or any(c not in tuple('WUBRGC') for c in extra.symbols)
+                    or extra.x_symbols!=0 or type(extra.x_symbols) is not int
+                    or not (extra.generic or extra.symbols)):
+                raise RulesViolation('Replicate requires a positive fixed mana cost')
+        if isinstance(program.cast,KickerCast):
+            extra=program.cast.kicker;cost(extra)
+            if (extra.tap_source or extra.tap_selector is not None or extra.life or extra.zone_costs or extra.counter_costs
+                    or extra.mana.x_symbols or not (extra.mana.generic or extra.mana.symbols)
+                    or not strings(program.cast.entry_flags) or not program.cast.entry_flags
+                    or any(not flag for flag in program.cast.entry_flags)
+                    or len(set(program.cast.entry_flags))!=len(program.cast.entry_flags)
+                    or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                    or set(program.types)&{'Instant','Sorcery'}):
+                raise RulesViolation('Kicker requires fixed additional mana and unique permanent-entry facts')
+        if isinstance(program.cast,CleanupCast):
+            if (program.cast.timing!='instant' or program.spell_effects
+                    or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                    or set(program.types)&{'Instant','Sorcery'}):
+                raise RulesViolation('Cleanup casting requires ordinary permanent resolution and instant permission')
+        if not isinstance(program.cast.alternatives,tuple):raise RulesViolation('Alternative costs must be immutable')
+        alternative_ids=set()
+        for alternative in program.cast.alternatives:
+            if (not isinstance(alternative,AlternativeCost) or type(alternative.alternative_id) is not str
+                    or not alternative.alternative_id or alternative.alternative_id in alternative_ids):raise RulesViolation('Invalid alternative cost identity')
+            alternative_ids.add(alternative.alternative_id);cost(alternative.cost)
+            if isinstance(alternative,OverloadAlternative):
+                if (not set(program.types)&{'Instant','Sorcery'} or program.spell_targets is None
+                        or program.modal is not None or not alternative.effects):
+                    raise RulesViolation('Overload requires a targeted nonmodal spell and an explicit body')
+                effects(alternative.effects,{'source'})
+                target_effects(alternative.effects,None)
+            if isinstance(alternative,EntryAlternativeCost) or isinstance(alternative,GraveyardAlternativeCost) and alternative.entry_flags:
+                if (not strings(alternative.entry_flags) or not alternative.entry_flags
+                        or any(not flag for flag in alternative.entry_flags)
+                        or len(alternative.entry_flags)!=len(set(alternative.entry_flags))
+                        or not set(program.types)&{'Artifact','Battle','Creature','Enchantment','Planeswalker'}
+                        or set(program.types)&{'Instant','Sorcery'}):
+                    raise RulesViolation('Entry alternative costs require a permanent spell and unique entry facts')
+            if isinstance(alternative,GraveyardAlternativeCost):
+                if (not strings(alternative.entry_flags) or type(alternative.exile_on_stack_exit) is not bool
+                        or alternative.exile_on_stack_exit and not set(program.types)&{'Instant','Sorcery'}):
+                    raise RulesViolation('Invalid graveyard casting facts')
+                if any(c.kind!='exile' or c.selector is None or c.selector.zone!=Zone.GRAVEYARD
+                        or c.selector.relation!='owned' or not c.selector.exclude_source
+                        for c in alternative.cost.zone_costs):
+                    raise RulesViolation('Graveyard alternative zone costs require other owned graveyard cards')
+            if alternative.condition is not None:condition(alternative.condition,allow_history=True)
+            if (program.cast.cost.life or program.cast.cost.mana.x_symbols or alternative.cost.mana.x_symbols
+                    or alternative.cost.tap_source or alternative.cost.tap_selector is not None
+                    or alternative.cost.zone_costs and not isinstance(alternative,GraveyardAlternativeCost) or alternative.cost.counter_costs):
+                raise RulesViolation('Alternative costs currently support fixed mana and life payments')
+        quantity(program.cast.generic_reduction,allow_source=False)
+        if program.cast.cost.counter_costs:raise RulesViolation('Source counter costs require a battlefield activation')
+        if program.cast.cost.zone_costs:
+            if (any(c.kind!='sacrifice' or c.selector is None for c in program.cast.cost.zone_costs)
+                    or program.cast.cost.life or program.cast.cost.tap_selector is not None
+                    or program.cast.alternatives):
+                raise RulesViolation('Casting zone costs currently require selected sacrifices plus mana only')
+        if program.cast.cost.tap_source:
+            raise RulesViolation('A spell cannot pay a tap-symbol source cost')
+        if 'Land' in program.types:
+            raise RulesViolation('Playing a land is not casting a spell')
+    if not isinstance(program.entry_restrictions,tuple) or not isinstance(program.casting_restrictions,tuple):
+        raise RulesViolation('Prohibitions must be immutable')
+    for restriction in program.entry_restrictions:
+        selector(restriction)
+        if restriction.zone not in {Zone.GRAVEYARD,Zone.EXILE}:
+            raise RulesViolation('Entry prohibitions currently require public off-battlefield origins')
+    for restriction in program.casting_restrictions:
+        if not isinstance(restriction,CastRestriction):raise RulesViolation('Invalid casting prohibition')
+        selector(restriction.selector)
+        if (restriction.selector.zone!=Zone.STACK or not isinstance(restriction.origin_zones,tuple) or not restriction.origin_zones
+                or any(not isinstance(zone,Zone) or zone not in {Zone.HAND,Zone.COMMAND,Zone.GRAVEYARD,Zone.EXILE} for zone in restriction.origin_zones)
+                or len(restriction.origin_zones)!=len(set(restriction.origin_zones))):raise RulesViolation('Invalid casting prohibition origins')
+    if not isinstance(program.activated, tuple) or not isinstance(program.cost_modifiers, tuple):
+        raise RulesViolation('Ability/cost definitions must be immutable tuples')
+    activation_ids = []
+    for ability in program.activated:
+        if (not isinstance(ability, ActivatedProgram) or not isinstance(ability.ability_id, str) or not ability.ability_id
+                or ability.timing not in {'instant', 'sorcery'} or type(ability.mana_ability) is not bool
+                or not isinstance(ability.zone,Zone) or ability.zone not in {Zone.BATTLEFIELD,Zone.HAND,Zone.GRAVEYARD}):
+            raise RulesViolation('Invalid activated ability')
+        if isinstance(ability.cost,LoyaltyCost) and (ability.timing!='sorcery' or ability.zone!=Zone.BATTLEFIELD or ability.mana_ability or ability.generic_reduction):
+            raise RulesViolation('Loyalty activations require the sorcery window and use the stack')
+        if isinstance(ability,ConditionalActivated):
+            if ability.zone!=Zone.BATTLEFIELD or ability.condition is None:
+                raise RulesViolation('Conditional activation requires a battlefield condition')
+            condition(ability.condition)
+        if ability.ability_id.startswith(('intrinsic-land:','granted:')):
+            raise RulesViolation('Reserved intrinsic ability identity')
+        cost(ability.cost)
+        quantity(ability.generic_reduction,allow_source=False)
+        if type(ability.minimum_x) is not int or ability.minimum_x<0 or ability.minimum_x and not cost_has_x(ability.cost):raise RulesViolation('Invalid activation minimum X')
+        if ability.zone!=Zone.BATTLEFIELD and (ability.cost.tap_source or ability.cost.counter_costs):
+            raise RulesViolation('Source tap and counter costs require battlefield activation')
+        for zone_cost in ability.cost.zone_costs:
+            if zone_cost.selector is None:
+                allowed=({Zone.BATTLEFIELD} if zone_cost.kind in {'sacrifice','return'}
+                    else {Zone.HAND} if zone_cost.kind=='discard' else {Zone.BATTLEFIELD,Zone.HAND,Zone.GRAVEYARD})
+                if ability.zone not in allowed:raise RulesViolation('Source zone cost does not match activation zone')
+        if ability.targets is not None:
+            target(ability.targets,cost_has_x(ability.cost),allow_groups=True)
+            if ability.targets.maximum is None:raise RulesViolation('Activation targets require a finite announced bound')
+            if ability.targets.groups and any(g.targets.minimum!=g.targets.maximum for g in ability.targets.groups):
+                raise RulesViolation('Announced activation target groups require fixed clause sizes')
+        if ability.zone not in {Zone.BATTLEFIELD,Zone.STACK} and any(
+                isinstance(node,ExileLinked) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Linked exile requires a public activation source')
+        if ability.zone!=Zone.BATTLEFIELD and any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Exile-until-leaves requires a battlefield activation source')
+        division=division_spec(ability.effects,ability.targets)
+        effects(ability.effects, ({'source', 'target'}|{'target:'+g.group_id for g in ability.targets.groups}) if ability.targets is not None else {'source'},cost_has_x(ability.cost),available_values={'activated_context'}|({'special_mana_context'} if ability.zone==Zone.BATTLEFIELD and ability.mana_ability else set())|({'counter_division'} if division else set())|{'paid_subtype:'+c.cost_id for c in ability.cost.zone_costs
+            if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD or c.selector is None and ability.zone==Zone.BATTLEFIELD})
+        target_effects(ability.effects,ability.targets)
+        if ability.mana_ability and any(isinstance(node,(PayMana,CastDuringResolution)) for node in immediate_effect_nodes(ability.effects)):
+            raise RulesViolation('Nested resolution payments or casts inside mana abilities are unsupported')
+        if ability.mana_ability != activation_is_mana(ability):
+            raise RulesViolation('Activation mana-ability classification does not match its targets and immediate effects')
+        activation_ids.append(ability.ability_id)
+    if len(activation_ids) != len(set(activation_ids)):
+        raise RulesViolation('Duplicate activated ability ID')
+    modifier_ids = []
+    if not isinstance(program.tapped_mana_replacements,tuple):raise RulesViolation('Mutable tapped-mana replacements')
+    mana_ids=[]
+    for rule in program.tapped_mana_replacements:
+        if (not isinstance(rule,TappedManaReplacement) or type(rule.replacement_id) is not str or not rule.replacement_id
+                or type(rule.multiplier) is not int or rule.multiplier<2 or type(rule.players) is not str or rule.players not in {'controller','opponents','all'}):
+            raise RulesViolation('Invalid tapped-mana replacement')
+        mana_ids.append(rule.replacement_id)
+    if len(mana_ids)!=len(set(mana_ids)):raise RulesViolation('Duplicate tapped-mana replacement ID')
+    if not isinstance(program.life_gain_replacements,tuple):raise RulesViolation('Mutable life-gain replacements')
+    life_ids=[]
+    for rule in program.life_gain_replacements:
+        if (not isinstance(rule,LifeGainReplacement) or type(rule.replacement_id) is not str or not rule.replacement_id
+                or type(rule.additional) is not int or rule.additional<1 or rule.players not in {'controller','opponents','all'}):
+            raise RulesViolation('Invalid additive life-gain replacement')
+        life_ids.append(rule.replacement_id)
+    if len(life_ids)!=len(set(life_ids)):raise RulesViolation('Duplicate life-gain replacement ID')
+    for modifier in program.cost_modifiers:
+        if isinstance(modifier,LifeCostModifier) and (modifier.color not in tuple('WUBRG')
+                or type(modifier.life) is not int or modifier.life<1 or modifier.generic_delta!=0):
+            raise RulesViolation('Invalid optional life cost modifier')
+        if (not isinstance(modifier, CostModifier) or not isinstance(modifier.modifier_id, str) or not modifier.modifier_id
+                or type(modifier.generic_delta) is not int):
+            raise RulesViolation('Invalid cost modifier')
+        if (not isinstance(modifier.origin_zones,tuple)
+                or any(not isinstance(zone,Zone) or zone not in {Zone.HAND,Zone.COMMAND,Zone.GRAVEYARD,Zone.EXILE} for zone in modifier.origin_zones)
+                or len(modifier.origin_zones)!=len(set(modifier.origin_zones))):raise RulesViolation("Invalid spell-cost origin filter")
+        selector(modifier.selector)
+        if modifier.selector.zone != Zone.STACK:
+            raise RulesViolation('Spell cost modifiers require a stack selector')
+        modifier_ids.append(modifier.modifier_id)
+    if len(modifier_ids) != len(set(modifier_ids)):
+        raise RulesViolation('Duplicate cost modifier ID')
+    if not isinstance(program.continuous, tuple):
+        raise RulesViolation('Continuous programs must be immutable')
+    continuous_ids = []
+    for effect in program.continuous:
+        if (not isinstance(effect, ContinuousProgram) or type(effect.effect_id) is not str or not effect.effect_id
+                or effect.subject not in {'any', 'self', 'attached'} or not isinstance(effect.changes, tuple)
+                or not effect.changes):
+            raise RulesViolation('Invalid continuous program')
+        selector(effect.selector)
+        if effect.selector.zone != Zone.BATTLEFIELD:
+            raise RulesViolation('Only battlefield continuous effects are supported')
+        if effect.condition is not None:
+            condition(effect.condition)
+        for change in effect.changes:
+            if isinstance(change,SetCardTypes):
+                if (not strings(change.types) or not change.types or len(set(change.types))!=len(change.types)
+                        or not set(change.types)<= {'Artifact','Creature','Land','Kindred'}
+                        or not strings(change.creature_subtypes) or not set(change.creature_subtypes)<=CREATURE_TYPES):
+                    raise RulesViolation('Invalid replacement types')
+            elif isinstance(change,AddWard):
+                mana(change.mana)
+                if change.mana.x_symbols:raise RulesViolation('Ward requires fixed mana')
+            elif isinstance(change,(LoseAbilities,Goaded,AddRiot)):
+                pass
+            elif isinstance(change,SetColors):
+                if not strings(change.colors) or len(set(change.colors))!=len(change.colors) or any(c not in tuple('WUBRG') for c in change.colors):raise RulesViolation('Invalid color changes')
+            elif isinstance(change,AddSubtypes):
+                subtype_addition(change)
+                if change.card_type not in effect.selector.types:raise RulesViolation('Subtype additions require a matching typed selector')
+            elif isinstance(change,AddTriggered):
+                if not isinstance(change.ability,AbilityProgram):raise RulesViolation('Granted trigger must be an ability')
+                validate(CardProgram('grant-trigger-validation','Grant trigger validation',('Artifact',),abilities=(change.ability,)),_depth+1)
+            elif isinstance(change,AddActivated):
+                if not isinstance(change.ability,ActivatedProgram) or change.ability.zone!=Zone.BATTLEFIELD:
+                    raise RulesViolation('Granted activation must be a battlefield ability')
+                validate(CardProgram('grant-validation','Grant validation',('Artifact',),activated=(change.ability,)),_depth+1)
+            elif isinstance(change,AddKeywords):
+                if not strings(change.keywords) or not change.keywords or set(change.keywords)-KEYWORDS:raise RulesViolation('Invalid keyword grants')
+            elif isinstance(change, ChangeTypes):
+                if not strings(change.add) or not strings(change.remove):
+                    raise RulesViolation('Invalid type changes')
+            elif isinstance(change, SetPT):
+                if any(type(v) is not int and v != 'mana_value' for v in (change.power, change.toughness)):
+                    raise RulesViolation('Unsupported power/toughness expression')
+            elif isinstance(change, ModifyPT):
+                if isinstance(change,CountedPT):
+                    selector(change.selector)
+                    if effect.subject!='self' or change.selector.zone!=Zone.BATTLEFIELD or change.selector.characteristics:raise RulesViolation('Live count modifiers require self and nonnumeric battlefield selection')
+                if type(change.power) is not int or type(change.toughness) is not int:
+                    raise RulesViolation('Invalid power/toughness modifier')
+            elif not isinstance(change, (SwitchPT,SkipUntap)):
+                raise RulesViolation('Unsupported continuous operation')
+        continuous_ids.append(effect.effect_id)
+    if len(continuous_ids) != len(set(continuous_ids)):
+        raise RulesViolation('Duplicate continuous effect ID')
+    if not isinstance(program.entry_modifiers,tuple):raise RulesViolation('Entry modifiers must be immutable')
+    entry_ids=[]
+    for modifier in program.entry_modifiers:
+        if (not isinstance(modifier,EntryModifier) or type(modifier.modifier_id) is not str or not modifier.modifier_id
+                or type(modifier.tapped) is not bool or type(modifier.unless) is not bool
+                or modifier.unless and modifier.condition is None):raise RulesViolation('Invalid entry modifier')
+        if modifier.condition is not None:condition(modifier.condition)
+        if modifier.selector is not None:
+            selector(modifier.selector)
+            if modifier.selector.zone!=Zone.BATTLEFIELD:raise RulesViolation('Entry orientation selector requires battlefield')
+        if isinstance(modifier,EntryLifeNote):
+            if (modifier.tapped or modifier.condition is not None or modifier.unless or modifier.selector is not None
+                    or type(modifier.note_id) is not str or not modifier.note_id):
+                raise RulesViolation('Life notes require an unconditional own-entry replacement')
+        if isinstance(modifier,EntryPayment):
+            if (modifier.tapped is not True or modifier.condition is not None or modifier.unless
+                    or modifier.selector is not None or type(modifier.life) is not int or modifier.life<0
+                    or (modifier.life>0)==(modifier.reveal is not None)):
+                raise RulesViolation('Entry payment requires exactly one fixed life or hand-reveal option')
+            if modifier.reveal is not None:
+                selector(modifier.reveal)
+                if modifier.reveal.zone!=Zone.HAND or modifier.reveal.relation!='owned':
+                    raise RulesViolation('Entry reveal requires the entering controller\'s hand')
+        entry_ids.append(modifier.modifier_id)
+    if len(entry_ids)!=len(set(entry_ids)):raise RulesViolation('Duplicate entry modifier ID')
+    note_ids=[m.note_id for m in program.entry_modifiers if isinstance(m,EntryLifeNote)]
+    if len(note_ids)!=len(set(note_ids)):raise RulesViolation('Duplicate entry life note')
+    if not isinstance(program.replacements, tuple):
+        raise RulesViolation('Replacements must be an immutable tuple')
+    replacement_ids = []
+    for replacement in program.replacements:
+        if (not isinstance(replacement, ZoneReplacement)
+                or type(replacement.replacement_id) is not str or not replacement.replacement_id
+                or not isinstance(replacement.destination, Zone)
+                or not isinstance(replacement.redirect, Zone)
+                or replacement.redirect in {Zone.BATTLEFIELD, Zone.STACK, Zone.OUTSIDE}
+                or replacement.from_zone is not None and not isinstance(replacement.from_zone, Zone)
+                or not strings(replacement.types) or replacement.relation not in {'any', 'owned', 'controlled'}
+                or replacement.subject not in {'any', 'self'} or type(replacement.optional) is not bool):
+            raise RulesViolation('Unsupported or malformed zone replacement')
+        replacement_ids.append(replacement.replacement_id)
+    if len(replacement_ids) != len(set(replacement_ids)):
+        raise RulesViolation('Duplicate replacement ID')
+    ids = []
+    for ability in program.abilities:
+        if isinstance(ability,ChapterAbility) and (type(ability.chapter) is not int or ability.chapter<1 or ability.event!=EventPattern('counters_added',subject='self',counter_kind='lore')):raise RulesViolation('Invalid Saga chapter trigger')
+        if (not isinstance(ability, AbilityProgram) or not isinstance(ability.event, EventPattern)
+                or type(ability.ability_id) is not str or not ability.ability_id):
+            raise RulesViolation('Invalid ability')
+        if ability.source_must_remain is not None and not isinstance(ability.source_must_remain, Zone):
+            raise RulesViolation('Invalid intervening source condition')
+        if ability.intervening_if is not None:
+            condition(ability.intervening_if,allow_history=True)
+        if ability.occurrence_condition is not None:
+            condition(ability.occurrence_condition,allow_history=True)
+        if type(ability.optional_once_per_turn) is not bool:raise RulesViolation('Invalid optional use limit')
+        if ability.optional_once_per_turn and (ability.trigger_limit is not None or not isinstance(ability.effects,tuple)
+                or len(ability.effects)!=1 or not isinstance(ability.effects[0],May) or ability.effects[0].otherwise):
+            raise RulesViolation('Optional turn limit requires one root May without a fallback or trigger limit')
+        event = ability.event
+        if isinstance(ability,EchoAbility):
+            if (event!=EventPattern('step_began',step='upkeep',controller_only=True)
+                    or ability.targets is not None or ability.intervening_if is not None or ability.occurrence_condition is not None
+                    or ability.source_must_remain is not None or ability.trigger_limit is not None or ability.optional_once_per_turn
+                    or len(ability.effects)!=1 or not isinstance(ability.effects[0],PayMana)
+                    or ability.effects[0].players!='controller' or ability.effects[0].effects
+                    or ability.effects[0].otherwise!=(Sacrifice('source'),)):
+                raise RulesViolation('Echo requires an unqualified own-upkeep optional mana payment or source sacrifice')
+        if isinstance(event,CombatDamageToPlayer) and (event.kind!='damage_dealt' or type(event.modified) is not bool):
+            raise RulesViolation('Invalid combat damage observation')
+        if isinstance(event,ZoneEventPattern):
+            if (event.kind!='zone_changed' or not strings(event.subtypes)
+                    or event.cause not in {None,'sacrifice'} or type(event.destination_owned) is not bool
+                    or event.cause=='sacrifice' and event.from_zone!=Zone.BATTLEFIELD):
+                raise RulesViolation('Invalid qualified zone-event pattern')
+        if isinstance(event,ColoredSpellEvent) and (not strings(event.colors) or not event.colors or set(event.colors)-set('WUBRG')):
+            raise RulesViolation('Invalid spell-color observation')
+        if isinstance(event,SpellEventPattern) and (event.kind!='spell_cast' or not strings(event.excluded_types)):
+            raise RulesViolation('Spell exclusions require a spell-cast event')
+        characteristic_ranges(event.characteristics)
+        selector(Selector(Zone.BATTLEFIELD,counters=event.counters))
+        if event.counters and event.kind not in {'zone_changed','counter_state'}:raise RulesViolation('Counter predicates require zone or counter-state events')
+        if (not strings(event.any_types) or type(event.exclude_source) is not bool
+                or (event.any_types or event.exclude_source) and event.kind!='zone_changed'
+                or event.exclude_source and event.subject=='self'):
+            raise RulesViolation('Invalid zone-event type union or source exclusion')
+        if event.kind in {'door_unlocked','fully_unlocked'}:
+            if (event.from_zone is not None or event.to_zone is not None or event.step is not None or event.counter_kind is not None or event.types or event.subject=='attached' or isinstance(event,RoomEventPattern) and (event.kind!='door_unlocked' or event.door not in {'left','right'})):raise RulesViolation('Invalid Room event')
+        elif isinstance(event,RoomEventPattern):raise RulesViolation('Door qualifier requires an unlock event')
+        if isinstance(event,DrawEventPattern) and (event.kind!='card_drawn' or type(event.occurrence) is not int or event.occurrence<1):
+            raise RulesViolation('Draw ordinals require a positive card-drawn occurrence')
+        if event.characteristics and event.kind!='zone_changed':
+            raise RulesViolation('Characteristic event filters require zone events')
+        if (event.kind not in {'door_unlocked','fully_unlocked','becomes_monstrous','counter_state','zone_changed', 'step_began', 'spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} or event.subject not in {'any', 'self', 'attached'}
+                or not strings(event.types) or type(event.controller_only) is not bool
+                or any(z is not None and not isinstance(z, Zone) for z in (event.from_zone, event.to_zone))):
+            raise RulesViolation('Unsupported trigger event')
+        if event.kind=='counter_state':
+            if (event.subject!='self' or not event.counters or event.types or event.any_types or event.characteristics
+                    or event.from_zone is not None or event.to_zone is not None or event.step is not None
+                    or event.counter_kind is not None or event.controller_only or event.recipient_relation!='any'
+                    or event.exclude_source or ability.intervening_if is not None or ability.occurrence_condition is not None):
+                raise RulesViolation('Counter-state triggers require an unqualified source counter predicate')
+        if event.subject=='attached' and not (
+                event.kind=='zone_changed' and event.from_zone==Zone.BATTLEFIELD
+                or event.kind=='creature_attacks'
+                or event==EventPattern('step_began',step='upkeep',subject='attached')):
+            raise RulesViolation('Attached-object events require battlefield departure or unqualified upkeep')
+        if (ability.trigger_limit is not None and (type(ability.trigger_limit) is not int or ability.trigger_limit!=1 or event.kind!='counters_added' or event.subject!='self')):
+            raise RulesViolation('Only self counter-event once-per-turn limits are currently supported')
+        if (event.counter_kind is not None and (event.kind!='counters_added' or type(event.counter_kind) is not str or not event.counter_kind)
+                or event.recipient_relation not in {'any','controlled','opponent_controlled'}
+                or event.kind not in {'door_unlocked','fully_unlocked','counters_added','zone_changed'}|ACTOR_EVENTS and event.recipient_relation!='any'
+                or event.controller_only and event.recipient_relation=='opponent_controlled'):
+            raise RulesViolation('Invalid counter event filters')
+        if event.kind in {'life_gained','card_drawn','library_searched','library_shuffled', 'scried','surveilled'} and (event.subject!='any' or event.types or event.from_zone is not None or event.to_zone is not None or event.step is not None):
+            raise RulesViolation('Player events cannot use object or step filters')
+        if event.kind == 'step_began':
+            if event.step not in {'upkeep','draw','precombat_main','begin_combat','declare_attackers','declare_blockers','first_strike_damage','combat_damage','end_combat','postcombat_main','end_step','cleanup'} or event.from_zone is not None or event.to_zone is not None or event.subject not in {'any','attached'} or event.types:
+                raise RulesViolation('Unsupported step pattern')
+        elif event.kind in {'becomes_monstrous','spell_cast', 'ability_activated', 'creature_attacks', 'creature_blocks', 'becomes_blocked', 'damage_dealt', 'damage_received', 'life_gained', 'card_drawn', 'library_searched', 'library_shuffled', 'scried','surveilled','counters_added','becomes_tapped'} and (event.step is not None or event.from_zone is not None or event.to_zone is not None):
+            raise RulesViolation('Announcement event cannot specify zones or step')
+        elif event.step is not None:
+            raise RulesViolation('Zone event cannot specify a step')
+        if ability.targets is not None:
+            target(ability.targets,allow_groups=True)
+        bindings=({'source','target'} if ability.targets is not None else {'source'})|({'event_subject'} if event.kind in {'zone_changed','becomes_tapped','creature_attacks'} else set())
+        if ability.targets is not None:bindings.update('target:'+group.group_id for group in ability.targets.groups)
+        if event.kind=='zone_changed' and event.subject=='self' and event.from_zone==Zone.BATTLEFIELD and event.to_zone in {Zone.STACK,Zone.GRAVEYARD,Zone.EXILE,Zone.COMMAND}:
+            bindings.add('source_successor')
+        if event.subject=='attached' and program.enchant is not None:bindings.add('aura_successor')
+        values={'event_amount'} if event.kind in {'life_gained','counters_added','damage_received'} else {'event_x'} if event.kind in {'spell_cast','becomes_monstrous'} else {'event_controllers'} if event.kind=='zone_changed' else {'defending_player'} if event.kind=='creature_attacks' else frozenset()
+        if isinstance(event,CombatDamageToPlayer):values=values|{'event_amount'}
+        if event.kind in ACTOR_EVENTS or event.kind=='creature_attacks':values=values|{'event_controllers'}
+        if event.kind=='step_began' and event.subject=='attached':
+            bindings.add('attached');values=values|{'event_controllers'}
+        if isinstance(event,ZoneEventPattern):bindings.add('event_successor')
+        if event.kind=='zone_changed' and event.from_zone==Zone.BATTLEFIELD:values=values|{'event_counters'}
+        if event.kind=='zone_changed' and event.to_zone==Zone.BATTLEFIELD:values=values|{'event_x'}
+        if event==EventPattern('spell_cast',subject='self'):values=values|{'cascade_source'}
+        effects(ability.effects,bindings,available_values=values)
+        target_effects(ability.effects,ability.targets)
+        ids.append(ability.ability_id)
+    if len(ids) != len(set(ids)):
+        raise RulesViolation('Duplicate ability ID')
+    if program.enchant is not None:
+        selector(program.enchant)
+        if 'Enchantment' not in program.types:
+            raise RulesViolation('Aura requires an enchantment definition')
+    if program.characteristic_pt is not None:
+        if not isinstance(program.characteristic_pt,CountObjects) or 'Creature' not in program.types:raise RulesViolation('Invalid characteristic P/T definition')
+        quantity(program.characteristic_pt)
+        if any(bound.statistic!='mana_value' for bound in program.characteristic_pt.selector.characteristics):raise RulesViolation('Characteristic P/T count cannot depend on P/T')
+    if (not strings(program.entry_copy_add_types) or len(set(program.entry_copy_add_types))!=len(program.entry_copy_add_types)
+            or any(t not in {'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'} for t in program.entry_copy_add_types)
+            or program.entry_copy_add_types and program.entry_copy is None):raise RulesViolation('Invalid entry copy type exception')
+    if type(program.entry_copy_tapped) is not bool or program.entry_copy_tapped and program.entry_copy is None:raise RulesViolation('Tapped entry copy requires a copy selector')
+    if program.entry_copy is not None:
+        selector(program.entry_copy)
+    if program.spell_targets is not None:
+        target(program.spell_targets,bool(program.cast and program.cast.cost.mana.x_symbols),allow_groups=True)
+        if program.spell_targets.maximum is None:raise RulesViolation('Spell targets require a finite announced bound')
+        if program.spell_targets.groups and any(g.targets.minimum!=g.targets.maximum for g in program.spell_targets.groups):
+            raise RulesViolation('Announced spell target groups require fixed clause sizes')
+    if any(isinstance(node,ExileUntilSourceLeaves) for node in immediate_effect_nodes(program.spell_effects)):
+        raise RulesViolation('Exile-until-leaves requires a permanent ability source')
+    spell_values=({'paid_cost:'+c.cost_id for c in program.cast.cost.zone_costs}
+        | {'paid_subtype:'+c.cost_id for c in program.cast.cost.zone_costs if c.selector is not None and c.selector.zone==Zone.BATTLEFIELD}) if program.cast else frozenset()
+    if division_spec(program.spell_effects,program.spell_targets):
+        if program.cast is None:raise RulesViolation('Divided counters require a casting specification')
+        spell_values=spell_values|{'counter_division'}
+    effects(program.spell_effects, ({'source','target'}|{'target:'+g.group_id for g in program.spell_targets.groups}) if program.spell_targets is not None else {'source'},
+            bool(program.cast and program.cast.cost.mana.x_symbols),available_values=spell_values)
+    target_effects(program.spell_effects,program.spell_targets)
+    if program.modal is not None:
+        modal=program.modal
+        if (not isinstance(modal,ModalSpec) or not isinstance(modal.modes,tuple) or not 1<=len(modal.modes)<=32
+                or any(not isinstance(mode,SpellMode) for mode in modal.modes)
+                or type(modal.minimum) is not int or type(modal.maximum) is not int
+                or not 1<=modal.minimum<=modal.maximum<=len(modal.modes)
+                or not {'Instant','Sorcery'}&set(program.types) or program.cast is None
+                or program.spell_effects or program.spell_targets is not None):
+            raise RulesViolation('Invalid modal spell specification')
+        if modal.extra_mode_condition is None:
+            if modal.conditional_maximum is not None:raise RulesViolation('Conditional mode maximum requires a condition')
+        else:
+            condition(modal.extra_mode_condition)
+            if type(modal.conditional_maximum) is not int or not modal.maximum<modal.conditional_maximum<=len(modal.modes):
+                raise RulesViolation('Invalid conditional mode maximum')
+        ids=[]
+        for mode in modal.modes:
+            if type(mode.mode_id) is not str or not mode.mode_id or len(mode.mode_id)>128:raise RulesViolation('Invalid spell mode identity')
+            ids.append(mode.mode_id)
+            if mode.targets is not None:target(mode.targets,bool(program.cast.cost.mana.x_symbols))
+            effects(mode.effects,{'source','target'} if mode.targets is not None else {'source'},bool(program.cast.cost.mana.x_symbols),available_values=spell_values)
+            target_effects(mode.effects,mode.targets)
+        if len(ids)!=len(set(ids)):raise RulesViolation('Duplicate spell mode identity')
+    if program.enchant is not None and program.spell_targets is not None and program.spell_targets.players is not None:
+        raise RulesViolation('Player-enchanting Auras are not supported')
+    encode(program)
+    return program
+
+
+def printed_trigger_programs(program):
+    """Printed and embedded granted triggers, for conservative observer indexes."""
+    yield from program.abilities
+    if isinstance(program,RoomProgram):
+        yield from printed_trigger_programs(program.right)
+        yield from program.shared_abilities
+    for effect in program.continuous:
+        for change in effect.changes:
+            if isinstance(change,AddTriggered):yield change.ability
+
+
+def token_programs(program):
+    """Direct embedded token definitions; recurse into each through its own validation."""
+    def walk(value):
+        if isinstance(value,CreateTokens):
+            yield value.token
+            if isinstance(value,WithCreatedTokens):yield from walk(value.effects)
+            return
+        if isinstance(value,tuple):
+            for item in value:yield from walk(item)
+        elif hasattr(type(value),'__dataclass_fields__'):
+            for field in fields(value):yield from walk(getattr(value,field.name))
+    if isinstance(program,DoubleFacedProgram):yield program.back
+    if isinstance(program,RoomProgram):yield program.right
+    for field in fields(program):
+        if field.name not in {'back','right'}:yield from walk(getattr(program,field.name))

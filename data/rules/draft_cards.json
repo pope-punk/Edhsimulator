@@ -1,0 +1,7 @@
+{
+  "schema": "edh-card-drafts:1",
+  "status": "unvalidated_draft",
+  "base_commit": "ad19e060ff529c17b0b260b64be4499003f2b960",
+  "production_ready": false,
+  "drafts": []
+}

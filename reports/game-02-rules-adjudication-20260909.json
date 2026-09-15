@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "game": 2,
+  "accepted": 110,
+  "original_terminal_fingerprint": "terminal-748e7ad08eeaaafd924e7c06124d1291a4587901c263fde0796106a40a433e20",
+  "reviewed_issues": [
+    "rules-6304b83ae39c4abcc2e6",
+    "rules-586fbcf2cd49d4cd7fb7"
+  ],
+  "verdict": "rules_draw",
+  "adjudicator": "operator_authorized_root",
+  "reason": "Rules-affected draw: Body Double copying Uro incorrectly survived its sacrifice trigger; subsequent pilot choices and the recorded outcome are invalidated. Retain choices 1-110 and apply the corrected mandatory effects.",
+  "rules_basis": "User explicitly authorized root adjudication on 2026-09-09. Uro has two independent ETB abilities; Body Double inherits both. It did not escape, so the sacrifice ability must sacrifice the real Body Double permanent. Original events 1030,1039,1059 demonstrate creation and no-op resolution. Decisions 108-109 order the triggers; decision 110 chooses the land during the value trigger, before the sacrifice resolves. Decision 111 is the first subsequent choice based on the incorrect battlefield. Corrected replay accepting 154 choices only shows label compatibility, not informed pilot parity. The original later Animate Dead/Felidar defect was repaired and its prior correction remains preserved in the full archive, but that sequence is now outside the certified prefix. Seven regression cases cover copied source identity/incarnations, copied death and ETB dispatch, escaped Uro, and removed Aura. A winner cannot be inferred without inventing counterfactual strategic choices; adjudicate a draw instead. Learning was disabled; no strategy changes or learning review claimed. Game three has a separate seed and frozen strategy and retains its exact accepted branch."
+}

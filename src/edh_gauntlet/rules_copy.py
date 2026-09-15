@@ -1,0 +1,213 @@
+"""Copiable token values, deterministic derived definitions and simultaneous fight."""
+import hashlib
+import json
+from collections import ChainMap
+from dataclasses import replace,fields
+from types import MappingProxyType
+from .rules_program import RoomProgram,printed_trigger_programs,DoubleFacedProgram,BattleProgram,CardProgram,CopyTokens,CostlessCopyTokens,CreateSizedTokens,CopyPermanent,SelectBySubtype,PowerDamage,CreateTokens,WithCreatedTokens,Fight,encode,decode,validate
+from .rules_state import RulesViolation,Zone,ObjectRef
+from .rules_choices import Option
+from .rules_subtypes import SUBTYPE_SETS
+from .rules_creature_types import CREATURE_TYPES
+
+
+class CopyRules:
+    def _init_copy_registry(self,records):
+        self._base_definitions=self.definitions
+        self._derived_definitions={}
+        self.definitions=MappingProxyType(ChainMap(self._derived_definitions,self._base_definitions))
+        self._base_trigger_index=self._trigger_index
+        self._derived_trigger_index={}
+        self._trigger_index=MappingProxyType(ChainMap(self._derived_trigger_index,self._base_trigger_index))
+        self.copy_programs=[]
+        if not isinstance(records,(tuple,list)):raise RulesViolation('Invalid copy registry')
+        for row in records:
+            if isinstance(row,dict) and row.get('kind')=='double_face':
+                if set(row)!={'kind','front','back','layout','definition_id'}:raise RulesViolation('Invalid paired copy lineage')
+                before=len(self.copy_programs)
+                program=self._register_face_pair(row['front'],row['back'],row['layout'])
+                if program.definition_id!=row['definition_id'] or len(self.copy_programs)!=before+1:raise RulesViolation('Invalid paired copy identity')
+                continue
+            if not isinstance(row,dict) or set(row)!={'parent','added_types','changes','definition_id','retained_activation','remove_mana_cost'}:
+                raise RulesViolation('Invalid copy lineage')
+            if type(row['remove_mana_cost']) is not bool:raise RulesViolation('Invalid mana-cost copy exception')
+            if row['parent'] not in self.definitions:raise RulesViolation('Unknown copy parent')
+            if not isinstance(row['added_types'],list) or any(t not in {'Artifact','Battle','Creature','Enchantment','Instant','Kindred','Land','Planeswalker','Sorcery'} for t in row['added_types']):
+                raise RulesViolation('Invalid copied type additions')
+            if not isinstance(row['changes'],dict) or set(row['changes'])!={'nonlegendary','power','toughness','colors','creature_types','abilities'}:
+                raise RulesViolation('Invalid copy exceptions')
+            changes={k:decode(v) for k,v in row['changes'].items()}
+            before=len(self.copy_programs)
+            program=self._register_copy_program(row['parent'],tuple(row['added_types']),changes,decode(row['retained_activation']),row['remove_mana_cost'])
+            if program.definition_id!=row['definition_id'] or len(self.copy_programs)!=before+1:
+                raise RulesViolation('Invalid copy registry identity')
+
+    def _register_copy_program(self,parent,added_types,changes,retained_activation=None,remove_mana_cost=False):
+        validate(CardProgram('copy:validation','Copy validation',('Artifact',),
+            spell_effects=(CopyTokens('source',**changes),)))
+        original=self.definitions[parent]
+        if isinstance(original,DoubleFacedProgram):
+            cls=BattleProgram if original.defense else CardProgram
+            original=cls(**{f.name:getattr(original,f.name) for f in fields(cls)})
+        attrs={'types':tuple(dict.fromkeys(original.types+tuple(added_types)))}
+        if remove_mana_cost:attrs.update(cast=None,mana_value=0)
+        if changes['nonlegendary']:attrs['supertypes']=tuple(s for s in original.supertypes if s!='Legendary')
+        if changes['power'] is not None:
+            attrs.update(power=changes['power'],toughness=changes['toughness'],characteristic_pt=None)
+        if changes['colors'] is not None:attrs['colors']=changes['colors']
+        if changes['creature_types'] is not None:
+            attrs['subtypes']=tuple(t for t in original.subtypes if t not in CREATURE_TYPES)+changes['creature_types']
+            attrs['all_subtype_sets']=tuple(t for t in original.all_subtype_sets if t!='creature')
+        abilities=list(original.abilities)
+        for ability in changes['abilities']:
+            ids={a.ability_id for a in abilities};ability_id=ability.ability_id;number=1
+            while ability_id in ids:
+                ability_id=ability.ability_id+':copy:'+str(number);number+=1
+            abilities.append(replace(ability,ability_id=ability_id))
+        attrs['abilities']=tuple(abilities)
+        if retained_activation is not None:
+            validate(CardProgram('copy:retained-review','Retained activation',('Artifact',),activated=(retained_activation,)))
+            activated=list(original.activated);ids={a.ability_id for a in activated}
+            ability_id=retained_activation.ability_id;number=1
+            while ability_id in ids:
+                ability_id=retained_activation.ability_id+':copy:'+str(number);number+=1
+            attrs['activated']=tuple(activated)+(replace(retained_activation,ability_id=ability_id),)
+        if isinstance(original,RoomProgram):
+            shared={k:v for k,v in attrs.items() if k not in {'abilities','activated'}}
+            attrs.update(right=replace(original.right,definition_id='copy:values:right',**shared),
+                shared_abilities=original.shared_abilities+tuple(abilities[len(original.abilities):]),
+                shared_activated=original.shared_activated+((attrs['activated'][-1],) if retained_activation is not None else ()),
+                copy_colors=changes['colors'] if changes['colors'] is not None else original.copy_colors,
+                cost_removed=original.cost_removed or remove_mana_cost,abilities=original.abilities,activated=original.activated)
+        program=replace(original,definition_id='copy:values',**attrs)
+        digest=hashlib.sha256(json.dumps(encode(program),sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        if isinstance(program,RoomProgram):program=replace(program,right=replace(program.right,definition_id='copy:'+digest+':right'))
+        program=validate(replace(program,definition_id='copy:'+digest))
+        existing=self.definitions.get(program.definition_id)
+        if existing is not None:
+            if existing!=program:raise RulesViolation('Copy definition collision')
+            return existing
+        grouped={}
+        for ability in program.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
+        self._derived_definitions[program.definition_id]=program
+        self._derived_trigger_index[program.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
+        self._has_attachment_observers|=any(a.event.subject=='attached' for a in printed_trigger_programs(program))
+        self._has_tap_triggers|=any(a.event.kind=='becomes_tapped' for a in printed_trigger_programs(program))
+        self._has_state_triggers|=any(a.event.kind=='counter_state' for a in printed_trigger_programs(program))
+        self.copy_programs.append({'parent':parent,'added_types':list(added_types),
+            'changes':{k:encode(v) for k,v in changes.items()},'definition_id':program.definition_id,
+            'retained_activation':encode(retained_activation),'remove_mana_cost':remove_mana_cost})
+        return program
+
+    def _register_face_pair(self,front,back,layout):
+        if layout not in {'modal','transform'} or front not in self.definitions or back not in self.definitions:raise RulesViolation('Invalid paired copy parents')
+        identity='copy-pair:'+hashlib.sha256(json.dumps([front,back,layout],separators=(',',':')).encode()).hexdigest()
+        if identity in self.definitions:return self.definitions[identity]
+        a=self.definitions[front];b=self.definitions[back]
+        b=CardProgram(**{f.name:getattr(b,f.name) for f in fields(CardProgram)})
+        b=replace(b,definition_id=identity+':back')
+        program=DoubleFacedProgram(**{f.name:getattr(a,f.name) for f in fields(CardProgram) if f.name!='definition_id'},
+            definition_id=identity,back=b,layout=layout,defense=getattr(a,'defense',0))
+        validate(program)
+        for p in (program,b):
+            self._derived_definitions[p.definition_id]=p
+            grouped={}
+            for ability in p.abilities:grouped.setdefault(ability.event.kind,[]).append(ability)
+            self._derived_trigger_index[p.definition_id]=MappingProxyType({kind:tuple(rows) for kind,rows in grouped.items()})
+        self.copy_programs.append({'kind':'double_face','front':front,'back':back,'layout':layout,'definition_id':identity})
+        return program
+
+    def _copy_token_program(self,obj,changes,remove_mana_cost=False):
+        physical=self.definitions[obj.definition]
+        if isinstance(physical,DoubleFacedProgram):
+            override=obj.copy_effects[-1][0] if obj.copy_effects else obj.copied_definition
+            front=self._register_copy_program(override or physical.definition_id,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost)
+            back=self._register_copy_program(override or physical.back.definition_id,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost)
+            return self._register_face_pair(front.definition_id,back.definition_id,physical.layout),obj.back_face
+        return self._register_copy_program(obj.effective_definition,obj.effective_add_types,changes,remove_mana_cost=remove_mana_cost),False
+
+    def _copy_information(self,ref):
+        try:return self.state.get(ref)
+        except RulesViolation:
+            known=self.last_known.get(ref)
+            return known[0] if known is not None else None
+
+    def _execute_copy(self,effect,frame,key):
+        if isinstance(effect,CreateSizedTokens):
+            if not self._quantity(effect.amount,frame):return True
+            changes={name:getattr(CopyTokens('source'),name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
+            changes.update(power=self._quantity(effect.power,frame),toughness=self._quantity(effect.toughness,frame))
+            program=self._register_copy_program(effect.token.definition_id,(),changes)
+            self._execute(frame,{'id':key,'effect':encode(CreateTokens(program,effect.amount,effect.players))})
+            return True
+        if isinstance(effect,SelectBySubtype):
+            choice=self._choose(key+':subtype',frame['controller'],'subtype',
+                'Choose a nonbasic land type.',tuple(Option(t,t) for t in sorted(SUBTYPE_SETS[effect.subtype_set])),1,1)[0]
+            selector=replace(effect.selector,subtypes=tuple(dict.fromkeys(effect.selector.subtypes+(choice.key,))))
+            frame['bindings']['selected']=[obj.ref.to_json() for obj in self._query(selector,frame)]
+            self._insert(frame,effect.effects)
+            return True
+        if isinstance(effect,CopyPermanent):
+            originals=self._refs(frame,effect.original)
+            if len(originals)!=1:return True
+            original=self._copy_information(originals[0])
+            if original is None:return True
+            recipients=[]
+            for ref in self._refs(frame,effect.subject):
+                try:obj=self.state.get(ref)
+                except RulesViolation:continue
+                if obj.zone==Zone.BATTLEFIELD and not obj.phased:recipients.append(ref)
+            if not recipients:return True
+            retained=decode(frame.get('activated_program')) if effect.retain_activation else None
+            if effect.retain_activation and retained is None:raise RulesViolation('Missing captured activation')
+            changes={name:getattr(CopyTokens('source'),name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
+            program=self._register_copy_program(original.effective_definition,original.effective_add_types,changes,retained)
+            refs=self.state.apply_copy(recipients,program.definition_id,until_end_of_turn=effect.until_end_of_turn)
+            self._event('permanents_copied',refs=[ref.to_json() for ref in refs],original=original.ref.to_json(),
+                definition_id=program.definition_id,until_end_of_turn=effect.until_end_of_turn)
+            return True
+        if isinstance(effect,PowerDamage):
+            sources=self._refs(frame,effect.source);targets=self._refs(frame,effect.target)
+            if len(sources)!=1 or len(targets)!=1:return True
+            try:source=self.state.get(sources[0]);target=self.state.get(targets[0])
+            except RulesViolation:return True
+            if any(obj.zone!=Zone.BATTLEFIELD or obj.phased for obj in (source,target)):return True
+            view=self.effective(source.ref);other=self.effective(target.ref)
+            if 'Creature' not in view.types or 'Creature' not in other.types:return True
+            amount=max(0,view.power or 0);creature_damage=amount
+            if effect.trample_excess and 'trample' in view.keywords:
+                lethal=max(0,(other.toughness or 0)-target.damage_marked)
+                if 'deathtouch' in view.keywords:lethal=min(lethal,1)
+                creature_damage=min(amount,lethal)
+            assignments=[(source,target.ref,creature_damage)]
+            if amount>creature_damage:assignments.append((source,target.controller,amount-creature_damage))
+            self._deal_damage(assignments)
+            return True
+        if isinstance(effect,Fight):
+            first=self._refs(frame,effect.first);second=self._refs(frame,effect.second)
+            if len(first)!=1 or len(second)!=1:return True
+            creatures=[]
+            for ref in (first[0],second[0]):
+                try:obj=self.state.get(ref)
+                except RulesViolation:return True
+                view=self.effective(ref)
+                if obj.zone!=Zone.BATTLEFIELD or obj.phased or 'Creature' not in view.types:return True
+                creatures.append((obj,max(0,view.power or 0)))
+            (a,ap),(b,bp)=creatures
+            self._deal_damage([(a,b.ref,ap),(b,a.ref,bp)])
+            return True
+        if not isinstance(effect,CopyTokens):return False
+        if not self._quantity(effect.amount,frame):return True
+        if effect.subject=='equipped':
+            holder=self._copy_information(self._source(frame).ref)
+            refs=() if holder is None or holder.attached_to is None else (holder.attached_to,)
+        else:refs=self._refs(frame,effect.subject)
+        if len(refs)!=1:return True
+        obj=self._copy_information(refs[0])
+        if obj is None:return True
+        original=self.definition(obj)
+        changes={name:getattr(effect,name) for name in ('nonlegendary','power','toughness','colors','creature_types','abilities')}
+        program,back_face=self._copy_token_program(obj,changes,remove_mana_cost=isinstance(effect,CostlessCopyTokens))
+        token_effect=WithCreatedTokens(program,effect.amount,'controller',effect.effects)
+        self._execute(frame,{'id':key,'effect':encode(token_effect),'token_back_face':back_face})
+        return True

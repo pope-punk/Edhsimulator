@@ -45,7 +45,7 @@ unexpected approval request instead of asking a terminal.
 Use one persistent isolated identity per seat and role, registered to that game.
 Each seat has a decider, short-term planner, long-term planner and diplomat. The
 software host routes directly through App Server. In concurrent mode it admits
-one inference per role lane; waiting decider tools retain context without occupying
+one inference per seat/role lane (16 independent lanes); waiting decider tools retain context without occupying
 an inference lane. A pending long-term revision does not serialize tactical work.
 
 Deciders reason about actual choices, inspect only actor-visible information and
@@ -117,3 +117,22 @@ Cancellation preserves provenance and does not retroactively erase learning. A
 terminal test with learning explicitly deferred is gameplay-complete but must not
 be represented as a learned cohort. Operator-authorized archive cleanup is separate
 from gameplay and happens only after hosts stop and release evidence is recorded.
+
+## Explicit historical rules-draw correction
+
+An operator may explicitly authorize root to adjudicate an already completed,
+learning-disabled game's compromised outcome. `tools/reconcile_sealed_rules.py`
+accepts a bound response identifying the original terminal fingerprint, every
+reviewed rules issue, a justified safe prefix, rules basis, and a draw verdict.
+Run without `--apply` to verify the corrected prefix, then apply the same response.
+This is an administrative rules correction, never a pilot choice or a counterfactual
+winner. It does not override a learning-enabled seal or imply that skipped learning
+was performed. Ordinary rewind remains prohibited for resolved seals.
+
+The tool retains the original full game directory and seal under
+`rules_reconciliations`, records the explicit operator rules review, regenerates a
+terminal seal and learning-skip receipt for the draw, and preserves the later
+active game's tape, configuration and status. A prepared interrupted transaction
+rolls back on an identical retry. Keep the host paused until the correction has
+committed and current-game replay parity is verified; follow the refreshed
+NEXT_ACTION and use fenced transport recovery for any subsequent resume.

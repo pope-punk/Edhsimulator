@@ -12,6 +12,26 @@ from enum import IntEnum
 from typing import Any, Callable, Iterable, Optional
 
 
+def read_only_views(function):
+    """Reuse derived characteristics only during one non-mutating rules query.
+
+    Nested menu queries share the view. It must never surround resolution,
+    payment, or a decision request: those can change game state.
+    """
+    from functools import wraps
+    @wraps(function)
+    def wrapped(self,*args,**kwargs):
+        owner=not hasattr(self,'_continuous_view_cache')
+        source_owner=not hasattr(self,'_query_source_cache')
+        if owner:self._continuous_view_cache={}
+        if source_owner:self._query_source_cache={}
+        try:return function(self,*args,**kwargs)
+        finally:
+            if source_owner:del self._query_source_cache
+            if owner:del self._continuous_view_cache
+    return wrapped
+
+
 class Layer(IntEnum):
     COPY = 10
     CONTROL = 20

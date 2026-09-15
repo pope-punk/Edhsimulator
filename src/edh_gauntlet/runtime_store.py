@@ -105,7 +105,9 @@ def write(path, value):
     temporary = path.with_name(path.name + '.' + uuid.uuid4().hex + '.tmp')
     try:
         with temporary.open('w', encoding='utf-8', newline='\n') as stream:
-            json.dump(value, stream, ensure_ascii=False, separators=(',', ':'))
+            # dumps uses the C encoder; dump iterates tiny Python chunks. Keep
+            # the same atomic replace/fsync contract without per-token writes.
+            stream.write(json.dumps(value, ensure_ascii=False, separators=(',', ':')))
             stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
         replace(temporary, path)
     finally:

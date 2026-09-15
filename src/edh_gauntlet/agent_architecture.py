@@ -7,7 +7,8 @@ SHORT='short_term_planner'
 LONG='long_term_planner'
 DIPLOMACY='diplomacy'
 PLANNERS=frozenset({'planner',SHORT,LONG})
-MODELS={'decider':'gpt-5.6-terra',SHORT:'gpt-5.6-terra',LONG:'gpt-5.6-sol',DIPLOMACY:'gpt-5.6-luna'}
+MODELS={'decider':'gpt-5.6-terra',SHORT:'gpt-5.6-sol',LONG:'gpt-5.6-sol',DIPLOMACY:'gpt-5.6-luna'}
+LEGACY_MODELS={**MODELS,SHORT:'gpt-5.6-terra'}
 EFFORTS={'decider':'low',SHORT:'high',DIPLOMACY:'low'}
 
 
@@ -16,6 +17,14 @@ def config(root,game):
 
 
 def enabled(root,game):return config(root,game).get('agent_architecture')==VERSION
+
+
+def models(root,game):
+    return dict(MODELS if config(root,game).get('short_term_sol_fast')==1 else LEGACY_MODELS)
+
+
+def service_tier(root,game,role):
+    return 'fast' if role==SHORT and config(root,game).get('short_term_sol_fast')==1 else None
 
 
 def diplomacy_enabled(root,game):
@@ -38,9 +47,12 @@ def roles(root,game):
 
 
 def validate_binding(value):
-    for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches'):
+    for key in ('agent_architecture','async_diplomacy','decision_roles','static_standing','combat_proposals','turn_batches','short_term_sol_fast'):
         if value.get(key) is not None and type(value[key]) is not int:
             raise ValueError(f'{key} must be an integer version.')
+    if value.get('short_term_sol_fast') not in (None,1):raise ValueError('Unknown short-term model policy.')
+    if value.get('short_term_sol_fast') and value.get('agent_architecture')!=1:
+        raise ValueError('Sol Fast short-term planning requires split planning.')
     if value.get('agent_architecture') not in (None,VERSION):raise ValueError('Unknown agent architecture.')
     if value.get('async_diplomacy') not in (None,VERSION):raise ValueError('Unknown diplomacy contract.')
     if value.get('decision_roles') not in (None,1):raise ValueError('Unknown decision role contract.')
@@ -70,6 +82,7 @@ def enroll(root,game,*,diplomacy=False):
         tape=directory/'decisions.jsonl'
         if tape.exists() and tape.read_bytes().strip():raise ValueError('Never migrate an accepted game.')
         value['agent_architecture']=VERSION
+        value['short_term_sol_fast']=1
         if diplomacy:value['async_diplomacy']=VERSION
         validate_binding(value);write(directory/'game_config.json',value)
         return {'game':game,'agent_architecture':VERSION,'async_diplomacy':diplomacy}

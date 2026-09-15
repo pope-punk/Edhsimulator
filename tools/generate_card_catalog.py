@@ -256,12 +256,13 @@ def _build_faces(card: ReferenceCard, annotation: dict[str, Any]) -> list[dict[s
                 "types": types,
                 "subtypes": subtypes,
                 "oracle_text": oracle,
-                "colors": _ordered_colors(_mana_symbols(cost) - {"C"}),
+                "colors": _ordered_colors(set(face_annotation.get("colors", _mana_symbols(cost) - {"C"}))),
                 "power": face_annotation.get("power", default_power),
                 "toughness": face_annotation.get("toughness", default_toughness),
                 "loyalty": face_annotation.get("loyalty"),
                 "loyalty_variable": face_annotation.get("loyalty_variable"),
-                "keywords": engine_keywords if index == 0 else [],
+                "keywords": engine_keywords if index == 0 else sorted(face_annotation.get("keywords", [])),
+                **({"defense": face_annotation["defense"]} if "defense" in face_annotation else {}),
             }
         )
     return faces
@@ -627,11 +628,13 @@ def build_payload(
         ]
         colors = set()
         for face in faces:
+            colors.update(face["colors"])
             colors.update(_mana_symbols(face["mana_cost"]))
             colors.update(_mana_symbols(face["oracle_text"]))
         cards.append(
             {
                 "card_id": card_id,
+                **({"layout": annotation["layout"]} if "layout" in annotation else {}),
                 "name": card_name,
                 "oracle_text": _clean_oracle(card.text),
                 "color_identity": _ordered_colors(colors - {"C"}),

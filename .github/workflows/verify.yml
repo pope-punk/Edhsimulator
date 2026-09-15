@@ -5,6 +5,7 @@ permissions:
 jobs:
   verify:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -20,3 +21,14 @@ jobs:
       - name: Verify installed catalog and runtime assets
         working-directory: ${{ runner.temp }}
         run: python -m edh_gauntlet verify
+      - name: Run complete repository conformance checks
+        run: python -m unittest discover -s tests -v
+      - name: Generate current migration admission evidence
+        run: python -m edh_gauntlet.rules_admission --output reports/reconciled-readiness.json --deck-coverage-output reports/reconciled-deck-coverage.json
+      - name: Check proposed primitive-engine test launch
+        run: python -m edh_gauntlet.rules_launch_preflight --cohort "${{ runner.temp }}/primitives-hosted-test" --games 1 --learning disabled --output reports/reconciled-launch-preflight.json
+      - name: Retain admission evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: reconciliation-${{ matrix.os }}
+          path: reports/reconciled-*.json

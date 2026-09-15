@@ -1501,7 +1501,7 @@ Rules text:
 [004] 1x Apex Devastator
 ------------------------
 Mana cost: {8}{G}{G}
-Type line: Creature — Chimera
+Type line: Creature — Chimera Hydra
 Rules text:
   Cascade, cascade, cascade, cascade
 
@@ -1548,8 +1548,7 @@ Rules text:
 Mana cost: —
 Type line: Legendary Land — Gate
 Rules text:
-  This land enters tapped unless you control two or more other Gates.
-  {T}: Add {G}.
+  {T}: Add {C}.
   {2}, {T}: Add X mana of any one color, where X is the number of other Gates you control.
 
 [011] 1x Basilisk Gate
@@ -1789,7 +1788,7 @@ Rules text:
 
 [041] 1x Hydra Broodmaster
 --------------------------
-Mana cost: {3}{G}{G}{G}
+Mana cost: {4}{G}{G}
 Type line: Creature — Hydra
 Rules text:
   {X}{X}{G}: Monstrosity X.

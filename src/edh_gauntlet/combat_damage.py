@@ -17,7 +17,8 @@ def specification(game,sources,step,defender,defended_object):
     rows=[];forced={}
     for source,blockers,amount,trample in sources:
         power=max(0,amount)
-        lethal=[1 if 'deathtouch' in game.keywords_for(source) else max(0,game.effective_toughness(b)-b.metadata.get('damage_marked',0)) for b in blockers]
+        remaining=[max(0,game.effective_toughness(b)-b.metadata.get('damage_marked',0)) for b in blockers]
+        lethal=[min(1,n) if 'deathtouch' in game.keywords_for(source) else n for n in remaining]
         if not power or len(blockers)==1 and (not trample or power<=sum(lethal)):
             forced[source.uid]={'blockers':{b.uid:power if i==0 else 0 for i,b in enumerate(blockers)},'defender':0}
             continue

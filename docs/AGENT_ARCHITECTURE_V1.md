@@ -14,10 +14,12 @@ Neither flag changes an existing started game.
 Fresh cohorts additionally bind [static_standing:1](STATIC_STANDING_PLANS.md):
 Python loads reviewed standing files; legacy games retain Sol's initialization.
 Sol owns the current strategic goal, strategic answers and diplomacy authorization;
-Terra-high owns continuity, short-term prose and symbolic proposals; Terra-low
+Sol-high with Fast service owns continuity, short-term prose and symbolic proposals
+in fresh cohorts bound to `short_term_sol_fast:1`; older games retain Terra-high. Terra-low
 owns actual choices and approvals; Luna-low owns only authorized public talk.
-Python coordinates them. Fresh split hosts use independent short-term, long-term,
-diplomacy and decision inference lanes. Each lane admits one seat at a time; a
+Python coordinates them. Fresh split hosts use 16 independent inference lanes:
+one decider, short-term planner, long-term planner and diplomat per seat. Each
+seat/role admits one inference at a time; a
 waiting decision tool does not occupy an inference lane. Roles never reserve a
 slot while waiting for another role.
 
@@ -207,9 +209,10 @@ interrupting an active inference or creating a plan-validation decision.
 | Short-term table-talk suggestion | Offer it in the pilot's existing decision packet; suggestion alone does not wake a diplomat or automatically post. |
 | Accepted decision, priority transfer, snooze expiry, or approved-sequence boundary | Python routes the next required pilot choice. Approved steps may continue across opponent passes; a new opposing action interrupts them. Snoozed unforced choices require no inference. |
 
-Pending work for one seat/role coalesces. Fresh software hosts bind `role_slots:1`
-in the workboard: one short-term, one long-term and one diplomacy inference can
-run concurrently alongside decision inference. Initial tactical work requires a
+Pending work for one seat/role coalesces. Fresh software hosts bind `role_slots:2`
+in the workboard: all twelve background seat/role lanes can run concurrently
+alongside four independent decider lanes. Only the seat owning the actual decision
+receives a decision packet; capacity does not create out-of-turn choices. Initial tactical work requires a
 completed opening goal; later strategic jobs do not block it. Each role prioritizes
 missing initial tactical plans and then aged work, preventing repeated maintenance
 from starving another seat. Mandatory brief posts lead their own diplomacy queue. Python transfers already-expired authorization to strategic refresh before
@@ -345,7 +348,8 @@ additional authority to disclose hidden strategy or invent commitments.
 
 ## Independent inference lanes
 
-Role reservations are stored in `active_by_role` and are looked up by immutable
+Seat/role reservations are stored in `active_by_role`, keyed by `SEAT::ROLE`
+under `role_slots:2`, and are looked up by immutable
 batch ID for every read, inspection, publication, retry and cancellation. All
 publications retain the existing atomic transaction lock and merge current component
 pointers, so concurrent inference does not mean concurrent unprotected file writes.
@@ -355,7 +359,11 @@ Tactical assessments stay tied to their frozen goal version.
 
 Fresh split hosts enable independent lanes before dispatch. A previously started
 host changes this transport policy only on explicit user authorization and through
-`resume_stopped_host.ps1 -DiagnosticPauseTelemetry PATH -ConcurrentBackground`.
+`resume_stopped_host.ps1 -DiagnosticPauseTelemetry PATH -SeatRoleLanes`
+(or Python `tools/resume_stopped_host.py --diagnostic-pause-telemetry PATH
+--seat-role-lanes` with the required cohort, game and accepted-prefix arguments).
+Existing `role_slots:1` hosts retain their four shared role lanes until explicitly
+upgraded; `-ConcurrentBackground` continues to select that older policy.
 It verifies the stopped process, accepted prefix, no active reservations and all
 unloaded seat contexts before enabling lanes. It preserves gameplay bindings,
 accepted decisions, wake triggers and clean contexts. Legacy desktop collaboration

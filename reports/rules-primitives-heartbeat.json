@@ -1,0 +1,8 @@
+{
+  "thread": "01a083a6-5302-7cb0-aa21-bc44c50d866c",
+  "interval_seconds": 600,
+  "directory": "/workspaces/Edhsimulator/archive/resume-heartbeats/migration-l064ue84",
+  "pid": 11108,
+  "stop_file": "/workspaces/Edhsimulator/archive/resume-heartbeats/migration-l064ue84/STOP",
+  "scope": "Local queue reminder; not an external scheduler and cannot survive codespace shutdown"
+}

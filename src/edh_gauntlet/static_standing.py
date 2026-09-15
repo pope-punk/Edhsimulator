@@ -50,7 +50,7 @@ def install(root,game,actor,snapshot):
     from . import component_store as c
     if 'standing' in c.current(root,game,actor):return
     d=c.directory(root,game);snap=get(d/'snapshots',snapshot)
-    text=standing(root,game,actor);operation='static_standing'
+    text=standing(root,game,actor);operation='static_standing:'+snap['source_session']['key']
     pointers,changed=c.prepare(root,game,actor,'static_reference',operation,{'standing':text},
         source_session=snap['source_session'],snapshot=snapshot,event_seq=snap['event_seq'])
     c.commit(root,game,actor,operation,identity(text),snap['source_session'],

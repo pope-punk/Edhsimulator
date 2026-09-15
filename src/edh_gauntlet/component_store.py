@@ -43,12 +43,15 @@ def current(root,game,actor):
         recover(root,game)
         values=read(index_path(d,actor),{})
         result={}
-        from .planner_runtime import _compatible
+        from .planner_runtime import _compatible,_rows
+        # One immutable tape read per pointer projection, rather than one per
+        # component. Validation still binds every envelope to this exact branch.
+        rows=_rows(root,game) if values else []
         for kind,key in values.items():
             envelope=get(d/'plan_components',key)
             if envelope['actor']!=actor or envelope['game']!=game or envelope['kind']!=kind:
                 raise SystemExit('Wrong-seat component pointer.')
-            if _compatible(envelope['source_session'],root,game,actor):result[kind]=envelope
+            if _compatible(envelope['source_session'],root,game,actor,rows):result[kind]=envelope
         return result
 
 

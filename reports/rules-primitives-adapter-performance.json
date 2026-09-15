@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
+  "repeats": 7,
+  "scope": "Synthetic current-packet and empty-event-tail costs; excludes inference, live queues, durable storage and production replay throughput",
+  "cases": [
+    {
+      "prior_zone_events": 0,
+      "public_permanents": 40,
+      "cards_per_hand": 7,
+      "packet_bytes": 18969,
+      "packet_median_ms": 0.37791,
+      "packet_samples_ms": [
+        0.525359,
+        0.454604,
+        0.373383,
+        0.392141,
+        0.365982,
+        0.37791,
+        0.370319
+      ],
+      "full_history_slice_median_ms": 8.9202e-05,
+      "incremental_cursor_median_ms": 0.000176672
+    },
+    {
+      "prior_zone_events": 1000,
+      "public_permanents": 40,
+      "cards_per_hand": 7,
+      "packet_bytes": 18973,
+      "packet_median_ms": 0.405301,
+      "packet_samples_ms": [
+        0.417489,
+        0.504037,
+        0.405301,
+        0.392552,
+        0.662812,
+        0.383548,
+        0.379483
+      ],
+      "full_history_slice_median_ms": 0.0020327130000000002,
+      "incremental_cursor_median_ms": 0.000192225
+    },
+    {
+      "prior_zone_events": 10000,
+      "public_permanents": 40,
+      "cards_per_hand": 7,
+      "packet_bytes": 18975,
+      "packet_median_ms": 0.477527,
+      "packet_samples_ms": [
+        0.740718,
+        0.502385,
+        0.475184,
+        0.470658,
+        0.475315,
+        0.477527,
+        0.698455
+      ],
+      "full_history_slice_median_ms": 0.023238968,
+      "incremental_cursor_median_ms": 0.00020229
+    }
+  ]
+}

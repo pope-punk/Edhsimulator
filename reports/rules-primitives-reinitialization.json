@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "status": "blocked_rules_migration",
+  "initialized": false,
+  "intent_sha256": "c62c5a092d61d6569eefd66a0717f4a4bc3bce85ec2dddd4b4ee0f296775f30b",
+  "requested": {
+    "cohort": "/workspaces/Edhsimulator/runs/primitives-hosted-test-20260915",
+    "rules_engine": "primitives-v1",
+    "games": 1,
+    "seed_start": 2026090901,
+    "max_rounds": 16,
+    "learning_enabled": false,
+    "planning_contract": 4,
+    "agent_architecture": 1,
+    "async_diplomacy": 1,
+    "short_term_sol_fast": 1,
+    "rules_implementation_sha256": "ad7a4f346a621d67265bf02fa2aa5a2f3089d9318eaf578225c21172ecfff3f2",
+    "catalog_sha256": "80eacb720beb49399076e7ccdfc1d0e0efe0e8e102922fa8f30f3d1965208f6b",
+    "decks_sha256": "54b6257ea36f3614993d03b270a49fa8f26dd252ff1ceb533599205e49ee5f17",
+    "authored_bundle_sha256": "881198597d637bacd98e5a0a222a20d1355e807f59a2539a50e9ebd17ced4f88"
+  },
+  "authored_unique_cards": 334,
+  "unreviewed_program_count": 0,
+  "unreviewed_programs": [],
+  "blockers": [
+    "No complete reviewed executable bundle for every face and clause in the fixed decks",
+    "Casting and activation still lack the full cost/announcement vocabulary and restricted mana; concessions, loss/win exceptions and planeswalker/battle combat are incomplete",
+    "Ability/control/color layers, prevention, full replacement semantics and state-based actions are incomplete",
+    "Hidden-information projections and production action routing are not bound to this kernel",
+    "Historical runtime selection, production replay parity and deployment gates are incomplete"
+  ],
+  "launch_command": null,
+  "adapter_status": "No production primitive-engine campaign/host adapter is registered"
+}

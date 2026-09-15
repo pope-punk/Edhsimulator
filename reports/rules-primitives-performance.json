@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "scope": "Synthetic characteristic evaluation only; excludes inference, transport and live gameplay",
+  "implementation_sha256": "7463ed757bf8058f49fd87352fd9cf11df088e6cdb27b9b72bab4064b0260be3",
+  "python": "3.12.11",
+  "platform": "Linux-6.8.0-1064-azure-x86_64-with-glibc2.36",
+  "repeats": 7,
+  "reference": "Same evaluator with dependency pruning disabled; not a legacy-host latency baseline",
+  "cases": [
+    {
+      "case": "independent_modifiers",
+      "objects": 120,
+      "continuous_effects": 24,
+      "semantic_parity": true,
+      "result_sha256": "714c79f4a92b8111a29fa666545701908bafd0f896737c1298d141acd0ceab0d",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            32.823216,
+            33.418358,
+            48.089207,
+            34.098567,
+            35.674042,
+            33.294264,
+            34.984771
+          ],
+          "median_ms": 34.098567,
+          "p95_ms": 48.089207
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            1833.246855,
+            1714.996994,
+            1843.338073,
+            1750.19409,
+            1735.509611,
+            1806.73276,
+            1746.437931
+          ],
+          "median_ms": 1750.19409,
+          "p95_ms": 1843.338073
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000169712,
+            0.000190883,
+            0.000165425,
+            0.000166627,
+            0.000165966,
+            0.000165135,
+            0.000169221
+          ],
+          "median_ms": 0.000166627,
+          "p95_ms": 0.000190883
+        }
+      },
+      "median_speedup_vs_exhaustive": 51.32749684172944
+    },
+    {
+      "case": "mixed_layers",
+      "objects": 58,
+      "continuous_effects": 10,
+      "semantic_parity": true,
+      "result_sha256": "bcf3d8ee28cded4570d629a45bc7cba45d9748bb6c75aeb54d088d3f8357e52f",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            11.702958,
+            8.133697,
+            7.610832,
+            7.284539,
+            7.422963,
+            7.418026,
+            8.421664
+          ],
+          "median_ms": 7.610832,
+          "p95_ms": 11.702958
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            58.740926,
+            58.207705,
+            68.802912,
+            58.696391,
+            58.188397,
+            99.190016,
+            58.262246
+          ],
+          "median_ms": 58.696391,
+          "p95_ms": 99.190016
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000196401,
+            0.000241468,
+            0.000165055,
+            0.000167589,
+            0.000234878,
+            0.000240306,
+            0.00016783899999999998
+          ],
+          "median_ms": 0.000196401,
+          "p95_ms": 0.000241468
+        }
+      },
+      "median_speedup_vs_exhaustive": 7.712217402775412
+    },
+    {
+      "case": "no_continuous_effects",
+      "objects": 120,
+      "continuous_effects": 0,
+      "semantic_parity": true,
+      "result_sha256": "8320ef1bbec6187910970046eb19a14942b76e21642466faeb98d7e8d7a5beeb",
+      "timings": {
+        "optimized_cold": {
+          "samples_ms": [
+            0.703884,
+            0.644485,
+            0.663553,
+            0.708391,
+            1.104788,
+            1.121242,
+            1.150005
+          ],
+          "median_ms": 0.708391,
+          "p95_ms": 1.150005
+        },
+        "exhaustive_cold": {
+          "samples_ms": [
+            0.856519,
+            0.649523,
+            0.653989,
+            0.653218,
+            1.101313,
+            1.183224,
+            1.117347
+          ],
+          "median_ms": 0.856519,
+          "p95_ms": 1.183224
+        },
+        "kernel_warm": {
+          "samples_ms": [
+            0.000167248,
+            0.000163963,
+            0.000163573,
+            0.000239565,
+            0.00027381499999999995,
+            0.000266395,
+            0.000259495
+          ],
+          "median_ms": 0.000239565,
+          "p95_ms": 0.00027381499999999995
+        }
+      },
+      "median_speedup_vs_exhaustive": 1.2091048587573812
+    }
+  ]
+}

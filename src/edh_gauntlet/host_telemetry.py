@@ -1,5 +1,6 @@
 """Rolling timing metadata; never stores prompts, deltas, choices or reasoning."""
 from collections import deque
+from contextlib import contextmanager
 import json
 import hashlib
 import threading
@@ -8,10 +9,44 @@ from .runtime_store import write
 
 
 class Timing:
-    def __init__(self,path,limit=512):
+    def __init__(self,path,limit=512,*,flush_interval=1.0):
         self.path=path;self.events=deque(maxlen=limit);self.roles={};self.requests={}
         self.first=set();self.lock=threading.RLock();self.count=0
         self.usage_totals={}
+        self.flush_interval=flush_interval;self.flushed_count=0
+        self.flush_lock=threading.Lock();self.stop=threading.Event()
+        self.failure=None;self.closed=False
+        self.worker=threading.Thread(target=self._flush_loop,daemon=True,name='host-telemetry')
+        self.worker.start()
+
+    def _flush_loop(self):
+        try:
+            while not self.stop.wait(self.flush_interval):self.flush()
+        except Exception as error:
+            with self.lock:self.failure=error
+
+    def flush(self):
+        # Serialize writers, but never hold the event lock across encoding/fsync.
+        with self.flush_lock:
+            with self.lock:
+                if self.failure is not None:raise self.failure
+                if self.flushed_count==self.count:return
+                value={'version':1,'total_events':self.count,'retained_events':list(self.events)}
+            write(self.path,value)
+            with self.lock:self.flushed_count=value['total_events']
+
+    def close(self):
+        self.stop.set();self.worker.join()
+        with self.lock:self.closed=True
+        self.flush()
+
+    @contextmanager
+    def measure(self,phase,thread=None,*,minimum=.05):
+        started=time.monotonic()
+        try:yield
+        finally:
+            seconds=time.monotonic()-started
+            if seconds>=minimum:self.record('host_phase',thread,phase=phase,seconds=seconds)
 
     def bind(self,thread,actor,role):
         with self.lock:
@@ -20,11 +55,12 @@ class Timing:
 
     def record(self,event,thread=None,**fields):
         with self.lock:
+            if self.failure is not None:raise self.failure
+            if self.closed:raise RuntimeError('Telemetry is closed.')
             self.count+=1
             row={'event':event,'epoch':time.time(),'thread':thread,**fields}
             if thread in self.roles:row.update(zip(('actor','role'),self.roles[thread]))
             self.events.append(row)
-            write(self.path,{'version':1,'total_events':self.count,'retained_events':list(self.events)})
 
     def observe(self,message):
         method=message.get('method','');p=message.get('params',{});thread=p.get('threadId')
