@@ -33,8 +33,7 @@ or game action was started by this probe.
 
 Remaining release work:
 
-- Finish object snooze semantics. Expand
-  missed-window and multi-turn sequence tests; audit mandatory publication coverage.
+- Complete final fixed-pod surface review and mandatory publication coverage.
 - Finish final host conformance and admission checks.
 - Expand fault tests, full suite and installed-package checks; bind admission to
   actual completed host conformance, not a manually flipped readiness flag.
@@ -149,3 +148,25 @@ state, interrupted transactions and a pending choice during audit.
 The combined primitive suite passed 96 tests in 121.471 seconds
 (`/tmp/edh-primitive-journal-suite.log`). A final focused regression also checks
 that changing a numeric state value to a boolean cannot pass replay equality.
+
+Source snoozes now accept exact primitive `{card_id,incarnation}` references and
+bind their zone, controller and control epoch. Moved or control-changed sources
+drop out. Current held/unheld candidates are marked in place on the unchanged
+board. Required decisions clear the snooze and return to the pilot.
+
+This host uses a conservative candidate inventory, not a complete legal-action
+enumerator: visible nonbattlefield cards and battlefield ability/room sources
+can remain candidates even when currently unusable. Automatic passing requires
+every candidate to be explicitly held. This can produce extra pilot wakes but
+does not infer that an unheld source is unusable. Visible stack sources are also
+included. Legacy string UIDs are rejected; planner steps and ordinary decisions
+share the same source validation before rules acceptance.
+The final combined primitive suite passed 103 tests in 125.688 seconds
+(`/tmp/edh-primitive-source-final.log`). The earlier source-suite run was stopped
+and restarted after fixing an immutable-object test fixture; the final run above
+contains the corrected fixture. Internal source-binding rows are omitted from the
+pilot's scheduler projection to avoid duplicating its source references.
+
+Next: reconcile `rules_admission` and `rules_launch_preflight`, whose static blocker
+text still describes pre-migration capabilities. Admission must consume actual
+current validation evidence and supported launch scope, not simply flip a flag.

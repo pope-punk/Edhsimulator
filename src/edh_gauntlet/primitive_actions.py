@@ -10,10 +10,11 @@ from .scheduler import normalize_directive
 
 
 def normalize_scheduler(value):
+    if type(value) is dict and value.get('mode')=='snooze_objects':
+        from .primitive_snoozes import normalize
+        return normalize(value,normalize_directive)
     directive=normalize_directive(value)
     if directive['mode']=='snooze_stack':raise RulesViolation('Use resolve_my_sequence')
-    if directive['mode']=='snooze_objects':
-        raise RulesViolation('Object snoozes require a primitive source-action surface, which is not yet available; choose another scheduler mode')
     return directive
 
 
@@ -30,11 +31,14 @@ def claim(campaign,actor):
             if existing['actor']!=actor or existing['revision']!=campaign.kernel.revision:raise RulesViolation('Stale frozen claim')
             return deepcopy(existing)
         seat=state['actors'][actor];packet=campaign.store.packet(actor)
+        from .primitive_snoozes import annotate
+        annotate(campaign,actor,packet,seat['snooze'])
         value={'actor':actor,'game':1,'revision':campaign.kernel.revision,'board':packet,
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
                'executed_steps':deepcopy(seat.get('executed_steps',{}).get(seat['plans'].get('actions',{}).get('id'),[]))}
+        if value['snooze']:value['snooze'].pop('sources',None)
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
         value['_knowledge']=freeze(campaign,actor,packet)
@@ -78,6 +82,8 @@ def submit(campaign,actor,claim_id,request_id,command,rationale,scheduler):
     state=campaign.state();current=state['claim']
     if not current or current['actor']!=actor or current['claim_id']!=claim_id:raise RulesViolation('Answer does not own the frozen claim')
     directive=normalize_scheduler(scheduler)
+    from .primitive_snoozes import bind
+    directive=bind(campaign,actor,directive)
     bound=bind_command(campaign,actor,command,request_id)
     if current['revision']!=campaign.kernel.revision:raise RulesViolation('Frozen decision revision changed')
     return campaign.submit(actor,request_id,bound,rationale=rationale,
@@ -155,6 +161,10 @@ def observe(campaign,state,actor,command):
         if other!=actor and approved and (command['kind']!='pass' or not approved['resume_after_passes']):seat['approved']=None
         snooze=seat['snooze']
         if not snooze:continue
+        if snooze['mode']=='snooze_objects':
+            from .primitive_snoozes import retained
+            held=retained(campaign,snooze)
+            snooze['sources']=list(held.values());snooze['objects']=[row['ref'] for row in held.values()]
         wake=snooze.get('wake_condition')
         if other!=actor and command['kind']!='pass' and (snooze['mode']=='resolve_my_sequence' or wake=='opponent_action'):
             seat['snooze']=None
@@ -195,8 +205,9 @@ def automatic(campaign):
     if state['claim'] or action.get('kind')!='dispatch_pilot':return False
     actor=action['actor'];seat=state['actors'][actor];approved=seat['approved']
     if action['decision_kind']!='priority':
-        if approved:
-            with campaign.transaction() as value:value['actors'][actor]['approved']=None
+        if approved or seat['snooze']:
+            with campaign.transaction() as value:
+                value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None
         return False
     chosen=None;control=None;rationale=None
     if approved:
@@ -219,11 +230,16 @@ def automatic(campaign):
     if chosen is None and seat['snooze']:
         snooze=seat['snooze'];mode=snooze['mode']
         active_own=any(frame['controller']==actor for frame in campaign.kernel.stack)
-        if mode=='snooze_table' or mode=='resolve_my_sequence' and active_own:
+        from .primitive_snoozes import covers
+        if (mode=='snooze_table' or mode=='resolve_my_sequence' and active_own
+                or mode=='snooze_objects' and covers(campaign,actor,snooze)):
             chosen={'kind':'pass'};rationale='Priority pass under the pilot-authored '+mode+' directive.'
     if chosen is None:return False
     request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':chosen,'control':control})
     try:
+        if control and control.get('scheduler'):
+            from .primitive_snoozes import bind
+            control['scheduler']=bind(campaign,actor,control['scheduler'])
         command=bind_command(campaign,actor,chosen,request_id)
         campaign.submit(actor,request_id,command,rationale=rationale,control=control,
             plan_refs={'actions':approved['proposal_id']} if approved and approved.get('proposal_id') else {})

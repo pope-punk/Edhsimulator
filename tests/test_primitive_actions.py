@@ -125,9 +125,9 @@ class PrimitiveActionTests(unittest.TestCase):
             actions.approve(self.game,'Omo',frozen['claim_id'],approve_ids=[],reject_ids=[],added=[first,second])
         self.assertEqual(frozen['claim_id'],self.game.state()['claim']['claim_id'])
 
-    def test_unsupported_scheduler_is_rejected_before_acceptance(self):
+    def test_legacy_source_ids_are_rejected_before_acceptance(self):
         frozen=actions.claim(self.game,'Omo');before=self.game.store.committed_head()
-        with self.assertRaisesRegex(RulesViolation,'not yet available'):
+        with self.assertRaisesRegex(RulesViolation,'exact primitive references'):
             actions.submit(self.game,'Omo',frozen['claim_id'],'unsupported',{'kind':'pass'},'Test.',
                 {'mode':'snooze_objects','objects':['legacy-id'],'time':'1 beginning of upkeep',
                  'wake_condition':'deadline_only'})

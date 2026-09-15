@@ -79,7 +79,11 @@ def instructions(actor,role):
 and tactical plans; adapt to changed facts. Every ordinary edh_act supplies command,
 rationale and scheduler. Scheduler is {mode:"hold_full_control"},
 {mode:"resolve_my_sequence"}, or {mode:"snooze_table",time:{occurrences:1,edge:"beginning",phase:"upkeep"},wake_condition:"opponent_action"}.
-Object snoozes are unavailable on this primitive command surface. Required choices
+Object snoozes use {mode:"snooze_objects",objects:[EXACT_REFS],time:TIME,wake_condition:WAKE}.
+They retain zone, incarnation and controller. Board source cards are marked
+priority_snoozed. Auto-pass requires every conservative candidate source to be
+snoozed; candidates can include cards currently unusable, so extra wakes are possible.
+Required choices
 always wake you. edh_act batch instead supplies approve_ids and reject_ids for every
 frozen action ID, optional added full steps, overrides keyed by ID, rejection_rationale,
 pass_priority and resume_after_passes. Both booleans default true: this explicitly
