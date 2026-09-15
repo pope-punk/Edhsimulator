@@ -87,3 +87,49 @@ class PrimitiveActionTests(unittest.TestCase):
             actions.observe(self.game,state,'Omo',{'kind':'pass'})
             self.assertIsNone(state['actors']['Omo']['approved'])
             self.game.kernel.semantic_events.pop()
+
+    def approval(self,**changes):
+        step={'id':'test-step','seat_turn':1,'phase':'precombat_main','command':{'kind':'pass'},
+              'rationale':'Synthetic timing check.','scheduler':{'mode':'hold_full_control'}}
+        return {'id':'test-approval','steps':[step],'cursor':0,'turn_limit':2,
+                'pass_priority':False,'resume_after_passes':True,'proposal_id':None,**changes}
+
+    def test_matching_phase_on_opponents_turn_does_not_execute_own_step(self):
+        actor=self.game.next_action()['actor']
+        self.game.kernel.active=next(p for p in self.game.state()['actors'] if p!=actor)
+        self.game.kernel.phase='precombat_main'
+        with self.game.transaction() as state:
+            state['actors'][actor]['turns']=1
+            state['actors'][actor]['approved']=self.approval()
+        before=self.game.store.committed_head()
+        self.assertFalse(actions.automatic(self.game))
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertEqual(0,self.game.state()['actors'][actor]['approved']['cursor'])
+
+    def test_missed_phase_clears_sequence_without_passing(self):
+        actor=self.game.next_action()['actor'];self.game.kernel.phase='postcombat_main'
+        with self.game.transaction() as state:
+            state['actors'][actor]['turns']=1
+            state['actors'][actor]['approved']=self.approval(pass_priority=True)
+        before=self.game.store.committed_head()
+        self.assertFalse(actions.automatic(self.game))
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertIsNone(self.game.state()['actors'][actor]['approved'])
+
+    def test_nonchronological_added_steps_are_rejected(self):
+        frozen=actions.claim(self.game,'Omo')
+        first=self.approval()['steps'][0]
+        second={**first,'id':'earlier','seat_turn':1}
+        first={**first,'seat_turn':2}
+        with self.assertRaisesRegex(RulesViolation,'chronological'):
+            actions.approve(self.game,'Omo',frozen['claim_id'],approve_ids=[],reject_ids=[],added=[first,second])
+        self.assertEqual(frozen['claim_id'],self.game.state()['claim']['claim_id'])
+
+    def test_unsupported_scheduler_is_rejected_before_acceptance(self):
+        frozen=actions.claim(self.game,'Omo');before=self.game.store.committed_head()
+        with self.assertRaisesRegex(RulesViolation,'not yet available'):
+            actions.submit(self.game,'Omo',frozen['claim_id'],'unsupported',{'kind':'pass'},'Test.',
+                {'mode':'snooze_objects','objects':['legacy-id'],'time':'1 beginning of upkeep',
+                 'wake_condition':'deadline_only'})
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertEqual(frozen['claim_id'],self.game.state()['claim']['claim_id'])

@@ -211,8 +211,9 @@ class PrimitiveCampaign:
         if state['pending']:return {**base,'kind':'recover_host_input'}
         if state['blocker']:return {**base,'kind':'repair_rules_work_items','terminal':state['terminal']}
         if state['terminal']:return {**base,'kind':'none','reason':'cohort_complete','terminal':state['terminal']}
-        if self.kernel.state.turn_number>self.config['max_rounds']*len(self.kernel.state.players):
-            return {**base,'kind':'resolve_horizon_stop'}
+        horizon=state.get('round_horizon',self.config['max_rounds'])
+        if self.kernel.state.turn_number>horizon*len(self.kernel.state.players):
+            return {**base,'kind':'resolve_horizon_stop','max_rounds':horizon}
         for actor in self.kernel.state.live_players:
             decision=decision_for_actor(self.kernel,actor)
             if decision['kind'] not in {'waiting','finished','engine_pending'}:

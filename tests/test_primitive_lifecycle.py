@@ -5,9 +5,9 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 from edh_gauntlet.primitive_campaign import PrimitiveCampaign
-from edh_gauntlet.primitive_lifecycle import main
+from edh_gauntlet.primitive_lifecycle import main,extend_horizon,stopped_prefix
 from edh_gauntlet.rules_state import RulesViolation
-from edh_gauntlet.runtime_store import read
+from edh_gauntlet.runtime_store import read,write
 
 
 class PrimitiveLifecycleTests(TestCase):
@@ -48,3 +48,49 @@ class PrimitiveLifecycleTests(TestCase):
             main(['--cohort',str(Path(self.tmp.name)/'fresh'),'init','--seed','94',
                   '--starting-player','Omo','--learning','disabled'])
         self.assertFalse((Path(self.tmp.name)/'fresh').exists())
+
+    def test_horizon_extension_is_recorded_once_without_a_game_action(self):
+        self.game.kernel.state._turn_number=65
+        before=self.game.store.committed_head()
+        self.assertEqual('resolve_horizon_stop',self.game.next_action()['kind'])
+        receipt=extend_horizon(self.game,expected=before,max_rounds=20)
+        self.assertEqual(receipt,extend_horizon(self.game,expected=before,max_rounds=20))
+        self.assertEqual(before,self.game.store.committed_head())
+        self.assertEqual(16,self.game.config['max_rounds'])
+        self.assertEqual('dispatch_pilot',self.game.next_action()['kind'])
+        self.assertIsNone(self.game.state()['terminal'])
+        for actor in self.game.state()['actors']:
+            self.assertEqual(1,len(self.game.evidence(actor,kinds=('horizon_extension',))))
+
+    def test_horizon_extension_preserves_operator_pause_and_claim(self):
+        self.game.kernel.state._turn_number=65
+        with self.game.transaction() as state:
+            state['paused']={'reason':'operator pause'}
+            state['claim']={'claim_id':'retained'}
+        extend_horizon(self.game,expected=self.game.store.committed_head(),max_rounds=20)
+        self.assertEqual('host_paused',self.game.next_action()['reason'])
+        self.assertEqual({'claim_id':'retained'},self.game.state()['claim'])
+
+    def test_horizon_extension_rejects_early_terminal_or_pending_changes(self):
+        before=self.game.store.committed_head()
+        with self.assertRaisesRegex(RulesViolation,'not been reached'):
+            extend_horizon(self.game,expected=before,max_rounds=20)
+        self.game.kernel.state._turn_number=65
+        with self.game.transaction() as state:state['pending']='unreconciled'
+        with self.assertRaisesRegex(RulesViolation,'pending input'):
+            extend_horizon(self.game,expected=before,max_rounds=20)
+        with self.game.transaction() as state:
+            state['pending']=None;state['terminal']={'kind':'draw'}
+        with self.assertRaisesRegex(RulesViolation,'terminal'):
+            extend_horizon(self.game,expected=before,max_rounds=20)
+
+    def test_stopped_transport_requires_binding_and_generation(self):
+        head=self.game.store.committed_head()
+        process={'active':False,'contexts_unloaded':True,'binding':self.game.binding,
+                 'commit':head,'generation':self.game.state()['transport_generation']}
+        path=self.path/'host_runtime/process.json'
+        write(path,process)
+        self.assertEqual(process,stopped_prefix(self.game,head))
+        for field,value in [('active',True),('contexts_unloaded',False),('binding',{}),('generation',99)]:
+            write(path,{**process,field:value})
+            with self.assertRaises(RulesViolation):stopped_prefix(self.game,head)

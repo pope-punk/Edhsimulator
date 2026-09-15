@@ -113,7 +113,7 @@ def validate_actions(value,job):
     if type(steps) is not list or len(steps)>16 or len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())>12000:
         raise RulesViolation('Action proposals exceed the bound')
     if type(coverage) is not dict or set(coverage)!=set(PHASES):raise RulesViolation('Cover all three turn phases')
-    ids=set()
+    ids=set();previous_window=None
     for step in steps:
         if type(step) is not dict or set(step)!={'id','seat_turn','phase','command','rationale','scheduler'}:
             raise RulesViolation('Each step requires id, seat_turn, phase, command, rationale and scheduler')
@@ -122,14 +122,18 @@ def validate_actions(value,job):
         ids.add(key);text_field(step,'rationale',300)
         if step['phase'] not in PHASES or type(step['seat_turn']) is not int or step['seat_turn']<1:
             raise RulesViolation('Invalid proposal timing')
+        window=(step['seat_turn'],PHASES.index(step['phase']))
+        if previous_window is not None and window<previous_window:
+            raise RulesViolation('Sequence steps must follow chronological turn and phase order')
+        previous_window=window
         if any(r.startswith('pre_turn:') for r in job['reasons']) and step['seat_turn']!=job['input']['target_seat_turn']:
             raise RulesViolation('Pre-turn proposals must target the requested turn')
         if type(step['command']) is not dict or set(step['command']) & {'revision','actor','action_id'}:
             raise RulesViolation('Host supplies command revision, actor binding and action identity')
         if step['command'].get('kind') not in {'cast','activate','play_land','unlock_room','attack','block','damage','pass','answer','pay_mana','decline_cast','allocate_counters'}:
             raise RulesViolation('Unsupported proposed primitive command')
-        from .scheduler import normalize_directive
-        normalize_directive(step['scheduler'])
+        from .primitive_actions import normalize_scheduler
+        normalize_scheduler(step['scheduler'])
     for phase,row in coverage.items():
         if type(row) is not dict or set(row)-{'status','reason'} or row.get('status') not in {'planned','no_action','reassess'}:
             raise RulesViolation('Invalid phase coverage')

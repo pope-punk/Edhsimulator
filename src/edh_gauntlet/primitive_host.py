@@ -79,7 +79,7 @@ def instructions(actor,role):
 and tactical plans; adapt to changed facts. Every ordinary edh_act supplies command,
 rationale and scheduler. Scheduler is {mode:"hold_full_control"},
 {mode:"resolve_my_sequence"}, or {mode:"snooze_table",time:{occurrences:1,edge:"beginning",phase:"upkeep"},wake_condition:"opponent_action"}.
-snooze_objects additionally needs objects:[exact UID strings]. Required choices
+Object snoozes are unavailable on this primitive command surface. Required choices
 always wake you. edh_act batch instead supplies approve_ids and reject_ids for every
 frozen action ID, optional added full steps, overrides keyed by ID, rejection_rationale,
 pass_priority and resume_after_passes. Both booleans default true: this explicitly

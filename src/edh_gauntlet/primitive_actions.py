@@ -9,6 +9,14 @@ from .rules_state import RulesViolation,ObjectRef
 from .scheduler import normalize_directive
 
 
+def normalize_scheduler(value):
+    directive=normalize_directive(value)
+    if directive['mode']=='snooze_stack':raise RulesViolation('Use resolve_my_sequence')
+    if directive['mode']=='snooze_objects':
+        raise RulesViolation('Object snoozes require a primitive source-action surface, which is not yet available; choose another scheduler mode')
+    return directive
+
+
 def phase_group(phase):
     return 'combat' if phase in {'begin_combat','declare_attackers','declare_blockers','first_strike_damage','combat_damage','end_combat'} else phase
 
@@ -69,8 +77,7 @@ def bind_command(campaign,actor,value,request_id):
 def submit(campaign,actor,claim_id,request_id,command,rationale,scheduler):
     state=campaign.state();current=state['claim']
     if not current or current['actor']!=actor or current['claim_id']!=claim_id:raise RulesViolation('Answer does not own the frozen claim')
-    directive=normalize_directive(scheduler)
-    if directive['mode']=='snooze_stack':raise RulesViolation('Use resolve_my_sequence')
+    directive=normalize_scheduler(scheduler)
     bound=bind_command(campaign,actor,command,request_id)
     if current['revision']!=campaign.kernel.revision:raise RulesViolation('Frozen decision revision changed')
     return campaign.submit(actor,request_id,bound,rationale=rationale,
@@ -201,9 +208,10 @@ def automatic(campaign):
         if turn>approved['turn_limit'] or expired_step:
             with campaign.transaction() as value:value['actors'][actor]['approved']=None
             return False
-        if cursor<len(steps) and steps[cursor]['seat_turn']==turn and steps[cursor]['phase']==phase:
+        if (cursor<len(steps) and campaign.kernel.active==actor
+                and steps[cursor]['seat_turn']==turn and steps[cursor]['phase']==phase):
             step=steps[cursor];chosen=step['command'];rationale=step['rationale']
-            control={'scheduler':normalize_directive(step['scheduler']),
+            control={'scheduler':normalize_scheduler(step['scheduler']),
                      'sequence':{'id':approved['id'],'cursor':cursor,'advance':True}}
         elif approved['pass_priority']:
             chosen={'kind':'pass'};rationale='Priority pass explicitly authorized by batch '+approved['id']

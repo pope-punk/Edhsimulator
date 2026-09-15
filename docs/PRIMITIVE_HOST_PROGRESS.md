@@ -35,7 +35,7 @@ Remaining release work:
 
 - Finish object snooze semantics and audit declared tactical dependencies. Expand
   missed-window and multi-turn sequence tests; audit mandatory publication coverage.
-- Complete horizon handling, unexpected-crash fencing and host-level replay
+- Complete unexpected-crash fencing and host-level replay
   conformance. Validate that stopped physical contexts cannot continue inference.
 - Expand fault tests, full suite and installed-package checks; bind admission to
   actual completed host conformance, not a manually flipped readiness flag.
@@ -83,3 +83,21 @@ coalescing, and seven diplomacy tests cover expired authorization after a held
 claim and private requests that cannot bypass the settled-hand goal gate. These
 changes preserve the frozen input instead of retroactively changing a running
 planner's publication obligations.
+
+Round-limit stops now support `primitive_lifecycle --cohort PATH extend-horizon
+--expected-sequence N --expected-sha256 HASH --max-rounds N`. The command requires
+a stopped, unloaded transport with matching campaign, generation and accepted
+prefix. It records the extension once in every seat's evidence, preserves the
+original contract, and does not clear a pause or declare a result. Resume an
+operator pause separately before fenced transport startup. Extending a game with
+a pending input or terminal result is rejected.
+
+Approved steps now require the deciding seat's own active turn as well as the
+specified turn counter and phase. Backward phase/turn ordering is rejected, and a
+missed window stops the sequence without an automatic pass. Object snoozes remain
+unfinished: the primitive surface now rejects them before acceptance instead of
+silently accepting legacy source IDs with no effect. This is still release work,
+not a supported object-snooze implementation.
+
+The complete primitive host suite passed 77 tests in 94.441 seconds after these
+changes (`/tmp/edh-primitive-horizon-sequences.log`).
