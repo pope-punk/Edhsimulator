@@ -44,13 +44,19 @@ $('#cardSearch').oninput=renderCardwiseRows;
 
 const human=v=>String(v||'').replaceAll('_',' ');
 function decisionRow(d,reason=true){return `<div class="decision-row"><div><strong class="chat-sender">${esc(d.actor)}</strong><span class="chat-time">${esc(d.id)}</span></div><div class="decision-action">${esc(d.action)}</div>${reason&&d.rationale?`<details><summary>Why this choice</summary><p class="prose">${esc(d.rationale)}</p></details>`:''}</div>`}
+function nonPassDecisions(s){
+ return (s.decision_log||[]).filter(d=>{
+  if(String(d.action).trim().toLowerCase()==='pass')return false;
+  try{return JSON.parse(d.action)?.kind!=='pass'}catch{return true}
+ }).reverse();
+}
 let lastDecisions='',lastEvents='';
 function renderDecisions(s){
- const rows=s.decision_log||[],key=JSON.stringify([s.id,s.game,rows]);if(key===lastDecisions)return;lastDecisions=key;
- const log=$('#decisions'),bottom=log.scrollHeight-log.scrollTop-log.clientHeight<40,position=log.scrollTop;
- log.innerHTML=rows.map(d=>decisionRow(d)).join('')||'<p class="muted">No accepted decisions yet.</p>';
- $('#decisionLogCount').textContent=`${s.decision_log_total||0} accepted choices · showing the latest ${rows.length}. Reasons are private operator information.`;
- log.scrollTop=bottom?log.scrollHeight:position;
+ const rows=nonPassDecisions(s),key=JSON.stringify([s.id,s.game,rows]);if(key===lastDecisions)return;lastDecisions=key;
+ const log=$('#decisions'),atTop=log.scrollTop<40,position=log.scrollTop,height=log.scrollHeight;
+ log.innerHTML=rows.map(d=>decisionRow(d)).join('')||'<p class="muted">No non-pass decisions in the latest log window.</p>';
+ $('#decisionLogCount').textContent=`${s.decision_log_total||0} accepted choices · ${rows.length} non-pass decisions in the latest log window · newest first. Reasons are private operator information.`;
+ log.scrollTop=atTop?0:Math.max(0,position+log.scrollHeight-height);
 }
 function renderLive(s,request,action,board){
  const notice=$('#runNotice');const between=s.pending_game?`Game ${s.game} has ended. Game ${s.pending_game} has not started. ${s.supervisor?.alive?'Supervisor online.':'Automatic continuation is offline.'}`:'';notice.hidden=!s.pause?.reason&&!between;notice.textContent=s.pause?.reason==='rules_audit'?'Paused for a rules review. No decisions are being submitted.':s.pause?.reason?'Play is paused.':between;
@@ -60,15 +66,15 @@ function renderLive(s,request,action,board){
  $('#decisionOwner').textContent=live?`${actor} · ${s.host.alive?'Deciding now':'Waiting — host stopped'}`:human(action.kind||s.state);
  $('#decisionPrompt').textContent=live?(request.prompt||human(request.kind)):(s.status?.result?.winner?`${s.status.result.winner} wins`:human(action.reason||s.state));
  const options=live?(request.options||[]):[];
- $('#choiceSummary').textContent=`${options.length} available choices${request.allow_pass?' · passing allowed':''}`;
+ $('#choiceSummary').textContent=!live?'No pending decision':request.kind==='priority'?'Priority window · may act or pass':options.length?`${options.length} available choices${request.allow_pass?' · passing allowed':''}`:'Structured decision · options are not enumerated here';
  $('#decisionOptions').innerHTML=options.map(o=>`<li>${esc(typeof o==='string'?o:'Structured choice — see Run record')}</li>`).join('');
  const stack=board.stack||[];
  $('#stackSummary').textContent=Array.isArray(stack)&&stack.length?`On the stack: ${stack.map(x=>typeof x==='string'?x:x.label||x.name||x.source||'Ability').join(' → ')}`:'Stack empty';
  $('#planTitle').textContent=actor?`${actor} — short-term plan`:'Short-term plan';
  $('#decidingPlan').textContent=live?(s.deciding_plan||'No short-term plan has been published yet.'):'No pending pilot decision.';
  $('#table').innerHTML=Object.entries(board.players||{}).map(([name,p])=>`<div class="seat-card ${name===actor?'deciding-seat':''}"><div class="seat-heading"><strong>${esc(name)}</strong><b>${esc(p.life??'—')} <small>life</small></b></div><p class="muted">${p.eliminated?'Eliminated':name===actor?'Considering this decision':name===board.active?'Active turn':'Waiting'} · ${esc(p.hand_count??p.hand?.length??'?')} cards in hand</p><div class="permanent-list">${(p.battlefield||[]).map(q=>`<span class="permanent ${q.tapped?'tapped':''}">${esc(q.copy_of?`${q.name} (copy of ${q.copy_of})`:q.name)}${q.tapped?' ↷':''}</span>`).join('')||'<span class="muted">No permanents</span>'}</div></div>`).join('')||'<p>No checkpoint yet.</p>';
- const recent=(s.decision_log||[]).slice(-6).reverse(),eventKey=JSON.stringify([s.id,s.game,recent]);
- if(eventKey!==lastEvents){lastEvents=eventKey;$('#events').innerHTML=recent.map(d=>decisionRow(d)).join('')||'<p>No accepted decisions yet.</p>';}
+ const recent=nonPassDecisions(s).slice(0,6),eventKey=JSON.stringify([s.id,s.game,recent]);
+ if(eventKey!==lastEvents){lastEvents=eventKey;$('#events').innerHTML=recent.map(d=>decisionRow(d)).join('')||'<p>No non-pass decisions in the latest log window.</p>';}
 }
 $('#downloadDecisions').onclick=()=>action(async()=>{const run=state.run,data=await call(`/api/runs/${run}/decisions`),url=URL.createObjectURL(new Blob([data.markdown],{type:'text/markdown'})),link=document.createElement('a');link.href=url;link.download=`${run}-game-${data.game}-decisions.md`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
 
