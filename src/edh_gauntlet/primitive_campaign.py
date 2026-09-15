@@ -127,7 +127,7 @@ class PrimitiveCampaign:
             store.close();raise
 
     @classmethod
-    def open(cls,path,*,root=PROJECT_ROOT,recover=True,telemetry_repair=None):
+    def open(cls,path,*,root=PROJECT_ROOT,recover=True,telemetry_repair=None,scheduler_upgrade=None):
         path=Path(path).resolve();root=Path(root)
         manifest=read(path/'cohort.json',{})
         if manifest.get('rules_engine')!='primitives-v1':raise RulesViolation('Not a primitive campaign; never adopt a legacy run')
@@ -148,8 +148,15 @@ class PrimitiveCampaign:
         self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=manifest['binding'];self.directory=directory
         if telemetry_repair is not None and (recover or config.get('host_implementation')==host_implementation()):
             raise RulesViolation('Telemetry repair candidates are only for stopped installation without recovery')
+        upgrade = None
+        if scheduler_upgrade is not None and (recover or telemetry_repair is not None or config.get('host_implementation')==host_implementation()):
+            raise RulesViolation('Scheduler upgrades require stopped installation without recovery')
+        if scheduler_upgrade is not None or (path/'host_runtime/scheduler_upgrade.json').exists():
+            from .primitive_scheduler_upgrade import validate
+            upgrade=scheduler_upgrade if scheduler_upgrade is not None else read(path/'host_runtime/scheduler_upgrade.json',{})
+            validate(upgrade,self.binding,config,root)
         repair = None
-        if config.get('host_implementation')!=host_implementation():
+        if upgrade is None and config.get('host_implementation')!=host_implementation():
             from .primitive_telemetry_repair import validate
             repair = telemetry_repair if telemetry_repair is not None else read(path/'host_runtime/telemetry_repair.json', {})
             validate(repair, self.binding, config, root)
@@ -157,6 +164,9 @@ class PrimitiveCampaign:
         try:
             from .primitive_journal import verify
             verify(self.store.connection,self.binding)
+            if upgrade is not None:
+                from .primitive_scheduler_upgrade import verify_prefix
+                verify_prefix(self,upgrade,candidate=scheduler_upgrade is not None)
             if repair is not None:
                 from .primitive_telemetry_repair import verify_prefix
                 verify_prefix(self, repair, candidate=telemetry_repair is not None)
