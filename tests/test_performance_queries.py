@@ -99,7 +99,7 @@ class ComponentReadTests(unittest.TestCase):
             path=Path(tmp)/'record.json';write(path,{'before':'é'})
             with patch('edh_gauntlet.runtime_store.os.fsync',side_effect=OSError('disk error')):
                 with self.assertRaises(OSError):write(path,{'after':list(range(100))})
-            self.assertEqual(json.loads(path.read_text()),{'before':'é'})
+            self.assertEqual(json.loads(path.read_text(encoding='utf-8')),{'before':'é'})
 
 
 class TimingTests(unittest.TestCase):
