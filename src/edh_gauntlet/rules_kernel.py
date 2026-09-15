@@ -596,6 +596,7 @@ class RulesKernel(RoomRules,FaceRules,WalkerRules,RuleEffects,ResolutionCastingR
         for source in self.state.objects(Zone.BATTLEFIELD):
             if source.phased:continue
             for ability in self._trigger_abilities(source,'counter_state'):
+                if ability.event.kind!='counter_state':continue
                 key=self._trigger_limit_key(source,ability)
                 if key not in occupied and counters_match(ability.event.counters,source):
                     self._trigger(source,ability,values={'state_trigger_key':key})

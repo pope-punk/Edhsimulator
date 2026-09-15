@@ -66,3 +66,12 @@ follow-up, which also adds eight edge-case and land/search integration methods. 
 workflow's fail-fast setting. The new conformance module now has 56 focused methods. Both hosted draft
 validation and the required reviewed-loader run must pass on Ubuntu and Windows
 before promotion is recorded. No completion count is inferred from authoring.
+
+Run [34912464358](https://github.com/pope-punk/Edhsimulator/actions/runs/34912464358)
+at `6d8756b5b4eaf418ae2221f594bc7b51601cbc4f` ran 2592 Ubuntu tests with two
+failures: the known catalog formatting mismatch and the expanded scanning parity
+case. The latter exposed a missing event-kind filter in state-trigger collection:
+the scanning reference offered unrelated abilities to that collector. The filter
+is now explicit, matching the other collectors and preserving indexed behavior.
+The canonical Unicode catalog correction is already committed at
+`c83caac04b4296617dd09298721b470c8d0fc094`.
