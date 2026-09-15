@@ -18,6 +18,9 @@ def evidence(directory):
 
 
 def rows(root):
+    if read(Path(root)/'cohort.json',{}).get('rules_engine')=='primitives-v1':
+        from .primitive_reports import result_rows
+        return result_rows(root)
     result=[]
     for directory in sorted(Path(root).glob('game_*')):
         status=read(directory/'status.json',{})

@@ -10,7 +10,7 @@ import time
 import uuid
 from . import primitive_actions as actions, primitive_planning as planning
 from .primitive_campaign import PrimitiveCampaign,ROLES
-from .primitive_inspection import inspect,public_input
+from .primitive_inspection import inspect,public_input,decision_records
 from .host_runtime import AppServer,tool
 from .host_routing import Routing
 from .host_failures import metadata
@@ -20,6 +20,8 @@ from .agent_architecture import MODELS,EFFORTS
 from .rules_adapter import digest
 from .rules_state import RulesViolation
 from .runtime_store import locked,read,write
+
+MAX_INLINE_PACKET_BYTES=12000
 
 COMMON='''You are an isolated role for one seat in one primitive-engine Commander game.
 Use only the supplied edh_* tools. No shell, files, network, other agents or other
@@ -37,6 +39,14 @@ End immediately when a tool says parked/stop, or a publication returns next:null
 Do not poll, replay an accepted action/stage, or call a different role. While a tool
 waits, do nothing. Tool-returned decisions require an answer. All references are
 bound to the frozen actor input. Use edh_inspect with a batch of relevant queries.
+Emit complete tool results. Use at least 32000 output tokens in exec/wait wrappers;
+never cap an action result to a short acknowledgement. If a response is truncated,
+do not infer a missing choice or replay an accepted action: inspect kind:decision
+for the exact current choice first. Historical evidence IDs are not decision counts.
+Large inspections return inspection_too_large, never a truncated fact. Narrow the
+same frozen query with path:JSON_POINTER; array paths support offset and limit 1..32.
+History supports page_size 1..32 and returns an evidence cursor, not a game decision
+number. Array slices retain their original indexes by adding the returned offset.
 '''
 COMMANDS='''Primitive commands omit revision, action_id and actor; Python supplies them.
 answer:{kind:"answer",request_id:CURRENT_CHOICE_ID,indexes:[ZERO_BASED_INDEXES]};
@@ -80,9 +90,19 @@ def schemas(role):
 def instructions(actor,role):
     if role=='decider':
         specific='''You alone choose actions, targets, costs and approvals. Follow the current strategic
-and tactical plans; adapt to changed facts. Every ordinary edh_act supplies command,
-rationale and scheduler. Scheduler is {mode:"hold_full_control"},
+and tactical plans; adapt to changed facts. Historical decision logs belong to your
+planners, not your default input or checkpoint memory. Every ordinary edh_act supplies
+command and scheduler; rationale is required for non-pass actions and optional for pass.
+Scheduler is {mode:"hold_full_control"},
 {mode:"resolve_my_sequence"}, or {mode:"snooze_table",time:{occurrences:1,edge:"beginning",phase:"upkeep"},wake_condition:"opponent_action"}.
+Choose the least repeated prompting compatible with your intended play. When you
+intend no optional intervention until a boundary, explicitly choose snooze_table
+with wake_condition:"deadline_only". Other supported wakes are opponent_spell,
+any_spell, targeted_or_attacked, and opponent_action. opponent_action is broad:
+opposing land plays, mana activations, answers and triggers can wake you. Do not
+select it reflexively when none of those events could change your intended play.
+Deadlines count table-wide phase boundaries, not just your turns. Required choices
+always wake you, including under deadline_only. Only you authorize a snooze.
 Object snoozes use {mode:"snooze_objects",objects:[EXACT_REFS],time:TIME,wake_condition:WAKE}.
 They retain zone, incarnation and controller. Board source cards are marked
 priority_snoozed. Auto-pass requires every conservative candidate source to be
@@ -98,7 +118,8 @@ Only an existing priority choice permits alarm control. It never delays gameplay
 No batch makes opponents pass or answers unknown required choices. Preserve unchanged
 planner rationales; only changed steps need your replacement rationale. No public
 speech or plan authorship belongs to you. Use retained standing during mulligans
-and until the initial strategic goal arrives. Inspect queries have kind state,
+and until the initial strategic goal arrives. Inspect kind:decision to retrieve the
+exact current choice; answer uses its choice.request_id. Other queries have kind state,
 object with source:REF, card with name:PRINTED_NAME, or history with after:INTEGER.
 '''+COMMANDS
     elif role==planning.LONG:
@@ -221,23 +242,32 @@ class PrimitiveRunner:
 
     def memory(self,actor,role,packet):
         seat=self.campaign.state()['actors'][actor]
-        if role==planning.DIPLOMAT:return {}
+        if role in ('decider',planning.DIPLOMAT):return {}
         delivered_ids={row['id'] for row in packet.get('rationales',[])}
         groups={}
-        for row in self.campaign.evidence(actor,kinds=('rationale',)):
+        for row in decision_records(self.campaign.evidence(actor,kinds=('rationale',))):
             if row['kind']=='rationale' and row['id'] not in delivered_ids:
                 value=row['value'];key=(value['rationale'],value['command']['kind'])
                 groups.setdefault(key,[]).append(row['id'])
         return {'rationales':[{'evidence_ids':ids,'rationale':key[0],'kind':key[1]} for key,ids in groups.items()]} if groups else {}
 
     def deliver(self,thread,packet):
-        actor,role=self.threads[thread];self.inputs[thread]=packet
+        actor,role=self.threads[thread]
         value=public_input(packet)
+        if role=='decider':value={'current_decision':deepcopy(packet['board']['decision']),**value}
         if thread not in self.deliveries:
             memory=self.memory(actor,role,packet)
             if memory:value['retained_memory']=memory
         presented,next_state=present(value,role,self.deliveries.get(thread))
         text=json.dumps(presented,ensure_ascii=False,separators=(',',':'))
+        if thread in self.waiting and len(text.encode('utf8'))>MAX_INLINE_PACKET_BYTES:
+            # A waiting tool has a separate output budget. End its old turn before
+            # delivering this complete real input through turn/start. Do not mark
+            # the new claim or comparison baseline delivered during this park.
+            request,_=self.waiting.pop(thread)
+            self.server.respond(request,{'state':'parked','previous_receipt':self.waiting_receipts.pop(thread),
+                'instruction':'End now. The host will deliver your complete next input in a new turn; never replay the accepted action.'})
+            return False
         if thread in self.waiting:
             request,_=self.waiting.pop(thread)
             presented['previous_receipt']=self.waiting_receipts.pop(thread)
@@ -252,7 +282,7 @@ class PrimitiveRunner:
             result=self.server.call('turn/start',params)
             self.running[thread]=result['turn']['id'];self.tool_counts[thread]=0;self.turn_models[thread]=model
             self.timing.record('turn_request',thread,input_chars=len(text),model=model,role=role)
-        self.deliveries[thread]=next_state
+        self.inputs[thread]=packet;self.deliveries[thread]=next_state
         if role=='decider':actions.delivered(self.campaign,actor,packet['claim_id'])
         return True
 
@@ -347,8 +377,10 @@ class PrimitiveRunner:
                     if set(args)!={'batch'}:raise RulesViolation('Choose an ordinary answer or batch approval')
                     value=actions.approve(self.campaign,actor,frozen['claim_id'],**args['batch'])
                 else:
-                    if set(args)!={'command','rationale','scheduler'}:raise RulesViolation('Ordinary action requires command, rationale and scheduler')
-                    value=actions.submit(self.campaign,actor,frozen['claim_id'],'rpc:'+digest(key),**args)
+                    if not {'command','scheduler'}<=set(args) or set(args)-{'command','rationale','scheduler'}:
+                        raise RulesViolation('Ordinary action requires command and scheduler; non-pass actions also require rationale')
+                    value=actions.submit(self.campaign,actor,frozen['claim_id'],'rpc:'+digest(key),
+                                         **{**args,'rationale':args.get('rationale')})
                 self.waiting_receipts[thread]=value
                 self.waiting[thread]=(request,time.monotonic())
                 return

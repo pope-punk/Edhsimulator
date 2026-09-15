@@ -86,13 +86,14 @@ def claim(campaign,actor,role):
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)
             evidence=campaign.evidence(actor,after=cursor,kinds=('rationale',)) if role!=DIPLOMAT else []
-            job['input']={'job_id':job['id'],'actor':actor,'role':role,'game':1,
+            from .primitive_inspection import decision_records
+            job['input']={'job_id':job['id'],'actor':actor,'role':role,'game':campaign.binding['game_number'],
                 '_event_cursor':len(campaign.kernel.semantic_events),'_zone_cursor':campaign.kernel.state.event_count,
                 'watches':deepcopy(seat.get('watches',{}).get(role,{}).get('watches',[])),
                 'context_handling':1,'board':board,'snapshot':digest(board),'reasons':job['reasons'][:],
                 'plans':deepcopy(seat['plans']),'target_seat_turn':max(1,seat.get('turns',0)+int(
                     campaign.kernel.active!=actor or campaign.kernel.phase in {'end_step','cleanup'})),
-                'rationales':[row for row in evidence if row['kind']=='rationale'],
+                'rationales':decision_records(evidence),
                 'evidence_after':cursor,'evidence_through':campaign.evidence_position(actor) if role!=DIPLOMAT else cursor}
             if role==LONG:job['input'].update(seed=seat['seed'],personality=seat['personality'],invalid_goal=deepcopy(seat.get('invalid_goal')))
             elif role==SHORT:job['input']['standing']=seat['standing']

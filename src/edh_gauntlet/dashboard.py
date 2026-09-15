@@ -86,6 +86,15 @@ class Dashboard:
 
     def snapshot(self,run_id):
         root=self.root(run_id);manifest=read_json(root/'cohort.json',{}) or {}
+        if manifest.get('rules_engine')=='primitives-v1':
+            from .primitive_reports import snapshot
+            from .dashboard_presenter import runtime_health
+            value=snapshot(root);value.pop('all_decisions',None)
+            host=self.host(run_id,root)
+            return {**value,'id':run_id,'state':'running' if host['alive'] else value['status']['state'],
+                    'host':host,'supervisor':self.supervisor(root),'pause':read_json(root/'HOST_PAUSED.json',{}),
+                    'runtime_health':runtime_health(root/'host_runtime/timing.json'),
+                    'auth_mode':'Codex session; learning disabled'}
         next_doc=read_json(root/'NEXT_ACTION.json',{}) or {};action=next_doc.get('next_action') or {}
         requested=int(action.get('game') or manifest.get('active_game') or 1)
         game=self.record_game(root,requested);directory=root/f'game_{game:02d}'
@@ -118,6 +127,17 @@ class Dashboard:
         from .cardwise_report import report,source_signature
         root=self.root(run_id)
         if not (root/'cohort.json').exists():raise FileNotFoundError('Unknown run')
+        if read_json(root/'cohort.json',{}).get('rules_engine')=='primitives-v1':
+            from .primitive_reports import cardwise
+            with self.report_lock:
+                paths=[root/'deck_snapshot.json',root/'cohort.json']
+                for directory in root.glob('game_[0-9]*'):
+                    if (directory/'terminal_result.json').exists():
+                        paths.extend(directory/name for name in ('rules.sqlite','rules.sqlite-wal','terminal_result.json','postgame_learning/skipped.json','game_config.json'))
+                signature=tuple((str(p),p.stat().st_mtime_ns,p.stat().st_size) for p in paths if p.exists())
+                previous=self.cardwise_cache.get(run_id)
+                if previous and previous[0]==signature:return previous[1]
+                value=cardwise(root);self.cardwise_cache[run_id]=(signature,value);return value
         with self.report_lock:
             signature=source_signature(root);previous=self.cardwise_cache.get(run_id)
             if previous and previous[0]==signature:return previous[1]
@@ -134,16 +154,14 @@ class Dashboard:
             if not low<=value<=high:raise ValueError(f'{key} out of range')
             values[key]=value
         learning=body.get('learning','disabled');publication=body.get('planner_publication','staged')
-        if learning not in ('enabled','disabled') or publication not in ('staged','single'):raise ValueError('Invalid run configuration')
-        command=[self.python,'-m','edh_gauntlet','--cohort',str(root),'init','--games',str(values['games']),
-                 '--seed-start',str(values['seed_start']),'--max-rounds',str(values['max_rounds']),'--learning',learning,
-                 '--planning-contract','4','--planner-publication',publication,'--agent-architecture']
-        if body.get('async_diplomacy',True):command.append('--async-diplomacy')
+        if learning!='disabled' or publication!='staged' or body.get('async_diplomacy',True) is not True:
+            raise ValueError('This release uses disabled learning, staged planning and asynchronous diplomacy.')
+        command=[self.python,'-m','edh_gauntlet.primitive_lifecycle','--cohort',str(root),'init','--games',str(values['games']),
+                 '--seed',str(values['seed_start']),'--starting-player','Omo','--max-rounds',str(values['max_rounds']),'--learning','disabled']
         result=subprocess.run(command,capture_output=True,text=True,timeout=300)
         if result.returncode:raise RuntimeError((result.stderr or result.stdout)[-2000:])
         write_json(root/'OPERATOR_VIEW.json',{'enabled':True})
-        refresh=subprocess.run([self.python,'-m','edh_gauntlet','--cohort',str(root),'advance','--game','1'],capture_output=True,text=True,timeout=300)
-        if refresh.returncode:raise RuntimeError((refresh.stderr or refresh.stdout)[-2000:])
+        write_json(root/'SUPERVISOR.json',{'enabled':True,'auto_advance':True,'hotfixes':False,'recaps':False})
         write_json(root/'dashboard'/'configuration.json',{**values,'learning':learning,'planner_publication':publication,'async_diplomacy':bool(body.get('async_diplomacy',True))})
         return self.snapshot(run_id)
     def start(self,run_id,body,*,supervision=True):
@@ -156,13 +174,13 @@ class Dashboard:
             action=(read_json(root/'NEXT_ACTION.json',{}) or {}).get('next_action',{})
             if action.get('kind')!='dispatch_pilot':
                 raise ValueError('Host cannot start: required next action is '+str(action.get('kind','unavailable'))+'.')
-            if (root/'HOST_PAUSED.json').exists() or (root/'host_runtime'/'sessions.json').exists():
+            if (root/'HOST_PAUSED.json').exists() or (root/'host_runtime'/'sessions.json').exists() or (root/'host_runtime/process.json').exists():
                 raise ValueError('This stopped host requires fenced recovery before gameplay can resume.')
             maximum=int(body.get('max_decisions',10000));tokens=int(body.get('context_tokens',64000));timing=int(body.get('timing_events',4096))
             if not 1<=maximum<=1_000_000 or not 8000<=tokens<=400000 or not 64<=timing<=4096:raise ValueError('Host limit out of range')
             command=[self.python,'-m','edh_gauntlet.host_runtime','--cohort',str(root),'--max-decisions',str(maximum),'--context-tokens',str(tokens),'--timing-events',str(timing)]
             env=os.environ.copy()
-            for name in API_ENV:env.pop(name,None)
+            for name in (*API_ENV,'CODEX_API_KEY'):env.pop(name,None)
             log_path=root/'dashboard'/'host.log';log_path.parent.mkdir(parents=True,exist_ok=True);log=log_path.open('ab',buffering=0)
             process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,cwd=Path.cwd(),env=env,start_new_session=True)
             self.processes[run_id]=process
@@ -173,6 +191,24 @@ class Dashboard:
         if not snapshot['host']['alive'] and not snapshot['supervisor']['alive']:raise RuntimeError('Host and supervisor are not running')
         accepted=int((snapshot.get('status') or {}).get('decision_count') or 0)
         write_json(root/'HOST_PAUSED.json',{'reason':'user_stop','accepted':accepted});return self.snapshot(run_id)
+
+    def resume(self,run_id):
+        root=self.root(run_id)
+        if read_json(root/'cohort.json',{}).get('rules_engine')!='primitives-v1':
+            raise ValueError('Use the documented legacy recovery workflow for this run.')
+        if self.host(run_id,root)['alive'] or self.supervisor(root)['alive']:
+            raise ValueError('Wait for the owned host and supervisor to stop.')
+        process=read_json(root/'host_runtime/process.json',{})
+        if process.get('active') or not process.get('contexts_unloaded'):
+            raise ValueError('Transport recovery requires verified stopped, unloaded contexts.')
+        prefix=process['commit']
+        command=[self.python,'-m','edh_gauntlet.primitive_lifecycle','--cohort',str(root),'resume-pause',
+                 '--expected-sequence',str(prefix['sequence']),'--expected-sha256',prefix['sha256']]
+        result=subprocess.run(command,capture_output=True,text=True,timeout=300)
+        if result.returncode:raise ValueError((result.stderr or result.stdout)[-1000:])
+        # Supervisor admits exactly this validated stopped prefix with resume-fenced.
+        write_json(root/'supervisor/resume.json',{'commit':prefix,'generation':process['generation']})
+        return self.start_supervisor(run_id,root)
 
 class Handler(BaseHTTPRequestHandler):
     server_version='EDHDashboard/1'
@@ -199,7 +235,10 @@ class Handler(BaseHTTPRequestHandler):
                     from .dashboard_presenter import decisions,decision_markdown
                     root=self.app.root(decision_export[1]);manifest=read_json(root/'cohort.json',{})
                     game=self.app.record_game(root,int(manifest.get('active_game') or 1))
-                    rows=decisions(root/f'game_{game:02d}')
+                    if manifest.get('rules_engine')=='primitives-v1':
+                        from .primitive_reports import snapshot
+                        value=snapshot(root);game=value['game'];rows=value['all_decisions']
+                    else:rows=decisions(root/f'game_{game:02d}')
                     return self.send_value({'game':game,'rows':rows,'markdown':decision_markdown(rows,game)})
                 results_export=re.fullmatch(r'/api/runs/([^/]+)/results.csv',path)
                 if results_export:
@@ -232,8 +271,9 @@ class Handler(BaseHTTPRequestHandler):
         try:
             path=urlparse(self.path).path;body=self.body()
             if path=='/api/runs':return self.send_value(self.app.create(body),201)
-            match=re.fullmatch(r'/api/runs/([^/]+)/(start|pause)',path)
+            match=re.fullmatch(r'/api/runs/([^/]+)/(start|pause|resume)',path)
             if not match:return self.send_value({'error':'not found'},404)
+            if match.group(2)=='resume':return self.send_value(self.app.resume(match.group(1)))
             return self.send_value(self.app.start(match.group(1),body) if match.group(2)=='start' else self.app.pause(match.group(1)))
         except FileExistsError as exc:return self.send_value({'error':str(exc)},409)
         except Exception as exc:return self.send_value({'error':str(exc)},400)

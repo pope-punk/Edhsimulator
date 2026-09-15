@@ -1,5 +1,23 @@
 # Private Codespace dashboard
 
+## Current primitive campaigns
+
+New web runs use the primitive lifecycle, with learning disabled, staged planning
+and asynchronous diplomacy. A matching local `EDH_PRIMITIVE_RELEASE_RECEIPT` is
+required. Select the game count, starting seed and round cap, initialize, then
+Start supervisor. The supervisor advances only a clean verified terminal game;
+blockers stop for operator attention. The explicit Resume button supports a
+verified stopped transport and preserves the accepted prefix.
+
+All existing views are projected from consistent read-only SQLite transactions.
+They do not recover pending choices or expose operator aggregates to pilot roles.
+Cardwise uses journal-bound original-card observations, including transient zone
+entries, and excludes rules-review games and mismatched terminal/skip evidence.
+Seeds increment and starting players rotate; learning and strategy changes remain
+disabled throughout the campaign. See [release status](PRIMITIVE_RELEASE.md).
+
+## Deployment and historical legacy behavior
+
 The dashboard runs the existing simulator without an alternate rules or scheduling
 path. The Python API and static interface are served from the same Codespace; keep
 port 8765 **Private** in the Codespaces Ports panel. GitHub authenticates access to

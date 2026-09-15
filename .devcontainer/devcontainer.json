@@ -4,7 +4,18 @@
   "postCreateCommand": "python -m pip install -e .",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python"]
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  },
+  "forwardPorts": [
+    8765
+  ],
+  "portsAttributes": {
+    "8765": {
+      "label": "EDH Observatory",
+      "onAutoForward": "notify"
     }
   }
 }

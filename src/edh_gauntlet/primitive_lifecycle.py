@@ -47,8 +47,10 @@ def main(argv=None):
     init.add_argument('--seed',type=int,required=True)
     init.add_argument('--starting-player',required=True)
     init.add_argument('--max-rounds',type=int,default=16)
+    init.add_argument('--games',type=int,default=1)
     init.add_argument('--learning',choices=['disabled'],required=True,
-                      help='This initial primitive host supports explicitly disabled learning only.')
+                      help='Learning remains disabled for primitive campaigns.')
+    advance_command=commands.add_parser('advance');advance_command.add_argument('--game',type=int,required=True)
     commands.add_parser('status')
     commands.add_parser('verify-journal')
     pause=commands.add_parser('pause');pause.add_argument('--reason',required=True)
@@ -82,9 +84,23 @@ def main(argv=None):
     with locked(root,'host-driver',timeout=0):
         if args.command=='init':
             campaign=PrimitiveCampaign.create(root,seed=args.seed,starting_player=args.starting_player,
-                                               max_rounds=args.max_rounds)
+                                               max_rounds=args.max_rounds,games=args.games)
         else:campaign=PrimitiveCampaign.open(root,recover=False)
         try:
+            if args.command=='advance':
+                if args.game==campaign.binding['game_number']:
+                    intent=read(root/'ADVANCE.json',{})
+                    if intent:
+                        if (intent.get('binding')!=campaign.binding or intent.get('to_game')!=args.game or
+                            campaign.store.generation or intent.get('config')!=campaign.config):
+                            raise RulesViolation('Interrupted advancement does not match the fresh game')
+                        write(root/f"game_{intent['from_game']:02d}"/'advancement.json',intent)
+                        (root/'ADVANCE.json').unlink()
+                else:
+                    from .primitive_multigame import advance
+                    previous=campaign
+                    try:campaign=advance(previous,args.game)
+                    finally:previous.close()
             if args.command=='verify-journal':
                 from .primitive_journal import head
                 # Open already reconstructed and checked the host projections.

@@ -32,9 +32,9 @@ def preflight(destination, *, root=PROJECT_ROOT, games=1, seed_start=2026090901,
     requested['release_receipt_sha256']=report['release_receipt_sha256']
     intent_hash=hashlib.sha256(json.dumps(requested,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     blockers=list(report['blockers'])
-    if games!=1 or learning!='disabled':blockers.append('Validated primitive host scope requires one game with learning disabled')
+    if games>1000 or learning!='disabled':blockers.append('Validated primitive host scope requires 1–1000 games with learning disabled')
     command=['python','-m','edh_gauntlet.primitive_lifecycle','--cohort',str(destination),'init',
-             '--seed',str(seed_start),'--starting-player','Omo','--max-rounds',str(max_rounds),'--learning','disabled']
+             '--seed',str(seed_start),'--starting-player','Omo','--max-rounds',str(max_rounds),'--games',str(games),'--learning','disabled']
     return {'schema':1,'status':'blocked_rules_migration' if blockers else 'ready','initialized':False,'intent_sha256':intent_hash,
         'requested':requested,'authored_unique_cards':coverage['authored_unique_cards'],
         'unreviewed_program_count':len(unmapped),'unreviewed_programs':unmapped,

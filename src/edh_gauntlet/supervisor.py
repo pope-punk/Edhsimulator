@@ -175,6 +175,7 @@ class Supervisor:
 
     def tick(self):
         if self.halted():return self.status('paused')
+        if read(self.root/'cohort.json',{}).get('rules_engine')=='primitives-v1':return self.primitive_tick()
         action=self.action();kind=action.get('kind')
         if kind!='retry_learning_transaction':
             from .game_results import narrate_pending
@@ -204,6 +205,37 @@ class Supervisor:
             return self.status('starting',game=action['game'])
         if kind=='none':return self.status('finished',reason=action.get('reason'))
         return self.status('needs_attention',reason='Lifecycle action requires independent handling: '+str(kind))
+
+    def primitive_tick(self):
+        """Advance only verified terminal games; never repair or choose for a seat."""
+        action=self.action();kind=action.get('kind')
+        if self.app.host(self.root.name,self.root)['alive']:return self.status('watching',game=action.get('game'))
+        if kind=='advance_game' and self.config().get('auto_advance'):
+            self.command([sys.executable,'-m','edh_gauntlet.primitive_lifecycle','--cohort',str(self.root),
+                          'advance','--game',str(action['game'])],self.directory/'advance.log')
+            return self.status('advanced',next_action=self.action().get('kind'))
+        resume=read(self.directory/'resume.json',{})
+        if kind=='dispatch_pilot' or kind=='none' and action.get('reason')=='host_paused' and resume:
+            process=read(self.root/'host_runtime/process.json',{})
+            if process and (not resume or process.get('commit')!=resume.get('commit') or
+                            process.get('generation')!=resume.get('generation') or process.get('active') or
+                            not process.get('contexts_unloaded')):
+                return self.status('needs_attention',reason='Stopped host requires explicit fenced resume.')
+            key=fingerprint({'action':action,'resume':resume});receipt=self.directory/'starts'/f'{key}.json'
+            if receipt.exists():return self.status('needs_attention',reason='This frontier already had a launch attempt.')
+            write(receipt,{'state':'launching','game':action.get('game')})
+            command=[sys.executable,'-m','edh_gauntlet.host_runtime','--cohort',str(self.root),
+                     '--max-decisions','10000','--context-tokens','64000','--timing-events','4096']
+            if resume:command.append('--resume-fenced')
+            log_path=self.root/'dashboard/host.log';log_path.parent.mkdir(parents=True,exist_ok=True)
+            with log_path.open('ab',buffering=0) as log:
+                process=subprocess.Popen(command,cwd=PROJECT_ROOT,env=environment(),stdout=log,
+                                         stderr=subprocess.STDOUT,start_new_session=True)
+            write(self.root/'dashboard/launch.json',{'pid':process.pid,'linux_process_identity':linux_process_identity(process.pid)})
+            if resume:(self.directory/'resume.json').unlink()
+            return self.status('starting',game=action.get('game'))
+        if kind=='none' and action.get('reason')=='cohort_complete':return self.status('finished',reason='cohort_complete')
+        return self.status('needs_attention',reason='Lifecycle requires operator handling: '+str(kind))
 
     def run(self):
         with locked(self.root,'supervisor',timeout=0):

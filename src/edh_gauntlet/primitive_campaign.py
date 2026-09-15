@@ -61,25 +61,37 @@ def configuration(root, *, seed, starting_player, max_rounds):
 
 class PrimitiveCampaign:
     @classmethod
-    def create(cls, path, *, seed, starting_player, max_rounds=16, root=PROJECT_ROOT):
+    def create(cls, path, *, seed, starting_player, max_rounds=16, games=1, root=PROJECT_ROOT):
         from .rules_admission import require_production_ready
         require_production_ready(root,scope='host')
-        return cls._create(path, seed=seed, starting_player=starting_player, max_rounds=max_rounds, root=root)
+        return cls._create(path, seed=seed, starting_player=starting_player, max_rounds=max_rounds, games=games, root=root)
 
     @classmethod
-    def _create(cls, path, *, seed, starting_player, max_rounds=16, root=PROJECT_ROOT):
+    def _create(cls, path, *, seed, starting_player, max_rounds=16, games=1, root=PROJECT_ROOT):
         """Internal construction also used by offline conformance, below admission."""
         path=Path(path).resolve();root=Path(root)
+        if type(games) is not int or not 1 <= games <= 1000:
+            raise RulesViolation('Use 1–1000 games')
         config=configuration(root, seed=seed, starting_player=starting_player, max_rounds=max_rounds)
+        from .primitive_reports import deck_rows
+        config['campaign']={'target_games':games,'seed_start':seed,'starting_player':starting_player,
+                            'max_rounds':max_rounds,'deck_sha256':digest(deck_rows(root))}
         kernel=fresh_pod(seed=seed, starting_player=starting_player, root=root)
         # No existing directory, even an empty one, is adopted or overwritten.
         path.mkdir(mode=0o700, parents=True, exist_ok=False)
-        directory=path/'game_01';directory.mkdir(mode=0o700)
         binding={'cohort_id':str(uuid.uuid4()),'game_number':1,'branch_id':str(uuid.uuid4()),
                  'contract_sha256':digest(config)}
+        write(path/'deck_snapshot.json',deck_rows(root))
+        write(path/'cohort.json',{'schema':2,'rules_engine':'primitives-v1','binding':binding,
+                                 'active_game':1,'target_games':games,'learning_enabled':False,
+                                 'seed_start':seed,'starting_player':starting_player,'max_rounds':max_rounds})
+        return cls._initialize(path,root,config,kernel,binding)
+
+    @classmethod
+    def _initialize(cls,path,root,config,kernel,binding,*,directory=None,publish=True):
+        directory=directory or path/f"game_{binding['game_number']:02d}"
+        directory.mkdir(mode=0o700)
         write(directory/'game_config.json',config)
-        write(path/'cohort.json',{'schema':1,'rules_engine':'primitives-v1','binding':binding,
-                                 'active_game':1,'target_games':1,'learning_enabled':False})
         store=DurableRulesAdapter.create(directory/'rules.sqlite',kernel,binding=binding)
         try:
             connection=store.connection
@@ -106,9 +118,10 @@ class PrimitiveCampaign:
             from .primitive_journal import initialize
             initialize(connection,binding,store.committed_head(),state)
             self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=binding;self.store=store
+            self.directory=directory
             with self.transaction() as state:
                 self._capture(state,initial=True)
-            self.publish_next()
+            if publish:self.publish_next()
             return self
         except BaseException:
             store.close();raise
@@ -118,12 +131,21 @@ class PrimitiveCampaign:
         path=Path(path).resolve();root=Path(root)
         manifest=read(path/'cohort.json',{})
         if manifest.get('rules_engine')!='primitives-v1':raise RulesViolation('Not a primitive campaign; never adopt a legacy run')
-        config=read(path/'game_01/game_config.json',{})
+        if manifest.get('active_game')!=manifest.get('binding',{}).get('game_number'):
+            raise RulesViolation('Active game does not match its binding')
+        directory=path/f"game_{manifest['active_game']:02d}"
+        config=read(directory/'game_config.json',{})
         if digest(config)!=manifest['binding']['contract_sha256'] or config.get('implementation')!=IMPLEMENTATION_ID:
             raise RulesViolation('Campaign contract or rules implementation changed; use its historical checkout')
+        if config.get('campaign'):
+            if (any(manifest.get(key)!=value for key,value in config['campaign'].items() if key!='deck_sha256') or
+                digest(read(path/'deck_snapshot.json',[]))!=config['campaign']['deck_sha256']):
+                raise RulesViolation('Frozen campaign schedule or report deck changed')
+        elif manifest.get('target_games',1)!=1:
+            raise RulesViolation('Historical single-game contracts cannot become multi-game campaigns')
         if any(hashlib.sha256((root/name).read_bytes()).hexdigest()!=value for name,value in config['assets'].items()):
             raise RulesViolation('Bound primitive assets changed')
-        self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=manifest['binding']
+        self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=manifest['binding'];self.directory=directory
         if telemetry_repair is not None and (recover or config.get('host_implementation')==host_implementation()):
             raise RulesViolation('Telemetry repair candidates are only for stopped installation without recovery')
         repair = None
@@ -149,7 +171,7 @@ class PrimitiveCampaign:
 
     def _reopen(self):
         definitions=tuple(row['program'] for row in load_reviewed(self.assets).values())
-        self.store=DurableRulesAdapter.open(self.root/'game_01/rules.sqlite',definitions,binding=self.binding)
+        self.store=DurableRulesAdapter.open(self.directory/'rules.sqlite',definitions,binding=self.binding)
 
     @property
     def kernel(self):return self.store._adapter.kernel
@@ -206,6 +228,8 @@ class PrimitiveCampaign:
         # evidence cheap without permitting a private engine checkpoint in egress.
         for actor in self.kernel.state.players:
             self.record(actor,'observation',self.store.packet(actor))
+        from .primitive_reports import capture_statistics
+        capture_statistics(self,state)
         state['last_rules_commit']=self.store.committed_head()
         from .primitive_planning import observe
         observe(self,state)
@@ -224,11 +248,15 @@ class PrimitiveCampaign:
                 'learning':'skipped_by_configuration'}
 
     def next_action(self):
-        state=self.state();base={'game':1,'rules_engine':'primitives-v1','commit':self.store.committed_head()}
+        state=self.state();number=self.binding['game_number']
+        base={'game':number,'rules_engine':'primitives-v1','commit':self.store.committed_head()}
         if state['paused']:return {**base,'kind':'none','reason':'host_paused'}
         if state['pending']:return {**base,'kind':'recover_host_input'}
         if state['blocker']:return {**base,'kind':'repair_rules_work_items','terminal':state['terminal']}
-        if state['terminal']:return {**base,'kind':'none','reason':'cohort_complete','terminal':state['terminal']}
+        if state['terminal']:
+            if number<read(self.root/'cohort.json',{}).get('target_games',1):
+                return {**base,'kind':'advance_game','game':number+1,'completed_game':number,'terminal':state['terminal']}
+            return {**base,'kind':'none','reason':'cohort_complete','terminal':state['terminal']}
         horizon=state.get('round_horizon',self.config['max_rounds'])
         if self.kernel.state.turn_number>horizon*len(self.kernel.state.players):
             return {**base,'kind':'resolve_horizon_stop','max_rounds':horizon}
@@ -245,14 +273,16 @@ class PrimitiveCampaign:
         if seal:
             from .primitive_journal import head
             seal={**seal,'host_commit':head(self.store.connection)}
-            write(self.root/'game_01/terminal_result.json',seal)
-            write(self.root/'game_01/postgame_learning/skipped.json',
+            write(self.directory/'terminal_result.json',seal)
+            write(self.directory/'postgame_learning/skipped.json',
                   {'status':'skipped_by_configuration','terminal_sha256':digest(seal),'rules_commit':seal['rules_commit']})
         return action
 
     def prepare(self,actor,request_id,command,*,rationale,plan_refs=None,control=None):
         if type(request_id) is not str or not request_id or len(request_id)>128:raise RulesViolation('Invalid host request ID')
-        if type(rationale) is not str or not rationale.strip() or len(rationale)>2400:raise RulesViolation('A bounded pilot-authored rationale is required')
+        no_pass_rationale=type(command) is dict and command.get('kind')=='pass' and rationale is None
+        if not no_pass_rationale and (type(rationale) is not str or not rationale.strip() or len(rationale)>2400):
+            raise RulesViolation('A bounded pilot-authored rationale is required for non-pass actions')
         payload={'command':command,'rationale':rationale,'plan_refs':plan_refs or {},'control':control}
         with self.transaction() as state:
             existing=self.store.connection.execute('SELECT actor,payload,state,receipt FROM host_inputs WHERE request_id=?',(request_id,)).fetchone()

@@ -1,5 +1,8 @@
 # Completed-card reconciliation and hosted test
 
+> Historical implementation/validation record. For current launch scope and the
+> latest release outcome, see [Primitive release status](PRIMITIVE_RELEASE.md).
+
 The current user request supersedes the completed authoring branch's stop:
 validate and reconcile its work, merge the validated result to main, and begin
 a fresh test game with hosted models. Preserve the paused legacy game.
