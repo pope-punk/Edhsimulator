@@ -304,6 +304,12 @@ def automatic(campaign):
         if (mode=='snooze_table' or mode=='resolve_my_sequence' and active_own
                 or mode=='snooze_objects' and covers(campaign,actor,snooze)):
             chosen={'kind':'pass'};rationale='Priority pass under the pilot-authored '+mode+' directive.'
+    if (chosen is None and approved is None and action['decision_kind']=='priority'
+            and campaign.config.get('mana_only_priority') == 1):
+        from .primitive_priority import mana_only_window
+        if mana_only_window(campaign.kernel,actor):
+            chosen={'kind':'pass'}
+            rationale='Automatic priority pass: no affordable non-mana action in this empty-stack window.'
     if chosen is None:return False
     request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':chosen,'control':control})
     try:
