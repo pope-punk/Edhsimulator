@@ -24,10 +24,10 @@ class PrimitivePlanningTests(unittest.TestCase):
         planning.publish(self.game,'Omo',planning.LONG,job['job_id'],'long_term',self.goal())
         return job
 
-    def test_kept_hand_queues_only_its_own_strategist(self):
+    def test_kept_hand_queues_both_own_planners(self):
         self.assertIsNotNone(planning.claim(self.game,'Omo',planning.LONG))
         self.assertIsNone(planning.claim(self.game,'Elenda',planning.LONG))
-        self.assertIsNone(planning.claim(self.game,'Omo',planning.SHORT))
+        self.assertIsNotNone(planning.claim(self.game,'Omo',planning.SHORT))
 
     def test_frozen_claim_and_queued_wakeup_survive_publication(self):
         job=planning.claim(self.game,'Omo',planning.LONG)
@@ -64,8 +64,8 @@ class PrimitivePlanningTests(unittest.TestCase):
         self.assertEqual([],job['rationales']);self.assertNotIn('plans',job)
         for card in self.game.store.packet('Omo')['hand']:self.assertNotIn(card['ref']['card_id'],str(job))
         self.assertTrue(job['requires_public_post'])
-        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[],'urgent_material_plan_change':{}})
-        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello'],'urgent_material_plan_change':{'hello':0}})
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[],'urgent_material_plan_change':{},'private_assessments':{}})
+        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello'],'urgent_material_plan_change':{'hello':0},'private_assessments':{'hello':{'explanation':'Routine fixture speech.','recommended_action':'Continue the current plan.','truthfulness':'truthful'}}})
         self.assertEqual(1,len(self.game.state()['messages']))
         self.assertIsNone(planning.claim(self.game,'Elenda',planning.DIPLOMAT)) # Generic talk creates no reply inference.
 
@@ -107,9 +107,9 @@ class PrimitivePlanningTests(unittest.TestCase):
             planning.publish(self.game,'Omo',planning.LONG,revision['job_id'],'long_term',self.goal())
         self.assertIsNotNone(self.game.state()['actors']['Omo']['invalid_goal'])
 
-    def test_initial_tactical_job_waits_for_the_opening_goal(self):
+    def test_initial_tactical_job_does_not_wait_for_opening_goal(self):
         with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
-        self.assertIsNone(planning.claim(self.game,'Omo',planning.SHORT))
+        self.assertIsNotNone(planning.claim(self.game,'Omo',planning.SHORT))
         self.publish_goal()
         self.assertIsNotNone(planning.claim(self.game,'Omo',planning.SHORT))
 
@@ -174,3 +174,17 @@ class PrimitivePlanningTests(unittest.TestCase):
                             'long_term_validity':'invalid','long_term_invalid_reason':'Fixture test.'},'actions':{}}
         with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value)
         self.assertEqual(before,self.game.state())
+
+    def test_opening_tactics_publish_before_goal_and_receive_followup(self):
+        short=planning.claim(self.game,'Omo',planning.SHORT)
+        self.assertIsNotNone(short)
+        self.assertNotIn('long_term',short['plans'])
+        self.assertIn('standing',short)
+        planning.publish(self.game,'Omo',planning.SHORT,short['job_id'],'short_term',{
+            'short_term_plan':'Develop the kept hand.','continuity':'Opening plan from standing strategy.',
+            'long_term_validity':'pending','long_term_invalid_reason':''})
+        long=planning.claim(self.game,'Omo',planning.LONG)
+        planning.publish(self.game,'Omo',planning.LONG,long['job_id'],'long_term',self.goal())
+        state=self.game.state()
+        self.assertIn('short_term',state['actors']['Omo']['plans'])
+        self.assertTrue(any(r.startswith('strategic_publication:') for r in state['actors']['Omo']['jobs'][planning.SHORT]['queued']))

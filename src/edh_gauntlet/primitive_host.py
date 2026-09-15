@@ -177,7 +177,11 @@ Do not write tactics, continuity, approve proposals or execute game actions.
     elif role==planning.SHORT:
         specific='''Own continuity and tactical proposals only. Retain standing; read current goal and
 all supplied own-seat rationales. Prepare short_term with
-{short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid",long_term_invalid_reason:TEXT}.
+{short_term_plan:TEXT_MAX_600,continuity:TEXT_MAX_1200,long_term_validity:"valid"|"invalid"|"pending",long_term_invalid_reason:TEXT}.
+Start immediately after the opening hand is kept, concurrently with the long-term
+planner. If no goal is in this frozen input, use standing strategy and the kept
+hand, mark long_term_validity:"pending", and publish an actionable opening plan
+without waiting for the goal. Its arrival queues a follow-up; do not invent its contents.
 Optional dependencies:[JSON_POINTERS] declares up to 24 distinct factual paths in
 this frozen board, for example /players/0/life or /hand. List indexes are zero-based.
 Only existing facts may be declared. A revised goal queues tactical follow-up when
@@ -197,6 +201,12 @@ only the decider approves execution. Never execute or contact a pilot.
     else:
         specific='''Own public conversation only. You have no private hand, seed, deck or rationales.
 Publish message with {authorized_ids:[IDS_FROM_THIS_JOB],urgent_material_plan_change:{ID:0_OR_1_FOR_EACH_SELECTED_ID}}.
+Also require private_assessments:{ID:{explanation:TEXT_MAX_600,
+recommended_action:TEXT_MAX_600,truthfulness:"truthful"|"deceptive"|"uncertain"}} for each selected ID.
+Explain the urgency flag and recommend what your OWN decider should do. Classify
+truthfulness using available facts; use uncertain when you cannot establish it.
+These assessments go only to your own decider, never opponents or public speech.
+No selected IDs requires empty tag and assessment objects.
 This private per-message tag is never included in public speech. Use 0 for routine
 banter, status reports, and repetition: these do not interrupt approved batches.
 Use 1 only for urgent new information, commitments or threats that materially

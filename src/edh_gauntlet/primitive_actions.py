@@ -46,6 +46,7 @@ def claim(campaign,actor):
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
                'batch_interruption':deepcopy(seat.get('batch_interruption')),
+               'private_diplomacy':deepcopy(seat.get('private_diplomacy',[])),
                'batch_context':{'own_turn':seat.get('turns',0),'phase':phase_group(campaign.kernel.phase),
                     'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
                         and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},

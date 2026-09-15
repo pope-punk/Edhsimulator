@@ -28,7 +28,7 @@ class PrimitiveDiplomacyTests(TestCase):
 
     def publish(self,job,urgent=0):
         return planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',
-                                {'authorized_ids':['fixture-message'],'urgent_material_plan_change':{'fixture-message':urgent}})
+                                {'authorized_ids':['fixture-message'],'urgent_material_plan_change':{'fixture-message':urgent},'private_assessments':{'fixture-message':{'explanation':'Routine fixture speech.','recommended_action':'Continue the current plan.','truthfulness':'truthful'}}})
 
     def test_post_waits_for_unclaimed_boundary_without_changing_claim(self):
         job=self.goal();actor=self.game.next_action()['actor'];frozen=actions.claim(self.game,actor)
@@ -93,7 +93,7 @@ class PrimitiveDiplomacyTests(TestCase):
         job=self.goal(to=['Elenda']);self.publish(job)
         reply=planning.claim(self.game,'Elenda',planning.DIPLOMAT)
         planning.publish(self.game,'Elenda',planning.DIPLOMAT,reply['job_id'],'message',
-                         {'authorized_ids':[],'urgent_material_plan_change':{},'authorization_request':'May I offer a fixture agreement?'})
+                         {'authorized_ids':[],'urgent_material_plan_change':{},'private_assessments':{},'authorization_request':'May I offer a fixture agreement?'})
         self.assertEqual(1,len(self.game.state()['messages']))
         self.assertIn(planning.LONG,self.game.state()['actors']['Elenda']['jobs'])
         self.assertIsNone(planning.claim(self.game,'Elenda',planning.LONG))
@@ -141,3 +141,24 @@ class PrimitiveDiplomacyTests(TestCase):
         with self.game.transaction() as state:state['actors']['Elenda']['approved']={'id':'still-approved','cursor':0}
         self.publish(job,1)
         self.assertEqual('still-approved',self.game.state()['actors']['Elenda']['approved']['id'])
+
+    def test_secret_assessment_is_delivered_only_to_own_decider(self):
+        self.publish(self.goal(),0)
+        state=self.game.state()
+        note=state['actors']['Omo']['private_diplomacy'][0]
+        self.assertEqual('truthful',note['truthfulness'])
+        self.assertEqual('Continue the current plan.',note['recommended_action'])
+        for actor,seat in state['actors'].items():
+            if actor!='Omo':self.assertNotIn('private_diplomacy',seat)
+        self.assertNotIn('private_assessment',state['messages'][0])
+        self.assertNotIn('truthfulness',state['messages'][0])
+
+    def test_private_assessment_requires_all_fields(self):
+        from edh_gauntlet.rules_state import RulesViolation
+        job=self.goal()
+        for assessment in [{},{'explanation':'x','recommended_action':'x','truthfulness':'yes'},
+                           {'explanation':'','recommended_action':'x','truthfulness':'truthful'}]:
+            with self.assertRaises(RulesViolation):
+                planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{
+                    'authorized_ids':['fixture-message'],'urgent_material_plan_change':{'fixture-message':0},
+                    'private_assessments':{'fixture-message':assessment}})

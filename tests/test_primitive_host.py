@@ -55,7 +55,7 @@ class PrimitiveHostTests(TestCase):
         self.assertEqual(1,self.game.store.generation)
         self.assertIn(thread,self.runner.waiting)
         self.runner.pump()
-        self.assertEqual(3,len(self.runner.running)) # Outgoing decider, incoming decider, own strategist.
+        self.assertEqual(4,len(self.runner.running)) # Both deciders and both opening planners.
         self.assertEqual(1,len(self.runner.waiting))
         self.runner.warm_seconds=0;self.runner.pump()
         parked=[v for _,v,_ in self.server.replies if v.get('state')=='parked']

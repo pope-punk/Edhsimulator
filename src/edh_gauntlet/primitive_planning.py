@@ -42,6 +42,7 @@ def observe(campaign,state):
         if kind=='mulligan_declared' and event['choice']=='keep':
             actor=event['actor'];state['actors'][actor]['kept']=True
             queue(state,actor,LONG,'opening_hand_kept')
+            queue(state,actor,SHORT,'opening_hand_kept')
         if kind=='turn_began':
             completed=state.pop('cleanup_actor',None)
             if completed:queue(state,completed,SHORT,f'own_turn_complete:{event["index"]}')
@@ -81,7 +82,7 @@ def claim(campaign,actor,role):
         seat=state['actors'].get(actor)
         if seat is None or actor not in campaign.kernel.state.live_players:raise RulesViolation('Unavailable actor')
         job=seat['jobs'].get(role)
-        if job is None or role==SHORT and 'long_term' not in seat['plans'] or role==LONG and not seat['kept']:return None
+        if job is None or role in (SHORT,LONG) and not seat['kept']:return None
         if job['input'] is None:
             board=public_board(campaign) if role==DIPLOMAT else campaign.store.packet(actor)
             cursor=seat['evidence_cursor'].get(role,0)
@@ -197,7 +198,9 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         if not required<=set(value) or set(value)-required-{'dependencies'}:
             raise RulesViolation('Supply tactical prose, continuity and strategic validity')
         text_field(value,'short_term_plan',600);text_field(value,'continuity',1200)
-        if value['long_term_validity'] not in {'valid','invalid'}:raise RulesViolation('Invalid strategic assessment')
+        if value['long_term_validity'] not in {'valid','invalid','pending'}:raise RulesViolation('Invalid strategic assessment')
+        if (value['long_term_validity']=='pending') != ('long_term' not in job['input']['plans']):
+            raise RulesViolation('Use pending exactly when this frozen input has no long-term goal')
         if value['long_term_validity']=='invalid':text_field(value,'long_term_invalid_reason',300)
         elif type(value['long_term_invalid_reason']) is not str:raise RulesViolation('Validity reason must be text')
         from .primitive_dependencies import freeze

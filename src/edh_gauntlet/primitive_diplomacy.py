@@ -6,7 +6,7 @@ from .rules_state import RulesViolation
 
 def prepare(campaign,state,actor,job,operation,value):
     from .primitive_planning import queue,LONG
-    if not {'authorized_ids'}<=set(value) or set(value)-{'authorized_ids','authorization_request','urgent_material_plan_change'} or type(value['authorized_ids']) is not list:
+    if not {'authorized_ids'}<=set(value) or set(value)-{'authorized_ids','authorization_request','urgent_material_plan_change','private_assessments'} or type(value['authorized_ids']) is not list:
         raise RulesViolation('Select authorized public messages by ID')
     ids=value['authorized_ids']
     if any(type(key) is not str for key in ids) or len(ids)!=len(set(ids)):
@@ -15,6 +15,16 @@ def prepare(campaign,state,actor,job,operation,value):
     if (type(urgency) is not dict or set(urgency)!=set(ids)
             or any(type(flag) is not int or flag not in (0,1) for flag in urgency.values())):
         raise RulesViolation('Privately tag each selected message in urgent_material_plan_change with integer 0 or 1')
+    assessments=value.get('private_assessments')
+    if type(assessments) is not dict or set(assessments)!=set(ids):
+        raise RulesViolation('Supply a private assessment for each selected message')
+    from .primitive_planning import text_field
+    for assessment in assessments.values():
+        if type(assessment) is not dict or set(assessment)!={'explanation','recommended_action','truthfulness'}:
+            raise RulesViolation('Private assessment requires explanation, recommended_action and truthfulness')
+        text_field(assessment,'explanation',600);text_field(assessment,'recommended_action',600)
+        if assessment['truthfulness'] not in ('truthful','deceptive','uncertain'):
+            raise RulesViolation('Truthfulness must be truthful, deceptive or uncertain')
     authorized={m['id']:m for m in job['input']['authorized_messages']}
     if any(key not in authorized for key in ids):raise RulesViolation('Unknown frozen authorization')
     brief=state['actors'][actor]['plans'].get('diplomacy_brief',{})
@@ -35,7 +45,7 @@ def prepare(campaign,state,actor,job,operation,value):
     previous=state.setdefault('public_outbox',{}).get(actor)
     if previous:campaign.record(actor,'diplomacy_superseded',{'operation':previous['operation'],'by':operation})
     state['public_outbox'][actor]={'operation':operation,'brief_id':brief['id'],
-        'required':required,'messages':[{**deepcopy(authorized[key]),'urgent_material_plan_change':urgency[key]} for key in ids]}
+        'required':required,'messages':[{**deepcopy(authorized[key]),'urgent_material_plan_change':urgency[key],'private_assessment':deepcopy(assessments[key])} for key in ids]}
 
 
 def flush_state(campaign,state):
@@ -66,6 +76,11 @@ def flush_state(campaign,state):
             if not message['reply_to']:
                 for recipient in message['to']:
                     queue(state,recipient,DIPLOMAT,'incoming:'+message['id'])
+            if 'private_assessment' in authorization:
+                private={'message_id':message['id'],'urgent_material_plan_change':authorization['urgent_material_plan_change'],
+                         **deepcopy(authorization['private_assessment'])}
+                seat['private_diplomacy']=(seat.get('private_diplomacy',[])+[private])[-8:]
+                campaign.record(actor,'private_diplomacy',private)
             if authorization.get('urgent_material_plan_change',1)==1:urgent.append(message['id'])
             committed+=1;posted=True
         if row['required'] and not committed:
