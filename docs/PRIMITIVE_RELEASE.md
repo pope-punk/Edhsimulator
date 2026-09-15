@@ -24,12 +24,18 @@ release passed 2,843 tests, isolated installed assets and source/install fingerp
 comparison. Windows and Linux CI passed. Receipt SHA-256:
 `d4b26448d407c1c4bdeda2ba7ac7f219c4c6af356fde79a312a149ad73cee925`.
 
-The subsequent campaign/dashboard extension is under validation. Its release
-receipt and real hosted-game outcome must be recorded before claiming completion.
+The campaign/dashboard extension passed 2,857 local tests and isolated installed
+asset/fingerprint verification. Runtime receipt SHA-256:
+`6fac056447b64bbbcc05aef50a0255d3713b7a47e47bcc26f1add651679aa437`.
+The receipt remains bound to the runtime, web assets, policies and frozen strategy.
+
 Offline fixtures exercise complete two-game advancement, clean role state,
 unchanged prior-game storage, blocker/pause gates, report tampering, full-deck
-cardwise tables and all four operator views. Fixture decisions are not live pilot
-or model validation.
+cardwise tables and all four operator views. HTTP checks cover the interface,
+snapshots, cardwise JSON/CSV, decision export, result CSV and authentication.
+Fixture decisions are not live pilot or model validation. The final release notes
+must separately record the real hosted-game outcome and CI results before
+publication; a running game is not a completed validation result.
 
 ## Retained trials
 
