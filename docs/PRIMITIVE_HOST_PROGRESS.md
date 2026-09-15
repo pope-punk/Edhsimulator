@@ -253,3 +253,14 @@ A regression reproduced the old failure, then passed with the fix, including
 close/reopen and a corrected answer using the original claim. All 13 action tests
 pass. Full validation and a subsequent clean hosted trial remain required; never
 resume the terminal rules-review game or remove its original evidence.
+
+### Follow-up trial: resolution-payment guidance
+
+Trial `primitive-hosted-test-20260915-b` reached 561 accepted decisions before a
+reported extort-payment blocker sealed a rules-review draw. The adapter and engine
+already accept `pay_mana` with `payment: null` to decline; host command instructions
+listed the fields but omitted that meaning. An empty payment object instead attempts
+to pay the fixed cost. Clarify this shared command for every resolution payment,
+including mana-ability use before paying, without changing individual cards or rules.
+Retain this terminal trial and its evidence. A new validated hosted trial is still
+required before declaring host integration complete.
