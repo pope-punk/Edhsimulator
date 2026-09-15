@@ -986,6 +986,9 @@ def main(argv=None):
     root=args.cohort.resolve()
     # OS-owned lock prevents two software drivers, with no stale lock recovery.
     with locked(root,'host-driver',timeout=0):
+        if read(root/'cohort.json',{}).get('rules_engine')=='primitives-v1':
+            from .primitive_host import launch
+            return launch(args)
         server=AppServer(args.codex)
         try:
             runner=Runner(root,server,model=args.model,decider_model=args.decider_model,
