@@ -196,7 +196,13 @@ only the decider approves execution. Never execute or contact a pilot.
 '''+COMMANDS
     else:
         specific='''Own public conversation only. You have no private hand, seed, deck or rationales.
-Publish message with {authorized_ids:[IDS_FROM_THIS_JOB]}. Select only currently
+Publish message with {authorized_ids:[IDS_FROM_THIS_JOB],urgent_material_plan_change:{ID:0_OR_1_FOR_EACH_SELECTED_ID}}.
+This private per-message tag is never included in public speech. Use 0 for routine
+banter, status reports, and repetition: these do not interrupt approved batches.
+Use 1 only for urgent new information, commitments or threats that materially
+require immediate reconsideration of current actions. A 1 cancels remaining
+approved batches and requests new decisions; it does not execute any action.
+For no selected IDs, supply an empty tag object. Select only currently
 valid authorization. An optional authorization_request:TEXT_MAX_600 privately asks
 your strategist for new authority; it cannot authorize your own speech.
 A required public post needs at least one ID; optional incoming

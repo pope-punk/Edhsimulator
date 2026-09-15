@@ -64,8 +64,8 @@ class PrimitivePlanningTests(unittest.TestCase):
         self.assertEqual([],job['rationales']);self.assertNotIn('plans',job)
         for card in self.game.store.packet('Omo')['hand']:self.assertNotIn(card['ref']['card_id'],str(job))
         self.assertTrue(job['requires_public_post'])
-        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[]})
-        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello']})
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':[],'urgent_material_plan_change':{}})
+        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello'],'urgent_material_plan_change':{'hello':0}})
         self.assertEqual(1,len(self.game.state()['messages']))
         self.assertIsNone(planning.claim(self.game,'Elenda',planning.DIPLOMAT)) # Generic talk creates no reply inference.
 

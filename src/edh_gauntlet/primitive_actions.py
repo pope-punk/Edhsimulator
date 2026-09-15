@@ -45,6 +45,7 @@ def claim(campaign,actor):
                'plans':deepcopy(seat['plans']),'previous_board':deepcopy(seat.get('last_delivered_board')),
                'snooze':deepcopy(seat['snooze']),'context_handling':1,
                'rejection':seat.get('last_rejection'),
+               'batch_interruption':deepcopy(seat.get('batch_interruption')),
                'batch_context':{'own_turn':seat.get('turns',0),'phase':phase_group(campaign.kernel.phase),
                     'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
                         and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},
@@ -57,6 +58,7 @@ def claim(campaign,actor):
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1
         value['claim_id']=digest({'binding':campaign.binding,'commit':campaign.store.committed_head(),'actor':actor,'claim_serial':state['claim_serial']})
+        seat.pop('batch_interruption',None)
         state['claim']=value
         return deepcopy(value)
 

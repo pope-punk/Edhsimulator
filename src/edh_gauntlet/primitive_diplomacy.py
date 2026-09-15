@@ -6,11 +6,15 @@ from .rules_state import RulesViolation
 
 def prepare(campaign,state,actor,job,operation,value):
     from .primitive_planning import queue,LONG
-    if not {'authorized_ids'}<=set(value) or set(value)-{'authorized_ids','authorization_request'} or type(value['authorized_ids']) is not list:
+    if not {'authorized_ids'}<=set(value) or set(value)-{'authorized_ids','authorization_request','urgent_material_plan_change'} or type(value['authorized_ids']) is not list:
         raise RulesViolation('Select authorized public messages by ID')
     ids=value['authorized_ids']
     if any(type(key) is not str for key in ids) or len(ids)!=len(set(ids)):
         raise RulesViolation('Message IDs must be distinct strings')
+    urgency=value.get('urgent_material_plan_change')
+    if (type(urgency) is not dict or set(urgency)!=set(ids)
+            or any(type(flag) is not int or flag not in (0,1) for flag in urgency.values())):
+        raise RulesViolation('Privately tag each selected message in urgent_material_plan_change with integer 0 or 1')
     authorized={m['id']:m for m in job['input']['authorized_messages']}
     if any(key not in authorized for key in ids):raise RulesViolation('Unknown frozen authorization')
     brief=state['actors'][actor]['plans'].get('diplomacy_brief',{})
@@ -31,14 +35,14 @@ def prepare(campaign,state,actor,job,operation,value):
     previous=state.setdefault('public_outbox',{}).get(actor)
     if previous:campaign.record(actor,'diplomacy_superseded',{'operation':previous['operation'],'by':operation})
     state['public_outbox'][actor]={'operation':operation,'brief_id':brief['id'],
-        'required':required,'messages':[deepcopy(authorized[key]) for key in ids]}
+        'required':required,'messages':[{**deepcopy(authorized[key]),'urgent_material_plan_change':urgency[key]} for key in ids]}
 
 
 def flush_state(campaign,state):
     if state['claim'] or state['pending'] or state['paused'] or state['terminal'] or state['blocker']:
         return False
     from .primitive_planning import queue,LONG,DIPLOMAT
-    posted=False
+    posted=False;urgent=[]
     for actor,row in list(state.get('public_outbox',{}).items()):
         seat=state['actors'][actor];brief=seat['plans'].get('diplomacy_brief',{})
         if brief.get('id')!=row['brief_id']:
@@ -62,14 +66,24 @@ def flush_state(campaign,state):
             if not message['reply_to']:
                 for recipient in message['to']:
                     queue(state,recipient,DIPLOMAT,'incoming:'+message['id'])
+            if authorization.get('urgent_material_plan_change',1)==1:urgent.append(message['id'])
             committed+=1;posted=True
         if row['required'] and not committed:
             queue(state,actor,LONG,'renew_unposted_diplomacy:'+row['operation'])
         campaign.record(actor,'diplomacy_delivery',{'operation':row['operation'],'posted':committed,
                                                    'rules_commit':campaign.store.committed_head()})
         del state['public_outbox'][actor]
-    if posted:
-        for seat in state['actors'].values():seat['approved']=None
+    if urgent:
+        for recipient,seat in state['actors'].items():
+            approved=seat['approved']
+            if approved:
+                notice={'approval_id':approved['id'],'executed_step_count':approved['cursor'],
+                        'message_ids':urgent,'reason':'New public information requires a fresh decision. Remaining batch steps were cancelled; do not replay executed steps.'}
+                seat['batch_interruption']=notice
+                campaign.record(recipient,'batch_interrupted',notice)
+                seat['approved']=None
+                # An old snooze must not silently pass the newly required decision.
+                seat['snooze']=None
     return posted
 
 

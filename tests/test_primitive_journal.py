@@ -26,7 +26,7 @@ class HostJournalTests(TestCase):
         planning.publish(self.game,'Omo',planning.LONG,job['job_id'],'long_term',
             {'long_term_plan':'Synthetic strategy.','diplomacy':[{'id':'hello','text':'Synthetic hello.','expires_turn':20}]})
         job=planning.claim(self.game,'Omo',planning.DIPLOMAT)
-        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello']})
+        planning.publish(self.game,'Omo',planning.DIPLOMAT,job['job_id'],'message',{'authorized_ids':['hello'],'urgent_material_plan_change':{'hello':0}})
         before=self.game.store.committed_head()
         with patch.object(self.game.store,'submit',side_effect=AssertionError('Replay must not execute')):
             self.assertEqual(journal.head(self.game.store.connection),journal.verify(self.game.store.connection,self.game.binding))

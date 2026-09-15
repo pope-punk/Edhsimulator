@@ -274,3 +274,11 @@ Metadata telemetry separately records automatic execution time, delivered input
 size, accepted publication mode, planner/direct batch approvals, and rejected
 input hashes. Aggregate counters survive rolling event eviction; tool-return
 wait time is not engine execution time.
+
+Diplomats privately tag every selected authorized message using
+`urgent_material_plan_change: {MESSAGE_ID: 0|1}`. Zero means routine speech and
+preserves approved actions and snoozes. One means urgent information requiring
+immediate tactical reconsideration; only actually posted messages interrupt
+remaining batches, with a bound interruption notice and no replay of executed
+steps. The private tag is not public speech. Missing tags are rejected for new
+submissions. Historical queued messages retain their prior interruption behavior.
