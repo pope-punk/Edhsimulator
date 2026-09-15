@@ -29,6 +29,7 @@ authoritative; an old prepared route is invalid after an intervening lifecycle c
 | dispatch_pilot | Let the registered isolated host seat decide. Root/coordinator never chooses for a pilot. |
 | adjudicate_combo | Use the sealed request and an independent rules adjudicator; commit only its verified permitted response. |
 | resolve_horizon_stop | Resolve the configured limit before continuing; a horizon stop is not a game result. |
+| await_pilot_help | Host stops without sealing a draw. Answer the bounded technical request at its exact stopped prefix, then explicitly resume; see PRIMITIVE_COORDINATION.md. |
 | repair_rules_work_items / fix_release_blocker | Stop pilot dispatch. Preserve the tagged accepted prefix and record the rules issue. |
 | postgame_review | Learning is enabled: review all four isolated evidence packets, then apply one consolidated response. |
 | retry_learning_transaction | Retry that exact learn command before inspection, answering or advancing. |

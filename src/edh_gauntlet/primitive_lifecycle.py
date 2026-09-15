@@ -57,6 +57,12 @@ def main(argv=None):
     resume=commands.add_parser('resume-pause')
     resume.add_argument('--expected-sequence',type=int,required=True)
     resume.add_argument('--expected-sha256',required=True)
+    help_status=commands.add_parser('help-status')
+    help_answer=commands.add_parser('answer-help')
+    help_answer.add_argument('--request-id',required=True)
+    help_answer.add_argument('--response',type=Path,required=True)
+    help_answer.add_argument('--expected-sequence',type=int,required=True)
+    help_answer.add_argument('--expected-sha256',required=True)
     extend=commands.add_parser('extend-horizon')
     extend.add_argument('--expected-sequence',type=int,required=True)
     extend.add_argument('--expected-sha256',required=True)
@@ -110,10 +116,18 @@ def main(argv=None):
             if args.command=='fence-crash':
                 from .primitive_recovery import fence_crash
                 fence_crash(campaign,{'sequence':args.expected_sequence,'sha256':args.expected_sha256})
+            if args.command=='help-status':
+                print(json.dumps({'request':campaign.state().get('help_request'),'next_action':campaign.next_action()},indent=2))
+                return
+            if args.command=='answer-help':
+                from .primitive_help import answer
+                answer(campaign,expected={'sequence':args.expected_sequence,'sha256':args.expected_sha256},
+                       request_id=args.request_id,response=read(args.response,{}))
             if args.command=='resume-pause':
                 expected={'sequence':args.expected_sequence,'sha256':args.expected_sha256}
                 process=stopped_prefix(campaign,expected)
                 if campaign.state()['terminal']:raise RulesViolation('A terminal game cannot resume')
+                if campaign.state().get('help_request'):raise RulesViolation('Answer the outstanding pilot help request before resuming')
                 with campaign.transaction() as state:
                     for actor in state['actors']:campaign.record(actor,'operator_resume',{'commit':expected})
                     state['paused']={'reason':'host_stopped','commit':expected} if process else None

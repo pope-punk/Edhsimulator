@@ -122,3 +122,45 @@ rolling event eviction. This measures the first tool after a real input, includi
 warm delivery, and excludes time spent holding a tool before that input. It is
 neither complete planning-job duration nor proof that background planning blocked
 gameplay. Aggregates describe one host process lifetime and reset on recovery.
+
+
+## Recoverable technical help
+
+A decider missing command syntax or facing an unexplained rejected input calls
+`edh_request_help` with `intended_action` and `question` (each at most 1200
+characters). The host stops and unloads, retaining the exact decision, accepted
+prefix, planner jobs, approvals, snoozes and logical seat identities. It does not
+seal a draw. The dashboard displays the pending technical-help notice.
+
+The operator reads only the submitted question and necessary command/schema
+facts. Explain representation and validation, not strategic choices, targets,
+which cards to pay, or another seat's private information. No helper inference
+lane, automatic repair, new game or executable default action is introduced.
+
+Read the request after the host stops:
+
+```sh
+python -m edh_gauntlet.primitive_lifecycle --cohort RUN help-status
+```
+
+Write a response file containing only `{"answer":"Technical explanation."}`
+(up to 2400 characters) and bind it to the request and exact stopped prefix:
+
+```sh
+python -m edh_gauntlet.primitive_lifecycle --cohort RUN answer-help \
+  --request-id REQUEST_ID --response RESPONSE_JSON \
+  --expected-sequence SEQUENCE --expected-sha256 SHA256
+```
+
+Then use the dashboard's existing Resume operation. Answering help itself never
+resumes play or clears an independent user pause. Unanswered requests block Resume.
+The requesting logical pilot receives its preserved decision with `technical_help`
+and authors the next action itself. Other seats do not receive that answer.
+Identical answer retries are idempotent; changed answers cannot overwrite an
+accepted response. Full original questions and answers remain in actor evidence.
+
+A technical answer cannot repair an implementation defect, change a started
+contract, bypass a pending receipt, or reopen a terminal game. Leave such a game
+suspended for verified repair through the existing procedures. `edh_rules_issue`
+remains available for actual rules-integrity concerns. This fresh-build feature
+does not retroactively unseal H or other terminal games.
