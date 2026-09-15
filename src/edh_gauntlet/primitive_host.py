@@ -108,7 +108,7 @@ def schemas(role):
                  {'alarm':{'type':'object'}},['alarm']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
                  {'reason':{'type':'string'}},['reason'])]
-    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners publish initial prose promptly; use short_term_and_actions when both are ready without delaying it. End when next is null.',
+    return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners follow the supplied stage and publication_order; publish the first stage promptly. Use short_term_and_actions only if both are already ready. End when next is null.',
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
 
 
@@ -214,9 +214,17 @@ this frozen board, for example /players/0/life or /hand. List indexes are zero-b
 Only existing facts may be declared. A revised goal queues tactical follow-up when
 these facts changed; a goal version change alone does not wake you.
 Invalidity requires a concrete reason, queues strategic work and still proceeds to
-actions. Publish the initial tactical prose promptly before optional inspections.
-Afterward, actions may include diplomacy_request:{objective:TEXT_MAX_600,player:SEAT}
+actions. Follow the frozen publication_order and current stage:
+EOT1 (after own cleanup): short_term prose, then actions.
+EOT3 (opposite-seat check): actions, then short_term prose.
+Opening and other wakes use prose then actions. Publish the first stage promptly
+from supplied facts; do not delay it for optional inspection or the other stage.
+Inspect only what is necessary to make a legal, useful proposal; never guess.
+The second publication may include diplomacy_request:{objective:TEXT_MAX_600,player:SEAT}
 for one concrete negotiation within the current brief; do not wait for its reply.
+After both publications, finish. There is no automatic refinement stage or extra
+inspection/revision turn. Accepted stages are immutable; corrections require a
+later authorized job, never resubmission of an accepted stage with altered content.
 Prepare actions with {action_sequence:[STEPS],phase_coverage:{
 precombat_main:{status:"planned"|"no_action"|"reassess",reason:TEXT},
 combat:{status:...,reason:...},postcombat_main:{status:...,reason:...}}}.
@@ -291,7 +299,7 @@ The host parks oversized tool deliveries and supplies a complete next real input
     elif role==planning.DIPLOMAT:
         common='Use only your authorized publication tool and supplied public input. Only planners inspect. End on stop or next:null; never replay an accepted publication.\n'
     else:common=COMMON
-    specific+='\nPublication and batch policy: short-term planners should publish stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} once both are ready. Both stages validate and commit atomically. Separate stages remain available when early prose is useful. If short_term was already accepted, publish only actions. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
+    specific+='\nPublication and batch policy: short-term planners publish the supplied first stage as soon as ready. If both are already ready without delaying the first, stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} validates both atomically in the frozen publication_order. If one stage was accepted, publish only the stage named in next. EOT3 actions remain available when the same job publishes its following prose; proposal IDs and executed-step tracking are preserved. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
     specific+='\nLand planning: supplied intrinsic_land_mana describes conditional battlefield abilities, including exact IDs and costs. A land in hand cannot tap yet. In an approved play-land/tap/cast sequence, use {owned_card:CARD_ID,zone:"battlefield"} for its new incarnation. Check entry/tapped conditions and other effects; an unexecuted planned land drop is not a completed action. Current board and accepted receipts establish what happened.'
     specific+='\nScheduler policy: ordinary snoozes end no later than your next upkeep. To explicitly pass through intervening turns and your own upkeep/draw until your next precombat main, use {mode:"snooze_until_own_main",wake_condition:"deadline_only"} or another supported wake condition. Required choices and the chosen wake condition still interrupt it; it never passes your precombat main. Prefer this over repeated upkeep/draw prompts when you intend no optional action before your main phase. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
     return f'You are the {actor} {role}.\n'+common+specific

@@ -26,6 +26,9 @@ class LandPlanningTests(TestCase):
     def test_combined_planner_publication_can_be_approved_as_one_mana_batch(self):
         self.land_line(True)
 
+    def test_actions_first_batch_executes_before_prose_without_replay(self):
+        self.land_line('actions_first')
+
     def land_line(self,planner):
         directory=self.enterContext(TemporaryDirectory())
         game=PrimitiveCampaign._create(Path(directory)/'game',seed=93,starting_player='Omo')
@@ -42,6 +45,9 @@ class LandPlanningTests(TestCase):
         bauble=game.kernel.state.add_card('fixture-bauble','catalog:wayfarer-s-bauble','Omo',Zone.HAND)
         self.assertEqual((),game.kernel.activated_abilities(game.kernel.state.get(forest)))
         server=FakeServer();runner=PrimitiveRunner(game,server);self.addCleanup(runner.timing.close)
+        if planner=='actions_first':
+            from edh_gauntlet import primitive_planning as planning
+            with game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
         runner.pump();thread=runner.lanes[('Omo','decider')]
         facts=action_facts(runner.inputs[thread]);key=next(row['rules_id'] for row in facts['objects'] if row['source']==forest.to_json())
         rules=facts['rules'][key]
@@ -65,9 +71,12 @@ class LandPlanningTests(TestCase):
             proposal={'action_sequence':[{**step,'seat_turn':1,'phase':'precombat_main',
                       'rationale':args['rationale'],'scheduler':args['scheduler']} for step in args['sequence']],
                       'phase_coverage':{phase:({'status':'planned'} if phase=='precombat_main' else {'status':'no_action','reason':'Fixture.'}) for phase in planning.PHASES}}
-            planning.publish(game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',
-                {'short_term':{'short_term_plan':'Play Forest, tap it and cast Bauble.','continuity':'No land played.',
-                               'long_term_validity':'valid' if 'long_term' in job['plans'] else 'pending','long_term_invalid_reason':''},'actions':proposal})
+            prose={'short_term_plan':'Play Forest, tap it and cast Bauble.','continuity':'No land played.',
+                   'long_term_validity':'valid' if 'long_term' in job['plans'] else 'pending','long_term_invalid_reason':''}
+            if planner=='actions_first':
+                planning.publish(game,'Omo',planning.SHORT,job['job_id'],'actions',proposal)
+            else:
+                planning.publish(game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',{'short_term':prose,'actions':proposal})
             # Existing claims are immutable; model a new delivery before approving the new plan.
             with game.transaction() as state:state['claim']=None
             frozen=actions.claim(game,'Omo');runner.inputs[thread]=frozen
@@ -75,7 +84,16 @@ class LandPlanningTests(TestCase):
         runner.handle({'id':'land-line','method':'item/tool/call','params':{'threadId':thread,
             'turnId':runner.running[thread],'callId':'land-line','tool':'edh_act','arguments':args}})
         before=game.store.generation
-        for _ in range(3):self.assertTrue(actions.automatic(game))
+        for index in range(3):
+            self.assertTrue(actions.automatic(game))
+            if planner=='actions_first' and index==0:
+                seat=game.state()['actors']['Omo'];proposal_id=seat['plans']['actions']['id']
+                approved=seat['approved'];executed=seat['executed_steps']
+                planning.publish(game,'Omo',planning.SHORT,job['job_id'],'short_term',prose)
+                after=game.state()['actors']['Omo']
+                self.assertEqual(proposal_id,after['plans']['actions']['id'])
+                self.assertEqual(approved,after['approved'])
+                self.assertEqual(executed,after['executed_steps'])
         self.assertEqual(before+3,game.store.generation)
         self.assertEqual(1,runner.tool_counts[thread])
         self.assertEqual(Zone.STACK,game.kernel.state.get(game.kernel.state.current(bauble.card_id)).zone)

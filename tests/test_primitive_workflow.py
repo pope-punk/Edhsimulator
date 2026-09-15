@@ -199,3 +199,19 @@ class WorkflowTests(TestCase):
         with self.game.transaction() as state:
             state['actors']['Omo']['plans']['short_term']['value']['short_term_plan']='New later plan.'
         self.assertEqual(job,planning.claim(self.game,'Omo',planning.DIPLOMAT))
+
+    def test_opposite_gate_requests_diplomacy_with_second_prose_stage(self):
+        self.goal()
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        request={'objective':'Ask Elenda about a one-turn truce.','player':'Elenda'}
+        value={'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Fixture.'} for p in planning.PHASES}}
+        with self.assertRaisesRegex(RulesViolation,'first planning stage'):
+            planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',{**value,'diplomacy_request':request})
+        planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',value)
+        result=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',{
+            'short_term_plan':'Develop while exploring a truce.','continuity':'Fixture.',
+            'long_term_validity':'valid','long_term_invalid_reason':'','diplomacy_request':request})
+        self.assertIsNone(result['next'])
+        self.assertEqual(request['objective'],self.game.state()['actors']['Omo']['diplomacy_requests'][-1]['objective'])
+        self.assertNotIn(planning.SHORT,self.game.state()['actors']['Omo']['jobs'])

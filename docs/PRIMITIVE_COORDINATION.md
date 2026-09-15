@@ -9,9 +9,25 @@ never silently rewrite a bound game.
 Each kept opening hand queues its own short- and long-term planners concurrently.
 Short-term work starts from standing strategy and the actor-visible hand, with
 long_term_validity pending until its frozen input contains a strategic goal.
-Initial tactical prose should publish before optional inspections. Concrete action
-proposals follow; an optional diplomacy_request can accompany that actions stage.
-Combined prose/actions publication remains available when immediately ready.
+Publication order is frozen when the short-term job is claimed:
+- EOT1 (after own cleanup): tactical prose, then action proposals.
+- EOT3 (opposite-seat gate): action proposals, then tactical prose.
+- Opening and other wakes: tactical prose, then action proposals.
+
+If an unclaimed job coalesces both gates, EOT3 ordering takes precedence. A new
+wake cannot reorder stages in an already claimed job; it queues the next job.
+Publish the first stage promptly; optional inspection must not hold it back.
+Necessary inspection for legal proposals remains available. The second publication
+may carry a diplomacy_request. Finish after the two publications, without an
+automatic refinement stage. Combined publication is permitted only when both are
+already ready without delaying the first; it commits in the frozen order.
+
+Actions-first proposals immediately become available for the decider's next claim.
+Their following same-job prose preserves proposal identity, active approvals and
+executed-step tracking. They are linked to the planning job rather than older
+prose. Existing frozen decider claims stay immutable. Later prose-first jobs still
+invalidate older proposals when their prose changes. Accepted stages cannot be
+rewritten; retries return the original receipt.
 
 After own cleanup, always queue short-term maintenance. At the opposite seat's end
 step (two positions away in the current live-seat order), queue only if any

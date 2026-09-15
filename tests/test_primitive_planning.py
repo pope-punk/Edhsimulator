@@ -188,3 +188,43 @@ class PrimitivePlanningTests(unittest.TestCase):
         state=self.game.state()
         self.assertIn('short_term',state['actors']['Omo']['plans'])
         self.assertTrue(any(r.startswith('strategic_publication:') for r in state['actors']['Omo']['jobs'][planning.SHORT]['queued']))
+
+    def test_opposite_gate_actions_first_prose_keeps_proposal_identity(self):
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        self.assertEqual(['actions','short_term'],job['publication_order'])
+        prose={'short_term_plan':'Develop from standing.','continuity':'Fixture.',
+               'long_term_validity':'pending','long_term_invalid_reason':''}
+        proposed={'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Fixture.'} for p in planning.PHASES}}
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',prose)
+        first=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',proposed)
+        self.assertEqual('short_term',first['next'])
+        action=self.game.state()['actors']['Omo']['plans']['actions']
+        self.assertIsNone(action['short_term_id'])
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'own_turn_complete:later')
+        self.assertEqual('short_term',planning.claim(self.game,'Omo',planning.SHORT)['stage'])
+        last=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',prose)
+        self.assertIsNone(last['next'])
+        self.assertEqual(action,self.game.state()['actors']['Omo']['plans']['actions'])
+        self.assertEqual(first,planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'actions',proposed))
+        self.assertEqual(['short_term','actions'],planning.claim(self.game,'Omo',planning.SHORT)['publication_order'])
+
+    def test_queued_opposite_gate_cannot_reorder_started_own_end_job(self):
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'own_turn_complete:fixture')
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:later')
+        self.assertEqual(job,planning.claim(self.game,'Omo',planning.SHORT))
+        self.assertEqual(['short_term','actions'],job['publication_order'])
+
+    def test_combined_opposite_publication_is_atomic_and_retry_safe(self):
+        with self.game.transaction() as state:planning.queue(state,'Omo',planning.SHORT,'pre_turn:fixture')
+        job=planning.claim(self.game,'Omo',planning.SHORT);before=self.game.state()
+        proposed={'action_sequence':[],'phase_coverage':{p:{'status':'reassess','reason':'Fixture.'} for p in planning.PHASES}}
+        with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',{'actions':proposed,'short_term':{}})
+        self.assertEqual(before,self.game.state())
+        value={'actions':proposed,'short_term':{'short_term_plan':'Develop from standing.','continuity':'Fixture.',
+               'long_term_validity':'pending','long_term_invalid_reason':''}}
+        receipt=planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value)
+        self.assertEqual(receipt,planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term_and_actions',value))
+        self.assertEqual(receipt['components']['actions'],self.game.state()['actors']['Omo']['plans']['actions']['id'])
+        self.assertNotIn(planning.SHORT,self.game.state()['actors']['Omo']['jobs'])
