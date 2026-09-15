@@ -35,8 +35,7 @@ Remaining release work:
 
 - Finish object snooze semantics and audit declared tactical dependencies. Expand
   missed-window and multi-turn sequence tests; audit mandatory publication coverage.
-- Complete unexpected-crash fencing and host-level replay
-  conformance. Validate that stopped physical contexts cannot continue inference.
+- Complete host-level replay conformance and audit tactical dependency handling.
 - Expand fault tests, full suite and installed-package checks; bind admission to
   actual completed host conformance, not a manually flipped readiness flag.
 - Update release documentation, push/review/merge the host branch, and initialize
@@ -101,3 +100,22 @@ not a supported object-snooze implementation.
 
 The complete primitive host suite passed 77 tests in 94.441 seconds after these
 changes (`/tmp/edh-primitive-horizon-sequences.log`).
+
+Linux crash recovery now supports `primitive_lifecycle --cohort PATH fence-crash
+--expected-sequence N --expected-sha256 HASH` under the host-driver lock. New
+primitive transports launch in a separate process session and record boot/start
+identities for host and transport. Recovery refuses live processes, surviving
+session children, missing process evidence, changed generation or changed prefix.
+It never kills a process, executes a pending input, clears an operator pause or
+changes logical seat identities. After fencing, normal `--resume-fenced` transport
+startup reconciles the retained pending receipt. A failed marker write can retry
+without duplicating the fence evidence. Platforms without Linux process evidence
+retain graceful stopped-host recovery; they cannot use this crash-fence command.
+
+Graceful shutdown also verifies the isolated Linux transport session is empty
+before marking contexts unloaded. A real App Server initialize/close probe passed
+this check without starting a model turn. Seven focused recovery tests passed,
+including a real isolated subprocess (`/tmp/edh-primitive-process-evidence.log`).
+The combined primitive suite passed 83 tests in 115.826 seconds; the subsequently
+expanded recovery and host transport suites passed seven and 14 tests respectively.
+Logs: `/tmp/edh-primitive-crash-fence.log` and `/tmp/edh-primitive-shutdown.log`.

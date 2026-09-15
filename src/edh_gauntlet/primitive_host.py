@@ -162,8 +162,12 @@ class PrimitiveRunner:
         with campaign.transaction() as state:
             state['transport_generation']+=1
             self.generation=state['transport_generation']
+        from .primitive_recovery import identity
+        transport_pid=getattr(getattr(server,'process',None),'pid',None)
+        self.process_evidence={'host_identity':identity(os.getpid()),'transport_identity':identity(transport_pid),
+            'transport_session':transport_pid if getattr(server,'isolated_process_group',False) else None}
         write(self.directory/'process.json',{'pid':os.getpid(),'active':True,'generation':self.generation,
-                                           'binding':campaign.binding,'commit':campaign.store.committed_head(),'contexts_unloaded':False})
+            'binding':campaign.binding,'commit':campaign.store.committed_head(),'contexts_unloaded':False,**self.process_evidence})
 
     def checkpoint_due(self,thread):
         usage=self.server.usage.get(thread,{})
@@ -369,11 +373,16 @@ class PrimitiveRunner:
                     try:self.server.send({'id':'shutdown:'+str(uuid.uuid4()),'method':'turn/interrupt',
                                           'params':{'threadId':thread,'turnId':turn}})
                     except (OSError,RuntimeError):pass
-                self.server.close();unloaded=True
+                self.server.close()
+                if self.process_evidence['transport_identity'] and self.process_evidence['transport_session']:
+                    from .primitive_recovery import verify_exited
+                    verify_exited(self.process_evidence['transport_identity'],session=self.process_evidence['transport_session'])
+                unloaded=True
             finally:
                 try:self.timing.close()
                 finally:
                     write(self.directory/'process.json',{'pid':os.getpid(),'active':not unloaded,
+                        **self.process_evidence,
                         'contexts_unloaded':unloaded,'generation':self.generation,
                         'binding':self.campaign.binding,'commit':self.campaign.store.committed_head()})
                     state=self.campaign.state()
@@ -391,7 +400,7 @@ def launch(args):
     campaign=PrimitiveCampaign.open(args.cohort,recover=False)
     server=None
     try:
-        server=AppServer(args.codex)
+        server=AppServer(args.codex,isolated_process_group=True)
         runner=PrimitiveRunner(campaign,server,max_decisions=args.max_decisions,
             warm_seconds=args.warm_seconds,context_tokens=args.context_tokens,resume_fenced=args.resume_fenced)
         runner.run()

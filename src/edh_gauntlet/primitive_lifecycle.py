@@ -58,6 +58,9 @@ def main(argv=None):
     extend.add_argument('--expected-sequence',type=int,required=True)
     extend.add_argument('--expected-sha256',required=True)
     extend.add_argument('--max-rounds',type=int,required=True)
+    fence=commands.add_parser('fence-crash')
+    fence.add_argument('--expected-sequence',type=int,required=True)
+    fence.add_argument('--expected-sha256',required=True)
     args=parser.parse_args(argv);root=args.cohort.resolve()
     if args.command=='status':
         if read(root/'cohort.json',{}).get('rules_engine')!='primitives-v1':raise RulesViolation('Not a primitive cohort')
@@ -81,6 +84,9 @@ def main(argv=None):
                                                max_rounds=args.max_rounds)
         else:campaign=PrimitiveCampaign.open(root,recover=False)
         try:
+            if args.command=='fence-crash':
+                from .primitive_recovery import fence_crash
+                fence_crash(campaign,{'sequence':args.expected_sequence,'sha256':args.expected_sha256})
             if args.command=='resume-pause':
                 expected={'sequence':args.expected_sequence,'sha256':args.expected_sha256}
                 process=stopped_prefix(campaign,expected)

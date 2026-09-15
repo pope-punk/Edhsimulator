@@ -89,6 +89,16 @@ class PrimitiveHostTests(TestCase):
         with self.assertRaisesRegex(RuntimeError,'Repeated transport'):self.runner.handle(message)
         self.assertEqual(0,self.game.store.generation)
 
+    def test_shutdown_does_not_claim_unloaded_when_a_transport_child_survives(self):
+        self.runner.done=True
+        self.runner.process_evidence={'host_identity':None,
+            'transport_identity':{'pid':123,'boot_id':'fixture','start_ticks':1},'transport_session':123}
+        with patch('edh_gauntlet.primitive_recovery.verify_exited',side_effect=RulesViolation('child survives')):
+            with self.assertRaisesRegex(RulesViolation,'child survives'):self.runner.run()
+        marker=read(self.runner.directory/'process.json')
+        self.assertTrue(marker['active']);self.assertFalse(marker['contexts_unloaded'])
+        self.assertEqual(0,self.game.store.generation)
+
     def test_unexpected_approval_request_stops(self):
         with self.assertRaisesRegex(RuntimeError,'Unexpected approval'):
             self.runner.handle({'id':99,'method':'item/commandExecution/requestApproval','params':{}})
