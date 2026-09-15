@@ -47,7 +47,7 @@ class ManaBatchTests(unittest.TestCase):
     def land(self,name):
         return next(o.ref for o in self.game.kernel.state.objects(Zone.HAND) if o.owner=='Omo' and o.definition==name)
 
-    def approve(self,labels=None):
+    def steps(self,labels=None):
         kernel=self.game.kernel
         island_ability=kernel.activated_abilities(kernel.state.get(self.island))[0].ability_id
         grove_abilities=kernel.activated_abilities(kernel.state.get(self.grove))
@@ -58,6 +58,10 @@ class ManaBatchTests(unittest.TestCase):
                step('grove',{'kind':'activate','source':self.grove.to_json(),'ability_id':filter_ability,'targets':[],'x_value':0,'payment':{'mana':{'U':1},'taps':[]}}),
                step('colors',{'kind':'answer','choice_from':{'step_id':'grove','option_labels':labels or ['{G}{G}','{G}{U}','{U}{U}']},'indexes':[1]}),
                step('done',{'kind':'pass'})]
+        return steps
+
+    def approve(self,labels=None):
+        steps=self.steps(labels)
         frozen=actions.claim(self.game,'Omo')
         actions.approve(self.game,'Omo',frozen['claim_id'],approve_ids=[],reject_ids=[],added=steps,pass_priority=False)
 

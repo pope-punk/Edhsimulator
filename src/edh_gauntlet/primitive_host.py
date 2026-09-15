@@ -87,8 +87,9 @@ def schemas(role):
     inspect_tool=tool('edh_inspect','Inspect only your frozen input. Batch related queries.',
         {'queries':{'type':'array','minItems':1,'maxItems':8,'items':{'type':'object'}}},['queries'])
     if role=='decider':
-        return [inspect_tool,tool('edh_act','Submit one decision or approve a frozen proposal batch. Await the returned decision or park.',
-            {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object'}},[]),
+        return [inspect_tool,tool('edh_act','Prefer a sequence for known mana production and cast chains, even without a planner proposal. Use command for a single decision or batch to approve planner steps. Await the next input or park.',
+            {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object'},'sequence':{'type':'array','minItems':1,'maxItems':64,
+             'items':{'type':'object','properties':{'id':{'type':'string'},'command':{'type':'object'},'rationale':{'type':'string'}},'required':['id','command'],'additionalProperties':False}}},[]),
             tool('edh_planner_alarm','Set, replace or cancel your planner alarm at a priority decision.',
                  {'alarm':{'type':'object'}},['alarm']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
@@ -101,7 +102,22 @@ def instructions(actor,role):
     if role=='decider':
         specific='''You alone choose actions, targets, costs and approvals. Follow the current strategic
 and tactical plans; adapt to changed facts. Historical decision logs belong to your
-planners, not your default input or checkpoint memory. Every ordinary edh_act supplies
+planners, not your default input or checkpoint memory.
+At own-turn priority, plan the full known line before submitting its first action.
+Use edh_act {sequence:[{id:"tap",command:ACTIVATE},{id:"color",command:GUARDED_ANSWER},
+{id:"cast",command:CAST}],rationale:SHARED_INTENT,scheduler:OBJECT} for predictable
+mana-production-and-cast chains. No planner action proposal is required. The host
+binds the current own turn and phase; you supply every action and choice. Each step
+may override the shared rationale. Choose the final scheduler once for the line.
+For example a known two-color source can use a color step with
+command:{kind:"answer",choice_from:{step_id:"tap",option_labels:["1 {W}","1 {B}"]},indexes:[1]}.
+Inspect the exact source ability/menu and spell costs together, then submit the
+complete sequence instead of activate -> another inference -> color -> another
+inference -> cast. Use a single command when the next action depends on genuinely
+unknown information; do not batch guesses or wait for a planner just to batch.
+Current batch_context tells you when direct sequences are available. The existing
+batch form remains available to approve a planner's proposed full-turn steps.
+Every ordinary edh_act supplies
 command and scheduler; rationale is required for non-pass actions and optional for pass.
 Scheduler is {mode:"hold_full_control"},
 {mode:"resolve_my_sequence"}, or {mode:"snooze_table",time:{occurrences:1,edge:"beginning",phase:"upkeep"},wake_condition:"opponent_action"}.
@@ -385,7 +401,10 @@ class PrimitiveRunner:
             elif name=='edh_publish' and role!= 'decider':
                 value=planning.publish(self.campaign,actor,role,frozen['job_id'],args['stage'],args['response'])
             elif name=='edh_act' and role=='decider':
-                if 'batch' in args:
+                if 'sequence' in args:
+                    if set(args)!={'sequence','rationale','scheduler'}:raise RulesViolation('Direct sequence requires sequence, rationale and scheduler only')
+                    value=actions.approve_sequence(self.campaign,actor,frozen['claim_id'],**args)
+                elif 'batch' in args:
                     if set(args)!={'batch'}:raise RulesViolation('Choose an ordinary answer or batch approval')
                     value=actions.approve(self.campaign,actor,frozen['claim_id'],**args['batch'])
                 else:
