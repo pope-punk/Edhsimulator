@@ -24,7 +24,7 @@ def finish(game):
 class MultiGameTests(unittest.TestCase):
     def setUp(self):
         self.temp=TemporaryDirectory();self.addCleanup(self.temp.cleanup)
-        self.root=Path(self.temp.name)/'run'
+        self.root=(Path(self.temp.name)/'run').resolve()
         self.game=PrimitiveCampaign._create(self.root,seed=93,starting_player='Omo',games=2)
         self.addCleanup(lambda:self.game.close())
 
