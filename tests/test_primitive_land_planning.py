@@ -80,3 +80,32 @@ class LandPlanningTests(TestCase):
         self.assertEqual(1,runner.tool_counts[thread])
         self.assertEqual(Zone.STACK,game.kernel.state.get(game.kernel.state.current(bauble.card_id)).zone)
         self.assertTrue(game.kernel.state.get(game.kernel.state.current(forest.card_id)).tapped)
+
+    def test_host_plays_glasswing_back_land_with_explicit_face(self):
+        from edh_gauntlet.primitive_host import COMMANDS
+        self.assertIn('play_land:{kind:"play_land",source:REF,face:"front"|"back"}',COMMANDS)
+        directory=self.enterContext(TemporaryDirectory())
+        game=PrimitiveCampaign._create(Path(directory)/'game',seed=93,starting_player='Elenda')
+        self.addCleanup(game.close)
+        while game.kernel.pending_choice:
+            choice=game.kernel.pending_choice
+            game.submit(choice.actor,'keep:'+str(game.store.generation),
+                {'kind':'answer','request_id':choice.request_id,'revision':game.kernel.revision,
+                 'indexes':[0] if choice.kind=='mulligan' else []},rationale='Offline setup.')
+        while game.kernel.phase!='precombat_main':
+            game.submit(game.kernel.priority,'pass:'+str(game.store.generation),
+                {'kind':'pass','revision':game.kernel.revision},rationale='Offline setup.')
+        card=game.kernel.state.add_card('fixture-modal','catalog:glasswing-grace-age-graced-chapel','Elenda',Zone.HAND)
+        server=FakeServer();runner=PrimitiveRunner(game,server);self.addCleanup(runner.timing.close)
+        runner.pump();thread=runner.lanes[('Elenda','decider')]
+        before=game.store.generation
+        runner.handle({'id':'modal-land','method':'item/tool/call','params':{'threadId':thread,
+            'turnId':runner.running[thread],'callId':'modal-land','tool':'edh_act','arguments':{
+                'sequence':[{'id':'land','command':{'kind':'play_land','source':card.to_json(),'face':'back'}}],
+                'rationale':'Play the back land face.','scheduler':{'mode':'hold_full_control'}}}})
+        self.assertTrue(actions.automatic(game))
+        self.assertEqual(before+1,game.store.generation)
+        current=game.kernel.state.get(game.kernel.state.current(card.card_id))
+        self.assertEqual(Zone.BATTLEFIELD,current.zone)
+        self.assertTrue(current.back_face)
+        self.assertEqual(1,game.kernel.turn_schedule['land_plays'])

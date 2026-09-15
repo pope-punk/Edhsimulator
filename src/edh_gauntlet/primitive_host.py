@@ -50,13 +50,16 @@ number. Array slices retain their original indexes by adding the returned offset
 '''
 COMMANDS='''Primitive commands omit revision, action_id and actor; Python supplies them.
 answer:{kind:"answer",request_id:CURRENT_CHOICE_ID,indexes:[ZERO_BASED_INDEXES]};
-pass:{kind:"pass"}; concede:{kind:"concede"} only at your priority decision; play_land:{kind:"play_land",source:REF};
+pass:{kind:"pass"}; concede:{kind:"concede"} only at your priority decision; play_land:{kind:"play_land",source:REF,face:"front"|"back"};
 activate:{kind:"activate",source:REF,ability_id:EXACT_ID,targets:[],x_value:0,payment:{mana:{},taps:[]}};
 cast:{kind:"cast",source:REF,targets:[],x_value:0,payment:{mana:{},taps:[]}}.
 REF is {card_id,incarnation}; player targets are {player:SEAT}. Produce mana by
 activating lands/rocks first; payment spends the resulting mana pool. Inspect the
 frozen object's activated_abilities for exact IDs and costs. Empty payment is
 {mana:{},taps:[]}. Source tap costs are implicit; do not repeat them in taps.
+Land face defaults to front. For a modal double-faced card with a land back face,
+use play_land with face:"back" and the hand card source; do not cast its land face.
+The current face in hand does not prevent playing a permitted back land face.
 Optional casting fields: face, modes, alternative_id, counter_division, kicker,
 replicate, life_costs, hybrid_choices. attack uses attackers:[{source:REF,defender:SEAT_OR_REF}];
 block and damage use assignments matching the supplied specification.
