@@ -63,6 +63,14 @@ a selector are implicit. Example: payment:{mana:{},taps:[],
 zone_costs:{"land-return":[{card_id:CHOSEN_LAND_ID,incarnation:CURRENT_INCARNATION}]}}.
 Optional payment fields also include convoke:[{ref:REF,color:SYMBOL}],
 tagged_mana:[EXACT_UNIT_IDS], and cost_order:[EXACT_COST_IDS] when applicable.
+For manual bundled ordinary mana, payment.mana_actions is an ordered array:
+[{kind:"activate",source:REF,ability_id:EXACT_ID,targets:[],x_value:0,
+payment:{mana:{},taps:[]}}]. If that activation offers a mana-color choice,
+append {kind:"answer",indexes:[CHOSEN_ZERO_BASED_INDEX]} immediately after it.
+Omit revision, action_id and request_id inside this bundle; Python binds them.
+payment.mana counts the total mana SPENT, not all mana produced; surplus remains
+in the pool. Bundles accept only ordinary eligible mana actions, just like autotap.
+Consequential or paid/filter sources require separate explicit activations.
 Land face defaults to front. For a modal double-faced card with a land back face,
 use play_land with face:"back" and the hand card source; do not cast its land face.
 The current face in hand does not prevent playing a permitted back land face.
