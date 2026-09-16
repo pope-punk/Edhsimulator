@@ -81,10 +81,11 @@ are local process reminders and cannot wake a stopped Codespace.
 ## Game N follow-up — 2026-09-16
 
 `web-campaign-20260916-n` runs build `caff4fb` with learning disabled. As of this
-documentation update it is still playing, with technical pauses handled through
-the existing exact-prefix answer-help and fenced-resume routes. No terminal
-result or completed hosted-validation claim is made here. Its original binding
-and accepted history remain unchanged. Earlier stopped games remain preserved.
+final update it has sealed a rules-review draw at accepted sequence 1490 over a
+reported Animate Dead targeting discrepancy. See the [quarantined result](reports/game-n-20260916/README.md).
+Its original binding and accepted history remain unchanged. The host and watchdog
+are stopped; earlier stopped games remain preserved. This is not a clean hosted
+validation result.
 
 The `release/game-n-results` branch includes follow-up changes for future hosts:
 

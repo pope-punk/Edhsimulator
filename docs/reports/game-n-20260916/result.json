@@ -1,0 +1,33 @@
+{
+  "run": "web-campaign-20260916-n",
+  "build_commit": "caff4fb",
+  "seed": 2026091625,
+  "seal": {
+    "contract_sha256": "b887a57e3e6b23dac91909d4b1b5a8dfbb2052b111038ef79b8e749ce1143427",
+    "kind": "draw",
+    "learning": "skipped_by_configuration",
+    "rules_commit": {
+      "sequence": 1490,
+      "sha256": "7249578c73cca71e53449f20651ae01c1e4f4e8d305f59a24e5048d8b2e50b17"
+    },
+    "tag": "rules_review",
+    "winners": [],
+    "host_commit": {
+      "sequence": 5810,
+      "sha256": "0dde8efc2415dcc3887adf5e309afe16c7facbc315e126df56a2a3169ca85afb"
+    }
+  },
+  "blocker": {
+    "actor": "Reaminatour",
+    "kind": "reported_rules_issue",
+    "reason": "Animate Dead's supplied current rules program has a required creature-card target in a graveyard, and the attempted cast used the current exact top-level targets reference for Leonin Relic-Warder; it was nevertheless rejected as having no target specification. This is a rules/implementation discrepancy, not a command-format issue.",
+    "rules_commit": {
+      "sequence": 1490,
+      "sha256": "7249578c73cca71e53449f20651ae01c1e4f4e8d305f59a24e5048d8b2e50b17"
+    }
+  },
+  "learning": "disabled; skipped_by_configuration",
+  "status": "quarantined_rules_review_draw",
+  "verification": "Configuration, command chain, head, host journal, terminal seal and learning-skip receipt passed integrity checks; verified_result then rejected report eligibility because rules review is pending.",
+  "cardwise": "Not exported: rules-review games are excluded from completed-game cardwise statistics."
+}
