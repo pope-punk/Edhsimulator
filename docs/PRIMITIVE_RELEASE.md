@@ -77,3 +77,40 @@ local, implementation-bound build evidence; regenerate after bound source change
 Keep the Codespace port private and enter its capability key in the interface.
 The server and model hosts stop when the Codespace stops. Ten-minute task reminders
 are local process reminders and cannot wake a stopped Codespace.
+
+## Game N follow-up — 2026-09-16
+
+`web-campaign-20260916-n` runs build `caff4fb` with learning disabled. As of this
+documentation update it is still playing, with technical pauses handled through
+the existing exact-prefix answer-help and fenced-resume routes. No terminal
+result or completed hosted-validation claim is made here. Its original binding
+and accepted history remain unchanged. Earlier stopped games remain preserved.
+
+The `release/game-n-results` branch includes follow-up changes for future hosts:
+
+- At most two continuations of an unfinished publication stage; accepted stages
+  are not replayed. Exhausted continuations still stop the host.
+- Public stack-source rules included in visible action facts; hidden opponent
+  hand rules remain excluded.
+- Clearer payment failures, including the current total cost when supplied mana
+  does not match it, and separate wording when no reservation was requested.
+- Explicit manual mana-bundle syntax and distinctions between priority, later
+  resolution payments, and spell targets versus later ETB/Saga targets.
+
+These changes were not applied to N midgame. Focused follow-up validation passed
+22 host tests, one stack-visibility regression, and 20 existing casting tests.
+Full release validation was explicitly waived by the user; these focused checks
+are not a replacement claim for the full suite. The earlier reopen-test failure
+was reproduced on the unchanged baseline.
+
+A local terminal publisher is prepared to verify the seal, complete command
+chain, host journal and learning-skip receipt before writing the result and
+existing Reaminatour cardwise JSON/CSV. It does not create another game. Reports
+will distinguish N's actual build from the follow-up code and label this single
+game as a smoke test, not evidence of card superiority. No private prompts,
+ordered libraries or capability keys belong in the published report.
+
+Recovery waits for all owned processes to exit before using the fenced resume
+route. Inactive metadata can precede complete process shutdown; that temporary
+condition calls for rechecking, not bypassing process verification. Local
+watchers cannot restart a stopped Codespace or guarantee a game outcome.

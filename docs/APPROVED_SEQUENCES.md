@@ -345,3 +345,51 @@ units are excluded from automatic payment and reserved ordinary capacity.
 payment still requires `mana` and `taps`, with `tagged_mana` inside `payment`.
 The `mana` counts include the selected tagged units rather than adding to them.
 The resulting exact mana bundle and tagged IDs remain in the accepted replay.
+
+### Payment stages and explicit mana bundles
+
+Automatic payment is the default for eligible priority casts and activations.
+A reservation applies to that payment only. An empty reservation removes the
+reservation constraint; it does not make a consequential or paid/filter mana
+source eligible. Surplus production remains in the pool: a source producing two
+colorless mana can fund a one-mana cost while leaving one colorless mana.
+
+A fully manual priority payment can bundle ordinary eligible mana activations:
+
+```json
+{
+  "mana": {"G": 1},
+  "taps": [],
+  "mana_actions": [
+    {
+      "kind": "activate",
+      "source": {"card_id": "CURRENT_SOURCE_ID", "incarnation": 1},
+      "ability_id": "EXACT_MANA_ABILITY_ID",
+      "targets": [],
+      "x_value": 0,
+      "payment": {"mana": {}, "taps": []}
+    }
+  ]
+}
+```
+
+This is a payment-shape example, not a legal choice for an arbitrary board. Copy
+current source references and ability IDs from the supplied action rules. If the
+activation offers a mana-color choice, place `{"kind":"answer","indexes":[0]}`
+immediately after it, replacing `0` with the pilot's chosen current option index.
+Python binds revision, action and request identities; omit them inside the bundle.
+The outer `mana` counts represent mana spent, including explicitly selected tagged
+units, rather than all mana produced. Bundles retain autotap's ordinary-source
+eligibility limits. Consequential or paid/filter sources need separate activations.
+
+Resolution payments are a different decision stage. `pay_mana` does not accept
+`autotap` or bundled `payment.mana_actions`. Activate an available mana ability
+separately, answer any resulting color choice, then submit the exact current
+`request_id` and `payment:{"mana":COUNTS,"taps":[]}`. `payment:null` declines an
+optional payment; an empty payment object attempts payment. A trigger being on
+the stack does not yet establish a resolution-payment request.
+
+Acceptance of a batch approval is distinct from execution of its steps. A later
+payment rejection can leave a step unexecuted and clear the approval. Follow the
+returned current decision and rejection; never replay already accepted actions.
+A repeated error can describe a new failed attempt, rather than stale feedback.
