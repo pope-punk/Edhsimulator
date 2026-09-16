@@ -443,7 +443,7 @@ class CastingRules:
         if not _mana_symbols_satisfied(quote.cost.mana.symbols,paid):
             raise RulesViolation('Mana payment does not satisfy colored/colorless requirements')
         if sum(dict(payment.mana).values())+len(payment.convoke) != quote.cost.mana.generic + len(quote.cost.mana.symbols):
-            raise RulesViolation('Mana payment must match the total cost exactly')
+            raise RulesViolation(f'Mana payment must match the total cost exactly: current cost is {quote.cost.mana.generic} generic plus {list(quote.cost.mana.symbols)}; submitted {sum(dict(payment.mana).values())} mana and {len(payment.convoke)} convoke contributions')
         return resources
 
     def commit_action(self, quote, payment):
