@@ -140,7 +140,14 @@ and tactical plans; adapt to changed facts. Historical decision logs belong to y
 planners, not your default input or checkpoint memory.
 At own-turn priority, first examine plans.actions.value.action_sequence and
 executed_steps. Prefer approving usable planner steps by ID instead of rewriting
-them as a direct sequence. Reject already performed, expired or unwanted steps;
+them as a direct sequence. A batch receipt accepts AUTHORIZATION, not execution.
+If the next owned decision carries a rejection and the step was not executed,
+execution failed and the approval may have been cleared. The same error text can
+be a fresh failure, not stale feedback. There is no standalone resume-step command.
+You may submit a corrected ordinary command, direct sequence, or new approval
+for an unexecuted step under this current claim. Never repeat an executed action.
+An unchanged failing command will fail again; revise your own payment/plan or
+choose another legal response. Reject already performed, expired or unwanted steps;
 Omit reject_ids to leave all unlisted steps unapproved; never approve executed IDs.
 For edits, overrides maps an approved step ID to just the fields you change:
 {batch:{approve_ids:["cast"],overrides:{cast:{command:{kind:"cast",source:YOUR_SOURCE,
@@ -366,6 +373,7 @@ class PrimitiveRunner:
         self.routing=Routing();self.routing.primary.update(MODELS)
         self.lanes={};self.threads={};self.running={};self.waiting={};self.deliveries={};self.inputs={}
         self.tool_counts={};self.failures={};self.retries={};self.retry_at={};self.seen=set();self.unanswered={};self.turn_models={};self.waiting_receipts={};self.last_status=None
+        self.unfinished_publications={}
         self.initial_count=campaign.store.generation;self.done=False
         state=campaign.state()
         if state.get('help_request'):raise RulesViolation('Resolve the outstanding pilot help request before resuming')
@@ -448,6 +456,9 @@ class PrimitiveRunner:
         warm=thread in self.waiting
         value=public_input(packet)
         if role=='decider':value={'response_required':True,'instruction':'Answer the current decision with an owned tool. An approval receipt is not execution; end only on explicit parked/stop.', 'current_decision':deepcopy(packet['board']['decision']),'action_facts':action_facts(packet),**value}
+        if role!='decider':
+            value['publication_required']=True
+            value['publication_instruction']='Publish only the current stage with edh_publish. A text reply or ending the turn does not complete the job. Optional diplomatic silence requires publishing messages:[]; required posts still require a message. Never repeat an accepted stage.'
         if thread not in self.deliveries:
             memory=self.memory(actor,role,packet)
             if memory:value['retained_memory']=memory
@@ -549,7 +560,18 @@ class PrimitiveRunner:
             role=self.threads[thread][1];frozen=self.inputs.get(thread,{})
             if role!='decider':
                 job=self.campaign.state()['actors'][self.threads[thread][0]]['jobs'].get(role)
-                if job and job['id']==frozen.get('job_id'):raise RuntimeError('Role ended before finishing its publication stages')
+                if job and job['id']==frozen.get('job_id'):
+                    actor=self.threads[thread][0];key=(actor,role,job['id'],job['stage'])
+                    count=self.unfinished_publications.get(key,0)
+                    if count>=2:raise RuntimeError('Role ended before finishing its publication stages')
+                    self.unfinished_publications={k:v for k,v in self.unfinished_publications.items() if k[:2]!=(actor,role)}
+                    self.unfinished_publications[key]=count+1
+                    self.timing.record('publication_continuation',thread,stage=job['stage'],attempt=count+1)
+                    # pump claims the CURRENT unfinished stage. Accepted stages
+                    # remain journaled; no prior publication or action is replayed.
+                else:
+                    owner=self.threads[thread]
+                    self.unfinished_publications={k:v for k,v in self.unfinished_publications.items() if k[:2]!=owner}
             elif thread in self.waiting:raise RuntimeError('Waiting decision tool ended unexpectedly')
             elif self.campaign.state()['claim'] and self.campaign.state()['claim']['claim_id']==frozen.get('claim_id'):
                 count=self.unanswered.get(frozen['claim_id'],0)

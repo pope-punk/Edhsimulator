@@ -250,3 +250,25 @@ class PrimitiveHostTests(TestCase):
         self.assertEqual({'results':values},self.server.replies[-1][1])
         self.assertTrue(self.server.replies[-1][2])
         self.assertIsNone(self.game.state()['paused'])
+
+    def test_unfinished_publication_continues_only_current_stage_with_bound(self):
+        thread='publication-test';self.runner.threads[thread]=('Omo',planning.SHORT)
+        self.runner.inputs[thread]={'job_id':'test-job','stage':'short_term'}
+        with self.game.transaction() as state:
+            state['actors']['Omo']['jobs'][planning.SHORT]={'id':'test-job','stage':1}
+        head=self.game.store.committed_head()
+        event={'method':'turn/completed','params':{'threadId':thread,'turn':{'id':'turn','status':'completed'}}}
+        for expected in (1,2):
+            self.runner.running[thread]='turn';self.runner.handle(event)
+            self.assertEqual(expected,self.runner.unfinished_publications[('Omo',planning.SHORT,'test-job',1)])
+            self.assertEqual(1,self.game.state()['actors']['Omo']['jobs'][planning.SHORT]['stage'])
+            self.assertEqual(head,self.game.store.committed_head())
+        self.runner.running[thread]='turn'
+        with self.assertRaisesRegex(RuntimeError,'publication stages'):self.runner.handle(event)
+
+    def test_completed_publication_is_not_restarted(self):
+        thread='publication-test';self.runner.threads[thread]=('Omo',planning.DIPLOMAT)
+        self.runner.inputs[thread]={'job_id':'completed-job','stage':'message'}
+        self.runner.running[thread]='turn'
+        self.runner.handle({'method':'turn/completed','params':{'threadId':thread,'turn':{'id':'turn','status':'completed'}}})
+        self.assertFalse(self.runner.unfinished_publications)

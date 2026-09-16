@@ -153,7 +153,9 @@ def payment(kernel,actor,command):
             if all(n>=forced[c] for c,n in zip(COLORS,spend)) and _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
                 best=(taps,commands,spend);break
         if best is not None:break
-    if best is None:raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
+    if best is None:
+        if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Consequential mana abilities require explicit pilot activation; tapped or restricted sources may be unavailable.')
+        raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
     base['mana']={c:n for c,n in zip(COLORS,best[2]) if n}
     if best[1]:base['mana_actions']=best[1]
     if any(reserve):
