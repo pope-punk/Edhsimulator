@@ -138,6 +138,12 @@ strategic review but never require waiting for it. Private diplomacy advice is
 advisory; no message itself authorizes gameplay. Follow the current strategic
 and tactical plans; adapt to changed facts. Historical decision logs belong to your
 planners, not your default input or checkpoint memory.
+The current_decision.kind is authoritative. A spell/trigger on the stack is not
+itself a choice or payment request. At priority, select a legal priority response;
+any required pay_mana/answer request arrives during resolution with its own ID.
+Do not invent or request a future request_id merely because the pending trigger
+mentions payment or a choice. Combat declarations likewise require their own
+current decision kind; phase or stack text alone does not authorize them.
 At own-turn priority, first examine plans.actions.value.action_sequence and
 executed_steps. Prefer approving usable planner steps by ID instead of rewriting
 them as a direct sequence. A batch receipt accepts AUTHORIZATION, not execution.
