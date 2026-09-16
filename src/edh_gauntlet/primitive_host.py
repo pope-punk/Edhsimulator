@@ -144,6 +144,10 @@ any required pay_mana/answer request arrives during resolution with its own ID.
 Do not invent or request a future request_id merely because the pending trigger
 mentions payment or a choice. Combat declarations likewise require their own
 current decision kind; phase or stack text alone does not authorize them.
+Targets belong to the exact spell or ability being submitted. An untargeted
+permanent spell uses targets:[] even if an ETB or Saga chapter ability will target
+something later. Those ability targets are supplied at their separate request;
+do not copy a later trigger's target specification into the cast command.
 At own-turn priority, first examine plans.actions.value.action_sequence and
 executed_steps. Prefer approving usable planner steps by ID instead of rewriting
 them as a direct sequence. A batch receipt accepts AUTHORIZATION, not execution.
