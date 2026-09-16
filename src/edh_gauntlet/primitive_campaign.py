@@ -56,7 +56,7 @@ def configuration(root, *, seed, starting_player, max_rounds):
             'short_term_sol_fast': 1, 'async_diplomacy': 1, 'decision_roles': 1,
             'static_standing': 1, 'planner_stages': True, 'plan_tiers': True,
             'context_handling': 1, 'turn_batches': 1, 'primitive_surface': 1,
-            'mana_only_priority': 1, 'combat_stage_batches': 1, 'autotap': 1, 'strategic_review': 1,
+            'mana_only_priority': 1, 'combat_stage_batches': 1, 'autotap': 1, 'automatic_decider_mana': 1, 'strategic_review': 1,
             'assets': {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in CONFIG_FILES}}
 
 
@@ -262,6 +262,10 @@ class PrimitiveCampaign:
         if state.get('help_request') and (not state['paused'] or state['paused']['reason']=='pilot_help_requested'):
             request=state['help_request']
             return {**base,'kind':'await_pilot_help','actor':request['actor'],'request_id':request['id']}
+        combo=state.get('combo')
+        if combo and (not state['paused'] or state['paused'].get('reason')=='combo_adjudication'):
+            if combo['remaining']:return {**base,'kind':'dispatch_pilot','actor':combo['remaining'][0],'decision_kind':'combo_consent','revision':self.kernel.revision}
+            return {**base,'kind':'adjudicate_combo','request_path':str(self.directory/'combo_request.json'),'proposal_id':combo['request']['proposal_id']}
         if state['paused']:return {**base,'kind':'none','reason':'host_paused'}
         if state['pending']:return {**base,'kind':'recover_host_input'}
         if state['blocker']:return {**base,'kind':'repair_rules_work_items','terminal':state['terminal']}
@@ -281,6 +285,7 @@ class PrimitiveCampaign:
     def publish_next(self):
         action=self.next_action()
         write(self.root/'NEXT_ACTION.json',{'schema':1,'next_action':action})
+        if action['kind']=='adjudicate_combo':write(self.directory/'combo_request.json',self.state()['combo']['request'])
         seal=self.state()['terminal']
         if seal:
             from .primitive_journal import head
@@ -302,7 +307,9 @@ class PrimitiveCampaign:
                 if existing[:2]!=(actor,encoded(payload)):raise RulesViolation('Host request ID reused with different content')
                 return existing[2]
             action=self.next_action()
-            if action['kind']!='dispatch_pilot' or action['actor']!=actor:raise RulesViolation('Actor does not own the campaign frontier')
+            combo=state.get('combo',{})
+            admin=(action['kind']=='adjudicate_combo' and command.get('kind')=='adjudicated_combo' and combo.get('response')==command.get('response') and actor==combo['request']['actor'])
+            if not admin and (action['kind']!='dispatch_pilot' or action['actor']!=actor):raise RulesViolation('Actor does not own the campaign frontier')
             if state['pending']:raise RulesViolation('Recover the prepared input first')
             self.store.connection.execute('INSERT INTO host_inputs VALUES (?,?,?,?,NULL)',(request_id,actor,encoded(payload),'prepared'))
             state['pending']=request_id
@@ -318,7 +325,7 @@ class PrimitiveCampaign:
     def recover(self):
         state=self.state();pending=state['pending']
         if not pending:return self.publish_next()
-        if state['paused'] and not self.store.connection.execute('SELECT 1 FROM commands WHERE request_id=?',(pending,)).fetchone():
+        if state['paused'] and not state.get('combo',{}).get('response') and not self.store.connection.execute('SELECT 1 FROM commands WHERE request_id=?',(pending,)).fetchone():
             return self.publish_next()
         actor,payload_text,status=self.store.connection.execute('SELECT actor,payload,state FROM host_inputs WHERE request_id=?',(pending,)).fetchone()
         if status!='prepared':raise RulesViolation('Inconsistent prepared host input')
@@ -339,6 +346,8 @@ class PrimitiveCampaign:
                     from .primitive_actions import apply_control,observe
                     apply_control(self,state,actor,payload.get('control'))
                     observe(self,state,actor,payload['command'])
+                    state['actors'][actor].pop('last_rejection',None)
+                    state['actors'][actor].pop('last_rejection_context',None)
                     self.record(actor,'rationale',{'request_id':pending,**payload})
                     self._capture(state)
                 self.store.connection.execute('UPDATE host_inputs SET state=?,receipt=? WHERE request_id=?',

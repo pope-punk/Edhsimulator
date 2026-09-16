@@ -140,7 +140,10 @@ def claim(campaign,actor,role):
 
 
 def validate_actions(value,job):
-    if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','diplomacy_request'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
+    if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','diplomacy_request','combo_proposal'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
+    if 'combo_proposal' in value:
+        from .primitive_combo import validate_proposal
+        validate_proposal(value['combo_proposal'])
     steps=value['action_sequence'];coverage=value['phase_coverage']
     if type(steps) is not list or len(steps)>64 or len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())>12000:
         raise RulesViolation('Action proposals exceed the bound')

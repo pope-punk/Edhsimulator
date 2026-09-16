@@ -12,6 +12,7 @@ class ManaBatchTests(unittest.TestCase):
         self.tmp=TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
         self.path=Path(self.tmp.name)/'game'
         self.game=PrimitiveCampaign._create(self.path,seed=93,starting_player='Omo')
+        self.game.config.pop('automatic_decider_mana',None)
         self.addCleanup(lambda:self.game.close())
         while self.game.kernel.pending_choice:
             q=self.game.kernel.pending_choice

@@ -63,6 +63,10 @@ def main(argv=None):
     help_answer.add_argument('--response',type=Path,required=True)
     help_answer.add_argument('--expected-sequence',type=int,required=True)
     help_answer.add_argument('--expected-sha256',required=True)
+    combo=commands.add_parser('adjudicate-combo')
+    combo.add_argument('--response',type=Path,required=True)
+    combo.add_argument('--expected-sequence',type=int,required=True)
+    combo.add_argument('--expected-sha256',required=True)
     extend=commands.add_parser('extend-horizon')
     extend.add_argument('--expected-sequence',type=int,required=True)
     extend.add_argument('--expected-sha256',required=True)
@@ -119,6 +123,9 @@ def main(argv=None):
             if args.command=='help-status':
                 print(json.dumps({'request':campaign.state().get('help_request'),'next_action':campaign.next_action()},indent=2))
                 return
+            if args.command=='adjudicate-combo':
+                from .primitive_combo import adjudicate
+                adjudicate(campaign,read(args.response,{}),{'sequence':args.expected_sequence,'sha256':args.expected_sha256})
             if args.command=='answer-help':
                 from .primitive_help import answer
                 answer(campaign,expected={'sequence':args.expected_sequence,'sha256':args.expected_sha256},
@@ -127,6 +134,7 @@ def main(argv=None):
                 expected={'sequence':args.expected_sequence,'sha256':args.expected_sha256}
                 process=stopped_prefix(campaign,expected)
                 if campaign.state()['terminal']:raise RulesViolation('A terminal game cannot resume')
+                if campaign.state().get('combo'):raise RulesViolation('Finish the pending independent combo adjudication before resuming')
                 if campaign.state().get('help_request'):raise RulesViolation('Answer the outstanding pilot help request before resuming')
                 with campaign.transaction() as state:
                     for actor in state['actors']:campaign.record(actor,'operator_resume',{'commit':expected})

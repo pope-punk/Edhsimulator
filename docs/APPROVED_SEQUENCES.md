@@ -393,3 +393,5 @@ Acceptance of a batch approval is distinct from execution of its steps. A later
 payment rejection can leave a step unexecuted and clear the approval. Follow the
 returned current decision and rejection; never replay already accepted actions.
 A repeated error can describe a new failed attempt, rather than stale feedback.
+
+For fresh `automatic_decider_mana:1` games, the [automatic payment policy](AUTOMATIC_MANA.md) supersedes decider-authored mana overrides above. Planners retain explicit mana sequencing; deciders approve it unchanged or submit an automatically paid action.

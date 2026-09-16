@@ -17,7 +17,7 @@ LIMIT = 20000
 def validate(command):
     if 'autotap' not in command:return
     spec=command['autotap']
-    if command.get('kind') not in ('cast','activate') or type(spec) is not dict or set(spec)-{'reserve','tagged_mana'}:
+    if command.get('kind') not in ('cast','activate','pay_mana') or type(spec) is not dict or set(spec)-{'reserve','tagged_mana'}:
         raise RulesViolation('autotap is a cast/activate option with optional reserve counts and tagged_mana IDs')
     tags=spec.get('tagged_mana',[])
     if type(tags) is not list or any(type(unit) is not str for unit in tags) or len(set(tags))!=len(tags):
@@ -79,6 +79,13 @@ def options(kernel,actor,obj,*,reserve_check=False):
 
 
 def quote(kernel,actor,command):
+    if command.get('kind')=='pay_mana':
+        from types import SimpleNamespace
+        from .rules_program import decode
+        window=kernel.mana_payment
+        if not kernel._payment_waiting() or window['actor']!=actor or window['id']!=command.get('request_id'):
+            raise RulesViolation('No matching current mana payment')
+        return SimpleNamespace(cost=CostSpec(mana=decode(window['mana'])),source=None,actor=actor,kind='pay_mana')
     from .rules_adapter import RulesActorAdapter
     adapter=RulesActorAdapter(kernel)
     source=adapter._visible_ref(command['source'],actor)
@@ -93,7 +100,18 @@ def quote(kernel,actor,command):
         hybrid_choices=tuple(command.get('hybrid_choices',[])),face=command.get('face'))
 
 
-def payment(kernel,actor,command):
+def payment(kernel,actor,command,*,smart=False):
+    if smart:
+        command=deepcopy(command)
+        if isinstance(command.get('payment'),dict):
+            command['payment'].setdefault('mana',{})
+            command['payment'].setdefault('taps',[])
+        from .primitive_mana_preferences import preferred_payment
+        return preferred_payment(kernel,actor,command)
+    return _payment(kernel,actor,command)
+
+
+def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS):
     validate(command)
     q=quote(kernel,actor,command)
     if type(q.cost) not in (CostSpec,LoyaltyCost):raise RulesViolation('autotap requires an ordinary quoted cost; use explicit payment for this cost')
@@ -103,7 +121,7 @@ def payment(kernel,actor,command):
     tags=kernel.state.mana_tags(actor)
     selected=command['autotap'].get('tagged_mana',[])
     # The pilot selects consequential/restricted units; Python pays the remainder.
-    kernel._tagged_resources(actor,tuple(selected),quote=q,source=kernel.state.get(q.source))
+    if selected:kernel._tagged_resources(actor,tuple(selected),quote=q,source=kernel.state.get(q.source))
     forced=Counter(tags[unit]['symbol'] for unit in selected)
     unavailable=Counter(row['symbol'] for unit,row in tags.items() if unit not in selected)
     pool=tuple(dict(kernel.state.mana_pool(actor)).get(c,0)-unavailable[c] for c in COLORS)
@@ -118,9 +136,8 @@ def payment(kernel,actor,command):
     # Each source can contribute to either side once, never to both.
     cap=tuple(need+r for r in reserve)
     states={(tuple(min(p,c) for p,c in zip(pool,cap)),(0,)*6):(0,[])}
-    for obj in sorted(kernel.state.objects(Zone.BATTLEFIELD),key=lambda o:o.ref.card_id):
+    for obj,choices in (sources if sources is not None else [(o,options(kernel,actor,o)) for o in sorted(kernel.state.objects(Zone.BATTLEFIELD),key=lambda o:o.ref.card_id)]):
         if obj.ref in excluded:continue
-        choices=options(kernel,actor,obj)
         if not choices:continue
         nxt=dict(states)
         for (available,held),(taps,commands) in states.items():
@@ -149,7 +166,9 @@ def payment(kernel,actor,command):
         limits=[min(a,need,max(0,a+h-r)) for a,h,r in zip(available,held,reserve)]
         if any(a+h<r for a,h,r in zip(available,held,reserve)):continue
         # Enumerate exact expenditures, bounded by cost; no gratuitous mana spending.
-        for spend in expenditures(limits,need):
+        order=[COLORS.index(c) for c in spend_order]
+        for ordered_spend in expenditures([limits[i] for i in order],need):
+            mapping=dict(zip(order,ordered_spend));spend=tuple(mapping[i] for i in range(6))
             if all(n>=forced[c] for c,n in zip(COLORS,spend)) and _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
                 best=(taps,commands,spend);break
         if best is not None:break
@@ -205,6 +224,34 @@ The isolated trial is committed only after the entire payment validates.
         if trial.pending_choice or trial.resolving or trial.priority!=q.actor:
             raise RulesViolation('Bundled mana encountered an execution boundary')
     result=trial.commit_action(replace(q,revision=trial.revision),replace(payment,mana_actions=()))
+    state=kernel.state;state.__dict__.update(trial.state.__dict__)
+    kernel.__dict__.update(trial.__dict__);kernel.state=state
+    return result
+
+
+def commit_resolution_payment(kernel, actor, command, payment):
+    """Execute only prevalidated ordinary mana lines and the fixed payment atomically."""
+    from .rules_adapter import RulesActorAdapter
+    trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
+    adapter=RulesActorAdapter(trial);lines=list(payment.mana_actions);index=0
+    quote(trial,actor,command)  # Fence the exact current resolution request first.
+    while index<len(lines):
+        row=lines[index]
+        if row.get('kind')!='activate':raise RulesViolation('Bundled mana requires an activation')
+        obj=trial.state.get(ObjectRef.from_json(row['source']))
+        match=next((cmds for _,cmds in options(trial,actor,obj) if lines[index:index+len(cmds)]==cmds),None)
+        if match is None:raise RulesViolation('Unavailable ordinary mana bundle')
+        for item in match:
+            item=deepcopy(item);item['revision']=trial.revision
+            if item['kind']=='activate':item['action_id']='autotap:'+hashlib.sha256((command['action_id']+':'+str(index)).encode()).hexdigest()
+            else:
+                pending=trial.pending_choice
+                if not pending or pending.actor!=actor or pending.kind!='mana_choice':raise RulesViolation('Mana choice boundary changed')
+                item['request_id']=pending.request_id
+            adapter._execute(actor,item);index+=1
+        quote(trial,actor,command)
+    final=deepcopy(command);final['revision']=trial.revision;final['payment']=payment.to_json();final['payment'].pop('mana_actions',None)
+    result=adapter._execute(actor,final)
     state=kernel.state;state.__dict__.update(trial.state.__dict__)
     kernel.__dict__.update(trial.__dict__);kernel.state=state
     return result

@@ -82,7 +82,7 @@ class RulesActorAdapter:
         if type(command) is not dict or type(command.get('kind')) is not str:
             raise RulesViolation('Invalid actor command')
         kind=command['kind']
-        required={'answer':{'request_id','indexes'},'allocate_counters':{'request_id','allocations'},'pass':set(),'concede':set(),
+        required={'adjudicated_combo':{'action_id','response'},'answer':{'request_id','indexes'},'allocate_counters':{'request_id','allocations'},'pass':set(),'concede':set(),
             'decline_cast':{'action_id','request_id'},
             'pay_mana':{'action_id','request_id','payment'},
             'cast':{'action_id','source','targets','x_value','payment'},
@@ -94,11 +94,14 @@ class RulesActorAdapter:
             raise RulesViolation('Unsupported command or unexpected command fields')
         if command['revision']!=self.kernel.revision:raise RulesViolation('Stale actor command')
         decision=decision_for_actor(self.kernel,actor)['kind']
-        expected={'answer':'choice','allocate_counters':'choice','pass':'priority','concede':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
+        expected={'adjudicated_combo':'priority','answer':'choice','allocate_counters':'choice','pass':'priority','concede':'priority','cast':'priority','activate':'priority','pay_mana':'mana_payment','decline_cast':'resolution_cast',
                   'unlock_room':'priority','play_land':'priority','attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}
         if decision!=expected[kind] and not (kind=='activate' and decision in {'mana_payment','casting_mana'} or kind=='cast' and decision=='resolution_cast'):
             raise RulesViolation('Actor does not own this decision stage')
         k=self.kernel
+        if kind=='adjudicated_combo':
+            from .rules_combo import apply
+            return apply(k,actor,command)
         if kind=='answer':return k.answer(command['request_id'],actor,command['indexes'])
         if kind=='allocate_counters':return k.allocate_counters(command['request_id'],actor,command['allocations'])
         if kind=='decline_cast':return k.decline_resolution_cast(command['action_id'],actor,command['request_id'],revision=command['revision'])
@@ -107,6 +110,9 @@ class RulesActorAdapter:
         if kind=='pay_mana':
             try:payment=None if command['payment'] is None else Payment.from_json(command['payment'])
             except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid resolution payment') from exc
+            if payment is not None and payment.mana_actions:
+                from .primitive_autotap import commit_resolution_payment
+                return commit_resolution_payment(k,actor,command,payment)
             return k.pay_resolution_mana(command['action_id'],actor,command['request_id'],payment,revision=command['revision'])
         if kind in {'cast','activate'}:
             source=self._visible_ref(command['source'],actor)

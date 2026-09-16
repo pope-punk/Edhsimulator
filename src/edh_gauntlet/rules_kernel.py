@@ -1107,6 +1107,9 @@ class RulesKernel(OpeningRules,RoomRules,FaceRules,WalkerRules,RuleEffects,Resol
             frame['targets']=next(group['targets'] for group in frame['mode_groups'] if group['mode_id']==task['mode_id'])
         for group in frame.get('target_groups',()):
             frame['bindings']['target:'+group['group_id']]=group['targets']
+        if 'combo_operation' in task:
+            from .rules_combo import execute
+            return execute(self,frame,task)
         effect=decode(task['effect']);key=task['id'];controller=frame['controller'];source=self._source(frame)
         if self._execute_room_instruction(effect,frame,task):return
         if self._execute_face_instruction(effect,frame,task):return

@@ -129,6 +129,8 @@ def schemas(role):
                 'pass_priority':{'type':'boolean'},'resume_after_passes':{'type':'boolean'}},
                 'required':['approve_ids'],'additionalProperties':False},'sequence':{'type':'array','minItems':1,'maxItems':64,
              'items':{'type':'object','properties':{'id':{'type':'string'},'command':{'type':'object'},'rationale':{'type':'string'}},'required':['id','command'],'additionalProperties':False}}},[]),
+            tool('edh_propose_combo','Submit the current planner combo_offer for opponent consent and independent adjudication.',{'proposal_id':{'type':'string'}},['proposal_id']),
+            tool('edh_combo_consent','Answer the current combo_consent decision. Accept only if you have no interaction that can stop the demonstrated loop.',{'accept':{'type':'boolean'},'rationale':{'type':'string','maxLength':300}},['accept','rationale']),
             tool('edh_diplomatic_override','Override named own diplomatic holds with rationale; does not execute an action.',{'hold_ids':{'type':'array','items':{'type':'string'}},'rationale':{'type':'string'}},['hold_ids','rationale']),
             tool('edh_planner_alarm','Set, replace or cancel your planner alarm at a priority decision.',
                  {'alarm':{'type':'object'}},['alarm']),
@@ -140,7 +142,7 @@ def schemas(role):
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
 
 
-def instructions(actor,role):
+def instructions(actor,role,*,automatic_mana=False):
     if role=='decider':
         specific='''You alone choose actions, targets, costs and approvals. Own diplomatic_holds constrain
 attacks/targeting until expiry. Honor them or call edh_diplomatic_override with
@@ -383,6 +385,21 @@ The host parks oversized tool deliveries and supplies a complete next real input
     specific+='\nPublication and batch policy: short-term planners publish the supplied first stage as soon as ready. If both are already ready without delaying the first, stage short_term_and_actions with response:{short_term:TACTICAL_PROSE_OBJECT,actions:ACTION_PROPOSAL_OBJECT} validates both atomically in the frozen publication_order. If one stage was accepted, publish only the stage named in next. EOT3 actions remain available when the same job publishes its following prose; proposal IDs and executed-step tracking are preserved. Deciders: inspect the supplied actions proposal before constructing another sequence; approve usable complete planner steps with edh_act batch, override only needed steps, or use a direct sequence when the proposal is absent/stale. Publication alone never authorizes execution. Plans/goals are already in plans; inspections use object/source and card/name, not ref/card or goal/board queries.'
     specific+='\nLand planning: supplied intrinsic_land_mana describes conditional battlefield abilities, including exact IDs and costs. A land in hand cannot tap yet. In an approved play-land/tap/cast sequence, use {owned_card:CARD_ID,zone:"battlefield"} for its new incarnation. Check entry/tapped conditions and other effects; an unexecuted planned land drop is not a completed action. Current board and accepted receipts establish what happened.'
     specific+='\nScheduler policy: ordinary snoozes end no later than your next upkeep. To explicitly pass through intervening turns and your own upkeep/draw until your next precombat main, use {mode:"snooze_until_own_main",wake_condition:"deadline_only"} or another supported wake condition. Required choices and the chosen wake condition still interrupt it; it never passes your precombat main. Prefer this over repeated upkeep/draw prompts when you intend no optional action before your main phase. When no creatures are eligible to attack, the host declares none without inference and preserves existing snoozes. Empty declarations alone do not wake opponents. Resulting triggers retain normal wake rules; no extra priority passes are authorized.'
+    if role=='decider' and automatic_mana:
+        from .primitive_decider_mana import COMMANDS as simple_commands
+        specific=specific.replace(COMMANDS,simple_commands)
+        start=specific.index('\nFresh autotap:1 payment policy:')
+        end=specific.index('\nPublication and batch policy:',start)
+        specific=specific[:start]+specific[end:]
+        specific=specific.replace('targets:YOUR_TARGETS,x_value:0,autotap:{reserve:{B:1}}','targets:YOUR_TARGETS,x_value:0')
+        start=specific.index('Explicit mana activation is for a deliberate float')
+        end=specific.index('Current batch_context',start)
+        specific=specific[:start]+'Never author mana activations, color choices, reservations or payments. Accept unchanged planner mana steps by ID, or choose an action for automatic payment.\n'+specific[end:]
+        start=specific.index('\nLand planning:')
+        end=specific.index('\nScheduler policy:',start)
+        specific=specific[:start]+specific[end:]
+    if role=='decider':specific+='\nA supplied combo_offer is a planner proof, not permission to win. If you choose to demonstrate that ready loop, call edh_propose_combo with its proposal_id. At combo_consent call edh_combo_consent; accept only if you have no interaction capable of stopping the demonstrated loop. Decline restores normal priority. All consents still require independent rules adjudication. Never report a rules defect solely because an old rejection mentions another command: rejection_context binds its actual command and accepted prefix.'
+    if role==planning.SHORT:specific+='\nOptional combo_proposal in the actions stage is {proposal_text,seat_turn,phase,requires}. Describe the concrete repeatable loop and claimed outcome in <=1200 characters; phase is precombat_main or postcombat_main. requires is up to eight {source:{card_id,incarnation},zone,controller} guards. Publish only when a concrete loop is ready; omission clears the old proposal. The decider chooses whether to submit it; opponents consent before an independent adjudicator evaluates it.'
     return f'You are the {actor} {role}.\n'+common+specific
 
 
@@ -448,7 +465,7 @@ class PrimitiveRunner:
             self.deliveries.pop(thread,None);self.lanes.pop(key)
         params={'cwd':str(self.workspace),'environments':[],'selectedCapabilityRoots':[],
             'approvalPolicy':'never','sandbox':'read-only','model':MODELS[role],
-            'baseInstructions':instructions(actor,role),'dynamicTools':schemas(role),'historyMode':'legacy',
+            'baseInstructions':instructions(actor,role,automatic_mana=self.campaign.config.get('automatic_decider_mana')==1),'dynamicTools':schemas(role),'historyMode':'legacy',
             'config':{'model_reasoning_effort':EFFORTS.get(role,'medium'),'web_search':'disabled',
                       'features':{'shell_tool':False,'apps':False,'plugins':False,'browser_use':False,
                                   'computer_use':False,'multi_agent':False,'hooks':False,'skill_search':False}}}
@@ -477,6 +494,9 @@ class PrimitiveRunner:
         warm=thread in self.waiting
         value=public_input(packet)
         if role=='decider':value={'response_required':True,'instruction':'Answer the current decision with an owned tool. An approval receipt is not execution; end only on explicit parked/stop.', 'current_decision':deepcopy(packet['board']['decision']),'action_facts':action_facts(packet),**value}
+        if role=='decider' and self.campaign.config.get('automatic_decider_mana')==1:
+            from .primitive_decider_mana import presentation
+            value=presentation(value)
         if role!='decider':
             value['publication_required']=True
             value['publication_instruction']='Publish only the current stage with edh_publish. A text reply or ending the turn does not complete the job. Optional diplomatic silence requires publishing messages:[]; required posts still require a message. Never repeat an accepted stage.'
@@ -631,6 +651,11 @@ class PrimitiveRunner:
                 self.waiting_receipts[thread]=value
                 self.waiting[thread]=(request,time.monotonic())
                 return
+            elif name in ('edh_propose_combo','edh_combo_consent') and role=='decider':
+                from .primitive_combo import propose,consent
+                if name=='edh_propose_combo':value=propose(self.campaign,actor,frozen['claim_id'],**args)
+                else:value=consent(self.campaign,actor,frozen['claim_id'],**args)
+                self.waiting_receipts[thread]=value;self.waiting[thread]=(request,time.monotonic());return
             elif name=='edh_diplomatic_override' and role=='decider':
                 from .primitive_negotiation import override
                 if set(args)!={'hold_ids','rationale'}:raise RulesViolation('Supply hold_ids and rationale')

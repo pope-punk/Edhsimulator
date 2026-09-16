@@ -35,3 +35,15 @@ These changes were not applied to N midgame. Focused checks passed: 22 host test
 one stack-visibility regression and 20 casting tests. Full validation was waived
 by the user. The known reopen-test failure was reproduced on the unchanged
 baseline. These checks do not resolve or validate the Animate Dead report.
+
+## Subsequent diagnosis
+
+The targeting error persisted from action **1236**, where it concerned the earlier
+Elspeth Conquers Death attempt. It was still being delivered at **1490** without
+its originating command. The current Animate Dead source and graveyard target
+were correctly identified; there was no newly recorded Animate Dead rejection
+at that frontier. The follow-up clears stale rejection feedback after acceptance
+and binds new batch errors to their actual commands/prefixes. An offline regression
+confirms automatic-payment casting, reanimation and attachment for Animate Dead
+and Leonin Relic-Warder. N's original seal and complaint remain preserved; this
+diagnosis does not retroactively award a winner.
