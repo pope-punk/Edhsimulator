@@ -17,8 +17,11 @@ LIMIT = 20000
 def validate(command):
     if 'autotap' not in command:return
     spec=command['autotap']
-    if command.get('kind') not in ('cast','activate') or type(spec) is not dict or set(spec)-{'reserve'}:
-        raise RulesViolation('autotap is a cast/activate option with optional reserve mana counts')
+    if command.get('kind') not in ('cast','activate') or type(spec) is not dict or set(spec)-{'reserve','tagged_mana'}:
+        raise RulesViolation('autotap is a cast/activate option with optional reserve counts and tagged_mana IDs')
+    tags=spec.get('tagged_mana',[])
+    if type(tags) is not list or any(type(unit) is not str for unit in tags) or len(set(tags))!=len(tags):
+        raise RulesViolation('autotap.tagged_mana requires unique current owned mana unit IDs')
     reserve=spec.get('reserve',{})
     if (type(reserve) is not dict or set(reserve)-set(COLORS)
             or any(type(n) is not int or not 0<=n<=10 for n in reserve.values()) or sum(reserve.values())>10):
@@ -97,9 +100,17 @@ def payment(kernel,actor,command):
     need=q.cost.mana.generic+len(q.cost.mana.symbols)
     if need>30:raise RulesViolation('autotap bounded search supports costs up to 30 mana; use explicit payment')
     reserve=tuple(command['autotap'].get('reserve',{}).get(c,0) for c in COLORS)
-    pool=tuple(dict(kernel.state.mana_pool(actor)).get(c,0) for c in COLORS)
+    tags=kernel.state.mana_tags(actor)
+    selected=command['autotap'].get('tagged_mana',[])
+    # The pilot selects consequential/restricted units; Python pays the remainder.
+    kernel._tagged_resources(actor,tuple(selected),quote=q,source=kernel.state.get(q.source))
+    forced=Counter(tags[unit]['symbol'] for unit in selected)
+    unavailable=Counter(row['symbol'] for unit,row in tags.items() if unit not in selected)
+    pool=tuple(dict(kernel.state.mana_pool(actor)).get(c,0)-unavailable[c] for c in COLORS)
+    if sum(forced.values())>need:raise RulesViolation('Selected tagged mana exceeds this action cost')
     excluded={q.source}
     base=deepcopy(command.get('payment',{'mana':{},'taps':[]}))
+    if selected:base['tagged_mana']=list(selected)
     excluded.update(ObjectRef.from_json(r) for r in base.get('taps',[]))
     for refs in base.get('zone_costs',{}).values():
         excluded.update(ObjectRef.from_json(r) for r in refs)
@@ -139,7 +150,7 @@ def payment(kernel,actor,command):
         if any(a+h<r for a,h,r in zip(available,held,reserve)):continue
         # Enumerate exact expenditures, bounded by cost; no gratuitous mana spending.
         for spend in expenditures(limits,need):
-            if _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
+            if all(n>=forced[c] for c,n in zip(COLORS,spend)) and _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
                 best=(taps,commands,spend);break
         if best is not None:break
     if best is None:raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
@@ -150,7 +161,8 @@ def payment(kernel,actor,command):
         trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
         final=deepcopy(command);final.pop('autotap');final['payment']=base
         RulesActorAdapter(trial)._execute(actor,final)
-        remaining=tuple(dict(trial.state.mana_pool(actor)).get(c,0) for c in COLORS)
+        unselected=Counter(row['symbol'] for row in trial.state.mana_tags(actor).values())
+        remaining=tuple(dict(trial.state.mana_pool(actor)).get(c,0)-unselected[c] for c in COLORS)
         reachable={tuple(min(r,n) for r,n in zip(reserve,remaining))}
         for obj in trial.state.objects(Zone.BATTLEFIELD):
             choices=options(trial,actor,obj,reserve_check=True)

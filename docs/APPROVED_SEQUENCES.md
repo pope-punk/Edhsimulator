@@ -331,3 +331,17 @@ New `added` steps still require all planner fields; use a direct `sequence` for 
 new current-window line. These conveniences do not relax mana affordability,
 reservations, timing, claim fencing or replay protection. Do not switch a started
 game to this host implementation silently.
+
+### Tagged mana with automatic payment
+
+Fresh autotap hosts accept `autotap: {"tagged_mana": ["CURRENT_UNIT_ID"]}`
+on a cast or activation, optionally alongside `reserve`. The pilot selects the
+current owned tagged units; Python spends all selected units and supplies the
+remaining cost using ordinary mana sources. Restrictions on those units still
+apply. Omit `payment` unless supplying explicit non-mana costs. Unselected tagged
+units are excluded from automatic payment and reserved ordinary capacity.
+
+`payment.taps` pays tap costs; it does not produce mana from lands. Fully manual
+payment still requires `mana` and `taps`, with `tagged_mana` inside `payment`.
+The `mana` counts include the selected tagged units rather than adding to them.
+The resulting exact mana bundle and tagged IDs remain in the accepted replay.

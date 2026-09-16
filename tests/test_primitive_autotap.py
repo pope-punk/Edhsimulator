@@ -154,3 +154,49 @@ class AutotapTests(unittest.TestCase):
         self.submit({'kind':'activate','source':ref.to_json(),'ability_id':ability.ability_id,'targets':[],'x_value':0})
         self.assertFalse(kernel.state.get(self.island).tapped)
         self.assertFalse(kernel.state.get(self.grove).tapped)
+
+    def tag(self,symbol='U',rider='copy'):
+        state=self.game.kernel.state
+        state.add_special_mana('Omo',(symbol,),rider,state.get(self.island))
+        return next(reversed(state.mana_tags('Omo')))
+
+    def test_selected_tag_plus_autotapped_remainder_replays(self):
+        from edh_gauntlet.rules_adapter import RulesActorAdapter
+        tag=self.tag();self.card('forest',Zone.BATTLEFIELD)
+        ref=self.card('cultivate',Zone.HAND)
+        cmd={'kind':'cast','source':ref.to_json(),'targets':[],'x_value':0,'autotap':{'tagged_mana':[tag]}}
+        kernel=self.game.kernel;before=kernel.snapshot()
+        self.submit(cmd)
+        recorded=self.game.evidence('Omo',kinds=('rationale',))[-1]['value']['command']
+        self.assertEqual([tag],recorded['payment']['tagged_mana'])
+        self.assertEqual(3,sum(recorded['payment']['mana'].values()))
+        self.assertTrue(recorded['payment']['mana_actions'])
+        self.assertNotIn(tag,kernel.state.mana_tags('Omo'))
+        replay=type(kernel).restore(before,kernel._base_definitions.values())
+        RulesActorAdapter(replay)._execute('Omo',recorded)
+        self.assertEqual(kernel.snapshot(),replay.snapshot())
+
+    def test_default_does_not_spend_unselected_tag(self):
+        tag=self.tag();self.submit(self.command())
+        self.assertIn(tag,self.game.kernel.state.mana_tags('Omo'))
+        recorded=self.game.evidence('Omo',kinds=('rationale',))[-1]['value']['command']
+        self.assertNotIn('tagged_mana',recorded['payment'])
+        self.assertTrue(recorded['payment']['mana_actions'])
+
+    def test_tag_restrictions_remain_atomic(self):
+        tag=self.tag(rider='legendary');cmd=self.command();cmd['autotap']={'tagged_mana':[tag]}
+        head=self.game.store.committed_head()
+        with self.assertRaisesRegex(RulesViolation,'legendary'):self.submit(cmd)
+        self.assertEqual(head,self.game.store.committed_head())
+        self.assertIn(tag,self.game.kernel.state.mana_tags('Omo'))
+        self.assertFalse(self.game.kernel.state.get(self.island).tapped)
+
+    def test_tag_selection_requires_current_unique_ids(self):
+        cmd=self.command()
+        for tags in (['missing'],['x','x'],[None]):
+            cmd['autotap']={'tagged_mana':tags}
+            with self.assertRaises(RulesViolation):self.submit(cmd)
+
+    def test_unselected_tag_does_not_satisfy_reserve(self):
+        self.tag('W');cmd=self.command({'W':1})
+        with self.assertRaisesRegex(RulesViolation,'preserving'):self.submit(cmd)
