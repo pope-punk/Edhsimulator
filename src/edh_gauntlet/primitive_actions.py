@@ -121,8 +121,10 @@ def submit(campaign,actor,claim_id,request_id,command,rationale,scheduler):
         plan_refs={k:v['id'] for k,v in current['plans'].items()},control={'scheduler':directive,'clear_approval':True})
 
 
-def approve(campaign,actor,claim_id,*,approve_ids,reject_ids,added=(),overrides=None,rejection_rationale="",pass_priority=True,resume_after_passes=True):
-    if type(approve_ids) is not list or type(reject_ids) is not list or type(pass_priority) is not bool or type(resume_after_passes) is not bool:
+def approve(campaign,actor,claim_id,*,approve_ids,reject_ids=None,added=(),overrides=None,rejection_rationale="",pass_priority=True,resume_after_passes=True):
+    if (type(approve_ids) is not list or any(type(key) is not str for key in approve_ids)
+            or reject_ids is not None and (type(reject_ids) is not list or any(type(key) is not str for key in reject_ids))
+            or type(pass_priority) is not bool or type(resume_after_passes) is not bool):
         raise RulesViolation('Invalid batch approval')
     with campaign.transaction() as state:
         frontier=campaign.next_action()
@@ -134,20 +136,29 @@ def approve(campaign,actor,claim_id,*,approve_ids,reject_ids,added=(),overrides=
         if current['board']['decision']['kind']!='priority':raise RulesViolation('Batch approval requires a priority decision')
         proposal=current['plans'].get('actions',{})
         steps=proposal.get('value',{}).get('action_sequence',[]);by_id={s['id']:s for s in steps}
+        implicit_rejections=reject_ids is None
+        if implicit_rejections:reject_ids=[key for key in by_id if key not in approve_ids]
         if (len(set(approve_ids+reject_ids))!=len(approve_ids+reject_ids)
                 or set(approve_ids+reject_ids)!=set(by_id)):
-            raise RulesViolation('Approve or reject every frozen proposal exactly once')
+            raise RulesViolation('Approve or reject every frozen proposal exactly once. '
+                'To approve only named steps, omit reject_ids; all other steps remain unapproved. '
+                f'Frozen IDs: {list(by_id)}; missing IDs: {sorted(set(by_id)-set(approve_ids+reject_ids))}')
         executed=seat.get('executed_steps',{}).get(proposal.get('id'),[])
         if any(key in executed for key in approve_ids):
             raise RulesViolation('An already executed proposal step cannot be approved again')
-        overrides=overrides or {}
+        overrides={} if overrides is None else overrides
         if type(overrides) is not dict or set(overrides)-set(approve_ids):raise RulesViolation('Overrides require approved step IDs')
-        if reject_ids and (type(rejection_rationale) is not str or not rejection_rationale.strip() or len(rejection_rationale)>300):
+        if type(rejection_rationale) is not str or (reject_ids and
+                (not implicit_rejections or rejection_rationale) and
+                (not rejection_rationale.strip() or len(rejection_rationale)>300)):
             raise RulesViolation('Explain rejected proposals in at most 300 characters')
         chosen=[]
         for key in approve_ids:
-            original=by_id[key];replacement=overrides.get(key,original)
-            if type(replacement) is not dict or replacement.get('id')!=key:raise RulesViolation('Override must retain its step ID')
+            original=by_id[key];patch=overrides.get(key,{})
+            if type(patch) is not dict or patch.get('id',key)!=key:raise RulesViolation('Override must retain its step ID')
+            # Inherit scheduling/prose, but replace a supplied command in full.
+            # Never merge old targets, payment or other gameplay fields into it.
+            replacement={**original,**patch}
             if {k:v for k,v in replacement.items() if k!='rationale'}=={k:v for k,v in original.items() if k!='rationale'}:replacement=original
             chosen.append(deepcopy(replacement))
         if not isinstance(added,(list,tuple)):raise RulesViolation('Added steps require a list')
@@ -159,7 +170,7 @@ def approve(campaign,actor,claim_id,*,approve_ids,reject_ids,added=(),overrides=
                                       'pass_priority':pass_priority,'resume_after_passes':resume_after_passes,'steps':chosen}),
             'steps':chosen,'cursor':0,'pass_priority':pass_priority,'resume_after_passes':resume_after_passes,
             'proposal_id':proposal.get('id'),'turn_limit':max([s['seat_turn'] for s in chosen]+[seat.get('turns',0)+1])}
-        campaign.record(actor,'batch_approval',{'claim_id':claim_id,**seat['approved'],'rejected':reject_ids,'rejection_rationale':rejection_rationale})
+        campaign.record(actor,'batch_approval',{'claim_id':claim_id,**seat['approved'],'rejected':reject_ids,'implicit_rejections':implicit_rejections,'rejection_rationale':rejection_rationale})
         state['claim']=None
         return {'accepted':True,'approved':len(chosen),'approval_id':seat['approved']['id']}
 

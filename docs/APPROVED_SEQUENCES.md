@@ -313,3 +313,21 @@ steps or unplanned priority passes. The explicitly supplied scheduler still appl
 Existing planner-batch approval supports future turn phases; direct sequences cover
 only the current phase. All guarded-choice and interruption checks above still apply.
 The `batch_context` in the decider input states whether this form is available.
+
+### Compact primitive planner-batch approvals
+
+For fresh hosts with compact batch approvals, `approve_ids` is the explicit,
+ordered selection. Omitting `reject_ids` leaves every unlisted proposal step
+unapproved; it never adds actions to the selection. Supplying `reject_ids` retains
+the exhaustive approve/reject check and requires a rejection rationale. Unknown,
+duplicate or already executed approval IDs remain errors.
+
+An override can contain only changed step fields. For example,
+`{"batch":{"approve_ids":["cast"],"overrides":{"cast":{"command":COMPLETE_CAST_COMMAND}}}}`
+inherits the frozen step's ID, turn, phase, scheduler and original rationale.
+The command is replaced as a whole, including targets and payment; nested gameplay
+fields are never inherited. Contradictory IDs and unknown fields remain errors.
+New `added` steps still require all planner fields; use a direct `sequence` for a
+new current-window line. These conveniences do not relax mana affordability,
+reservations, timing, claim fencing or replay protection. Do not switch a started
+game to this host implementation silently.
