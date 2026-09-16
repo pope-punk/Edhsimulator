@@ -200,3 +200,16 @@ class AutotapTests(unittest.TestCase):
     def test_unselected_tag_does_not_satisfy_reserve(self):
         self.tag('W');cmd=self.command({'W':1})
         with self.assertRaisesRegex(RulesViolation,'preserving'):self.submit(cmd)
+
+    def test_opponent_stack_spell_rules_are_delivered_without_hidden_hand(self):
+        import json
+        from edh_gauntlet.primitive_inspection import freeze,action_facts
+        cmd=self.command();self.submit(cmd)
+        board=self.game.store.packet('Elenda')
+        knowledge=freeze(self.game,'Elenda',board)
+        ref=board['stack'][-1]['source']
+        self.assertIn(json.dumps(ref,sort_keys=True),knowledge)
+        facts=action_facts({'_knowledge':knowledge})
+        self.assertIn(ref,[row['source'] for row in facts['objects']])
+        hidden=self.game.store.packet('Omo')['hand'][0]['ref']
+        self.assertNotIn(json.dumps(hidden,sort_keys=True),knowledge)

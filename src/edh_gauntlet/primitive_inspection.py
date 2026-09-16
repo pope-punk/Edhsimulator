@@ -34,9 +34,11 @@ def freeze(campaign,actor,board):
     objects={}
     def collect(value):
         if type(value) is dict:
-            if 'name' in value and type(value.get('ref')) is dict:
+            # Zone objects use ref; public stack entries use source.
+            ref=value.get('ref',value.get('source'))
+            if 'name' in value and type(ref) is dict and set(ref)=={'card_id','incarnation'}:
                 try:
-                    row=campaign.store.inspect(actor,{'kind':'card_rules','source':value['ref']})
+                    row=campaign.store.inspect(actor,{'kind':'card_rules','source':ref})
                     from .rules_casting import intrinsic_land_mana
                     from .rules_program import encode
                     program=row['program']
@@ -44,7 +46,7 @@ def freeze(campaign,actor,board):
                     if abilities:
                         row['intrinsic_land_mana']={'condition':'On the battlefield, while this land has these basic land types and its abilities are not removed. Not usable from hand. Entry effects and current legality still apply.',
                                                     'abilities':encode(abilities)}
-                    objects[json.dumps(value['ref'],sort_keys=True)]=row
+                    objects[json.dumps(ref,sort_keys=True)]=row
                 except RulesViolation:pass # Historical stack/LKI references are not live objects.
             for child in value.values():collect(child)
         elif type(value) is list:
