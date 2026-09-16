@@ -85,7 +85,10 @@ A nonempty blocker list must meet min_blockers. damage uses assignments matching
 the supplied specification.
 pay_mana:{request_id,payment}: use payment:null to decline a resolution payment
 (including extort); an empty payment object attempts to pay and is not a decline.
-To pay, activate available mana abilities first and supply the exact mana payment.
+To pay, submit separate activate commands for available mana abilities, answer any
+resulting color choice, then pay_mana with payment:{mana:COUNTS,taps:[]} from the
+pool. pay_mana does not support autotap or bundled payment.mana_actions. Mana
+abilities are allowed during this payment decision; ordinary spells are not.
 Resolution payments must be answered with pay_mana, not a priority pass.
 decline_cast:{request_id}; allocate_counters:{request_id,allocations};
 unlock_room:{source,door,payment}; each also supplies kind. Announcements validate
