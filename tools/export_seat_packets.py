@@ -325,7 +325,7 @@ def export(run, output, sessions, actor='Reaminatour'):
                 'opaque_reasoning_records_not_exported': opaque,
                 'updated_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}
     atomic(output / 'manifest.json', json.dumps(manifest, indent=2) + '\n')
-    description = '''# Reaminatour packet audit — game O
+    description = f'''# {actor} packet audit — {run.name}
 
 These are communication-audit exports, not game-result/cardwise CSVs. No game commands are executed.
 
@@ -344,7 +344,7 @@ These are communication-audit exports, not game-result/cardwise CSVs. No game co
 '''
     atomic(output / 'README.md', description)
     links = ''.join(f'<li><a href="round-{n}.csv">Round {n} CSV</a>: {v["rows"]} rows — {v["status"]}</li>' for n, v in counts.items())
-    atomic(output / 'index.html', '<!doctype html><meta charset="utf-8"><title>Reaminatour packet audit</title><h1>Reaminatour — game O</h1><ul>' + links + '</ul><pre>' + html.escape(description) + '</pre>')
+    atomic(output / 'index.html', '<!doctype html><meta charset="utf-8"><title>Reaminatour packet audit</title><h1>' + html.escape(actor + ' — ' + run.name) + '</h1><ul>' + links + '</ul><pre>' + html.escape(description) + '</pre>')
     return manifest
 
 
