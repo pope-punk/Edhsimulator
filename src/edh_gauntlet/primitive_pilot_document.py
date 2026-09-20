@@ -161,7 +161,7 @@ class Document:
         previous=self.labels.sections.get(key)
         self.labels.sections[key]=text
         if previous==text and not repeat:
-            return 'Unchanged since the previous delivered input in this conversation.'
+            return ''
         return text
 
     def render(self,packet,role):
@@ -185,7 +185,7 @@ class Document:
         self.labels.encode(packet)
         self.labels.actions={}
         lines=['# Pilot working document',
-               'Labels refer to this conversation’s exact objects, not names. Use current action labels only. Unchanged sections refer only to the previous delivered input in this same conversation; first inputs are self-contained. '
+               'Labels refer to this conversation’s exact objects, not names. Use current action labels only. Omitted sections retain their last delivered values in this conversation; first inputs are self-contained. '
                'Headings supply controller, zone and all card types. Owner appears only when different. '
                'Omitted object defaults: false flags, zero damage, no counters/attachment, no listed keywords/colors/subtypes/supertypes; front face. '
                'Zero power/toughness, life, costs and choice counts are retained. Oracle text describes printed rules; current modifications and engine validation govern play.',
@@ -201,14 +201,14 @@ class Document:
         if role=='decider':
             lines.append('## Actions\nOne entry per spell/ability/face/alternative, not per target combination. '
                          'These are action families, not guaranteed legal combinations. Read availability and current decision; choose parameters yourself. '
-                         'Submit command:{action:"A…",target:"S…"} (or targets:[…]); Python binds exact references. '
-                         'Omit mana payment for automatic tapping, including supported pure filter-land costs and color choices. Submit the spell or ability itself; do not request planner mana steps for a payment marked checked. If automatic payment cannot fund an action, consequential or unsupported sources may require a planner sequence; labels do not unlock otherwise prohibited mana activations.')
+                         'Submit command:{action:"A…"}; add target:"S…" or targets:[…] only for an action that targets. Python binds exact references. '
+                         'Omit mana payment for automatic tapping, including supported filter costs, color choices, life payments and other mana-ability costs. Submit the spell or ability itself; do not request planner mana steps for a payment marked checked. If automatic payment cannot fund an action, unsupported choices may require a planner sequence; labels do not unlock otherwise prohibited mana activations.')
             for row in menu:
                 self.labels.counters['A']+=1
                 alias='A'+str(self.labels.counters['A']); self.labels.actions[alias]=deepcopy(row['command'])
                 lines.append('- '+alias+' — '+row['label']+'\n  '+self.value({k:v for k,v in row.items() if k not in ('label','command')}))
         if role=='short_term_planner' and packet.get('_coordination_document')==1:
-            lines.append('## Planning action templates\nThese are frozen planning vocabulary, not legal actions available now. Use command:{action:"T…",targets:[…]} in phase steps; select parameters and reserve mana if needed. Python expands the template before publication. Templates do not execute and are never sent to the decider as another lane’s labels.')
+            lines.append('## Planning action templates\nThese are frozen planning vocabulary, not legal actions available now. Land: command:{action:"T…"}; targeted spell: command:{action:"T…",targets:[…]}. Use these in phase steps; select parameters and reserve mana if needed. Python expands the template before publication. Templates do not execute and are never sent to the decider as another lane’s labels.')
             for row in packet.get('_planning_menu',[]):
                 self.labels.counters['T']+=1;alias='T'+str(self.labels.counters['T'])
                 self.labels.actions[alias]=deepcopy(row['command'])
@@ -252,7 +252,8 @@ class Document:
         for name in dict.fromkeys(names):
             face=self.faces.get(name)
             if face:
-                lines.append('### '+face.name+' '+face.mana_cost+'\n'+self.section('oracle/'+face.name,face.oracle_text))
+                rendered=self.section('oracle/'+face.name,face.oracle_text)
+                if rendered:lines.append('### '+face.name+' '+face.mana_cost+'\n'+rendered)
             else:
                 # Custom tokens/fixtures cannot acquire invented Oracle rules.
                 rules=[v for v in packet.get('_knowledge',{}).values() if v.get('program',{}).get('name')==name]
@@ -261,4 +262,8 @@ class Document:
         for key,value in packet.items():
             if key in excluded or key in handled or key in OMIT or key.startswith('_') or value is None: continue
             lines.append('## '+key.replace('_',' ')+'\n'+self.section(key,self.value(value)))
+        lines=[line for line in lines if not (line.startswith('#') and '\n' in line and not line.split('\n',1)[1].strip())]
+        empty_headings={'## Current board','## Card rules (once per printed face)'}
+        lines=[line for i,line in enumerate(lines) if line not in empty_headings
+               or i+1<len(lines) and lines[i+1] not in empty_headings]
         return '\n\n'.join(lines)+'\n'

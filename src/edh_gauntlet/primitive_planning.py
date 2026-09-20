@@ -188,6 +188,8 @@ def validate_actions(value,job):
             raise RulesViolation('Unsupported proposed primitive command')
         if step['command'].get('kind') in {'attack','block','damage'} and step['phase']!='combat':
             raise RulesViolation('Combat declarations require the combat phase; actual execution also requires the matching decision stage')
+        from .primitive_command_schema import validate as validate_command
+        validate_command(step['command'])
         from .primitive_autotap import validate as validate_autotap
         validate_autotap(step['command'])
         from .primitive_actions import normalize_scheduler
@@ -203,6 +205,7 @@ def validate_actions(value,job):
 
 def publish(campaign,actor,role,job_id,stage,value):
     if role not in STAGES or type(value) is not dict:raise RulesViolation('Invalid role publication')
+    value=deepcopy(value)
     with campaign.transaction() as state:
         if stage=='brief_decision':
             from .primitive_negotiation import decide_brief
@@ -225,10 +228,11 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         raise RulesViolation('Publication is stopped')
     seat=state['actors'][actor];job=seat['jobs'].get(role)
     # Completed-stage receipts survive job completion and future jobs.
+    input_sha=digest(value)
     receipt_key=job_id+':'+stage
     receipt=campaign.store.connection.execute('SELECT actor,role,input_sha,receipt FROM host_publications WHERE id=?',(receipt_key,)).fetchone()
     if receipt:
-        if receipt[:3]!=(actor,role,digest(value)):raise RulesViolation('Accepted stage cannot be replaced')
+        if receipt[:3]!=(actor,role,input_sha):raise RulesViolation('Accepted stage cannot be replaced')
         return json.loads(receipt[3])
     if job is None or job['id']!=job_id or job['input'] is None or stages(role,job)[job['stage']]!=stage:
         raise RulesViolation('Publication does not own this frozen stage')
@@ -350,7 +354,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
     order=stages(role,job)
     next_stage=order[job['stage']] if job['stage']<len(order) else None
     result={'accepted':True,'component_id':component['id'],'next':next_stage}
-    campaign.store.connection.execute('INSERT INTO host_publications VALUES (?,?,?,?,?)',(receipt_key,actor,role,digest(value),json.dumps(result)))
+    campaign.store.connection.execute('INSERT INTO host_publications VALUES (?,?,?,?,?)',(receipt_key,actor,role,input_sha,json.dumps(result)))
     if next_stage is None:
         seat['evidence_cursor'][role]=job['input']['evidence_through']
         queued=job['queued'];del seat['jobs'][role]

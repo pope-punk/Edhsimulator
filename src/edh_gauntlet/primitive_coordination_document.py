@@ -294,17 +294,17 @@ Both stages already ready: short_term_and_actions with {short_term:PROSE_RESPONS
 actions:PHASE_RESPONSE}; never delay an earlier stage to combine them. Only the
 second stage may include diplomacy_request:{objective:TEXT_MAX_600,player:SEAT},
 within the supplied brief, without awaiting its result.
-Prefer supplied planning templates: command:{action:"T1",targets:["C2"],x_value:0}.
+Prefer supplied planning templates. Land: command:{action:"T1"}. Spell: command:{action:"T2",targets:["C2"],x_value:0}. Only supply parameters that belong to that action.
 Templates are planning vocabulary, not permission to act at the observed decision.
 Native command:{kind:"cast",source:"C1",targets:["C2"],x_value:0} also works; casts and
-activations omit payment for autotap. Native play_land uses source and optional face;
+activations omit payment for autotap. Native land example: {kind:"play_land",source:"C1"}; only optional face is allowed, never targets/x_value/payment.
 activate uses source and ability_id. Player targets use {player:SEAT}. An untargeted
 permanent cast uses targets:[]; later trigger targets belong to their own requests.
 attack uses attackers:[{source:"C1",defender:SEAT_OR_OBJECT_LABEL}]. Other declarations,
 non-mana costs, modal choices and exceptional manual payments retain their native
 command grammar, available with kind:protocol if needed. Optional autotap:{reserve:{B:1}} is a hard
 remaining-capacity requirement. Do not habitually propose tap/color steps. Explicit
-mana sequencing is reserved for consequential or unsupported sources and must be
+mana sequencing is reserved for deliberate source choices or unsupported cases and must be
 accepted unchanged by the decider. A known land move followed by its activation
 uses source:{owned_card:"C1",zone:"battlefield"} to bind the new incarnation.
 For exceptional guarded mana answers, choice_from:{step:ONE_BASED_EARLIER_STEP,

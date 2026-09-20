@@ -77,9 +77,9 @@ def freeze(campaign, actor, packet):
                 if key not in payment_cache:
                     try: payment(kernel,actor,{**candidate,'autotap':{}},smart=getattr(campaign,'config',{}).get('automatic_decider_mana')==1)
                     except RulesViolation as exc:
-                        payment_cache[key]='Automatic payment not established: '+str(exc).replace('Consequential mana abilities require explicit pilot activation;', 'Consequential mana sources require planner-authored sequencing;').rstrip('.')+'. Supported pure mana filters are included in this check; no separate tap/color commands are required for them.'
+                        payment_cache[key]='Automatic payment not established: '+str(exc).replace('Consequential mana abilities require explicit pilot activation;', 'Consequential mana sources require planner-authored sequencing;').rstrip('.')+'. Supported additional mana costs are included; do not submit preliminary taps.'
                     else:
-                        payment_cache[key]='Announcement and ordinary automatic mana checked, including supported filter-land activation costs and color choices. Submit this action without mana instructions; no planner mana sequence is required for this payment. Chosen non-mana costs and final legality are validated on submission.'
+                        payment_cache[key]='Announcement and ordinary automatic mana checked, including supported filter-land costs, life payments and other mana-ability costs. Submit this action without mana instructions; no planner mana sequence is required for this payment. Chosen non-mana costs and final legality are validated on submission.'
                 status=payment_cache[key]
             results.append((candidate['targets'],status))
         if results:

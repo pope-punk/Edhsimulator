@@ -33,13 +33,13 @@ def presentation(value):
         return node
     for key in ('board','previous_board','current_decision','action_facts'):
         if key in value:value[key]=clean(value[key])
-    value['payment_policy']='Choose the spell or non-mana ability without mana instructions. Python pays automatically, including supported pure filter-land costs and color choices. No preliminary taps or planner sequence is needed when the menu marks automatic mana checked. Accept planner mana sequencing by approving its unchanged step IDs. Pay an optional mana request with pay_mana and request_id only, or decline with payment:null.'
+    value['payment_policy']='Choose the spell or non-mana ability without mana instructions. Python pays automatically, including supported filter costs, color choices, life payments and other mana-ability costs. No preliminary taps or planner sequence is needed when the menu marks automatic mana checked. Accept planner mana sequencing by approving its unchanged step IDs. Pay an optional mana request with pay_mana and request_id only, or decline with payment:null.'
     return value
 
 COMMANDS='''Primitive commands omit revision, action_id and actor; Python supplies them.
 cast:{kind:"cast",source:REF,targets:[],x_value:0};
 activate:{kind:"activate",source:REF,ability_id:EXACT_NON_MANA_ID,targets:[],x_value:0}.
-Python selects and pays mana automatically, including supported paid mana filters. Submit the intended spell/ability; the host sequences funding, filtering and payment atomically. Do not submit autotap, reservations,
+Python selects and pays mana automatically, including supported paid mana filters and additional mana-ability costs (including life and sacrifice). Submit the intended spell/ability; the host sequences funding, filtering and payment atomically. Do not submit autotap, reservations,
 mana production commands or mana allocations. To use a planner's mana sequencing,
 approve the unchanged planner steps by ID. A changed action returns to auto payment.
 You still choose targets, modes, X, optional casting choices and non-mana costs.

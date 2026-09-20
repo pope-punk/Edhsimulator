@@ -181,8 +181,14 @@ def payment(kernel,actor,command,*,smart=False):
             command['payment'].setdefault('mana',{})
             command['payment'].setdefault('taps',[])
         from .primitive_mana_preferences import preferred_payment
-        return preferred_payment(kernel,actor,command)
-    return _payment(kernel,actor,command)
+        try:return preferred_payment(kernel,actor,command)
+        except RulesViolation:
+            from .primitive_mana_cost_search import payment as costly_payment
+            return costly_payment(kernel,actor,command)
+    try:return _payment(kernel,actor,command)
+    except RulesViolation:
+        from .primitive_mana_cost_search import payment as costly_payment
+        return costly_payment(kernel,actor,command)
 
 
 def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filters=True):
@@ -249,7 +255,7 @@ def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filter
     if best is None and allow_filters and not selected:
         best=filter_payment(kernel,actor,q,pool,reserve,excluded)
     if best is None:
-        if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Consequential mana sources still require planner-authored sequencing; tapped or restricted sources may be unavailable.')
+        if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Additional-cost sources are checked by the fallback; tapped or restricted sources may be unavailable.')
         raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
     base['mana']={c:n for c,n in zip(COLORS,best[2]) if n}
     if best[1]:base['mana_actions']=best[1]
@@ -282,24 +288,17 @@ The isolated trial is committed only after the entire payment validates.
     if kernel.priority!=q.actor or kernel.pending_choice or kernel.resolving:
         raise RulesViolation('Bundled ordinary mana payment requires priority')
     trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
-    adapter=RulesActorAdapter(trial);lines=list(payment.mana_actions);index=0
-    while index<len(lines):
-        cmd=lines[index]
-        if cmd.get('kind')!='activate':raise RulesViolation('Bundled mana must begin with an ordinary activation')
-        obj=trial.state.get(ObjectRef.from_json(cmd['source']))
-        match=next((line for _,line in options(trial,q.actor,obj,available=free_pool(trial,q.actor)) if lines[index:index+len(line)]==line),None)
-        if match is None:raise RulesViolation('Bundled mana contains an unavailable or consequential mana action')
-        for row in match:
-            bound=deepcopy(row);bound['revision']=trial.revision
-            if row['kind']=='activate':bound['action_id']='autotap:'+hashlib.sha256((q.action_id+':'+str(index)).encode()).hexdigest()
-            else:
-                request=trial.pending_choice
-                if request is None or request.actor!=q.actor or request.kind!='mana_choice':raise RulesViolation('Bundled mana choice is unavailable')
-                bound['request_id']=request.request_id
-            adapter._execute(q.actor,bound);index+=1
-        if trial.pending_choice or trial.resolving or trial.priority!=q.actor:
-            raise RulesViolation('Bundled mana encountered an execution boundary')
+    from .primitive_mana_cost_search import execute
+    trial._automatic_payment=True
+    for index,row in enumerate(payment.mana_actions):
+        execute(trial,q.actor,row,'autotap:'+hashlib.sha256((q.action_id+':'+str(index)).encode()).hexdigest())
+    if trial.pending_choice or trial.resolving or trial.announcement:
+        raise RulesViolation('Automatic mana payment encountered an unresolved choice')
+    # State-based actions and triggered abilities wait until the entire action
+    # has been paid; life may legally reach zero during that payment.
     result=trial.commit_action(replace(q,revision=trial.revision),replace(payment,mana_actions=()))
+    trial.__dict__.pop('_automatic_payment',None)
+    if not trial.pending_choice:result=trial.advance()
     state=kernel.state;state.__dict__.update(trial.state.__dict__)
     kernel.__dict__.update(trial.__dict__);kernel.state=state
     return result
@@ -309,25 +308,17 @@ def commit_resolution_payment(kernel, actor, command, payment):
     """Execute only prevalidated ordinary mana lines and the fixed payment atomically."""
     from .rules_adapter import RulesActorAdapter
     trial=type(kernel).restore(kernel.snapshot(),kernel._base_definitions.values())
-    adapter=RulesActorAdapter(trial);lines=list(payment.mana_actions);index=0
-    quote(trial,actor,command)  # Fence the exact current resolution request first.
-    while index<len(lines):
-        row=lines[index]
-        if row.get('kind')!='activate':raise RulesViolation('Bundled mana requires an activation')
-        obj=trial.state.get(ObjectRef.from_json(row['source']))
-        match=next((cmds for _,cmds in options(trial,actor,obj,available=free_pool(trial,actor)) if lines[index:index+len(cmds)]==cmds),None)
-        if match is None:raise RulesViolation('Unavailable ordinary mana bundle')
-        for item in match:
-            item=deepcopy(item);item['revision']=trial.revision
-            if item['kind']=='activate':item['action_id']='autotap:'+hashlib.sha256((command['action_id']+':'+str(index)).encode()).hexdigest()
-            else:
-                pending=trial.pending_choice
-                if not pending or pending.actor!=actor or pending.kind!='mana_choice':raise RulesViolation('Mana choice boundary changed')
-                item['request_id']=pending.request_id
-            adapter._execute(actor,item);index+=1
-        quote(trial,actor,command)
+    from .primitive_mana_cost_search import execute
+    adapter=RulesActorAdapter(trial)
+    quote(trial,actor,command)
+    trial._automatic_payment=True
+    for index,row in enumerate(payment.mana_actions):
+        execute(trial,actor,row,'autotap:'+hashlib.sha256((command['action_id']+':'+str(index)).encode()).hexdigest())
+    quote(trial,actor,command)
     final=deepcopy(command);final['revision']=trial.revision;final['payment']=payment.to_json();final['payment'].pop('mana_actions',None)
     result=adapter._execute(actor,final)
+    trial.__dict__.pop('_automatic_payment',None)
+    if not trial.pending_choice:result=trial.advance()
     state=kernel.state;state.__dict__.update(trial.state.__dict__)
     kernel.__dict__.update(trial.__dict__);kernel.state=state
     return result

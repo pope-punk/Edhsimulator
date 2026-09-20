@@ -188,7 +188,7 @@ class RulesKernel(OpeningRules,RoomRules,FaceRules,WalkerRules,RuleEffects,Resol
 
     def _idle(self):
         if self.outcome:raise RulesViolation('Game has finished')
-        if self.pending_choice or self.resolving or self.pending_triggers or self.announcement:raise RulesViolation('Resolve the current rules boundary first')
+        if self.pending_choice or self.resolving or (self.pending_triggers and not getattr(self,'_automatic_payment',False)) or self.announcement:raise RulesViolation('Resolve the current rules boundary first')
 
     def _source(self,frame):return RulesObject.from_json(frame['source'])
 
@@ -1718,6 +1718,8 @@ class RulesKernel(OpeningRules,RoomRules,FaceRules,WalkerRules,RuleEffects,Resol
                     if self.phase=='declare_attackers':return TurnActionBoundary(self.active,'declare_attackers',self.revision)
                     if self.phase in {'declare_blockers','first_strike_damage','combat_damage'}:
                         return self._combat_boundary()
+                if getattr(self,'_automatic_payment',False):
+                    return PriorityBoundary(self.priority,tuple(f['id'] for f in reversed(self.stack)))
                 if self._state_based_actions():
                     self._mark_cleanup_priority();continue
                 if self.pending_triggers or self.placement:self._place_triggers();continue

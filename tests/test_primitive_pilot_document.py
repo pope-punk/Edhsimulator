@@ -169,7 +169,9 @@ class DocumentHostTests(unittest.TestCase):
     def test_unchanged_sections_only_after_successful_delivery_and_fresh_context_full(self):
         p=packet();d=Document(CATALOG);first=d.render(p,'decider')
         warm=Document(CATALOG,d.labels);second=warm.render(p,'decider')
-        self.assertIn('Unchanged since the previous delivered input',second)
+        self.assertNotIn('Unchanged since',second)
+        self.assertNotIn('## hand\n',second)
+        self.assertLess(len(second),len(first))
         self.assertNotIn('Counter target spell',second)
         self.assertIn('Counter target spell',Document(CATALOG).render(p,'decider'))
         self.assertEqual(p,packet())
