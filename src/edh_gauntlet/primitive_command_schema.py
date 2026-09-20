@@ -42,6 +42,17 @@ def validate(command):
     for target in command.get('targets',[]):reference(target,player=True)
     if 'payment' in command and command['payment'] is not None:
         from .rules_casting import Payment
+        def mana_counts(value):
+            if type(value) is not dict:return
+            if 'mana' in value:
+                mana=value['mana']
+                if (type(mana) is not dict or set(mana)-set('WUBRGC')
+                    or any(type(n) is not int or n<0 for n in mana.values())):
+                    raise RulesViolation('payment.mana requires nonnegative W/U/B/R/G/C counts of actual mana spent. Generic is a cost, not a mana type; omit payment for autotap.')
+            rows=value.get('mana_actions',[])
+            for row in rows if isinstance(rows,list) else []:
+                if isinstance(row,dict):mana_counts(row.get('payment'))
+        mana_counts(command['payment'])
         def payment_shape(value):
             if isinstance(value,dict):
                 if 'owned_card' in value:

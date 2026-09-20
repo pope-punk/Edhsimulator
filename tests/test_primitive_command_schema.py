@@ -26,6 +26,13 @@ class CommandSchemaTests(unittest.TestCase):
         validate({'kind':'activate','source':{'owned_card':'card','zone':'battlefield'},'ability_id':'use','targets':[],'x_value':0,
                   'payment':{'mana':{},'taps':[],'zone_costs':{'sacrifice':[{'owned_card':'food','zone':'battlefield'}]}}})
 
+    def test_generic_is_not_a_payment_mana_type(self):
+        base={'kind':'cast','source':{'card_id':'spell','incarnation':0},'targets':[],'x_value':0}
+        for mana in ({'W':1,'U':1,'B':1,'generic':1},{'U':True},{'B':-1}):
+            with self.assertRaisesRegex(RulesViolation,'actual mana spent'):
+                validate({**base,'payment':{'mana':mana,'taps':[]}})
+        validate({**base,'payment':{'mana':{'W':2,'U':1,'B':1},'taps':[]}})
+
     def test_missing_spell_parameters_report_exact_fields(self):
         with self.assertRaisesRegex(RulesViolation,"missing.*targets.*x_value"):
             validate({'kind':'cast','source':{}})
