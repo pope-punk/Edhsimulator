@@ -66,15 +66,17 @@ class Timing:
             self.count+=1
             row={'event':event,'epoch':time.time(),'thread':thread,**fields}
             if thread in self.roles:row.update(zip(('actor','role'),self.roles[thread]))
-            if event in {'automatic_action','publication_accepted','input_rejected','inspection_batch','batch_authorized','input_delivered','input_to_first_tool'}:
+            if event in {'automatic_action','publication_accepted','input_rejected','inspection_batch','batch_authorized','input_delivered','input_to_first_tool','proposal_offered'}:
                 labels=[event,str(row.get('role','host')),str(row.get('kind',row.get('stage',row.get('mode',row.get('tool','')))))]
                 key='|'.join(labels);aggregate=self.aggregates.setdefault(key,{'count':0})
                 aggregate['count']+=1
-                for metric in ('seconds','input_chars','steps','queries','rejected'):
+                for metric in ('seconds','input_chars','steps','queries','rejected','executed','expired','age_decisions'):
                     value=row.get(metric)
                     if isinstance(value,(int,float)) and not isinstance(value,bool):
                         aggregate[metric+'_sum']=aggregate.get(metric+'_sum',0)+value
                         aggregate[metric+'_max']=max(aggregate.get(metric+'_max',0),value)
+                if event=='proposal_offered' and row.get('matching_prose') is True:
+                    aggregate['matching_prose_count']=aggregate.get('matching_prose_count',0)+1
             self.events.append(row)
 
     def observe(self,message):
@@ -110,17 +112,24 @@ class Timing:
                     for query in queries:
                         kind=query.get('kind') if isinstance(query,dict) else query
                         categories.append(kind if isinstance(kind,str) and kind in {
-                            'continuity','sequence','roles','deck','seed','history','state','object','card'} else 'other')
+                            'continuity','sequence','roles','deck','seed','history','state','object','card','plans','protocol'} else 'other')
                     fields['inspection_categories']=categories
                 response=args.get('response',{}) if isinstance(args,dict) else {}
                 if isinstance(response,dict):
                     fields['submitted_chars']=len(json.dumps(response,ensure_ascii=False,separators=(',',':')))
                     if p.get('tool')=='edh_publish':
-                        sequence=response.get('action_sequence',[])
+                        proposal=response.get('actions',response) if args.get('stage')=='short_term_and_actions' else response
+                        if not isinstance(proposal,dict):proposal={}
+                        sequence=proposal.get('action_sequence',[])
+                        phases=proposal.get('phases')
+                        if isinstance(phases,list):
+                            sequence=[step for phase in phases if isinstance(phase,dict) and isinstance(phase.get('steps'),list) for step in phase['steps']]
                         fields.update(publication_stage=args.get('stage'),strategic_disposition=response.get('strategic_disposition'),
                             long_term_action=response.get('long_term_action'),proposed_actions=len(sequence) if isinstance(sequence,list) else 0)
-                        if isinstance(response.get('phase_coverage'),dict):
-                            fields['phase_coverage']={phase:row.get('status') for phase,row in response['phase_coverage'].items()
+                        if isinstance(phases,list):
+                            fields['phase_coverage']={row['phase']:row.get('status') for row in phases if isinstance(row,dict) and isinstance(row.get('phase'),str) and row['phase'] in {'precombat_main','combat','postcombat_main'}}
+                        elif isinstance(proposal.get('phase_coverage'),dict):
+                            fields['phase_coverage']={phase:row.get('status') for phase,row in proposal['phase_coverage'].items()
                                 if phase in {'precombat_main','combat','postcombat_main'} and isinstance(row,dict)}
                 self.record('tool_arrived',thread,**fields)
             elif method=='turn/completed':

@@ -137,11 +137,29 @@ def claim(campaign,actor,role):
             from .primitive_inspection import freeze
             job['input']['_knowledge']=freeze(campaign,actor,board) if role!=DIPLOMAT else {}
             if campaign.config.get('pilot_document')==1:job['input']['_accepted_sequence']=campaign.store.generation
-        return {**deepcopy(job['input']),'stage':stages(role,job)[job['stage']]}
+            if campaign.config.get('coordination_document')==1:
+                job['input']['_coordination_document']=1
+                if role==SHORT:
+                    from .primitive_coordination_document import planning_templates
+                    job['input']['_planning_menu']=planning_templates(job['input'])
+                if role in (SHORT,LONG):
+                    from .primitive_negotiation import active
+                    job['input']['diplomatic_holds']=deepcopy(active(campaign,seat))
+        result={**deepcopy(job['input']),'stage':stages(role,job)[job['stage']]}
+        if campaign.config.get('coordination_document')==1:
+            result['_coordination_document']=1
+            result['completed_stages']=list(stages(role,job)[:job['stage']])
+            # Own accepted stages are known facts even though the board and
+            # other lanes' inputs remain frozen at this job's original claim.
+            for name,row in seat['plans'].items():
+                if row.get('job_id')==job['id']:result['plans'][name]=deepcopy(row)
+        return result
 
 
 def validate_actions(value,job):
-    if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','diplomacy_request','combo_proposal'}:raise RulesViolation('Actions require action_sequence and phase_coverage')
+    extra={'intent'} if job.get('input',{}).get('_coordination_document')==1 else set()
+    if not {'action_sequence','phase_coverage'}<=set(value) or set(value)-{'action_sequence','phase_coverage','diplomacy_request','combo_proposal'}-extra:raise RulesViolation('Actions require action_sequence and phase_coverage')
+    if 'intent' in value:text_field(value,'intent',600)
     if 'combo_proposal' in value:
         from .primitive_combo import validate_proposal
         validate_proposal(value['combo_proposal'])
@@ -268,6 +286,8 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         if type(seat['plans'].get('diplomacy_brief',{}).get('value')) is dict:queue(state,actor,DIPLOMAT,'tactical_request:'+receipt_key)
     component_value={'long_term_plan':value['long_term_plan']} if stage=='long_term' else deepcopy(value)
     component={'id':digest({'stage':stage,'value':component_value}),'job_id':job_id,'value':component_value}
+    if campaign.config.get('coordination_document')==1:
+        component['basis']={'accepted_decisions':job['input'].get('_accepted_sequence'),'turn':deepcopy(job['input']['board'].get('turn',{}))}
     old=seat['plans'].get(stage)
     diplomacy_review=bool(job['reasons']) and all(r.startswith('diplomat_request:') for r in job['reasons'])
     if stage=='long_term' and diplomacy_review:

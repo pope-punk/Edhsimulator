@@ -75,6 +75,9 @@ class ManaBatchTests(unittest.TestCase):
         self.assertEqual(prefix,self.game.store.committed_head())
         self.assertTrue(actions.automatic(self.game));self.assertIsNone(self.game.kernel.pending_choice)
         self.assertTrue(actions.automatic(self.game));self.assertEqual(before+4,self.game.store.generation)
+        # The next opponent may receive a forced mana-only pass. Disable that
+        # independent policy here so this assertion detects batch replay only.
+        self.game.config.pop('mana_only_priority',None)
         self.assertFalse(actions.automatic(self.game))
 
     def test_changed_color_menu_stops_at_accepted_prefix(self):

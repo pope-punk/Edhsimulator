@@ -91,6 +91,11 @@ class PrimitiveDiplomacyTests(TestCase):
 
     def test_private_authorization_request_cannot_publish_or_start_an_unsettled_goal(self):
         job=self.goal(to=['Elenda']);self.publish(job)
+        # A diplomat cannot claim without a brief, even for an addressed message.
+        # An empty legacy authorization allows asking for more, not posting.
+        self.assertIsNone(planning.claim(self.game,'Elenda',planning.DIPLOMAT))
+        with self.game.transaction() as state:
+            state['actors']['Elenda']['plans']['diplomacy_brief']={'id':'fixture-empty-brief','value':[]}
         reply=planning.claim(self.game,'Elenda',planning.DIPLOMAT)
         planning.publish(self.game,'Elenda',planning.DIPLOMAT,reply['job_id'],'message',
                          {'authorized_ids':[],'urgent_material_plan_change':{},'private_assessments':{},'authorization_request':'May I offer a fixture agreement?'})

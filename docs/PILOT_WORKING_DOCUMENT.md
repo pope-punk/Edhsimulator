@@ -4,6 +4,9 @@ Fresh primitive campaigns bind `pilot_document:1`. Existing campaigns without
 that flag retain their original transport. Do not edit a started game's config
 to adopt this feature. Rendering does not grant gameplay or inspection authority.
 
+Fresh `coordination_document:1` adds role-specific layouts and compact tactical
+publications; see [COORDINATION_DOCUMENT.md](COORDINATION_DOCUMENT.md).
+
 ## Model-facing layout
 
 1. Current decision, then a separate action menu.

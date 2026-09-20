@@ -66,6 +66,7 @@ def claim(campaign,actor):
             from .primitive_action_menu import freeze as freeze_menu
             value['_action_menu']=freeze_menu(campaign,actor,value)
             value['_accepted_sequence']=campaign.store.generation
+        if campaign.config.get('coordination_document')==1:value['_coordination_document']=1
         value['evidence_through']=campaign.evidence_position(actor)
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1

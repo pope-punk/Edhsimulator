@@ -93,10 +93,15 @@ def _inspect(campaign,actor,role,frozen,queries,*,budget=12000):
             if type(count) is not int or not 1<=count<=32:raise RulesViolation('History page_size must be 1..32')
             rows=campaign.evidence(actor,after=query['after'],through=frozen['evidence_through'],limit=count+1)
             results.append({'records':decision_records(rows[:count]),'next':rows[count-1]['id'] if len(rows)>count else None})
+        elif kind=='protocol' and set(query)=={'kind'} and frozen.get('_coordination_document')==1:
+            from .primitive_host import COMMANDS
+            results.append({'commands':COMMANDS})
+        elif kind=='plans' and set(query)=={'kind'} and frozen.get('_coordination_document')==1:
+            value=deepcopy(frozen['plans']);results.append(value)
         elif kind=='decision' and set(query)=={'kind'}:
             results.append(deepcopy(frozen['board']['decision']))
         elif kind=='state' and set(query)=={'kind'}:results.append(deepcopy(frozen['board']))
-        else:raise RulesViolation('Use object with source:{card_id,incarnation}; card with name; state or decision; history with after; deck is long-term only. Plans/goals are supplied in plans, not inspection kinds.')
+        else:raise RulesViolation('Use object with source; card with name; state or decision; history with after; deck is long-term only. Fresh coordination documents also support plans and protocol.')
         value=select(results.pop(),path,offset,limit)
         size=len(json.dumps(value,ensure_ascii=False,separators=(',',':')).encode())
         if size>budget//len(queries):

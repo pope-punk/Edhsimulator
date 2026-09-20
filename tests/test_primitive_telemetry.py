@@ -57,3 +57,23 @@ class PrimitiveTelemetryTests(TestCase):
                 self.assertEqual(7,aggregate['seconds_sum'])
                 self.assertEqual(4,aggregate['seconds_max'])
             finally:timing.close()
+
+    def test_compact_proposal_metrics_and_age_survive_eviction(self):
+        with TemporaryDirectory() as directory:
+            timing=Timing(Path(directory)/'timing.json',limit=1)
+            try:
+                for phases in (None,17,[None,{'phase':[],'steps':7}]):
+                    timing.observe({'method':'item/tool/call','id':'fixture','params':{'threadId':'fixture',
+                        'tool':'edh_publish','arguments':{'stage':'actions','response':{'phases':phases}}}})
+                timing.observe({'method':'item/tool/call','id':'fixture','params':{'threadId':'fixture',
+                    'tool':'edh_publish','arguments':{'stage':'actions','response':{'phases':[
+                        {'phase':'combat','status':'planned','steps':[{'command':{'kind':'attack'}}]}]}}}})
+                self.assertEqual(1,timing.events[-1]['proposed_actions'])
+                self.assertEqual({'combat':'planned'},timing.events[-1]['phase_coverage'])
+                timing.bind('fixture','Omo','decider')
+                timing.record('proposal_offered','fixture',steps=2,executed=1,expired=0,age_decisions=9,matching_prose=True)
+                timing.record('model_item','fixture')
+                a=timing.aggregates['proposal_offered|decider|']
+                self.assertEqual(9,a['age_decisions_sum']);self.assertEqual(1,a['matching_prose_count'])
+                self.assertEqual(2,a['steps_sum'])
+            finally:timing.close()

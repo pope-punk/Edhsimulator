@@ -6,6 +6,7 @@ Labels live in one physical conversation, with action menus bound to one input.
 from collections import defaultdict
 from copy import deepcopy
 import json
+import re
 from .catalog import load_catalog
 from .rules_state import RulesViolation
 
@@ -17,7 +18,8 @@ OMIT = {'claim_id', 'job_id', 'snapshot', 'revision', 'context_handling', 'evide
 LITERALS = {'kind','node','phase','zone','face','timing','name','label','mode','seat',
             'actor','controller','owner','relation','color','symbol','status','encoding','type'}
 PROSE = {'rationale','reason','question','intended_action','long_term_plan','short_term_plan',
-         'proposal_text','message','text','objective','disclosure_limits','commitment_limits'}
+         'proposal_text','message','text','objective','disclosure_limits','commitment_limits',
+         'intent','continuity','long_term_invalid_reason','explanation','recommended_action'}
 
 
 def compact(value): return json.dumps(value, ensure_ascii=False, separators=(',', ':'))
@@ -28,7 +30,7 @@ def is_object(value): return isinstance(value,dict) and is_ref(value.get('ref'))
 
 class Labels:
     def __init__(self):
-        self.forward={}; self.reverse={}; self.counters=defaultdict(int); self.actions={}; self.sections={}
+        self.forward={}; self.reverse={}; self.counters=defaultdict(int); self.actions={}; self.sections={}; self.proposals={}; self.object_names={}; self.coordination=False
 
     def label(self, value, prefix='R'):
         key=ref_key(value) if is_ref(value) else compact(value)
@@ -45,8 +47,8 @@ class Labels:
         if isinstance(value, dict):
             result={}
             for k,v in value.items():
-                if k in OMIT or k.startswith('_'): continue
-                if k in ('id','brief_id','proposal_id','request_id','hold_id','step_id','ability_id','mode_id','cost_id','uid','owned_card') and isinstance(v,str):
+                if k in OMIT or k.startswith('_') or self.coordination and k in {'plan_refs','goal_id','assessed_goal','sha256'}: continue
+                if (k in ('id','brief_id','proposal_id','request_id','hold_id','step_id','ability_id','mode_id','cost_id','uid','owned_card') or self.coordination and k in ('reply_to','authorization_id','negotiation_id')) and isinstance(v,str):
                     result[k]=self.label(v)
                 else: result[self.forward.get(compact(k),k)]=self.encode(v,k)
             return result
@@ -60,6 +62,7 @@ class Labels:
             if key=='command': return self.command(value)
             result={}
             for k,v in value.items():
+                if re.fullmatch(r'P[0-9]+',k) and k not in self.proposals:raise RulesViolation('Unknown or expired proposal label')
                 real=self.reverse.get(k,k)
                 if isinstance(real,dict):
                     if key!='assignments': raise RulesViolation('Object labels cannot be used as keys here')
@@ -70,6 +73,8 @@ class Labels:
                 else: result[real]=self.decode(v,k)
             return result
         if isinstance(value,str):
+            if re.fullmatch(r'P[0-9]+',value) and value not in self.proposals:
+                raise RulesViolation('Unknown or expired proposal label; use the current proposal')
             resolved=deepcopy(self.reverse.get(value,value))
             return resolved['card_id'] if key=='owned_card' and is_ref(resolved) else resolved
         return deepcopy(value)
@@ -141,7 +146,9 @@ class Document:
 
     def value(self,value):
         value=self.oracle_programs(value)
-        if is_object(value): return self.objects([value])
+        if is_object(value):
+            self.labels.object_names[self.labels.label(value['ref'],'C')]=value['name']
+            return self.objects([value])
         if isinstance(value,list) and value and all(is_object(x) for x in value): return self.objects(value)
         def contains(v):
             return is_object(v) or isinstance(v,dict) and any(contains(x) for x in v.values()) or isinstance(v,list) and any(contains(x) for x in v)
@@ -158,11 +165,22 @@ class Document:
         return text
 
     def render(self,packet,role):
+        self.labels.coordination=packet.get('_coordination_document')==1
         board=packet.get('board',{})
         # Register stack references first. S labels mean exact spell sources,
         # never frame IDs; two spell incarnations never share a label.
         for frame in board.get('stack',[]):
             if frame.get('kind')=='spell' and is_ref(frame.get('source')): self.labels.label(frame['source'],'S')
+        def names(node):
+            if isinstance(node,dict):
+                ref=node.get('ref',node.get('source'))
+                if is_ref(ref) and isinstance(node.get('name'),str):
+                    label=self.labels.label(ref,'C')
+                    self.labels.object_names[label]=node['name']
+                for child in node.values():names(child)
+            elif isinstance(node,list):
+                for child in node:names(child)
+        names(board)
         # Register operational identities before rendering references to them.
         self.labels.encode(packet)
         self.labels.actions={}
@@ -173,6 +191,12 @@ class Document:
                'Zero power/toughness, life, costs and choice counts are retained. Oracle text describes printed rules; current modifications and engine validation govern play.',
                '## Current decision\n'+self.value(board.get('decision',{}))]
         if '_accepted_sequence' in packet:lines.insert(1,'Accepted decision count: '+str(packet['_accepted_sequence']))
+        handled=set()
+        if packet.get('_coordination_document')==1:
+            from .primitive_coordination_document import sections
+            extra,handled=sections(self,packet,role);lines.extend(extra)
+            if role!='decider':
+                lines=[line.replace('## Current decision\n','## Observed decision (not a request for you to play)\n',1) for line in lines]
         menu=packet.get('_action_menu',[])
         if role=='decider':
             lines.append('## Actions\nOne entry per spell/ability/face/alternative, not per target combination. '
@@ -183,9 +207,15 @@ class Document:
                 self.labels.counters['A']+=1
                 alias='A'+str(self.labels.counters['A']); self.labels.actions[alias]=deepcopy(row['command'])
                 lines.append('- '+alias+' — '+row['label']+'\n  '+self.value({k:v for k,v in row.items() if k not in ('label','command')}))
+        if role=='short_term_planner' and packet.get('_coordination_document')==1:
+            lines.append('## Planning action templates\nThese are frozen planning vocabulary, not legal actions available now. Use command:{action:"T…",targets:[…]} in phase steps; select parameters and reserve mana if needed. Python expands the template before publication. Templates do not execute and are never sent to the decider as another lane’s labels.')
+            for row in packet.get('_planning_menu',[]):
+                self.labels.counters['T']+=1;alias='T'+str(self.labels.counters['T'])
+                self.labels.actions[alias]=deepcopy(row['command'])
+                lines.append('- '+alias+' — '+row['label']+'\n  '+self.value({k:v for k,v in row.items() if k not in ('label','command')}))
         # Keep plans verbatim in substance, with reversible IDs and references.
         for key in ('plans','diplomatic_holds','combo_offer','rejection','rejection_context','batch_interruption'):
-            if packet.get(key) is not None:
+            if key not in handled and packet.get(key) is not None:
                 value=packet[key]
                 if key=='plans':value={name:{k:v for k,v in row.items() if k not in ('id','short_term_id')} if isinstance(row,dict) else row for name,row in value.items()}
                 lines.append('## '+key.replace('_',' ')+'\n'+self.section(key,self.value(value),repeat=key=='plans'))
@@ -229,6 +259,6 @@ class Document:
                 lines.append('### '+name+'\nNo frozen Oracle face available. Explicit implemented rules: '+self.value(rules))
         excluded={'board','current_decision','action_facts','plans','diplomatic_holds','combo_offer','rejection','rejection_context','batch_interruption'}
         for key,value in packet.items():
-            if key in excluded or key in OMIT or key.startswith('_') or value is None: continue
+            if key in excluded or key in handled or key in OMIT or key.startswith('_') or value is None: continue
             lines.append('## '+key.replace('_',' ')+'\n'+self.section(key,self.value(value)))
         return '\n\n'.join(lines)+'\n'

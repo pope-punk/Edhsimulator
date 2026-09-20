@@ -374,3 +374,10 @@ accepted commands and pending choice, verifies full deterministic replay, and jo
 a prefix-bound sidecar. Existing snoozes are cleared once at installation; explicit
 approved sequences are retained. Resume through the ordinary fenced dashboard route.
 Resumed isolated role contexts receive the updated scheduler instructions.
+
+### Agent-facing coordination documents
+
+Fresh primitive campaigns bind `coordination_document:1` alongside `pilot_document:1`.
+See [COORDINATION_DOCUMENT.md](COORDINATION_DOCUMENT.md) for role-specific context,
+compact tactical publications, current proposal labels and delivery telemetry.
+Existing games retain their bound interface; no configuration migration is implied.

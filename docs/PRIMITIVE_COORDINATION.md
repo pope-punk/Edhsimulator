@@ -1,5 +1,9 @@
 # Primitive role coordination
 
+Fresh `coordination_document:1` working documents and compact publications are
+described in [COORDINATION_DOCUMENT.md](COORDINATION_DOCUMENT.md). They preserve
+the scheduling and role authority specified here.
+
 This describes the new primitive host build. Started games retain their recorded
 implementation and require explicit migration or a fresh cohort; source changes
 never silently rewrite a bound game.

@@ -105,22 +105,23 @@ card into that visible zone in an approved sequence. Other references stay exact
 '''
 
 
-def inspection_schema(role,*,pilot_document=False):
+def inspection_schema(role,*,pilot_document=False,coordination_document=False):
     pointer={'path':{'type':'string'},'offset':{'type':'integer','minimum':0},'limit':{'type':'integer','minimum':1,'maximum':32}}
     ref={'type':'object','properties':{'card_id':{'type':'string'},'incarnation':{'type':'integer'}},'required':['card_id','incarnation'],'additionalProperties':False}
     if pilot_document:ref={'anyOf':[ref,{'type':'string','description':'Current C/S object label'}]}
     kinds=[('object',{'source':ref},['source']),('card',{'name':{'type':'string'}},['name']),
            ('state',{},[]),('decision',{},[]),('history',{'after':{'type':'integer','minimum':0},'page_size':{'type':'integer','minimum':1,'maximum':32}},['after'])]
+    if coordination_document and role in (planning.SHORT,planning.LONG):kinds.extend([('plans',{},[]),('protocol',{},[])])
     if role==planning.LONG:kinds.append(('deck',{},[]))
     return {'oneOf':[{'type':'object','properties':{'kind':{'type':'string','enum':[kind]},**fields,**pointer},
                      'required':['kind',*required],'additionalProperties':False} for kind,fields,required in kinds]}
 
 
-def schemas(role,*,pilot_document=False):
+def schemas(role,*,pilot_document=False,coordination_document=False):
     inspect_tool=tool('edh_inspect','Inspect only your frozen input. Batch related queries.',
-        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role,pilot_document=pilot_document)}},['queries'])
+        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role,pilot_document=pilot_document,coordination_document=coordination_document)}},['queries'])
     if role=='decider':
-        return [tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit the intended cast/ability directly: fresh autotap games pay automatically when payment is omitted. Use a direct sequence for multiple known actions. Await the next input or park.',
+        result=[tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit the intended cast/ability directly: fresh autotap games pay automatically when payment is omitted. Use a direct sequence for multiple known actions. Await the next input or park.',
             {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object','properties':{
                 'approve_ids':{'type':'array','items':{'type':'string'},'description':'Only these proposal IDs are approved, in this order.'},
                 'reject_ids':{'type':'array','items':{'type':'string'},'description':'Optional exhaustive complement; omit to leave all unlisted steps unapproved.'},
@@ -139,11 +140,16 @@ def schemas(role,*,pilot_document=False):
                  {'intended_action':{'type':'string'},'question':{'type':'string'}},['intended_action','question']),
             tool('edh_rules_issue','Stop this game for an unsupported or incorrect material rule.',
                  {'reason':{'type':'string'}},['reason'])]
+        if coordination_document:result[0]['inputSchema']['properties']['batch']['required']=['approve_ids','pass_priority','resume_after_passes']
+        return result
     return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners follow the supplied stage and publication_order; publish the first stage promptly. Use short_term_and_actions only if both are already ready. End when next is null.',
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
 
 
-def instructions(actor,role,*,automatic_mana=False,pilot_document=False):
+def instructions(actor,role,*,automatic_mana=False,pilot_document=False,coordination_document=False):
+    if coordination_document and role!='decider':
+        from .primitive_coordination_document import instructions as role_instructions
+        return role_instructions(actor,role)
     if role=='decider':
         specific='''You alone choose actions, targets, costs and approvals. Own diplomatic_holds constrain
 attacks/targeting until expiry. Honor them or call edh_diplomatic_override with
@@ -403,6 +409,12 @@ The host parks oversized tool deliveries and supplies a complete next real input
     if role==planning.SHORT:specific+='\nOptional combo_proposal in the actions stage is {proposal_text,seat_turn,phase,requires}. Describe the concrete repeatable loop and claimed outcome in <=1200 characters; phase is precombat_main or postcombat_main. requires is up to eight {source:{card_id,incarnation},zone,controller} guards. Publish only when a concrete loop is ready; omission clears the old proposal. The decider chooses whether to submit it; opponents consent before an independent adjudicator evaluates it.'
     if pilot_document:
         specific += '\nPilot document interface: action and object labels replace raw identities. Use command:{action:"A1",target:"S1"} or targets:["C1",{player:SEAT}]; supply modes/X/non-mana costs when needed. Action labels apply only to the current menu. Other command forms remain supported, with C/S labels wherever exact object references are required. For a planned post-zone-change reference use {owned_card:"C1",zone:"battlefield"}; Python binds the new incarnation at execution. R labels replace operational IDs (requests, planner steps, holds, abilities); copy them exactly. Python binds revisions and request identities. At an answer decision, using its menu action supplies request_id automatically. An action family is not a guarantee of legality or automatic payment: read its availability, target rules and current decision. Printed Oracle rules never authorize an unimplemented or illegal action. Do not inspect unless you are a planner.'
+    if coordination_document and role=='decider':
+        specific=specific.replace('At own-turn priority, first examine plans.actions.value.action_sequence and\nexecuted_steps.', 'At own-turn priority, first examine Planner action proposal and each step status.')
+        specific=specific.replace('Both booleans default true: this explicitly\nauthorizes passing unplanned priority and continuing after ordinary opposing passes.', 'Both booleans are required choices: true authorizes passing unplanned priority\nand continuing after ordinary opposing passes, respectively.')
+        common=common.replace('Your complete current input includes current_decision,\nboard, plans and action_facts. Look up exact source rules using action_facts.objects\nand its rules_id table; these are already supplied facts, not another tool call.',
+            'Your working document supplies the current decision, proposal steps, action menu, board and Oracle rules directly.')
+        specific+='\nPlanner proposals use current P labels. Approve with batch.approve_ids; explicitly choose pass_priority and resume_after_passes to authorize passing and continuation. Intent and step rationales make the action proposal self-contained even when matching tactical prose is still pending. Age is factual, not a verdict on strategy. Never approve executed or expired steps. Keep planner mana choices unchanged, or use a new automatically paid action. Historical continuity is planner-only. Other conversations use different C/S/R/P labels; structured proposals are translated by Python.'
     return f'You are the {actor} {role}.\n'+common+specific
 
 
@@ -468,7 +480,7 @@ class PrimitiveRunner:
             self.deliveries.pop(thread,None);self.documents.pop(thread,None);self.lanes.pop(key)
         params={'cwd':str(self.workspace),'environments':[],'selectedCapabilityRoots':[],
             'approvalPolicy':'never','sandbox':'read-only','model':MODELS[role],
-            'baseInstructions':instructions(actor,role,automatic_mana=self.campaign.config.get('automatic_decider_mana')==1,pilot_document=self.campaign.config.get('pilot_document')==1),'dynamicTools':schemas(role,pilot_document=self.campaign.config.get('pilot_document')==1),'historyMode':'legacy',
+            'baseInstructions':instructions(actor,role,automatic_mana=self.campaign.config.get('automatic_decider_mana')==1,pilot_document=self.campaign.config.get('pilot_document')==1,coordination_document=self.campaign.config.get('coordination_document')==1),'dynamicTools':schemas(role,pilot_document=self.campaign.config.get('pilot_document')==1,coordination_document=self.campaign.config.get('coordination_document')==1),'historyMode':'legacy',
             'config':{'model_reasoning_effort':EFFORTS.get(role,'medium'),'web_search':'disabled',
                       'features':{'shell_tool':False,'apps':False,'plugins':False,'browser_use':False,
                                   'computer_use':False,'multi_agent':False,'hooks':False,'skill_search':False}}}
@@ -542,7 +554,16 @@ class PrimitiveRunner:
         self.inputs[thread]=packet;self.deliveries[thread]=next_state
         if document:self.documents[thread]=document.labels
         self.timing.record('input_delivered',thread,warm=warm,accepted=self.campaign.store.generation,input_chars=len(text))
-        if role=='decider':actions.delivered(self.campaign,actor,packet['claim_id'])
+        if role=='decider':
+            actions.delivered(self.campaign,actor,packet['claim_id'])
+            if self.campaign.config.get('coordination_document')==1:
+                from .primitive_coordination_document import proposal_status
+                status=proposal_status(packet);observed=status['observed_at']
+                self.timing.record('proposal_offered',thread,steps=len(status['steps']),
+                    executed=sum(s.startswith('executed') for s in status['steps'].values()),
+                    expired=sum(s.startswith('past') for s in status['steps'].values()),
+                    age_decisions=packet.get('_accepted_sequence',self.campaign.store.generation)-observed if type(observed) is int else None,
+                    matching_prose=status['prose_relationship']=='matching planning job')
         return True
 
     def pump(self):
@@ -643,6 +664,10 @@ class PrimitiveRunner:
         args=params['arguments'];name=params['tool'];frozen=self.inputs[thread]
         try:
             if self.campaign.next_action()['kind']!='dispatch_pilot':raise RulesViolation('Campaign dispatch is stopped')
+            if self.campaign.config.get('coordination_document')==1 and name=='edh_publish' and role!='decider':
+                from .primitive_coordination_document import normalize
+                args=deepcopy(args)
+                args['response']=normalize(args['stage'],args['response'],frozen,self.documents[thread])
             if self.campaign.config.get('pilot_document')==1:
                 args=self.documents[thread].decode(args)
             if name=='edh_inspect' and role in (planning.LONG,planning.SHORT):value=inspect(self.campaign,actor,role,frozen,args['queries'])
@@ -655,6 +680,8 @@ class PrimitiveRunner:
                     if set(args)!={'sequence','rationale','scheduler'}:raise RulesViolation('Direct sequence requires sequence, rationale and scheduler only')
                     value=actions.approve_sequence(self.campaign,actor,frozen['claim_id'],**args)
                 elif 'batch' in args:
+                    if self.campaign.config.get('coordination_document')==1 and not {'pass_priority','resume_after_passes'}<=set(args['batch']):
+                        raise RulesViolation('Choose batch.pass_priority and batch.resume_after_passes explicitly; approval has not been accepted')
                     if set(args)!={'batch'}:raise RulesViolation('Batch approval requires only the top-level batch field. Remove top-level rationale, command, sequence and scheduler. Approved steps retain planner rationales; explain rejected IDs with batch.rejection_rationale. No batch was accepted.')
                     value=actions.approve(self.campaign,actor,frozen['claim_id'],**args['batch'])
                 else:

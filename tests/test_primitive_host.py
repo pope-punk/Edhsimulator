@@ -28,6 +28,7 @@ class PrimitiveHostTests(TestCase):
     def setUp(self):
         self.temp=TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.game=PrimitiveCampaign._create(Path(self.temp.name)/'game',seed=93,starting_player='Omo')
+        self.game.config.pop('coordination_document',None)
         self.game.config.pop('pilot_document',None)  # Legacy packet delivery remains supported.
         self.addCleanup(self.game.close)
         self.server=FakeServer();self.runner=PrimitiveRunner(self.game,self.server)
