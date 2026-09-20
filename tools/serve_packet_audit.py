@@ -14,20 +14,7 @@ from urllib.parse import urlparse
 import zipfile
 from edh_gauntlet.dashboard import Dashboard, Handler
 
-PAGE = r'''<!doctype html><meta charset="utf-8"><title>Reaminatour packet audit</title>
-<style>body{font:16px system-ui;margin:2rem;color:#17202a}input,button{font:inherit;padding:.4rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f6fa;padding:1rem}a{margin-right:1rem}table{border-collapse:collapse;width:100%;font-size:13px}td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}#error{color:#a00}</style>
-<a href="/">Game dashboard</a><h1>Reaminatour · game O packet audit</h1>
-<label>Authorization key <input id="key" type="password"></label><button id="connect">Connect / refresh</button><p id="error"></p><p id="status"></p>
-<p id="links"></p><p>Round membership and board columns follow the snapshot delivered to the role; a planner's output may arrive after live play has moved on. Length is UTF-8 bytes of the recorded JSON. Opening/setup is included with round 1.</p>
-<div id="content"></div><script>
-const $=x=>document.querySelector(x);$('#key').value=sessionStorage.edhKey||'';
-async function api(name){const r=await fetch('/api/packet-audit/'+name,{headers:{Authorization:'Bearer '+$('#key').value}});if(!r.ok)throw Error('Request failed: '+r.status);return r}
-function a(text,fn){const x=document.createElement('a');x.href='#';x.textContent=text;x.onclick=e=>{e.preventDefault();fn().catch(error=>$('#error').textContent=error.message)};return x}
-async function download(name){const r=await api(name),u=URL.createObjectURL(await r.blob()),x=document.createElement('a');x.href=u;x.download=name;x.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
-async function packet(id){if(!/^(?:[a-f0-9]{24}|help-\d+)$/.test(id))throw Error('Invalid packet');const raw=await(await api('packets/'+id+'.html')).text();const doc=new DOMParser().parseFromString(raw,'text/html');const container=$('#content');container.replaceChildren();const back=a('Back to rounds',async()=>{location.hash='';await render()});container.append(back);const prev=[...doc.querySelectorAll('a')].find(x=>x.textContent.startsWith('Previous'));if(prev){const pid=prev.getAttribute('href').replace('.html','');container.append(a('Previous packet in this role conversation',async()=>{location.hash='packet='+pid}))}const button=document.createElement('button');button.textContent='Copy packet';button.onclick=()=>navigator.clipboard.writeText(doc.querySelector('pre').textContent);const pre=document.createElement('pre');pre.textContent=doc.querySelector('pre').textContent;container.append(button,pre)}
-async function render(){sessionStorage.edhKey=$('#key').value;$('#error').textContent='';const m=await(await api('manifest.json')).json();$('#status').textContent='Turn '+m.latest_turn+' · accepted prefix '+m.accepted_prefix.sequence+' · updated '+m.updated_utc+' · '+m.decode_errors.length+' decoding gaps';const links=$('#links');links.replaceChildren();for(const n of [1,5,7])links.append(a('Round '+n+' CSV ('+m.rounds[n].rows+' rows; '+m.rounds[n].status+')',()=>download('round-'+n+'.csv')));links.append(a('Download all CSVs + packet copies (ZIP)',()=>download('bundle.zip')));if(location.hash.startsWith('#packet=')){await packet(location.hash.slice(8));return}const pre=document.createElement('pre');pre.textContent=await(await api('README.md')).text();$('#content').replaceChildren(pre)}
-$('#connect').onclick=()=>render().catch(e=>$('#error').textContent=e.message);window.onhashchange=$('#connect').onclick;if($('#key').value)$('#connect').click();
-</script>'''
+PAGE = Path(__file__).with_name('packet_audit.html').read_text(encoding='utf8')
 
 
 class AuditHandler(Handler):
@@ -38,7 +25,7 @@ class AuditHandler(Handler):
         if path.startswith('/api/packet-audit/'):
             if not self.auth():return self.send_value({'error':'unauthorized'},401)
             name=path.removeprefix('/api/packet-audit/')
-            allowed=re.fullmatch(r'(round-(1|5|7)\.csv|manifest\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|help-\d+)\.html)',name)
+            allowed=re.fullmatch(r'(round-(1|5|7)\.(csv|json)|manifest\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|help-\d+)\.html)',name)
             if not allowed:return self.send_value({'error':'not found'},404)
             root=self.server.audit
             if name=='bundle.zip':
@@ -48,6 +35,12 @@ class AuditHandler(Handler):
                         if file.is_file() and (file.suffix in ('.csv','.html','.md') or file.name=='manifest.json'):
                             archive.write(file,file.relative_to(root))
                 return self.send_value(data.getvalue(),content_type='application/zip')
+            if re.fullmatch(r'round-(1|5|7)\.json',name):
+                source=root/name.replace('.json','.csv')
+                if not source.is_file():return self.send_value({'error':'not ready'},404)
+                with source.open(newline='',encoding='utf8') as stream:
+                    rows=list(csv.DictReader(stream))
+                return self.send_value({'rows':rows})
             file=root/name
             if not file.is_file():return self.send_value({'error':'not ready'},404)
             if name.endswith('.csv'):

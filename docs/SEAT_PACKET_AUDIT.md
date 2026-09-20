@@ -51,7 +51,12 @@ python tools/serve_packet_audit.py --runs runs \
   --public-url https://YOUR-CODESPACE-8765.app.github.dev
 ```
 
-Download individual CSVs for browser packet hyperlinks, or the ZIP for portable
+The audit page renders every CSV column in searchable, sortable round tables, with
+role filters and an inline packet viewer. Previous-packet links retain access to
+conversation context. Round tables refresh every 30 seconds when the packet viewer
+is closed; no downloads are required.
+
+Optionally download individual CSVs for browser packet hyperlinks, or the ZIP for portable
 relative hyperlinks beside a `packets` folder. Plaintext spreadsheet cells are
 escaped against formula injection; only exporter-generated hyperlinks are formulas.
 The packet viewer displays escaped source text and offers a copy button.
