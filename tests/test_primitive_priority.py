@@ -108,12 +108,14 @@ class ManaOnlyPriorityTests(TestCase):
             AbilityProgram('tap', EventPattern('becomes_tapped'), (GainLife(1),)),))
         self.assertFalse(mana_only_window(self.kernel((p,), Zone.BATTLEFIELD), 'A'))
 
-    def test_own_main_and_stack_response_keep_control(self):
+    def test_own_main_sorcery_is_not_a_response_to_the_stack(self):
         p = CardProgram('spell', 'Free sorcery', ('Sorcery',), cast=CastSpec(CostSpec()))
         k = self.kernel((p,)); k.active = 'A'
         self.assertFalse(mana_only_window(k, 'A'))
-        k.active = 'B'; k.stack.append({'id': 'pending-spell'})
-        self.assertFalse(mana_only_window(k, 'A'))
+        k.stack.append({'id': 'pending-spell'})
+        self.assertTrue(mana_only_window(k, 'A'))
+        k.active='B'
+        self.assertTrue(mana_only_window(k, 'A'))
 
     def test_automatic_pass_is_durable_and_old_binding_does_not_skip(self):
         with TemporaryDirectory() as tmp:
@@ -150,5 +152,41 @@ class ManaOnlyPriorityTests(TestCase):
         self.assertFalse(mana_only_window(k,'A'))  # An available activation has material effects.
         state.move((),'fixture-tap',payment=ResourcePayment('A',taps=tuple(refs)))
         before=k.snapshot()
+        self.assertTrue(mana_only_window(k,'A'))
+        self.assertEqual(before,k.snapshot())
+
+    def test_stack_responses_check_affordability_and_free_alternatives(self):
+        from edh_gauntlet.rules_program import AlternativeCost
+        for spec,expected in (
+            (CastSpec(CostSpec(ManaCost(1)), 'instant'),True),
+            (CastSpec(CostSpec(), 'instant'),False),
+            (CastSpec(CostSpec(ManaCost(5)), 'instant',alternatives=(AlternativeCost('free',CostSpec()),)),False)):
+            with self.subTest(spec=spec):
+                spell=CardProgram('response','Response',('Instant',),cast=spec)
+                k=self.kernel((spell,));k.state.set_tapped_batch((k.state.current('land'),),True)
+                k.stack.append({'id':'pending-spell'});before=k.snapshot()
+                self.assertEqual(expected,mana_only_window(k,'A'))
+                self.assertEqual(before,k.snapshot())
+
+    def test_stack_floating_mana_and_zero_cost_abilities_keep_control(self):
+        spell=CardProgram('response','Response',('Instant',),cast=CastSpec(CostSpec(ManaCost(1)),'instant'))
+        k=self.kernel((spell,));k.state.set_tapped_batch((k.state.current('land'),),True)
+        k.stack.append({'id':'pending-spell'});k.state.add_mana('A',('G',))
+        self.assertFalse(mana_only_window(k,'A'))
+        ability=CardProgram('ability','Ability',('Artifact',),activated=(ActivatedProgram('life',CostSpec(),(GainLife(1),)),))
+        k=self.kernel((ability,),Zone.BATTLEFIELD);k.state.set_tapped_batch((k.state.current('land'),),True)
+        k.stack.append({'id':'pending-spell'})
+        self.assertFalse(mana_only_window(k,'A'))
+
+    def test_actual_remora_and_tapped_lands_skip_sakura_response(self):
+        from edh_gauntlet.rules_bundle import load_reviewed
+        from edh_gauntlet.rules_casting import Payment
+        cards=load_reviewed();names=('mystic-remora','otawara-soaring-city','shattered-sanctum','sakura-tribe-elder')
+        programs=[cards[n]['program'] for n in names];state=RulesState(('A','B'))
+        refs=[state.add_card(n,p.definition_id,'A' if n!='sakura-tribe-elder' else 'B',Zone.BATTLEFIELD if n!='sakura-tribe-elder' else Zone.HAND) for n,p in zip(names,programs)]
+        k=RulesKernel(state,programs);k.open_window_for_scenario('B','precombat_main','B')
+        state.set_tapped_batch(tuple(refs[1:3]),True);state.add_mana('B',('G','C'))
+        q=k.quote_cast('cast-sakura','B',refs[3]);k.commit_action(q,Payment((('G',1),('C',1))))
+        k.pass_priority('B');before=k.snapshot()
         self.assertTrue(mana_only_window(k,'A'))
         self.assertEqual(before,k.snapshot())

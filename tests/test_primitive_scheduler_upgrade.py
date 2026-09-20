@@ -26,6 +26,9 @@ class SchedulerUpgradeTests(TestCase):
         self.old['modules']['rules_combat.py'] = 'old-combat'
         self.old['modules']['primitive_campaign.py'] = 'old-campaign'
         self.old['modules'].pop('primitive_scheduler_upgrade.py')
+        if getattr(self,'priority_scope',False):
+            self.old=deepcopy(self.new)
+            for name in repair.PRIORITY_MODULES:self.old['modules'][name]='old-'+name
         with patch('edh_gauntlet.primitive_campaign.host_implementation', return_value=repair.host_hash(self.old['modules'])):
             campaign = PrimitiveCampaign._create(self.path, seed=19, starting_player='Omo')
         self.binding = campaign.binding; self.config = campaign.config
@@ -40,6 +43,9 @@ class SchedulerUpgradeTests(TestCase):
         campaign.close()
         self.process = {'active':False, 'contexts_unloaded':True, 'binding':self.binding,
                         'generation':0, 'commit':self.commit}
+        if getattr(self,'priority_scope',False):
+            dead={'pid':987654321,'boot_id':Path('/proc/sys/kernel/random/boot_id').read_text().strip(),'start_ticks':0}
+            self.process.update(host_identity=dead,transport_identity=dead)
         write(self.path/'host_runtime/process.json', self.process)
         self.before = self.base/'before.json'; self.after = self.base/'after.json'
         write(self.before, receipt(self.old)); write(self.after, receipt(self.new))
@@ -115,3 +121,39 @@ class SchedulerUpgradeTests(TestCase):
         campaign=PrimitiveCampaign.open(self.path,recover=False)
         self.assertEqual(directive,campaign.state()['actors']['Omo']['snooze'])
         campaign.close()
+
+
+class StackPriorityUpgradeTests(TestCase):
+    priority_scope=True
+    setUp=SchedulerUpgradeTests.setUp
+
+    def test_install_preserves_snooze_claim_contract_and_prefix(self):
+        with patch('edh_gauntlet.primitive_campaign.host_implementation',return_value=repair.host_hash(self.old['modules'])):
+            game=PrimitiveCampaign.open(self.path,recover=False)
+        with game.transaction() as state:
+            state['actors']['Omo']['snooze']={'mode':'hold_full_control'}
+            state['paused']={'reason':'user_stop'}
+        before=game.state();game.close()
+        write(self.path/'HOST_PAUSED.json',{'reason':'user_stop','accepted':self.commit['sequence']})
+        installed=repair.install(self.path,self.before,self.after,scope=repair.PRIORITY_SCOPE)
+        game=PrimitiveCampaign.open(self.path,recover=False)
+        after=game.state();after.pop('scheduler_upgrade')
+        self.assertEqual(before,after)
+        self.assertEqual(self.commit,game.store.committed_head());game.close()
+        self.assertTrue((self.path/'HOST_PAUSED.json').exists())
+        self.assertEqual(self.config,read(self.path/'game_01/game_config.json'))
+        self.assertEqual(installed,repair.install(self.path,self.before,self.after,scope=repair.PRIORITY_SCOPE))
+
+    def test_priority_upgrade_rejects_unrelated_change_or_missing_authority(self):
+        proof={'schema':1,'scope':repair.PRIORITY_SCOPE,'authorization':repair.PRIORITY_AUTHORIZATION,
+               'binding':self.binding,'commit':self.commit,'before':receipt(self.old),'after':receipt(self.new)}
+        repair.validate(proof,self.binding,self.config,Path(__file__).resolve().parents[1])
+        with self.assertRaises(RulesViolation):repair.validate({**proof,'authorization':''},self.binding,self.config,Path(__file__).resolve().parents[1])
+        old=deepcopy(self.old);old['modules']['primitive_autotap.py']='unrelated'
+        with self.assertRaises(RulesViolation):
+            repair.validate({**proof,'before':receipt(old)},self.binding,{**self.config,'host_implementation':repair.host_hash(old['modules'])},Path(__file__).resolve().parents[1])
+
+    def test_priority_upgrade_rejects_active_host(self):
+        write(self.path/'host_runtime/process.json',{**self.process,'active':True})
+        with self.assertRaises(RulesViolation):repair.install(self.path,self.before,self.after,scope=repair.PRIORITY_SCOPE)
+        self.assertFalse((self.path/'host_runtime/scheduler_upgrade.json').exists())

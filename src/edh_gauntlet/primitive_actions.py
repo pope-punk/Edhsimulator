@@ -403,7 +403,7 @@ def automatic(campaign):
         from .primitive_priority import mana_only_window
         if mana_only_window(campaign.kernel,actor):
             chosen={'kind':'pass'}
-            rationale='Automatic priority pass: no affordable non-mana action in this empty-stack window.'
+            rationale='Automatic priority pass: no affordable non-mana action in this priority window.'
     if chosen is None:return False
     request_id='auto:'+digest({'commit':campaign.store.committed_head(),'actor':actor,'command':chosen,'control':control})
     try:

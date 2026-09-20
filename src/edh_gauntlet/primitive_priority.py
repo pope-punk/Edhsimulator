@@ -95,11 +95,11 @@ def _could_pay(kernel, obj, spec, bound, *, spell=False):
 
 
 def mana_only_window(kernel, actor):
-    # Keep stack-response windows, including floating in response to removal.
-    # Delayed effects can make a seemingly pointless mana activation material.
-    if kernel.stack or kernel.delayed_triggers or kernel.temporary_effects:
+    # Stack presence alone is not an available response. Apply the same
+    # conservative affordability proof while retaining unknown delayed effects.
+    if kernel.delayed_triggers or kernel.temporary_effects:
         return False
-    main = kernel.active == actor and kernel.phase in {'precombat_main', 'postcombat_main'}
+    main = not kernel.stack and kernel.active == actor and kernel.phase in {'precombat_main', 'postcombat_main'}
     public = (Zone.BATTLEFIELD, Zone.GRAVEYARD, Zone.EXILE, Zone.COMMAND, Zone.STACK)
     objects = [o for o in kernel.state.objects() if o.zone in public or o.zone == Zone.HAND and o.owner == actor]
     objects.extend(kernel.revealed_ability_sources())
