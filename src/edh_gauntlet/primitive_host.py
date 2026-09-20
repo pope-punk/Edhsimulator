@@ -70,7 +70,7 @@ append {kind:"answer",indexes:[CHOSEN_ZERO_BASED_INDEX]} immediately after it.
 Omit revision, action_id and request_id inside this bundle; Python binds them.
 payment.mana counts the total mana SPENT, not all mana produced; surplus remains
 in the pool. Bundles accept only ordinary eligible mana actions, just like autotap.
-Consequential or paid/filter sources require separate explicit activations.
+Supported pure paid filters are automatically sequenced; consequential sources still require planner-authored activations.
 Land face defaults to front. For a modal double-faced card with a land back face,
 use play_land with face:"back" and the hand card source; do not cast its land face.
 The current face in hand does not prevent playing a permitted back land face.

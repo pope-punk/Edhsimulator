@@ -133,6 +133,8 @@ class AutotapTests(unittest.TestCase):
 
     def test_reserved_capacity_excludes_explicit_sacrifice(self):
         # Crop Rotation's author-selected sacrificed land cannot also be held back.
+        # An available filter could legitimately produce surplus blue instead.
+        self.game.kernel.state.set_tapped_batch((self.grove,),True)
         forest=self.card('forest',Zone.BATTLEFIELD)
         ref=self.card('crop-rotation',Zone.HAND)
         spec=self.game.kernel.definition(self.game.kernel.state.get(ref)).cast

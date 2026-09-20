@@ -128,7 +128,7 @@ class PrimitiveCampaign:
             store.close();raise
 
     @classmethod
-    def open(cls,path,*,root=PROJECT_ROOT,recover=True,telemetry_repair=None,scheduler_upgrade=None):
+    def open(cls,path,*,root=PROJECT_ROOT,recover=True,telemetry_repair=None,scheduler_upgrade=None,payment_repair=None):
         path=Path(path).resolve();root=Path(root)
         manifest=read(path/'cohort.json',{})
         if manifest.get('rules_engine')!='primitives-v1':raise RulesViolation('Not a primitive campaign; never adopt a legacy run')
@@ -149,6 +149,13 @@ class PrimitiveCampaign:
         self=cls.__new__(cls);self.root=path;self.assets=root;self.config=config;self.binding=manifest['binding'];self.directory=directory
         if telemetry_repair is not None and (recover or config.get('host_implementation')==host_implementation()):
             raise RulesViolation('Telemetry repair candidates are only for stopped installation without recovery')
+        payment_upgrade=None
+        if payment_repair is not None or (path/'host_runtime/payment_repair.json').exists():
+            from .primitive_payment_repair import validate
+            if payment_repair is not None and (recover or telemetry_repair is not None or scheduler_upgrade is not None):
+                raise RulesViolation('Payment repair requires stopped installation without other upgrades')
+            payment_upgrade=payment_repair if payment_repair is not None else read(path/'host_runtime/payment_repair.json',{})
+            validate(payment_upgrade,self.binding,config,root)
         upgrade = None
         if scheduler_upgrade is not None and (recover or telemetry_repair is not None or config.get('host_implementation')==host_implementation()):
             raise RulesViolation('Scheduler upgrades require stopped installation without recovery')
@@ -157,7 +164,7 @@ class PrimitiveCampaign:
             upgrade=scheduler_upgrade if scheduler_upgrade is not None else read(path/'host_runtime/scheduler_upgrade.json',{})
             validate(upgrade,self.binding,config,root)
         repair = None
-        if upgrade is None and config.get('host_implementation')!=host_implementation():
+        if upgrade is None and payment_upgrade is None and config.get('host_implementation')!=host_implementation():
             from .primitive_telemetry_repair import validate
             repair = telemetry_repair if telemetry_repair is not None else read(path/'host_runtime/telemetry_repair.json', {})
             validate(repair, self.binding, config, root)
@@ -165,6 +172,9 @@ class PrimitiveCampaign:
         try:
             from .primitive_journal import verify
             verify(self.store.connection,self.binding)
+            if payment_upgrade is not None:
+                from .primitive_payment_repair import verify_prefix
+                verify_prefix(self,payment_upgrade,candidate=payment_repair is not None)
             if upgrade is not None:
                 from .primitive_scheduler_upgrade import verify_prefix
                 verify_prefix(self,upgrade,candidate=scheduler_upgrade is not None)

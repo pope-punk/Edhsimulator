@@ -87,11 +87,14 @@ def preferred_payment(kernel,actor,command):
                 variants.append(v)
     tag_candidates=[]
     for variant in variants[:MAX_CANDIDATES]:
-        try:tag_candidates.append(_payment(kernel,actor,variant,sources=sources))
+        try:tag_candidates.append(_payment(kernel,actor,variant,sources=sources,allow_filters=False))
         except RulesViolation:continue
     if baseline is None:
         if not tag_candidates:return _payment(kernel,actor,command,sources=sources)
         baseline=tag_candidates[0]
+    # The fallback paid-filter line is already exact and validated at execution.
+    # Free-source portfolio scoring must not treat filter output as free mana.
+    if any(row.get('payment',{}).get('mana') for row in baseline.get('mana_actions',[])):return baseline
     costs=hand_costs(kernel,actor,q.source)
     demand=tuple(sum(c[1][i] for c in costs) for i in range(6))
     def scarcity(row):
@@ -107,11 +110,11 @@ def preferred_payment(kernel,actor,command):
         orders.append(sorted(sources,key=lambda row:(max(m[i] for m,_ in row[1]),scarcity(row))))
     candidates={json.dumps(p,sort_keys=True):p for p in [baseline]+tag_candidates}
     for order in orders[:MAX_CANDIDATES-1]:
-        try:p=_payment(kernel,actor,command,sources=order)
+        try:p=_payment(kernel,actor,command,sources=order,allow_filters=False)
         except RulesViolation:continue
         candidates[json.dumps(p,sort_keys=True)]=p
     for color in COLORS:
-        try:p=_payment(kernel,actor,command,sources=sources,spend_order=COLORS.replace(color,'')+color)
+        try:p=_payment(kernel,actor,command,sources=sources,spend_order=COLORS.replace(color,'')+color,allow_filters=False)
         except RulesViolation:continue
         candidates[json.dumps(p,sort_keys=True)]=p
     excluded={q.source}

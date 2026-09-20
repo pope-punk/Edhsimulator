@@ -202,7 +202,7 @@ class Document:
             lines.append('## Actions\nOne entry per spell/ability/face/alternative, not per target combination. '
                          'These are action families, not guaranteed legal combinations. Read availability and current decision; choose parameters yourself. '
                          'Submit command:{action:"A…",target:"S…"} (or targets:[…]); Python binds exact references. '
-                         'Omit mana payment for automatic tapping. If ordinary autotap cannot fund an action, a planner payment sequence may be required; labels do not unlock otherwise prohibited mana activations.')
+                         'Omit mana payment for automatic tapping, including supported pure filter-land costs and color choices. Submit the spell or ability itself; do not request planner mana steps for a payment marked checked. If automatic payment cannot fund an action, consequential or unsupported sources may require a planner sequence; labels do not unlock otherwise prohibited mana activations.')
             for row in menu:
                 self.labels.counters['A']+=1
                 alias='A'+str(self.labels.counters['A']); self.labels.actions[alias]=deepcopy(row['command'])

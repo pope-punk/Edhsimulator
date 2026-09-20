@@ -1,6 +1,6 @@
 """Bounded deterministic payment selection for explicitly authorized auto-taps.
 
-Only ordinary, free tap-for-mana abilities are eligible. Reservations describe
+Only side-effect-free tap-for-mana abilities, including finite paid filters, are eligible. Reservations describe
 simultaneously available mana after payment, not a preference to ignore on failure.
 """
 import hashlib
@@ -33,7 +33,7 @@ def validate(command):
     except (KeyError,TypeError,ValueError) as exc:raise RulesViolation('Invalid explicit non-mana payment for autotap') from exc
 
 
-def options(kernel,actor,obj,*,reserve_check=False):
+def options(kernel,actor,obj,*,reserve_check=False,available=None):
     """Return finite ordinary mana options, never strategic side-effect choices."""
     from .primitive_priority import _orientation_sensitive
     if (obj.zone!=Zone.BATTLEFIELD or obj.controller!=actor or obj.tapped or obj.phased
@@ -51,14 +51,20 @@ def options(kernel,actor,obj,*,reserve_check=False):
     result=[]
     for ability in kernel.activated_abilities(obj):
         if (not ability.mana_ability or ability.zone!=Zone.BATTLEFIELD
-                or type(ability.cost) is not CostSpec or ability.cost!=CostSpec(tap_source=True)
+                or type(ability.cost) is not CostSpec or ability.cost!=CostSpec(mana=ability.cost.mana,tap_source=True)
                 or len(ability.effects)!=1 or ability.targets is not None):continue
+        if ability.cost.mana.x_symbols or ability.cost.mana.generic+len(ability.cost.mana.symbols)>30:continue
+        if available is None and (ability.cost.mana.generic or ability.cost.mana.symbols):continue
+        cost=ability.cost.mana
         if reserve_check:
             # A pending trigger-order choice need not invalidate physical capacity.
             # For this post-payment proof admit only unrestricted instant abilities.
             if type(ability) is not ActivatedProgram or ability.timing!='instant':continue
         else:
-            try:kernel.quote_activation('autotap-eligibility',actor,obj.ref,ability.ability_id)
+            try:
+                quoted=kernel.quote_activation('autotap-eligibility',actor,obj.ref,ability.ability_id)
+                if type(quoted.cost) is not CostSpec or quoted.cost!=CostSpec(mana=quoted.cost.mana,tap_source=True):continue
+                cost=quoted.cost.mana
             except RulesViolation:continue
         e=ability.effects[0]
         if type(e) is AddMana:bundles=(e.symbols,)
@@ -70,12 +76,80 @@ def options(kernel,actor,obj,*,reserve_check=False):
         for index,bundle in enumerate(bundles):
             counts=Counter(kernel._mana_after_replacements(actor,bundle,tapped_for_mana=True))
             if not counts or set(counts)-set(COLORS):continue
-            command={'kind':'activate','source':obj.ref.to_json(),'ability_id':ability.ability_id,
-                     'targets':[],'x_value':0,'payment':{'mana':{},'taps':[]}}
-            commands=[command]
-            if len(bundles)>1:commands.append({'kind':'answer','indexes':[index]})
-            result.append((tuple(counts[c] for c in COLORS),commands))
+            for spent in spends(available or (0,)*6,cost):
+                command={'kind':'activate','source':obj.ref.to_json(),'ability_id':ability.ability_id,
+                         'targets':[],'x_value':0,'payment':{'mana':{c:n for c,n in zip(COLORS,spent) if n},'taps':[]}}
+                commands=[command]
+                if len(bundles)>1:commands.append({'kind':'answer','indexes':[index]})
+                result.append((tuple(counts[c]-n for c,n in zip(COLORS,spent)),commands))
     return result
+
+
+
+def free_pool(kernel,actor):
+    tagged=Counter(v['symbol'] for v in kernel.state.mana_tags(actor).values())
+    pool=dict(kernel.state.mana_pool(actor))
+    return tuple(pool.get(c,0)-tagged[c] for c in COLORS)
+
+
+def spends(pool,cost):
+    """Exact, finite payments from already-produced unrestricted mana."""
+    total=cost.generic+len(cost.symbols)
+    if cost.x_symbols or total>sum(pool):return
+    count=0
+    def walk(i,left,prefix):
+        nonlocal count
+        if i==5:
+            if 0<=left<=pool[i]:
+                row=prefix+(left,);count+=1
+                if count>LIMIT:raise RulesViolation('Filter payment search limit reached')
+                if _mana_symbols_satisfied(cost.symbols,dict(zip(COLORS,row))):yield row
+            return
+        for n in range(max(0,left-sum(pool[i+1:])),min(pool[i],left)+1):
+            yield from walk(i+1,left-n,prefix+(n,))
+    yield from walk(0,total,())
+
+
+def filter_payment(kernel,actor,q,pool,reserve,excluded):
+    """Search ordered pure mana production; each permanent taps at most once.
+
+    Costs are paid before output is credited. No source can bootstrap itself or
+    mutually fund another unfunded filter. Commands are revalidated atomically.
+    The fast free-source solver is always attempted before this fallback.
+    """
+    from collections import deque
+    objects=[o for o in sorted(kernel.state.objects(Zone.BATTLEFIELD),key=lambda o:o.ref.card_id) if o.ref not in excluded]
+    # Probe structural eligibility without mutating mana or objects. Costs in
+    # the actual search must be funded by its reachable pool, not this probe.
+    potential=[(o,options(kernel,actor,o,available=(30,)*6)) for o in objects]
+    if not any(any(line[0]['payment']['mana'] for _,line in choices) for _,choices in potential):return None
+    sources=[(o,options(kernel,actor,o)) for o,choices in potential if choices]
+    need=q.cost.mana.generic+len(q.cost.mana.symbols)
+    cap=need+30+sum(reserve)
+    initial=tuple(min(cap,n) for n in pool)
+    queue=deque([(0,initial,[]) ]);seen={(0,initial)};cache={};work=0
+    while queue:
+        mask,available,line=queue.popleft()
+        for spent in spends(available,q.cost.mana):
+            remainder=tuple(a-n for a,n in zip(available,spent))
+            reachable={tuple(min(r,n) for r,n in zip(reserve,remainder))}
+            for i,(_,choices) in enumerate(sources):
+                if mask&(1<<i):continue
+                reachable|={tuple(min(r,h+n) for r,h,n in zip(reserve,held,mana)) for held in tuple(reachable) for mana,_ in choices}
+                if reserve in reachable:break
+            if reserve in reachable:return mask.bit_count(),line,spent
+        for i,(obj,_) in enumerate(sources):
+            if mask&(1<<i):continue
+            key=(i,available)
+            if key not in cache:cache[key]=options(kernel,actor,obj,available=available)
+            for net,commands in cache[key]:
+                work+=1
+                if work>LIMIT:raise RulesViolation('Automatic filter-mana search limit reached; no payment was made')
+                after=tuple(min(cap,a+n) for a,n in zip(available,net))
+                state=(mask|(1<<i),after)
+                if state in seen:continue
+                seen.add(state);queue.append((*state,line+commands))
+    return None
 
 
 def quote(kernel,actor,command):
@@ -111,7 +185,7 @@ def payment(kernel,actor,command,*,smart=False):
     return _payment(kernel,actor,command)
 
 
-def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS):
+def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filters=True):
     validate(command)
     q=quote(kernel,actor,command)
     if type(q.cost) not in (CostSpec,LoyaltyCost):raise RulesViolation('autotap requires an ordinary quoted cost; use explicit payment for this cost')
@@ -172,8 +246,10 @@ def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS):
             if all(n>=forced[c] for c,n in zip(COLORS,spend)) and _mana_symbols_satisfied(q.cost.mana.symbols,dict(zip(COLORS,spend))):
                 best=(taps,commands,spend);break
         if best is not None:break
+    if best is None and allow_filters and not selected:
+        best=filter_payment(kernel,actor,q,pool,reserve,excluded)
     if best is None:
-        if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Consequential mana abilities require explicit pilot activation; tapped or restricted sources may be unavailable.')
+        if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Consequential mana sources still require planner-authored sequencing; tapped or restricted sources may be unavailable.')
         raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
     base['mana']={c:n for c,n in zip(COLORS,best[2]) if n}
     if best[1]:base['mana_actions']=best[1]
@@ -211,7 +287,7 @@ The isolated trial is committed only after the entire payment validates.
         cmd=lines[index]
         if cmd.get('kind')!='activate':raise RulesViolation('Bundled mana must begin with an ordinary activation')
         obj=trial.state.get(ObjectRef.from_json(cmd['source']))
-        match=next((line for _,line in options(trial,q.actor,obj) if lines[index:index+len(line)]==line),None)
+        match=next((line for _,line in options(trial,q.actor,obj,available=free_pool(trial,q.actor)) if lines[index:index+len(line)]==line),None)
         if match is None:raise RulesViolation('Bundled mana contains an unavailable or consequential mana action')
         for row in match:
             bound=deepcopy(row);bound['revision']=trial.revision
@@ -239,7 +315,7 @@ def commit_resolution_payment(kernel, actor, command, payment):
         row=lines[index]
         if row.get('kind')!='activate':raise RulesViolation('Bundled mana requires an activation')
         obj=trial.state.get(ObjectRef.from_json(row['source']))
-        match=next((cmds for _,cmds in options(trial,actor,obj) if lines[index:index+len(cmds)]==cmds),None)
+        match=next((cmds for _,cmds in options(trial,actor,obj,available=free_pool(trial,actor)) if lines[index:index+len(cmds)]==cmds),None)
         if match is None:raise RulesViolation('Unavailable ordinary mana bundle')
         for item in match:
             item=deepcopy(item);item['revision']=trial.revision
