@@ -60,6 +60,16 @@ class PacketExportTests(unittest.TestCase):
             self.assertEqual(len(list((out/'packets').glob('*.html'))),25)
             self.assertNotIn('OPAQUE',''.join(p.read_text() for p in (out/'packets').glob('*.html')))
 
+    def test_pilot_document_and_unchanged_sections_keep_audit_context(self):
+        text='# Pilot working document\n\nAccepted decision count: 895\n\n## turn\n{"number":20,"active":"Minsc & Boo","phase":"precombat_main"}\n\n## stack\n[{"name":"Ghalta, Primal Hunger","source":"S1"}]\n'
+        value=next(module.objects(text))
+        context=module.context_packet(value,{}, {}, {})
+        self.assertEqual(895,context['sequence']);self.assertEqual(20,context['turn']['number'])
+        next_text='# Pilot working document\n\nAccepted decision count: 897\n\n## turn\nUnchanged since the previous delivered input in this conversation.\n\n## stack\n[]\n'
+        updated=module.context_packet(next(module.objects(next_text)),context,{}, {})
+        self.assertEqual(897,updated['sequence']);self.assertEqual(context['turn'],updated['turn'])
+        self.assertEqual([],updated['stack'])
+
     def test_delta_context_and_unknown_revision(self):
         from edh_gauntlet.rules_adapter import digest
         board={'turn':{'number':17,'phase':'end','active':'Omo'},'revision':'r1','stack':[]}

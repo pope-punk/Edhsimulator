@@ -20,6 +20,7 @@ class FakeServer:
         return {}
     def send(self,value):self.calls.append((value['method'],value['params']))
     def respond(self,request,value,success=True):self.replies.append((request,value,success))
+    def respond_text(self,request,text,success=True):self.replies.append((request,{'pilot_document':text},success))
     def close(self):self.closed=True
 
 
@@ -27,6 +28,7 @@ class PrimitiveHostTests(TestCase):
     def setUp(self):
         self.temp=TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.game=PrimitiveCampaign._create(Path(self.temp.name)/'game',seed=93,starting_player='Omo')
+        self.game.config.pop('pilot_document',None)  # Legacy packet delivery remains supported.
         self.addCleanup(self.game.close)
         self.server=FakeServer();self.runner=PrimitiveRunner(self.game,self.server)
         self.addCleanup(self.runner.timing.close)

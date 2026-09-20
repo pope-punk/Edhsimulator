@@ -136,6 +136,7 @@ def claim(campaign,actor,role):
                     messages=deepcopy(state['messages'][-24:]))
             from .primitive_inspection import freeze
             job['input']['_knowledge']=freeze(campaign,actor,board) if role!=DIPLOMAT else {}
+            if campaign.config.get('pilot_document')==1:job['input']['_accepted_sequence']=campaign.store.generation
         return {**deepcopy(job['input']),'stage':stages(role,job)[job['stage']]}
 
 

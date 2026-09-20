@@ -7,6 +7,8 @@ this build. Existing game bindings are not silently migrated.
 
 ## Primitive campaign release
 
+Fresh campaigns bind `pilot_document:1` for the [pilot working document](PILOT_WORKING_DOCUMENT.md): a separate parameterized action menu, exact-reference aliases, grouped board and frozen Oracle rules. Earlier campaigns retain their bound packet transport.
+
 Fresh primitive campaigns use `primitive_lifecycle init --games N --learning disabled`.
 Select a matching `EDH_PRIMITIVE_RELEASE_RECEIPT` produced by `primitive_release`.
 The dashboard's Start supervisor runs each game and advances only after a clean

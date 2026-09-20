@@ -116,6 +116,12 @@ class AppServer:
         self.send({'id':key,'result':{'success':success,'contentItems':[
             {'type':'inputText','text':json.dumps(value,ensure_ascii=False,separators=(',',':'))}]}})
 
+    def respond_text(self,key,text,success=True):
+        """Deliver an already rendered pilot document without JSON quoting it."""
+        if getattr(self,'timing',None):self.timing.returned(key,{'pilot_document':text},success)
+        self.send({'id':key,'result':{'success':success,'contentItems':[
+            {'type':'inputText','text':text}]}})
+
     def close(self):
         try:self.process.stdin.close()
         except (OSError,ValueError):pass

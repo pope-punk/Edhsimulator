@@ -105,9 +105,10 @@ card into that visible zone in an approved sequence. Other references stay exact
 '''
 
 
-def inspection_schema(role):
+def inspection_schema(role,*,pilot_document=False):
     pointer={'path':{'type':'string'},'offset':{'type':'integer','minimum':0},'limit':{'type':'integer','minimum':1,'maximum':32}}
     ref={'type':'object','properties':{'card_id':{'type':'string'},'incarnation':{'type':'integer'}},'required':['card_id','incarnation'],'additionalProperties':False}
+    if pilot_document:ref={'anyOf':[ref,{'type':'string','description':'Current C/S object label'}]}
     kinds=[('object',{'source':ref},['source']),('card',{'name':{'type':'string'}},['name']),
            ('state',{},[]),('decision',{},[]),('history',{'after':{'type':'integer','minimum':0},'page_size':{'type':'integer','minimum':1,'maximum':32}},['after'])]
     if role==planning.LONG:kinds.append(('deck',{},[]))
@@ -115,9 +116,9 @@ def inspection_schema(role):
                      'required':['kind',*required],'additionalProperties':False} for kind,fields,required in kinds]}
 
 
-def schemas(role):
+def schemas(role,*,pilot_document=False):
     inspect_tool=tool('edh_inspect','Inspect only your frozen input. Batch related queries.',
-        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role)}},['queries'])
+        {'queries':{'type':'array','minItems':1,'maxItems':8,'items':inspection_schema(role,pilot_document=pilot_document)}},['queries'])
     if role=='decider':
         return [tool('edh_act','Approve a usable supplied planner sequence with batch. Otherwise submit the intended cast/ability directly: fresh autotap games pay automatically when payment is omitted. Use a direct sequence for multiple known actions. Await the next input or park.',
             {'command':{'type':'object'},'rationale':{'type':'string'},'scheduler':{'type':'object'},'batch':{'type':'object','properties':{
@@ -142,7 +143,7 @@ def schemas(role):
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
 
 
-def instructions(actor,role,*,automatic_mana=False):
+def instructions(actor,role,*,automatic_mana=False,pilot_document=False):
     if role=='decider':
         specific='''You alone choose actions, targets, costs and approvals. Own diplomatic_holds constrain
 attacks/targeting until expiry. Honor them or call edh_diplomatic_override with
@@ -400,6 +401,8 @@ The host parks oversized tool deliveries and supplies a complete next real input
         specific=specific[:start]+specific[end:]
     if role=='decider':specific+='\nA supplied combo_offer is a planner proof, not permission to win. If you choose to demonstrate that ready loop, call edh_propose_combo with its proposal_id. At combo_consent call edh_combo_consent; accept only if you have no interaction capable of stopping the demonstrated loop. Decline restores normal priority. All consents still require independent rules adjudication. Never report a rules defect solely because an old rejection mentions another command: rejection_context binds its actual command and accepted prefix.'
     if role==planning.SHORT:specific+='\nOptional combo_proposal in the actions stage is {proposal_text,seat_turn,phase,requires}. Describe the concrete repeatable loop and claimed outcome in <=1200 characters; phase is precombat_main or postcombat_main. requires is up to eight {source:{card_id,incarnation},zone,controller} guards. Publish only when a concrete loop is ready; omission clears the old proposal. The decider chooses whether to submit it; opponents consent before an independent adjudicator evaluates it.'
+    if pilot_document:
+        specific += '\nPilot document interface: action and object labels replace raw identities. Use command:{action:"A1",target:"S1"} or targets:["C1",{player:SEAT}]; supply modes/X/non-mana costs when needed. Action labels apply only to the current menu. Other command forms remain supported, with C/S labels wherever exact object references are required. For a planned post-zone-change reference use {owned_card:"C1",zone:"battlefield"}; Python binds the new incarnation at execution. R labels replace operational IDs (requests, planner steps, holds, abilities); copy them exactly. Python binds revisions and request identities. At an answer decision, using its menu action supplies request_id automatically. An action family is not a guarantee of legality or automatic payment: read its availability, target rules and current decision. Printed Oracle rules never authorize an unimplemented or illegal action. Do not inspect unless you are a planner.'
     return f'You are the {actor} {role}.\n'+common+specific
 
 
@@ -409,7 +412,7 @@ class PrimitiveRunner:
         self.warm_seconds=warm_seconds;self.context_tokens=context_tokens
         self.directory=campaign.root/'host_runtime';self.directory.mkdir(exist_ok=True)
         self.routing=Routing();self.routing.primary.update(MODELS)
-        self.lanes={};self.threads={};self.running={};self.waiting={};self.deliveries={};self.inputs={}
+        self.lanes={};self.threads={};self.running={};self.waiting={};self.deliveries={};self.inputs={};self.documents={}
         self.tool_counts={};self.failures={};self.retries={};self.retry_at={};self.seen=set();self.unanswered={};self.turn_models={};self.waiting_receipts={};self.last_status=None
         self.unfinished_publications={}
         self.initial_count=campaign.store.generation;self.done=False
@@ -462,10 +465,10 @@ class PrimitiveRunner:
         if thread:
             if not self.checkpoint_due(thread):return thread
             self.server.call('thread/unsubscribe',{'threadId':thread})
-            self.deliveries.pop(thread,None);self.lanes.pop(key)
+            self.deliveries.pop(thread,None);self.documents.pop(thread,None);self.lanes.pop(key)
         params={'cwd':str(self.workspace),'environments':[],'selectedCapabilityRoots':[],
             'approvalPolicy':'never','sandbox':'read-only','model':MODELS[role],
-            'baseInstructions':instructions(actor,role,automatic_mana=self.campaign.config.get('automatic_decider_mana')==1),'dynamicTools':schemas(role),'historyMode':'legacy',
+            'baseInstructions':instructions(actor,role,automatic_mana=self.campaign.config.get('automatic_decider_mana')==1,pilot_document=self.campaign.config.get('pilot_document')==1),'dynamicTools':schemas(role,pilot_document=self.campaign.config.get('pilot_document')==1),'historyMode':'legacy',
             'config':{'model_reasoning_effort':EFFORTS.get(role,'medium'),'web_search':'disabled',
                       'features':{'shell_tool':False,'apps':False,'plugins':False,'browser_use':False,
                                   'computer_use':False,'multi_agent':False,'hooks':False,'skill_search':False}}}
@@ -503,8 +506,15 @@ class PrimitiveRunner:
         if thread not in self.deliveries:
             memory=self.memory(actor,role,packet)
             if memory:value['retained_memory']=memory
-        presented,next_state=present(value,role,self.deliveries.get(thread))
-        text=json.dumps(presented,ensure_ascii=False,separators=(',',':'))
+        document=None
+        if self.campaign.config.get('pilot_document')==1:
+            from .primitive_pilot_document import Document
+            document=Document(self.campaign.assets/'data/catalog/cards.json',self.documents.get(thread))
+            presented={'pilot_document':document.render({**value,**{k:v for k,v in packet.items() if k.startswith('_')}},role)}
+            next_state={}  # self-contained document; no board/hash reconstruction in inference
+        else:
+            presented,next_state=present(value,role,self.deliveries.get(thread))
+        text=presented['pilot_document'] if document else json.dumps(presented,ensure_ascii=False,separators=(',',':'))
         if thread in self.waiting and len(text.encode('utf8'))>MAX_INLINE_PACKET_BYTES:
             # A waiting tool has a separate output budget. End its old turn before
             # delivering this complete real input through turn/start. Do not mark
@@ -515,8 +525,10 @@ class PrimitiveRunner:
             return False
         if thread in self.waiting:
             request,_=self.waiting.pop(thread)
-            presented['previous_receipt']=self.waiting_receipts.pop(thread)
-            self.server.respond(request,presented)
+            receipt=self.waiting_receipts.pop(thread)
+            presented['previous_receipt']=document.labels.encode(receipt) if document else receipt
+            if document:self.server.respond_text(request,text+'\n## Previous receipt\n'+json.dumps(presented['previous_receipt'],ensure_ascii=False))
+            else:self.server.respond(request,presented)
         else:
             if thread in self.running:raise RuntimeError('Role lane already has an inference')
             model=self.routing.select(role)
@@ -528,6 +540,7 @@ class PrimitiveRunner:
             self.running[thread]=result['turn']['id'];self.tool_counts[thread]=0;self.turn_models[thread]=model
             self.timing.record('turn_request',thread,input_chars=len(text),model=model,role=role)
         self.inputs[thread]=packet;self.deliveries[thread]=next_state
+        if document:self.documents[thread]=document.labels
         self.timing.record('input_delivered',thread,warm=warm,accepted=self.campaign.store.generation,input_chars=len(text))
         if role=='decider':actions.delivered(self.campaign,actor,packet['claim_id'])
         return True
@@ -630,6 +643,8 @@ class PrimitiveRunner:
         args=params['arguments'];name=params['tool'];frozen=self.inputs[thread]
         try:
             if self.campaign.next_action()['kind']!='dispatch_pilot':raise RulesViolation('Campaign dispatch is stopped')
+            if self.campaign.config.get('pilot_document')==1:
+                args=self.documents[thread].decode(args)
             if name=='edh_inspect' and role in (planning.LONG,planning.SHORT):value=inspect(self.campaign,actor,role,frozen,args['queries'])
             elif name=='edh_publish' and role!= 'decider':
                 if role==planning.LONG and args.get('stage')=='long_term' and type(args.get('response',{}).get('diplomacy')) is not dict:
@@ -674,7 +689,13 @@ class PrimitiveRunner:
             else:raise RulesViolation('Tool is not owned by this role')
             if name=='edh_publish':self.timing.record('publication_accepted',thread,stage=args.get('stage'),combined=args.get('stage')=='short_term_and_actions')
             if name=='edh_inspect':self.timing.record('inspection_batch',thread,queries=len(args['queries']),rejected=sum(isinstance(r,dict) and bool(r.get('rejected')) for r in value['results']))
-            self.server.respond(request,value)
+            if self.campaign.config.get('pilot_document')==1:
+                from .primitive_pilot_document import Document
+                document=Document(self.campaign.assets/'data/catalog/cards.json',self.documents[thread])
+                value=document.value(value)
+                self.documents[thread]=document.labels
+                self.server.respond_text(request,value)
+            else:self.server.respond(request,value)
         except (RulesViolation,ValueError,KeyError,TypeError) as exc:
             self.timing.record('input_rejected',thread,tool=name,reason_sha256=digest(str(exc)))
             self.server.respond(request,{'rejected':True,'reason':str(exc),'instruction':'Correct only this unaccepted input. Never replay an accepted action or stage.'},False)

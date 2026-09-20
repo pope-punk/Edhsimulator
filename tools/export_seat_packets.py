@@ -47,6 +47,17 @@ def text_parts(value):
 
 def objects(text):
     """Decode complete JSON text blocks, never execute model-authored code."""
+    if isinstance(text,str) and text.startswith('# Pilot working document\n'):
+        import re
+        count=re.search(r'^Accepted decision count: (\d+)$',text,re.M)
+        observation={'sequence':int(count[1]) if count else ''}
+        for field in ('turn','stack'):
+            section=re.search(r'^## '+field+r'\n([^\n]+)',text,re.M)
+            if section:
+                try:observation[field]=json.loads(section[1])
+                except ValueError:pass # Explicit unchanged section inherits the previous delivery.
+        yield {'pilot_document_observation':observation}
+        return
     try:
         value = json.loads(text)
     except (ValueError, TypeError):
@@ -116,6 +127,8 @@ def context_packet(value, current, boards, revisions):
     from edh_gauntlet.primitive_journal import apply
     from edh_gauntlet.communications import expand_board
     from copy import deepcopy
+    if 'pilot_document_observation' in value:
+        return {**current,**value['pilot_document_observation'],'basis':'delivered pilot document (may lag live play)'}
     candidates = [value]
     if isinstance(value.get('next'), dict):
         candidates.append(value['next'])

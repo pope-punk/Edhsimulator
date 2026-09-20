@@ -62,6 +62,10 @@ def claim(campaign,actor):
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
         value['_knowledge']=freeze(campaign,actor,packet)
+        if campaign.config.get('pilot_document')==1:
+            from .primitive_action_menu import freeze as freeze_menu
+            value['_action_menu']=freeze_menu(campaign,actor,value)
+            value['_accepted_sequence']=campaign.store.generation
         value['evidence_through']=campaign.evidence_position(actor)
         value['messages']=deepcopy(state['messages'])
         state['claim_serial']=state.get('claim_serial',0)+1
