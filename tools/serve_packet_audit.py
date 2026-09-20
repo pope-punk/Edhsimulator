@@ -27,7 +27,7 @@ class AuditHandler(Handler):
         if path.startswith('/api/packet-audit/'):
             if not self.auth():return self.send_value({'error':'unauthorized'},401)
             name=path.removeprefix('/api/packet-audit/')
-            allowed=re.fullmatch(r'(round-(1|5|7)\.(csv|json)|manifest\.json|sparse-preview\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|help-\d+)\.html)',name)
+            allowed=re.fullmatch(r'(round-(1|5|7)\.(csv|json)|submission-issues\.(csv|json)|manifest\.json|sparse-preview\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|(?:help|issue)-\d+)\.html)',name)
             if not allowed:return self.send_value({'error':'not found'},404)
             root=self.server.audit
             if name=='bundle.zip':
@@ -50,7 +50,7 @@ class AuditHandler(Handler):
                 if rows:
                     link=rows[0].index('hyperlink to copy');identity=rows[0].index('record ID')
                     for row in rows[1:]:
-                        if re.fullmatch(r'[a-f0-9]{24}|help-\d+',row[identity]):
+                        if re.fullmatch(r'[a-f0-9]{24}|(?:help|issue)-\d+',row[identity]):
                             row[link]='=HYPERLINK("'+self.server.public_url+'/audit/#packet='+row[identity]+'","Open packet")'
                 stream=io.StringIO();csv.writer(stream).writerows(rows)
                 return self.send_value(stream.getvalue(),content_type='text/csv; charset=utf-8')

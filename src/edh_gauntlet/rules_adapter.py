@@ -138,6 +138,9 @@ class RulesActorAdapter:
         if kind=='unlock_room':
             try:payment=Payment.from_json(command['payment'])
             except (TypeError,KeyError,ValueError) as exc:raise RulesViolation('Invalid unlock payment') from exc
+            if payment.mana_actions:
+                from .primitive_autotap import commit_resolution_payment
+                return commit_resolution_payment(k,actor,command,payment)
             return k.unlock_room(command['action_id'],actor,self._visible_ref(command['source'],actor),command['door'],payment,revision=command['revision'])
         if kind=='play_land':return k.play_land(command['action_id'],actor,self._visible_ref(command['source'],actor),revision=command['revision'],face=command.get('face','front'))
         if kind=='attack':

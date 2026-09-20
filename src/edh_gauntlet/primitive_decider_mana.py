@@ -3,7 +3,7 @@ from copy import deepcopy
 from .rules_state import RulesViolation, ObjectRef
 
 
-def validate(campaign,actor,command):
+def validate(campaign,actor,command,*,future=False):
     if campaign.config.get('automatic_decider_mana')!=1:return
     if not isinstance(command,dict):raise RulesViolation('Expected an action command')
     if 'autotap' in command:raise RulesViolation('Mana selection is automatic; omit autotap or accept the planner sequence unchanged')
@@ -16,7 +16,7 @@ def validate(campaign,actor,command):
         if isinstance(ref,dict) and set(ref)=={'owned_card','zone'}:
             obj=campaign.kernel.state.get(campaign.kernel.state.current(ref['owned_card']))
             campaign.store._adapter._visible_ref(obj.ref.to_json(),actor)
-            if obj.owner!=actor or obj.zone.value!=ref['zone']:raise RulesViolation('Symbolic object is unavailable')
+            if obj.owner!=actor or (not future and obj.zone.value!=ref['zone']):raise RulesViolation('Symbolic object is unavailable')
         else:obj=campaign.kernel.state.get(campaign.store._adapter._visible_ref(ref,actor))
         ability=next((a for a in campaign.kernel.activated_abilities(obj) if a.ability_id==command.get('ability_id')),None)
         if ability is None:raise RulesViolation('Unavailable activation; choose a supplied non-mana ability')
@@ -48,7 +48,7 @@ source tap costs are implicit. REF is {card_id,incarnation}; player targets {pla
 answer:{kind:"answer",request_id:CURRENT_CHOICE_ID,indexes:[ZERO_BASED_INDEXES]};
 pass:{kind:"pass"}; concede:{kind:"concede"} only at priority;
 play_land:{kind:"play_land",source:REF,face:"front"|"back"}.
-Room unlocks retain planner-authored payment: approve the unchanged unlock_room step.
+unlock_room:{kind:"unlock_room",source:REF,door:"left"|"right"} also pays automatically.
 Optional casting fields: face, modes, alternative_id, counter_division, kicker,
 replicate, life_costs, hybrid_choices. These are gameplay choices, not mana taps.
 attack:{kind:"attack",attackers:[{source:REF,defender:SEAT_OR_REF}]};

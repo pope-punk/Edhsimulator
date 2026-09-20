@@ -1,6 +1,7 @@
 """Bounded deterministic payment selection for explicitly authorized auto-taps.
 
-Only side-effect-free tap-for-mana abilities, including finite paid filters, are eligible. Reservations describe
+The fast path uses ordinary tap-for-mana sources and finite paid filters; a
+bounded fallback validates additional costs on isolated kernels. Reservations describe
 simultaneously available mana after payment, not a preference to ignore on failure.
 """
 import hashlib
@@ -17,8 +18,8 @@ LIMIT = 20000
 def validate(command):
     if 'autotap' not in command:return
     spec=command['autotap']
-    if command.get('kind') not in ('cast','activate','pay_mana') or type(spec) is not dict or set(spec)-{'reserve','tagged_mana'}:
-        raise RulesViolation('autotap is a cast/activate option with optional reserve counts and tagged_mana IDs')
+    if command.get('kind') not in ('cast','activate','pay_mana','unlock_room') or type(spec) is not dict or set(spec)-{'reserve','tagged_mana'}:
+        raise RulesViolation('autotap supports cast, activate, unlock_room and pay_mana with optional reserve counts and tagged_mana IDs')
     tags=spec.get('tagged_mana',[])
     if type(tags) is not list or any(type(unit) is not str for unit in tags) or len(set(tags))!=len(tags):
         raise RulesViolation('autotap.tagged_mana requires unique current owned mana unit IDs')
@@ -153,6 +154,20 @@ def filter_payment(kernel,actor,q,pool,reserve,excluded):
 
 
 def quote(kernel,actor,command):
+    if command.get('kind')=='unlock_room':
+        from types import SimpleNamespace
+        from .rules_adapter import RulesActorAdapter
+        source=RulesActorAdapter(kernel)._visible_ref(command['source'],actor)
+        obj=kernel.state.get(source);program=kernel._room(obj);door=command.get('door')
+        if (kernel.priority!=actor or kernel.active!=actor or kernel.stack
+            or kernel.phase not in {'precombat_main','postcombat_main'}):
+            raise RulesViolation('Unlocking requires sorcery timing and current priority')
+        if (obj.zone!=Zone.BATTLEFIELD or obj.phased or obj.controller!=actor
+            or program is None or door not in {'left','right'} or door in obj.unlocked):
+            raise RulesViolation('Choose a locked door you control')
+        half=program if door=='left' else program.right
+        if half.cast is None:raise RulesViolation('An absent mana cost cannot be paid')
+        return SimpleNamespace(cost=CostSpec(mana=half.cast.cost.mana),source=source,actor=actor,kind='unlock_room')
     if command.get('kind')=='pay_mana':
         from types import SimpleNamespace
         from .rules_program import decode
@@ -194,9 +209,9 @@ def payment(kernel,actor,command,*,smart=False):
 def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filters=True):
     validate(command)
     q=quote(kernel,actor,command)
-    if type(q.cost) not in (CostSpec,LoyaltyCost):raise RulesViolation('autotap requires an ordinary quoted cost; use explicit payment for this cost')
+    if type(q.cost) not in (CostSpec,LoyaltyCost):raise RulesViolation('autotap requires an ordinary quoted cost; this cost needs an explicitly approved planner payment')
     need=q.cost.mana.generic+len(q.cost.mana.symbols)
-    if need>30:raise RulesViolation('autotap bounded search supports costs up to 30 mana; use explicit payment')
+    if need>30:raise RulesViolation('Automatic search supports costs up to 30 mana; this action needs an explicitly approved planner payment')
     reserve=tuple(command['autotap'].get('reserve',{}).get(c,0) for c in COLORS)
     tags=kernel.state.mana_tags(actor)
     selected=command['autotap'].get('tagged_mana',[])
@@ -234,7 +249,7 @@ def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filter
         if len(limits)==1:
             if 0<=total<=limits[0]:
                 attempts+=1
-                if attempts>LIMIT:raise RulesViolation('autotap expenditure search limit reached; use explicit payment')
+                if attempts>LIMIT:raise RulesViolation('Automatic expenditure search limit reached; no costs were paid')
                 yield prefix+(total,)
             return
         for n in range(max(0,total-sum(limits[1:])),min(limits[0],total)+1):
@@ -256,7 +271,7 @@ def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filter
         best=filter_payment(kernel,actor,q,pool,reserve,excluded)
     if best is None:
         if not any(reserve):raise RulesViolation('autotap found no payment using eligible ordinary mana sources; no reserve was requested. Additional-cost sources are checked by the fallback; tapped or restricted sources may be unavailable.')
-        raise RulesViolation('autotap cannot pay while preserving the requested reserve using ordinary mana sources; edit the reservation or pay explicitly')
+        raise RulesViolation('Automatic payment could not pay while preserving the requested reserve with ordinary sources; choose a new automatically paid action or a revised planner proposal')
     base['mana']={c:n for c,n in zip(COLORS,best[2]) if n}
     if best[1]:base['mana_actions']=best[1]
     if any(reserve):
@@ -273,7 +288,7 @@ def _payment(kernel,actor,command,*,sources=None,spend_order=COLORS,allow_filter
                         for held in tuple(reachable) for mana,_ in choices}
             if reserve in reachable:break
         if reserve not in reachable:
-            raise RulesViolation('autotap cannot preserve the reserve after the complete action costs; revise the payment or reserve')
+            raise RulesViolation('autotap cannot preserve the reserve after the complete action costs; choose a new action or a revised planner proposal')
     return base
 
 

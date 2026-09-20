@@ -140,7 +140,10 @@ def payment(kernel,actor,command):
         state,line,used=queue.popleft()
         if line:
             try:
-                tail=_payment(state,actor,command)
+                if state.state.mana_tags(actor):
+                    from .primitive_mana_preferences import preferred_payment
+                    tail=preferred_payment(state,actor,command)
+                else:tail=_payment(state,actor,command)
                 result=deepcopy(tail);result['mana_actions']=line+tail.get('mana_actions',[])
                 final=deepcopy(command);final.pop('autotap',None);final['payment']=result
                 from .rules_adapter import RulesActorAdapter

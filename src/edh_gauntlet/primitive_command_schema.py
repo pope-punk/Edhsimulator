@@ -5,7 +5,7 @@ FIELDS={
  'cast':({'source','targets','x_value'},{'payment','autotap','face','modes','alternative_id','counter_division','kicker','replicate','life_costs','hybrid_choices'}),
  'activate':({'source','ability_id','targets','x_value'},{'payment','autotap','counter_division'}),
  'play_land':({'source'},{'face'}),
- 'unlock_room':({'source','door','payment'},set()),
+ 'unlock_room':({'source','door'},{'payment','autotap'}),
  'answer':({'indexes'},{'request_id','choice_from'}),
  'allocate_counters':({'request_id','allocations'},set()),
  'pay_mana':({'request_id'},{'payment','autotap'}),
@@ -14,6 +14,8 @@ FIELDS={
  'damage':({'assignments'},set()),'pass':(set(),set())}
 
 def validate(command):
+    from .primitive_intent import normalize
+    normalized=normalize(command);command.clear();command.update(normalized)
     kind=command.get('kind')
     if kind not in FIELDS:raise RulesViolation('Unsupported proposed primitive command')
     # Empty targeting metadata carries no choice. Canonicalize this common

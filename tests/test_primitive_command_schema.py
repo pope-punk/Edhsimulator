@@ -33,9 +33,20 @@ class CommandSchemaTests(unittest.TestCase):
                 validate({**base,'payment':{'mana':mana,'taps':[]}})
         validate({**base,'payment':{'mana':{'W':2,'U':1,'B':1},'taps':[]}})
 
-    def test_missing_spell_parameters_report_exact_fields(self):
-        with self.assertRaisesRegex(RulesViolation,"missing.*targets.*x_value"):
-            validate({'kind':'cast','source':{}})
+    def test_default_target_and_x_fields_are_shared(self):
+        command={'kind':'cast','source':{'card_id':'spell','incarnation':0}}
+        validate(command)
+        self.assertEqual([],command['targets']);self.assertEqual(0,command['x_value'])
+
+    def test_nonmana_selections_keep_automatic_payment(self):
+        command={'kind':'activate','source':{'owned_card':'card','zone':'battlefield'},'ability_id':'use',
+                 'payment':{'zone_costs':{'sacrifice':[{'owned_card':'food','zone':'battlefield'}]}}}
+        validate(command)
+        self.assertEqual({},command['autotap'])
+        self.assertEqual({},command['payment']['mana'])
+        self.assertIn('zone_costs',command['payment'])
+        with self.assertRaisesRegex(RulesViolation,'declines only'):
+            validate({'kind':'cast','source':{'card_id':'spell','incarnation':0},'payment':None})
 
 class PublicationSchemaTests(unittest.TestCase):
     setUp=_Fixture.setUp

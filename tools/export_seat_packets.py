@@ -14,7 +14,7 @@ import zlib
 ROUNDS = {1: (1, 4), 5: (17, 20), 7: (25, 28)}
 FIELDS = ['decision #', 'turn #', 'active seat', 'phase', 'stack contents',
           'sender', 'recipient', 'type', 'rationale', 'length', 'hyperlink to copy',
-          'timestamp UTC', 'role', 'inference turn', 'context basis', 'record ID', 'source']
+          'timestamp UTC', 'role', 'inference turn', 'context basis', 'record ID', 'source', 'category', 'submission issues', 'issue reason', 'issue ID', 'related packet']
 
 
 def decode(blob):
@@ -66,6 +66,61 @@ def objects(text):
         yield value
 
 
+def submission_issues(entries, thread):
+    """Classify transport facts, never words quoted in strategy or table chat."""
+    import re
+    annotations={};calls={}
+    def record(line):return hashlib.sha256(f'{thread}:{line}'.encode()).hexdigest()[:24]
+    def mark(line,kind,reason='',identity='',related=None):
+        item=annotations.setdefault(line,{'kinds':set(),'reasons':set(),'ids':set(),'related':set()})
+        item['kinds'].add(kind)
+        if reason:item['reasons'].add(reason)
+        item['ids'].add(identity or 'issue-'+record(line))
+        if related:item['related'].add(record(related))
+    for line,raw,value in entries:
+        if value.get('type')!='response_item':continue
+        p=value.get('payload',{});kind=p.get('type','');call_id=p.get('call_id')
+        if kind in ('custom_tool_call','function_call'):
+            if call_id:calls[call_id]=line
+            code=p.get('input',p.get('arguments',''))
+            if p.get('name')=='edh_request_help' or re.search(r'\btools\.edh_request_help\s*\(',code):
+                mark(line,'help query',identity='help-'+record(line))
+            continue
+        incoming=kind.endswith('_output') or p.get('role')=='user'
+        if not incoming:continue
+        reasons=[]
+        for text in text_parts(p.get('content',p.get('output',[]))):
+            if text.startswith('# Pilot working document\n'):
+                match=re.search(r'^## rejection\n(.+?)(?=\n## |\Z)',text,re.M|re.S)
+                if match and not match[1].strip().startswith('Unchanged since'):
+                    reasons.append(match[1].strip())
+                continue
+            def failures(value):
+                if isinstance(value,str):
+                    try:value=json.loads(value)
+                    except ValueError:return
+                if isinstance(value,list):
+                    for child in value:yield from failures(child)
+                elif isinstance(value,dict):
+                    if value.get('rejected') is True:yield str(value.get('reason','Submission rejected'))
+                    elif value.get('isError') is True:yield str(value.get('error',value.get('message','Tool failed')))
+                    elif value.get('rejection'):yield str(value['rejection'])
+                    # Traverse transport envelopes only, never strategy/board text.
+                    for key in ('content','results','result','output','structuredContent'):
+                        if key in value:yield from failures(value[key])
+                    if value.get('type')=='text' and 'text' in value:yield from failures(value['text'])
+            reasons.extend(failures(text))
+        if p.get('is_error') is True or p.get('isError') is True:
+            reasons.append('Tool reported an error')
+        if reasons:
+            submitted=calls.get(call_id) if kind.endswith('_output') else None
+            identity='issue-'+record(submitted or line)
+            for reason in reasons:
+                mark(line,'failure notification',reason,identity,submitted)
+                if submitted:mark(submitted,'failed submission',reason,identity,line)
+    return annotations
+
+
 def rationales(value):
     if isinstance(value, dict):
         for key, child in value.items():
@@ -89,7 +144,7 @@ def database(run, actor):
     supervisors = []
     for evidence_id, kind, sequence, blob in db.execute(
             'SELECT seq,kind,rules_seq,payload FROM host_evidence WHERE actor=? ORDER BY seq', (actor,)):
-        if kind not in ('observation', 'help_request', 'help_answer'):
+        if kind not in ('observation', 'help_request', 'help_answer', 'batch_rejection'):
             continue
         value = decode(blob)
         if kind == 'observation':
@@ -185,8 +240,9 @@ def export(run, output, sessions, actor='Reaminatour'):
     paths = list(sessions.rglob('rollout-*.jsonl'))
     files = {thread: next((p for p in paths if p.name.endswith(thread + '.jsonl')), None) for thread in threads}
     all_count = 0
+    issue_records=[];issue_rows=[]
 
-    def add(record_id, role, kind, sender, recipient, raw, payload, context, timestamp, inference, source, previous):
+    def add(record_id, role, kind, sender, recipient, raw, payload, context, timestamp, inference, source, previous, issue=None):
         nonlocal all_count
         all_count += 1
         turn = (context.get('turn') or {}).get('number')
@@ -195,9 +251,10 @@ def export(run, output, sessions, actor='Reaminatour'):
         rendered = packet_html(raw, record_id, previous, metadata)
         if not path.exists() or path.read_text(encoding='utf8') != rendered:
             atomic(path, rendered)
+        if issue:
+            issue_records.append({'record_id':record_id,'role':role,'turn':turn,'timestamp':timestamp,
+                'kinds':sorted(issue['kinds']),'reasons':sorted(issue['reasons']),'issue_ids':sorted(issue['ids']),'related':sorted(issue['related'])})
         number = round_for(turn) if isinstance(turn, int) else None
-        if number is None:
-            return
         why = list(dict.fromkeys(rationales(payload)))
         # Tool code is retained verbatim in the copy; only extract quoted rationale literals.
         if kind.startswith(('custom_tool_call/', 'function_call/')):
@@ -211,8 +268,12 @@ def export(run, output, sessions, actor='Reaminatour'):
                json.dumps(context.get('stack', []), ensure_ascii=False), sender, recipient, kind,
                '\n'.join(dict.fromkeys(why)), len(raw.encode('utf8')),
                f'=HYPERLINK("packets/{record_id}.html","Open packet")', timestamp,
-               role, inference, context.get('basis', 'unknown'), record_id, source]
-        rows[number].append(row)
+               role, inference, context.get('basis', 'unknown'), record_id, source,
+               'Submission issues' if issue else '', '; '.join(sorted(issue['kinds'])) if issue else '',
+               '\n'.join(sorted(issue['reasons'])) if issue else '', '; '.join(sorted(issue['ids'])) if issue else '',
+               '; '.join(sorted(issue['related'])) if issue else '']
+        if issue:issue_rows.append(dict(zip(FIELDS,row)))
+        if number is not None:rows[number].append(row)
 
     for thread, role in sorted(threads.items()):
         path = files[thread]
@@ -226,6 +287,7 @@ def export(run, output, sessions, actor='Reaminatour'):
                 errors.append({'source': str(path), 'line': line_number, 'error': 'Incomplete JSON line; retry on next poll'})
                 break
             entries.append((line_number, line.rstrip('\n'), value))
+        issues=submission_issues(entries,thread)
         current, boards = {}, {}
         first_context = None
         inference_contexts = {}
@@ -295,18 +357,23 @@ def export(run, output, sessions, actor='Reaminatour'):
             sender, recipient = ('host/runtime', endpoint) if incoming else (endpoint, 'host/tools' if 'call' in kind else 'host/runtime')
             record_id = hashlib.sha256(f'{thread}:{line_number}'.encode()).hexdigest()[:24]
             add(record_id, role, display_kind, sender, recipient, raw, p, current,
-                timestamp, inference, f'{path.name}:{line_number}', previous)
+                timestamp, inference, f'{path.name}:{line_number}', previous, issues.get(line_number))
             previous = record_id
 
     for evidence_id, kind, sequence, value in supervisors:
         obs = observations.get(sequence, {})
         context = {'turn': obs.get('turn'), 'stack': obs.get('stack', []), 'sequence': sequence,
                    'basis': 'exact rules prefix of supervisor record; delivery separately recorded in role transcript'}
-        record_id = f'help-{evidence_id}'
+        record_id = f'issue-{evidence_id}' if kind=='batch_rejection' else f'help-{evidence_id}'
         raw = json.dumps(value, ensure_ascii=False, indent=2)
         sender, recipient = ('rules supervisor', actor + '/decider') if kind == 'help_answer' else (actor + '/decider', 'rules supervisor')
-        add(record_id, 'decider', 'supervisor_record/' + kind, sender, recipient,
-            raw, value, context, '', '', f'host_evidence:{evidence_id}', None)
+        issue=None
+        if kind in ('batch_rejection','help_request'):
+            issue={'kinds':{'failed batch execution' if kind=='batch_rejection' else 'help query record'},
+                   'reasons':{str(value.get('reason',value.get('question','')))},'ids':{'evidence-'+str(evidence_id)},'related':set()}
+        if kind=='batch_rejection':sender,recipient='host/executor',actor+'/decider'
+        add(record_id, 'decider', ('execution_record/' if kind=='batch_rejection' else 'supervisor_record/') + kind, sender, recipient,
+            raw, value, context, '', '', f'host_evidence:{evidence_id}', None, issue)
 
     latest_turn = (observations[max(observations)]['turn'] or {}).get('number', 0)
     counts = {}
@@ -319,7 +386,14 @@ def export(run, output, sessions, actor='Reaminatour'):
         atomic(output / f'round-{number}.csv', stream.getvalue())
         counts[number] = {'rows': len(data), 'turns': ROUNDS[number],
                           'status': 'window_passed' if latest_turn > ROUNDS[number][1] else 'collecting' if latest_turn >= ROUNDS[number][0] else 'not_reached'}
-    manifest = {'run': run.name, 'game': game, 'actor': actor, 'accepted_prefix': head,
+    atomic(output/'submission-issues.json',json.dumps({'records':issue_records,'rows':issue_rows},indent=2)+'\n')
+    stream=io.StringIO(newline='');writer=csv.writer(stream);writer.writerow(FIELDS)
+    for row in issue_rows:writer.writerow([row[f] if f=='hyperlink to copy' else safe_cell(row[f]) for f in FIELDS])
+    atomic(output/'submission-issues.csv',stream.getvalue())
+    issue_summary={role:{kind:sum(kind in row['kinds'] and row['role']==role for row in issue_records)
+                       for kind in ('failed submission','failure notification','help query','failed batch execution','help query record')}
+                   for role in sorted(set(threads.values()))}
+    manifest = {'submission_issues':issue_summary,'run': run.name, 'game': game, 'actor': actor, 'accepted_prefix': head,
                 'latest_turn': latest_turn, 'rounds': counts, 'registered_conversations': len(threads),
                 'source_packet_copies': all_count, 'missing_transcripts': missing, 'decode_errors': errors,
                 'opaque_reasoning_records_not_exported': opaque,
@@ -337,6 +411,7 @@ These are communication-audit exports, not game-result/cardwise CSVs. No game co
 * Length is UTF-8 bytes of the linked original JSON record (including its envelope), not tokenizer-measured tokens or cumulative inference context size.
 * Hyperlinks open escaped local HTML copies. Keep the `packets` folder beside the CSVs; download/extract the entire directory. Each packet links to the previous packet in that physical role conversation, including intervening rounds, so retained context can be inspected.
 * Plans and diplomat/table messages are included **as actually delivered inside packets**, not falsely counted as separate model calls. Tool calls include rejected inputs and waiting/poll calls. Passes are not filtered from this audit.
+* **Submission issues** tags failed calls, their failure notifications, explicit help queries, and durable failed batch executions across all four roles. Related packet IDs link exact transport call/result pairs. Counts describe records, not distinct failed actions: notifications and durable evidence may describe the same event. All-turn issue records are also available in `submission-issues.json`; round CSVs retain their selected windows. Free prose mentioning an error is not treated as a failed submission.
 * Technical-help request/answer records supplement the actual model deliveries and are labelled `supervisor_record`; a recorded answer alone does not prove the pilot received it.
 * Transcript event mirrors are excluded to avoid counting the same message twice. Encrypted internal reasoning is not readable; it is counted in the manifest but not exported or reconstructed. System content not preserved by the transport cannot be recovered. Retained context is not re-labelled as freshly sent on each inference turn.
 * Source copies include all available recorded packets in the selected seat's registered conversations, so earlier retained instructions/references remain reachable. No other seat's private transcript is read.

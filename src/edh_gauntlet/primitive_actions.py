@@ -55,9 +55,12 @@ def claim(campaign,actor):
                     'direct_sequence_available':packet['decision']['kind']=='priority' and campaign.kernel.active==actor
                         and phase_group(campaign.kernel.phase) in ('precombat_main','combat','postcombat_main')},
                'executed_steps':deepcopy(seat.get('executed_steps',{}).get(seat['plans'].get('actions',{}).get('id'),[]))}
+        from .primitive_intent import waiting_reason
+        value['batch_context']['waiting_steps']={s['id']:reason for s in seat['plans'].get('actions',{}).get('value',{}).get('action_sequence',[])
+            if (reason:=waiting_reason(campaign,actor,s['command']))}
         from .primitive_combo import offer
         value['combo_offer']=offer(campaign,actor,value['plans']) if action.get('decision_kind')=='priority' else None
-        if campaign.config.get('autotap')==1:value['payment_policy']='autotap:1; omit payment for automatic cast/activate payment; explicit payment opts out'
+        if campaign.config.get('autotap')==1:value['payment_policy']='autotap:1; cast/activate/unlock_room payment is automatic when omitted or containing only non-mana selections; an explicit planner mana allocation opts out'
         if value['snooze']:value['snooze'].pop('sources',None)
         if 'long_term' not in seat['plans']:value['standing']=seat['standing']
         from .primitive_inspection import freeze
@@ -86,6 +89,8 @@ def delivered(campaign,actor,claim_id):
 def bind_command(campaign,actor,value,request_id):
     if isinstance(value,dict) and value.get('kind')=='adjudicated_combo':raise RulesViolation('Only independent adjudication may submit a shortcut result')
     if type(value) is not dict or set(value)&{'revision','actor','action_id'}:raise RulesViolation('Host supplies revision, actor and action identity')
+    from .primitive_intent import normalize
+    value=normalize(value)
     required={'attack':'declare_attackers','block':'declare_blockers','damage':'combat_damage'}.get(value.get('kind'))
     current=campaign.next_action().get('decision_kind')
     if required and current!=required:
@@ -106,7 +111,7 @@ def bind_command(campaign,actor,value,request_id):
     if (campaign.config.get('autotap')!=1 and current=='priority'
             and (result.get('payment') or {}).get('mana_actions')):
         raise RulesViolation('Priority bundled mana requires a fresh autotap:1 contract')
-    auto=(result.get('kind')=='pay_mana' and 'payment' not in result and campaign.config.get('automatic_decider_mana')==1 or 'autotap' in result or result.get('kind') in {'cast','activate'} and 'payment' not in result)
+    auto=(result.get('kind')=='pay_mana' and 'payment' not in result and campaign.config.get('automatic_decider_mana')==1 or 'autotap' in result or result.get('kind') in {'cast','activate','unlock_room'} and 'payment' not in result)
     if auto:
         if campaign.config.get('autotap')!=1:raise RulesViolation('Auto-tap is available only in fresh autotap:1 games; supply explicit payment')
         from .primitive_autotap import payment
@@ -126,7 +131,7 @@ def submit(campaign,actor,claim_id,request_id,command,rationale,scheduler):
     directive=bind(campaign,actor,directive)
     from .primitive_decider_mana import validate as validate_mana
     validate_mana(campaign,actor,command)
-    if campaign.config.get('automatic_decider_mana')==1 and command.get('kind') in {'cast','activate'}:
+    if campaign.config.get('automatic_decider_mana')==1 and command.get('kind') in {'cast','activate','unlock_room'}:
         command=deepcopy(command)
         if 'payment' in command:command['autotap']={}
     bound=bind_command(campaign,actor,command,request_id)
@@ -178,20 +183,22 @@ def approve(campaign,actor,claim_id,*,approve_ids,reject_ids=None,added=(),overr
             if {k:v for k,v in replacement.items() if k!='rationale'}=={k:v for k,v in original.items() if k!='rationale'}:replacement=original
             if replacement.get('command')!=original.get('command'):
                 from .primitive_decider_mana import validate as validate_mana
-                validate_mana(campaign,actor,replacement['command'])
-                if campaign.config.get('automatic_decider_mana')==1 and replacement['command'].get('kind') in {'cast','activate'} and 'payment' in replacement['command']:
+                validate_mana(campaign,actor,replacement['command'],future=True)
+                if campaign.config.get('automatic_decider_mana')==1 and replacement['command'].get('kind') in {'cast','activate','unlock_room'} and 'payment' in replacement['command']:
                     replacement=deepcopy(replacement);replacement['command']['autotap']={}
             chosen.append(deepcopy(replacement))
         if not isinstance(added,(list,tuple)):raise RulesViolation('Added steps require a list')
         from .primitive_decider_mana import validate as validate_mana
         added=deepcopy(added)
         for row in added:
-            validate_mana(campaign,actor,row.get('command'))
-            if campaign.config.get('automatic_decider_mana')==1 and row['command'].get('kind') in {'cast','activate'} and 'payment' in row['command']:row['command']['autotap']={}
+            validate_mana(campaign,actor,row.get('command'),future=True)
+            if campaign.config.get('automatic_decider_mana')==1 and row['command'].get('kind') in {'cast','activate','unlock_room'} and 'payment' in row['command']:row['command']['autotap']={}
         chosen.extend(deepcopy(added))
         from .primitive_planning import validate_actions,PHASES
         coverage={phase:{'status':'planned'} if any(s.get('phase')==phase for s in chosen) else {'status':'no_action','reason':'No step included in this explicit approval.'} for phase in PHASES}
         validate_actions({'action_sequence':chosen,'phase_coverage':coverage},{'reasons':[]})
+        from .primitive_intent import preflight
+        preflight(campaign,actor,chosen,'preflight:'+claim_id)
         seat['approved']={'id':digest({'claim':claim_id,'approve':approve_ids,'reject':reject_ids,
                                       'pass_priority':pass_priority,'resume_after_passes':resume_after_passes,'steps':chosen}),
             'steps':chosen,'cursor':0,'pass_priority':pass_priority,'resume_after_passes':resume_after_passes,
@@ -223,14 +230,16 @@ def approve_sequence(campaign,actor,claim_id,*,sequence,rationale,scheduler):
             if type(row) is not dict or not {'id','command'}<=set(row) or set(row)-{'id','command','rationale'}:
                 raise RulesViolation('Each direct step requires id and command; rationale is optional')
             from .primitive_decider_mana import validate as validate_mana
-            validate_mana(campaign,actor,row['command'])
+            validate_mana(campaign,actor,row['command'],future=True)
             row=deepcopy(row)
-            if campaign.config.get('automatic_decider_mana')==1 and row['command'].get('kind') in {'cast','activate'} and 'payment' in row['command']:row['command']['autotap']={}
+            if campaign.config.get('automatic_decider_mana')==1 and row['command'].get('kind') in {'cast','activate','unlock_room'} and 'payment' in row['command']:row['command']['autotap']={}
             steps.append({'id':row['id'],'command':deepcopy(row['command']),
                 'rationale':row.get('rationale',rationale),'scheduler':deepcopy(directive),
                 'seat_turn':turn,'phase':phase})
         coverage={p:({'status':'planned'} if p==phase else {'status':'no_action','reason':'Only the current phase is approved.'}) for p in PHASES}
         validate_actions({'action_sequence':steps,'phase_coverage':coverage},{'reasons':[]})
+        from .primitive_intent import preflight
+        preflight(campaign,actor,steps,'preflight:'+claim_id)
         approval={'id':digest({'claim':claim_id,'mode':'direct','steps':steps}),'steps':steps,
             'cursor':0,'pass_priority':False,'resume_after_passes':True,'proposal_id':None,'turn_limit':turn}
         seat['approved']=approval
@@ -348,6 +357,10 @@ def automatic(campaign):
         if approved or seat['snooze']:
             with campaign.transaction() as value:
                 value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None
+                if approved:
+                    value['actors'][actor]['batch_interruption']={'reason':'A required decision needs your choice; remaining actions are not automatically authorized afterward.',
+                        'completed_step_ids':[s['id'] for s in approved['steps'][:approved['cursor']]],
+                        'unexecuted_steps':deepcopy(approved['steps'][approved['cursor']:])}
         return False
     chosen=None;control=None;rationale=None
     if approved:
@@ -372,7 +385,10 @@ def automatic(campaign):
             step=steps[cursor];chosen=step['command'];rationale=step['rationale']
             control={'scheduler':normalize_scheduler(step['scheduler']),
                      'sequence':{'id':approved['id'],'cursor':cursor,'advance':True}}
-        elif approved['pass_priority'] and action['decision_kind']=='priority':
+        if chosen is not None and action['decision_kind']=='priority':
+            from .primitive_intent import waiting_reason
+            if waiting_reason(campaign,actor,chosen):chosen=None;control=None;rationale=None
+        if chosen is None and approved['pass_priority'] and action['decision_kind']=='priority':
             chosen={'kind':'pass'};rationale='Priority pass explicitly authorized by batch '+approved['id']
             control={'sequence':{'id':approved['id'],'cursor':cursor,'advance':False}}
     if chosen is None and seat['snooze'] and action['decision_kind']=='priority':
@@ -405,8 +421,10 @@ def automatic(campaign):
     except RulesViolation as exc:
         with campaign.transaction() as value:
             value['actors'][actor]['approved']=None;value['actors'][actor]['snooze']=None
-            value['actors'][actor]['last_rejection']=str(exc)
-            context={'command':deepcopy(chosen),'commit':campaign.store.committed_head(),'reason':str(exc)}
+            value['actors'][actor]['last_rejection']=str(exc)+' This step spent no resources. Completed steps remain accepted; review only the unexecuted actions. Change the action, targets or non-mana choices, or request technical help if an expected payment was not found.'
+            context={'command':deepcopy(chosen),'commit':campaign.store.committed_head(),'reason':str(exc),
+                     'resources_spent':False,'completed_step_ids':[s['id'] for s in approved['steps'][:approved['cursor']]] if approved else [],
+                     'unexecuted_steps':deepcopy(approved['steps'][approved['cursor']:]) if approved else []}
             value['actors'][actor]['last_rejection_context']=context
             campaign.record(actor,'batch_rejection',context)
         return False

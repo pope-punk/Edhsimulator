@@ -79,7 +79,7 @@ def freeze(campaign, actor, packet):
                     except RulesViolation as exc:
                         payment_cache[key]='Automatic payment not established: '+str(exc).replace('Consequential mana abilities require explicit pilot activation;', 'Consequential mana sources require planner-authored sequencing;').rstrip('.')+'. Supported additional mana costs are included; do not submit preliminary taps.'
                     else:
-                        payment_cache[key]='Announcement and ordinary automatic mana checked, including supported filter-land costs, life payments and other mana-ability costs. Submit this action without mana instructions; no planner mana sequence is required for this payment. Chosen non-mana costs and final legality are validated on submission.'
+                        payment_cache[key]='Default announcement and automatic mana checked. Supply targets, X, modes and non-mana choices if required; changed parameters are rechecked. No preliminary taps.'
                 status=payment_cache[key]
             results.append((candidate['targets'],status))
         if results:
@@ -135,5 +135,5 @@ def freeze(campaign, actor, packet):
             for door in ('left', 'right'):
                 if door not in obj.unlocked:
                     add('Unlock '+program.name+' — '+door, {'kind':'unlock_room','source':ref,'door':door},
-                        availability='Requires sorcery timing and explicit payment; use an unchanged planner payment sequence where decider mana restrictions apply.')
+                        availability='Requires sorcery timing; Python pays the selected door cost automatically.')
     return rows

@@ -38,3 +38,6 @@ conversations retain self-contained baselines; original evidence remains intact.
 
 This change includes an engine payment-timing fix and must be released as a new
 fingerprint-bound build. It does not alter an already running game's bound rules.
+
+For the integrated publication, approval, execution, recovery and telemetry path,
+see [Main-phase action intents](INTEGRATED_ACTION_INTENTS.md).

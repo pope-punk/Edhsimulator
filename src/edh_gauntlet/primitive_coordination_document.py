@@ -58,9 +58,13 @@ def planning_templates(packet):
                     add('Play '+program['name'],{'kind':'play_land','source':ref,'face':face})
         for ability in known.get('activated_abilities',[]):
             owner=obj.get('controller') if obj['zone']=='battlefield' else obj.get('owner')
-            if ability.get('mana_ability') or owner!=actor or ability.get('zone',{}).get('zone')!=obj['zone']:continue
-            add('Activate '+p['name']+' — '+ability['ability_id'],
-                {'kind':'activate','source':ref,'ability_id':ability['ability_id']},ability,ability.get('targets'))
+            if ability.get('mana_ability') or owner!=actor:continue
+            destination=ability.get('zone',{}).get('zone')
+            future=destination=='battlefield' and obj['zone'] in ('hand','command') and p.get('cast')
+            if destination!=obj['zone'] and not future:continue
+            source={'owned_card':ref['card_id'],'zone':'battlefield'} if future else ref
+            add(('After entry: activate ' if future else 'Activate ')+p['name']+' — '+ability['ability_id'],
+                {'kind':'activate','source':source,'ability_id':ability['ability_id']},ability,ability.get('targets'))
         if p.get('node')=='RoomProgram' and obj['zone']=='battlefield' and obj.get('controller')==actor:
             for door in ('left','right'):
                 if door not in obj.get('unlocked',[]):add('Unlock '+p['name']+' — '+door,{'kind':'unlock_room','source':ref,'door':door})
@@ -162,6 +166,7 @@ def proposal_status(packet):
             status='past its proposed window — revise or reject'
         elif type(turn) is int and (step['seat_turn']>turn or step['seat_turn']==turn and phase in PHASES and PHASES.index(step['phase'])>PHASES.index(phase)):
             status='future window — approval waits for matching timing'
+        elif step['id'] in now.get('waiting_steps',{}):status=now['waiting_steps'][step['id']]+'; execution waits, passing still requires your authorization'
         else:status='review against current facts; execution still validates legality'
         result['steps'][step['id']]=status
     return result
@@ -213,6 +218,7 @@ def sections(document,packet,role):
                 'observed_after_accepted_decisions':status['observed_at'],'relationship_to_tactical_prose':status['prose_relationship'],
                 'phase_coverage':proposal.get('phase_coverage',{})})
         for step in proposal.get('action_sequence',[]):
+            if role=='decider' and step['id'] in packet.get('executed_steps',[]):continue
             if role=='decider':
                 document.labels.counters['P']+=1;label='P'+str(document.labels.counters['P'])
                 document.labels.proposals[label]=step['id'];document.labels.reverse[label]=step['id']
@@ -222,7 +228,7 @@ def sections(document,packet,role):
         if role=='decider':
             section('Approve or revise','Use edh_act batch:{approve_ids:["P…"],pass_priority:BOOLEAN,resume_after_passes:BOOLEAN}. '
                     'Choose both booleans: true authorizes unplanned priority passes / continuation after ordinary opposing passes. '
-                    'Approval is not execution. Preserve planner mana steps unchanged, or replace a command with an automatically paid action. '
+                    'Approval is not execution. Waiting for spell resolution retains pending steps; passes require your permission. Preserve planner mana steps unchanged, or replace a command with an automatically paid action. '
                     'Override by P label; omitted step fields inherit, but command replaces the entire command. Never approve an executed step.')
     if role=='short_term_planner' and proposal:
         for key in ('combo_proposal','diplomacy_request'):
@@ -297,7 +303,7 @@ within the supplied brief, without awaiting its result.
 Prefer supplied planning templates. Land: command:{action:"T1"}. Spell: command:{action:"T2",targets:["C2"],x_value:0}. Only supply parameters that belong to that action.
 Templates are planning vocabulary, not permission to act at the observed decision.
 Native command:{kind:"cast",source:"C1",targets:["C2"],x_value:0} also works; casts and
-activations omit payment for autotap. Native land example: {kind:"play_land",source:"C1"}; only optional face is allowed, never targets/x_value/payment.
+activations omit payment for autotap. Non-mana cost selections use payment:{taps:[OBJECT],zone_costs:{COST_ID:[OBJECT]}} and still autotap. Never calculate mana amounts for ordinary actions. Native land example: {kind:"play_land",source:"C1"}; only optional face is allowed, never targets/x_value/payment.
 activate uses source and ability_id. Player targets use {player:SEAT}. An untargeted
 permanent cast uses targets:[]; later trigger targets belong to their own requests.
 attack uses attackers:[{source:"C1",defender:SEAT_OR_OBJECT_LABEL}]. Other declarations,
@@ -305,7 +311,7 @@ non-mana costs, modal choices and exceptional manual payments retain their nativ
 command grammar, available with kind:protocol if needed. Optional autotap:{reserve:{B:1}} is a hard
 remaining-capacity requirement. Do not habitually propose tap/color steps. Explicit
 mana sequencing is reserved for deliberate source choices or unsupported cases and must be
-accepted unchanged by the decider. A known land move followed by its activation
+accepted unchanged by the decider. Python waits for a resolving permanent or an empty stack before attempting the next dependent step; the decider must authorize priority passes or a matching snooze. Unknown choices and opposing actions still require reassessment. A known land move followed by its activation
 uses source:{owned_card:"C1",zone:"battlefield"} to bind the new incarnation.
 For exceptional guarded mana answers, choice_from:{step:ONE_BASED_EARLIER_STEP,
 option_labels:[EXACT_LABELS]} replaces step_id. The existing guard still validates.

@@ -83,3 +83,38 @@ class PacketExportTests(unittest.TestCase):
 
 
 if __name__ == '__main__':unittest.main()
+
+class SubmissionIssueTests(unittest.TestCase):
+    def entries(self,role):
+        rows=[
+            {'type':'custom_tool_call','name':'functions.exec','call_id':'c1','input':'await tools.edh_publish({stage:"actions",response:{}})'},
+            {'type':'custom_tool_call_output','call_id':'c1','output':json.dumps({'rejected':True,'reason':'Missing phases'})},
+            {'type':'custom_tool_call','call_id':'c2','input':'await tools.edh_request_help({question:"Which field is required?"})'},
+            {'type':'message','role':'assistant','content':[{'text':'Our opponent had a rejected proposal and requested help.'}]},
+            {'type':'message','role':'user','content':[{'text':'# Pilot working document\n## rejection\nA required target is missing.\n## board\n{}'}]},
+        ]
+        return [(i,'',{'type':'response_item','payload':p}) for i,p in enumerate(rows,1)]
+
+    def test_exact_call_pairing_and_help_for_each_role(self):
+        for role in ('decider','short_term_planner','long_term_planner','diplomacy'):
+            with self.subTest(role=role):
+                result=module.submission_issues(self.entries(role),role)
+                self.assertEqual({'failed submission'},result[1]['kinds'])
+                self.assertEqual({'failure notification'},result[2]['kinds'])
+                self.assertEqual(result[1]['ids'],result[2]['ids'])
+                self.assertEqual({'help query'},result[3]['kinds'])
+                self.assertNotIn(4,result)
+                self.assertEqual({'failure notification'},result[5]['kinds'])
+
+    def test_event_duplicates_and_strategy_prose_are_not_issues(self):
+        data=[(1,'',{'type':'event_msg','payload':{'rejected':True}}),
+              (2,'',{'type':'response_item','payload':{'type':'message','role':'user','content':[{'text':json.dumps({'plans':{'rationale':'rejected'}})}]}}),
+              (3,'',{'type':'response_item','payload':{'type':'message','role':'user','content':[{'text':'# Pilot working document\n## rejection\nUnchanged since previous delivery.'}]}})]
+        self.assertEqual({},module.submission_issues(data,'thread'))
+
+    def test_nested_tool_envelopes_remain_paired(self):
+        entries=self.entries('decider')[:2]
+        entries[1][2]['payload']['output']=json.dumps([{'type':'text','text':json.dumps({'rejected':True,'reason':'Bad target'})}])
+        result=module.submission_issues(entries,'decider')
+        self.assertEqual({'Bad target'},result[1]['reasons'])
+        self.assertEqual(result[1]['ids'],result[2]['ids'])
