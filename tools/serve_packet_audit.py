@@ -20,12 +20,14 @@ PAGE = Path(__file__).with_name('packet_audit.html').read_text(encoding='utf8')
 class AuditHandler(Handler):
     def do_GET(self):
         path=urlparse(self.path).path
+        if path in ('/audit/sparse','/audit/sparse/'):
+            return self.send_value(Path(__file__).with_name('sparse_preview.html').read_text(encoding='utf8'),content_type='text/html; charset=utf-8')
         if path in ('/audit','/audit/'):
             return self.send_value(PAGE,content_type='text/html; charset=utf-8')
         if path.startswith('/api/packet-audit/'):
             if not self.auth():return self.send_value({'error':'unauthorized'},401)
             name=path.removeprefix('/api/packet-audit/')
-            allowed=re.fullmatch(r'(round-(1|5|7)\.(csv|json)|manifest\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|help-\d+)\.html)',name)
+            allowed=re.fullmatch(r'(round-(1|5|7)\.(csv|json)|manifest\.json|sparse-preview\.json|README\.md|bundle\.zip|packets/([a-f0-9]{24}|help-\d+)\.html)',name)
             if not allowed:return self.send_value({'error':'not found'},404)
             root=self.server.audit
             if name=='bundle.zip':
