@@ -35,9 +35,8 @@ class WatcherTests(TestCase):
         with patch.object(watcher,'support_resolved',return_value=True):
             result=watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support')
         self.assertEqual('support_finished',result[0]['state'])
-        self.assertEqual(['codex','exec'],self.calls[0][:2])
-        self.assertIn('Never edit repository/runtime source',self.calls[0][-1])
-        self.assertIn('never print the key',self.calls[0][-1])
+        self.assertTrue(self.calls[0][1].endswith('run_pilot_help.py'))
+        self.assertNotIn('codex', self.calls[0])
         self.assertEqual([],watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support'))
         self.assertEqual(1,len(self.calls))
 
@@ -46,7 +45,7 @@ class WatcherTests(TestCase):
         with patch.object(watcher,'support_resolved',return_value=False):
             result=watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support')
         self.assertEqual('uncertain',result[0]['state'])
-        self.assertEqual(['codex','exec'],self.calls[0][:2])
+        self.assertTrue(self.calls[0][1].endswith('run_pilot_help.py'))
         self.assertEqual(['codex','queue'],self.calls[1][:2])
         self.assertEqual([],watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support'))
         self.assertEqual(2,len(self.calls))
@@ -70,7 +69,7 @@ class WatcherTests(TestCase):
         with patch.object(watcher,'support_resolved',return_value=True):
             watcher.tick(self.runs,self.directory,'thread-fixture',self.send,mode='support',
                          dashboard_url='http://127.0.0.1:8766',key_file=Path('/private/key'))
-        prompt=self.calls[0][-1]
+        prompt=self.calls[0]
         self.assertIn('http://127.0.0.1:8766',prompt)
         self.assertIn('/private/key',prompt)
         self.assertNotIn('localhost:8765',prompt)

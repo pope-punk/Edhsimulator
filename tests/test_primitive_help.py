@@ -92,7 +92,9 @@ class HelpTests(TestCase):
         runner.handle({'id':'help-call','method':'item/tool/call','params':{'threadId':thread,
             'turnId':runner.running[thread],'callId':'help-call','tool':'edh_request_help','arguments':self.question}})
         self.assertTrue(runner.done);self.assertIsNone(self.game.state()['terminal'])
-        self.assertEqual('pilot_help_requested',server.replies[-1][1]['reason'])
+        reply=server.replies[-1][1]
+        if 'pilot_document' in reply:reply=json.loads(reply['pilot_document'])
+        self.assertEqual('pilot_help_requested',reply['reason'])
         self.assertEqual(self.prefix,self.game.store.committed_head())
 
     def test_operator_cli_round_trip_persists_request_and_answer(self):

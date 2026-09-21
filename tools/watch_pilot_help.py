@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sqlite3
 import subprocess
+import sys
 import time
 import uuid
 
@@ -39,28 +40,6 @@ def support_resolved(run, request_id):
     # request left at its help-answer pause still needs an explicit resume.
     return not state.get('paused')
 
-
-def support_prompt(message, root, directory, dashboard_url, key_file):
-    return ("You are an independent technical-support agent, separate from the development conversation. "
-        "The user authorized this support lane. Handle only this exact request, then end. "
-        f"Read {root}/AGENTS.md, docs/GAUNTLET_WORKFLOW.md and the technical-help section of "
-        "docs/PRIMITIVE_COORDINATION.md. Read only the help question and necessary schema/command facts. "
-        "Never choose actions, targets, colors, payments or strategy; never inspect hidden decks or unrelated "
-        "private plans. Never edit repository/runtime source, migrate a started contract, create a game, "
-        "replay an accepted action/stage, send messages to other people, or start watchers/agents. "
-        "You may write bounded technical-answer/recovery files under archive/releases. "
-        "Only supported help-status, exact-prefix answer-help and the existing fenced dashboard resume are "
-        "authorized mutations. Confirm owned processes have stopped and contexts are unloaded. "
-        f"Before answering and before resuming, check {directory}/STOP and the run's HOST_PAUSED.json; "
-        "if either exists, stop. "
-        "If the exact request was already answered or superseded, report stale and do nothing. "
-        "Give a self-contained schema answer; never tell the pilot what gameplay choice to make. "
-        f"For authorized resume use {dashboard_url} with bearer key read from {key_file}; "
-        "never print the key. After answering, explicitly resume once and verify progress or report the exact "
-        "remaining blocker. Do not repair source or repeat successful recovery. Write a concise final result "
-        "with UTC timestamps, request ID, accepted prefix, answer/resume status and unresolved issue, without private strategy. "
-        "Prioritize a concise answer to the submitted schema question; do not run broad validation or investigate unrelated improvements. "
-        "If another help request arrives, leave it for the next support invocation. " + message)
 
 
 def tick(runs,directory,thread,send=subprocess.run,mode='queue',*,dashboard_url='http://127.0.0.1:8765',key_file=None,run_id=None):
@@ -95,9 +74,9 @@ def tick(runs,directory,thread,send=subprocess.run,mode='queue',*,dashboard_url=
                 f'Notification receipt: {receipt}. If already answered or no longer pending, acknowledge without further action.')
             try:
                 if mode=='support':
-                    command=['codex','exec','--sandbox','danger-full-access','-c','approval_policy="never"',
-                             '--cd',str(runs.parent),'--json','--output-last-message',str(receipt.with_suffix('.answer.txt')),
-                             support_prompt(message,runs.parent,directory,dashboard_url,key_file)]
+                    command=[sys.executable,str(Path(__file__).with_name('run_pilot_help.py')),
+                             '--run',str(run),'--receipt',str(receipt),
+                             '--dashboard-url',dashboard_url,'--key-file',str(key_file)]
                 else:command=['codex','queue','--thread',thread,'--message',message]
                 if mode=='support' and send is subprocess.run:
                     # Stream evidence while the worker runs; record its identity before waiting.
@@ -123,7 +102,7 @@ def tick(runs,directory,thread,send=subprocess.run,mode='queue',*,dashboard_url=
                     value.update(state='queued' if result.returncode==0 else 'uncertain',returncode=result.returncode,
                                  stdout=result.stdout,stderr=result.stderr)
             except Exception as error:value.update(state='uncertain',error=str(error))
-            if mode=='support' and value['state']=='uncertain' and not (directory/'STOP').exists():
+            if mode=='support' and value['state']=='uncertain' and not (directory/'STOP').exists() and not (run/'HOST_PAUSED.json').exists():
                 # Escalate uncertainty once; never launch a second support attempt.
                 try:
                     fallback=send(['codex','queue','--thread',thread,'--message',
