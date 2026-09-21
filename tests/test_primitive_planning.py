@@ -269,3 +269,33 @@ class StrategicReviewTests(PrimitivePlanningTests):
     def test_review_and_invalid_do_not_enable_watches(self):
         job=planning.claim(self.game,'Omo',planning.LONG)
         with self.assertRaises(RulesViolation):planning.publish(self.game,'Omo',planning.LONG,job['job_id'],'long_term',{**self.goal(),'watches':[]})
+
+class PlanProseMarginTests(unittest.TestCase):
+    setUp=PrimitivePlanningTests.setUp
+    goal=PrimitivePlanningTests.goal
+
+    def test_current_publication_preserves_small_prose_overflow_but_rejects_hard_cap(self):
+        self.game.config['coordination_document']=1
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        value={'short_term_plan':'x'*661,'continuity':'Fixture history.',
+               'long_term_validity':'pending','long_term_invalid_reason':''}
+        head=self.game.store.committed_head()
+        with self.assertRaisesRegex(RulesViolation,'received 661 characters'):
+            planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',value)
+        self.assertEqual(0,self.game.state()['actors']['Omo']['jobs'][planning.SHORT]['stage'])
+        value['short_term_plan']='x'*601
+        planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',value)
+        self.assertEqual(value['short_term_plan'],self.game.state()['actors']['Omo']['plans']['short_term']['value']['short_term_plan'])
+        long_job=planning.claim(self.game,'Omo',planning.LONG)
+        goal={**self.goal(),'long_term_plan':'y'*1310}
+        planning.publish(self.game,'Omo',planning.LONG,long_job['job_id'],'long_term',goal)
+        self.assertEqual(goal['long_term_plan'],self.game.state()['actors']['Omo']['plans']['long_term']['value']['long_term_plan'])
+        self.assertEqual(head,self.game.store.committed_head())
+
+    def test_legacy_publication_keeps_its_original_strict_bound(self):
+        self.game.config.pop('coordination_document',None)
+        job=planning.claim(self.game,'Omo',planning.SHORT)
+        value={'short_term_plan':'x'*601,'continuity':'Fixture history.',
+               'long_term_validity':'pending','long_term_invalid_reason':''}
+        with self.assertRaisesRegex(RulesViolation,'at most 600'):
+            planning.publish(self.game,'Omo',planning.SHORT,job['job_id'],'short_term',value)

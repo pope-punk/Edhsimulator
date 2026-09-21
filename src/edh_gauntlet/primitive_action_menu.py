@@ -37,7 +37,11 @@ def freeze(campaign, actor, packet):
         add('Decline payment', {'kind': 'pay_mana', 'request_id': decision['request_id'], 'payment': None})
     elif kind in ('declare_attackers', 'declare_blockers', 'combat_damage'):
         command = {'declare_attackers': 'attack', 'declare_blockers': 'block', 'combat_damage': 'damage'}[kind]
-        add('Submit '+kind.replace('_', ' '), {'kind': command}, parameters='Use the current decision specification; object labels replace exact references.')
+        grammar={
+            'attack':'REQUIRED attackers:[{source:OBJECT_LABEL,defender:SEAT_OR_OBJECT_LABEL}]. Empty attackers:[] declares no attackers. Choose only eligible attackers and legal defenders.',
+            'block':'REQUIRED assignments:{ATTACKER_UID:[BLOCKER_UID,...],...}. Include every supplied attacker UID exactly once; [] means unblocked. Each blocker can appear once and must be eligible; respect min_blockers. assignments is an OBJECT, not an array.',
+            'damage':'REQUIRED assignments:{SOURCE_UID:{blockers:{BLOCKER_UID:NONNEGATIVE_INTEGER,...},defender:NONNEGATIVE_INTEGER},...}. Include every source and its listed blockers, including zero assignments. Per-source amounts sum to its power; positive defender damage requires trample and lethal damage assigned to every blocker.'}
+        add('Submit '+kind.replace('_', ' '), {'kind': command}, parameters=grammar[command])
     if kind == 'resolution_cast':
         add('Decline optional cast', {'kind':'decline_cast', 'request_id':decision['request_id']})
     if kind not in ('priority', 'resolution_cast'):

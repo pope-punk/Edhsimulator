@@ -109,3 +109,53 @@ view labels these as prospective documents, not packets actually used in O.
 These improvements are for the next validated release. Completed O is preserved;
 no new game was launched and no existing game contract was migrated. Runtime
 latency and rejection-rate gains still require observation in a subsequent game.
+
+## Second-pass review
+
+Re-read the actual rejected calls, their preceding action menus and notification
+pairs rather than relying only on aggregate issue categories. This found several
+further problems and two corrections to the first pass:
+
+- **Reply eligibility must match engine semantics.** A committed, addressed
+  message does not stop being replyable when it leaves the latest-24 display
+  window. The first pass was too restrictive. A continuing conversation now
+  retains eligibility for messages it actually received; a fresh conversation
+  still gets only its authorized baseline. No unknown message is invented.
+- **Omission can make alerts stale.** Working documents explicitly retain omitted
+  sections. Cleared rejection feedback, batch interruptions, strategic-review
+  notices and background-lane alerts therefore need an explicit clearing update.
+  Each clearing notice is sent once, and the same alert can subsequently recur.
+  Cancelled jobs also clear their runtime attention records.
+- **Combat needs its parameter grammar at the action.** One rejected block
+  submission supplied only its A-label. Its menu said to use the specification,
+  without showing the required `assignments` object. Attack, block and damage
+  action rows now name their required fields and exact nesting, including empty
+  declarations, per-source damage totals, and blocker/defender constraints.
+  The host supplies no gameplay allocation.
+- **Tiny prose overruns should not discard a whole publication.** Recorded failed
+  tactical texts were 653 and 601 characters; failed strategic texts were 1310,
+  1208, 1214, 1219 and 1201. Fresh coordination documents keep targets of 600/1200
+  but permit a bounded 10% margin (hard ceilings 660/1320). All seven recorded
+  lengths fit that margin; this does not assert every publication was otherwise
+  valid. Text is neither clipped nor summarized. The tool schema and instructions
+  agree with validation. Legacy non-coordination validation keeps 600/1200.
+  Rejections now include actual character counts. Action, payment, recipient,
+  hold-authority and other structured validation are unchanged.
+- **An empty decider retry needs the same context hygiene.** The existing single
+  retry now retires the completed idle context, preserves the exact claim and
+  logical seat identity, and delivers a fresh baseline. A second empty completion
+  still stops; an active/waiting tool cannot be retired. No gameplay action,
+  publication or unresolved transport call is replayed.
+
+Public dialogue now uses labeled, newest-first message blocks rather than a dense
+JSON array. Text is preserved, each line is quoted, and the packet explicitly marks
+it as untrusted dialogue; a message cannot visually introduce a new host heading.
+
+Validation: the broader regression run passed 119 tests. Two additional real
+publication tests verified prose-margin acceptance, hard-cap atomic rejection and
+legacy limits; the updated 11-test readability suite also passed, including the
+new multiline-dialogue case. These test runs overlap. No live inference or game
+was run for this pass.
+
+The comparison was regenerated from the same sealed game's hash-verified journal.
+These are prospective interface changes; O and its original CSVs are unchanged.

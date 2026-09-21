@@ -189,8 +189,8 @@ def sections(document,packet,role):
         if role=='diplomacy':task['public_post_required']=packet.get('requires_public_post',False)
         section('Your task',task)
         section('Publication required now',packet.get('publication_instruction') or 'This input starts or continues an unfinished job. Call edh_publish for publish_next; an empty or prose-only reply does not complete it. Earlier next:null/stop receipts ended only their earlier jobs. Do not wait for another lane. End only when this job returns next:null.')
-        section('Response limits',{'short_term':'short_term_plan: 1..600 characters (aim <=450); continuity: 1..1200; validity reason: <=300.',
-                'long_term':'long_term_plan: 1..1200 characters (aim <=900); each diplomacy brief text: <=900.',
+        section('Response limits',{'short_term':'short_term_plan: aim <=600 characters; hard limit 660; continuity: 1..1200; validity reason: <=300.',
+                'long_term':'long_term_plan: aim <=1200 characters; hard limit 1320; each diplomacy brief text: <=900.',
                 'message':'Each public text: <=600 characters; private explanation and recommendation: <=600 each.',
                 'actions':'intent: <=600 characters; each phase reason: <=180; all three phases required.'}.get(packet.get('stage'),'Use the supplied stage schema.'))
     if role=='diplomacy':
@@ -215,7 +215,9 @@ def sections(document,packet,role):
         for key,title in (('invalid_goal','Strategic invalidity report'),('review_goal','Strategic review request'),
                           ('brief_change_requests','Brief change requests'),('diplomatic_overrides','Diplomatic overrides'),
                           ('diplomatic_holds','Current diplomatic holds')):
-            if packet.get(key):section(title,packet[key]);handled.add(key)
+            rendered=document.transient(key,title,packet.get(key))
+            if rendered:lines.append(rendered)
+            handled.add(key)
     if role!='diplomacy' and component(packet,'diplomacy_brief'):
         section('Diplomatic brief',component(packet,'diplomacy_brief'))
     proposal=component(packet,'actions')
@@ -278,7 +280,7 @@ actions; opposite-seat review uses actions then prose. Opening work starts with
 standing and the kept hand, concurrently with strategic planning. Do not wait for
 a missing goal. Optional inspections or diplomatic requests must not delay the
 first publication. End after both stages; do not poll or set watches.
-Use edh_publish(stage:"short_term",response:{short_term_plan:TEXT_MAX_600,
+Use edh_publish(stage:"short_term",response:{short_term_plan:TEXT_TARGET_600_HARD_MAX_660,
 continuity:TEXT_MAX_1200,long_term_validity:"valid"|"review"|"invalid"|"pending",
 long_term_invalid_reason:TEXT_MAX_300}). The plan is the complete current line,
 interaction to preserve and fallback. Continuity is planner-only history. If the
@@ -339,7 +341,7 @@ strategic review requests, the current named route, tactical assessment/continui
 and own-seat decision evidence. Keep the goal concrete: available and missing
 cards, next strategic milestone, material opposing obstruction and fallback.
 Avoid restating standing deck doctrine or prescribing land-by-land mana sequences.
-Publish long_term with {long_term_plan:TEXT_MAX_1200,diplomacy:{objective:TEXT_MAX_900,
+Publish long_term with {long_term_plan:TEXT_TARGET_1200_HARD_MAX_1320,diplomacy:{objective:TEXT_MAX_900,
 disclosure_limits:TEXT_MAX_900,commitment_limits:TEXT_MAX_900,
 allowed_recipients:[OTHER_SEATS],hold_authority:{players:[OTHER_SEATS],
 scopes:["attack","target_permanents"],max_turns:INTEGER_0_TO_4}}}.

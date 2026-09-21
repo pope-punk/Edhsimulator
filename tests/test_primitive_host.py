@@ -283,3 +283,30 @@ class PrimitiveHostTests(TestCase):
         self.runner.running[thread]='turn'
         self.runner.handle({'method':'turn/completed','params':{'threadId':thread,'turn':{'id':'turn','status':'completed'}}})
         self.assertFalse(self.runner.unfinished_publications)
+
+class EmptyDecisionRecoveryTests(TestCase):
+    setUp=PrimitiveHostTests.setUp
+
+    def test_empty_decider_gets_new_context_same_claim_and_logical_owner(self):
+        self.runner.pump();old=self.runner.lanes[('Omo','decider')]
+        claim=self.game.state()['claim']['claim_id'];head=self.game.store.committed_head()
+        logical=self.game.state()['registrations']['Omo::decider']['logical_id']
+        event={'method':'turn/completed','params':{'threadId':old,'turn':{'id':self.runner.running[old],'status':'completed'}}}
+        self.runner.handle(event);self.assertNotIn(('Omo','decider'),self.runner.lanes)
+        self.runner.pump();new=self.runner.lanes[('Omo','decider')]
+        self.assertNotEqual(old,new)
+        self.assertEqual(claim,self.game.state()['claim']['claim_id'])
+        self.assertEqual(head,self.game.store.committed_head())
+        self.assertEqual(logical,self.game.state()['registrations']['Omo::decider']['logical_id'])
+        event['params']={'threadId':new,'turn':{'id':self.runner.running[new],'status':'completed'}}
+        with self.assertRaisesRegex(RuntimeError,'Decider ended twice'):self.runner.handle(event)
+
+    def test_retirement_cannot_drop_an_active_turn(self):
+        self.runner.pump();thread=self.runner.lanes[('Omo','decider')]
+        with self.assertRaisesRegex(RuntimeError,'active or waiting'):self.runner.retire_idle_context(thread)
+
+    def test_cancelled_job_clears_stale_lane_attention(self):
+        self.runner.background_attention[('Omo',planning.SHORT)]=('cancelled',0)
+        self.runner.write_background_attention();self.runner.pump()
+        self.assertFalse(self.runner.background_attention)
+        self.assertFalse(self.runner.last_status['background_attention'])

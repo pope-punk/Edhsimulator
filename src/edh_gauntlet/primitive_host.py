@@ -144,7 +144,7 @@ def schemas(role,*,pilot_document=False,coordination_document=False):
         return result
     return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners follow the supplied stage and publication_order; publish the first stage promptly. Use short_term_and_actions only if both are already ready. End when next is null.',
         {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object','properties':{k:{'type':'string','maxLength':n,'description':'Maximum characters, not tokens. Leave a margin.'} for k,n in
-            ({'short_term_plan':600,'continuity':1200,'long_term_invalid_reason':300,'intent':600} if role==planning.SHORT else {'long_term_plan':1200} if role==planning.LONG else {}).items()}}},['stage','response'])]
+            ({'short_term_plan':planning.PLAN_LIMITS['short_term_plan'] if coordination_document else 600,'continuity':1200,'long_term_invalid_reason':300,'intent':600} if role==planning.SHORT else {'long_term_plan':planning.PLAN_LIMITS['long_term_plan'] if coordination_document else 1200} if role==planning.LONG else {}).items()}}},['stage','response'])]
 
 
 def instructions(actor,role,*,automatic_mana=False,pilot_document=False,coordination_document=False):
@@ -472,6 +472,20 @@ class PrimitiveRunner:
                     'instruction':'End now. A later input resumes your logical seat.'})
                 del self.waiting[thread]
 
+    def retire_idle_context(self,thread):
+        """Retire transport context only; logical ownership and receipts survive."""
+        if thread in self.running or thread in self.waiting:
+            raise RuntimeError('Cannot retire an active or waiting role context')
+        owner=self.threads[thread]
+        self.server.call('thread/unsubscribe',{'threadId':thread})
+        self.deliveries.pop(thread,None);self.documents.pop(thread,None)
+        if self.lanes.get(owner)==thread:self.lanes.pop(owner)
+
+    def write_background_attention(self):
+        write(self.directory/'background_attention.json',{'lanes':[
+            {'actor':a,'role':r,'job_id':j,'stage':s}
+            for (a,r),(j,s) in self.background_attention.items()]})
+
     def context(self,actor,role):
         key=(actor,role);thread=self.lanes.get(key)
         if thread and thread in self.running:return thread
@@ -519,8 +533,7 @@ class PrimitiveRunner:
         if thread not in self.deliveries:
             memory=self.memory(actor,role,packet)
             if memory:value['retained_memory']=memory
-        if self.background_attention:
-            value['background_planning_status']=[{'actor':a,'role':r,'status':'publication stalled; last published guidance has not been refreshed'} for a,r in self.background_attention if a==actor]
+        value['background_planning_status']=[{'actor':a,'role':r,'status':'publication stalled; last published guidance has not been refreshed'} for a,r in self.background_attention if a==actor]
         if role!='decider':
             job=self.campaign.state()['actors'][actor]['jobs'].get(role)
             attempt=self.unfinished_publications.get((actor,role,packet.get('job_id'),job['stage']),0) if job else 0
@@ -598,13 +611,15 @@ class PrimitiveRunner:
         state=campaign.state()
         for actor in campaign.kernel.state.live_players:
             for role in (planning.LONG,planning.SHORT,planning.DIPLOMAT):
-                if role not in state['actors'][actor]['jobs']:continue
+                if role not in state['actors'][actor]['jobs']:
+                    if self.background_attention.pop((actor,role),None):self.write_background_attention()
+                    continue
                 attention=self.background_attention.get((actor,role))
                 if attention:
                     job_state=state['actors'][actor]['jobs'][role]
                     if (job_state['id'],job_state['stage'])==attention:continue
                     del self.background_attention[(actor,role)]
-                    write(self.directory/'background_attention.json',{'lanes':[{'actor':a,'role':r,'job_id':j,'stage':s} for (a,r),(j,s) in self.background_attention.items()]})
+                    self.write_background_attention()
                 thread=self.lanes.get((actor,role))
                 if thread in self.running or self.retry_at.get(thread,0)>time.monotonic():continue
                 job=planning.claim(campaign,actor,role)
@@ -657,7 +672,7 @@ class PrimitiveRunner:
                         # accepted stages and last published plans; never invent a plan.
                         self.background_attention[(actor,role)]=(job['id'],job['stage'])
                         self.timing.record('publication_stalled',thread,stage=job['stage'],attempt=count+1)
-                        write(self.directory/'background_attention.json',{'lanes':[{'actor':a,'role':r,'job_id':j,'stage':s} for (a,r),(j,s) in self.background_attention.items()]})
+                        self.write_background_attention()
                         return
                     self.unfinished_publications={k:v for k,v in self.unfinished_publications.items() if k[:2]!=(actor,role)}
                     self.unfinished_publications[key]=count+1
@@ -665,9 +680,7 @@ class PrimitiveRunner:
                     # A completed empty turn is not an in-flight or accepted stage.
                     # Retire only this idle physical context and deliver a complete
                     # current-stage baseline to the same logical role next time.
-                    self.server.call('thread/unsubscribe',{'threadId':thread})
-                    self.deliveries.pop(thread,None);self.documents.pop(thread,None)
-                    self.lanes.pop((actor,role),None)
+                    self.retire_idle_context(thread)
                     # pump claims the CURRENT unfinished stage. Accepted stages
                     # remain journaled; no prior publication or action is replayed.
                 else:
@@ -678,6 +691,8 @@ class PrimitiveRunner:
                 count=self.unanswered.get(frozen['claim_id'],0)
                 if count:raise RuntimeError('Decider ended twice without answering its claim')
                 self.unanswered[frozen['claim_id']]=1
+                self.retire_idle_context(thread)
+                self.timing.record('decision_continuation',thread,attempt=1)
             return
         if method!='item/tool/call':
             if 'id' in message:raise RuntimeError('Unexpected approval or server request; host cannot grant it')

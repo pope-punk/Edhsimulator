@@ -11,6 +11,10 @@ from .rules_state import RulesViolation
 SHORT='short_term_planner';LONG='long_term_planner';DIPLOMAT='diplomacy'
 STAGES={SHORT:('short_term','actions'),LONG:('long_term',),DIPLOMAT:('message',)}
 PHASES=('precombat_main','combat','postcombat_main')
+# Concision targets are not gameplay legality. Small counting errors should not
+# discard an otherwise valid publication; preserve all prose within a bounded margin.
+PLAN_TARGETS={'short_term_plan':600,'long_term_plan':1200}
+PLAN_LIMITS={name:target*11//10 for name,target in PLAN_TARGETS.items()}
 
 
 def stages(role,job):
@@ -21,7 +25,8 @@ def stages(role,job):
 def text_field(value,name,maximum):
     result=value.get(name)
     if type(result) is not str or not result.strip() or len(result)>maximum:
-        raise RulesViolation(f'{name} requires nonempty text of at most {maximum} characters')
+        detail=f'; received {len(result)} characters' if isinstance(result,str) else '; received a non-text value'
+        raise RulesViolation(f'{name} requires nonempty text of at most {maximum} characters'+detail)
     return result
 
 
@@ -238,7 +243,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         raise RulesViolation('Publication does not own this frozen stage')
     if stage=='long_term':
         if not {'long_term_plan','diplomacy'}<=set(value) or set(value)-{'long_term_plan','diplomacy'}:raise RulesViolation('Strategic publication requires goal and diplomacy authorization')
-        text_field(value,'long_term_plan',1200)
+        text_field(value,'long_term_plan',PLAN_LIMITS['long_term_plan'] if campaign.config.get('coordination_document')==1 else 1200)
         if (job['input'].get('invalid_goal') and
                 job['input']['invalid_goal']['goal_id']==seat['plans'].get('long_term',{}).get('id') and
                 value['long_term_plan']==seat['plans'].get('long_term',{}).get('value',{}).get('long_term_plan')):
@@ -266,7 +271,7 @@ def _publish(campaign,state,actor,role,job_id,stage,value):
         required={'short_term_plan','continuity','long_term_validity','long_term_invalid_reason'}
         if not required<=set(value) or set(value)-required-{'dependencies','diplomacy_request'}:
             raise RulesViolation('Supply tactical prose, continuity and strategic validity')
-        text_field(value,'short_term_plan',600);text_field(value,'continuity',1200)
+        text_field(value,'short_term_plan',PLAN_LIMITS['short_term_plan'] if campaign.config.get('coordination_document')==1 else 600);text_field(value,'continuity',1200)
         if value['long_term_validity'] not in ({'valid','invalid','pending','review'} if campaign.config.get('strategic_review')==1 else {'valid','invalid','pending'}):raise RulesViolation('Invalid strategic assessment')
         if (value['long_term_validity']=='pending') != ('long_term' not in job['input']['plans']):
             raise RulesViolation('Use pending exactly when this frozen input has no long-term goal')
