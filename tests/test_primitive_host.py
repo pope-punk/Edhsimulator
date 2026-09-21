@@ -267,7 +267,15 @@ class PrimitiveHostTests(TestCase):
             self.assertEqual(1,self.game.state()['actors']['Omo']['jobs'][planning.SHORT]['stage'])
             self.assertEqual(head,self.game.store.committed_head())
         self.runner.running[thread]='turn'
-        with self.assertRaisesRegex(RuntimeError,'publication stages'):self.runner.handle(event)
+        self.runner.handle(event)
+        self.assertEqual(('test-job',1),self.runner.background_attention[('Omo',planning.SHORT)])
+        self.assertFalse(self.runner.done)
+        self.assertEqual(head,self.game.store.committed_head())
+        self.assertTrue((self.runner.directory/'background_attention.json').exists())
+        self.assertEqual(2,len([x for x in self.server.calls if x[0]=='thread/unsubscribe']))
+        self.runner.pump()
+        self.assertIn(('Omo','decider'),self.runner.lanes)
+        self.assertEqual(1,len(self.runner.last_status['background_attention']))
 
     def test_completed_publication_is_not_restarted(self):
         thread='publication-test';self.runner.threads[thread]=('Omo',planning.DIPLOMAT)

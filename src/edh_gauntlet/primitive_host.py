@@ -143,7 +143,8 @@ def schemas(role,*,pilot_document=False,coordination_document=False):
         if coordination_document:result[0]['inputSchema']['properties']['batch']['required']=['approve_ids','pass_priority','resume_after_passes']
         return result
     return ([inspect_tool] if role in (planning.LONG,planning.SHORT) else [])+[tool('edh_publish','Publish the next owned stage. Short-term planners follow the supplied stage and publication_order; publish the first stage promptly. Use short_term_and_actions only if both are already ready. End when next is null.',
-        {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object'}},['stage','response'])]
+        {'stage':{'type':'string','enum':list(planning.STAGES[role])+(['short_term_and_actions'] if role==planning.SHORT else ['brief_decision'] if role==planning.LONG else [])},'response':{'type':'object','properties':{k:{'type':'string','maxLength':n,'description':'Maximum characters, not tokens. Leave a margin.'} for k,n in
+            ({'short_term_plan':600,'continuity':1200,'long_term_invalid_reason':300,'intent':600} if role==planning.SHORT else {'long_term_plan':1200} if role==planning.LONG else {}).items()}}},['stage','response'])]
 
 
 def instructions(actor,role,*,automatic_mana=False,pilot_document=False,coordination_document=False):
@@ -425,7 +426,7 @@ class PrimitiveRunner:
         self.routing=Routing();self.routing.primary.update(MODELS)
         self.lanes={};self.threads={};self.running={};self.waiting={};self.deliveries={};self.inputs={};self.documents={}
         self.tool_counts={};self.failures={};self.retries={};self.retry_at={};self.seen=set();self.unanswered={};self.turn_models={};self.waiting_receipts={};self.last_status=None
-        self.unfinished_publications={}
+        self.unfinished_publications={};self.background_attention={}
         self.initial_count=campaign.store.generation;self.done=False
         state=campaign.state()
         if state.get('help_request'):raise RulesViolation('Resolve the outstanding pilot help request before resuming')
@@ -451,6 +452,7 @@ class PrimitiveRunner:
         transport_pid=getattr(getattr(server,'process',None),'pid',None)
         self.process_evidence={'host_identity':identity(os.getpid()),'transport_identity':identity(transport_pid),
             'transport_session':transport_pid if getattr(server,'isolated_process_group',False) else None}
+        write(self.directory/'background_attention.json',{'lanes':[]})
         write(self.directory/'process.json',{'pid':os.getpid(),'active':True,'generation':self.generation,
             'binding':campaign.binding,'commit':campaign.store.committed_head(),'contexts_unloaded':False,**self.process_evidence})
 
@@ -513,10 +515,16 @@ class PrimitiveRunner:
             value=presentation(value)
         if role!='decider':
             value['publication_required']=True
-            value['publication_instruction']='Publish only the current stage with edh_publish. A text reply or ending the turn does not complete the job. Optional diplomatic silence requires publishing messages:[]; required posts still require a message. Never repeat an accepted stage.'
+            value['publication_instruction']='THIS INPUT REQUIRES PUBLICATION NOW. Earlier next:null/stop receipts do not finish this task. Publish only the current stage with edh_publish. A text reply or ending the turn does not complete the job. Optional diplomatic silence requires publishing messages:[]; required posts still require a message. Never repeat an accepted stage.'
         if thread not in self.deliveries:
             memory=self.memory(actor,role,packet)
             if memory:value['retained_memory']=memory
+        if self.background_attention:
+            value['background_planning_status']=[{'actor':a,'role':r,'status':'publication stalled; last published guidance has not been refreshed'} for a,r in self.background_attention if a==actor]
+        if role!='decider':
+            job=self.campaign.state()['actors'][actor]['jobs'].get(role)
+            attempt=self.unfinished_publications.get((actor,role,packet.get('job_id'),job['stage']),0) if job else 0
+            if attempt:value['publication_instruction']+=' Recovery: your last turn ended WITHOUT this publication. Submit the current stage now; do not repeat earlier accepted stages.'
         document=None
         if self.campaign.config.get('pilot_document')==1:
             from .primitive_pilot_document import Document
@@ -591,6 +599,12 @@ class PrimitiveRunner:
         for actor in campaign.kernel.state.live_players:
             for role in (planning.LONG,planning.SHORT,planning.DIPLOMAT):
                 if role not in state['actors'][actor]['jobs']:continue
+                attention=self.background_attention.get((actor,role))
+                if attention:
+                    job_state=state['actors'][actor]['jobs'][role]
+                    if (job_state['id'],job_state['stage'])==attention:continue
+                    del self.background_attention[(actor,role)]
+                    write(self.directory/'background_attention.json',{'lanes':[{'actor':a,'role':r,'job_id':j,'stage':s} for (a,r),(j,s) in self.background_attention.items()]})
                 thread=self.lanes.get((actor,role))
                 if thread in self.running or self.retry_at.get(thread,0)>time.monotonic():continue
                 job=planning.claim(campaign,actor,role)
@@ -602,7 +616,8 @@ class PrimitiveRunner:
                 packet=actions.claim(campaign,actor)
                 self.deliver(self.context(actor,'decider'),packet)
         status={'accepted':campaign.store.generation,'inference_lanes':len(self.running)-len(self.waiting),
-            'waiting_tools':len(self.waiting),'registered_lanes':len(self.lanes),'next_action':campaign.next_action()}
+            'waiting_tools':len(self.waiting),'registered_lanes':len(self.lanes),'next_action':campaign.next_action(),
+                'background_attention':[{'actor':a,'role':r,'reason':'publication ended repeatedly without completing the current stage'} for a,r in self.background_attention]}
         if status!=self.last_status:
             write(self.directory/'status.json',status);self.last_status=status
 
@@ -637,10 +652,22 @@ class PrimitiveRunner:
                 if job and job['id']==frozen.get('job_id'):
                     actor=self.threads[thread][0];key=(actor,role,job['id'],job['stage'])
                     count=self.unfinished_publications.get(key,0)
-                    if count>=2:raise RuntimeError('Role ended before finishing its publication stages')
+                    if count>=2:
+                        # Isolate the failed advisory lane. Preserve its unfinished job,
+                        # accepted stages and last published plans; never invent a plan.
+                        self.background_attention[(actor,role)]=(job['id'],job['stage'])
+                        self.timing.record('publication_stalled',thread,stage=job['stage'],attempt=count+1)
+                        write(self.directory/'background_attention.json',{'lanes':[{'actor':a,'role':r,'job_id':j,'stage':s} for (a,r),(j,s) in self.background_attention.items()]})
+                        return
                     self.unfinished_publications={k:v for k,v in self.unfinished_publications.items() if k[:2]!=(actor,role)}
                     self.unfinished_publications[key]=count+1
                     self.timing.record('publication_continuation',thread,stage=job['stage'],attempt=count+1)
+                    # A completed empty turn is not an in-flight or accepted stage.
+                    # Retire only this idle physical context and deliver a complete
+                    # current-stage baseline to the same logical role next time.
+                    self.server.call('thread/unsubscribe',{'threadId':thread})
+                    self.deliveries.pop(thread,None);self.documents.pop(thread,None)
+                    self.lanes.pop((actor,role),None)
                     # pump claims the CURRENT unfinished stage. Accepted stages
                     # remain journaled; no prior publication or action is replayed.
                 else:

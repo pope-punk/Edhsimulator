@@ -13,10 +13,12 @@ from .rules_state import RulesViolation
 DEFAULTS = {'commander':False, 'token':False, 'tapped':False, 'phased':False,
             'damage':0, 'counters':{}, 'attached_to':None, 'power':None, 'toughness':None,
             'keywords':[], 'colors':[], 'subtypes':[], 'supertypes':[]}
-OMIT = {'claim_id', 'job_id', 'snapshot', 'revision', 'context_handling', 'evidence_through',
+OMIT = {'action_id', 'claim_id', 'job_id', 'snapshot', 'revision', 'context_handling', 'evidence_through',
         'evidence_after', 'definition_id', 'rules_id', 'board_id', 'base_id', 'brief_id', 'short_term_id'}
 LITERALS = {'kind','node','phase','zone','face','timing','name','label','mode','seat',
             'actor','controller','owner','relation','color','symbol','status','encoding','type'}
+IDENTITY_MAPS = {'assignments', 'blockers', 'zone_costs', 'cost_order', 'overrides'}
+
 PROSE = {'rationale','reason','question','intended_action','long_term_plan','short_term_plan',
          'proposal_text','message','text','objective','disclosure_limits','commitment_limits',
          'intent','continuity','long_term_invalid_reason','explanation','recommended_action'}
@@ -50,7 +52,7 @@ class Labels:
                 if k in OMIT or k.startswith('_') or self.coordination and k in {'plan_refs','goal_id','assessed_goal','sha256'}: continue
                 if (k in ('id','brief_id','proposal_id','request_id','hold_id','step_id','ability_id','mode_id','cost_id','uid','owned_card') or self.coordination and k in ('reply_to','authorization_id','negotiation_id')) and isinstance(v,str):
                     result[k]=self.label(v)
-                else: result[self.forward.get(compact(k),k)]=self.encode(v,k)
+                else: result[self.forward.get(compact(k),k) if key in IDENTITY_MAPS else k]=self.encode(v,k)
             return result
         if isinstance(value,str): return self.forward.get(compact(value),value)
         return value
@@ -157,6 +159,23 @@ class Document:
             return '\n'.join(self.value(v) for v in value)
         return compact(self.labels.encode(value))
 
+    def messages(self, rows, actor, role):
+        # Retained conversations receive only new/changed full messages. The current
+        # reply set is always explicit; old text does not imply ongoing reply authority.
+        visible=[{k:row[k] for k in ('id','actor','to','turn','text','reply_to','reply_depth') if k in row} for row in rows]
+        previous=self.labels.sections.get('message_records',{})
+        current={row['id']:compact(row) for row in visible}
+        changed=[row for row in visible if previous.get(row['id'])!=current[row['id']]]
+        self.labels.sections['message_records']=current
+        lines=[]
+        if role=='diplomacy':
+            eligible=[row['id'] for row in rows if actor in row.get('to',[]) and row.get('reply_depth',0)<3]
+            lines.append('## Reply choices now\n'+self.value({'reply_to':eligible})+
+                         '\nOnly these message labels accept a reply. Otherwise use reply_to:null for an independently useful message, or optional silence. This list replaces prior reply eligibility.')
+        if changed:
+            lines.append('## Public messages — '+('new or changed' if previous else 'baseline')+'\n'+self.value(list(reversed(changed))))
+        return lines
+
     def section(self,key,text,*,repeat=False):
         previous=self.labels.sections.get(key)
         self.labels.sections[key]=text
@@ -191,12 +210,20 @@ class Document:
                'Zero power/toughness, life, costs and choice counts are retained. Oracle text describes printed rules; current modifications and engine validation govern play.',
                '## Current decision\n'+self.value(board.get('decision',{}))]
         if '_accepted_sequence' in packet:lines.insert(1,'Accepted decision count: '+str(packet['_accepted_sequence']))
-        handled=set()
+        handled={'previous_board'}  # comparison evidence is not another current board
         if packet.get('_coordination_document')==1:
             from .primitive_coordination_document import sections
-            extra,handled=sections(self,packet,role);lines.extend(extra)
+            extra,role_handled=sections(self,packet,role);handled.update(role_handled)
+            if role=='decider':lines.extend(extra)
+            else:
+                # The assignment is actionable; a board's waiting/priority field is not this lane's task.
+                lines=[line for line in lines if not line.startswith('## Current decision\n')]
+                lines[1:1]=extra
             if role!='decider':
                 lines=[line.replace('## Current decision\n','## Observed decision (not a request for you to play)\n',1) for line in lines]
+        if role=='decider':
+            lines.insert(2,'## Respond now\nCall edh_act with command:{action:"A…",...}, rationale:"Your reason", scheduler:{mode:"hold_full_control"}. Choose the scheduler yourself; this example preserves control. For planner approval use the separate batch wrapper below, not command. Every new packet requires a new response; an earlier stop/park ended only its earlier turn.')
+        action_start=len(lines)
         menu=packet.get('_action_menu',[])
         if role=='decider':
             lines.append('## Actions\nOne entry per spell/ability/face/alternative, not per target combination. '
@@ -213,6 +240,10 @@ class Document:
                 self.labels.counters['T']+=1;alias='T'+str(self.labels.counters['T'])
                 self.labels.actions[alias]=deepcopy(row['command'])
                 lines.append('- '+alias+' — '+row['label']+'\n  '+self.value({k:v for k,v in row.items() if k not in ('label','command')}))
+        if role=='decider':
+            action_lines=lines[action_start:];del lines[action_start:]
+            position=next(i for i,line in enumerate(lines) if line.startswith('## Current decision'))+1
+            lines[position:position]=action_lines
         # Keep plans verbatim in substance, with reversible IDs and references.
         for key in ('plans','diplomatic_holds','combo_offer','rejection','rejection_context','batch_interruption'):
             if key not in handled and packet.get(key) is not None:
@@ -260,6 +291,8 @@ class Document:
                 lines.append('### '+name+'\nNo frozen Oracle face available. Explicit implemented rules: '+self.value(rules))
         excluded={'board','current_decision','action_facts','plans','diplomatic_holds','combo_offer','rejection','rejection_context','batch_interruption'}
         for key,value in packet.items():
+            if key=='messages':
+                lines.extend(self.messages(value,packet.get('actor'),role));continue
             if key in excluded or key in handled or key in OMIT or key.startswith('_') or value is None: continue
             lines.append('## '+key.replace('_',' ')+'\n'+self.section(key,self.value(value)))
         lines=[line for line in lines if not (line.startswith('#') and '\n' in line and not line.split('\n',1)[1].strip())]

@@ -17,3 +17,10 @@ class PresenterTests(unittest.TestCase):
         value={'minsc_and_boo':'**Short-term plan**\nsource metadata\n\n> Attack after protection.\n> Keep removal.\n\n**Long-term plan**\n> Long term secret\n'}
         self.assertEqual(published_short_term(value,'Minsc & Boo'),'Attack after protection.\nKeep removal.')
         self.assertEqual(published_short_term(value,'Omo'),'')
+    def test_stalled_background_lane_is_visible_without_claiming_host_stopped(self):
+        from edh_gauntlet.dashboard_presenter import runtime_health
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'timing.json').write_text('{"retained_events":[]}')
+            alert={'actor':'Omo','role':'short_term_planner','reason':'publication stalled'}
+            (root/'status.json').write_text(json.dumps({'background_attention':[alert]}))
+            self.assertEqual([alert],runtime_health(root/'timing.json')['background_attention'])

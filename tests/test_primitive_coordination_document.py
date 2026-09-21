@@ -252,3 +252,56 @@ class ExecutionHandoffTests(unittest.TestCase):
         self.assertEqual(source.to_json(),record['source'])
         self.assertEqual('cast',record['kind']);self.assertTrue(record['payment']['mana_actions'])
         self.assertEqual(['step-1'],self.game.state()['actors']['Omo']['executed_steps'][claim['plans']['actions']['id']])
+
+class ReadabilityRegressionTests(unittest.TestCase):
+    def test_required_publication_survives_rendering_and_supersedes_old_stop(self):
+        p={**frozen(),'stage':'short_term','publication_required':True,
+           'publication_instruction':'CURRENT TASK MUST PUBLISH','previous_board':{'sentinel':'obsolete'},
+           'completed_stages':[]}
+        text=Document(CATALOG).render(p,planning.SHORT)
+        self.assertIn('CURRENT TASK MUST PUBLISH',text)
+        self.assertIn('publication required',text)
+        self.assertNotIn('Observed decision',text)
+        self.assertNotIn('obsolete',text)
+        self.assertIn('600 characters',text)
+
+    def test_labels_never_rename_schema_keys_that_match_ability_ids(self):
+        labels=Labels();ability=labels.label('mana');cost=labels.label('sacrifice')
+        encoded=labels.encode({'payment':{'mana':{'B':1},'zone_costs':{'sacrifice':[REF]}},'ability_id':'mana'})
+        self.assertEqual({'B':1},encoded['payment']['mana'])
+        self.assertEqual(ability,encoded['ability_id'])
+        self.assertIn(cost,encoded['payment']['zone_costs'])
+        self.assertEqual({'payment':{'mana':{'B':1},'zone_costs':{'sacrifice':[REF]}},'ability_id':'mana'},labels.decode(encoded))
+
+    def test_messages_keep_verbatim_text_but_send_only_changes_and_current_reply_set(self):
+        p={**frozen(),'stage':'message','brief':{},'messages':[
+           {'id':'message-one','actor':'Elenda','to':['Omo'],'turn':8,'text':'Verbatim offer','reply_depth':0,'authorization_id':'not-a-reply'},
+           {'id':'message-two','actor':'Omo','to':['Elenda'],'turn':8,'text':'Own message','reply_depth':0}]}
+        doc=Document(CATALOG);first=doc.render(p,planning.DIPLOMAT)
+        self.assertIn('Verbatim offer',first);self.assertNotIn('authorization_id',first)
+        message_label=doc.labels.forward['"message-one"']
+        own_label=doc.labels.forward['"message-two"']
+        reply=first.split('## Reply choices now\n')[1].split('\n\n')[0]
+        self.assertIn(message_label,reply);self.assertNotIn(own_label,reply)
+        second=Document(CATALOG,doc.labels).render(p,planning.DIPLOMAT)
+        self.assertNotIn('Verbatim offer',second);self.assertIn('Reply choices now',second)
+        p['messages'][0]['reply_depth']=3
+        third=Document(CATALOG,doc.labels).render(p,planning.DIPLOMAT)
+        self.assertIn('"reply_to":[]',third)
+        self.assertIn('Verbatim offer',third)
+        self.assertIn('Verbatim offer',Document(CATALOG).render(p,planning.DIPLOMAT))
+
+    def test_decider_gets_full_wrapper_and_menu_before_plans_no_previous_board(self):
+        p={**frozen(),'previous_board':{'sentinel':'old board'},'_action_menu':[{'label':'Play Island','command':{'kind':'play_land','source':REF}}],
+           'plans':{'long_term':{'value':{'long_term_plan':'Current strategy'}}}}
+        text=Document(CATALOG).render(p,'decider')
+        self.assertIn('scheduler:{mode:"hold_full_control"}',text)
+        self.assertLess(text.index('## Actions'),text.index('## Strategic goal'))
+        self.assertNotIn('old board',text)
+
+    def test_missing_inspection_path_reports_only_available_frozen_keys(self):
+        from edh_gauntlet.primitive_inspection import select
+        with self.assertRaisesRegex(RulesViolation,'available keys: battlefield'):
+            select({'zones':{'battlefield':{}}},'/zones/creatures')
+        with self.assertRaisesRegex(RulesViolation,'array length: 1'):
+            select({'items':[{}]},'/items/3')

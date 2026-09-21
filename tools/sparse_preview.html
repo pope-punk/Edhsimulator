@@ -5,9 +5,9 @@
 <h2>Compare a role</h2>
 <label>Role <select id="role"><option value="decider">Decider</option><option value="short_term_planner">Short-term planner</option><option value="long_term_planner">Long-term planner</option><option value="diplomacy">Diplomat</option></select></label>
 <label>View <select id="mode"><option value="text">New working document</option><option value="original">Original input</option></select></label><button id="copy">Copy displayed packet</button>
-<p id="source"></p><p id="stats"></p><small>Planners and diplomats show their latest frozen job available by accepted decision 895, which can be older than the decider’s snapshot. Their originals are frozen role inputs before transport presentation, not recordings of their final inference text. Size compares UTF-8 bytes, not tokens or measured inference time.</small>
+<p id="source"></p><p id="stats"></p><small>Each role shows a hash-verified frozen snapshot from the saved game. Snapshots can differ in age. Originals are role inputs before transport presentation, not necessarily recordings of final inference text. Size compares UTF-8 bytes, not tokens or measured inference time.</small>
 <pre id="full"></pre>
-<details><summary>Decider action-menu example at decision 895</summary><p>Generated from the verified historical engine snapshot. Targets are parameters of the spell or ability; payment availability is separate from targeting legality.</p><pre id="menu"></pre></details>
+<details><summary>Decider action-menu example</summary><p>Generated from the verified saved actor snapshot. Targets are parameters of the spell or ability; payment availability is separate from targeting legality.</p><pre id="menu"></pre></details>
 <details><summary>Grouped board example</summary><p>Headings supply seat, zone, and all card types. Cards inherit that context; owner appears only when different. Short labels resolve to exact engine references. Printed card rules use frozen Oracle text.</p><pre id="group"></pre><h3>Original Deserted Beach record</h3><pre id="before"></pre></details>
 <script>
 const $=s=>document.querySelector(s);let data;$('#key').value=sessionStorage.edhKey||'';

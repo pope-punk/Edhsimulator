@@ -183,15 +183,22 @@ def sections(document,packet,role):
         document.labels.proposals={}
         handled.add('executed_steps')
     if role!='decider':
-        task={'role':role,'publish_next':packet.get('stage'),'accepted_stages':packet.get('completed_stages',[]),
+        task={'status':'publication required', 'role':role,'publish_next':packet.get('stage'),'accepted_stages':packet.get('completed_stages',[]),
               'why_now':list(dict.fromkeys(r.split(':',1)[0] for r in packet.get('reasons',[])))}
         if role=='short_term_planner':task.update(order=packet.get('publication_order'),target_own_turn=packet.get('target_seat_turn'))
         if role=='diplomacy':task['public_post_required']=packet.get('requires_public_post',False)
         section('Your task',task)
-        section('Publication boundary','Publish only the next stage. Previously accepted stages are immutable. Do not wait for another lane; end when next is null.')
+        section('Publication required now',packet.get('publication_instruction') or 'This input starts or continues an unfinished job. Call edh_publish for publish_next; an empty or prose-only reply does not complete it. Earlier next:null/stop receipts ended only their earlier jobs. Do not wait for another lane. End only when this job returns next:null.')
+        section('Response limits',{'short_term':'short_term_plan: 1..600 characters (aim <=450); continuity: 1..1200; validity reason: <=300.',
+                'long_term':'long_term_plan: 1..1200 characters (aim <=900); each diplomacy brief text: <=900.',
+                'message':'Each public text: <=600 characters; private explanation and recommendation: <=600 each.',
+                'actions':'intent: <=600 characters; each phase reason: <=180; all three phases required.'}.get(packet.get('stage'),'Use the supplied stage schema.'))
     if role=='diplomacy':
         for key,title in (('brief','Authority and disclosure limits'),('requests','Negotiation requests'),('holds','Current negotiation holds')):
             if key in packet:section(title,packet[key]);handled.add(key)
+        authority=packet.get('brief',{}).get('hold_authority',{}) if isinstance(packet.get('brief'),dict) else {}
+        turn=packet.get('board',{}).get('turn',{}).get('number')
+        if isinstance(turn,int):section('Hold expiry bounds',{'current_turn':turn,'maximum_expires_turn':turn+authority.get('max_turns',0),'players':authority.get('players',[]),'scopes':authority.get('scopes',[])})
         section('Private planning context','Own-seat plans inform negotiation; they do not authorize disclosure. Do not quote private intent merely because it appears below.')
     for name,title,field in (('long_term','Strategic goal','long_term_plan'),('short_term','Tactical assessment','short_term_plan')):
         value=component(packet,name)
@@ -249,7 +256,9 @@ data. Never read another seat's private material or an ordered future library.
 Use only supplied facts; do not invent future draws, choices or permissions.
 A publication proposes or advises; only a decider approves gameplay. Engine rules
 and current decision stages remain authoritative. Never replay an accepted action
-or stage. If a tool is waiting, do nothing. End on parked/stop or next:null.
+or stage. A pending tool call means wait for its result, not for the board to change.
+An explicit NEW input always supersedes prior end/park/next:null instructions.
+End only on parked/stop or next:null returned for the CURRENT task.
 Do not truncate tool output; use at least 32000 output tokens in exec/wait wrappers.
 A truncated response does not authorize guessing or resubmitting an accepted call.
 C/S labels are exact observed object incarnations, local to this conversation.

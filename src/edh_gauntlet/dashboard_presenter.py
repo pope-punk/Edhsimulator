@@ -46,8 +46,11 @@ def runtime_health(path):
     if not Path(path).exists():return {}
     value=json.loads(Path(path).read_text());events=value.get('retained_events',[])
     usage=[e.get('usage',{}).get('inputTokens',0) for e in events if e.get('event')=='usage' and not e.get('repeated_usage')]
+    status_path=Path(path).with_name('status.json')
+    status=json.loads(status_path.read_text()) if status_path.exists() else {}
     calls=[e.get('request') for e in events if e.get('event')=='tool_arrived']
     return {'scope':'Last recorded host session; retained events only',
+            'background_attention':status.get('background_attention',[]),
             'input_samples':len(usage),'largest_input':max(usage,default=0),
             'inputs_over_64k':sum(n>=64000 for n in usage),
             'duplicate_request_ids':len(calls)-len(set(calls)),

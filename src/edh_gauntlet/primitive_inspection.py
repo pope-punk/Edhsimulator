@@ -15,6 +15,7 @@ def decision_records(rows):
 def select(value,path='',offset=None,limit=None):
     if type(path) is not str or path and not path.startswith('/'):
         raise RulesViolation('Inspection path must be a JSON pointer')
+    traversed=[]
     try:
         for part in path.split('/')[1:] if path else ():
             part=part.replace('~1','/').replace('~0','~')
@@ -22,7 +23,10 @@ def select(value,path='',offset=None,limit=None):
                 if not part.isdecimal():raise ValueError()
                 value=value[int(part)]
             else:value=value[part]
-    except (KeyError,IndexError,TypeError,ValueError):raise RulesViolation('Path is absent from this frozen inspection') from None
+            traversed.append(part)
+    except (KeyError,IndexError,TypeError,ValueError):
+        choices=('available keys: '+', '.join(str(k) for k in list(value)[:16])) if type(value) is dict else ('array length: '+str(len(value))) if type(value) is list else 'scalar value; no child path'
+        raise RulesViolation('Path is absent from this frozen inspection at /'+'/'.join(traversed)+'; '+choices+'. Document headings are not JSON paths.') from None
     if offset is not None or limit is not None:
         if type(value) is not list or type(offset) is not int or offset<0 or type(limit) is not int or not 1<=limit<=32:
             raise RulesViolation('Array inspection requires nonnegative offset and limit 1..32')
